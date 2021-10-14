@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: gators
+Version: 0.1.0
+Summary: Model building and Model deployment library
+Home-page: UNKNOWN
+Author: Simility Data Team
+Author-email: cpoli@paypal.com
+License: Apache-2.0 Software License
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: Apache-2 License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+License-File: LICENSE
+
+UNKNOWN
+
