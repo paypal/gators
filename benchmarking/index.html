@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Benchmarking &#8212; gators  documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/gators.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="shortcut icon" href="../_static/gators_logo.ico"/>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="gators.transformers.TransformerXY" href="../reference/api/gators.transformers.TransformerXY.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../index.html">
+  <img src="../_static/GATORS_LOGO.png" class="logo" alt="logo">
+</a>      
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../about_gators/index.html">
+  About Gators
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../getting_started/index.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../user_guide/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../reference/index.html">
+  API Reference
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="current reference internal nav-link" href="#">
+  Benchmarking
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/paypal/Gators/" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#per-sample-transform-benchmarking">
+   Per-sample
+   <em>
+    transform
+   </em>
+   benchmarking
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-cleaning">
+     Data Cleaning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#binning">
+     Binning
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#clipping">
+     Clipping
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scalers">
+     Scalers
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imputers">
+     Imputers
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#encoders">
+     Encoders
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#feature-generation">
+     Feature Generation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#feature-generation-string">
+     Feature Generation String
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#feature-generation-datetime">
+     Feature Generation DateTime
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="benchmarking">
+<h1>Benchmarking<a class="headerlink" href="#benchmarking" title="Permalink to this headline">¶</a></h1>
+<section id="per-sample-transform-benchmarking">
+<h2>Per-sample <em>transform</em> benchmarking<a class="headerlink" href="#per-sample-transform-benchmarking" title="Permalink to this headline">¶</a></h2>
+<p>Benchmarking done using the jupyter notebook <em>%timeit</em> magic command.</p>
+<section id="data-cleaning">
+<h3>Data Cleaning<a class="headerlink" href="#data-cleaning" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/DropColumns.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/DropColumns.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/DropDatatypeColumns.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/DropDatatypeColumns.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/KeepColumns.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/KeepColumns.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/Replace.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/Replace.jpg" style="width: 800px;" /></a>
+</section>
+<section id="binning">
+<h3>Binning<a class="headerlink" href="#binning" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/BinRareEvents.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/BinRareEvents.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/CustomDiscretizer.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/CustomDiscretizer.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/Discretizer.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/Discretizer.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/QuantileDiscretizer.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/QuantileDiscretizer.jpg" style="width: 800px;" /></a>
+</section>
+<section id="clipping">
+<h3>Clipping<a class="headerlink" href="#clipping" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/Clipping.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/Clipping.jpg" style="width: 800px;" /></a>
+</section>
+<section id="scalers">
+<h3>Scalers<a class="headerlink" href="#scalers" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/MinMaxScaler.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/MinMaxScaler.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/StandardScaler.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/StandardScaler.jpg" style="width: 800px;" /></a>
+</section>
+<section id="imputers">
+<h3>Imputers<a class="headerlink" href="#imputers" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/NumericsImputer.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/NumericsImputer.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/IntImputer.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/IntImputer.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/FloatImputer.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/FloatImputer.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/ObjectImputer.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/ObjectImputer.jpg" style="width: 800px;" /></a>
+</section>
+<section id="encoders">
+<h3>Encoders<a class="headerlink" href="#encoders" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/OneHotEncoder.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/OneHotEncoder.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/OrdinalEncoder.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/OrdinalEncoder.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/TargetEncoder.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/TargetEncoder.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/WOEEncoder.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/WOEEncoder.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/MultiClassEncoder.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/MultiClassEncoder.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/RegressionEncoder.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/RegressionEncoder.jpg" style="width: 800px;" /></a>
+</section>
+<section id="feature-generation">
+<h3>Feature Generation<a class="headerlink" href="#feature-generation" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/ElementaryArithmetics.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/ElementaryArithmetics.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/IsEqual.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/IsEqual.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/IsNull.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/IsNull.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/ClusterStatistics.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/ClusterStatistics.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/OneHot.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/OneHot.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/PlaneRotation.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/PlaneRotation.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/PolynomialFeatures.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/PolynomialFeatures.jpg" style="width: 800px;" /></a>
+</section>
+<section id="feature-generation-string">
+<h3>Feature Generation String<a class="headerlink" href="#feature-generation-string" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/LowerCase.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/LowerCase.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/UpperCase.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/UpperCase.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/Extract.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/Extract.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/StringContains.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/StringContains.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/StringLength.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/StringLength.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/SplitExtract.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/SplitExtract.jpg" style="width: 800px;" /></a>
+</section>
+<section id="feature-generation-datetime">
+<h3>Feature Generation DateTime<a class="headerlink" href="#feature-generation-datetime" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/OrdinalMinuteOfHour.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/OrdinalMinuteOfHour.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/OrdinalHourOfDay.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/OrdinalHourOfDay.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/OrdinalDayOfWeek.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/OrdinalDayOfWeek.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/OrdinalDayOfMonth.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/OrdinalDayOfMonth.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/OrdinalMonthOfYear.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/OrdinalMonthOfYear.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/CyclicMinuteOfHour.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/CyclicMinuteOfHour.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/CyclicHourOfDay.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/CyclicHourOfDay.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/CyclicDayOfWeek.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/CyclicDayOfWeek.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/CyclicDayOfMonth.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/CyclicDayOfMonth.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/CyclicMonthOfYear.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/CyclicMonthOfYear.jpg" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_static/benchmarking_pandas_numpy/DeltaTime.jpg"><img alt="alternate text" class="align-left" src="../_static/benchmarking_pandas_numpy/DeltaTime.jpg" style="width: 800px;" /></a>
+</section>
+</section>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../reference/api/gators.transformers.TransformerXY.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">gators.transformers.TransformerXY</p>
+        </div>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, the gators development team..<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

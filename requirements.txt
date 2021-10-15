@@ -1,4 +1,0 @@
-numpy<1.20.0
-Cython
-wheel
-tox-wheel==0.6.0
