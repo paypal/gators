@@ -59,10 +59,10 @@ html_css_files = ['css/gators.css']
 html_static_path = ['_static']
 html_logo = '../doc_data/GATORS_LOGO.png'
 html_favicon = '../doc_data/gators_logo.ico'
-# html_theme_options = {
-#   "logo_link": "index",
-#   "github_url": "https://github.paypal.com/pages/Simility-R/gators/",
-# }
+html_theme_options = {
+  "logo_link": "index",
+  "github_url": "https://github.com/paypal/Gators/",
+}
 man_pages = [
     ('index', 'gators', u'gators Documentation',
      [u'the gators team'], 1)
