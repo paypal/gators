@@ -5,8 +5,8 @@
 [![codecov](https://codecov.io/gh/scikit-learn-contrib/imbalanced-learn/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-learn-contrib/imbalanced-learn)
 [![GitHub license](http://dmlc.github.io/img/apache2.svg)](./LICENSE)
 
-<a href="https://github.paypal.com/pages/Simility-R/gators/index.html" target="_blank">Documentation</a> | 
-<a href="https://github.paypal.com/pages/Simility-R/gators/getting_started/install.html" target="_blank">Installation</a>
+<a href="https://paypal.github.io/gators/index.html" target="_blank">Documentation</a> | 
+<a href="https://paypal.github.io/gators/index.html/getting_started/install.html" target="_blank">Installation</a>
 
 
 ![Gators logo](doc_data/GATORS_LOGO.png)
