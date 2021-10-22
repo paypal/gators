@@ -18,5 +18,5 @@ The goal of Gators is to be able to manage both model building and model serving
 
 Gators helps to streamline the model building and productionization processes. The model building part is done using the Pandas library for datasets held in memory, or Koalas for big data. On the model serving side, the pre-processing is carried out directly with Python, using NumPy and Cython. As a result, the speed-up using both NumPy and Cython for pre-processing is around x100 compared to standard Python code. Moreover, the per-sample response time becomes similar to other compiled languages (microsecond scale).
 
-In summary, Gators is a package to handle model building with big data ad fast real-time pre-processing, even for a large number of QPS, using only Python.
+In summary, Gators is a package to handle model building with big data and fast real-time pre-processing, even for a large number of QPS, using only Python.
 
