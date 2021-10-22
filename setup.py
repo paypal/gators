@@ -101,6 +101,7 @@ setuptools.setup(
         'pytest>=5.0.0',
         'pytest-cov>=2.6.0',
         'pylama>=7.6.5',
+        'docutils==0.17',
         'sphinx>=3.3.0',
         'nbsphinx>=0.8.0',
         'pydata_sphinx_theme',
