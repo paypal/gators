@@ -46,7 +46,7 @@ class _BaseEncoder(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        return X.replace(self.mapping)
+        return X.replace(self.mapping).astype(self.dtype)
         # def f(x) -> ks.Series[self.dtype]:
         #     x_name = x.name
         #     if x_name not in self.mapping:
