@@ -48,4 +48,3 @@ jobs:
     # - name: Test with tox
     #   run: tox
     - uses: codecov/codecov-action@v2
-      run: |
