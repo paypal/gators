@@ -85,7 +85,7 @@ setuptools.setup(
         'scipy>=1.5.2',
         'Cython>=0.29.21',
         'dill>=0.3.1.1',
-        'scikit-learn==0.23.1',
+        'scikit-learn',
         'seaborn>=0.11.0',
         'pandas>=0.25.3<1.2',
         'treelite>=0.93',
