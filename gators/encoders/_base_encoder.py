@@ -47,12 +47,6 @@ class _BaseEncoder(Transformer):
         """
         self.check_dataframe(X)
         return X.replace(self.mapping).astype(self.dtype)
-        # def f(x) -> ks.Series[self.dtype]:
-        #     x_name = x.name
-        #     if x_name not in self.mapping:
-        #         return x.astype(self.dtype)
-        #     return x.replace(self.mapping[x_name]).astype(self.dtype)
-        # return X.apply(f)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the input array.

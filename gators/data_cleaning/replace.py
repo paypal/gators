@@ -138,12 +138,6 @@ class Replace(Transformer):
         """
         self.check_dataframe(X)
         return X.replace(self.to_replace_dict)
-        # def f(x, to_replace_dict, columns):
-        #     name = x.name
-        #     if name not in columns:
-        #         return x
-        #     return x.replace(to_replace_dict[name])
-        # return X.apply(f, args=(self.to_replace_dict, self.columns))
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the NumPy array `X`.

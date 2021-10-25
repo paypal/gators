@@ -3,8 +3,7 @@
 [![Build Status](https://img.shields.io/travis/dmlc/treelite.svg?label=build&logo=travis&branch=mainline)](https://travis-ci.org/dmlc/treelite)
 [![Documentation Status](https://readthedocs.org/projects/treelite/badge/?version=latest)](http://treelite.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/scikit-learn-contrib/imbalanced-learn/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-learn-contrib/imbalanced-learn)
-[![GitHub license](http://dmlc.github.io/img/apache2.svg)](./LICENSE)
-
+![GitHub](https://img.shields.io/github/license/paypal/gators)
 
 <a href="https://paypal.github.io/gators/index.html" target="_blank">Documentation</a> | 
 <a href="https://paypal.github.io/gators/getting_started/install.html#install" target="_blank">Installation</a>
