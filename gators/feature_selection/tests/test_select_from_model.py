@@ -34,12 +34,12 @@ def data():
 def data_ks():
     X = ks.DataFrame(
         {'A': [22.0, 38.0, 26.0, 35.0, 35.0, 28.11, 54.0, 2.0, 27.0, 14.0],
-         'B': [7.25, 71.28, 7.92, 53.1, 8.05, 8.46, 51.86, 21.08, 11.13, 30.07],
+         'B': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
          'C': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]})
     y = ks.Series([0, 1, 1, 1, 0, 0, 0, 0, 1, 1], name='TARGET')
-    X_expected = X[['A', 'B']].to_pandas().copy()
+    X_expected = X[['A']].to_pandas().copy()
     model = RFCSpark(
-        numTrees=2, maxDepth=2, labelCol=y.name, seed=0)
+        numTrees=2, maxDepth=1, labelCol=y.name, seed=0)
     obj = SelectFromModel(model=model, k=2).fit(X, y)
     return obj, X, X_expected
 
@@ -48,10 +48,10 @@ def data_ks():
 def data_combined():
     X = ks.DataFrame(
         {'A': [22.0, 38.0, 26.0, 35.0, 35.0, 28.11, 54.0, 2.0, 27.0, 14.0],
-         'B': [7.25, 71.28, 7.92, 53.1, 8.05, 8.46, 51.86, 21.08, 11.13, 30.07],
+         'B': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
          'C': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]})
     y = ks.Series([0, 1, 1, 1, 0, 0, 0, 0, 1, 1], name='TARGET')
-    X_expected = X[['A', 'B']].to_pandas().copy()
+    X_expected = X[['A']].to_pandas().copy()
     model = XGBClassifier(
         random_state=0,
         subsample=1.,
