@@ -4,8 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Best Practices &#8212; gators  documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
@@ -224,14 +223,14 @@
               
               <div>
                 
-  <section id="best-practices">
+  <div class="section" id="best-practices">
 <h1>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h1>
-<section id="pandas-or-koalas">
+<div class="section" id="pandas-or-koalas">
 <h2>Pandas or Koalas?<a class="headerlink" href="#pandas-or-koalas" title="Permalink to this headline">¶</a></h2>
 <p>The choice of using <a class="reference external" href="https://pandas.pydata.org/">Pandas</a> or <a class="reference external" href="https://koalas.readthedocs.io/en/latest/">Koalas</a> will be dictated by your data set.
 For in-memory datasets it is recommended to use pandas, koalas otherwise.</p>
-</section>
-<section id="does-the-transformation-order-matter">
+</div>
+<div class="section" id="does-the-transformation-order-matter">
 <h2>Does the transformation order matter?<a class="headerlink" href="#does-the-transformation-order-matter" title="Permalink to this headline">¶</a></h2>
 <p>Absolutely! While Pandas and Koalas dataframes hold the datatype of each column,
 Numpy does not.</p>
@@ -250,25 +249,25 @@ they consider.</p>
 <p>After an encoding transformation, all the column datatypes with be set to <em>np.float32</em> or <em>np.float64</em>,
 any datetime columns should then be removed before this step.</p>
 </div>
-</section>
-<section id="what-are-the-models-currently-supported-by-gators">
+</div>
+<div class="section" id="what-are-the-models-currently-supported-by-gators">
 <h2>What are the models currently supported by gators?<a class="headerlink" href="#what-are-the-models-currently-supported-by-gators" title="Permalink to this headline">¶</a></h2>
 <p><strong>Gators</strong> mainly focuses on data pre-processing in both offline and in real-time but
 a submodule uses the package <a class="reference external" href="https://treelite.readthedocs.io/en/latest/">treelite</a> which compiles in C tree-based
 models. Only this type of models is currently supported. Note that for deep learning
 models, the <a class="reference external" href="https://tvm.apache.org/">tvm package</a> could be interesting to consider.</p>
-</section>
-<section id="when-using-numpy">
+</div>
+<div class="section" id="when-using-numpy">
 <h2>When using NumPy?<a class="headerlink" href="#when-using-numpy" title="Permalink to this headline">¶</a></h2>
 <p>In <strong>gators</strong>, NumPy, by means of the method <cite>transform_numpy()</cite> , should only be used in the production environment where the response time of the data pre-processing is critical.</p>
-</section>
-<section id="why-the-method-fit-numpy-is-not-defined">
+</div>
+<div class="section" id="why-the-method-fit-numpy-is-not-defined">
 <h2>Why the method <cite>fit_numpy()</cite> is not defined?<a class="headerlink" href="#why-the-method-fit-numpy-is-not-defined" title="Permalink to this headline">¶</a></h2>
 <p>The offline model building steps are only done with pandas or koalas dataframes.
 First, the excellent <a class="reference external" href="https://scikit#learn.org/stable/">Sklearn</a> package already handle NumPy arrays, second,
 NumPy is not suitable for large-scale data.</p>
-</section>
-</section>
+</div>
+</div>
 
 
               </div>

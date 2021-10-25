@@ -150,21 +150,26 @@ Data pre-processing
 ===================
 
 .. image:: ../_static/pandas_logo.png
+    :width: 170 px
+    :target: https://pandas.pydata.org/docs/
 
 The most well known package for data analysis is used for data pre-processing during the model building phase. This package should be used as long as the data can fit in memory.
 
 .. image:: ../_static/koalas_logo.png
     :width: 170 px
+    :target: https://koalas.readthedocs.io/en/latest/
 
 koalas has been chosen to replace pandas if the data does not fit in memory. The main advantage of koalas compared to other big data packages such as PySpark and Dask, is the fact that the syntax is close to pandas.
 
 .. image:: ../_static/numpy_logo.png
     :width: 170 px
+    :target: https://numpy.org/doc/
 
 NumPy is used in the production environment when the pre-processing needs to be as fast as possible.
 
 .. image:: ../_static/cython_logo.jpeg
     :width: 170 px
+    :target: https://cython.readthedocs.io/en/latest/
 
 In the production environment, the pre-processing with be done by pre-compile Cython code on NumPy arrays.
 
@@ -174,11 +179,13 @@ Model building
 
 .. image:: ../_static/sklearn_logo.png
     :width: 170 px
+    :target: https://scikit-learn.org/stable/
 
 The most well known package for model building is used for cross-validation and model evaluation.
 
 .. image:: ../_static/hyperopt_logo.png
     :width: 170 px
+    :target: http://hyperopt.github.io/hyperopt/
 
 This package is used for hyperparameter tuning. The three algorithms currently available to perform hyperparameter tuning are:
 
@@ -188,16 +195,19 @@ This package is used for hyperparameter tuning. The three algorithms currently a
 
 .. image:: ../_static/xgboost_logo.png
     :width: 170 px
+    :target: https://xgboost.readthedocs.io/en/latest/
 
 Decision tree-based package used for model building. XGBoost algorithm applies level-wise tree growth.
 
 .. image:: ../_static/lightgbm_logo.png
     :width: 170 px
+    :target: https://lightgbm.readthedocs.io/en/latest/
 
 Decision tree-based package used for model building. LightGBM algorithm applies leaf-wise tree growth.
 
 .. image:: ../_static/treelite_logo.png
     :width: 170 px
+    :target: https://treelite.readthedocs.io/
 
 Treelite is used to compile the trained models in C before being deployed in production,
 and treelite-runtime is used for real-time model scoring.
