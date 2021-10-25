@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.7, 3.8, 3.9]
         os: [ubuntu-latest, windows-latest]
 
     env:
@@ -44,6 +44,6 @@ jobs:
           python setup.py build_ext --inplace
           python setup.py install
 
-    - name: Test with tox
-      run: tox
-    - uses: codecov/codecov-action@v2
+    # - name: Test with tox
+    #   run: tox
+    # - uses: codecov/codecov-action@v2
