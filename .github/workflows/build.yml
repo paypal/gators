@@ -39,15 +39,7 @@ jobs:
         if [ 'RUNNER_OS' == 'macOS' ]; then
           wget https://raw.githubusercontent.com/Homebrew/homebrew-core/679923b4eb48a8dc7ecc1f05d06063cd79b3fc00/Formula/libomp.rb -O $(find $(brew --repository) -name libomp.rb)
           brew install libomp
-          python -m pip install --upgrade pip
-          pip install tox tox-wheel tox-gh-actions
-          pip install numpy==1.19.5
-          pip install Cython
-          pip install scipy
-          python setup.py build_ext --inplace
-          python setup.py install
-        else
-          echo "libomp not needed"
+        fi
           python -m pip install --upgrade pip
           pip install tox tox-wheel tox-gh-actions
           pip install numpy==1.19.5
