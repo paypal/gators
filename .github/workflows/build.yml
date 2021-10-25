@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8]
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]   # , windows-latest, macos-latest
 
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
@@ -43,8 +43,8 @@ jobs:
           pip install scipy
           python setup.py build_ext --inplace
           python setup.py install
-          coverage run gators pytest -m "not koalas" && coverage report && coverage xml
     # run: |
     # - name: Test with tox
     #   run: tox
     - uses: codecov/codecov-action@v2
+    - run: coverage run gators pytest -m "not koalas" && coverage report && coverage xml
