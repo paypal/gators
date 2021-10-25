@@ -87,7 +87,7 @@ setuptools.setup(
         'dill>=0.3.1.1',
         'scikit-learn',
         'seaborn>=0.11.0',
-        'pandas>=0.25.3<1.2',
+        'pandas',
         'treelite>=0.93',
         'treelite-runtime>=0.93',
         'xgboost>=0.90',
