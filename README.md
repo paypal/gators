@@ -5,6 +5,9 @@
 [![codecov](https://codecov.io/gh/scikit-learn-contrib/imbalanced-learn/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-learn-contrib/imbalanced-learn)
 ![GitHub](https://img.shields.io/github/license/paypal/gators)
 
+[![Build and test](https://github.com/paypal/gators/actions/workflows/build.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/build.yml)
+
+
 <a href="https://paypal.github.io/gators/index.html" target="_blank">Documentation</a> | 
 <a href="https://paypal.github.io/gators/getting_started/install.html#install" target="_blank">Installation</a>
 
