@@ -78,6 +78,7 @@ setuptools.setup(
     license='Apache-2.0 Software License',
     setup_requires=['numpy', 'Cython'],
     install_requires=[
+        'Cython',
         'setuptools>=41.0.0',
         'numpy==1.19.5',
         'requests>=2.23.0',
@@ -87,7 +88,7 @@ setuptools.setup(
         'dill>=0.3.1.1',
         'scikit-learn',
         'seaborn>=0.11.0',
-        'pandas',
+        'pandas',  # >=0.25.3<1.2
         'treelite>=0.93',
         'treelite-runtime>=0.93',
         'xgboost>=0.90',
