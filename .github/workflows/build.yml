@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.7, 3.8]
-        os: [macos-latest, ubuntu-latest]   # 
+        os: ['windows'] #[macos-latest, ubuntu-latest]   # 
 
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
@@ -51,7 +51,7 @@ jobs:
         python setup.py install
     - name: Tests
       run: |
-        coverage run --omit test*.py -m pytest gators && coverage report && coverage xml
+        coverage run --omit test*.py -m pytest gators -m "not koalas" && coverage report && coverage xml
     - uses: codecov/codecov-action@v2
 
 
