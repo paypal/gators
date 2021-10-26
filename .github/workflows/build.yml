@@ -36,7 +36,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name:  Install libomp
       run:   |
-            if [ "$RUNNER_OS" == "Linux" ]; then
+            if [ "$RUNNER_OS" == "macOS" ]; then
                   brew install libomp
             fi
       shell: bash
