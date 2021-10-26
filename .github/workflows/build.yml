@@ -47,7 +47,9 @@ jobs:
     # - name: Test with tox
     #   run: tox
     - name: Tests
-      uses: codecov/codecov-action@v2
+      run: |
+        coverage run -m pytest gators && coverage report && coverage xml
+    - uses: codecov/codecov-action@v2
 
 
 
