@@ -51,7 +51,7 @@ jobs:
         python setup.py install
     - name: Tests
       run: |
-        coverage run -m pytest gators && coverage report && coverage xml
+        coverage run --omit test*.py -m pytest gators && coverage report && coverage xml
     - uses: codecov/codecov-action@v2
 
 
