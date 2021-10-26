@@ -43,9 +43,7 @@ jobs:
         pip install scipy
         python setup.py build_ext --inplace
         python setup.py install
-    # run: |
-    # - name: Test with tox
-    #   run: tox
+
     - name: Tests
       run: |
         coverage run -m pytest gators && coverage report && coverage xml
@@ -53,7 +51,9 @@ jobs:
 
 
 
-
+# run: |
+# - name: Test with tox
+#   run: tox
 # with:
 #   token: {{ secrets.CODECOV_TOKEN }}
 
