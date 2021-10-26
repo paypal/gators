@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.7, 3.8]
-        os: ['windows'] #[macos-latest, ubuntu-latest]   # 
+        os: ['windows-latest'] #[macos-latest, ubuntu-latest]   # 
 
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
