@@ -48,11 +48,15 @@ jobs:
     #   run: tox
     - name: Tests
       uses: codecov/codecov-action@v2
-        with:
-          token: {{ secrets.CODECOV_TOKEN }}
 
-    # - run: coverage run -m pytest gators && coverage report && coverage xml
-      
-      # token: 'ce68bafd-388e-42e8-abf8-b5ea3b328037'
+
+
+
+# with:
+#   token: {{ secrets.CODECOV_TOKEN }}
+
+# - run: coverage run -m pytest gators && coverage report && coverage xml
+  
+  # token: 'ce68bafd-388e-42e8-abf8-b5ea3b328037'
 
 
