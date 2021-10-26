@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.7]
         os: [ubuntu-latest]   # , macos-latest
 
     env:
@@ -48,3 +48,6 @@ jobs:
     #   run: tox
     - uses: codecov/codecov-action@v2
     - run: coverage run -m pytest gators && coverage report && coverage xml
+      token: 'ce68bafd-388e-42e8-abf8-b5ea3b328037'
+
+
