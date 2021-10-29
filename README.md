@@ -1,12 +1,12 @@
 # gators
 
 
-[![build](https://github.com/paypal/gators/actions/workflows/build.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/build.yml)
+[![build](https://github.com/paypal/gators/actions/workflows/build.yml/badge.svg?branch=test_develop)](https://github.com/paypal/gators/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/paypal/gators/branch/test_develop/graph/badge.svg?token=vllGApc9v9)](https://codecov.io/gh/paypal/gators)
 ![GitHub](https://img.shields.io/github/license/paypal/gators)
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
 
 <a href="https://paypal.github.io/gators/index.html" target="_blank">Documentation</a> | 
