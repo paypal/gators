@@ -7,7 +7,7 @@
 
 
 
-[![Build and test](https://github.com/paypal/gators/branch/test_develop/actions/workflows/build.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/build.yml)
+[![Build and test](https://github.com/paypal/gators/actions/workflows/build.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/paypal/gators/branch/test_develop/graph/badge.svg?token=vllGApc9v9)](https://codecov.io/gh/paypal/gators)
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
