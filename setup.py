@@ -122,13 +122,13 @@ setuptools.setup(
         'numpydoc',
         'tox',
         'tox-wheel',
-    ],
+        'xgboost>=0.90',
+        'Lightgbm',
+        'pytest>=5.0.0',
+        'pytest-cov>=2.6.0',
+        ],
     extras_require={
         'dev': [
-            'xgboost>=0.90',
-            'Lightgbm',
-            'pytest>=5.0.0',
-            'pytest-cov>=2.6.0',
             'pylama>=7.6.5',
             'ipykernel',
             'jupyter',
@@ -139,6 +139,8 @@ setuptools.setup(
             'pandoc',
             'tox',
             'tox-wheel',
+            'black',
+            'inum'
         ],
     },
     package_data={'gators': [
