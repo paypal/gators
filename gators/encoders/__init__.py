@@ -1,7 +1,7 @@
 from ._base_encoder import _BaseEncoder
 from .multiclass_encoder import MultiClassEncoder
-from .onehot_encoder import OneHotEncoder
 from .ordinal_encoder import OrdinalEncoder
+from .onehot_encoder import OneHotEncoder
 from .target_encoder import TargetEncoder
 from .woe_encoder import WOEEncoder
 
