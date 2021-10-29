@@ -52,7 +52,7 @@ jobs:
     - name: Tests
       run: |
         coverage run --omit test*.py -m pytest gators -m "not koalas" && coverage report && coverage xml
-    - name: "Upload coverage to Codecov"
+    - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
         fail_ci_if_error: true
