@@ -140,7 +140,7 @@ setuptools.setup(
             'tox',
             'tox-wheel',
             'black',
-            'inum'
+            'isort',
         ],
     },
     package_data={'gators': [
