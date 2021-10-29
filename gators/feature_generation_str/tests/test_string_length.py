@@ -1,46 +1,72 @@
 # License: Apache-2.0
-from gators.feature_generation_str import StringLength
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_generation_str import StringLength
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame(np.zeros((3, 3)), columns=list('qwe'))
-    X['a'] = ['Q', 'QQ', 'QQQ']
-    X['s'] = ['W', 'WW', 'WWW']
-    X['d'] = ['nan', None, '']
+    X = pd.DataFrame(np.zeros((3, 3)), columns=list("qwe"))
+    X["a"] = ["Q", "QQ", "QQQ"]
+    X["s"] = ["W", "WW", "WWW"]
+    X["d"] = ["nan", None, ""]
 
-    obj = StringLength(columns=list('asd')).fit(X)
+    obj = StringLength(columns=list("asd")).fit(X)
     columns_expected = [
-        'q', 'w', 'e', 'a', 's', 'd', 'a__length', 's__length', 'd__length']
+        "q",
+        "w",
+        "e",
+        "a",
+        "s",
+        "d",
+        "a__length",
+        "s__length",
+        "d__length",
+    ]
     X_expected = pd.DataFrame(
-        [[0.0, 0.0, 0.0, 'Q', 'W', 'nan', 1., 1., 0.],
-         [0.0, 0.0, 0.0, 'QQ', 'WW', None, 2., 2., 0.],
-         [0.0, 0.0, 0.0, 'QQQ', 'WWW', '', 3., 3., 0.]],
-        columns=columns_expected)
+        [
+            [0.0, 0.0, 0.0, "Q", "W", "nan", 1.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, "QQ", "WW", None, 2.0, 2.0, 0.0],
+            [0.0, 0.0, 0.0, "QQQ", "WWW", "", 3.0, 3.0, 0.0],
+        ],
+        columns=columns_expected,
+    )
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(np.zeros((3, 3)), columns=list('qwe'))
-    X['a'] = ['Q', 'QQ', 'QQQ']
-    X['s'] = ['W', 'WW', 'WWW']
-    X['d'] = ['nan', None, '']
+    X = ks.DataFrame(np.zeros((3, 3)), columns=list("qwe"))
+    X["a"] = ["Q", "QQ", "QQQ"]
+    X["s"] = ["W", "WW", "WWW"]
+    X["d"] = ["nan", None, ""]
 
-    obj = StringLength(columns=list('asd')).fit(X)
+    obj = StringLength(columns=list("asd")).fit(X)
     columns_expected = [
-        'q', 'w', 'e', 'a', 's', 'd', 'a__length', 's__length', 'd__length']
+        "q",
+        "w",
+        "e",
+        "a",
+        "s",
+        "d",
+        "a__length",
+        "s__length",
+        "d__length",
+    ]
     X_expected = pd.DataFrame(
-        [[0.0, 0.0, 0.0, 'Q', 'W', 'nan', 1., 1., 0.],
-         [0.0, 0.0, 0.0, 'QQ', 'WW', None, 2., 2., 0.],
-         [0.0, 0.0, 0.0, 'QQQ', 'WWW', '', 3., 3., 0.]],
-        columns=columns_expected)
+        [
+            [0.0, 0.0, 0.0, "Q", "W", "nan", 1.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, "QQ", "WW", None, 2.0, 2.0, 0.0],
+            [0.0, 0.0, 0.0, "QQQ", "WWW", "", 3.0, 3.0, 0.0],
+        ],
+        columns=columns_expected,
+    )
     return obj, X, X_expected
 
 
@@ -74,6 +100,6 @@ def test_ks_np(data_ks):
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = StringLength(columns='x')
+        _ = StringLength(columns="x")
     with pytest.raises(ValueError):
         _ = StringLength(columns=[])

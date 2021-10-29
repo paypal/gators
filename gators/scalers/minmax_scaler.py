@@ -1,10 +1,12 @@
 # License: Apache-2.0
-from scaler import minmax_scaler
-from ..transformers.transformer import Transformer
-import numpy as np
 from typing import Union
-import pandas as pd
+
 import databricks.koalas as ks
+import numpy as np
+import pandas as pd
+from scaler import minmax_scaler
+
+from ..transformers.transformer import Transformer
 
 
 class MinMaxScaler(Transformer):
@@ -75,8 +77,11 @@ class MinMaxScaler(Transformer):
         self.X_min_np = np.array([])
         self.X_max_np = np.array([])
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'MinMaxScaler':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "MinMaxScaler":
         """Fit the transformer on the pandas/koalas dataframe X.
 
         Parameters
@@ -132,5 +137,4 @@ class MinMaxScaler(Transformer):
             np.ndarray: Imputed ndarray.
         """
         self.check_array(X)
-        return minmax_scaler(
-            X.astype(self.dtype), self.X_min_np, self.X_max_np)
+        return minmax_scaler(X.astype(self.dtype), self.X_min_np, self.X_max_np)

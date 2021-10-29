@@ -1,10 +1,12 @@
 # License: Apache-2.0
-from ..transformers.transformer import Transformer
-from ..util import util
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+from ..transformers.transformer import Transformer
+from ..util import util
 
 
 class _BaseFeatureSelection(Transformer):
@@ -28,8 +30,10 @@ class _BaseFeatureSelection(Transformer):
         self.columns_to_drop: List[str] = []
 
     def transform(
-            self, X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> Union[pd.DataFrame, ks.DataFrame]:
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> Union[pd.DataFrame, ks.DataFrame]:
         """Transform the dataframe `X`.
 
         Parameters

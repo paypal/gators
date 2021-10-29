@@ -1,11 +1,12 @@
 # License: Apache-2.0
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-from gators.feature_generation._base_feature_generation import (
-    _BaseFeatureGeneration)
+
 from feature_gen import elementary_arithmetics
+from gators.feature_generation._base_feature_generation import _BaseFeatureGeneration
 
 EPSILON = 1e-10
 
@@ -125,55 +126,62 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
 
     """
 
-    def __init__(self, columns_a: List[str], columns_b: List[str],
-                 operator: str, column_names: List[str] = None,
-                 coef: float = 1., dtype: type = np.float64):
+    def __init__(
+        self,
+        columns_a: List[str],
+        columns_b: List[str],
+        operator: str,
+        column_names: List[str] = None,
+        coef: float = 1.0,
+        dtype: type = np.float64,
+    ):
         if not isinstance(columns_a, list):
-            raise TypeError('`columns_a` should be a list.')
+            raise TypeError("`columns_a` should be a list.")
         if not isinstance(columns_b, list):
-            raise TypeError('`columns_b` should be a list.')
+            raise TypeError("`columns_b` should be a list.")
         if len(columns_a) == 0:
-            raise ValueError('`columns_a` should not be empty.')
+            raise ValueError("`columns_a` should not be empty.")
         if not isinstance(operator, str):
-            raise TypeError('`operator` should be a str.')
+            raise TypeError("`operator` should be a str.")
         if not isinstance(coef, float):
-            raise TypeError('`coef` should be a float.')
+            raise TypeError("`coef` should be a float.")
         if column_names and not isinstance(column_names, list):
-            raise TypeError('`column_names` should be a list.')
+            raise TypeError("`column_names` should be a list.")
         if len(columns_a) != len(columns_b):
-            raise ValueError(
-                'Length of `columns_a` and `columns_a` should match.')
-        if operator not in ['+', '*', '/']:
-            raise ValueError(
-                '`operator` should be "+", "*", or "/".')
+            raise ValueError("Length of `columns_a` and `columns_a` should match.")
+        if operator not in ["+", "*", "/"]:
+            raise ValueError('`operator` should be "+", "*", or "/".')
         if not column_names:
             str_operator = operator
             if coef < 0:
-                str_operator = '-'
+                str_operator = "-"
             column_names = [
-                f'{c_a}__{str_operator}__{c_b}'
+                f"{c_a}__{str_operator}__{c_b}"
                 for c_a, c_b in zip(columns_a, columns_b)
             ]
             column_mapping = {
-                f'{c_a}__{str_operator}__{c_b}': [c_a, c_b]
+                f"{c_a}__{str_operator}__{c_b}": [c_a, c_b]
                 for c_a, c_b in zip(columns_a, columns_b)
             }
         else:
             column_mapping = {
-                c: [c_a, c_b]
-                for c, c_a, c_b
-                in zip(column_names, columns_a, columns_b)
+                c: [c_a, c_b] for c, c_a, c_b in zip(column_names, columns_a, columns_b)
             }
         if len(column_names) != len(columns_a):
             raise ValueError(
-                '''Length of `columns_a`, `columns_b`,
-                and `column_names` should match.''')
+                """Length of `columns_a`, `columns_b`,
+                and `column_names` should match."""
+            )
         self.check_datatype(dtype, [np.float32, np.float64])
         columns = list(set(columns_a + columns_b))
         _BaseFeatureGeneration.__init__(
-            self, columns=columns, column_names=column_names,
-            column_mapping=column_mapping, dtype=dtype)
-        self.columns = list(set(columns_a+columns_b))
+            self,
+            columns=columns,
+            column_names=column_names,
+            column_mapping=column_mapping,
+            dtype=dtype,
+        )
+        self.columns = list(set(columns_a + columns_b))
         self.columns_a = columns_a
         self.columns_b = columns_b
         self.idx_columns_a: np.ndarray = np.array([])
@@ -181,9 +189,11 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         self.operator = operator
         self.coef = coef
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'ElementaryArithmetics':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "ElementaryArithmetics":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -201,12 +211,10 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         self.check_dataframe(X)
         self.check_dataframe_is_numerics(X)
         self.idx_columns_a = self.get_idx_columns(
-            columns=X.columns,
-            selected_columns=self.columns_a
+            columns=X.columns, selected_columns=self.columns_a
         )
         self.idx_columns_b = self.get_idx_columns(
-            columns=X.columns,
-            selected_columns=self.columns_b
+            columns=X.columns, selected_columns=self.columns_b
         )
         return self
 
@@ -227,11 +235,10 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         """
         self.check_dataframe(X)
         self.check_dataframe_is_numerics(X)
-        for c_a, c_b, c in zip(
-                self.columns_a, self.columns_b, self.column_names):
-            if self.operator == '+':
+        for c_a, c_b, c in zip(self.columns_a, self.columns_b, self.column_names):
+            if self.operator == "+":
                 X[c] = X[c_a] + self.coef * X[c_b]
-            elif self.operator == '*':
+            elif self.operator == "*":
                 X[c] = X[c_a] * X[c_b]
             else:
                 X[c] = X[c_a] / (X[c_b] + EPSILON)
@@ -254,14 +261,17 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         """
         self.check_array(X)
         return elementary_arithmetics(
-            X.astype(self.dtype), self.idx_columns_a, self.idx_columns_b,
-            self.operator, self.coef, EPSILON, self.dtype
+            X.astype(self.dtype),
+            self.idx_columns_a,
+            self.idx_columns_b,
+            self.operator,
+            self.coef,
+            EPSILON,
+            self.dtype,
         )
 
     @staticmethod
-    def get_idx_columns(
-            columns: List[str],
-            selected_columns: List[str]) -> np.ndarray:
+    def get_idx_columns(columns: List[str], selected_columns: List[str]) -> np.ndarray:
         """Get the indices of the columns used for the combination.
 
         Parameters

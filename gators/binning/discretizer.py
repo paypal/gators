@@ -1,10 +1,12 @@
 # License: Apache-2.0
-from ._base_discretizer import _BaseDiscretizer
 from typing import List, Tuple, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
 from ..util import util
+from ._base_discretizer import _BaseDiscretizer
 
 EPSILON = 1e-10
 
@@ -51,7 +53,7 @@ class Discretizer(_BaseDiscretizer):
             0 -1  1    0.0    0.0
             1  0  2    1.0    1.0
             2  1  3    2.0    2.0
-            
+
     * fit & transform with `koalas`
 
     >>> import databricks.koalas as ks
@@ -101,8 +103,9 @@ class Discretizer(_BaseDiscretizer):
         _BaseDiscretizer.__init__(self, n_bins=n_bins, inplace=inplace)
 
     @staticmethod
-    def compute_bins(X: Union[pd.DataFrame, ks.DataFrame], n_bins: int
-                     ) -> Tuple[List[List[float]], np.ndarray]:
+    def compute_bins(
+        X: Union[pd.DataFrame, ks.DataFrame], n_bins: int
+    ) -> Tuple[List[List[float]], np.ndarray]:
         """Compute the bins list and the bins array.
         The bin list is used for dataframes and
         the bins array is used for arrays.
@@ -127,20 +130,18 @@ class Discretizer(_BaseDiscretizer):
         X_dtype = X.dtypes.to_numpy()[0]
         if isinstance(X, pd.DataFrame):
             deltas = X.max() - X.min()
-            bins_np = np.empty((n_bins+1, n_cols))
+            bins_np = np.empty((n_bins + 1, n_cols))
             bins_np[0, :] = util.get_bounds(X_dtype)[0]
             bins_np[-1, :] = util.get_bounds(X_dtype)[1]
             for i in range(1, n_bins):
                 bins_np[i, :] = X.min() + i * deltas / n_bins
 
-            bins = pd.DataFrame(
-                bins_np, columns=X.columns).to_dict(
-                    orient='list')
+            bins = pd.DataFrame(bins_np, columns=X.columns).to_dict(orient="list")
             return bins, bins_np
         x_min = X.min().to_pandas()
         x_max = X.max().to_pandas()
         deltas = x_max - x_min
-        bins_np = np.empty((n_bins+1, n_cols))
+        bins_np = np.empty((n_bins + 1, n_cols))
         bins_np[0, :] = util.get_bounds(X_dtype)[0]
         bins_np[-1, :] = util.get_bounds(X_dtype)[1]
         for i in range(1, n_bins):

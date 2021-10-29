@@ -1,11 +1,14 @@
 # License: Apache-2.0
-from feature_gen import one_hot
-from ._base_feature_generation import _BaseFeatureGeneration
-from ..util import util
-from typing import List, Dict, Union
+from typing import Dict, List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+from feature_gen import one_hot
+
+from ..util import util
+from ._base_feature_generation import _BaseFeatureGeneration
 
 
 class OneHot(_BaseFeatureGeneration):
@@ -68,47 +71,51 @@ class OneHot(_BaseFeatureGeneration):
 
     """
 
-    def __init__(self, categories_dict: Dict[str, List[str]],
-                 column_names: List[str] = None):
+    def __init__(
+        self, categories_dict: Dict[str, List[str]], column_names: List[str] = None
+    ):
         if not isinstance(categories_dict, dict):
-            raise TypeError('`categories_dict` should be a dict.')
+            raise TypeError("`categories_dict` should be a dict.")
         if column_names is not None and not isinstance(column_names, list):
-            raise TypeError('`column_names` should be None or a list.')
+            raise TypeError("`column_names` should be None or a list.")
         self.categories_dict = categories_dict
         columns = list(set(categories_dict.keys()))
         if not column_names:
             column_names = [
-                f'{col}__onehot__{cat}'
+                f"{col}__onehot__{cat}"
                 for col, cats in categories_dict.items()
                 for cat in cats
             ]
             column_mapping = {
-                f'{col}__onehot__{cat}': col
+                f"{col}__onehot__{cat}": col
                 for col, cats in categories_dict.items()
                 for cat in cats
             }
         else:
             column_mapping = {
-                name: col
-                for name, col in zip(column_names, categories_dict.keys())
+                name: col for name, col in zip(column_names, categories_dict.keys())
             }
-        columns = [
-            col
-            for col, cats in categories_dict.items()
-            for cat in cats
-        ]
+        columns = [col for col, cats in categories_dict.items() for cat in cats]
         n_cats = sum([len(cat) for cat in categories_dict.values()])
         if column_names and n_cats != len(column_names):
             raise ValueError(
-                'Length of `clusters_dict` and `column_names` should match.')
+                "Length of `clusters_dict` and `column_names` should match."
+            )
 
         _BaseFeatureGeneration.__init__(
-            self, columns=columns, column_names=column_names,
-            column_mapping=column_mapping, dtype=None)
+            self,
+            columns=columns,
+            column_names=column_names,
+            column_mapping=column_mapping,
+            dtype=None,
+        )
         self.mapping = dict(zip(self.column_names, self.columns))
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None):
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ):
         """
         Fit the dataframe X.
 
@@ -124,21 +131,17 @@ class OneHot(_BaseFeatureGeneration):
         """
         self.check_dataframe(X)
         self.cats = np.array(
-            [cat
-             for cats in self.categories_dict.values()
-             for cat in cats]
+            [cat for cats in self.categories_dict.values() for cat in cats]
         ).astype(object)
         cols_flatten = np.array(
-            [col
-             for col, cats in self.categories_dict.items()
-             for cat in cats]
+            [col for col, cats in self.categories_dict.items() for cat in cats]
         )
         self.idx_columns = util.get_idx_columns(X, cols_flatten)
         return self
 
-    def transform(self,
-                  X: Union[pd.DataFrame, ks.DataFrame]
-                  ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(
+        self, X: Union[pd.DataFrame, ks.DataFrame]
+    ) -> Union[pd.DataFrame, ks.DataFrame]:
         """Transform the dataframe `X`.
 
         Parameters
@@ -153,16 +156,12 @@ class OneHot(_BaseFeatureGeneration):
         """
         self.check_dataframe(X)
         if isinstance(X, pd.DataFrame):
-            for name, col, cat in zip(
-                    self.column_names, self.columns, self.cats):
-                X.loc[:, name] = (X[col] == cat)
+            for name, col, cat in zip(self.column_names, self.columns, self.cats):
+                X.loc[:, name] = X[col] == cat
             return X
 
-        for name, col, cat in zip(
-                self.column_names, self.columns, self.cats):
-            X = X.assign(
-                dummy=(X[col] == cat)
-            ).rename(columns={'dummy': name})
+        for name, col, cat in zip(self.column_names, self.columns, self.cats):
+            X = X.assign(dummy=(X[col] == cat)).rename(columns={"dummy": name})
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

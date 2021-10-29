@@ -1,182 +1,223 @@
 # License: Apache-2.0
-import pytest
-from gators.feature_generation.elementary_arithmethics import (
-    ElementaryArithmetics
-)
-from pandas.testing import assert_frame_equal
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_generation.elementary_arithmethics import ElementaryArithmetics
 
 
 @pytest.fixture
 def data_add():
-    X = pd.DataFrame(np.arange(9).reshape(
-        3, 3), columns=list('ABC'))
+    X = pd.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"))
 
-    X_expected = pd.DataFrame(np.array(
-        [[0.,  1.,  2., -2., -4.],
-         [3.,  4.,  5., -5., -7.],
-         [6.,  7.,  8., -8., -10.]]),
-        columns=['A',  'B',  'C',  'A__-__B',  'A__-__C']
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, -2.0, -4.0],
+                [3.0, 4.0, 5.0, -5.0, -7.0],
+                [6.0, 7.0, 8.0, -8.0, -10.0],
+            ]
+        ),
+        columns=["A", "B", "C", "A__-__B", "A__-__C"],
     )
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), coef=-2., operator='+'
+        columns_a=list("AA"), columns_b=list("BC"), coef=-2.0, operator="+"
     ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_float32_add():
-    X = pd.DataFrame(np.arange(9).reshape(
-        3, 3), columns=list('ABC'))
+    X = pd.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"))
 
-    X_expected = pd.DataFrame(np.array(
-        [[0.,  1.,  2., -2., -4.],
-         [3.,  4.,  5., -5., -7.],
-         [6.,  7.,  8., -8., -10.]]),
-        columns=['A',  'B',  'C',  'A__-__B',  'A__-__C']
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, -2.0, -4.0],
+                [3.0, 4.0, 5.0, -5.0, -7.0],
+                [6.0, 7.0, 8.0, -8.0, -10.0],
+            ]
+        ),
+        columns=["A", "B", "C", "A__-__B", "A__-__C"],
     ).astype(np.float32)
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), coef=-2., operator='+',
-        dtype=np.float32).fit(X)
+        columns_a=list("AA"),
+        columns_b=list("BC"),
+        coef=-2.0,
+        operator="+",
+        dtype=np.float32,
+    ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_name_add():
-    X = pd.DataFrame(np.arange(9).reshape(
-        3, 3), columns=list('ABC'), dtype=np.float64)
+    X = pd.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"), dtype=np.float64)
 
-    X_expected = pd.DataFrame(np.array(
-        [[0.,  1.,  2., -2., -4.],
-         [3.,  4.,  5., -5., -7.],
-         [6.,  7.,  8., -8., -10.]]),
-        columns=['A',  'B',  'C',  'A+B',  'A+C']
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, -2.0, -4.0],
+                [3.0, 4.0, 5.0, -5.0, -7.0],
+                [6.0, 7.0, 8.0, -8.0, -10.0],
+            ]
+        ),
+        columns=["A", "B", "C", "A+B", "A+C"],
     )
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), coef=-2., operator='+',
-        column_names=['A+B',  'A+C']
-
+        columns_a=list("AA"),
+        columns_b=list("BC"),
+        coef=-2.0,
+        operator="+",
+        column_names=["A+B", "A+C"],
     ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_mult():
-    X = pd.DataFrame(np.arange(9).reshape(3, 3),
-                     columns=list('ABC'), dtype=np.float64)
-    X_expected = pd.DataFrame(np.array(
-        [[0.,  1.,  2.,  0.,  0.],
-         [3.,  4.,  5., 12., 15.],
-         [6.,  7.,  8., 42., 48.]]),
-        columns=['A',  'B',  'C',  'A__*__B',  'A__*__C']
+    X = pd.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"), dtype=np.float64)
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, 0.0, 0.0],
+                [3.0, 4.0, 5.0, 12.0, 15.0],
+                [6.0, 7.0, 8.0, 42.0, 48.0],
+            ]
+        ),
+        columns=["A", "B", "C", "A__*__B", "A__*__C"],
     )
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), operator='*'
+        columns_a=list("AA"), columns_b=list("BC"), operator="*"
     ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_div():
-    X = pd.DataFrame(np.arange(9).reshape(
-        3, 3), columns=list('ABC'), dtype=np.float64)
+    X = pd.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"), dtype=np.float64)
 
-    X_expected = pd.DataFrame(np.array(
-        [[0., 1., 2., 0., 0],
-         [3., 4., 5., 0.75, 0.59999988],
-         [6., 7., 8., 0.85714286, 0.7499999]]),
-        columns=['A',  'B',  'C',  'A__/__B',  'A__/__C']
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, 0.0, 0],
+                [3.0, 4.0, 5.0, 0.75, 0.59999988],
+                [6.0, 7.0, 8.0, 0.85714286, 0.7499999],
+            ]
+        ),
+        columns=["A", "B", "C", "A__/__B", "A__/__C"],
     )
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), operator='/'
+        columns_a=list("AA"), columns_b=list("BC"), operator="/"
     ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_add_ks():
-    X = ks.DataFrame(np.arange(9).reshape(
-        3, 3), columns=list('ABC'))
+    X = ks.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"))
 
-    X_expected = pd.DataFrame(np.array(
-        [[0.,  1.,  2., -2., -4.],
-         [3.,  4.,  5., -5., -7.],
-         [6.,  7.,  8., -8., -10.]]),
-        columns=['A',  'B',  'C',  'A__-__B',  'A__-__C']
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, -2.0, -4.0],
+                [3.0, 4.0, 5.0, -5.0, -7.0],
+                [6.0, 7.0, 8.0, -8.0, -10.0],
+            ]
+        ),
+        columns=["A", "B", "C", "A__-__B", "A__-__C"],
     )
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), coef=-2., operator='+'
+        columns_a=list("AA"), columns_b=list("BC"), coef=-2.0, operator="+"
     ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_float32_add_ks():
-    X = ks.DataFrame(np.arange(9).reshape(
-        3, 3), columns=list('ABC'))
+    X = ks.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"))
 
-    X_expected = pd.DataFrame(np.array(
-        [[0.,  1.,  2., -2., -4.],
-         [3.,  4.,  5., -5., -7.],
-         [6.,  7.,  8., -8., -10.]]),
-        columns=['A',  'B',  'C',  'A__-__B',  'A__-__C']
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, -2.0, -4.0],
+                [3.0, 4.0, 5.0, -5.0, -7.0],
+                [6.0, 7.0, 8.0, -8.0, -10.0],
+            ]
+        ),
+        columns=["A", "B", "C", "A__-__B", "A__-__C"],
     ).astype(np.float32)
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), coef=-2., operator='+',
-        dtype=np.float32).fit(X)
+        columns_a=list("AA"),
+        columns_b=list("BC"),
+        coef=-2.0,
+        operator="+",
+        dtype=np.float32,
+    ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_name_add_ks():
-    X = ks.DataFrame(np.arange(9).reshape(
-        3, 3), columns=list('ABC'), dtype=np.float64)
+    X = ks.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"), dtype=np.float64)
 
-    X_expected = pd.DataFrame(np.array(
-        [[0.,  1.,  2., -2., -4.],
-         [3.,  4.,  5., -5., -7.],
-         [6.,  7.,  8., -8., -10.]]),
-        columns=['A',  'B',  'C',  'A+B',  'A+C']
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, -2.0, -4.0],
+                [3.0, 4.0, 5.0, -5.0, -7.0],
+                [6.0, 7.0, 8.0, -8.0, -10.0],
+            ]
+        ),
+        columns=["A", "B", "C", "A+B", "A+C"],
     )
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), coef=-2., operator='+',
-        column_names=['A+B',  'A+C']
-
+        columns_a=list("AA"),
+        columns_b=list("BC"),
+        coef=-2.0,
+        operator="+",
+        column_names=["A+B", "A+C"],
     ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_mult_ks():
-    X = ks.DataFrame(np.arange(9).reshape(3, 3),
-                     columns=list('ABC'), dtype=np.float64)
-    X_expected = pd.DataFrame(np.array(
-        [[0.,  1.,  2.,  0.,  0.],
-         [3.,  4.,  5., 12., 15.],
-         [6.,  7.,  8., 42., 48.]]),
-        columns=['A',  'B',  'C',  'A__*__B',  'A__*__C']
+    X = ks.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"), dtype=np.float64)
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, 0.0, 0.0],
+                [3.0, 4.0, 5.0, 12.0, 15.0],
+                [6.0, 7.0, 8.0, 42.0, 48.0],
+            ]
+        ),
+        columns=["A", "B", "C", "A__*__B", "A__*__C"],
     )
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), operator='*'
+        columns_a=list("AA"), columns_b=list("BC"), operator="*"
     ).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_div_ks():
-    X = ks.DataFrame(np.arange(9).reshape(
-        3, 3), columns=list('ABC'), dtype=np.float64)
+    X = ks.DataFrame(np.arange(9).reshape(3, 3), columns=list("ABC"), dtype=np.float64)
 
-    X_expected = pd.DataFrame(np.array(
-        [[0., 1., 2., 0., 0],
-         [3., 4., 5., 0.75, 0.59999988],
-         [6., 7., 8., 0.85714286, 0.7499999]]),
-        columns=['A',  'B',  'C',  'A__/__B',  'A__/__C']
+    X_expected = pd.DataFrame(
+        np.array(
+            [
+                [0.0, 1.0, 2.0, 0.0, 0],
+                [3.0, 4.0, 5.0, 0.75, 0.59999988],
+                [6.0, 7.0, 8.0, 0.85714286, 0.7499999],
+            ]
+        ),
+        columns=["A", "B", "C", "A__/__B", "A__/__C"],
     )
     obj = ElementaryArithmetics(
-        columns_a=list('AA'),  columns_b=list('BC'), operator='/'
+        columns_a=list("AA"), columns_b=list("BC"), operator="/"
     ).fit(X)
     return obj, X, X_expected
 
@@ -334,37 +375,37 @@ def test_name_add_ks_np_ks(data_name_add_ks):
 def test_init():
     with pytest.raises(TypeError):
         _ = ElementaryArithmetics(
-            columns_a='A', columns_b=['A'],
-            operator='+', column_names=['2A'])
+            columns_a="A", columns_b=["A"], operator="+", column_names=["2A"]
+        )
     with pytest.raises(TypeError):
         _ = ElementaryArithmetics(
-            columns_a=['A'], columns_b='A',
-            operator='+', column_names=['2A'])
+            columns_a=["A"], columns_b="A", operator="+", column_names=["2A"]
+        )
     with pytest.raises(TypeError):
         _ = ElementaryArithmetics(
-            columns_a=['A'], columns_b=['A'],
-            operator=0, column_names=['2A'])
+            columns_a=["A"], columns_b=["A"], operator=0, column_names=["2A"]
+        )
     with pytest.raises(ValueError):
         _ = ElementaryArithmetics(
-            columns_a=['A'], columns_b=['A'],
-            operator='z', column_names=['2A'])
+            columns_a=["A"], columns_b=["A"], operator="z", column_names=["2A"]
+        )
     with pytest.raises(ValueError):
         _ = ElementaryArithmetics(
-            columns_a=['A', 'B'], columns_b=['A'],
-            operator='+', column_names=['2A'])
+            columns_a=["A", "B"], columns_b=["A"], operator="+", column_names=["2A"]
+        )
     with pytest.raises(ValueError):
         _ = ElementaryArithmetics(
-            columns_a=[], columns_b=['A'],
-            operator='+', column_names=['2A'])
+            columns_a=[], columns_b=["A"], operator="+", column_names=["2A"]
+        )
     with pytest.raises(ValueError):
         _ = ElementaryArithmetics(
-            columns_a=['A'], columns_b=['A'],
-            operator='+', column_names=['2A', '2A'])
+            columns_a=["A"], columns_b=["A"], operator="+", column_names=["2A", "2A"]
+        )
     with pytest.raises(TypeError):
         _ = ElementaryArithmetics(
-            columns_a=['A'], columns_b=['A'],
-            operator='+', coef='x')
+            columns_a=["A"], columns_b=["A"], operator="+", coef="x"
+        )
     with pytest.raises(TypeError):
         _ = ElementaryArithmetics(
-            columns_a=['A'], columns_b=['A'],
-            operator='+', column_names='x')
+            columns_a=["A"], columns_b=["A"], operator="+", column_names="x"
+        )

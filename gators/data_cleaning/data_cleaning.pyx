@@ -2,7 +2,9 @@
 # License: Apache-2.0
 cimport cython
 cimport numpy as np
+
 import numpy as np
+
 
 @cython.boundscheck(False)
 @cython.wraparound(False)

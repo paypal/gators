@@ -1,39 +1,46 @@
 # License: Apache-2.0
-from gators.feature_generation_dt import CyclicDayOfWeek
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_generation_dt import CyclicDayOfWeek
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame({
-        'A': ['2020-05-04T00', None, np.nan],
-        'B': ['2020-05-06T06', None, np.nan],
-        'C': ['2020-05-08T23', None, np.nan],
-        'D': ['2020-05-09T06', None, np.nan],
-        'E': ['2020-05-10T06', None, np.nan],
-        'X': ['x', None, np.nan], })
-    columns = ['A', 'B', 'C', 'D', 'E']
-    X['A'] = X['A'].astype('datetime64[ns]')
-    X['B'] = X['B'].astype('datetime64[ms]')
-    X['C'] = X['C'].astype('datetime64[s]')
-    X['D'] = X['D'].astype('datetime64[m]')
-    X['E'] = X['E'].astype('datetime64[h]')
+    X = pd.DataFrame(
+        {
+            "A": ["2020-05-04T00", None, np.nan],
+            "B": ["2020-05-06T06", None, np.nan],
+            "C": ["2020-05-08T23", None, np.nan],
+            "D": ["2020-05-09T06", None, np.nan],
+            "E": ["2020-05-10T06", None, np.nan],
+            "X": ["x", None, np.nan],
+        }
+    )
+    columns = ["A", "B", "C", "D", "E"]
+    X["A"] = X["A"].astype("datetime64[ns]")
+    X["B"] = X["B"].astype("datetime64[ms]")
+    X["C"] = X["C"].astype("datetime64[s]")
+    X["D"] = X["D"].astype("datetime64[m]")
+    X["E"] = X["E"].astype("datetime64[h]")
     X_expected = pd.DataFrame(
-        {'A__day_of_week_cos': [1.0, np.nan, np.nan],
-         'A__day_of_week_sin': [0.0, np.nan, np.nan],
-         'B__day_of_week_cos': [-0.4999999999999998, np.nan, np.nan],
-         'B__day_of_week_sin': [0.8660254037844388, np.nan, np.nan],
-         'C__day_of_week_cos': [-0.5000000000000004, np.nan, np.nan],
-         'C__day_of_week_sin': [-0.8660254037844384, np.nan, np.nan],
-         'D__day_of_week_cos': [0.4999999999999993, np.nan, np.nan],
-         'D__day_of_week_sin': [-0.866025403784439, np.nan, np.nan],
-         'E__day_of_week_cos': [1.0, None, np.nan],
-         'E__day_of_week_sin': [-2.4492935982947064e-16, None, np.nan], }
+        {
+            "A__day_of_week_cos": [1.0, np.nan, np.nan],
+            "A__day_of_week_sin": [0.0, np.nan, np.nan],
+            "B__day_of_week_cos": [-0.4999999999999998, np.nan, np.nan],
+            "B__day_of_week_sin": [0.8660254037844388, np.nan, np.nan],
+            "C__day_of_week_cos": [-0.5000000000000004, np.nan, np.nan],
+            "C__day_of_week_sin": [-0.8660254037844384, np.nan, np.nan],
+            "D__day_of_week_cos": [0.4999999999999993, np.nan, np.nan],
+            "D__day_of_week_sin": [-0.866025403784439, np.nan, np.nan],
+            "E__day_of_week_cos": [1.0, None, np.nan],
+            "E__day_of_week_sin": [-2.4492935982947064e-16, None, np.nan],
+        }
     )
     X_expected = pd.concat([X.copy(), X_expected], axis=1)
     obj = CyclicDayOfWeek(columns=columns).fit(X)
@@ -42,26 +49,31 @@ def data():
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({
-        'A': ['2020-05-04T00', None, np.nan],
-        'B': ['2020-05-06T06', None, np.nan],
-        'C': ['2020-05-08T23', None, np.nan],
-        'D': ['2020-05-09T06', None, np.nan],
-        'E': ['2020-05-10T06', None, np.nan],
-        'X': ['x', None, np.nan], })
-    columns = ['A', 'B', 'C', 'D', 'E']
-    X[columns] = X[columns].astype('datetime64[ns]')
+    X = ks.DataFrame(
+        {
+            "A": ["2020-05-04T00", None, np.nan],
+            "B": ["2020-05-06T06", None, np.nan],
+            "C": ["2020-05-08T23", None, np.nan],
+            "D": ["2020-05-09T06", None, np.nan],
+            "E": ["2020-05-10T06", None, np.nan],
+            "X": ["x", None, np.nan],
+        }
+    )
+    columns = ["A", "B", "C", "D", "E"]
+    X[columns] = X[columns].astype("datetime64[ns]")
     X_expected = pd.DataFrame(
-        {'A__day_of_week_cos': [1.0, np.nan, np.nan],
-         'A__day_of_week_sin': [0.0, np.nan, np.nan],
-         'B__day_of_week_cos': [-0.4999999999999998, np.nan, np.nan],
-         'B__day_of_week_sin': [0.8660254037844388, np.nan, np.nan],
-         'C__day_of_week_cos': [-0.5000000000000004, np.nan, np.nan],
-         'C__day_of_week_sin': [-0.8660254037844384, np.nan, np.nan],
-         'D__day_of_week_cos': [0.4999999999999993, np.nan, np.nan],
-         'D__day_of_week_sin': [-0.866025403784439, np.nan, np.nan],
-         'E__day_of_week_cos': [1.0, None, np.nan],
-         'E__day_of_week_sin': [-2.4492935982947064e-16, None, np.nan], }
+        {
+            "A__day_of_week_cos": [1.0, np.nan, np.nan],
+            "A__day_of_week_sin": [0.0, np.nan, np.nan],
+            "B__day_of_week_cos": [-0.4999999999999998, np.nan, np.nan],
+            "B__day_of_week_sin": [0.8660254037844388, np.nan, np.nan],
+            "C__day_of_week_cos": [-0.5000000000000004, np.nan, np.nan],
+            "C__day_of_week_sin": [-0.8660254037844384, np.nan, np.nan],
+            "D__day_of_week_cos": [0.4999999999999993, np.nan, np.nan],
+            "D__day_of_week_sin": [-0.866025403784439, np.nan, np.nan],
+            "E__day_of_week_cos": [1.0, None, np.nan],
+            "E__day_of_week_sin": [-2.4492935982947064e-16, None, np.nan],
+        }
     )
     X_expected = pd.concat([X.to_pandas().copy(), X_expected], axis=1)
     obj = CyclicDayOfWeek(columns=columns).fit(X)

@@ -1,139 +1,163 @@
 # License: Apache-2.0
-from gators.binning.bin_rare_events import BinRareEvents
-from pandas.testing import assert_frame_equal
-import pytest
-import pandas as pd
 import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.binning.bin_rare_events import BinRareEvents
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame({
-        'A': ['w', 'z', 'q', 'q', 'q', 'z'],
-        'B': ['x', 'x', 'w', 'w', 'w', 'x'],
-        'C': ['c', 'c', 'e', 'd', 'd', 'c'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    X_expected = pd.DataFrame({
-        'A': ['OTHERS', 'OTHERS', 'q', 'q', 'q', 'OTHERS'],
-        'B': ['x', 'x', 'w', 'w', 'w', 'x'],
-        'C': ['c', 'c', 'OTHERS', 'OTHERS', 'OTHERS', 'c'],
-        'D': [1, 2, 3, 4, 5, 6]})
+    X = pd.DataFrame(
+        {
+            "A": ["w", "z", "q", "q", "q", "z"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "e", "d", "d", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": ["OTHERS", "OTHERS", "q", "q", "q", "OTHERS"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "OTHERS", "OTHERS", "OTHERS", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
     obj = BinRareEvents(min_ratio=0.5).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_1object():
-    X = pd.DataFrame({
-        'A': ['w', 'z', 'q', 'q', 'q', 'z'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    X_expected = pd.DataFrame({
-        'A': ['OTHERS', 'OTHERS', 'q', 'q', 'q', 'OTHERS'],
-        'D': [1, 2, 3, 4, 5, 6]})
+    X = pd.DataFrame({"A": ["w", "z", "q", "q", "q", "z"], "D": [1, 2, 3, 4, 5, 6]})
+    X_expected = pd.DataFrame(
+        {"A": ["OTHERS", "OTHERS", "q", "q", "q", "OTHERS"], "D": [1, 2, 3, 4, 5, 6]}
+    )
     obj = BinRareEvents(min_ratio=0.5).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_all_others():
-    X = pd.DataFrame({
-        'A': ['w', 'z', 'q', 'q', 'q', 'z'],
-        'B': ['x', 'x', 'w', 'w', 'w', 'x'],
-        'C': ['c', 'c', 'e', 'd', 'd', 'c'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    X_expected = pd.DataFrame({
-        'A': ['OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS'],
-        'B': ['OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS'],
-        'C': ['OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    obj = BinRareEvents(min_ratio=1.).fit(X)
+    X = pd.DataFrame(
+        {
+            "A": ["w", "z", "q", "q", "q", "z"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "e", "d", "d", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
+            "B": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
+            "C": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    obj = BinRareEvents(min_ratio=1.0).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_no_other():
-    X = pd.DataFrame({
-        'A': ['w', 'z', 'q', 'q', 'q', 'z'],
-        'B': ['x', 'x', 'w', 'w', 'w', 'x'],
-        'C': ['c', 'c', 'e', 'd', 'd', 'c'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    obj = BinRareEvents(min_ratio=0.).fit(X)
-    obj = BinRareEvents(min_ratio=0.).fit(X)
+    X = pd.DataFrame(
+        {
+            "A": ["w", "z", "q", "q", "q", "z"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "e", "d", "d", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    obj = BinRareEvents(min_ratio=0.0).fit(X)
+    obj = BinRareEvents(min_ratio=0.0).fit(X)
     return obj, X, X.copy()
 
 
 @pytest.fixture
 def data_num():
-    X = pd.DataFrame({
-        'A': [1, 2, 3, 4, 5, 6],
-        'B': [1, 2, 3, 4, 5, 6]})
-    obj = BinRareEvents(min_ratio=1.).fit(X)
+    X = pd.DataFrame({"A": [1, 2, 3, 4, 5, 6], "B": [1, 2, 3, 4, 5, 6]})
+    obj = BinRareEvents(min_ratio=1.0).fit(X)
     return obj, X, X.copy()
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({
-        'A': ['w', 'z', 'q', 'q', 'q', 'z'],
-        'B': ['x', 'x', 'w', 'w', 'w', 'x'],
-        'C': ['c', 'c', 'e', 'd', 'd', 'c'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    X_expected = pd.DataFrame({
-        'A': ['OTHERS', 'OTHERS', 'q', 'q', 'q', 'OTHERS'],
-        'B': ['x', 'x', 'w', 'w', 'w', 'x'],
-        'C': ['c', 'c', 'OTHERS', 'OTHERS', 'OTHERS', 'c'],
-        'D': [1, 2, 3, 4, 5, 6]})
+    X = ks.DataFrame(
+        {
+            "A": ["w", "z", "q", "q", "q", "z"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "e", "d", "d", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": ["OTHERS", "OTHERS", "q", "q", "q", "OTHERS"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "OTHERS", "OTHERS", "OTHERS", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
     obj = BinRareEvents(min_ratio=0.5).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_1object_ks():
-    X = ks.DataFrame({
-        'A': ['w', 'z', 'q', 'q', 'q', 'z'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    X_expected = pd.DataFrame({
-        'A': ['OTHERS', 'OTHERS', 'q', 'q', 'q', 'OTHERS'],
-        'D': [1, 2, 3, 4, 5, 6]})
+    X = ks.DataFrame({"A": ["w", "z", "q", "q", "q", "z"], "D": [1, 2, 3, 4, 5, 6]})
+    X_expected = pd.DataFrame(
+        {"A": ["OTHERS", "OTHERS", "q", "q", "q", "OTHERS"], "D": [1, 2, 3, 4, 5, 6]}
+    )
     obj = BinRareEvents(min_ratio=0.5).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_all_others_ks():
-    X = ks.DataFrame({
-        'A': ['w', 'z', 'q', 'q', 'q', 'z'],
-        'B': ['x', 'x', 'w', 'w', 'w', 'x'],
-        'C': ['c', 'c', 'e', 'd', 'd', 'c'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    X_expected = pd.DataFrame({
-        'A': ['OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS'],
-        'B': ['OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS'],
-        'C': ['OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS', 'OTHERS'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    obj = BinRareEvents(min_ratio=1.).fit(X)
+    X = ks.DataFrame(
+        {
+            "A": ["w", "z", "q", "q", "q", "z"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "e", "d", "d", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
+            "B": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
+            "C": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    obj = BinRareEvents(min_ratio=1.0).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_no_other_ks():
-    X = ks.DataFrame({
-        'A': ['w', 'z', 'q', 'q', 'q', 'z'],
-        'B': ['x', 'x', 'w', 'w', 'w', 'x'],
-        'C': ['c', 'c', 'e', 'd', 'd', 'c'],
-        'D': [1, 2, 3, 4, 5, 6]})
-    obj = BinRareEvents(min_ratio=0.).fit(X)
-    obj = BinRareEvents(min_ratio=0.).fit(X)
+    X = ks.DataFrame(
+        {
+            "A": ["w", "z", "q", "q", "q", "z"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "e", "d", "d", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    obj = BinRareEvents(min_ratio=0.0).fit(X)
+    obj = BinRareEvents(min_ratio=0.0).fit(X)
     return obj, X, X.to_pandas().copy()
 
 
 @pytest.fixture
 def data_num_ks():
-    X = ks.DataFrame({
-        'A': [1, 2, 3, 4, 5, 6],
-        'B': [1, 2, 3, 4, 5, 6]})
-    obj = BinRareEvents(min_ratio=1.).fit(X)
+    X = ks.DataFrame({"A": [1, 2, 3, 4, 5, 6], "B": [1, 2, 3, 4, 5, 6]})
+    obj = BinRareEvents(min_ratio=1.0).fit(X)
     return obj, X, X.to_pandas().copy()
 
 
@@ -153,8 +177,7 @@ def test_ks(data_ks):
 def test_pd_np(data):
     obj, X, X_expected = data
     X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(
-        X_numpy_new, columns=X_expected.columns)
+    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
     X_expected.index = X_new.index
     assert_frame_equal(X_new, X_expected.astype(object))
 

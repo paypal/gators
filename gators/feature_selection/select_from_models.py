@@ -1,12 +1,14 @@
 # License: Apache-2.0
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
 import pyspark.sql.dataframe as ps
-from ._base_feature_selection import _BaseFeatureSelection
+
 from ..scalers.minmax_scaler import MinMaxScaler
 from ..util import util
+from ._base_feature_selection import _BaseFeatureSelection
 
 
 class SelectFromModels(_BaseFeatureSelection):
@@ -85,21 +87,23 @@ class SelectFromModels(_BaseFeatureSelection):
 
     def __init__(self, models: List[object], k: int):
         if not isinstance(models, list):
-            raise TypeError('`models` should be a list.')
+            raise TypeError("`models` should be a list.")
         if not isinstance(k, int):
-            raise TypeError('`k` should be an int.')
+            raise TypeError("`k` should be an int.")
         for model in models:
-            if not hasattr(model, 'fit'):
+            if not hasattr(model, "fit"):
                 raise TypeError(
-                    'All the elements of `models` should have the attribute `fit`.'
+                    "All the elements of `models` should have the attribute `fit`."
                 )
         _BaseFeatureSelection.__init__(self)
         self.models = models
         self.k = k
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'SelectFromModels':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "SelectFromModels":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -115,43 +119,44 @@ class SelectFromModels(_BaseFeatureSelection):
         """
         self.check_dataframe(X)
         self.check_y(X, y)
-        self.feature_importances_ = self.get_feature_importances_frame(
-            X, self.models)
+        self.feature_importances_ = self.get_feature_importances_frame(X, self.models)
         if isinstance(X, pd.DataFrame):
-            for col, model in zip(
-                    self.feature_importances_.columns, self.models):
+            for col, model in zip(self.feature_importances_.columns, self.models):
                 model_feature_importances_ = self.get_feature_importances_pd(
-                    model=model, X=X, y=y)
+                    model=model, X=X, y=y
+                )
                 self.feature_importances_[col] = model_feature_importances_
         else:
             spark_df = util.generate_spark_dataframe(X=X, y=y)
-            for col, model in zip(
-                    self.feature_importances_.columns, self.models):
+            for col, model in zip(self.feature_importances_.columns, self.models):
                 model_feature_importances_ = self.get_feature_importances_sk(
-                    model=model, spark_df=spark_df)
+                    model=model, spark_df=spark_df
+                )
                 self.feature_importances_[col] = model_feature_importances_
         self.feature_importances_ = self.clean_feature_importances_frame(
-            self.feature_importances_)
+            self.feature_importances_
+        )
         self.selected_columns = list(
-            self.feature_importances_['count'].iloc[:self.k].index)
+            self.feature_importances_["count"].iloc[: self.k].index
+        )
         self.columns_to_drop = [
-            c for c in self.feature_importances_.index
-            if c not in self.selected_columns
+            c for c in self.feature_importances_.index if c not in self.selected_columns
         ]
         self.idx_selected_columns = util.get_idx_columns(
-            X.columns, self.selected_columns)
+            X.columns, self.selected_columns
+        )
         return self
 
     @staticmethod
     def get_feature_importances_pd(
-            model: object, X: pd.DataFrame, y: Union[pd.Series, ks.Series]):
+        model: object, X: pd.DataFrame, y: Union[pd.Series, ks.Series]
+    ):
         model.fit(X, y)
         feature_importances_ = model.feature_importances_
         return feature_importances_
 
     @staticmethod
-    def get_feature_importances_sk(
-            model: object, spark_df: ps.DataFrame):
+    def get_feature_importances_sk(model: object, spark_df: ps.DataFrame):
         trained_model = model.fit(spark_df)
         feature_importances_ = trained_model.featureImportances.toArray()
         return feature_importances_
@@ -161,19 +166,18 @@ class SelectFromModels(_BaseFeatureSelection):
         index = np.array(list(X.columns))
         columns = []
         for i, model in enumerate(models):
-            col = str(model).split('(')[0]
-            columns.append(col + '_' + str(i))
-        return pd.DataFrame(
-            columns=columns, index=index, dtype=np.float64)
+            col = str(model).split("(")[0]
+            columns.append(col + "_" + str(i))
+        return pd.DataFrame(columns=columns, index=index, dtype=np.float64)
 
     @staticmethod
     def clean_feature_importances_frame(feature_importances):
-        feature_importances = MinMaxScaler(
-        ).fit_transform(feature_importances)
+        feature_importances = MinMaxScaler().fit_transform(feature_importances)
         feature_importances_sum = feature_importances.sum(1)
         feature_importances_count = (feature_importances != 0).sum(1)
-        feature_importances['sum'] = feature_importances_sum
-        feature_importances['count'] = feature_importances_count
+        feature_importances["sum"] = feature_importances_sum
+        feature_importances["count"] = feature_importances_count
         feature_importances.sort_values(
-            by=['count', 'sum'], ascending=False, inplace=True)
+            by=["count", "sum"], ascending=False, inplace=True
+        )
         return feature_importances

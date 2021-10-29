@@ -1,11 +1,14 @@
 # Licence Apache-2.0
-import feature_gen_dt
-from ..util import util
-from ..transformers import Transformer
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+import feature_gen_dt
+
+from ..transformers import Transformer
+from ..util import util
 
 
 class DeltaTime(Transformer):
@@ -89,32 +92,33 @@ class DeltaTime(Transformer):
     def __init__(self, columns_a: List[str], columns_b: List[str]):
         Transformer.__init__(self)
         if not isinstance(columns_a, list):
-            raise TypeError('`columns_a` should be a list.')
+            raise TypeError("`columns_a` should be a list.")
         if not columns_a:
-            raise ValueError('`columns_a` should not be empty.')
+            raise ValueError("`columns_a` should not be empty.")
         if not isinstance(columns_b, list):
-            raise TypeError('`columns_b` should be a list.')
+            raise TypeError("`columns_b` should be a list.")
         if not columns_b:
-            raise ValueError('`columns_b` should not be empty.')
+            raise ValueError("`columns_b` should not be empty.")
         if len(columns_b) != len(columns_a):
-            raise ValueError(
-                '`columns_a` and `columns_b` should have the same length.')
-        self.unit = 's'
+            raise ValueError("`columns_a` and `columns_b` should have the same length.")
+        self.unit = "s"
         self.columns_a = columns_a
         self.columns_b = columns_b
-        self.deltatime_dtype = f'timedelta64[{self.unit}]'
+        self.deltatime_dtype = f"timedelta64[{self.unit}]"
         self.column_names = [
-            f'{c_a}__{c_b}__Deltatime[{self.unit}]'
+            f"{c_a}__{c_b}__Deltatime[{self.unit}]"
             for c_a, c_b in zip(columns_a, columns_b)
         ]
         self.column_mapping = {
-            name: [c_a, c_b] for name, c_a, c_b
-            in zip(self.column_names, columns_a, columns_b)
+            name: [c_a, c_b]
+            for name, c_a, c_b in zip(self.column_names, columns_a, columns_b)
         }
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'DeltaTime':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "DeltaTime":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -130,7 +134,7 @@ class DeltaTime(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        columns = list(set(self.columns_a+self.columns_b))
+        columns = list(set(self.columns_a + self.columns_b))
         X_datetime_dtype = X.iloc[:5000][columns].dtypes
         for column in columns:
             if not np.issubdtype(X_datetime_dtype[column], np.datetime64):
@@ -138,7 +142,8 @@ class DeltaTime(Transformer):
                     """
                     Datetime columns should be of subtype np.datetime64.
                     Use `ConvertColumnDatatype` to convert the dtype.
-                """)
+                """
+                )
         self.idx_columns_a = util.get_idx_columns(
             columns=X.columns,
             selected_columns=self.columns_a,
@@ -166,13 +171,15 @@ class DeltaTime(Transformer):
         """
         self.check_dataframe(X)
         if isinstance(X, pd.DataFrame):
-            for name, c_a, c_b in zip(self.column_names, self.columns_a, self.columns_b):
+            for name, c_a, c_b in zip(
+                self.column_names, self.columns_a, self.columns_b
+            ):
                 X.loc[:, name] = (X[c_a] - X[c_b]).astype(self.deltatime_dtype)
             return X
         for name, c_a, c_b in zip(self.column_names, self.columns_a, self.columns_b):
-            X = X.assign(
-                dummy=(X[c_a].astype(float) - X[c_b].astype(float))).rename(
-                columns={'dummy': name})
+            X = X.assign(dummy=(X[c_a].astype(float) - X[c_b].astype(float))).rename(
+                columns={"dummy": name}
+            )
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -189,5 +196,4 @@ class DeltaTime(Transformer):
             Array with the datetime features added.
         """
         self.check_array(X)
-        return feature_gen_dt.deltatime(
-            X, self.idx_columns_a, self.idx_columns_b)
+        return feature_gen_dt.deltatime(X, self.idx_columns_a, self.idx_columns_b)

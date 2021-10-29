@@ -1,9 +1,11 @@
 # License: Apache-2.0
+from typing import Union
+
+import databricks.koalas as ks
+import pandas as pd
+
 from ..util import util
 from ._base_data_cleaning import _BaseDataCleaning
-from typing import Union
-import pandas as pd
-import databricks.koalas as ks
 
 
 class DropColumns(_BaseDataCleaning):
@@ -68,13 +70,12 @@ class DropColumns(_BaseDataCleaning):
 
     def __init__(self, columns):
         if not isinstance(columns, list):
-            raise TypeError('`columns` should be a list.')
+            raise TypeError("`columns` should be a list.")
 
         _BaseDataCleaning.__init__(self)
         self.columns = columns
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y=None) -> 'DropColumns':
+    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "DropColumns":
         """Fit the transformer on the dataframe X.
 
         Get the list of column names to remove and the array of
@@ -93,10 +94,9 @@ class DropColumns(_BaseDataCleaning):
         """
         self.check_dataframe(X)
         self.columns_to_keep = util.exclude_columns(
-            columns=X.columns,
-            excluded_columns=self.columns)
+            columns=X.columns, excluded_columns=self.columns
+        )
         self.idx_columns_to_keep = util.exclude_idx_columns(
-            columns=X.columns,
-            excluded_columns=self.columns
+            columns=X.columns, excluded_columns=self.columns
         )
         return self

@@ -1,10 +1,13 @@
 # License: Apache-2.0
-from feature_gen_str import contains
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-from._base_string_feature import _BaseStringFeature
+
+from feature_gen_str import contains
+
+from ._base_string_feature import _BaseStringFeature
 
 
 class StringContains(_BaseStringFeature):
@@ -73,22 +76,23 @@ class StringContains(_BaseStringFeature):
 
     """
 
-    def __init__(self, columns: List[str], contains_vec: List[str],
-                 column_names: List[str] = None):
+    def __init__(
+        self,
+        columns: List[str],
+        contains_vec: List[str],
+        column_names: List[str] = None,
+    ):
         if not isinstance(columns, list):
-            raise TypeError('`columns` should be a list.')
+            raise TypeError("`columns` should be a list.")
         if not isinstance(contains_vec, list):
-            raise TypeError('`contains_vec` should be a list.')
+            raise TypeError("`contains_vec` should be a list.")
         if len(columns) != len(contains_vec):
-            raise ValueError(
-                'Length of `columns` and `contains_vec` should match.')
+            raise ValueError("Length of `columns` and `contains_vec` should match.")
         if not column_names:
             column_names = [
-                f'{col}__contains_{val}'
-                for col, val in zip(columns, contains_vec)
+                f"{col}__contains_{val}" for col, val in zip(columns, contains_vec)
             ]
-        _BaseStringFeature.__init__(
-            self, columns, column_names)
+        _BaseStringFeature.__init__(self, columns, column_names)
         self.contains_vec = np.array(contains_vec, str).astype(object)
 
     def transform(
@@ -107,10 +111,8 @@ class StringContains(_BaseStringFeature):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        for col, val, name in zip(
-                self.columns, self.contains_vec, self.column_names):
-            X.loc[:, name] = X[col].str.contains(
-                val, regex=False).astype(np.float64)
+        for col, val, name in zip(self.columns, self.contains_vec, self.column_names):
+            X.loc[:, name] = X[col].str.contains(val, regex=False).astype(np.float64)
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

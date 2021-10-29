@@ -1,37 +1,42 @@
 # License: Apache-2.0
-from gators.feature_generation_dt import OrdinalDayOfWeek
-from pandas.testing import assert_series_equal
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal, assert_series_equal
+
+from gators.feature_generation_dt import OrdinalDayOfWeek
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
     X = pd.DataFrame(
-        {'A': {0: '2020-05-04 00:00:00', 1: np.nan},
-         'B': {0: '2020-05-06 06:00:00', 1: np.nan},
-         'C': {0: '2020-05-08 23:00:00', 1: pd.NaT},
-         'D': {0: '2020-05-09 06:00:00', 1: None},
-         'E': {0: '2020-05-10 06:00:00', 1: None},
-         'X': {0: 'x', 1: 'x'}}
+        {
+            "A": {0: "2020-05-04 00:00:00", 1: np.nan},
+            "B": {0: "2020-05-06 06:00:00", 1: np.nan},
+            "C": {0: "2020-05-08 23:00:00", 1: pd.NaT},
+            "D": {0: "2020-05-09 06:00:00", 1: None},
+            "E": {0: "2020-05-10 06:00:00", 1: None},
+            "X": {0: "x", 1: "x"},
+        }
     )
-    columns = ['A', 'B', 'C', 'D', 'E']
-    X['A'] = X['A'].astype('datetime64[ns]')
-    X['B'] = X['B'].astype('datetime64[ms]')
-    X['C'] = X['C'].astype('datetime64[s]')
-    X['D'] = X['D'].astype('datetime64[m]')
-    X['E'] = X['E'].astype('datetime64[h]')
+    columns = ["A", "B", "C", "D", "E"]
+    X["A"] = X["A"].astype("datetime64[ns]")
+    X["B"] = X["B"].astype("datetime64[ms]")
+    X["C"] = X["C"].astype("datetime64[s]")
+    X["D"] = X["D"].astype("datetime64[m]")
+    X["E"] = X["E"].astype("datetime64[h]")
 
     X_expected = pd.DataFrame(
-        {'A__day_of_week': {0: '0.0', 1: 'nan'},
-         'B__day_of_week': {0: '2.0', 1: 'nan'},
-         'C__day_of_week': {0: '4.0', 1: 'nan'},
-         'D__day_of_week': {0: '5.0', 1: 'nan'},
-         'E__day_of_week': {0: '6.0', 1: 'nan'}}
+        {
+            "A__day_of_week": {0: "0.0", 1: "nan"},
+            "B__day_of_week": {0: "2.0", 1: "nan"},
+            "C__day_of_week": {0: "4.0", 1: "nan"},
+            "D__day_of_week": {0: "5.0", 1: "nan"},
+            "E__day_of_week": {0: "6.0", 1: "nan"},
+        }
     )
     X_expected = pd.concat([X.copy(), X_expected], axis=1)
     obj = OrdinalDayOfWeek(columns=columns).fit(X)
@@ -41,22 +46,26 @@ def data():
 @pytest.fixture
 def data_ks():
     X = ks.DataFrame(
-        {'A': {0: '2020-05-04 00:00:00', 1: np.nan},
-         'B': {0: '2020-05-06 06:00:00', 1: np.nan},
-         'C': {0: '2020-05-08 23:00:00', 1: pd.NaT},
-         'D': {0: '2020-05-09 06:00:00', 1: None},
-         'E': {0: '2020-05-10 06:00:00', 1: None},
-         'X': {0: 'x', 1: 'x'}}
+        {
+            "A": {0: "2020-05-04 00:00:00", 1: np.nan},
+            "B": {0: "2020-05-06 06:00:00", 1: np.nan},
+            "C": {0: "2020-05-08 23:00:00", 1: pd.NaT},
+            "D": {0: "2020-05-09 06:00:00", 1: None},
+            "E": {0: "2020-05-10 06:00:00", 1: None},
+            "X": {0: "x", 1: "x"},
+        }
     )
-    columns = ['A', 'B', 'C', 'D', 'E']
-    X[columns] = X[columns].astype('datetime64[ns]')
+    columns = ["A", "B", "C", "D", "E"]
+    X[columns] = X[columns].astype("datetime64[ns]")
 
     X_expected = pd.DataFrame(
-        {'A__day_of_week': {0: '0.0', 1: 'nan'},
-         'B__day_of_week': {0: '2.0', 1: 'nan'},
-         'C__day_of_week': {0: '4.0', 1: 'nan'},
-         'D__day_of_week': {0: '5.0', 1: 'nan'},
-         'E__day_of_week': {0: '6.0', 1: 'nan'}}
+        {
+            "A__day_of_week": {0: "0.0", 1: "nan"},
+            "B__day_of_week": {0: "2.0", 1: "nan"},
+            "C__day_of_week": {0: "4.0", 1: "nan"},
+            "D__day_of_week": {0: "5.0", 1: "nan"},
+            "E__day_of_week": {0: "6.0", 1: "nan"},
+        }
     )
     X_expected = pd.concat([X.to_pandas().copy(), X_expected], axis=1)
     obj = OrdinalDayOfWeek(columns=columns).fit(X)

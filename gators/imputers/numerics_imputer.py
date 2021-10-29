@@ -1,13 +1,14 @@
 # License: Apache-2.0
-from ._base_imputer import _BaseImputer
-from imputer import float_imputer_object
-from imputer import float_imputer
-from ..util import util
-import numpy as np
-from typing import List, Union
-import pandas as pd
-import databricks.koalas as ks
 import warnings
+from typing import List, Union
+
+import databricks.koalas as ks
+import numpy as np
+import pandas as pd
+from imputer import float_imputer, float_imputer_object
+
+from ..util import util
+from ._base_imputer import _BaseImputer
 
 
 class NumericsImputer(_BaseImputer):
@@ -110,21 +111,24 @@ class NumericsImputer(_BaseImputer):
 
     """
 
-    def __init__(self, strategy: str,
-                 value: float = None,
-                 columns: List[str] = None):
+    def __init__(self, strategy: str, value: float = None, columns: List[str] = None):
         _BaseImputer.__init__(self, strategy, value, columns)
-        if strategy not in ['constant', 'mean', 'median']:
+        if strategy not in ["constant", "mean", "median"]:
             raise ValueError(
-                '''`strategy` should be "constant", ,"mean"
-                     or "median" for NumericsImputer Transformer.''')
-        if strategy == 'constant' and not isinstance(value, float):
+                """`strategy` should be "constant", ,"mean"
+                     or "median" for NumericsImputer Transformer."""
+            )
+        if strategy == "constant" and not isinstance(value, float):
             raise TypeError(
-                '''`value` should be a float
-                for the NumericsImputer class''')
+                """`value` should be a float
+                for the NumericsImputer class"""
+            )
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'NumericsImputer':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "NumericsImputer":
         """Fit the transformer on the pandas/koalas dataframe X.
 
         Parameters
@@ -143,8 +147,9 @@ class NumericsImputer(_BaseImputer):
             self.columns = util.get_datatype_columns(X, float)
         if not self.columns:
             warnings.warn(
-                '''`X` does not contain numerical columns,
-                `NumericsImputer` is not needed''')
+                """`X` does not contain numerical columns,
+                `NumericsImputer` is not needed"""
+            )
             self.idx_columns = np.array([])
             return self
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
@@ -154,8 +159,7 @@ class NumericsImputer(_BaseImputer):
             strategy=self.strategy,
             value=self.value,
         )
-        self.statistics_values = np.array(
-            list(self.statistics.values()))
+        self.statistics_values = np.array(list(self.statistics.values()))
         return self
 
     def transform(
@@ -197,10 +201,6 @@ class NumericsImputer(_BaseImputer):
             return X
         if X.dtype == object:
             return float_imputer_object(
-                X,
-                self.statistics_values.astype(object),
-                self.idx_columns)
-        return float_imputer(
-            X,
-            self.statistics_values,
-            self.idx_columns)
+                X, self.statistics_values.astype(object), self.idx_columns
+            )
+        return float_imputer(X, self.statistics_values, self.idx_columns)

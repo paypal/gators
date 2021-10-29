@@ -1,94 +1,140 @@
 # License: Apache-2.0
-from gators.feature_generation_str import StringContains
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_generation_str import StringContains
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame(np.zeros((3, 3)), columns=list('qwe'))
-    X['a'] = ['0', '1Q', '1QQ']
-    X['s'] = ['0', 'W2', 'W2W']
-    X['d'] = ['0', 'Q', '']
+    X = pd.DataFrame(np.zeros((3, 3)), columns=list("qwe"))
+    X["a"] = ["0", "1Q", "1QQ"]
+    X["s"] = ["0", "W2", "W2W"]
+    X["d"] = ["0", "Q", ""]
 
-    obj = StringContains(
-        columns=list('asd'), contains_vec=['1', '2', '0']).fit(X)
+    obj = StringContains(columns=list("asd"), contains_vec=["1", "2", "0"]).fit(X)
     columns_expected = [
-        'q', 'w', 'e', 'a', 's', 'd',
-        'a__contains_1', 's__contains_2',	'd__contains_0']
+        "q",
+        "w",
+        "e",
+        "a",
+        "s",
+        "d",
+        "a__contains_1",
+        "s__contains_2",
+        "d__contains_0",
+    ]
     X_expected = pd.DataFrame(
-        [[0.0, 0.0, 0.0, '0', '0', '0', 0.0, 0.0, 1.0],
-         [0.0, 0.0, 0.0, '1Q', 'W2', 'Q', 1.0, 1.0, 0.0],
-         [0.0, 0.0, 0.0, '1QQ', 'W2W', '', 1.0, 1.0, 0.0]],
-        columns=columns_expected)
+        [
+            [0.0, 0.0, 0.0, "0", "0", "0", 0.0, 0.0, 1.0],
+            [0.0, 0.0, 0.0, "1Q", "W2", "Q", 1.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, "1QQ", "W2W", "", 1.0, 1.0, 0.0],
+        ],
+        columns=columns_expected,
+    )
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(np.zeros((3, 3)), columns=list('qwe'))
-    X['a'] = ['0', '1Q', '1QQ']
-    X['s'] = ['0', 'W2', 'W2W']
-    X['d'] = ['0', 'Q', '']
+    X = ks.DataFrame(np.zeros((3, 3)), columns=list("qwe"))
+    X["a"] = ["0", "1Q", "1QQ"]
+    X["s"] = ["0", "W2", "W2W"]
+    X["d"] = ["0", "Q", ""]
 
-    obj = StringContains(
-        columns=list('asd'), contains_vec=['1', '2', '0']).fit(X)
+    obj = StringContains(columns=list("asd"), contains_vec=["1", "2", "0"]).fit(X)
     columns_expected = [
-        'q', 'w', 'e', 'a', 's', 'd',
-        'a__contains_1', 's__contains_2',	'd__contains_0']
+        "q",
+        "w",
+        "e",
+        "a",
+        "s",
+        "d",
+        "a__contains_1",
+        "s__contains_2",
+        "d__contains_0",
+    ]
     X_expected = pd.DataFrame(
-        [[0.0, 0.0, 0.0, '0', '0', '0', 0.0, 0.0, 1.0],
-         [0.0, 0.0, 0.0, '1Q', 'W2', 'Q', 1.0, 1.0, 0.0],
-         [0.0, 0.0, 0.0, '1QQ', 'W2W', '', 1.0, 1.0, 0.0]],
-        columns=columns_expected)
+        [
+            [0.0, 0.0, 0.0, "0", "0", "0", 0.0, 0.0, 1.0],
+            [0.0, 0.0, 0.0, "1Q", "W2", "Q", 1.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, "1QQ", "W2W", "", 1.0, 1.0, 0.0],
+        ],
+        columns=columns_expected,
+    )
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_with_names():
-    X = pd.DataFrame(np.zeros((3, 3)), columns=list('qwe'))
-    X['a'] = ['0', '1Q', '1QQ']
-    X['s'] = ['0', 'W2', 'W2W']
-    X['d'] = ['0', 'Q', '']
+    X = pd.DataFrame(np.zeros((3, 3)), columns=list("qwe"))
+    X["a"] = ["0", "1Q", "1QQ"]
+    X["s"] = ["0", "W2", "W2W"]
+    X["d"] = ["0", "Q", ""]
 
     obj = StringContains(
-        columns=list('asd'),
-        contains_vec=['1', '2', '0'],
-        column_names=['a_with_1', 's_with_2', 'd_with_0']).fit(X)
+        columns=list("asd"),
+        contains_vec=["1", "2", "0"],
+        column_names=["a_with_1", "s_with_2", "d_with_0"],
+    ).fit(X)
     columns_expected = [
-        'q', 'w', 'e', 'a', 's', 'd', 'a_with_1',
-        's_with_2',	'd_with_0']
+        "q",
+        "w",
+        "e",
+        "a",
+        "s",
+        "d",
+        "a_with_1",
+        "s_with_2",
+        "d_with_0",
+    ]
     X_expected = pd.DataFrame(
-        [[0.0, 0.0, 0.0, '0', '0', '0', 0.0, 0.0, 1.0],
-         [0.0, 0.0, 0.0, '1Q', 'W2', 'Q', 1.0, 1.0, 0.0],
-         [0.0, 0.0, 0.0, '1QQ', 'W2W', '', 1.0, 1.0, 0.0]],
-        columns=columns_expected)
+        [
+            [0.0, 0.0, 0.0, "0", "0", "0", 0.0, 0.0, 1.0],
+            [0.0, 0.0, 0.0, "1Q", "W2", "Q", 1.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, "1QQ", "W2W", "", 1.0, 1.0, 0.0],
+        ],
+        columns=columns_expected,
+    )
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_with_names_ks():
-    X = ks.DataFrame(np.zeros((3, 3)), columns=list('qwe'))
-    X['a'] = ['0', '1Q', '1QQ']
-    X['s'] = ['0', 'W2', 'W2W']
-    X['d'] = ['0', 'Q', '']
+    X = ks.DataFrame(np.zeros((3, 3)), columns=list("qwe"))
+    X["a"] = ["0", "1Q", "1QQ"]
+    X["s"] = ["0", "W2", "W2W"]
+    X["d"] = ["0", "Q", ""]
 
     obj = StringContains(
-        columns=list('asd'),
-        contains_vec=['1', '2', '0'],
-        column_names=['a_with_1', 's_with_2', 'd_with_0']).fit(X)
+        columns=list("asd"),
+        contains_vec=["1", "2", "0"],
+        column_names=["a_with_1", "s_with_2", "d_with_0"],
+    ).fit(X)
     columns_expected = [
-        'q', 'w', 'e', 'a', 's', 'd', 'a_with_1',
-        's_with_2',	'd_with_0']
+        "q",
+        "w",
+        "e",
+        "a",
+        "s",
+        "d",
+        "a_with_1",
+        "s_with_2",
+        "d_with_0",
+    ]
     X_expected = pd.DataFrame(
-        [[0.0, 0.0, 0.0, '0', '0', '0', 0.0, 0.0, 1.0],
-         [0.0, 0.0, 0.0, '1Q', 'W2', 'Q', 1.0, 1.0, 0.0],
-         [0.0, 0.0, 0.0, '1QQ', 'W2W', '', 1.0, 1.0, 0.0]],
-        columns=columns_expected)
+        [
+            [0.0, 0.0, 0.0, "0", "0", "0", 0.0, 0.0, 1.0],
+            [0.0, 0.0, 0.0, "1Q", "W2", "Q", 1.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, "1QQ", "W2W", "", 1.0, 1.0, 0.0],
+        ],
+        columns=columns_expected,
+    )
     return obj, X, X_expected
 
 
@@ -151,21 +197,21 @@ def test_names_ks_np(data_with_names_ks):
 def test_init():
     with pytest.raises(TypeError):
         _ = StringContains(
-            columns='x', contains_vec=['z', 'x'], column_names=['aa', 'ss']
+            columns="x", contains_vec=["z", "x"], column_names=["aa", "ss"]
         )
     with pytest.raises(TypeError):
         _ = StringContains(
-            columns=['a', 's'], contains_vec='x', column_names=['aa', 'ss']
+            columns=["a", "s"], contains_vec="x", column_names=["aa", "ss"]
         )
     with pytest.raises(TypeError):
         _ = StringContains(
-            columns=['a', 's'], contains_vec=['z', 'x'], column_names='x'
+            columns=["a", "s"], contains_vec=["z", "x"], column_names="x"
         )
     with pytest.raises(ValueError):
         _ = StringContains(
-            columns=['a', 's'], contains_vec=['z'], column_names=['aa', 'ss']
+            columns=["a", "s"], contains_vec=["z"], column_names=["aa", "ss"]
         )
     with pytest.raises(ValueError):
         _ = StringContains(
-            columns=['a', 's'], contains_vec=['z', 'x'], column_names=['aa']
+            columns=["a", "s"], contains_vec=["z", "x"], column_names=["aa"]
         )

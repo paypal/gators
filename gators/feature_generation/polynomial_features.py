@@ -1,11 +1,14 @@
+from itertools import chain, combinations, combinations_with_replacement
+from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-from typing import List, Union
-import databricks.koalas as ks
-from ..util import util
-from gators.transformers import Transformer
-from itertools import combinations, combinations_with_replacement, chain
+
 from feature_gen import polynomial
+from gators.transformers import Transformer
+
+from ..util import util
 from ._base_feature_generation import _BaseFeatureGeneration
 
 
@@ -87,21 +90,27 @@ class PolynomialFeatures(Transformer):
 
     """
 
-    def __init__(self, columns: List[str], degree=2, interaction_only=False,
-                 dtype: type = np.float64):
+    def __init__(
+        self,
+        columns: List[str],
+        degree=2,
+        interaction_only=False,
+        dtype: type = np.float64,
+    ):
         if not isinstance(columns, list):
-            raise TypeError('`columns` should be a list.')
+            raise TypeError("`columns` should be a list.")
         if not columns:
-            raise ValueError('`columns` should not be empty.')
+            raise ValueError("`columns` should not be empty.")
         if not isinstance(degree, int):
-            raise TypeError('`degree` should be an int.')
+            raise TypeError("`degree` should be an int.")
         if degree < 2:
-            raise ValueError('`degree` should be at least 2.')
+            raise ValueError("`degree` should be at least 2.")
         if not isinstance(interaction_only, bool):
-            raise TypeError('`interaction_only` should be a bool.')
+            raise TypeError("`interaction_only` should be a bool.")
         if interaction_only == True and len(columns) == 1:
             raise ValueError(
-                'Cannot create interaction only terms from single feature.')
+                "Cannot create interaction only terms from single feature."
+            )
         self.check_datatype(dtype, [np.float32, np.float64])
 
         self.degree = degree
@@ -109,22 +118,32 @@ class PolynomialFeatures(Transformer):
             combinations if interaction_only else combinations_with_replacement
         )
         self.combinations = list(
-            map(list, chain.from_iterable(
-                self.method(columns, self.degree)
-                for self.degree in range(self.degree + 1)))
+            map(
+                list,
+                chain.from_iterable(
+                    self.method(columns, self.degree)
+                    for self.degree in range(self.degree + 1)
+                ),
+            )
         )
         self.combinations = [c for c in self.combinations if len(c) >= 2]
-        column_names = ['__x__'.join(map(str, combination))
-                        for combination in self.combinations]
-        column_mapping = dict(
-            zip(column_names, map(list, self.combinations)))
+        column_names = [
+            "__x__".join(map(str, combination)) for combination in self.combinations
+        ]
+        column_mapping = dict(zip(column_names, map(list, self.combinations)))
         _BaseFeatureGeneration.__init__(
-            self, columns=columns, column_names=column_names,
-            column_mapping=column_mapping, dtype=dtype)
+            self,
+            columns=columns,
+            column_names=column_names,
+            column_mapping=column_mapping,
+            dtype=dtype,
+        )
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'PolynomialFeatures':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "PolynomialFeatures":
         """
         Fit the dataframe X.
 
@@ -142,15 +161,18 @@ class PolynomialFeatures(Transformer):
         self.check_dataframe_is_numerics(X)
         self.dtype = X[self.columns].dtypes.unique()[0]
         self.idx_columns = util.get_idx_columns(
-            columns=X.columns,
-            selected_columns=self.columns
+            columns=X.columns, selected_columns=self.columns
         )
         self.n_rows = X[self.columns].shape[0]
         self.n_cols = X[self.columns].shape[1]
         self.combinations_np = list(
-            map(list, chain.from_iterable(
-                self.method(self.idx_columns, self.degree)
-                for self.degree in range(self.degree + 1)))
+            map(
+                list,
+                chain.from_iterable(
+                    self.method(self.idx_columns, self.degree)
+                    for self.degree in range(self.degree + 1)
+                ),
+            )
         )
         self.combinations_np = [c for c in self.combinations_np if len(c) >= 2]
         for combo in self.combinations_np:
@@ -181,9 +203,7 @@ class PolynomialFeatures(Transformer):
             return X
         for combi, name in zip(self.combinations, self.column_names):
             dummy = X[combi[0]] * X["__x__".join(combi[1:])]
-            X = X.assign(
-                dummy=dummy
-            ).rename(columns={'dummy': name})
+            X = X.assign(dummy=dummy).rename(columns={"dummy": name})
         X[self.column_names] = X[self.column_names].astype(self.dtype)
         return X
 
@@ -201,5 +221,4 @@ class PolynomialFeatures(Transformer):
             Transformed array.
         """
         self.check_array(X)
-        return polynomial(
-            X, self.combinations_np, self.degree, self.dtype)
+        return polynomial(X, self.combinations_np, self.degree, self.dtype)

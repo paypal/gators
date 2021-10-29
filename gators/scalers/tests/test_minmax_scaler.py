@@ -1,27 +1,23 @@
 # License: Apache-2.0
-from gators.scalers.minmax_scaler import MinMaxScaler
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+
+from gators.scalers.minmax_scaler import MinMaxScaler
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame(
-        np.arange(25).reshape((5, 5)),
-        columns=list('ABCDF')
-    )
+    X = pd.DataFrame(np.arange(25).reshape((5, 5)), columns=list("ABCDF"))
     return MinMaxScaler().fit(X), X
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
-        np.arange(25).reshape((5, 5)),
-        columns=list('ABCDF')
-    )
+    X = ks.DataFrame(np.arange(25).reshape((5, 5)), columns=list("ABCDF"))
     return MinMaxScaler().fit(X), X
 
 
@@ -29,7 +25,7 @@ def data_ks():
 def data_float32():
     X = pd.DataFrame(
         np.random.randn(5, 5),
-        columns=list('ABCDF'),
+        columns=list("ABCDF"),
     )
     return MinMaxScaler(dtype=np.float32).fit(X), X
 
@@ -38,7 +34,7 @@ def data_float32():
 def data_float32_ks():
     X = pd.DataFrame(
         np.random.randn(5, 5),
-        columns=list('ABCDF'),
+        columns=list("ABCDF"),
     )
     return MinMaxScaler(dtype=np.float32).fit(X), X
 

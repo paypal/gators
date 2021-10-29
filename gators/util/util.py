@@ -1,9 +1,10 @@
 # License: Apache-2.0
-from pyspark.ml.feature import VectorAssembler
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+from pyspark.ml.feature import VectorAssembler
 
 
 def get_bounds(X_dtype: type) -> List:
@@ -19,16 +20,17 @@ def get_bounds(X_dtype: type) -> List:
     List
         Lower ad upper bounds.
     """
-    if 'float' in str(X_dtype):
+    if "float" in str(X_dtype):
         info = np.finfo(X_dtype)
         return info.min, info.max
-    elif 'int' in str(X_dtype):
+    elif "int" in str(X_dtype):
         info = np.iinfo(X_dtype)
         return info.min, info.max
 
 
-def concat(objs: List[Union[pd.DataFrame, ks.DataFrame]],
-           axis: int) -> Union[pd.DataFrame, ks.DataFrame]:
+def concat(
+    objs: List[Union[pd.DataFrame, ks.DataFrame]], axis: int
+) -> Union[pd.DataFrame, ks.DataFrame]:
     """Concatenate the `objs` along an axis.
 
     Parameters
@@ -49,8 +51,8 @@ def concat(objs: List[Union[pd.DataFrame, ks.DataFrame]],
 
 
 def get_datatype_columns(
-        X: Union[pd.DataFrame, ks.DataFrame],
-        datatype: type) -> List[str]:
+    X: Union[pd.DataFrame, ks.DataFrame], datatype: type
+) -> List[str]:
     """Return the columns of the specified datatype.
 
     Parameters
@@ -68,15 +70,13 @@ def get_datatype_columns(
     X_dtypes = X.dtypes
     mask = X_dtypes == datatype
     if isinstance(X, ks.DataFrame) and (datatype == object):
-        mask = (X_dtypes == object) | (
-            X_dtypes.astype(str).str.startswith('<U'))
+        mask = (X_dtypes == object) | (X_dtypes.astype(str).str.startswith("<U"))
 
     datatype_columns = [c for c, m in zip(X_dtypes.index, mask) if m]
     return datatype_columns
 
 
-def exclude_columns(columns: List[str],
-                    excluded_columns: List[str]) -> List[str]:
+def exclude_columns(columns: List[str], excluded_columns: List[str]) -> List[str]:
     """Return the columns in `columns` not in `selected_columns`.
 
     Parameters
@@ -94,8 +94,7 @@ def exclude_columns(columns: List[str],
     return [c for c in columns if c not in excluded_columns]
 
 
-def get_idx_columns(
-        columns: List[str], selected_columns: List[str]) -> np.ndarray:
+def get_idx_columns(columns: List[str], selected_columns: List[str]) -> np.ndarray:
     """Return the indices of the columns in `columns`
       and `selected_columns`.
 
@@ -119,8 +118,7 @@ def get_idx_columns(
     return np.array(selected_idx_columns)
 
 
-def exclude_idx_columns(
-        columns: List[str], excluded_columns: List[str]) -> np.ndarray:
+def exclude_idx_columns(columns: List[str], excluded_columns: List[str]) -> np.ndarray:
     """Return the indices of the columns in `columns`
         and not in `excluded_columns`.
 
@@ -138,8 +136,7 @@ def exclude_idx_columns(
     """
 
     selected_idx_columns = [
-        i for i, c in enumerate(columns)
-        if c not in excluded_columns
+        i for i, c in enumerate(columns) if c not in excluded_columns
     ]
     return np.array(selected_idx_columns)
 
@@ -159,12 +156,12 @@ def get_numerical_columns(X: Union[pd.DataFrame, ks.DataFrame]) -> List[str]:
     """
     X_dtypes = X.dtypes
     mask = (
-        (X_dtypes == np.float64) |
-        (X_dtypes == np.int64) |
-        (X_dtypes == np.float32) |
-        (X_dtypes == np.int32) |
-        (X_dtypes == np.float16) |
-        (X_dtypes == np.int16)
+        (X_dtypes == np.float64)
+        | (X_dtypes == np.int64)
+        | (X_dtypes == np.float32)
+        | (X_dtypes == np.int32)
+        | (X_dtypes == np.float16)
+        | (X_dtypes == np.int16)
     )
     numerical_columns = [c for c, m in zip(X_dtypes.index, mask) if m]
     return numerical_columns
@@ -189,11 +186,10 @@ def get_float_only_columns(X: Union[pd.DataFrame, ks.DataFrame]) -> List[str]:
     i_max = int(np.min(np.array([X.shape[0], 50000])))
     X_dummy = X[numerical_columns].head(i_max).to_numpy()
     float_columns = [
-        col for i, col in enumerate(numerical_columns)
-        if not np.allclose(
-            X_dummy[:, i].round(),
-            X_dummy[:, i], equal_nan=True) or
-        (X_dummy[:, i] != X_dummy[:, i]).mean() == 1
+        col
+        for i, col in enumerate(numerical_columns)
+        if not np.allclose(X_dummy[:, i].round(), X_dummy[:, i], equal_nan=True)
+        or (X_dummy[:, i] != X_dummy[:, i]).mean() == 1
     ]
     return float_columns
 
@@ -217,11 +213,10 @@ def get_int_only_columns(X: Union[pd.DataFrame, ks.DataFrame]) -> List[str]:
     i_max = int(np.min(np.array([X.shape[0], 50000])))
     X_dummy = X[numerical_columns].head(i_max).to_numpy()
     int_columns = [
-        col for i, col in enumerate(numerical_columns)
-        if np.allclose(
-            X_dummy[:, i].round(),
-            X_dummy[:, i], equal_nan=True) and
-        (X_dummy[:, i] != X_dummy[:, i]).mean() != 1
+        col
+        for i, col in enumerate(numerical_columns)
+        if np.allclose(X_dummy[:, i].round(), X_dummy[:, i], equal_nan=True)
+        and (X_dummy[:, i] != X_dummy[:, i]).mean() != 1
     ]
     return int_columns
 
@@ -248,8 +243,7 @@ def generate_spark_dataframe(X: ks.DataFrame, y=None):
         spark_df = X.to_spark()
     else:
         spark_df = X.join(y).to_spark()
-    vector_assembler = VectorAssembler(
-        inputCols=columns, outputCol="features")
+    vector_assembler = VectorAssembler(inputCols=columns, outputCol="features")
     transformed_spark_df = vector_assembler.transform(spark_df)
     return transformed_spark_df
 

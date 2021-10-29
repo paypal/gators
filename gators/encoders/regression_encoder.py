@@ -1,11 +1,13 @@
 # License: Apache-2.0
-import numpy as np
 from typing import Union
-import pandas as pd
+
 import databricks.koalas as ks
-from .multiclass_encoder import MultiClassEncoder
-from ._base_encoder import _BaseEncoder
+import numpy as np
+import pandas as pd
+
 from ..transformers import Transformer
+from ._base_encoder import _BaseEncoder
+from .multiclass_encoder import MultiClassEncoder
 
 
 class RegressionEncoder(_BaseEncoder):
@@ -136,22 +138,21 @@ class RegressionEncoder(_BaseEncoder):
              0.69314718,  0.69314718]])
     """
 
-    def __init__(self, encoder: Transformer, discretizer: Transformer,
-                 dtype: type = np.float64):
+    def __init__(
+        self, encoder: Transformer, discretizer: Transformer, dtype: type = np.float64
+    ):
         _BaseEncoder.__init__(self, dtype=dtype)
         if not isinstance(discretizer, Transformer):
-            raise TypeError(
-                '`discretizer` should inherit from _BaseDiscretizer.')
+            raise TypeError("`discretizer` should inherit from _BaseDiscretizer.")
         if not isinstance(encoder, Transformer):
-            raise TypeError('`encoder` should be a transformer.')
+            raise TypeError("`encoder` should be a transformer.")
 
         self.discretizer = discretizer
-        self.multiclass_encoder = MultiClassEncoder(
-            encoder=encoder, dtype=dtype)
+        self.multiclass_encoder = MultiClassEncoder(encoder=encoder, dtype=dtype)
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series]) -> 'RegressionEncoder':
+    def fit(
+        self, X: Union[pd.DataFrame, ks.DataFrame], y: Union[pd.Series, ks.Series]
+    ) -> "RegressionEncoder":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -170,13 +171,12 @@ class RegressionEncoder(_BaseEncoder):
         self.check_y(X, y)
         self.check_regression_target(y)
         y_binned = self.discretizer.fit_transform(y.to_frame())
-        self.multiclass_encoder.fit(
-            X, y_binned[y.name].astype(float).astype(int))
+        self.multiclass_encoder.fit(X, y_binned[y.name].astype(float).astype(int))
         return self
 
-    def transform(self,
-                  X: Union[pd.DataFrame, ks.DataFrame]
-                  ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(
+        self, X: Union[pd.DataFrame, ks.DataFrame]
+    ) -> Union[pd.DataFrame, ks.DataFrame]:
         """Transform the dataframe `X`.
 
         Parameters

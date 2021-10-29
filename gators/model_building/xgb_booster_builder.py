@@ -1,13 +1,9 @@
 # License: Apache-2.0
 from typing import Union
+
 import numpy as np
 import xgboost
-from xgboost import (
-    XGBClassifier,
-    XGBRegressor,
-    XGBRFClassifier,
-    XGBRFRegressor
-)
+from xgboost import XGBClassifier, XGBRegressor, XGBRFClassifier, XGBRFRegressor
 
 
 class XGBBoosterBuilder:
@@ -32,11 +28,11 @@ class XGBBoosterBuilder:
 
     @staticmethod
     def train(
-            model: Union[
-                XGBClassifier, XGBRegressor, XGBRFClassifier, XGBRFRegressor],
-            X_train: np.array,
-            y_train: np.ndarray,
-            num_class=None):
+        model: Union[XGBClassifier, XGBRegressor, XGBRFClassifier, XGBRFRegressor],
+        X_train: np.array,
+        y_train: np.ndarray,
+        num_class=None,
+    ):
         """Convert the XGBoost model to a XGB Booster model.
 
         Parameters
@@ -53,18 +49,19 @@ class XGBBoosterBuilder:
         xgboost.Booster
             Trained xgboost Booster model.
         """
-        if not isinstance(model, (XGBClassifier, XGBRegressor, XGBRFClassifier, XGBRFRegressor)):
-            raise TypeError(
-                '`model` should be a `xgboost.sklearn` model.')
+        if not isinstance(
+            model, (XGBClassifier, XGBRegressor, XGBRFClassifier, XGBRFRegressor)
+        ):
+            raise TypeError("`model` should be a `xgboost.sklearn` model.")
         if not isinstance(X_train, np.ndarray):
-            raise TypeError('`X_train` should be a NumPy array.')
+            raise TypeError("`X_train` should be a NumPy array.")
         if not isinstance(y_train, np.ndarray):
-            raise TypeError('`y_train` should be a NumPy array.')
+            raise TypeError("`y_train` should be a NumPy array.")
         if num_class is not None and not isinstance(num_class, int):
-            raise TypeError('`num_class` should be an int.')
+            raise TypeError("`num_class` should be an int.")
         params = model.get_xgb_params()
         if num_class:
-            params['num_class'] = num_class
+            params["num_class"] = num_class
         n_estimators = model.n_estimators
         dtrain = xgboost.DMatrix(X_train, label=y_train)
         return xgboost.train(params, dtrain, n_estimators)

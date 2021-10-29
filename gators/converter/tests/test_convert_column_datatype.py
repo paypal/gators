@@ -1,79 +1,101 @@
 # License: Apache-2.0
-from gators.converter.convert_column_datatype import ConvertColumnDatatype
-from pandas.testing import assert_frame_equal
-import pytest
-import pandas as pd
 import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.converter.convert_column_datatype import ConvertColumnDatatype
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame({
-        'A': [True, False, True, False],
-        'B': [True, True, True, False],
-        'C': [True, True, True, True],
-        'D': [1, 2, 3, 4]})
-    X_expected = pd.DataFrame({
-        'A': [1., 0., 1., 0.],
-        'B': [1., 1., 1., 0.],
-        'C': [1., 1., 1., 1.],
-        'D': [1, 2, 3, 4]})
-    obj = ConvertColumnDatatype(
-        columns=['A', 'B', 'C'], datatype=float).fit(X)
+    X = pd.DataFrame(
+        {
+            "A": [True, False, True, False],
+            "B": [True, True, True, False],
+            "C": [True, True, True, True],
+            "D": [1, 2, 3, 4],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": [1.0, 0.0, 1.0, 0.0],
+            "B": [1.0, 1.0, 1.0, 0.0],
+            "C": [1.0, 1.0, 1.0, 1.0],
+            "D": [1, 2, 3, 4],
+        }
+    )
+    obj = ConvertColumnDatatype(columns=["A", "B", "C"], datatype=float).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_obj():
-    X = pd.DataFrame({
-        'A': ['2020-01-01 00:00:00', '2020-04-08 06:00:00'],
-        'B': [True, False],
-        'C': [True, True],
-        'D': [1, 2]})
-    X_expected = pd.DataFrame({
-        'A': ['2020-01-01 00:00:00', '2020-04-08 06:00:00'],
-        'B': [True, False],
-        'C': [True, True],
-        'D': [1, 2]})
-    X_expected['A'] = X_expected['A'].astype('datetime64[ns]')
-    obj = ConvertColumnDatatype(
-        columns=['A'], datatype='datetime64[ns]').fit(X)
+    X = pd.DataFrame(
+        {
+            "A": ["2020-01-01 00:00:00", "2020-04-08 06:00:00"],
+            "B": [True, False],
+            "C": [True, True],
+            "D": [1, 2],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": ["2020-01-01 00:00:00", "2020-04-08 06:00:00"],
+            "B": [True, False],
+            "C": [True, True],
+            "D": [1, 2],
+        }
+    )
+    X_expected["A"] = X_expected["A"].astype("datetime64[ns]")
+    obj = ConvertColumnDatatype(columns=["A"], datatype="datetime64[ns]").fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({
-        'A': [True, False, True, False],
-        'B': [True, True, True, False],
-        'C': [True, True, True, True],
-        'D': [1, 2, 3, 4]})
-    X_expected = pd.DataFrame({
-        'A': [1., 0., 1., 0.],
-        'B': [1., 1., 1., 0.],
-        'C': [1., 1., 1., 1.],
-        'D': [1, 2, 3, 4]})
-    obj = ConvertColumnDatatype(
-        columns=['A', 'B', 'C'], datatype=float).fit(X)
+    X = ks.DataFrame(
+        {
+            "A": [True, False, True, False],
+            "B": [True, True, True, False],
+            "C": [True, True, True, True],
+            "D": [1, 2, 3, 4],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": [1.0, 0.0, 1.0, 0.0],
+            "B": [1.0, 1.0, 1.0, 0.0],
+            "C": [1.0, 1.0, 1.0, 1.0],
+            "D": [1, 2, 3, 4],
+        }
+    )
+    obj = ConvertColumnDatatype(columns=["A", "B", "C"], datatype=float).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_obj_ks():
-    X = ks.DataFrame({
-        'A': ['2020-01-01 00:00:00', '2020-04-08 06:00:00'],
-        'B': [True, False],
-        'C': [True, True],
-        'D': [1, 2]})
-    X_expected = pd.DataFrame({
-        'A': ['2020-01-01 00:00:00', '2020-04-08 06:00:00'],
-        'B': [True, False],
-        'C': [True, True],
-        'D': [1, 2]})
-    X_expected['A'] = X_expected['A'].astype('datetime64[ns]')
-    obj = ConvertColumnDatatype(
-        columns=['A'], datatype='datetime64[ns]').fit(X)
+    X = ks.DataFrame(
+        {
+            "A": ["2020-01-01 00:00:00", "2020-04-08 06:00:00"],
+            "B": [True, False],
+            "C": [True, True],
+            "D": [1, 2],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": ["2020-01-01 00:00:00", "2020-04-08 06:00:00"],
+            "B": [True, False],
+            "C": [True, True],
+            "D": [1, 2],
+        }
+    )
+    X_expected["A"] = X_expected["A"].astype("datetime64[ns]")
+    obj = ConvertColumnDatatype(columns=["A"], datatype="datetime64[ns]").fit(X)
     return obj, X, X_expected
 
 
@@ -95,9 +117,9 @@ def test_pd_np(data):
     X_numpy = X.to_numpy()
     X_numpy_new = obj.transform_numpy(X_numpy)
     X_new = pd.DataFrame(
-        X_numpy_new, columns=X_expected.columns, dtype=X_numpy_new.dtype)
-    X_expected = pd.DataFrame(
-        X_expected, columns=X_expected.columns, dtype=float)
+        X_numpy_new, columns=X_expected.columns, dtype=X_numpy_new.dtype
+    )
+    X_expected = pd.DataFrame(X_expected, columns=X_expected.columns, dtype=float)
     assert_frame_equal(X_new, X_expected)
 
 
@@ -129,7 +151,6 @@ def test_obj_pd_np(data_obj):
     assert X_numpy_new.tolist() == X.to_numpy().tolist()
 
 
-
 @pytest.mark.koalas
 def test_obj_ks_np(data_obj_ks):
     obj, X, X_expected = data_obj_ks
@@ -143,6 +164,6 @@ def test_input():
     with pytest.raises(ValueError):
         _ = ConvertColumnDatatype(columns=[], datatype=float)
     with pytest.raises(TypeError):
-        _ = ConvertColumnDatatype(columns=['A'], datatype=0)
+        _ = ConvertColumnDatatype(columns=["A"], datatype=0)
     with pytest.raises(TypeError):
-        _ = ConvertColumnDatatype(columns=['A'], datatype='x')
+        _ = ConvertColumnDatatype(columns=["A"], datatype="x")

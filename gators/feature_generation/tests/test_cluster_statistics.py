@@ -1,136 +1,380 @@
 # License: Apache-2.0
-from pandas.testing import assert_frame_equal
-from gators.feature_generation.cluster_statistics import ClusterStatistics
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_generation.cluster_statistics import ClusterStatistics
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame(
-        np.arange(9, dtype=float).reshape(3, 3), columns=list('ABC'))
+    X = pd.DataFrame(np.arange(9, dtype=float).reshape(3, 3), columns=list("ABC"))
     clusters_dict = {
-        'cluster_name_a': list('AB'),
-        'cluster_name_b': list('AC'),
-        'cluster_name_c': list('BC'), }
-    obj = ClusterStatistics(
-        clusters_dict=clusters_dict).fit(X)
+        "cluster_name_a": list("AB"),
+        "cluster_name_b": list("AC"),
+        "cluster_name_c": list("BC"),
+    }
+    obj = ClusterStatistics(clusters_dict=clusters_dict).fit(X)
     X_expected = pd.DataFrame(
-        [[0.0, 1.0, 2.0, 0.5, 0.7071067811865476, 1.0, 1.4142135623730951, 1.5, 0.7071067811865476],
-         [3.0, 4.0, 5.0, 3.5, 0.7071067811865476, 4.0,
-             1.4142135623730951, 4.5, 0.7071067811865476],
-         [6.0, 7.0, 8.0, 6.5, 0.7071067811865476, 7.0, 1.4142135623730951, 7.5, 0.7071067811865476]],
-        columns=['A', 'B', 'C', 'cluster_name_a__mean', 'cluster_name_a__std',
-                 'cluster_name_b__mean', 'cluster_name_b__std', 'cluster_name_c__mean', 'cluster_name_c__std'])
+        [
+            [
+                0.0,
+                1.0,
+                2.0,
+                0.5,
+                0.7071067811865476,
+                1.0,
+                1.4142135623730951,
+                1.5,
+                0.7071067811865476,
+            ],
+            [
+                3.0,
+                4.0,
+                5.0,
+                3.5,
+                0.7071067811865476,
+                4.0,
+                1.4142135623730951,
+                4.5,
+                0.7071067811865476,
+            ],
+            [
+                6.0,
+                7.0,
+                8.0,
+                6.5,
+                0.7071067811865476,
+                7.0,
+                1.4142135623730951,
+                7.5,
+                0.7071067811865476,
+            ],
+        ],
+        columns=[
+            "A",
+            "B",
+            "C",
+            "cluster_name_a__mean",
+            "cluster_name_a__std",
+            "cluster_name_b__mean",
+            "cluster_name_b__std",
+            "cluster_name_c__mean",
+            "cluster_name_c__std",
+        ],
+    )
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_float32():
-    X = pd.DataFrame(
-        np.arange(9, dtype=np.int16).reshape(3, 3), columns=list('ABC'))
+    X = pd.DataFrame(np.arange(9, dtype=np.int16).reshape(3, 3), columns=list("ABC"))
 
     clusters_dict = {
-        'cluster_name_a': list('AB'),
-        'cluster_name_b': list('AC'),
-        'cluster_name_c': list('BC'), }
-    obj = ClusterStatistics(
-        clusters_dict=clusters_dict, dtype=np.float32).fit(X)
+        "cluster_name_a": list("AB"),
+        "cluster_name_b": list("AC"),
+        "cluster_name_c": list("BC"),
+    }
+    obj = ClusterStatistics(clusters_dict=clusters_dict, dtype=np.float32).fit(X)
     X_expected = pd.DataFrame(
-        [[0.0, 1.0, 2.0, 0.5, 0.7071067811865476, 1.0, 1.4142135623730951, 1.5, 0.7071067811865476],
-         [3.0, 4.0, 5.0, 3.5, 0.7071067811865476, 4.0,
-             1.4142135623730951, 4.5, 0.7071067811865476],
-         [6.0, 7.0, 8.0, 6.5, 0.7071067811865476, 7.0, 1.4142135623730951, 7.5, 0.7071067811865476]],
-        columns=['A', 'B', 'C', 'cluster_name_a__mean', 'cluster_name_a__std',
-                 'cluster_name_b__mean', 'cluster_name_b__std', 'cluster_name_c__mean', 'cluster_name_c__std']
+        [
+            [
+                0.0,
+                1.0,
+                2.0,
+                0.5,
+                0.7071067811865476,
+                1.0,
+                1.4142135623730951,
+                1.5,
+                0.7071067811865476,
+            ],
+            [
+                3.0,
+                4.0,
+                5.0,
+                3.5,
+                0.7071067811865476,
+                4.0,
+                1.4142135623730951,
+                4.5,
+                0.7071067811865476,
+            ],
+            [
+                6.0,
+                7.0,
+                8.0,
+                6.5,
+                0.7071067811865476,
+                7.0,
+                1.4142135623730951,
+                7.5,
+                0.7071067811865476,
+            ],
+        ],
+        columns=[
+            "A",
+            "B",
+            "C",
+            "cluster_name_a__mean",
+            "cluster_name_a__std",
+            "cluster_name_b__mean",
+            "cluster_name_b__std",
+            "cluster_name_c__mean",
+            "cluster_name_c__std",
+        ],
     ).astype(np.float32)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_names():
-    X = pd.DataFrame(
-        np.arange(9, dtype=float).reshape(3, 3), columns=list('ABC'))
+    X = pd.DataFrame(np.arange(9, dtype=float).reshape(3, 3), columns=list("ABC"))
 
     clusters_dict = {
-        'cluster_name_a': list('AB'),
-        'cluster_name_b': list('AC'),
-        'cluster_name_c': list('BC'), }
+        "cluster_name_a": list("AB"),
+        "cluster_name_b": list("AC"),
+        "cluster_name_c": list("BC"),
+    }
     obj = ClusterStatistics(
         clusters_dict=clusters_dict,
-        column_names=['a_mean', 'a_std', 'bb_mean', 'bb_std', 'ccc_mean', 'ccc_std']).fit(X)
+        column_names=["a_mean", "a_std", "bb_mean", "bb_std", "ccc_mean", "ccc_std"],
+    ).fit(X)
     X_expected = pd.DataFrame(
-        [[0.0, 1.0, 2.0, 0.5, 0.7071067811865476, 1.0, 1.4142135623730951, 1.5, 0.7071067811865476],
-         [3.0, 4.0, 5.0, 3.5, 0.7071067811865476, 4.0,
-             1.4142135623730951, 4.5, 0.7071067811865476],
-         [6.0, 7.0, 8.0, 6.5, 0.7071067811865476, 7.0, 1.4142135623730951, 7.5, 0.7071067811865476]],
-        columns=['A', 'B', 'C', 'a_mean', 'a_std', 'bb_mean', 'bb_std', 'ccc_mean', 'ccc_std'])
+        [
+            [
+                0.0,
+                1.0,
+                2.0,
+                0.5,
+                0.7071067811865476,
+                1.0,
+                1.4142135623730951,
+                1.5,
+                0.7071067811865476,
+            ],
+            [
+                3.0,
+                4.0,
+                5.0,
+                3.5,
+                0.7071067811865476,
+                4.0,
+                1.4142135623730951,
+                4.5,
+                0.7071067811865476,
+            ],
+            [
+                6.0,
+                7.0,
+                8.0,
+                6.5,
+                0.7071067811865476,
+                7.0,
+                1.4142135623730951,
+                7.5,
+                0.7071067811865476,
+            ],
+        ],
+        columns=[
+            "A",
+            "B",
+            "C",
+            "a_mean",
+            "a_std",
+            "bb_mean",
+            "bb_std",
+            "ccc_mean",
+            "ccc_std",
+        ],
+    )
     return obj, X, X_expected
-
-
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
-        np.arange(9, dtype=float).reshape(3, 3), columns=list('ABC'))
+    X = ks.DataFrame(np.arange(9, dtype=float).reshape(3, 3), columns=list("ABC"))
     clusters_dict = {
-        'cluster_name_a': list('AB'),
-        'cluster_name_b': list('AC'),
-        'cluster_name_c': list('BC'), }
-    obj = ClusterStatistics(
-        clusters_dict=clusters_dict).fit(X)
+        "cluster_name_a": list("AB"),
+        "cluster_name_b": list("AC"),
+        "cluster_name_c": list("BC"),
+    }
+    obj = ClusterStatistics(clusters_dict=clusters_dict).fit(X)
     X_expected = pd.DataFrame(
-        [[0.0, 1.0, 2.0, 0.5, 0.7071067811865476, 1.0, 1.4142135623730951, 1.5, 0.7071067811865476],
-         [3.0, 4.0, 5.0, 3.5, 0.7071067811865476, 4.0,
-             1.4142135623730951, 4.5, 0.7071067811865476],
-         [6.0, 7.0, 8.0, 6.5, 0.7071067811865476, 7.0, 1.4142135623730951, 7.5, 0.7071067811865476]],
-        columns=['A', 'B', 'C', 'cluster_name_a__mean', 'cluster_name_a__std',
-                 'cluster_name_b__mean', 'cluster_name_b__std', 'cluster_name_c__mean', 'cluster_name_c__std'])
+        [
+            [
+                0.0,
+                1.0,
+                2.0,
+                0.5,
+                0.7071067811865476,
+                1.0,
+                1.4142135623730951,
+                1.5,
+                0.7071067811865476,
+            ],
+            [
+                3.0,
+                4.0,
+                5.0,
+                3.5,
+                0.7071067811865476,
+                4.0,
+                1.4142135623730951,
+                4.5,
+                0.7071067811865476,
+            ],
+            [
+                6.0,
+                7.0,
+                8.0,
+                6.5,
+                0.7071067811865476,
+                7.0,
+                1.4142135623730951,
+                7.5,
+                0.7071067811865476,
+            ],
+        ],
+        columns=[
+            "A",
+            "B",
+            "C",
+            "cluster_name_a__mean",
+            "cluster_name_a__std",
+            "cluster_name_b__mean",
+            "cluster_name_b__std",
+            "cluster_name_c__mean",
+            "cluster_name_c__std",
+        ],
+    )
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_float32_ks():
-    X = ks.DataFrame(
-        np.arange(9, dtype=np.int16).reshape(3, 3), columns=list('ABC'))
+    X = ks.DataFrame(np.arange(9, dtype=np.int16).reshape(3, 3), columns=list("ABC"))
     clusters_dict = {
-        'cluster_name_a': list('AB'),
-        'cluster_name_b': list('AC'),
-        'cluster_name_c': list('BC'), }
-    obj = ClusterStatistics(
-        clusters_dict=clusters_dict, dtype=np.float32).fit(X)
+        "cluster_name_a": list("AB"),
+        "cluster_name_b": list("AC"),
+        "cluster_name_c": list("BC"),
+    }
+    obj = ClusterStatistics(clusters_dict=clusters_dict, dtype=np.float32).fit(X)
     X_expected = pd.DataFrame(
-        [[0.0, 1.0, 2.0, 0.5, 0.7071067811865476, 1.0, 1.4142135623730951, 1.5, 0.7071067811865476],
-         [3.0, 4.0, 5.0, 3.5, 0.7071067811865476, 4.0,
-             1.4142135623730951, 4.5, 0.7071067811865476],
-         [6.0, 7.0, 8.0, 6.5, 0.7071067811865476, 7.0, 1.4142135623730951, 7.5, 0.7071067811865476]],
-        columns=['A', 'B', 'C', 'cluster_name_a__mean', 'cluster_name_a__std',
-                 'cluster_name_b__mean', 'cluster_name_b__std', 'cluster_name_c__mean', 'cluster_name_c__std']
+        [
+            [
+                0.0,
+                1.0,
+                2.0,
+                0.5,
+                0.7071067811865476,
+                1.0,
+                1.4142135623730951,
+                1.5,
+                0.7071067811865476,
+            ],
+            [
+                3.0,
+                4.0,
+                5.0,
+                3.5,
+                0.7071067811865476,
+                4.0,
+                1.4142135623730951,
+                4.5,
+                0.7071067811865476,
+            ],
+            [
+                6.0,
+                7.0,
+                8.0,
+                6.5,
+                0.7071067811865476,
+                7.0,
+                1.4142135623730951,
+                7.5,
+                0.7071067811865476,
+            ],
+        ],
+        columns=[
+            "A",
+            "B",
+            "C",
+            "cluster_name_a__mean",
+            "cluster_name_a__std",
+            "cluster_name_b__mean",
+            "cluster_name_b__std",
+            "cluster_name_c__mean",
+            "cluster_name_c__std",
+        ],
     ).astype(np.float32)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_names_ks():
-    X = ks.DataFrame(
-        np.arange(9, dtype=float).reshape(3, 3), columns=list('ABC'))
+    X = ks.DataFrame(np.arange(9, dtype=float).reshape(3, 3), columns=list("ABC"))
     clusters_dict = {
-        'cluster_name_a': list('AB'),
-        'cluster_name_b': list('AC'),
-        'cluster_name_c': list('BC'), }
+        "cluster_name_a": list("AB"),
+        "cluster_name_b": list("AC"),
+        "cluster_name_c": list("BC"),
+    }
     obj = ClusterStatistics(
         clusters_dict=clusters_dict,
-        column_names=['a_mean', 'a_std', 'bb_mean', 'bb_std', 'ccc_mean', 'ccc_std']).fit(X)
+        column_names=["a_mean", "a_std", "bb_mean", "bb_std", "ccc_mean", "ccc_std"],
+    ).fit(X)
     X_expected = pd.DataFrame(
-        [[0.0, 1.0, 2.0, 0.5, 0.7071067811865476, 1.0, 1.4142135623730951, 1.5, 0.7071067811865476],
-         [3.0, 4.0, 5.0, 3.5, 0.7071067811865476, 4.0,
-             1.4142135623730951, 4.5, 0.7071067811865476],
-         [6.0, 7.0, 8.0, 6.5, 0.7071067811865476, 7.0, 1.4142135623730951, 7.5, 0.7071067811865476]],
-        columns=['A', 'B', 'C', 'a_mean', 'a_std', 'bb_mean', 'bb_std', 'ccc_mean', 'ccc_std'])
+        [
+            [
+                0.0,
+                1.0,
+                2.0,
+                0.5,
+                0.7071067811865476,
+                1.0,
+                1.4142135623730951,
+                1.5,
+                0.7071067811865476,
+            ],
+            [
+                3.0,
+                4.0,
+                5.0,
+                3.5,
+                0.7071067811865476,
+                4.0,
+                1.4142135623730951,
+                4.5,
+                0.7071067811865476,
+            ],
+            [
+                6.0,
+                7.0,
+                8.0,
+                6.5,
+                0.7071067811865476,
+                7.0,
+                1.4142135623730951,
+                7.5,
+                0.7071067811865476,
+            ],
+        ],
+        columns=[
+            "A",
+            "B",
+            "C",
+            "a_mean",
+            "a_std",
+            "bb_mean",
+            "bb_std",
+            "ccc_mean",
+            "ccc_std",
+        ],
+    )
     return obj, X, X_expected
 
 
@@ -228,17 +472,14 @@ def test_init():
     with pytest.raises(TypeError):
         _ = ClusterStatistics(clusters_dict=0)
     with pytest.raises(ValueError):
-        _ = ClusterStatistics(clusters_dict={'a': []})
+        _ = ClusterStatistics(clusters_dict={"a": []})
     with pytest.raises(TypeError):
-        _ = ClusterStatistics(clusters_dict={'a': 'x'})
+        _ = ClusterStatistics(clusters_dict={"a": "x"})
     with pytest.raises(TypeError):
-        _ = ClusterStatistics(clusters_dict={'a': ['x', 'y']}, column_names=0)
+        _ = ClusterStatistics(clusters_dict={"a": ["x", "y"]}, column_names=0)
     with pytest.raises(ValueError):
-        _ = ClusterStatistics(
-            clusters_dict={'a': ['x', 'y']}, column_names=['aa'])
+        _ = ClusterStatistics(clusters_dict={"a": ["x", "y"]}, column_names=["aa"])
     with pytest.raises(ValueError):
-        _ = ClusterStatistics(
-            clusters_dict={'a': ['x', 'y'], 'b': ['x', 'y', 'z']})
+        _ = ClusterStatistics(clusters_dict={"a": ["x", "y"], "b": ["x", "y", "z"]})
     with pytest.raises(ValueError):
-        _ = ClusterStatistics(
-            clusters_dict={'a': ['x'], 'b': ['y']})
+        _ = ClusterStatistics(clusters_dict={"a": ["x"], "b": ["y"]})

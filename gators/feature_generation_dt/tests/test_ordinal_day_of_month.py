@@ -1,35 +1,43 @@
 # License: Apache-2.0
-from gators.feature_generation_dt import OrdinalDayOfMonth
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_generation_dt import OrdinalDayOfMonth
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame({
-        'A': ['2020-05-01 00:00:00', np.nan],
-        'B': ['2020-05-08 06:00:00', np.nan],
-        'C': ['2020-05-16 12:00:00', np.nan],
-        'D': ['2020-05-24 18:00:00', None],
-        'E': ['2020-05-30 23:00:00', None],
-        'X': ['x', 'x']})
-    columns = ['A', 'B', 'C', 'D', 'E']
-    X['A'] = X['A'].astype('datetime64[ns]')
-    X['B'] = X['B'].astype('datetime64[ms]')
-    X['C'] = X['C'].astype('datetime64[s]')
-    X['D'] = X['D'].astype('datetime64[m]')
-    X['E'] = X['E'].astype('datetime64[h]')
+    X = pd.DataFrame(
+        {
+            "A": ["2020-05-01 00:00:00", np.nan],
+            "B": ["2020-05-08 06:00:00", np.nan],
+            "C": ["2020-05-16 12:00:00", np.nan],
+            "D": ["2020-05-24 18:00:00", None],
+            "E": ["2020-05-30 23:00:00", None],
+            "X": ["x", "x"],
+        }
+    )
+    columns = ["A", "B", "C", "D", "E"]
+    X["A"] = X["A"].astype("datetime64[ns]")
+    X["B"] = X["B"].astype("datetime64[ms]")
+    X["C"] = X["C"].astype("datetime64[s]")
+    X["D"] = X["D"].astype("datetime64[m]")
+    X["E"] = X["E"].astype("datetime64[h]")
 
-    X_expected = pd.DataFrame({
-        'A__day_of_month': ['1.0', 'nan'],
-        'B__day_of_month': ['8.0', 'nan'],
-        'C__day_of_month': ['16.0', 'nan'],
-        'D__day_of_month': ['24.0', 'nan'],
-        'E__day_of_month': ['30.0', 'nan']})
+    X_expected = pd.DataFrame(
+        {
+            "A__day_of_month": ["1.0", "nan"],
+            "B__day_of_month": ["8.0", "nan"],
+            "C__day_of_month": ["16.0", "nan"],
+            "D__day_of_month": ["24.0", "nan"],
+            "E__day_of_month": ["30.0", "nan"],
+        }
+    )
     X_expected = pd.concat([X.copy(), X_expected], axis=1)
     obj = OrdinalDayOfMonth(columns=columns).fit(X)
     return obj, X, X_expected
@@ -37,22 +45,28 @@ def data():
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({
-        'A': ['2020-05-01 00:00:00', np.nan],
-        'B': ['2020-05-08 06:00:00', np.nan],
-        'C': ['2020-05-16 12:00:00', np.nan],
-        'D': ['2020-05-24 18:00:00', None],
-        'E': ['2020-05-30 23:00:00', None],
-        'X': ['x', 'x']})
-    columns = ['A', 'B', 'C', 'D', 'E']
-    X[columns] = X[columns].astype('datetime64[ns]')
+    X = ks.DataFrame(
+        {
+            "A": ["2020-05-01 00:00:00", np.nan],
+            "B": ["2020-05-08 06:00:00", np.nan],
+            "C": ["2020-05-16 12:00:00", np.nan],
+            "D": ["2020-05-24 18:00:00", None],
+            "E": ["2020-05-30 23:00:00", None],
+            "X": ["x", "x"],
+        }
+    )
+    columns = ["A", "B", "C", "D", "E"]
+    X[columns] = X[columns].astype("datetime64[ns]")
 
-    X_expected = pd.DataFrame({
-        'A__day_of_month': ['1.0', 'nan'],
-        'B__day_of_month': ['8.0', 'nan'],
-        'C__day_of_month': ['16.0', 'nan'],
-        'D__day_of_month': ['24.0', 'nan'],
-        'E__day_of_month': ['30.0', 'nan']})
+    X_expected = pd.DataFrame(
+        {
+            "A__day_of_month": ["1.0", "nan"],
+            "B__day_of_month": ["8.0", "nan"],
+            "C__day_of_month": ["16.0", "nan"],
+            "D__day_of_month": ["24.0", "nan"],
+            "E__day_of_month": ["30.0", "nan"],
+        }
+    )
     X_expected = pd.concat([X.to_pandas().copy(), X_expected], axis=1)
     obj = OrdinalDayOfMonth(columns=columns).fit(X)
     return obj, X, X_expected

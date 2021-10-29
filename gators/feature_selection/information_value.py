@@ -1,11 +1,13 @@
 # License: Apache-2.0
 from typing import Union
-import numpy as np
+
 import databricks.koalas as ks
+import numpy as np
 import pandas as pd
-from ._base_feature_selection import _BaseFeatureSelection
-from ..util import util
+
 from ..binning._base_discretizer import _BaseDiscretizer
+from ..util import util
+from ._base_feature_selection import _BaseFeatureSelection
 
 
 class InformationValue(_BaseFeatureSelection):
@@ -124,17 +126,18 @@ class InformationValue(_BaseFeatureSelection):
 
     def __init__(self, k: int, discretizer: _BaseDiscretizer):
         if not isinstance(k, int):
-            raise TypeError('`k` should be an int.')
+            raise TypeError("`k` should be an int.")
         if not isinstance(discretizer, _BaseDiscretizer):
-            raise TypeError(
-                '`discretizer` should derive from _BaseDiscretizer.')
+            raise TypeError("`discretizer` should derive from _BaseDiscretizer.")
         _BaseFeatureSelection.__init__(self)
         self.k = k
         self.discretizer = discretizer
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'InformationValue':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "InformationValue":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -156,19 +159,19 @@ class InformationValue(_BaseFeatureSelection):
             X, y, self.discretizer
         )
         self.feature_importances_.sort_values(ascending=False, inplace=True)
-        self.selected_columns = list(self.feature_importances_.index[:self.k])
-        self.columns_to_drop = [
-            c for c in columns if c not in self.selected_columns
-        ]
+        self.selected_columns = list(self.feature_importances_.index[: self.k])
+        self.columns_to_drop = [c for c in columns if c not in self.selected_columns]
         self.idx_selected_columns = util.get_idx_columns(
-            X.columns, self.selected_columns)
+            X.columns, self.selected_columns
+        )
         return self
 
     @staticmethod
     def compute_information_value(
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series],
-            discretizer: _BaseDiscretizer) -> pd.Series:
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series],
+        discretizer: _BaseDiscretizer,
+    ) -> pd.Series:
         """Compute information value.
 
         Parameters
@@ -188,8 +191,7 @@ class InformationValue(_BaseFeatureSelection):
         discretizer.inplace = False
         object_columns = util.get_datatype_columns(X, object)
         numerical_columns = util.get_numerical_columns(X)
-        binned_columns = [
-            f'{c}__bin' for c in numerical_columns]
+        binned_columns = [f"{c}__bin" for c in numerical_columns]
         iv_columns = object_columns.copy() + binned_columns.copy()
         X = discretizer.fit_transform(X)
         iv = pd.Series(0, index=iv_columns)
@@ -197,21 +199,23 @@ class InformationValue(_BaseFeatureSelection):
         y_name = y.name
         for col in iv_columns:
             if isinstance(X, pd.DataFrame):
-                tab = X.groupby(
-                    [col, y_name])[y_name].count().unstack(
-                ).fillna(0)
+                tab = X.groupby([col, y_name])[y_name].count().unstack().fillna(0)
             else:
-                tab = X[[col, y_name]].groupby(
-                    [col, y_name])[y_name].count().to_pandas().unstack(
-                ).fillna(0)
+                tab = (
+                    X[[col, y_name]]
+                    .groupby([col, y_name])[y_name]
+                    .count()
+                    .to_pandas()
+                    .unstack()
+                    .fillna(0)
+                )
             tab /= tab.sum()
             tab = tab.to_numpy()
-            with np.errstate(divide='ignore'):
+            with np.errstate(divide="ignore"):
                 woe = pd.Series(np.log(tab[:, 1] / tab[:, 0]))
-            woe[(woe == np.inf) | (woe == -np.inf)] = 0.
+            woe[(woe == np.inf) | (woe == -np.inf)] = 0.0
             iv.loc[col] = np.sum(woe * (tab[:, 1] - tab[:, 0]))
 
         X = X.drop(binned_columns + [y_name], axis=1)
-        iv.index = [
-            c.split('__bin')[0] for c in iv.index]
+        iv.index = [c.split("__bin")[0] for c in iv.index]
         return iv.sort_values(ascending=False).fillna(0)

@@ -1,13 +1,14 @@
 # License: Apache-2.0
-from ._base_imputer import _BaseImputer
-from imputer import float_imputer_object
-from imputer import float_imputer
-from ..util import util
+import warnings
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-import warnings
+from imputer import float_imputer, float_imputer_object
+
+from ..util import util
+from ._base_imputer import _BaseImputer
 
 
 class IntImputer(_BaseImputer):
@@ -98,19 +99,20 @@ class IntImputer(_BaseImputer):
 
     """
 
-    def __init__(self, strategy: str,
-                 value: float = None,
-                 columns: List[str] = None):
+    def __init__(self, strategy: str, value: float = None, columns: List[str] = None):
         _BaseImputer.__init__(self, strategy, value, columns)
-        if strategy == 'constant' and not isinstance(value, int):
+        if strategy == "constant" and not isinstance(value, int):
             raise TypeError(
-                '''`value` should be a integer
-                for the IntImputer class''')
+                """`value` should be a integer
+                for the IntImputer class"""
+            )
         self.columns = columns
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'IntImputer':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "IntImputer":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -129,9 +131,10 @@ class IntImputer(_BaseImputer):
             self.columns = util.get_int_only_columns(X=X)
         if not self.columns:
             warnings.warn(
-                '''`X` does not contain columns satisfying:
+                """`X` does not contain columns satisfying:
                 X[column] == X[column].round(),
-                `IntImputer` is not needed''')
+                `IntImputer` is not needed"""
+            )
             self.idx_columns = np.array([])
             return self
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
@@ -141,8 +144,9 @@ class IntImputer(_BaseImputer):
             strategy=self.strategy,
             value=self.value,
         )
-        self.statistics_values = np.array(
-            list(self.statistics.values())).astype(np.float64)
+        self.statistics_values = np.array(list(self.statistics.values())).astype(
+            np.float64
+        )
         return self
 
     def transform_numpy(self, X: Union[pd.Series, ks.Series], y=None):
@@ -160,15 +164,11 @@ class IntImputer(_BaseImputer):
         if self.idx_columns.size == 0:
             return X
         X_dtype = X.dtype
-        if 'int' in str(X_dtype):
+        if "int" in str(X_dtype):
             return X
         elif X_dtype == object:
             return float_imputer_object(
-                X,
-                self.statistics_values.astype(object),
-                self.idx_columns)
+                X, self.statistics_values.astype(object), self.idx_columns
+            )
         else:
-            return float_imputer(
-                X,
-                self.statistics_values,
-                self.idx_columns)
+            return float_imputer(X, self.statistics_values, self.idx_columns)

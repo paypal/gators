@@ -1,12 +1,8 @@
 import cython
 import numpy as np
-cimport numpy as np
-from libc.math cimport pi
-from libc.math cimport cos
-from libc.math cimport sin
-from libc.math cimport isnan
-from libc.math cimport sqrt
 
+cimport numpy as np
+from libc.math cimport cos, isnan, pi, sin, sqrt
 
 ctypedef fused num_t:
     np.int16_t

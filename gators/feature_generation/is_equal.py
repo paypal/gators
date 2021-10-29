@@ -1,12 +1,14 @@
 # License: Apache-2.0
-from feature_gen import is_equal_object
-from feature_gen import is_equal
-from ._base_feature_generation import _BaseFeatureGeneration
-from ..util import util
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+from feature_gen import is_equal, is_equal_object
+
+from ..util import util
+from ._base_feature_generation import _BaseFeatureGeneration
 
 
 class IsEqual(_BaseFeatureGeneration):
@@ -71,46 +73,50 @@ class IsEqual(_BaseFeatureGeneration):
 
     """
 
-    def __init__(self, columns_a: List[str], columns_b: List[str],
-                 column_names: List[str] = None):
+    def __init__(
+        self, columns_a: List[str], columns_b: List[str], column_names: List[str] = None
+    ):
         if not isinstance(columns_a, list):
-            raise TypeError('`columns_a` should be a list.')
+            raise TypeError("`columns_a` should be a list.")
         if not isinstance(columns_b, list):
-            raise TypeError('`columns_b` should be a list.')
+            raise TypeError("`columns_b` should be a list.")
         if column_names is not None and not isinstance(column_names, list):
-            raise TypeError('`columns_a` should be a list.')
+            raise TypeError("`columns_a` should be a list.")
         if len(columns_a) != len(columns_b):
-            raise ValueError(
-                'Length of `columns_a` and `columns_b` should match.')
+            raise ValueError("Length of `columns_a` and `columns_b` should match.")
         if len(columns_a) == 0:
-            raise ValueError(
-                '`columns_a` and `columns_b` should not be empty.')
+            raise ValueError("`columns_a` and `columns_b` should not be empty.")
         if not column_names:
             column_names = [
-                f'{c_a}__is__{c_b}'
-                for c_a, c_b in zip(columns_a, columns_b)
+                f"{c_a}__is__{c_b}" for c_a, c_b in zip(columns_a, columns_b)
             ]
         if len(columns_a) != len(column_names):
             raise ValueError(
-                '''Length of `columns_a`, `columns_b` and `column_names`
-                should match.''')
+                """Length of `columns_a`, `columns_b` and `column_names`
+                should match."""
+            )
         column_mapping = {
             name: [c_a, c_b]
-            for name, c_a, c_b
-            in zip(column_names, columns_a, columns_b)
+            for name, c_a, c_b in zip(column_names, columns_a, columns_b)
         }
         columns = list(set(columns_a + columns_b))
         _BaseFeatureGeneration.__init__(
-            self, columns=columns, column_names=column_names,
-            column_mapping=column_mapping, dtype=None)
+            self,
+            columns=columns,
+            column_names=column_names,
+            column_mapping=column_mapping,
+            dtype=None,
+        )
         self.columns_a = columns_a
         self.columns_b = columns_b
         self.idx_columns_a: List[int] = []
         self.idx_columns_b: List[int] = []
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None):
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ):
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -127,12 +133,10 @@ class IsEqual(_BaseFeatureGeneration):
         """
         self.check_dataframe(X)
         self.idx_columns_a = util.get_idx_columns(
-            columns=X.columns,
-            selected_columns=self.columns_a
+            columns=X.columns, selected_columns=self.columns_a
         )
         self.idx_columns_b = util.get_idx_columns(
-            columns=X.columns,
-            selected_columns=self.columns_b
+            columns=X.columns, selected_columns=self.columns_b
         )
         return self
 
@@ -153,22 +157,22 @@ class IsEqual(_BaseFeatureGeneration):
         """
         self.check_dataframe(X)
         if isinstance(X, pd.DataFrame):
-            for a, b, name in zip(
-                    self.columns_a, self.columns_b, self.column_names):
+            for a, b, name in zip(self.columns_a, self.columns_b, self.column_names):
                 x_dtype = X[a].dtype
-                x_dtype = x_dtype if (x_dtype != object) and (
-                    x_dtype != bool) else np.float64
+                x_dtype = (
+                    x_dtype if (x_dtype != object) and (x_dtype != bool) else np.float64
+                )
                 X.loc[:, name] = (X[a] == X[b]).astype(x_dtype)
             return X
 
-        for a, b, name in zip(
-                self.columns_a, self.columns_b, self.column_names):
+        for a, b, name in zip(self.columns_a, self.columns_b, self.column_names):
             x_dtype = X[a].dtype
-            x_dtype = x_dtype if (x_dtype != object) and (
-                x_dtype != bool) else np.float64
-            X = X.assign(
-                dummy=(X[a] == X[b]).astype(x_dtype)
-            ).rename(columns={'dummy': name})
+            x_dtype = (
+                x_dtype if (x_dtype != object) and (x_dtype != bool) else np.float64
+            )
+            X = X.assign(dummy=(X[a] == X[b]).astype(x_dtype)).rename(
+                columns={"dummy": name}
+            )
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -186,7 +190,5 @@ class IsEqual(_BaseFeatureGeneration):
         """
         self.check_array(X)
         if X.dtype == object:
-            return is_equal_object(
-                X, self.idx_columns_a, self.idx_columns_b)
-        return is_equal(
-            X, self.idx_columns_a, self.idx_columns_b)
+            return is_equal_object(X, self.idx_columns_a, self.idx_columns_b)
+        return is_equal(X, self.idx_columns_a, self.idx_columns_b)

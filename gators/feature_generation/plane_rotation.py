@@ -1,13 +1,17 @@
 # License: Apache-2.0
-from typing import List, Union
-from math import cos, sin
+from math import cos
 from math import pi as PI
+from math import sin
+from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-from gators.util import util
-from gators.transformers import Transformer
+
 from feature_gen import plan_rotation
+from gators.transformers import Transformer
+from gators.util import util
+
 from ._base_feature_generation import _BaseFeatureGeneration
 
 
@@ -88,41 +92,48 @@ class PlaneRotation(Transformer):
             261.62950904,  24.74873734, 272.23611076]])
     """
 
-    def __init__(self, columns: List[List[str]], theta_vec: List[float],
-                 dtype: type = np.float64):
+    def __init__(
+        self, columns: List[List[str]], theta_vec: List[float], dtype: type = np.float64
+    ):
         if not isinstance(columns, list):
-            raise TypeError('`columns` should be a list.')
+            raise TypeError("`columns` should be a list.")
         if not isinstance(theta_vec, list):
-            raise TypeError('`theta_vec` should be a list.')
+            raise TypeError("`theta_vec` should be a list.")
         if not columns:
-            raise ValueError('`columns` should not be empty.')
+            raise ValueError("`columns` should not be empty.")
         if not any(isinstance(cols, list) for cols in columns):
-            raise TypeError('`columns` should be a list of lists.')
+            raise TypeError("`columns` should be a list of lists.")
         if not all(isinstance(theta, (float, int)) for theta in theta_vec):
-            raise TypeError(
-                '`theta_vec` should be a list of ints or floats.')
+            raise TypeError("`theta_vec` should be a list of ints or floats.")
         self.check_datatype(dtype, [np.float32, np.float64])
 
         column_names = [
-            [f'{x}{y}_x_{t}deg', f'{x}{y}_y_{t}deg']
-            for (x, y) in columns for t in theta_vec]
+            [f"{x}{y}_x_{t}deg", f"{x}{y}_y_{t}deg"]
+            for (x, y) in columns
+            for t in theta_vec
+        ]
         column_names = [c for cols in column_names for c in cols]
         column_mapping = {
-            **{f'{x}{y}_x_{t}deg': [x, y]
-                for (x, y) in columns for t in theta_vec},
-            **{f'{x}{y}_y_{t}deg': [x, y]
-                for (x, y) in columns for t in theta_vec}
+            **{f"{x}{y}_x_{t}deg": [x, y] for (x, y) in columns for t in theta_vec},
+            **{f"{x}{y}_y_{t}deg": [x, y] for (x, y) in columns for t in theta_vec},
         }
         columns = [c for cols in columns for c in cols]
         _BaseFeatureGeneration.__init__(
-            self, columns=columns, column_names=column_names,
-            column_mapping=column_mapping, dtype=dtype)
+            self,
+            columns=columns,
+            column_names=column_names,
+            column_mapping=column_mapping,
+            dtype=dtype,
+        )
         self.theta_vec = np.array(theta_vec)
         self.cos_theta_vec = np.cos(self.theta_vec * np.pi / 180)
         self.sin_theta_vec = np.sin(self.theta_vec * np.pi / 180)
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'PlaneRotation':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "PlaneRotation":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -143,8 +154,9 @@ class PlaneRotation(Transformer):
         self.idx_columns_y = util.get_idx_columns(X, self.columns[1::2])
         return self
 
-    def transform(self, X: Union[pd.DataFrame, ks.DataFrame]
-                  ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(
+        self, X: Union[pd.DataFrame, ks.DataFrame]
+    ) -> Union[pd.DataFrame, ks.DataFrame]:
         """Transform the dataframe `X`.
 
         Parameters
@@ -162,10 +174,8 @@ class PlaneRotation(Transformer):
             for theta in self.theta_vec:
                 cos_theta = cos(theta * PI / 180)
                 sin_theta = sin(theta * PI / 180)
-                X.loc[:, f'{x}{y}_x_{theta}deg'] = X[x] * \
-                    cos_theta - X[y] * sin_theta
-                X.loc[:, f'{x}{y}_y_{theta}deg'] = X[x] * \
-                    sin_theta + X[y] * cos_theta
+                X.loc[:, f"{x}{y}_x_{theta}deg"] = X[x] * cos_theta - X[y] * sin_theta
+                X.loc[:, f"{x}{y}_y_{theta}deg"] = X[x] * sin_theta + X[y] * cos_theta
         X[self.column_names] = X[self.column_names].astype(self.dtype)
         return X
 
@@ -184,5 +194,9 @@ class PlaneRotation(Transformer):
         """
         self.check_array(X)
         return plan_rotation(
-            X.astype(self.dtype), self.idx_columns_x, self.idx_columns_y,
-            self.cos_theta_vec, self.sin_theta_vec)
+            X.astype(self.dtype),
+            self.idx_columns_x,
+            self.idx_columns_y,
+            self.cos_theta_vec,
+            self.sin_theta_vec,
+        )

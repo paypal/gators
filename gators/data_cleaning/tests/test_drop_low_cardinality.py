@@ -1,29 +1,22 @@
-from gators.data_cleaning.drop_low_cardinality import DropLowCardinality
-import pytest
-import pandas as pd
-from pandas.testing import assert_frame_equal
 import databricks.koalas as ks
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.data_cleaning.drop_low_cardinality import DropLowCardinality
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame({
-        'A': list('abc'),
-        'B': list('abb'),
-        'C': list('ccc')})
-    X_expected = pd.DataFrame({
-        'A': list('abc'),
-        'B': list('abb')})
+    X = pd.DataFrame({"A": list("abc"), "B": list("abb"), "C": list("ccc")})
+    X_expected = pd.DataFrame({"A": list("abc"), "B": list("abb")})
     obj = DropLowCardinality(min_categories=2).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_no_drop():
-    X = pd.DataFrame({
-        'A': list('abc'),
-        'B': list('abb'),
-        'C': list('ccd')})
+    X = pd.DataFrame({"A": list("abc"), "B": list("abb"), "C": list("ccd")})
     X_expected = X.copy()
     obj = DropLowCardinality(min_categories=2).fit(X)
     return obj, X, X_expected
@@ -31,11 +24,9 @@ def data_no_drop():
 
 @pytest.fixture
 def data_no_object():
-    X = pd.DataFrame({
-        'A': [0., 1., 2.],
-        'B': [3., 4., 5.],
-        'C': [6., 7., 8.]
-    }, dtype=float)
+    X = pd.DataFrame(
+        {"A": [0.0, 1.0, 2.0], "B": [3.0, 4.0, 5.0], "C": [6.0, 7.0, 8.0]}, dtype=float
+    )
     X_expected = X.copy()
     obj = DropLowCardinality(min_categories=2).fit(X)
     return obj, X, X_expected
@@ -43,23 +34,15 @@ def data_no_object():
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({
-        'A': list('abc'),
-        'B': list('abb'),
-        'C': list('ccc')})
-    X_expected = pd.DataFrame({
-        'A': list('abc'),
-        'B': list('abb')})
+    X = ks.DataFrame({"A": list("abc"), "B": list("abb"), "C": list("ccc")})
+    X_expected = pd.DataFrame({"A": list("abc"), "B": list("abb")})
     obj = DropLowCardinality(min_categories=2).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_no_drop_ks():
-    X = ks.DataFrame({
-        'A': list('abc'),
-        'B': list('abb'),
-        'C': list('ccd')})
+    X = ks.DataFrame({"A": list("abc"), "B": list("abb"), "C": list("ccd")})
     X_expected = X.to_pandas().copy()
     obj = DropLowCardinality(min_categories=2).fit(X)
     return obj, X, X_expected
@@ -67,11 +50,9 @@ def data_no_drop_ks():
 
 @pytest.fixture
 def data_no_object_ks():
-    X = ks.DataFrame({
-        'A': [0., 1., 2.],
-        'B': [3., 4., 5.],
-        'C': [6., 7., 8.]
-    }, dtype=float)
+    X = ks.DataFrame(
+        {"A": [0.0, 1.0, 2.0], "B": [3.0, 4.0, 5.0], "C": [6.0, 7.0, 8.0]}, dtype=float
+    )
     X_expected = X.to_pandas().copy()
     obj = DropLowCardinality(min_categories=2).fit(X)
     return obj, X, X_expected
@@ -163,15 +144,9 @@ def test_no_object_ks_np(data_no_object_ks):
 
 def test_drop_high_cardinality_init():
     with pytest.raises(TypeError):
-        _ = DropLowCardinality(min_categories='q')
+        _ = DropLowCardinality(min_categories="q")
 
 
 def test_no_obj():
-    X = pd.DataFrame({
-        'A': [0, 1, 2],
-        'B': [3, 4, 5],
-        'C': [6, 7, 8]})
-    assert_frame_equal(
-        X,
-        DropLowCardinality(min_categories=2).fit_transform(X)
-    )
+    X = pd.DataFrame({"A": [0, 1, 2], "B": [3, 4, 5], "C": [6, 7, 8]})
+    assert_frame_equal(X, DropLowCardinality(min_categories=2).fit_transform(X))

@@ -1,9 +1,12 @@
 # License: Apache-2.0
-from typing import List, Union, Dict
+from typing import Dict, List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
 from feature_gen import cluster_statistics
+
 from ._base_feature_generation import _BaseFeatureGeneration
 
 
@@ -84,56 +87,59 @@ class ClusterStatistics(_BaseFeatureGeneration):
             7.5       , 0.70710678]])
     """
 
-    def __init__(self, clusters_dict: Dict[str, List[str]],
-                 column_names: List[str] = None,
-                 dtype: type = np.float64):
+    def __init__(
+        self,
+        clusters_dict: Dict[str, List[str]],
+        column_names: List[str] = None,
+        dtype: type = np.float64,
+    ):
         if not isinstance(clusters_dict, dict):
-            raise TypeError('`clusters_dict` should be a dict.')
+            raise TypeError("`clusters_dict` should be a dict.")
         for key, val in clusters_dict.items():
             if not isinstance(val, list):
-                raise TypeError('`clusters_dict` values should be a list.')
+                raise TypeError("`clusters_dict` values should be a list.")
             if len(val) == 0:
-                raise ValueError(
-                    '`clusters_dict` values should be a not empty list.')
+                raise ValueError("`clusters_dict` values should be a not empty list.")
         cluster_length = [len(v) for v in clusters_dict.values()]
         if min(cluster_length) != max(cluster_length):
-            raise ValueError(
-                '`clusters_dict` values should be lists with same length.')
+            raise ValueError("`clusters_dict` values should be lists with same length.")
         if cluster_length[0] == 1:
             raise ValueError(
-                '''`clusters_dict` values should be
-                lists with a length larger than 1.''')
+                """`clusters_dict` values should be
+                lists with a length larger than 1."""
+            )
         if column_names is not None and not isinstance(column_names, list):
-            raise TypeError('`column_names` should be None or a list.')
+            raise TypeError("`column_names` should be None or a list.")
         if not column_names:
             column_names = self.get_column_names(clusters_dict)
             column_mapping = {
-                **{f'{key}__mean': val for (
-                    key, val) in clusters_dict.items()},
-                **{f'{key}__std': val for (key, val)
-                   in clusters_dict.items()}
+                **{f"{key}__mean": val for (key, val) in clusters_dict.items()},
+                **{f"{key}__std": val for (key, val) in clusters_dict.items()},
             }
         else:
             column_mapping = dict(zip(column_names, clusters_dict.values()))
-        columns = list(
-            set(
-                [c for s in list(clusters_dict.values()) for c in s]
-            )
-        )
+        columns = list(set([c for s in list(clusters_dict.values()) for c in s]))
         if column_names and 2 * len(clusters_dict) != len(column_names):
             raise ValueError(
-                '''Length of `column_names` should be
-                two times the length of `clusters_dict`.''')
+                """Length of `column_names` should be
+                two times the length of `clusters_dict`."""
+            )
         self.check_datatype(dtype, [np.float32, np.float64])
         _BaseFeatureGeneration.__init__(
-            self, columns=columns, column_names=column_names,
-            column_mapping=column_mapping, dtype=dtype)
+            self,
+            columns=columns,
+            column_names=column_names,
+            column_mapping=column_mapping,
+            dtype=dtype,
+        )
         self.clusters_dict = clusters_dict
         self.n_clusters = len(self.clusters_dict)
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'ClusterStatistics':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "ClusterStatistics":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -150,13 +156,13 @@ class ClusterStatistics(_BaseFeatureGeneration):
         """
         self.check_dataframe(X)
         self.check_dataframe_is_numerics(X)
-        self.idx_columns = self.get_idx_columns(
-            X, self.clusters_dict)
+        self.idx_columns = self.get_idx_columns(X, self.clusters_dict)
         return self
 
-    def transform(self,
-                  X: Union[pd.DataFrame, ks.DataFrame],
-                  ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+    ) -> Union[pd.DataFrame, ks.DataFrame]:
         """Transform the dataframe X.
 
         Parameters
@@ -170,10 +176,8 @@ class ClusterStatistics(_BaseFeatureGeneration):
             Dataframe with statistics cluster features.
         """
         for i, cols in enumerate(self.clusters_dict.values()):
-            X = X.join(X[cols].mean(axis=1).rename(
-                self.column_names[2*i]))
-            X = X.join(X[cols].std(axis=1).rename(
-                self.column_names[2*i+1]))
+            X = X.join(X[cols].mean(axis=1).rename(self.column_names[2 * i]))
+            X = X.join(X[cols].std(axis=1).rename(self.column_names[2 * i + 1]))
         if isinstance(X, ks.DataFrame):
             return X.astype(self.dtype).sort_index()
         return X.astype(self.dtype)
@@ -192,13 +196,12 @@ class ClusterStatistics(_BaseFeatureGeneration):
             Transformed array.
         """
         self.check_array(X)
-        return cluster_statistics(
-            X.astype(self.dtype), self.idx_columns, self.dtype)
+        return cluster_statistics(X.astype(self.dtype), self.idx_columns, self.dtype)
 
-    @ staticmethod
+    @staticmethod
     def get_idx_columns(
-            X: Union[pd.DataFrame, ks.DataFrame],
-            clusters_dict: Dict[str, List[str]]) -> np.ndarray:
+        X: Union[pd.DataFrame, ks.DataFrame], clusters_dict: Dict[str, List[str]]
+    ) -> np.ndarray:
         """Get the column indices of the clusters.
 
         Parameters
@@ -215,17 +218,16 @@ class ClusterStatistics(_BaseFeatureGeneration):
         """
         columns = list(X.columns)
         n_columns = len(columns)
-        idx_columns = np.array([
-            [i for i in range(n_columns)
-             if columns[i] in cluster_columns
-             ]
-            for cluster_columns in list(clusters_dict.values())
-        ])
+        idx_columns = np.array(
+            [
+                [i for i in range(n_columns) if columns[i] in cluster_columns]
+                for cluster_columns in list(clusters_dict.values())
+            ]
+        )
         return idx_columns
 
-    @ staticmethod
-    def get_column_names(
-            clusters_dict: Dict[str, List[str]]) -> List[str]:
+    @staticmethod
+    def get_column_names(clusters_dict: Dict[str, List[str]]) -> List[str]:
         """Get statistics cluster column names.
 
         Parameters
@@ -240,6 +242,6 @@ class ClusterStatistics(_BaseFeatureGeneration):
         """
         column_names = []
         for name in clusters_dict.keys():
-            column_names.append(name + '__mean')
-            column_names.append(name + '__std')
+            column_names.append(name + "__mean")
+            column_names.append(name + "__std")
         return column_names

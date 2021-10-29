@@ -1,9 +1,10 @@
+from typing import Dict, Tuple, Union
 
-from ..transformers import TransformerXY
-from typing import Tuple, Dict, Union
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+from ..transformers import TransformerXY
 
 
 class UnsupervisedSampling(TransformerXY):
@@ -65,13 +66,14 @@ class UnsupervisedSampling(TransformerXY):
 
     def __init__(self, n_samples: int):
         if not isinstance(n_samples, int):
-            raise TypeError('`n_samples` should be an int.')
+            raise TypeError("`n_samples` should be an int.")
         self.n_samples = n_samples
 
-    def transform(self,
-                  X: Union[pd.DataFrame, ks.DataFrame],
-                  y: Union[pd.Series, ks.Series],
-                  ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.Series, ks.Series]]:
+    def transform(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series],
+    ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.Series, ks.Series]]:
         """Fit and transform the dataframe `X` and the series `y`.
 
         Parameters:
@@ -88,7 +90,7 @@ class UnsupervisedSampling(TransformerXY):
         self.check_dataframe(X)
         self.check_y(X, y)
         frac = self.n_samples / X.shape[0]
-        if frac >= 1.:
+        if frac >= 1.0:
             return X, y
         y_name = y.name
         Xy = X.join(y).sample(frac=round(frac, 3), random_state=0)

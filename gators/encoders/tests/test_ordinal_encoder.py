@@ -1,25 +1,28 @@
 # License: Apache-2.0
-from gators.encoders import OrdinalEncoder
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.encoders import OrdinalEncoder
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame({
-            'A': ['Q', 'Q', 'W'],
-            'B': ['Q', 'W', 'W'],
-            'C': ['W', 'Q', 'W'],
-            'D': [1, 2, 3]})
+    X = pd.DataFrame(
+        {
+            "A": ["Q", "Q", "W"],
+            "B": ["Q", "W", "W"],
+            "C": ["W", "Q", "W"],
+            "D": [1, 2, 3],
+        }
+    )
     X_expected = pd.DataFrame(
-        [[1.0, 1.0, 0.0, 1.0],
-         [1.0, 0.0, 1.0, 2.0],
-         [0.0, 0.0, 0.0, 3.0]],
-        columns=list('ABCD'),
+        [[1.0, 1.0, 0.0, 1.0], [1.0, 0.0, 1.0, 2.0], [0.0, 0.0, 0.0, 3.0]],
+        columns=list("ABCD"),
     )
     obj = OrdinalEncoder().fit(X)
     return obj, X, X_expected
@@ -27,26 +30,27 @@ def data():
 
 @pytest.fixture
 def data_int16():
-    X = pd.DataFrame({
-            'A': ['Q', 'Q', 'W'],
-            'B': ['Q', 'W', 'W'],
-            'C': ['W', 'Q', 'W'],
-            'D': [1, 2, 3]})
+    X = pd.DataFrame(
+        {
+            "A": ["Q", "Q", "W"],
+            "B": ["Q", "W", "W"],
+            "C": ["W", "Q", "W"],
+            "D": [1, 2, 3],
+        }
+    )
     X_expected = pd.DataFrame(
-        [[1.0, 1.0, 0.0, 1.0],
-         [1.0, 0.0, 1.0, 2.0],
-         [0.0, 0.0, 0.0, 3.0]],
-        columns=list('ABCD'),
+        [[1.0, 1.0, 0.0, 1.0], [1.0, 0.0, 1.0, 2.0], [0.0, 0.0, 0.0, 3.0]],
+        columns=list("ABCD"),
     ).astype(np.int16)
     obj = OrdinalEncoder(dtype=np.int16).fit(X)
     return obj, X, X_expected
 
 
-@ pytest.fixture
+@pytest.fixture
 def data_no_cat():
     X = pd.DataFrame(
         np.zeros((3, 3)),
-        columns=list('ABC'),
+        columns=list("ABC"),
     )
     obj = OrdinalEncoder().fit(X)
     return obj, X, X.copy()
@@ -54,16 +58,17 @@ def data_no_cat():
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({
-            'A': ['Q', 'Q', 'W'],
-            'B': ['Q', 'W', 'W'],
-            'C': ['W', 'Q', 'W'],
-            'D': [1, 2, 3]})
+    X = ks.DataFrame(
+        {
+            "A": ["Q", "Q", "W"],
+            "B": ["Q", "W", "W"],
+            "C": ["W", "Q", "W"],
+            "D": [1, 2, 3],
+        }
+    )
     X_expected = pd.DataFrame(
-        [[1.0, 1.0, 0.0, 1.0],
-         [1.0, 0.0, 1.0, 2.0],
-         [0.0, 0.0, 0.0, 3.0]],
-        columns=list('ABCD'),
+        [[1.0, 1.0, 0.0, 1.0], [1.0, 0.0, 1.0, 2.0], [0.0, 0.0, 0.0, 3.0]],
+        columns=list("ABCD"),
     )
     obj = OrdinalEncoder().fit(X)
     return obj, X, X_expected
@@ -71,26 +76,27 @@ def data_ks():
 
 @pytest.fixture
 def data_int16_ks():
-    X = ks.DataFrame({
-            'A': ['Q', 'Q', 'W'],
-            'B': ['Q', 'W', 'W'],
-            'C': ['W', 'Q', 'W'],
-            'D': [1, 2, 3]})
+    X = ks.DataFrame(
+        {
+            "A": ["Q", "Q", "W"],
+            "B": ["Q", "W", "W"],
+            "C": ["W", "Q", "W"],
+            "D": [1, 2, 3],
+        }
+    )
     X_expected = pd.DataFrame(
-        [[1.0, 1.0, 0.0, 1.0],
-         [1.0, 0.0, 1.0, 2.0],
-         [0.0, 0.0, 0.0, 3.0]],
-        columns=list('ABCD'),
+        [[1.0, 1.0, 0.0, 1.0], [1.0, 0.0, 1.0, 2.0], [0.0, 0.0, 0.0, 3.0]],
+        columns=list("ABCD"),
     ).astype(np.int16)
     obj = OrdinalEncoder(dtype=np.int16).fit(X)
     return obj, X, X_expected
 
 
-@ pytest.fixture
+@pytest.fixture
 def data_no_cat_ks():
     X = ks.DataFrame(
         np.zeros((3, 3)),
-        columns=list('ABC'),
+        columns=list("ABC"),
     )
     obj = OrdinalEncoder().fit(X)
     return obj, X, X.copy().to_pandas()
@@ -186,13 +192,16 @@ def test_no_cat_ks_np(data_no_cat_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@ pytest.fixture
+@pytest.fixture
 def test_check_nans():
-    X = pd.DataFrame({
-            'A': [None, 'Q', 'W'],
-            'B': ['Q', 'W', 'W'],
-            'C': ['W', 'Q', 'W'],
-            'D': [1, 2, 3]})
+    X = pd.DataFrame(
+        {
+            "A": [None, "Q", "W"],
+            "B": ["Q", "W", "W"],
+            "C": ["W", "Q", "W"],
+            "D": [1, 2, 3],
+        }
+    )
 
     with pytest.raises(ValueError):
         _ = OrdinalEncoder().fit(X)
@@ -200,4 +209,4 @@ def test_check_nans():
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = OrdinalEncoder(add_other_columns='yes')
+        _ = OrdinalEncoder(add_other_columns="yes")

@@ -1,24 +1,28 @@
 # License: Apache-2.0
-from gators.feature_selection.correlation_filter import CorrelationFilter
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_selection.correlation_filter import CorrelationFilter
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
     max_corr = 0.8
-    X = pd.DataFrame({
-            'A': [7.25, 71.2833, 7.925, 53.1, 8.05, 8.4583],
-            'B': [1, 1, 0, 1, 0, 0],
-            'D': [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
-            'F': [3, 1, 2, 1, 2, 3],
-        })
+    X = pd.DataFrame(
+        {
+            "A": [7.25, 71.2833, 7.925, 53.1, 8.05, 8.4583],
+            "B": [1, 1, 0, 1, 0, 0],
+            "D": [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
+            "F": [3, 1, 2, 1, 2, 3],
+        }
+    )
 
-    X_expected = X[['B', 'D', 'F']].copy()
+    X_expected = X[["B", "D", "F"]].copy()
     obj = CorrelationFilter(max_corr=max_corr).fit(X)
     return obj, X, X_expected
 
@@ -26,14 +30,16 @@ def data():
 @pytest.fixture
 def data_ks():
     max_corr = 0.8
-    X = ks.DataFrame({
-            'A': [7.25, 71.2833, 7.925, 53.1, 8.05, 8.4583],
-            'B': [1, 1, 0, 1, 0, 0],
-            'D': [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
-            'F': [3, 1, 2, 1, 2, 3],
-        })
+    X = ks.DataFrame(
+        {
+            "A": [7.25, 71.2833, 7.925, 53.1, 8.05, 8.4583],
+            "B": [1, 1, 0, 1, 0, 0],
+            "D": [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
+            "F": [3, 1, 2, 1, 2, 3],
+        }
+    )
 
-    X_expected = X[['B', 'D', 'F']].to_pandas().copy()
+    X_expected = X[["B", "D", "F"]].to_pandas().copy()
     obj = CorrelationFilter(max_corr=max_corr).fit(X)
     return obj, X, X_expected
 
@@ -69,4 +75,4 @@ def test_ks_np(data_ks):
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = CorrelationFilter(max_corr='a')
+        _ = CorrelationFilter(max_corr="a")

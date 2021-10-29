@@ -1,8 +1,10 @@
+from typing import Tuple, Union
+
+import databricks.koalas as ks
+import pandas as pd
+
 from ..transformers import TransformerXY
 from ..util import util
-from typing import Tuple, Union
-import pandas as pd
-import databricks.koalas as ks
 
 
 class SupervisedSampling(TransformerXY):
@@ -70,14 +72,13 @@ class SupervisedSampling(TransformerXY):
 
     def __init__(self, n_samples: int):
         if not isinstance(n_samples, int):
-            raise TypeError('`n_samples` should be an int.')
+            raise TypeError("`n_samples` should be an int.")
         self.n_samples = n_samples
         self.frac_vec = pd.Series([])
 
-    def transform(self, X: Union[pd.DataFrame, ks.DataFrame],
-                  y: Union[pd.Series, ks.Series]
-                  ) -> Tuple[Union[pd.DataFrame, ks.DataFrame],
-                             Union[pd.Series, ks.Series]]:
+    def transform(
+        self, X: Union[pd.DataFrame, ks.DataFrame], y: Union[pd.Series, ks.Series]
+    ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.Series, ks.Series]]:
         """Fit and transform the dataframe `X` and the series `y`.
 
         Parameters
@@ -97,16 +98,13 @@ class SupervisedSampling(TransformerXY):
         y_name = y.name
         self.frac_vec = self.compute_sampling_fractions(y, self.n_samples)
         Xy = X.join(y)
-        Xy_sampled = self.sample_dataframe(
-            Xy=Xy,
-            frac_vec=self.frac_vec,
-            y_name=y_name
-        )
+        Xy_sampled = self.sample_dataframe(Xy=Xy, frac_vec=self.frac_vec, y_name=y_name)
         return Xy_sampled.drop(y_name, axis=1), Xy_sampled[y_name]
 
     @staticmethod
-    def compute_sampling_fractions(y: Union[pd.Series, ks.Series],
-                                   n_samples: int) -> pd.Series:
+    def compute_sampling_fractions(
+        y: Union[pd.Series, ks.Series], n_samples: int
+    ) -> pd.Series:
         """Compute the sampling fractions.
 
         Parameters
@@ -126,18 +124,18 @@ class SupervisedSampling(TransformerXY):
         n_samples_per_class = int(n_samples / n_classes)
         mask = class_count > n_samples_per_class
         n_classes_ = mask.sum()
-        n_samples_ = n_samples - class_count[~ mask].sum()
+        n_samples_ = n_samples - class_count[~mask].sum()
         frac_vec = n_samples_ / (class_count * n_classes_)
         if isinstance(frac_vec, ks.Series):
             frac_vec = frac_vec.to_pandas()
-        frac_vec[frac_vec > 1] = 1.
-        frac_vec = frac_vec.mask(frac_vec < 1./n_samples, 1./n_samples)
+        frac_vec[frac_vec > 1] = 1.0
+        frac_vec = frac_vec.mask(frac_vec < 1.0 / n_samples, 1.0 / n_samples)
         return frac_vec
 
     @staticmethod
-    def sample_dataframe(Xy: Union[pd.DataFrame, ks.DataFrame],
-                         frac_vec: pd.Series, y_name: str
-                         ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def sample_dataframe(
+        Xy: Union[pd.DataFrame, ks.DataFrame], frac_vec: pd.Series, y_name: str
+    ) -> Union[pd.DataFrame, ks.DataFrame]:
         """Sample dataframe.
 
         Parameters
@@ -160,13 +158,13 @@ class SupervisedSampling(TransformerXY):
             Xy_sampled = ks.DataFrame(columns=Xy.columns)
         for c, frac in frac_vec.iteritems():
             if frac == 1:
-                Xy_sampled = util.concat(
-                    [Xy_sampled, Xy[Xy[y_name] == int(c)]], axis=0)
+                Xy_sampled = util.concat([Xy_sampled, Xy[Xy[y_name] == int(c)]], axis=0)
             else:
                 Xy_sampled = util.concat(
-                    [Xy_sampled,
-                     Xy[Xy[y_name] == int(c)].sample(
-                         frac=frac, random_state=0)],
-                    axis=0
+                    [
+                        Xy_sampled,
+                        Xy[Xy[y_name] == int(c)].sample(frac=frac, random_state=0),
+                    ],
+                    axis=0,
                 )
         return Xy_sampled.astype(Xy.dtypes.to_dict())

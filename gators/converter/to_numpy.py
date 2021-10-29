@@ -1,8 +1,10 @@
-from ..transformers.transformer_xy import TransformerXY
 from typing import Tuple, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+from ..transformers.transformer_xy import TransformerXY
 
 
 class ToNumpy(TransformerXY):
@@ -39,7 +41,7 @@ class ToNumpy(TransformerXY):
     >>> y = ks.Series([0, 0, 1], name='TARGET')
     >>> obj = ToNumpy()
     >>> X, y = obj.transform(X, y)
-    >>> X 
+    >>> X
     array([[0., 1., 2.],
            [3., 4., 5.],
            [6., 7., 8.]])
@@ -51,10 +53,11 @@ class ToNumpy(TransformerXY):
     def __init__(self):
         TransformerXY.__init__(self)
 
-    def transform(self,
-                  X: Union[pd.DataFrame, ks.DataFrame],
-                  y: Union[pd.Series, ks.Series],
-                  ) -> Tuple[np.ndarray, np.ndarray]:
+    def transform(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series],
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Fit the transformer on the dataframe `X`.
 
         Parameters

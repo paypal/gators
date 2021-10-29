@@ -1,9 +1,11 @@
 # License: Apache-2.0
-from ..transformers.transformer import Transformer
-from typing import List, Dict, Union
+from typing import Dict, List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+from ..transformers.transformer import Transformer
 
 
 class _BaseImputer(Transformer):
@@ -26,18 +28,17 @@ class _BaseImputer(Transformer):
 
     """
 
-    def __init__(self, strategy: str,
-                 value: Union[float, str, None],
-                 columns: List[str]):
+    def __init__(
+        self, strategy: str, value: Union[float, str, None], columns: List[str]
+    ):
         if not isinstance(strategy, str):
-            raise TypeError('`strategy` should be a string.')
-        if strategy == 'constant' and value is None:
-            raise ValueError(
-                'if `strategy` is "constant", `value` should not be None.')
-        if strategy not in ['constant', 'mean', 'median', 'most_frequent']:
-            raise ValueError('Imputation `strategy` not implemented.')
+            raise TypeError("`strategy` should be a string.")
+        if strategy == "constant" and value is None:
+            raise ValueError('if `strategy` is "constant", `value` should not be None.')
+        if strategy not in ["constant", "mean", "median", "most_frequent"]:
+            raise ValueError("Imputation `strategy` not implemented.")
         if not isinstance(columns, list) and columns is not None:
-            raise TypeError('`columns` should be a list or None.')
+            raise TypeError("`columns` should be a list or None.")
 
         Transformer.__init__(self)
         self.strategy = strategy
@@ -72,9 +73,10 @@ class _BaseImputer(Transformer):
 
     @staticmethod
     def compute_statistics(
-            X: Union[pd.DataFrame, ks.DataFrame], columns: List[str],
-            strategy: str,
-            value: Union[float, int, str, None]
+        X: Union[pd.DataFrame, ks.DataFrame],
+        columns: List[str],
+        strategy: str,
+        value: Union[float, int, str, None],
     ) -> Dict[str, Union[float, int, str]]:
         """Compute the imputation values.
 
@@ -94,24 +96,22 @@ class _BaseImputer(Transformer):
         Dict[str, Union[float, int, str]]
             Imputation value mapping.
         """
-        if strategy == 'mean':
+        if strategy == "mean":
             statistics = X[columns].astype(np.float64).mean().to_dict()
-        elif strategy == 'median':
+        elif strategy == "median":
             statistics = X[columns].astype(np.float64).median().to_dict()
-        elif strategy == 'most_frequent':
-            values = [
-                X[c].value_counts().index.to_numpy()[0]
-                for c in columns
-            ]
+        elif strategy == "most_frequent":
+            values = [X[c].value_counts().index.to_numpy()[0] for c in columns]
             statistics = dict(zip(columns, values))
         else:  # strategy == 'constant'
             values = len(columns) * [value]
             statistics = dict(zip(columns, values))
         if pd.Series(statistics).isnull().sum():
             raise ValueError(
-                '''Some columns contains only NaN values and the
+                """Some columns contains only NaN values and the
                 imputation values cannot be calculated.
                 Remove these columns
                 before performing the imputation
-                (e.g. with `gators.data_cleaning.drop_high_nan_ratio()`).''')
+                (e.g. with `gators.data_cleaning.drop_high_nan_ratio()`)."""
+            )
         return statistics

@@ -1,11 +1,13 @@
 # License: Apache-2.0
-from ..transformers.transformer import Transformer
-from ..util import util
-from typing import List, Union
 from abc import ABC
+from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+from ..transformers.transformer import Transformer
+from ..util import util
 
 
 class _BaseDataCleaning(Transformer, ABC):
@@ -17,8 +19,9 @@ class _BaseDataCleaning(Transformer, ABC):
         self.columns_to_keep: List[str] = []
         self.idx_columns_to_keep = np.array([])
 
-    def transform(self,  X: Union[pd.DataFrame, ks.DataFrame]
-                  ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(
+        self, X: Union[pd.DataFrame, ks.DataFrame]
+    ) -> Union[pd.DataFrame, ks.DataFrame]:
         """Transform the dataframe `X`.
 
         Parameters
@@ -52,9 +55,10 @@ class _BaseDataCleaning(Transformer, ABC):
         self.check_array(X)
         return X[:, self.idx_columns_to_keep]
 
-    @ staticmethod
+    @staticmethod
     def get_idx_columns_to_keep(
-            columns: List[str], columns_to_drop: List[str]) -> np.array:
+        columns: List[str], columns_to_drop: List[str]
+    ) -> np.array:
         """Get the column indices to keep.
 
         Parameters

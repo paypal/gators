@@ -1,17 +1,16 @@
 # License: Apache-2.0
-from hyperopt.pyll.base import Apply
-from hyperopt import Trials
-from hyperopt import fmin
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import KFold, StratifiedKFold
-from sklearn.metrics._scorer import _PredictScorer
-from typing import List, Union, Dict, Callable
+from typing import Callable, Dict, List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+from hyperopt import Trials, fmin
+from hyperopt.pyll.base import Apply
+from sklearn.metrics._scorer import _PredictScorer
+from sklearn.model_selection import KFold, StratifiedKFold, cross_val_score
 
 
-class HyperOpt():
+class HyperOpt:
     """Hyper parameter optimization using the Hyperopt package.
 
     Parameters
@@ -63,37 +62,40 @@ class HyperOpt():
 
     """
 
-    def __init__(self, model: object, scoring: _PredictScorer,
-                 algo: Callable,
-                 space: Dict[str, Apply],
-                 kfold: Union[KFold, StratifiedKFold],
-                 max_evals: int,
-                 features: List[str]) -> 'HyperOpt':
+    def __init__(
+        self,
+        model: object,
+        scoring: _PredictScorer,
+        algo: Callable,
+        space: Dict[str, Apply],
+        kfold: Union[KFold, StratifiedKFold],
+        max_evals: int,
+        features: List[str],
+    ) -> "HyperOpt":
 
-        if not hasattr(model, 'fit') or not hasattr(model, 'predict'):
-            raise TypeError(
-                '`model` should have the methods `fit` and `predict`')
+        if not hasattr(model, "fit") or not hasattr(model, "predict"):
+            raise TypeError("`model` should have the methods `fit` and `predict`")
         if not callable(algo):
             raise TypeError(
-                '''
+                """
                 `algo` should be:
-                hyperopt.rand, hyperopt.tpe, or hyperopt.atpe''')
+                hyperopt.rand, hyperopt.tpe, or hyperopt.atpe"""
+            )
         if not isinstance(scoring, (str, _PredictScorer)):
             raise TypeError(
-                '''`scoring` should be a str or
-                a sklearn.metrics._scorer._PredictScorer''')
+                """`scoring` should be a str or
+                a sklearn.metrics._scorer._PredictScorer"""
+            )
         if not isinstance(space, dict):
-            raise TypeError(
-                '`space` should be a dict')
+            raise TypeError("`space` should be a dict")
         if not isinstance(kfold, (KFold, StratifiedKFold)):
             raise TypeError(
-                '`scoring` should be a sklearn.metrics._scorer._PredictScorer')
+                "`scoring` should be a sklearn.metrics._scorer._PredictScorer"
+            )
         if not isinstance(max_evals, int):
-            raise TypeError(
-                '`max_evals` should be an int')
+            raise TypeError("`max_evals` should be an int")
         if not isinstance(features, list):
-            raise TypeError(
-                '`features` should be a list')
+            raise TypeError("`features` should be a list")
         self.model = model
         self.algo = algo
         self.scoring = scoring
@@ -104,7 +106,7 @@ class HyperOpt():
         self.int_parameters: List[str] = self.get_int_parameters(space)
         self.features = features
 
-    def fit(self, X: np.ndarray, y: np.ndarray) -> 'HyperOpt':
+    def fit(self, X: np.ndarray, y: np.ndarray) -> "HyperOpt":
         """Fit model on X with y.
 
         Parameters
@@ -120,11 +122,9 @@ class HyperOpt():
             Instance of itself.
         """
         if not isinstance(X, np.ndarray):
-            raise TypeError(
-                '''`X` must be a NumPy array.''')
+            raise TypeError("""`X` must be a NumPy array.""")
         if not isinstance(y, np.ndarray):
-            raise TypeError(
-                '''`y` must be a NumPy array.''')
+            raise TypeError("""`y` must be a NumPy array.""")
 
         def fn(params, cv=self.kfold, X=X, y=y):
             for int_parameter in self.int_parameters:
@@ -132,9 +132,9 @@ class HyperOpt():
             self.model.set_params(**params)
             self.model.fit(X, y)
             score = cross_val_score(
-                self.model, X, y, cv=cv,
-                scoring=self.scoring, n_jobs=-1).mean()
-            return - score
+                self.model, X, y, cv=cv, scoring=self.scoring, n_jobs=-1
+            ).mean()
+            return -score
 
         trials = Trials()
         best = fmin(
@@ -143,7 +143,7 @@ class HyperOpt():
             algo=self.algo,
             max_evals=self.max_evals,
             trials=trials,
-            rstate=np.random.RandomState(0)
+            rstate=np.random.RandomState(0),
         )
         for int_parameter in self.int_parameters:
             best[int_parameter] = int(best[int_parameter])
@@ -160,8 +160,7 @@ class HyperOpt():
         pd.Series
             Feature importances.
         """
-        feature_importances_ = pd.Series(
-            self.model.feature_importances_, self.features)
+        feature_importances_ = pd.Series(self.model.feature_importances_, self.features)
         return feature_importances_.sort_values(ascending=False)
 
     @staticmethod
@@ -178,14 +177,15 @@ class HyperOpt():
         pd.DataFrame
             Hyperparameter tuning history.
         """
+
         def f(x) -> ks.Series[np.float32]:
             return pd.Series({key: val[0] for key, val in x.items()})
 
         loss = pd.DataFrame(trials.results)
-        params = pd.DataFrame(trials.miscs)['vals'].apply(f)
+        params = pd.DataFrame(trials.miscs)["vals"].apply(f)
         history = pd.concat([params, loss], axis=1)
-        history['id'] = history.index
-        history.sort_values('loss', ascending=False)
+        history["id"] = history.index
+        history.sort_values("loss", ascending=False)
         return history
 
     @staticmethod
@@ -204,6 +204,6 @@ class HyperOpt():
         """
         int_parameters = []
         for key in space.keys():
-            if 'qlog' in str(space[key]) or 'quni' in str(space[key]):
+            if "qlog" in str(space[key]) or "quni" in str(space[key]):
                 int_parameters.append(key)
         return int_parameters

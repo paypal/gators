@@ -1,23 +1,24 @@
-from gators.data_cleaning.drop_columns import DropColumns
-from pandas.testing import assert_frame_equal
-import pytest
-import pandas as pd
 import databricks.koalas as ks
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.data_cleaning.drop_columns import DropColumns
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame({'A': [1, 2], 'B': [1., 2.], 'C': ['q', 'w']})
-    obj = DropColumns(['A']).fit(X)
-    X_expected = pd.DataFrame({'B': [1., 2.], 'C': ['q', 'w']})
+    X = pd.DataFrame({"A": [1, 2], "B": [1.0, 2.0], "C": ["q", "w"]})
+    obj = DropColumns(["A"]).fit(X)
+    X_expected = pd.DataFrame({"B": [1.0, 2.0], "C": ["q", "w"]})
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({'A': [1, 2], 'B': [1., 2.], 'C': ['q', 'w']})
-    obj = DropColumns(['A']).fit(X)
-    X_expected = pd.DataFrame({'B': [1., 2.], 'C': ['q', 'w']})
+    X = ks.DataFrame({"A": [1, 2], "B": [1.0, 2.0], "C": ["q", "w"]})
+    obj = DropColumns(["A"]).fit(X)
+    X_expected = pd.DataFrame({"B": [1.0, 2.0], "C": ["q", "w"]})
     return obj, X, X_expected
 
 
@@ -51,4 +52,4 @@ def test_ks_np(data_ks):
 
 def test_drop_columns_init(data):
     with pytest.raises(TypeError):
-        _ = DropColumns(columns='q')
+        _ = DropColumns(columns="q")

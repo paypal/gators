@@ -1,11 +1,13 @@
 # License: Apache-2.0
 from typing import Union
-import pandas as pd
+
 import databricks.koalas as ks
+import pandas as pd
+
+from ..binning._base_discretizer import _BaseDiscretizer
+from ..util import util
 from ._base_feature_selection import _BaseFeatureSelection
 from .multiclass_information_value import MultiClassInformationValue
-from ..util import util
-from ..binning._base_discretizer import _BaseDiscretizer
 
 
 class RegressionInformationValue(_BaseFeatureSelection):
@@ -128,18 +130,18 @@ class RegressionInformationValue(_BaseFeatureSelection):
 
     def __init__(self, k: int, discretizer: _BaseDiscretizer):
         if not isinstance(k, int):
-            raise TypeError('`k` should be an int.')
+            raise TypeError("`k` should be an int.")
         if not isinstance(discretizer, _BaseDiscretizer):
-            raise TypeError(
-                '`discretizer` should inherite from _BaseDiscretizer.')
+            raise TypeError("`discretizer` should inherite from _BaseDiscretizer.")
         _BaseFeatureSelection.__init__(self)
         self.k = k
         self.discretizer = discretizer
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None
-            ) -> 'RegressionInformationValue':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "RegressionInformationValue":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -161,19 +163,19 @@ class RegressionInformationValue(_BaseFeatureSelection):
             X, y, self.discretizer
         )
         self.feature_importances_.sort_values(ascending=False, inplace=True)
-        self.selected_columns = list(self.feature_importances_.index[:self.k])
-        self.columns_to_drop = [
-            c for c in columns if c not in self.selected_columns
-        ]
+        self.selected_columns = list(self.feature_importances_.index[: self.k])
+        self.columns_to_drop = [c for c in columns if c not in self.selected_columns]
         self.idx_selected_columns = util.get_idx_columns(
-            X.columns, self.selected_columns)
+            X.columns, self.selected_columns
+        )
         return self
 
     @staticmethod
     def compute_information_value(
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series],
-            discretizer: _BaseDiscretizer) -> pd.Series:
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series],
+        discretizer: _BaseDiscretizer,
+    ) -> pd.Series:
         """Compute information value.
 
         Parameters
@@ -195,6 +197,5 @@ class RegressionInformationValue(_BaseFeatureSelection):
         discretizer.inplace = False
         discretizer.output_columns = []
         return MultiClassInformationValue.compute_information_value(
-            X,
-            y_binned.astype(float).astype(int),
-            discretizer=discretizer)
+            X, y_binned.astype(float).astype(int), discretizer=discretizer
+        )

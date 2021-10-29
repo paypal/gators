@@ -1,7 +1,9 @@
 # License: Apache-2.0
 from typing import List, Union
-import pandas as pd
+
 import databricks.koalas as ks
+import pandas as pd
+
 from ..util import util
 from ._base_data_cleaning import _BaseDataCleaning
 
@@ -77,12 +79,11 @@ class DropHighNaNRatio(_BaseDataCleaning):
 
     def __init__(self, max_ratio: float):
         if not isinstance(max_ratio, float):
-            raise TypeError('`max_ratio` should be a float.')
+            raise TypeError("`max_ratio` should be a float.")
         _BaseDataCleaning.__init__(self)
         self.max_ratio = max_ratio
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y=None) -> 'DropHighNaNRatio':
+    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "DropHighNaNRatio":
         """Fit the transformer on the dataframe X.
 
         Get the list of column names to remove and the array of
@@ -100,21 +101,19 @@ class DropHighNaNRatio(_BaseDataCleaning):
         DropHighNaNRatio: Instance of itself.
         """
         self.check_dataframe(X)
-        self.columns = self.get_columns_to_drop(
-            X=X,
-            max_ratio=self.max_ratio)
+        self.columns = self.get_columns_to_drop(X=X, max_ratio=self.max_ratio)
         self.columns_to_keep = util.exclude_columns(
-            columns=list(X.columns),
-            excluded_columns=self.columns)
+            columns=list(X.columns), excluded_columns=self.columns
+        )
         self.idx_columns_to_keep = self.get_idx_columns_to_keep(
-            columns=X.columns,
-            columns_to_drop=self.columns)
+            columns=X.columns, columns_to_drop=self.columns
+        )
         return self
 
     @staticmethod
     def get_columns_to_drop(
-            X: Union[pd.DataFrame, ks.DataFrame],
-            max_ratio: float) -> List[str]:
+        X: Union[pd.DataFrame, ks.DataFrame], max_ratio: float
+    ) -> List[str]:
         """Get  the list of column names to drop.
 
         Parameters

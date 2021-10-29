@@ -1,10 +1,13 @@
 # Licence Apache-2.0
-import feature_gen_dt
-from ._base_datetime_feature import _BaseDatetimeFeature
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+
+import feature_gen_dt
+
+from ._base_datetime_feature import _BaseDatetimeFeature
 
 
 class OrdinalDayOfWeek(_BaseDatetimeFeature):
@@ -71,13 +74,12 @@ class OrdinalDayOfWeek(_BaseDatetimeFeature):
 
     def __init__(self, columns: List[str]):
         if not isinstance(columns, list):
-            raise TypeError('`columns` should be a list.')
+            raise TypeError("`columns` should be a list.")
         if not columns:
-            raise ValueError('`columns` should not be empty.')
-        column_names = [f'{c}__day_of_week' for c in columns]
+            raise ValueError("`columns` should not be empty.")
+        column_names = [f"{c}__day_of_week" for c in columns]
         column_mapping = dict(zip(column_names, columns))
-        _BaseDatetimeFeature.__init__(
-            self, columns, column_names, column_mapping)
+        _BaseDatetimeFeature.__init__(self, columns, column_names, column_mapping)
 
     def transform(
         self, X: Union[pd.DataFrame, ks.DataFrame]
@@ -97,14 +99,15 @@ class OrdinalDayOfWeek(_BaseDatetimeFeature):
         self.check_dataframe(X)
         if isinstance(X, pd.DataFrame):
             X_ordinal = X[self.columns].apply(
-                lambda x: x.dt.dayofweek.astype(np.float64).astype(str))
+                lambda x: x.dt.dayofweek.astype(np.float64).astype(str)
+            )
             X_ordinal.columns = self.column_names
             return X.join(X_ordinal)
 
         for col, name in zip(self.columns, self.column_names):
             X = X.assign(
                 dummy=X[col].dt.dayofweek.astype(np.float64).astype(str)
-            ).rename(columns={'dummy': name})
+            ).rename(columns={"dummy": name})
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -121,5 +124,4 @@ class OrdinalDayOfWeek(_BaseDatetimeFeature):
             Transformed array.
         """
         self.check_array(X)
-        return feature_gen_dt.ordinal_day_of_week(
-            X, self.idx_columns)
+        return feature_gen_dt.ordinal_day_of_week(X, self.idx_columns)

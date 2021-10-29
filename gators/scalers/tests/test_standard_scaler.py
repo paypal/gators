@@ -1,47 +1,35 @@
 # License: Apache-2.0
-from gators.scalers.standard_scaler import StandardScaler
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+
+from gators.scalers.standard_scaler import StandardScaler
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame(
-        np.random.randn(5, 5),
-        columns=list('ABCDF')
-    )
+    X = pd.DataFrame(np.random.randn(5, 5), columns=list("ABCDF"))
     return StandardScaler().fit(X), X
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
-        np.random.randn(5, 5),
-        columns=list('ABCDF')
-    )
+    X = ks.DataFrame(np.random.randn(5, 5), columns=list("ABCDF"))
     return StandardScaler().fit(X), X
 
 
 @pytest.fixture
 def data_float32():
-    X = pd.DataFrame(
-        np.random.randn(5, 5),
-        columns=list('ABCDF'),
-        dtype=np.float32
-    )
+    X = pd.DataFrame(np.random.randn(5, 5), columns=list("ABCDF"), dtype=np.float32)
     return StandardScaler().fit(X), X
 
 
 @pytest.fixture
 def data_float32_ks():
-    X = ks.DataFrame(
-        np.random.randn(5, 5),
-        columns=list('ABCDF'),
-        dtype=np.float32
-    )
+    X = ks.DataFrame(np.random.randn(5, 5), columns=list("ABCDF"), dtype=np.float32)
     return StandardScaler().fit(X), X
 
 

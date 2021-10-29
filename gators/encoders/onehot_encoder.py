@@ -1,13 +1,16 @@
 # License: Apache-2.0
-from typing import Union
 import warnings
+from typing import Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-from ..util import util
-from ._base_encoder import _BaseEncoder
-from . import OrdinalEncoder
+
 from encoder import onehot_encoder
+
+from ..util import util
+from . import OrdinalEncoder
+from ._base_encoder import _BaseEncoder
 
 
 class OneHotEncoder(_BaseEncoder):
@@ -72,16 +75,17 @@ class OneHotEncoder(_BaseEncoder):
 
     def __init__(self, dtype: type = np.float64):
         _BaseEncoder.__init__(self, dtype=dtype)
-        self.ordinal_encoder = OrdinalEncoder(
-            dtype=dtype, add_other_columns=False)
+        self.ordinal_encoder = OrdinalEncoder(dtype=dtype, add_other_columns=False)
         self.idx_numerical_columns = np.array([])
         self.onehot_columns = []
         self.numerical_columns = []
         self.column_mapping = {}
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'OneHotEncoder':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "OneHotEncoder":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -99,58 +103,63 @@ class OneHotEncoder(_BaseEncoder):
         self.columns = util.get_datatype_columns(X, object)
         if not self.columns:
             warnings.warn(
-                f'''`X` does not contain object columns:
-                `{self.__class__.__name__}` is not needed''')
+                f"""`X` does not contain object columns:
+                `{self.__class__.__name__}` is not needed"""
+            )
             return self
         self.check_nans(X, self.columns)
-        self.numerical_columns = util.exclude_columns(
-            X.columns, self.columns)
+        self.numerical_columns = util.exclude_columns(X.columns, self.columns)
         _ = self.ordinal_encoder.fit(X)
         self.onehot_columns = []
         for key, val in self.ordinal_encoder.mapping.items():
             self.onehot_columns.extend(
-                [f'{key}__{self.dtype(c)}'
-                 for c in sorted(val.values(), key=int)])
+                [f"{key}__{self.dtype(c)}" for c in sorted(val.values(), key=int)]
+            )
         for key, val in self.ordinal_encoder.mapping.items():
             for k, v in val.items():
-                self.column_mapping[f'{key}__{self.dtype(v)}'] = \
-                    f'{key}__{k}'
+                self.column_mapping[f"{key}__{self.dtype(v)}"] = f"{key}__{k}"
         self.all_columns = self.numerical_columns + self.onehot_columns
         self.idx_numerical_columns = util.get_idx_columns(
-            X.columns, self.numerical_columns)
+            X.columns, self.numerical_columns
+        )
         self.idx_columns = np.arange(
             len(self.numerical_columns),
-            len(self.numerical_columns)+len(self.onehot_columns),
-            dtype=int)
+            len(self.numerical_columns) + len(self.onehot_columns),
+            dtype=int,
+        )
         self.idx_columns = np.arange(
-            len(self.numerical_columns),
-            len(self.onehot_columns),
-            dtype=int)
-        self.n_categories_vec = np.empty(
-            len(self.ordinal_encoder.columns), int)
+            len(self.numerical_columns), len(self.onehot_columns), dtype=int
+        )
+        self.n_categories_vec = np.empty(len(self.ordinal_encoder.columns), int)
         for i, c in enumerate(self.columns):
-            self.n_categories_vec[i] = \
-                len(self.ordinal_encoder.mapping[c])
+            self.n_categories_vec[i] = len(self.ordinal_encoder.mapping[c])
 
-        self.columns_flatten = np.array([
-            col
-            for col, mapping in self.ordinal_encoder.mapping.items()
-            for v in range(len(mapping))])
+        self.columns_flatten = np.array(
+            [
+                col
+                for col, mapping in self.ordinal_encoder.mapping.items()
+                for v in range(len(mapping))
+            ]
+        )
         self.idx_columns = util.get_idx_columns(X, self.columns_flatten)
         self.idx_columns_to_keep = [
-            i for i in range(X.shape[1] + self.idx_columns.shape[0])
-            if i not in util.get_idx_columns(X, self.columns)]
-        self.cats = np.array([
-            v
-            for col, mapping in self.ordinal_encoder.mapping.items()
-            for v in dict(
-                sorted(mapping.items(), key=lambda item: item[1])).keys()
-        ]).astype(object)
+            i
+            for i in range(X.shape[1] + self.idx_columns.shape[0])
+            if i not in util.get_idx_columns(X, self.columns)
+        ]
+        self.cats = np.array(
+            [
+                v
+                for col, mapping in self.ordinal_encoder.mapping.items()
+                for v in dict(sorted(mapping.items(), key=lambda item: item[1])).keys()
+            ]
+        ).astype(object)
         return self
 
-    def transform(self,
-                  X: Union[pd.DataFrame, ks.DataFrame],
-                  ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+    ) -> Union[pd.DataFrame, ks.DataFrame]:
         """Transform the dataframe `X`.
 
         Parameters
@@ -170,16 +179,10 @@ class OneHotEncoder(_BaseEncoder):
         X_new = self.ordinal_encoder.transform(X)
         X[self.columns] = dummy
         if isinstance(X, pd.DataFrame):
-            X_new = pd.get_dummies(
-                X_new,
-                prefix_sep='__',
-                columns=self.columns)
+            X_new = pd.get_dummies(X_new, prefix_sep="__", columns=self.columns)
         else:
-            X_new = ks.get_dummies(
-                X_new,
-                prefix_sep='__',
-                columns=self.columns)
-        X_new = X_new.reindex(columns=self.all_columns, fill_value=0.)
+            X_new = ks.get_dummies(X_new, prefix_sep="__", columns=self.columns)
+        X_new = X_new.reindex(columns=self.all_columns, fill_value=0.0)
         return X_new.rename(columns=self.column_mapping).astype(self.dtype)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -197,8 +200,6 @@ class OneHotEncoder(_BaseEncoder):
         self.check_array(X)
         if len(self.idx_columns) == 0:
             return X
-        return onehot_encoder(
-            X,
-            self.idx_columns,
-            self.cats
-        )[:, self.idx_columns_to_keep].astype(self.dtype)
+        return onehot_encoder(X, self.idx_columns, self.cats)[
+            :, self.idx_columns_to_keep
+        ].astype(self.dtype)

@@ -1,6 +1,7 @@
 # License: Apache-2.0
-from gators.encoders import WOEEncoder
 import pytest
+
+from gators.encoders import WOEEncoder
 
 
 def test_init():

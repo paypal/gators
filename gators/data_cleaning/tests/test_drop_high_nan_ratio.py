@@ -1,18 +1,20 @@
-from gators.data_cleaning.drop_high_nan_ratio import DropHighNaNRatio
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.data_cleaning.drop_high_nan_ratio import DropHighNaNRatio
 
 
 @pytest.fixture
 def data():
     X = pd.DataFrame(
-        {'A': [np.nan, np.nan, np.nan], 'B': [
-            np.nan, 0., 1.], 'C': ['a', 'a', 'b']},)
+        {"A": [np.nan, np.nan, np.nan], "B": [np.nan, 0.0, 1.0], "C": ["a", "a", "b"]},
+    )
     X_expected = pd.DataFrame(
-        {'B': [np.nan, 0., 1.], 'C': ['a', 'a', 'b']},)
+        {"B": [np.nan, 0.0, 1.0], "C": ["a", "a", "b"]},
+    )
     obj = DropHighNaNRatio(max_ratio=0.5).fit(X)
     return obj, obj, X, X, X_expected
 
@@ -20,7 +22,8 @@ def data():
 @pytest.fixture
 def data_no_drop():
     X = pd.DataFrame(
-        {'A': list('qww'), 'B': list('ass'), 'C': list('zxx'), 'D': [0, 1, 2]})
+        {"A": list("qww"), "B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]}
+    )
     X_expected = X.copy()
     obj = DropHighNaNRatio(max_ratio=0.5).fit(X)
     return obj, obj, X, X, X_expected
@@ -29,10 +32,11 @@ def data_no_drop():
 @pytest.fixture
 def data_ks():
     X = ks.DataFrame(
-        {'A': [np.nan, np.nan, np.nan], 'B': [
-            np.nan, 0., 1.], 'C': ['a', 'a', 'b']},)
+        {"A": [np.nan, np.nan, np.nan], "B": [np.nan, 0.0, 1.0], "C": ["a", "a", "b"]},
+    )
     X_expected = pd.DataFrame(
-        {'B': [np.nan, 0., 1.], 'C': ['a', 'a', 'b']},)
+        {"B": [np.nan, 0.0, 1.0], "C": ["a", "a", "b"]},
+    )
     obj = DropHighNaNRatio(max_ratio=0.5).fit(X)
     return obj, obj, X, X, X_expected
 
@@ -40,7 +44,8 @@ def data_ks():
 @pytest.fixture
 def data_no_drop_ks():
     X = ks.DataFrame(
-        {'A': list('qww'), 'B': list('ass'), 'C': list('zxx'), 'D': [0, 1, 2]})
+        {"A": list("qww"), "B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]}
+    )
     X_expected = X.to_pandas().copy()
     obj = DropHighNaNRatio(max_ratio=0.5).fit(X)
     return obj, obj, X, X, X_expected
@@ -104,4 +109,4 @@ def test_no_drop_ks_np(data_no_drop_ks):
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = DropHighNaNRatio(max_ratio='q')
+        _ = DropHighNaNRatio(max_ratio="q")

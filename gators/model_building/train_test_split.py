@@ -1,8 +1,10 @@
+from typing import Tuple, Union
+
+import databricks.koalas as ks
+import pandas as pd
+
 from ..transformers import TransformerXY
 from ..util import util
-from typing import Tuple, Union
-import pandas as pd
-import databricks.koalas as ks
 
 
 class TrainTestSplit(TransformerXY):
@@ -243,30 +245,32 @@ class TrainTestSplit(TransformerXY):
         4    1
         5    2
         Name: TARGET, dtype: int64
-    
+
     """
 
-    def __init__(self, test_ratio: float, strategy: str,
-                 random_state: int = 0):
+    def __init__(self, test_ratio: float, strategy: str, random_state: int = 0):
         if not isinstance(strategy, str):
-            raise TypeError('`strategy` must be a string.')
+            raise TypeError("`strategy` must be a string.")
         if not isinstance(test_ratio, float):
-            raise TypeError('`test_ratio` must be a float.')
+            raise TypeError("`test_ratio` must be a float.")
         if not isinstance(random_state, int):
-            raise TypeError('`random_state` must be an int.')
-        if strategy not in ['ordered', 'random', 'stratified']:
-            raise ValueError('`strategy` not implemented.')
+            raise TypeError("`random_state` must be an int.")
+        if strategy not in ["ordered", "random", "stratified"]:
+            raise ValueError("`strategy` not implemented.")
         self.test_ratio = test_ratio
         self.random_state = random_state
         self.strategy = strategy
 
-    def transform(self, X: Union[pd.DataFrame, ks.DataFrame],
-                  y: Union[pd.Series, ks.Series],
-                  ) -> Tuple[
-            Union[pd.DataFrame, ks.DataFrame],
-            Union[pd.DataFrame, ks.DataFrame],
-            Union[pd.Series, ks.Series],
-            Union[pd.Series, ks.Series]]:
+    def transform(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series],
+    ) -> Tuple[
+        Union[pd.DataFrame, ks.DataFrame],
+        Union[pd.DataFrame, ks.DataFrame],
+        Union[pd.Series, ks.Series],
+        Union[pd.Series, ks.Series],
+    ]:
         """Transform dataframe and series.
 
         Parameters
@@ -286,23 +290,28 @@ class TrainTestSplit(TransformerXY):
         """
         self.check_dataframe(X)
         self.check_y(X, y)
-        if self.strategy == 'ordered':
+        if self.strategy == "ordered":
             return self.ordered_split(X, y)
         y_name = y.name
         x_name = X.index.name
         if isinstance(X, ks.DataFrame):
-            X['index'] = X.index
+            X["index"] = X.index
         Xy = X.join(y)
 
-        if self.strategy == 'random':
+        if self.strategy == "random":
             Xy_train, Xy_test = self.random_split(Xy, x_name)
         else:
             Xy_train, Xy_test = self.stratified_split(Xy, x_name, y_name)
-        return Xy_train.drop(y_name, axis=1), Xy_test.drop(y_name, axis=1), Xy_train[y_name], Xy_test[y_name]
+        return (
+            Xy_train.drop(y_name, axis=1),
+            Xy_test.drop(y_name, axis=1),
+            Xy_train[y_name],
+            Xy_test[y_name],
+        )
 
-    def ordered_split(self,
-                      X: Union[pd.DataFrame, ks.DataFrame], y: Union[pd.Series, ks.Series]
-                      ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.DataFrame, ks.DataFrame]]:
+    def ordered_split(
+        self, X: Union[pd.DataFrame, ks.DataFrame], y: Union[pd.Series, ks.Series]
+    ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.DataFrame, ks.DataFrame]]:
         """Perform random split.
 
         Parameters
@@ -323,11 +332,9 @@ class TrainTestSplit(TransformerXY):
         n_train = n_samples - n_test
         return X.head(n_train), X.tail(n_test), y.head(n_train), y.tail(n_test)
 
-    def random_split(self,
-                     Xy: Union[pd.DataFrame, ks.DataFrame],
-                     x_name: str
-                     ) -> Tuple[Union[pd.DataFrame, ks.DataFrame],
-                                Union[pd.DataFrame, ks.DataFrame]]:
+    def random_split(
+        self, Xy: Union[pd.DataFrame, ks.DataFrame], x_name: str
+    ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.DataFrame, ks.DataFrame]]:
         """Perform random split.
 
         Parameters
@@ -348,25 +355,22 @@ class TrainTestSplit(TransformerXY):
         if isinstance(Xy, ks.DataFrame):
             self.test_ratio -= 1e-6
             Xy_train, Xy_test = Xy.to_spark().randomSplit(
-                [1. - self.test_ratio, self.test_ratio],
-                seed=self.random_state
+                [1.0 - self.test_ratio, self.test_ratio], seed=self.random_state
             )
             Xy_train = Xy_train.to_koalas()
             Xy_test = Xy_test.to_koalas()
-            Xy_train.set_index('index', drop=True, inplace=True)
+            Xy_train.set_index("index", drop=True, inplace=True)
             Xy_train.index.name = x_name
-            Xy_test.set_index('index', drop=True, inplace=True)
+            Xy_test.set_index("index", drop=True, inplace=True)
             Xy_test.index.name = x_name
         else:
-            Xy_test = Xy.sample(
-                frac=self.test_ratio, random_state=self.random_state)
+            Xy_test = Xy.sample(frac=self.test_ratio, random_state=self.random_state)
             Xy_train = Xy.drop(Xy_test.index)
         return Xy_train, Xy_test
 
-    def stratified_split(self,
-                         Xy: Union[pd.DataFrame, ks.DataFrame],
-                         x_name: str, y_name: str
-                         ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.DataFrame, ks.DataFrame]]:
+    def stratified_split(
+        self, Xy: Union[pd.DataFrame, ks.DataFrame], x_name: str, y_name: str
+    ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.DataFrame, ks.DataFrame]]:
         """Perform stratified split.
 
         Parameters
@@ -392,27 +396,24 @@ class TrainTestSplit(TransformerXY):
             self.test_ratio -= 1e-6
             for label, ratio in y_values.iteritems():
                 Xy_label = Xy[Xy[y_name] == label]
-                Xy_train_label, Xy_test_label = Xy_label.to_spark(
-                ).randomSplit(
-                    [1. - self.test_ratio, self.test_ratio],
-                    seed=self.random_state
+                Xy_train_label, Xy_test_label = Xy_label.to_spark().randomSplit(
+                    [1.0 - self.test_ratio, self.test_ratio], seed=self.random_state
                 )
                 Xy_train_label = Xy_train_label.to_koalas()
                 Xy_test_label = Xy_test_label.to_koalas()
-                Xy_train_label.set_index('index', drop=True, inplace=True)
+                Xy_train_label.set_index("index", drop=True, inplace=True)
                 Xy_train_label.index.name = x_name
-                Xy_test_label.set_index('index', drop=True, inplace=True)
+                Xy_test_label.set_index("index", drop=True, inplace=True)
                 Xy_test_label.index.name = x_name
                 Xy_test_list.append(Xy_test_label)
                 Xy_train_list.append(Xy_train_label)
-            return util.concat(Xy_train_list, axis=0), \
-                util.concat(Xy_test_list, axis=0)
+            return util.concat(Xy_train_list, axis=0), util.concat(Xy_test_list, axis=0)
 
         for label, ratio in y_values.iteritems():
             Xy_label = Xy[Xy[y_name] == label]
             Xy_label_test = Xy_label.sample(
-                frac=self.test_ratio,
-                random_state=self.random_state)
+                frac=self.test_ratio, random_state=self.random_state
+            )
             Xy_test_list.append(Xy_label_test)
             Xy_train_list.append(Xy_label.drop(Xy_label_test.index))
         return util.concat(Xy_train_list, axis=0), util.concat(Xy_test_list, axis=0)

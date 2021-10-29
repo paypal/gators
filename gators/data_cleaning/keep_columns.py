@@ -1,9 +1,11 @@
 # License: Apache-2.0
+from typing import Union
+
+import databricks.koalas as ks
+import pandas as pd
+
 from ..util import util
 from ._base_data_cleaning import _BaseDataCleaning
-from typing import Union
-import pandas as pd
-import databricks.koalas as ks
 
 
 class KeepColumns(_BaseDataCleaning):
@@ -69,12 +71,11 @@ class KeepColumns(_BaseDataCleaning):
 
     def __init__(self, columns_to_keep):
         if not isinstance(columns_to_keep, list):
-            raise TypeError('`columns_to_keep` should be a list.')
+            raise TypeError("`columns_to_keep` should be a list.")
         _BaseDataCleaning.__init__(self)
         self.columns_to_keep = columns_to_keep
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y=None) -> 'KeepColumns':
+    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "KeepColumns":
         """Fit the transformer on the dataframe X.
 
         Get the list of column names to remove and the array of
@@ -93,10 +94,9 @@ class KeepColumns(_BaseDataCleaning):
         """
         self.check_dataframe(X)
         self.columns = util.exclude_columns(
-            columns=X.columns,
-            excluded_columns=self.columns_to_keep)
+            columns=X.columns, excluded_columns=self.columns_to_keep
+        )
         self.idx_columns_to_keep = util.exclude_idx_columns(
-            columns=X.columns,
-            excluded_columns=self.columns
+            columns=X.columns, excluded_columns=self.columns
         )
         return self

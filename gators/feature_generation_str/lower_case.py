@@ -1,11 +1,15 @@
 # License: Apache-2.0
-from ..util import util
-from feature_gen_str import lower_case
 from typing import List, Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-from._base_string_feature import _BaseStringFeature
+
+from feature_gen_str import lower_case
+
+from ..util import util
+
+from ._base_string_feature import _BaseStringFeature
 
 
 class LowerCase(_BaseStringFeature):
@@ -71,14 +75,16 @@ class LowerCase(_BaseStringFeature):
 
     def __init__(self, columns: List[str]):
         if not isinstance(columns, list):
-            raise TypeError('`columns` should be a list.')
+            raise TypeError("`columns` should be a list.")
         if not columns:
-            raise ValueError('`columns` should not be empty.')
+            raise ValueError("`columns` should not be empty.")
         self.columns = columns
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'LowerCase':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "LowerCase":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -95,8 +101,7 @@ class LowerCase(_BaseStringFeature):
         """
         self.check_dataframe(X)
         self.idx_columns = util.get_idx_columns(
-            columns=X.columns,
-            selected_columns=self.columns
+            columns=X.columns, selected_columns=self.columns
         )
         return self
 
@@ -115,11 +120,12 @@ class LowerCase(_BaseStringFeature):
         Union[pd.DataFrame, ks.DataFrame]
             Transformed dataframe.
         """
+
         def f(x):
             if x.name in self.columns:
-                return x.astype(str).str.lower().replace(
-                    {'none': None})
+                return x.astype(str).str.lower().replace({"none": None})
             return x
+
         return X.apply(f)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -1,40 +1,49 @@
-from gators.data_cleaning.replace import Replace
-from pandas.testing import assert_frame_equal
-import pytest
-import pandas as pd
 import databricks.koalas as ks
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.data_cleaning.replace import Replace
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame({
-        'A': list('abcd'),
-        'B': list('abcd'),
-        'C': [0, 1, 2, 3],
-        })
-    X_expected = pd.DataFrame({
-        'A': {0: 'W', 1: 'X', 2: 'c', 3: 'd'},
-        'B': {0: 'a', 1: 'b', 2: 'Y', 3: 'Z'},
-        'C': {0: 0, 1: 1, 2: 2, 3: 3}
-    })
-    to_replace_dict = {'A': {'a': 'W', 'b': 'X'}, 'B': {'c': 'Y', 'd': 'Z'}}
+    X = pd.DataFrame(
+        {
+            "A": list("abcd"),
+            "B": list("abcd"),
+            "C": [0, 1, 2, 3],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": {0: "W", 1: "X", 2: "c", 3: "d"},
+            "B": {0: "a", 1: "b", 2: "Y", 3: "Z"},
+            "C": {0: 0, 1: 1, 2: 2, 3: 3},
+        }
+    )
+    to_replace_dict = {"A": {"a": "W", "b": "X"}, "B": {"c": "Y", "d": "Z"}}
     obj = Replace(to_replace_dict=to_replace_dict).fit(X)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({
-        'A': list('abcd'),
-        'B': list('abcd'),
-        'C': [0, 1, 2, 3],
-        })
-    X_expected = pd.DataFrame({
-        'A': {0: 'W', 1: 'X', 2: 'c', 3: 'd'},
-        'B': {0: 'a', 1: 'b', 2: 'Y', 3: 'Z'},
-        'C': {0: 0, 1: 1, 2: 2, 3: 3}
-    })
-    to_replace_dict = {'A': {'a': 'W', 'b': 'X'}, 'B': {'c': 'Y', 'd': 'Z'}}
+    X = ks.DataFrame(
+        {
+            "A": list("abcd"),
+            "B": list("abcd"),
+            "C": [0, 1, 2, 3],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": {0: "W", 1: "X", 2: "c", 3: "d"},
+            "B": {0: "a", 1: "b", 2: "Y", 3: "Z"},
+            "C": {0: 0, 1: 1, 2: 2, 3: 3},
+        }
+    )
+    to_replace_dict = {"A": {"a": "W", "b": "X"}, "B": {"c": "Y", "d": "Z"}}
     obj = Replace(to_replace_dict=to_replace_dict).fit(X)
     return obj, X, X_expected
 
@@ -69,4 +78,4 @@ def test_ks_np(data_ks):
 
 def test_drop_columns_init(data):
     with pytest.raises(TypeError):
-        _ = Replace(to_replace_dict='q')
+        _ = Replace(to_replace_dict="q")

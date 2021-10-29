@@ -1,10 +1,8 @@
 import cython
 import numpy as np
+
 cimport numpy as np
-from libc.math cimport pi
-from libc.math cimport cos
-from libc.math cimport sin
-from libc.math cimport isnan
+from libc.math cimport cos, isnan, pi, sin
 
 
 @cython.boundscheck(False)

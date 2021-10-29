@@ -1,10 +1,12 @@
 # License: Apache-2.0
-from ..util import util
-from ..transformers.transformer import Transformer
-import numpy as np
 from typing import List, Union
-import pandas as pd
+
 import databricks.koalas as ks
+import numpy as np
+import pandas as pd
+
+from ..transformers.transformer import Transformer
+from ..util import util
 
 
 class _BaseFeatureGeneration(Transformer):
@@ -23,9 +25,13 @@ class _BaseFeatureGeneration(Transformer):
 
     """
 
-    def __init__(self, columns: List[str],
-                 column_names: List[str], column_mapping: List[str],
-                 dtype: type = None):
+    def __init__(
+        self,
+        columns: List[str],
+        column_names: List[str],
+        column_mapping: List[str],
+        dtype: type = None,
+    ):
         Transformer.__init__(self)
         self.column_names = column_names
         self.columns = columns

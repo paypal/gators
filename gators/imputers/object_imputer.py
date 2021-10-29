@@ -1,12 +1,14 @@
 # License: Apache-2.0
-from ._base_imputer import _BaseImputer
-from imputer import object_imputer
-from ..util import util
+import warnings
 from typing import Union
+
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-import warnings
+from imputer import object_imputer
+
+from ..util import util
+from ._base_imputer import _BaseImputer
 
 
 class ObjectImputer(_BaseImputer):
@@ -120,18 +122,22 @@ class ObjectImputer(_BaseImputer):
 
     def __init__(self, strategy: str, value: str = None, columns=None):
         _BaseImputer.__init__(self, strategy, value, columns=columns)
-        if strategy not in ['constant', 'most_frequent']:
+        if strategy not in ["constant", "most_frequent"]:
             raise ValueError(
-                '''`strategy` should be "constant" or "most_frequent"
-                    for the ObjectImputer Transformer.''')
-        if strategy == 'constant' and not isinstance(value, str):
+                """`strategy` should be "constant" or "most_frequent"
+                    for the ObjectImputer Transformer."""
+            )
+        if strategy == "constant" and not isinstance(value, str):
             raise TypeError(
-                '''`value` should be a string
-                for the ObjectImputer class''')
+                """`value` should be a string
+                for the ObjectImputer class"""
+            )
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'ObjectImputer':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "ObjectImputer":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -150,21 +156,20 @@ class ObjectImputer(_BaseImputer):
             self.columns = util.get_datatype_columns(X, object)
         if not self.columns:
             warnings.warn(
-                '''`X` does not contain object columns:
-                `ObjectImputer` is not needed''')
+                """`X` does not contain object columns:
+                `ObjectImputer` is not needed"""
+            )
             self.idx_columns = np.array([])
             return self
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
-        self.idx_columns = np.array(
-            util.get_idx_columns(X, self.columns))
+        self.idx_columns = np.array(util.get_idx_columns(X, self.columns))
         self.statistics = self.compute_statistics(
             X=X,
             columns=self.columns,
             strategy=self.strategy,
             value=self.value,
         )
-        self.statistics_values = np.array(
-            list(self.statistics.values())).astype(object)
+        self.statistics_values = np.array(list(self.statistics.values())).astype(object)
         return self
 
     def transform_numpy(self, X: Union[pd.Series, ks.Series], y=None):
@@ -181,7 +186,4 @@ class ObjectImputer(_BaseImputer):
         self.check_array(X)
         if self.idx_columns.size == 0:
             return X
-        return object_imputer(
-            X,
-            self.statistics_values,
-            self.idx_columns)
+        return object_imputer(X, self.statistics_values, self.idx_columns)

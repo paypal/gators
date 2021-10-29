@@ -1,9 +1,11 @@
 # License: Apache-2.0
-from ._base_data_cleaning import _BaseDataCleaning
-from ..util import util
 from typing import Union
-import pandas as pd
+
 import databricks.koalas as ks
+import pandas as pd
+
+from ..util import util
+from ._base_data_cleaning import _BaseDataCleaning
 
 
 class DropDatatypeColumns(_BaseDataCleaning):
@@ -66,14 +68,15 @@ class DropDatatypeColumns(_BaseDataCleaning):
 
     """
 
-    def __init__(self,  dtype: type):
+    def __init__(self, dtype: type):
         if not isinstance(dtype, type):
-            raise TypeError('`dtype` should be a type.')
+            raise TypeError("`dtype` should be a type.")
         _BaseDataCleaning.__init__(self)
         self.dtype = dtype
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y=None) -> 'DropDatatypeColumns':
+    def fit(
+        self, X: Union[pd.DataFrame, ks.DataFrame], y=None
+    ) -> "DropDatatypeColumns":
         """Fit the transformer on the dataframe X.
 
         Get the list of column names to remove and the array of
@@ -92,9 +95,9 @@ class DropDatatypeColumns(_BaseDataCleaning):
         self.check_dataframe(X)
         self.columns = util.get_datatype_columns(X, self.dtype)
         self.columns_to_keep = util.exclude_columns(
-            columns=X.columns,
-            excluded_columns=self.columns)
+            columns=X.columns, excluded_columns=self.columns
+        )
         self.idx_columns_to_keep = util.exclude_idx_columns(
-            columns=X.columns,
-            excluded_columns=self.columns)
+            columns=X.columns, excluded_columns=self.columns
+        )
         return self

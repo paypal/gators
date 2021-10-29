@@ -1,10 +1,12 @@
 # License: Apache-2.0
-from scaler import standard_scaler
-from ..transformers.transformer import Transformer
-import numpy as np
 from typing import Union
-import pandas as pd
+
 import databricks.koalas as ks
+import numpy as np
+import pandas as pd
+from scaler import standard_scaler
+
+from ..transformers.transformer import Transformer
 
 
 class StandardScaler(Transformer):
@@ -77,8 +79,11 @@ class StandardScaler(Transformer):
         self.X_mean_np = np.array([])
         self.X_std_np = np.array([])
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'StandardScaler':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "StandardScaler":
         """Fit the transformer on the pandas/koalas dataframe X.
 
         Parameters
@@ -135,5 +140,4 @@ class StandardScaler(Transformer):
         """
         self.check_array(X)
         self.check_array_is_numerics(X)
-        return standard_scaler(
-            X.astype(self.dtype), self.X_mean_np, self.X_std_np)
+        return standard_scaler(X.astype(self.dtype), self.X_mean_np, self.X_std_np)

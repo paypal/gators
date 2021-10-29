@@ -3,7 +3,6 @@ cimport cython
 cimport numpy as np
 from libc.math cimport isnan
 
-
 ctypedef fused num_float_t:
     np.float32_t
     np.float64_t

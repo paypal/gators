@@ -1,9 +1,11 @@
 # License: Apache-2.0
+from typing import Union
+
+import databricks.koalas as ks
+import pandas as pd
+
 from ..util import util
 from ._base_feature_selection import _BaseFeatureSelection
-from typing import Union
-import pandas as pd
-import databricks.koalas as ks
 
 
 class VarianceFilter(_BaseFeatureSelection):
@@ -72,13 +74,15 @@ class VarianceFilter(_BaseFeatureSelection):
 
     def __init__(self, min_var: float):
         if not isinstance(min_var, float):
-            raise TypeError('`min_var` should be a float.')
+            raise TypeError("`min_var` should be a float.")
         _BaseFeatureSelection.__init__(self)
         self.min_var = min_var
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'VarianceFilter':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "VarianceFilter":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -99,9 +103,8 @@ class VarianceFilter(_BaseFeatureSelection):
             self.feature_importances_ = self.feature_importances_.to_pandas()
         mask = self.feature_importances_ < self.min_var
         self.columns_to_drop = list(self.feature_importances_.index[mask])
-        self.selected_columns = util.exclude_columns(
-            X.columns, self.columns_to_drop
-        )
+        self.selected_columns = util.exclude_columns(X.columns, self.columns_to_drop)
         self.idx_selected_columns = util.get_idx_columns(
-            X.columns, self.selected_columns)
+            X.columns, self.selected_columns
+        )
         return self

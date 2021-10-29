@@ -1,8 +1,9 @@
 # License: Apache-2.0
-import pytest
 import numpy as np
+import pytest
 import xgboost
 from xgboost import XGBClassifier
+
 from gators.model_building.xgb_booster_builder import XGBBoosterBuilder
 
 
@@ -13,8 +14,7 @@ def test():
     xgb.fit(X_train, y_train)
     xgb_booster = XGBBoosterBuilder.train(xgb, X_train, y_train)
     assert np.allclose(
-        xgb.predict_proba(X_train)[:, 1],
-        xgb_booster.predict(xgboost.DMatrix(X_train))
+        xgb.predict_proba(X_train)[:, 1], xgb_booster.predict(xgboost.DMatrix(X_train))
     )
 
 
@@ -25,8 +25,7 @@ def test_num_class():
     xgb.fit(X_train, y_train)
     xgb_booster = XGBBoosterBuilder.train(xgb, X_train, y_train, num_class=3)
     assert np.allclose(
-        xgb.predict_proba(X_train),
-        xgb_booster.predict(xgboost.DMatrix(X_train))
+        xgb.predict_proba(X_train), xgb_booster.predict(xgboost.DMatrix(X_train))
     )
 
 
@@ -43,4 +42,4 @@ def test_input():
     with pytest.raises(TypeError):
         _ = XGBBoosterBuilder.train(xgb, X_train, 0, num_class)
     with pytest.raises(TypeError):
-        _ = XGBBoosterBuilder.train(xgb, X_train, y_train, 'a')
+        _ = XGBBoosterBuilder.train(xgb, X_train, y_train, "a")

@@ -1,23 +1,27 @@
 # License: Apache-2.0
-from gators.feature_selection.variance_filter import VarianceFilter
-from pandas.testing import assert_frame_equal
-import pytest
-import pandas as pd
 import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_selection.variance_filter import VarianceFilter
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    min_var = 2.
-    X = pd.DataFrame({
-            'A': [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
-            'B': [1, 1, 0, 1, 0, 0],
-            'C': ['a', 'b', 'b', 'b', 'a', 'a'],
-            'D': [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
-            'F': [1, 2, 3, 1, 2, 4],
-        })
-    X_expected = X[['A', 'C', 'D']].copy()
+    min_var = 2.0
+    X = pd.DataFrame(
+        {
+            "A": [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
+            "B": [1, 1, 0, 1, 0, 0],
+            "C": ["a", "b", "b", "b", "a", "a"],
+            "D": [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
+            "F": [1, 2, 3, 1, 2, 4],
+        }
+    )
+    X_expected = X[["A", "C", "D"]].copy()
 
     y = pd.Series([1, 1, 1, 0, 0, 0])
     obj = VarianceFilter(min_var=min_var).fit(X, y)
@@ -26,15 +30,17 @@ def data():
 
 @pytest.fixture
 def data_ks():
-    min_var = 2.
-    X = ks.DataFrame({
-            'A': [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
-            'B': [1, 1, 0, 1, 0, 0],
-            'C': ['a', 'b', 'b', 'b', 'a', 'a'],
-            'D': [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
-            'F': [1, 2, 3, 1, 2, 4],
-        })
-    X_expected = X[['A', 'C', 'D']].to_pandas().copy()
+    min_var = 2.0
+    X = ks.DataFrame(
+        {
+            "A": [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
+            "B": [1, 1, 0, 1, 0, 0],
+            "C": ["a", "b", "b", "b", "a", "a"],
+            "D": [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
+            "F": [1, 2, 3, 1, 2, 4],
+        }
+    )
+    X_expected = X[["A", "C", "D"]].to_pandas().copy()
     y = ks.Series([1, 1, 1, 0, 0, 0])
     obj = VarianceFilter(min_var=min_var).fit(X, y)
     return obj, X, X_expected
@@ -77,4 +83,4 @@ def test_empty_drop_columns(data):
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = VarianceFilter(min_var='a')
+        _ = VarianceFilter(min_var="a")

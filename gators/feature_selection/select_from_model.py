@@ -1,10 +1,12 @@
 # License: Apache-2.0
 from typing import Union
-import pandas as pd
+
 import databricks.koalas as ks
-from ._base_feature_selection import _BaseFeatureSelection
+import pandas as pd
+
 from ..converter import KoalasToPandas
 from ..util import util
+from ._base_feature_selection import _BaseFeatureSelection
 
 
 class SelectFromModel(_BaseFeatureSelection):
@@ -82,18 +84,18 @@ class SelectFromModel(_BaseFeatureSelection):
 
     def __init__(self, model, k: int):
         if not isinstance(k, int):
-            raise TypeError('`k` should be an int.')
-        if not hasattr(model, 'fit'):
-            raise TypeError(
-                '`model` should have the attribute `fit`.'
-            )
+            raise TypeError("`k` should be an int.")
+        if not hasattr(model, "fit"):
+            raise TypeError("`model` should have the attribute `fit`.")
         _BaseFeatureSelection.__init__(self)
         self.model = model
         self.k = k
 
-    def fit(self,
-            X: Union[pd.DataFrame, ks.DataFrame],
-            y: Union[pd.Series, ks.Series] = None) -> 'SelectFromModel':
+    def fit(
+        self,
+        X: Union[pd.DataFrame, ks.DataFrame],
+        y: Union[pd.Series, ks.Series] = None,
+    ) -> "SelectFromModel":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -112,31 +114,32 @@ class SelectFromModel(_BaseFeatureSelection):
         columns = list(X.columns)
         if isinstance(X, pd.DataFrame):
             self.feature_importances_ = self.calculate_feature_importances_pd(
-                model=self.model, X=X, y=y, columns=columns)
+                model=self.model, X=X, y=y, columns=columns
+            )
         else:
-            if hasattr(self.model, 'labelCol'):
-                self.feature_importances_ = \
-                    self.calculate_feature_importances_ks(
-                        model=self.model, X=X, y=y, columns=columns)
+            if hasattr(self.model, "labelCol"):
+                self.feature_importances_ = self.calculate_feature_importances_ks(
+                    model=self.model, X=X, y=y, columns=columns
+                )
             else:
                 X_, y_ = KoalasToPandas().transform(X, y)
-                self.feature_importances_ = \
-                    self.calculate_feature_importances_pd(
-                        model=self.model, X=X_, y=y_, columns=columns)
+                self.feature_importances_ = self.calculate_feature_importances_pd(
+                    model=self.model, X=X_, y=y_, columns=columns
+                )
         mask = self.feature_importances_ != 0
         self.feature_importances_ = self.feature_importances_[mask]
         self.feature_importances_.sort_values(ascending=False, inplace=True)
-        self.selected_columns = list(self.feature_importances_.index[:self.k])
-        self.columns_to_drop = [
-            c for c in columns if c not in self.selected_columns]
+        self.selected_columns = list(self.feature_importances_.index[: self.k])
+        self.columns_to_drop = [c for c in columns if c not in self.selected_columns]
         self.idx_selected_columns = util.get_idx_columns(
-            X.columns, self.selected_columns)
+            X.columns, self.selected_columns
+        )
         return self
 
     @staticmethod
     def calculate_feature_importances_pd(
-            model: object, X: pd.DataFrame,
-            y: Union[pd.Series, ks.Series], columns: list) -> pd.Series:
+        model: object, X: pd.DataFrame, y: Union[pd.Series, ks.Series], columns: list
+    ) -> pd.Series:
         model.fit(X.to_numpy(), y)
         feature_importances_ = pd.Series(
             model.feature_importances_,
@@ -146,12 +149,11 @@ class SelectFromModel(_BaseFeatureSelection):
 
     @staticmethod
     def calculate_feature_importances_ks(
-            model: object, X: ks.DataFrame,
-            y: ks.Series, columns: list) -> pd.Series:
+        model: object, X: ks.DataFrame, y: ks.Series, columns: list
+    ) -> pd.Series:
         spark_df = util.generate_spark_dataframe(X=X, y=y)
         trained_model = model.fit(spark_df)
         feature_importances_ = pd.Series(
-            trained_model.featureImportances.toArray(),
-            index=columns
+            trained_model.featureImportances.toArray(), index=columns
         )
         return feature_importances_

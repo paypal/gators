@@ -1,16 +1,17 @@
-from gators.data_cleaning.drop_high_cardinality import DropHighCardinality
-import pytest
-import pandas as pd
-from pandas.testing import assert_frame_equal
 import databricks.koalas as ks
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.data_cleaning.drop_high_cardinality import DropHighCardinality
 
 
 @pytest.fixture
 def data():
     X = pd.DataFrame(
-        {'A': list('qwe'), 'B': list('ass'), 'C': list('zxx'), 'D': [0, 1, 2]})
-    X_expected = pd.DataFrame(
-        {'B': list('ass'), 'C': list('zxx'), 'D': [0, 1, 2]})
+        {"A": list("qwe"), "B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]}
+    )
+    X_expected = pd.DataFrame({"B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]})
     obj = DropHighCardinality(max_categories=2).fit(X)
     return obj, X, X_expected
 
@@ -18,9 +19,9 @@ def data():
 @pytest.fixture
 def data_ks():
     X = ks.DataFrame(
-        {'A': list('qwe'), 'B': list('ass'), 'C': list('zxx'), 'D': [0, 1, 2]})
-    X_expected = pd.DataFrame(
-        {'B': list('ass'), 'C': list('zxx'), 'D': [0, 1, 2]})
+        {"A": list("qwe"), "B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]}
+    )
+    X_expected = pd.DataFrame({"B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]})
     obj = DropHighCardinality(max_categories=2).fit(X)
     return obj, X, X_expected
 
@@ -28,7 +29,8 @@ def data_ks():
 @pytest.fixture
 def data_no_drop():
     X = pd.DataFrame(
-        {'A': list('qww'), 'B': list('ass'), 'C': list('zxx'), 'D': [0, 1, 2]})
+        {"A": list("qww"), "B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]}
+    )
     X_expected = X.copy()
     obj = DropHighCardinality(max_categories=2).fit(X)
     return obj, X, X_expected
@@ -37,7 +39,8 @@ def data_no_drop():
 @pytest.fixture
 def data_no_drop_ks():
     X = ks.DataFrame(
-        {'A': list('qww'), 'B': list('ass'), 'C': list('zxx'), 'D': [0, 1, 2]})
+        {"A": list("qww"), "B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]}
+    )
     X_expected = X.to_pandas().copy()
     obj = DropHighCardinality(max_categories=2).fit(X)
     return obj, X, X_expected
@@ -45,11 +48,7 @@ def data_no_drop_ks():
 
 @pytest.fixture
 def data_no_object():
-    X = pd.DataFrame({
-        'A': [0, 1, 2],
-        'B': [3, 4, 5],
-        'C': [6, 7, 8]
-    })
+    X = pd.DataFrame({"A": [0, 1, 2], "B": [3, 4, 5], "C": [6, 7, 8]})
     X_expected = X.copy()
     obj = DropHighCardinality(max_categories=2).fit(X)
     return obj, X, X_expected
@@ -57,11 +56,7 @@ def data_no_object():
 
 @pytest.fixture
 def data_no_object_ks():
-    X = ks.DataFrame({
-        'A': [0, 1, 2],
-        'B': [3, 4, 5],
-        'C': [6, 7, 8]
-    })
+    X = ks.DataFrame({"A": [0, 1, 2], "B": [3, 4, 5], "C": [6, 7, 8]})
     X_expected = X.to_pandas().copy()
     obj = DropHighCardinality(max_categories=2).fit(X)
     return obj, X, X_expected
@@ -152,11 +147,11 @@ def test_no_object_ks_np(data_no_object_ks):
 
 
 def test_object_columns_empty(data_no_drop):
-    X = pd.DataFrame({'A': [1, 2, 3]})
+    X = pd.DataFrame({"A": [1, 2, 3]})
     X_new = DropHighCardinality(max_categories=2).fit_transform(X.copy())
     assert_frame_equal(X_new, X)
 
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = DropHighCardinality(max_categories='q')
+        _ = DropHighCardinality(max_categories="q")

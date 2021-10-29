@@ -1,46 +1,80 @@
 # License: Apache-2.0
-from gators.feature_generation_str import UpperCase
-from pandas.testing import assert_frame_equal
-import pytest
+import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import databricks.koalas as ks
-ks.set_option('compute.default_index_type', 'distributed-sequence')
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_generation_str import UpperCase
+
+ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
-    X = pd.DataFrame(np.zeros((3, 3)), columns=list('qwe'))
-    X['a'] = ['q', 'qq', 'QQq']
-    X['s'] = ['w', 'WW', 'WWw']
-    X['d'] = ['nan', None, '']
+    X = pd.DataFrame(np.zeros((3, 3)), columns=list("qwe"))
+    X["a"] = ["q", "qq", "QQq"]
+    X["s"] = ["w", "WW", "WWw"]
+    X["d"] = ["nan", None, ""]
 
-    obj = UpperCase(columns=list('asd')).fit(X)
-    columns_expected = [
-        'q', 'w', 'e', 'a', 's', 'd']
+    obj = UpperCase(columns=list("asd")).fit(X)
+    columns_expected = ["q", "w", "e", "a", "s", "d"]
     X_expected = pd.DataFrame(
-        [[0.0, 0.0, 0.0, 'Q', 'W', 'nan', ],
-         [0.0, 0.0, 0.0, 'QQ', 'WW', None, ],
-         [0.0, 0.0, 0.0, 'QQQ', 'WWW', '']],
-        columns=columns_expected)
+        [
+            [
+                0.0,
+                0.0,
+                0.0,
+                "Q",
+                "W",
+                "nan",
+            ],
+            [
+                0.0,
+                0.0,
+                0.0,
+                "QQ",
+                "WW",
+                None,
+            ],
+            [0.0, 0.0, 0.0, "QQQ", "WWW", ""],
+        ],
+        columns=columns_expected,
+    )
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(np.zeros((3, 3)), columns=list('qwe'))
-    X['a'] = ['q', 'qq', 'QQq']
-    X['s'] = ['w', 'WW', 'WWw']
-    X['d'] = ['nan', None, '']
+    X = ks.DataFrame(np.zeros((3, 3)), columns=list("qwe"))
+    X["a"] = ["q", "qq", "QQq"]
+    X["s"] = ["w", "WW", "WWw"]
+    X["d"] = ["nan", None, ""]
 
-    obj = UpperCase(columns=list('asd')).fit(X)
-    columns_expected = [
-        'q', 'w', 'e', 'a', 's', 'd']
+    obj = UpperCase(columns=list("asd")).fit(X)
+    columns_expected = ["q", "w", "e", "a", "s", "d"]
     X_expected = pd.DataFrame(
-        [[0.0, 0.0, 0.0, 'Q', 'W', 'nan', ],
-         [0.0, 0.0, 0.0, 'QQ', 'WW', None, ],
-         [0.0, 0.0, 0.0, 'QQQ', 'WWW', '']],
-        columns=columns_expected)
+        [
+            [
+                0.0,
+                0.0,
+                0.0,
+                "Q",
+                "W",
+                "nan",
+            ],
+            [
+                0.0,
+                0.0,
+                0.0,
+                "QQ",
+                "WW",
+                None,
+            ],
+            [0.0, 0.0, 0.0, "QQQ", "WWW", ""],
+        ],
+        columns=columns_expected,
+    )
     return obj, X, X_expected
 
 
@@ -74,6 +108,6 @@ def test_ks_np(data_ks):
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = UpperCase(columns='x')
+        _ = UpperCase(columns="x")
     with pytest.raises(ValueError):
         _ = UpperCase(columns=[])
