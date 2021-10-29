@@ -4,6 +4,7 @@ import numpy
 from Cython.Build import cythonize
 from gators import __version__
 
+
 extensions = [
     setuptools.Extension(
         'imputer',
@@ -64,10 +65,13 @@ extensions = [
 setuptools.setup(
     name='gators',
     version=__version__,
+    url='https://paypal.github.io/gators/',
     author='Simility Data Team',
-    author_email='cpoli@paypal.com',
     options={'bdist_wheel': {'universal': True}},
+    long_description=long_description,
+    long_description_content_type="text_markdown",
     description='Model building and Model deployment library',
+    maintainer='Charles Poli',
     packages=setuptools.find_packages(exclude=['examples', 'doc']),
     classifiers=[
         'Programming Language :: Python :: 3',
