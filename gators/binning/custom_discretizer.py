@@ -141,8 +141,13 @@ class CustomDiscretizer(_BaseDiscretizer):
         self.labels = np.arange(max_bins - 1)
         self.bins_np = np.inf * np.ones((max_bins, n_cols))
         for i, b in enumerate(self.bins.values()):
+<<<<<<< HEAD
             self.bins_np[: len(b), i] = b
         if isinstance(X, ks.DataFrame):
+=======
+            self.bins_np[:len(b), i] = b
+        if not isinstance(X, pd.DataFrame):
+>>>>>>> master
             self.bins = self.bins_np.T.tolist()
             self.bins = [np.unique(b) + EPSILON for b in self.bins]
         return self

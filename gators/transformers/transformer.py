@@ -165,9 +165,9 @@ class Transformer(ABC):
             Labels
         """
         if isinstance(X, pd.DataFrame) and (not isinstance(y, pd.Series)):
-            raise TypeError("`y` should be a pandas series.")
-        if isinstance(X, ks.DataFrame) and (not isinstance(y, ks.Series)):
-            raise TypeError("`y` should be a koalas series.")
+            raise TypeError('`y` should be a pandas series.')
+        if not isinstance(X, pd.DataFrame) and (not isinstance(y, ks.Series)):
+            raise TypeError('`y` should be a koalas series.')
         if not isinstance(y.name, str):
             raise TypeError("Name of `y` should be a str.")
         if X.shape[0] != y.shape[0]:

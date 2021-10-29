@@ -103,7 +103,6 @@ setuptools.setup(
         'pandas',  # >=0.25.3<1.2
         'treelite>=0.93',
         'treelite-runtime>=0.93',
-        'xgboost>=0.90',
         'pyDOE>=0.3.8',
         'scikit-optimize>=0.8.1',
         'emcee>=3.0.2',
@@ -124,6 +123,24 @@ setuptools.setup(
         'tox',
         'tox-wheel',
     ],
+    extras_require={
+        'dev': [
+            'xgboost>=0.90',
+            'Lightgbm',
+            'pytest>=5.0.0',
+            'pytest-cov>=2.6.0',
+            'pylama>=7.6.5',
+            'ipykernel',
+            'jupyter',
+            'numpydoc',
+            'sphinx>=3.3.0',
+            'nbsphinx>=0.8.0',
+            'pydata_sphinx_theme',
+            'pandoc',
+            'tox',
+            'tox-wheel',
+        ],
+    },
     package_data={'gators': [
         '*.c',
     ]},

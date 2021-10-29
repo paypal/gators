@@ -176,9 +176,17 @@ class ClusterStatistics(_BaseFeatureGeneration):
             Dataframe with statistics cluster features.
         """
         for i, cols in enumerate(self.clusters_dict.values()):
+<<<<<<< HEAD
             X = X.join(X[cols].mean(axis=1).rename(self.column_names[2 * i]))
             X = X.join(X[cols].std(axis=1).rename(self.column_names[2 * i + 1]))
         if isinstance(X, ks.DataFrame):
+=======
+            X = X.join(X[cols].mean(axis=1).rename(
+                self.column_names[2*i]))
+            X = X.join(X[cols].std(axis=1).rename(
+                self.column_names[2*i+1]))
+        if not isinstance(X, pd.DataFrame):
+>>>>>>> master
             return X.astype(self.dtype).sort_index()
         return X.astype(self.dtype)
 

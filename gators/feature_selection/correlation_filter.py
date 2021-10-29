@@ -101,7 +101,7 @@ class CorrelationFilter(_BaseFeatureSelection):
         self.check_dataframe(X)
         columns = X.columns
         corr = X.corr().abs()
-        if isinstance(X, ks.DataFrame):
+        if not isinstance(X, pd.DataFrame):
             corr = corr.to_pandas()
         stacked_corr = (
             corr.where(np.tril(np.ones(corr.shape), k=-1).astype(np.bool))

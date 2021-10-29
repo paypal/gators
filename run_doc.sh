@@ -1,5 +1,5 @@
 rm -rf doc
-# mkdir doc
+mkdir doc
 sphinx-apidoc -F -M -d 1 --separate -o doc gators `find ../gators -name *.pyx`
 cd doc
 
@@ -59,10 +59,10 @@ html_css_files = ['css/gators.css']
 html_static_path = ['_static']
 html_logo = '../doc_data/GATORS_LOGO.png'
 html_favicon = '../doc_data/gators_logo.ico'
-# html_theme_options = {
-#   "logo_link": "index",
-#   "github_url": "https://github.paypal.com/pages/Simility-R/gators/",
-# }
+html_theme_options = {
+  "logo_link": "index",
+  "github_url": "https://github.paypal.com/Simility-R/gators/",
+}
 man_pages = [
     ('index', 'gators', u'gators Documentation',
      [u'the gators team'], 1)
@@ -211,7 +211,6 @@ Decision tree-based package used for model building. LightGBM algorithm applies 
 
 Treelite is used to compile the trained models in C before being deployed in production,
 and treelite-runtime is used for real-time model scoring.
-
 EOL
 
 mkdir user_guide
@@ -336,13 +335,23 @@ From source available on GitHub
 ###############################
 
 If you prefer, you can clone it and run the setup.py file. Use the following
-commands to get a copy from Github and install all dependencies::
+commands to get a copy from Github and install all dependencies:
 
   >>> git clone git@github.paypal.com:Simility-R/gators.git
   >>> cd gators
   >>> pip3 install  -r requirements.txt 
   >>> python3 setup.py build_ext --inplace
   >>> pip3 install .
+
+To install the dev gators enironment:
+Extra packages
+  >>> git clone git@github.paypal.com:Simility-R/gators.git
+  >>> cd gators
+  >>> pip3 install  -r requirements.txt 
+  >>> python3 setup.py build_ext --inplace
+  >>> brew install libomp
+  >>> brew install pandoc
+  >>> pip3 install .[dev]
 
 Test and coverage
 #################
