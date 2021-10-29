@@ -1,10 +1,18 @@
 # License: Apache-2.0
+# import os
 import setuptools
 import numpy
 from Cython.Build import cythonize
 from gators import __version__
 
+with open('README.md', 'r') as f:
+    long_description = f.read().replace('![Gators logo](doc_data/GATORS_LOGO.png)\n\n', '')
 
+
+# rootdir = os.path.normpath(os.path.join(__file__, os.pardir))
+# print(rootdir)
+# import sys
+# sys.exit()
 extensions = [
     setuptools.Extension(
         'imputer',

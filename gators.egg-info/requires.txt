@@ -1,3 +1,4 @@
+Cython
 setuptools>=41.0.0
 numpy==1.19.5
 requests>=2.23.0
@@ -5,9 +6,9 @@ tqdm>=4.43.0
 scipy>=1.5.2
 Cython>=0.29.21
 dill>=0.3.1.1
-scikit-learn==0.23.1
+scikit-learn
 seaborn>=0.11.0
-pandas>=0.25.3<1.2
+pandas
 treelite>=0.93
 treelite-runtime>=0.93
 xgboost>=0.90

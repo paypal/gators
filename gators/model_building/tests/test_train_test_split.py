@@ -145,10 +145,10 @@ def test_random_ks(data_random_ks):
 def test_stratified(data_stratified):
     obj, X, y, X_train_expected, X_test_expected, y_train_expected, y_test_expected = data_stratified
     X_train, X_test, y_train, y_test = obj.transform(X, y)
-    assert_frame_equal(X_train, X_train_expected)
-    assert_frame_equal(X_test, X_test_expected)
-    assert_series_equal(y_train, y_train_expected)
-    assert_series_equal(y_test, y_test_expected)
+    assert_frame_equal(X_train.sort_index(), X_train_expected.sort_index())
+    assert_frame_equal(X_test.sort_index(), X_test_expected.sort_index())
+    assert_series_equal(y_train.sort_index(), y_train_expected.sort_index())
+    assert_series_equal(y_test.sort_index(), y_test_expected.sort_index())
 
 
 @pytest.mark.koalas
