@@ -1,0 +1,49 @@
+# RUN IN TERMINAL: 
+# docker build -t gators:latest -f docker/Dockerfile .\
+
+# gators docker container (needs Zscaler disabled)
+# If getting ERROR: THESE PACKAGES DO NOT MATCH THE HASHES FROM THE 
+# REQUIREMENTS FILE, just keep re-running
+# cd gators
+# docker build -t gators:latest -f docker/Dockerfile .
+
+
+# Install default environment
+FROM dockerhub.paypalcorp.com/simility/python:3.7
+
+# Install Java
+RUN apt update -y && apt-get install -y software-properties-common && \
+    apt-add-repository 'deb http://security.debian.org/debian-security stretch/updates main' && apt update -y && \
+    apt-get install -y openjdk-8-jdk-headless && \    
+    export JAVA_HOME && \
+    apt-get clean
+
+# Delete cache (stops ERROR: THESE PACKAGES DO NOT MATCH THE HASHES FROM THE 
+# REQUIREMENTS FILE)
+RUN rm ~/.cache/pip -rf
+
+# Install python libs
+ENV LANG C.UTF-8
+RUN apt-get update && apt-get install -y python python-dev python-pip virtualenv libssl-dev libpq-dev git build-essential libfontconfig1 libfontconfig1-dev
+
+# Upgrade setuptools
+RUN pip install -U pip --no-cache
+RUN pip install setuptools>=41.0.0 --no-cache
+RUN pip3.7 install numpy==1.19.5 --no-cache-dir
+RUN pip3.7 install cython --no-cache-dir
+# RUN pip3.7 install wheel --no-cache-dir
+# Copy GATORS directory
+RUN mkdir /gators
+COPY ./ /gators
+
+
+# Install gators
+# RUN python3.7 /gators/setup_docker.py build_ext --inplace
+RUN pip3.7 install /gators/.
+# Set up working directory
+WORKDIR /
+RUN mkdir /workdir/
+RUN mkdir /workdir/examples
+COPY ./examples /workdir/examples
+RUN pip3.7 install jupyterlab  --no-cache-dir
+ENTRYPOINT jupyter lab --ip=0.0.0.0 --port=9090 --allow-root --no-browser --notebook-dir /workdir/ --NotebookApp.token=''
