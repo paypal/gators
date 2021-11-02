@@ -1,10 +1,8 @@
 # Licence Apache-2.0
 from math import pi
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
-import pandas as pd
 
 import feature_gen_dt
 
@@ -13,64 +11,55 @@ from ._base_datetime_feature import _BaseDatetimeFeature
 PREFACTOR = 2 * pi / 59.0
 
 
+from gators import DataFrame
+
+
 class CyclicMinuteOfHour(_BaseDatetimeFeature):
     """Create new columns based on the cyclic mapping of the minute of the hour.
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns.
 
     Examples
     ---------
+    Imports and initialization:
 
-    * fit & transform with `pandas`
+    >>> from gators.feature_generation_dt import CyclicMinuteOfHour
+    >>> obj = CyclicMinuteOfHour(columns=['A'])
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00',  None], 'B': [0, 1, 0]}), npartitions=1)
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
+
+    * `koalas` dataframes:
+
+    >>> import databricks.koalas as ks
+    >>> X = ks.DataFrame({'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation_dt import CyclicMinuteOfHour
-    >>> X = pd.DataFrame(
-    ... {'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = CyclicMinuteOfHour(columns=['A'])
+    >>> X = pd.DataFrame({'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
                         A  B  A__minute_of_hour_cos  A__minute_of_hour_sin
     0 2020-01-01 23:00:00  0                    1.0           0.000000e+00
     1 2020-12-15 18:59:00  1                    1.0          -2.449294e-16
     2                 NaT  0                    NaN                    NaN
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_dt import CyclicMinuteOfHour
-    >>> X = ks.DataFrame(
-    ... {'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = CyclicMinuteOfHour(columns=['A'])
-    >>> obj.fit_transform(X)
-                        A  B  A__minute_of_hour_cos  A__minute_of_hour_sin
-    0 2020-01-01 23:00:00  0                    1.0           0.000000e+00
-    1 2020-12-15 18:59:00  1                    1.0          -2.449294e-16
-    2                 NaT  0                    NaN                    NaN
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation_dt import CyclicMinuteOfHour
-    >>> X = pd.DataFrame(
-    ... {'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = CyclicMinuteOfHour(columns=['A'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[Timestamp('2020-01-01 23:00:00'), 0, 1.0, 0.0],
-           [Timestamp('2020-12-15 18:59:00'), 1, 1.0,
-            -2.4492935982947064e-16],
-           [NaT, 0, nan, nan]], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_dt import CyclicMinuteOfHour
-    >>> X = ks.DataFrame(
-    ... {'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = CyclicMinuteOfHour(columns=['A'])
+    >>> X = pd.DataFrame({'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([[Timestamp('2020-01-01 23:00:00'), 0, 1.0, 0.0],
@@ -80,37 +69,34 @@ class CyclicMinuteOfHour(_BaseDatetimeFeature):
 
     """
 
-    def __init__(self, columns: List[str]):
-        if not isinstance(columns, list):
+    def __init__(self, columns: List[str], date_format: str = "ymd"):
+        if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
         if not columns:
             raise ValueError("`columns` should not be empty.")
         column_names = self.get_cyclic_column_names(columns, "minute_of_hour")
-        column_mapping = {
-            name: col for name, col in zip(column_names, columns + columns)
-        }
-        _BaseDatetimeFeature.__init__(self, columns, column_names, column_mapping)
+        _BaseDatetimeFeature.__init__(
+            self, columns, date_format, column_names
+        )
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        return self.compute_cyclic_minute_of_hour(X, self.columns, self.column_names)
+        return self.compute_cyclic_minute_of_hour(X)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -119,45 +105,30 @@ class CyclicMinuteOfHour(_BaseDatetimeFeature):
 
         Returns
         -------
-        np.ndarray
+        X : np.ndarray
             Transformed array.
         """
         self.check_array(X)
-        return feature_gen_dt.cyclic_minute_of_hour(X, self.idx_columns, PREFACTOR)
+        X_new = feature_gen_dt.cyclic_minute_of_hour(
+            X[:, self.idx_columns], PREFACTOR)
+        return np.concatenate([X, X_new], axis=1)
 
-    @staticmethod
-    def compute_cyclic_minute_of_hour(
-        X: Union[pd.DataFrame, ks.DataFrame],
-        columns: List[str],
-        column_names: List[str],
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def compute_cyclic_minute_of_hour(self, X: DataFrame) -> DataFrame:
         """Compute the cyclic hours of the day features.
-
+        
         Parameters
         ----------
-        X_datetime : Union[pd.DataFrame, ks.DataFrame]
+        X_datetime : DataFrame
             Dataframe of datetime columns.
-
+        
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Dataframe of cyclic hours of the day features.
         """
-        if isinstance(X, pd.DataFrame):
-            X_cyclic = (
-                X[columns].apply(lambda x: PREFACTOR * x.dt.minute).agg(["cos", "sin"])
-            )
-            X_cyclic.columns = column_names
-            return X.join(X_cyclic)
 
-        for i, col in enumerate(columns):
-            X = X.assign(
-                dummy_cos=np.cos(PREFACTOR * X[col].dt.minute),
-                dummy_sin=np.sin(PREFACTOR * X[col].dt.minute),
-            ).rename(
-                columns={
-                    "dummy_cos": column_names[2 * i],
-                    "dummy_sin": column_names[2 * i + 1],
-                }
-            )
+        for i, c in enumerate(self.columns):
+            minute = X[c].dt.minute
+            X[self.column_names[2 * i]] = np.cos(PREFACTOR * minute)
+            X[self.column_names[2 * i + 1]] = np.sin(PREFACTOR * minute)
         return X

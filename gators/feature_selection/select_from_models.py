@@ -1,14 +1,14 @@
 # License: Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
 import pandas as pd
-import pyspark.sql.dataframe as ps
 
 from ..scalers.minmax_scaler import MinMaxScaler
 from ..util import util
 from ._base_feature_selection import _BaseFeatureSelection
+
+from gators import DataFrame, Series
 
 
 class SelectFromModels(_BaseFeatureSelection):
@@ -26,57 +26,79 @@ class SelectFromModels(_BaseFeatureSelection):
 
     Examples
     ---------
-    * fit & transform with `koalas`
+    Imports and initialization:
 
-    >>> import pandas as pd
-    >>> from sklearn.ensemble import RandomForestClassifier as RFC
     >>> from gators.feature_selection import SelectFromModels
-    >>> X = pd.DataFrame({
-    ... 'A': [22.0, 38.0, 26.0, 35.0, 35.0, 28.11, 54.0, 2.0, 27.0, 14.0],
-    ... 'B': [7.25, 71.28, 7.92, 53.1, 8.05, 8.46, 51.86, 21.08, 11.13, 30.07],
-    ... 'C': [3.0, 1.0, 3.0, 1.0, 3.0, 3.0, 1.0, 3.0, 3.0, 2.0]})
-    >>> y = pd.Series([0, 1, 1, 1, 0, 0, 0, 0, 1, 1], name='TARGET')
-    >>> models = [RFC(n_estimators=1, max_depth=1, random_state=0),
-    ... RFC(n_estimators=1, max_depth=2, random_state=1)]
-    >>> obj = SelectFromModels(models=models, k=2)
-    >>> obj.fit_transform(X, y)
-           B    C
-    0   7.25  3.0
-    1  71.28  1.0
-    2   7.92  3.0
-    3  53.10  1.0
-    4   8.05  3.0
-    5   8.46  3.0
-    6  51.86  1.0
-    7  21.08  3.0
-    8  11.13  3.0
-    9  30.07  2.0
 
-    * fit & transform with `koalas`
+    Note that the model can be:
+
+          * a **dask-ml** or a **sklearn** model for `dask` dataframes
+          * a **sklearn** model for `pandas` and `pandas` dataframes
+          * a **pyspark.ml** model for `koalas` dataframes
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+     >>> import dask.dataframe as dd
+     >>> from dask.distributed import Client
+     >>> from dask_ml.xgboost import XGBClassifier
+     >>> import pandas as pd
+     >>> client = Client()
+     >>> X = dd.from_pandas(pd.DataFrame({
+     ... 'A': [0.94, 0.09, -0.43, 0.31, 0.99, 1.05, 1.02, -0.77, 0.03, 0.99],
+     ... 'B': [0.13, 0.01, -0.06, 0.04, 0.14, 0.14, 0.14, -0.1, 0.0, 0.13],
+     ... 'C': [0.8, 0.08, -0.37, 0.26, 0.85, 0.9, 0.87, -0.65, 0.02, 0.84]}), npartitions=1)
+     >>> y = dd.from_pandas(pd.Series([1, 0, 0, 0, 1, 1, 1, 0, 0, 1], name='TARGET'), npartitions=1)
+     >>> models = [XGBClassifier(num_boost_round=1, random_state=0),
+     ... XGBClassifier(num_boost_round=1, random_state=1)]
+     >>> obj = SelectFromModels(models=models, k=1)
+
+    * `koalas` dataframes:
 
     >>> import databricks.koalas as ks
+    >>> from pyspark import SparkConf, SparkContext
     >>> from pyspark.ml.classification import RandomForestClassifier as RFCSpark
-    >>> from gators.feature_selection import SelectFromModels
+    >>> conf = SparkConf()
+    >>> _ = conf.set('spark.executor.memory', '2g')
+    >>> _ = SparkContext(conf=conf)
     >>> X = ks.DataFrame({
-    ... 'A': [22.0, 38.0, 26.0, 35.0, 35.0, 28.11, 54.0, 2.0, 27.0, 14.0],
-    ... 'B': [7.25, 71.28, 7.92, 53.1, 8.05, 8.46, 51.86, 21.08, 11.13, 30.07],
-    ... 'C': [3.0, 1.0, 3.0, 1.0, 3.0, 3.0, 1.0, 3.0, 3.0, 2.0]})
-    >>> y = ks.Series([0, 1, 1, 1, 0, 0, 0, 0, 1, 1], name='TARGET')
-    >>> models = [RFCSpark(numTrees=1, maxDepth=1, labelCol=y.name, seed=0),
+    ... 'A': [0.94, 0.09, -0.43, 0.31, 0.99, 1.05, 1.02, -0.77, 0.03, 0.99],
+    ... 'B': [0.13, 0.01, -0.06, 0.04, 0.14, 0.14, 0.14, -0.1, 0.0, 0.13],
+    ... 'C': [0.8, 0.08, -0.37, 0.26, 0.85, 0.9, 0.87, -0.65, 0.02, 0.84]})
+    >>> y = ks.Series([1, 0, 0, 0, 1, 1, 1, 0, 0, 1], name='TARGET')
+    >>> models = [RFCSpark(numTrees=1, maxDepth=2, labelCol=y.name, seed=0),
     ... RFCSpark(numTrees=1, maxDepth=2, labelCol=y.name, seed=1)]
-    >>> obj = SelectFromModels(models=models, k=2)
+    >>> obj = SelectFromModels(models=models, k=1)
+
+
+    * and `pandas` dataframes:
+
+    >>> import pandas as pd
+    >>> from xgboost import XGBClassifier
+    >>> X = pd.DataFrame({
+    ... 'A': [0.94, 0.09, -0.43, 0.31, 0.99, 1.05, 1.02, -0.77, 0.03, 0.99],
+    ... 'B': [0.13, 0.01, -0.06, 0.04, 0.14, 0.14, 0.14, -0.1, 0.0, 0.13],
+    ... 'C': [0.8, 0.08, -0.37, 0.26, 0.85, 0.9, 0.87, -0.65, 0.02, 0.84]})
+    >>> y = pd.Series([1, 0, 0, 0, 1, 1, 1, 0, 0, 1], name='TARGET')
+    >>> models = [XGBClassifier(n_estimators=1, max_depth=3, random_state=0, eval_metric='logloss'),
+    ... XGBClassifier(n_estimators=1, max_depth=4, random_state=1, eval_metric='logloss')]
+    >>> obj = SelectFromModels(models=models, k=1)
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X, y)
-           A      B
-    0  22.00   7.25
-    1  38.00  71.28
-    2  26.00   7.92
-    3  35.00  53.10
-    4  35.00   8.05
-    5  28.11   8.46
-    6  54.00  51.86
-    7   2.00  21.08
-    8  27.00  11.13
-    9  14.00  30.07
+          A
+    0  0.94
+    1  0.09
+    2 -0.43
+    3  0.31
+    4  0.99
+    5  1.05
+    6  1.02
+    7 -0.77
+    8  0.03
+    9  0.99
 
     See Also
     --------
@@ -86,7 +108,7 @@ class SelectFromModels(_BaseFeatureSelection):
     """
 
     def __init__(self, models: List[object], k: int):
-        if not isinstance(models, list):
+        if not isinstance(models, (list, np.ndarray)):
             raise TypeError("`models` should be a list.")
         if not isinstance(k, int):
             raise TypeError("`k` should be an int.")
@@ -99,40 +121,28 @@ class SelectFromModels(_BaseFeatureSelection):
         self.models = models
         self.k = k
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "SelectFromModels":
+    def fit(self, X: DataFrame, y: Series = None) -> "SelectFromModels":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Input dataframe.
-        y : Union[pd.Series, ks.Series], default to None.
-            Labels.
+        y : Series, default to None.
+            Target values.
 
         Returns
         -------
-        SelectFromModels: Instance of itself.
+        self : "SelectFromModels"
+            Instance of itself.
         """
         self.check_dataframe(X)
-        self.check_y(X, y)
+        self.check_target(X, y)
         self.feature_importances_ = self.get_feature_importances_frame(X, self.models)
-        if isinstance(X, pd.DataFrame):
-            for col, model in zip(self.feature_importances_.columns, self.models):
-                model_feature_importances_ = self.get_feature_importances_pd(
-                    model=model, X=X, y=y
-                )
-                self.feature_importances_[col] = model_feature_importances_
-        else:
-            spark_df = util.generate_spark_dataframe(X=X, y=y)
-            for col, model in zip(self.feature_importances_.columns, self.models):
-                model_feature_importances_ = self.get_feature_importances_sk(
-                    model=model, spark_df=spark_df
-                )
-                self.feature_importances_[col] = model_feature_importances_
+        for col, model in zip(self.feature_importances_.columns, self.models):
+            self.feature_importances_[col] = util.get_function(X).feature_importances_(
+                model, X, y
+            )
         self.feature_importances_ = self.clean_feature_importances_frame(
             self.feature_importances_
         )
@@ -146,20 +156,6 @@ class SelectFromModels(_BaseFeatureSelection):
             X.columns, self.selected_columns
         )
         return self
-
-    @staticmethod
-    def get_feature_importances_pd(
-        model: object, X: pd.DataFrame, y: Union[pd.Series, ks.Series]
-    ):
-        model.fit(X, y)
-        feature_importances_ = model.feature_importances_
-        return feature_importances_
-
-    @staticmethod
-    def get_feature_importances_sk(model: object, spark_df: ps.DataFrame):
-        trained_model = model.fit(spark_df)
-        feature_importances_ = trained_model.featureImportances.toArray()
-        return feature_importances_
 
     @staticmethod
     def get_feature_importances_frame(X, models):

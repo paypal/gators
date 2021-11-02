@@ -73,7 +73,7 @@ cpdef np.ndarray[num_t, ndim = 2] bin_numerics(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef np.ndarray[object, ndim = 2] discretizer_inplace(
+cpdef np.ndarray[object, ndim = 2] binning_inplace(
         np.ndarray[object, ndim=2] X,
         np.ndarray[num_t, ndim=2] bins_np,
         np.ndarray[np.int64_t, ndim=1] idx_columns):
@@ -89,14 +89,14 @@ cpdef np.ndarray[object, ndim = 2] discretizer_inplace(
             j_col = idx_columns[j]
             for k in range(1, n_bins):
                 if X[i, j_col] <= bins_np[k, j]:
-                    X[i, j_col] = str(float(k - 1))
+                    X[i, j_col] = '_' + str(k - 1)
                     break
     return X
 
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef np.ndarray[object, ndim = 2] discretizer(
+cpdef np.ndarray[object, ndim = 2] binning(
         np.ndarray[object, ndim=2] X,
         np.ndarray[num_t, ndim=2] bins_np,
         np.ndarray[np.int64_t, ndim=1] idx_columns):
@@ -113,6 +113,6 @@ cpdef np.ndarray[object, ndim = 2] discretizer(
             j_col = idx_columns[j]
             for k in range(1, n_bins):
                 if float(X[i, j_col]) <= bins_np[k, j]:
-                    X_bin[i, j] = str(float(k - 1))
+                    X_bin[i, j] = '_' + str(k - 1)
                     break
     return np.concatenate((X, X_bin), axis=1)

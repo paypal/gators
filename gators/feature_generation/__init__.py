@@ -6,6 +6,7 @@ from .is_null import IsNull
 from .one_hot import OneHot
 from .plane_rotation import PlaneRotation
 from .polynomial_features import PolynomialFeatures
+from .polynomial_object_features import PolynomialObjectFeatures
 
 __all__ = [
     "_BaseFeatureGeneration",
@@ -14,5 +15,7 @@ __all__ = [
     "OneHot",
     "ElementaryArithmetics",
     "ClusterStatistics",
-    "PlaneRotation" "PolynomialFeatures",
+    "PlaneRotation",
+    "PolynomialFeatures",
+    "PolynomialObjectFeatures",
 ]

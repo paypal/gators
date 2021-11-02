@@ -1,13 +1,15 @@
 # License: Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
 import pandas as pd
 
 from feature_gen_str import contains
 
+from ..util import util
 from ._base_string_feature import _BaseStringFeature
+
+from gators import DataFrame, Series
 
 
 class StringContains(_BaseStringFeature):
@@ -17,7 +19,7 @@ class StringContains(_BaseStringFeature):
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns.
     contains_vec : List[int]
         List of substrings.
@@ -26,54 +28,44 @@ class StringContains(_BaseStringFeature):
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.feature_generation_str import StringContains
+    >>> obj = StringContains(columns=['A', 'A'], contains_vec=['qw', 'we'])
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(
+    ... pd.DataFrame({'A': ['qwe', 'qwd', 'zwe'], 'B': [1, 2, 3]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import databricks.koalas as ks
+    >>> X = ks.DataFrame({'A': ['qwe', 'qwd', 'zwe'], 'B': [1, 2, 3]})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation_str import StringContains
     >>> X = pd.DataFrame({'A': ['qwe', 'qwd', 'zwe'], 'B': [1, 2, 3]})
-    >>> obj = StringContains(columns=['A', 'A'], contains_vec=['qw', 'we'])
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
          A  B  A__contains_qw  A__contains_we
     0  qwe  1             1.0             1.0
     1  qwd  2             1.0             0.0
     2  zwe  3             0.0             1.0
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_str import StringLength
-    >>> X = ks.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
-    >>> obj = StringContains(columns=['A', 'A'], contains_vec=['qw', 'we'])
-    >>> obj.fit_transform(X)
-         A  B  A__contains_qw  A__contains_we
-    0  qwe  1             1.0             1.0
-    1  asd  2             0.0             0.0
-    2  zxc  3             0.0             0.0
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation_str import StringLength
-    >>> X = ks.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
-    >>> obj = StringContains(columns=['A', 'A'], contains_vec=['qw', 'we'])
+    >>> X = pd.DataFrame({'A': ['qwe', 'qwd', 'zwe'], 'B': [1, 2, 3]})
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([['qwe', 1, 1.0, 1.0],
-           ['asd', 2, 0.0, 0.0],
-           ['zxc', 3, 0.0, 0.0]], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_str import StringLength
-    >>> X = ks.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
-    >>> obj = StringContains(columns=['A', 'A'], contains_vec=['qw', 'we'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['qwe', 1, 1.0, 1.0],
-           ['asd', 2, 0.0, 0.0],
-           ['zxc', 3, 0.0, 0.0]], dtype=object)
-
+           ['qwd', 2, 1.0, 0.0],
+           ['zwe', 3, 0.0, 1.0]], dtype=object)
     """
 
     def __init__(
@@ -82,9 +74,9 @@ class StringContains(_BaseStringFeature):
         contains_vec: List[str],
         column_names: List[str] = None,
     ):
-        if not isinstance(columns, list):
+        if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
-        if not isinstance(contains_vec, list):
+        if not isinstance(contains_vec, (list, np.ndarray)):
             raise TypeError("`contains_vec` should be a list.")
         if len(columns) != len(contains_vec):
             raise ValueError("Length of `columns` and `contains_vec` should match.")
@@ -93,30 +85,31 @@ class StringContains(_BaseStringFeature):
                 f"{col}__contains_{val}" for col, val in zip(columns, contains_vec)
             ]
         _BaseStringFeature.__init__(self, columns, column_names)
-        self.contains_vec = np.array(contains_vec, str).astype(object)
+        self.contains_vec = contains_vec
+        self.contains_vec_np = np.array(self.contains_vec).astype(object)
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
+
         self.check_dataframe(X)
         for col, val, name in zip(self.columns, self.contains_vec, self.column_names):
-            X.loc[:, name] = X[col].str.contains(val, regex=False).astype(np.float64)
+            X[name] = X[col].str.contains(val, regex=False).astype(np.float64)
+        self.columns_ = list(X.columns)
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -125,8 +118,8 @@ class StringContains(_BaseStringFeature):
 
         Returns
         -------
-        np.ndarray
+        X : np.ndarray
             Transformed array.
         """
         self.check_array(X)
-        return contains(X, self.idx_columns, self.contains_vec)
+        return contains(X, self.idx_columns, self.contains_vec_np)

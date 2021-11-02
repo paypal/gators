@@ -18,9 +18,9 @@ class XGBBoosterBuilder:
     >>> y_train = np.array([0, 1, 1, 0])
     >>> model = xgb.XGBClassifier(eval_metric='logloss').fit(X_train, y_train)
     >>> xgbooster = XGBBoosterBuilder.train(
-    ...     model=model,
-    ...     X_train=X_train,
-    ...     y_train=y_train,
+    ... model=model,
+    ... X_train=X_train,
+    ... y_train=y_train)
     >>> xgbooster.predict(xgb.DMatrix(X_train))
     array([0.5, 0.5, 0.5, 0.5], dtype=float32)
 
@@ -29,7 +29,7 @@ class XGBBoosterBuilder:
     @staticmethod
     def train(
         model: Union[XGBClassifier, XGBRegressor, XGBRFClassifier, XGBRFRegressor],
-        X_train: np.array,
+        X_train: np.ndarray,
         y_train: np.ndarray,
         num_class=None,
     ):
@@ -42,7 +42,7 @@ class XGBBoosterBuilder:
         X_train : np.ndarray
             Train array.
         y_train : np.ndarray
-             Labels.
+             Target values.
 
         Returns
         -------

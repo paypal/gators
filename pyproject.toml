@@ -4,30 +4,8 @@ version = '0.1.0'
 description = 'Streamline model building and productionization processes.'
 authors = ['Simility Data Team']
 readme = 'README.md'
-include = ['*.so', 'gators/imputers/cython_imputer.pyx', '*.c']
+include = ['*.so', '*.c']
 keywords = ['machine learning']
 
 [build-system]
-requires = ['setuptools', 'wheel', 'numpy==1.19.5', 'Cython']
-
-[tool.poetry.dependencies]
-python = '>=3.6,<3.9'
-wheel = '>=0.36.0'
-jupyter = '^1.0.0'
-treelite = '^1.3.0'
-xgboost = '^1.4.2'
-treelite-runtime = '^1.3.0'
-scikit-learn = '^0.24.2'
-koalas = '^1.8.0'
-matplotlib = '~3.3'
-pytest = '^6.2.4'
-dill = '^0.3.3'
-hyperopt = '^0.2.5'
-pytest-cov = '^2.12.0'
-ipykernel = '^5.5.5'
-Sphinx = '^4.0.2'
-pydata-sphinx-theme = "^0.6.3"
-pyspark = '^3.1.1'
-pandas-profiling = '^3.0.0'
-numpydoc = "^1.1.0"
-autopep8 = "^1.5.7"
+requires = ['setuptools', 'wheel', 'numpy', 'Cython']

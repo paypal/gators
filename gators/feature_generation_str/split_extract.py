@@ -1,13 +1,15 @@
 # License: Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
 import pandas as pd
 
 from feature_gen_str import split_and_extract_str
 
+from ..util import util
 from ._base_string_feature import _BaseStringFeature
+
+from gators import DataFrame, Series
 
 
 class SplitExtract(_BaseStringFeature):
@@ -20,7 +22,7 @@ class SplitExtract(_BaseStringFeature):
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns.
 
     str_split_vec : List[int]
@@ -34,59 +36,45 @@ class SplitExtract(_BaseStringFeature):
 
     Examples
     ---------
+    Imports and initialization:
 
-    * fit & transform with `pandas`
-
-    >>> import pandas as pd
     >>> from gators.feature_generation_str import SplitExtract
-    >>> X = pd.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]})
     >>> obj = SplitExtract(
-    ...     columns=['A','A'], str_split_vec=['*', '*'], idx_split_vec=[0, 1])
-    >>> obj.fit_transform(X)
-          A  B A__split_by_*_idx_0 A__split_by_*_idx_1
-    0  qw*e  1                  qw                   e
-    1  a*qd  2                   a                  qd
-    2  zxq*  3                 zxq
+    ... columns=['A', 'A'], str_split_vec=['*', '*'], idx_split_vec=[0, 1])
 
-    * fit & transform with `koalas`
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(
+    ... pd.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]}), npartitions=1)
+
+    * `koalas` dataframes:
 
     >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_str import SplitExtract
     >>> X = ks.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]})
-    >>> obj = SplitExtract(
-    ...     columns=['A','A'], str_split_vec=['*', '*'], idx_split_vec=[0, 1])
+
+    * and `pandas` dataframes:
+
+    >>> import pandas as pd
+    >>> X = pd.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]})
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
           A  B A__split_by_*_idx_0 A__split_by_*_idx_1
     0  qw*e  1                  qw                   e
     1  a*qd  2                   a                  qd
-    2  zxq*  3                 zxq
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation_str import SplitExtract
+    2  zxq*  3                 zxq                    
+    
     >>> X = pd.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]})
-    >>> obj = SplitExtract(
-    ...     columns=['A','A'], str_split_vec=['*', '*'], idx_split_vec=[0, 1])
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([['qw*e', 1, 'qw', 'e'],
            ['a*qd', 2, 'a', 'qd'],
            ['zxq*', 3, 'zxq', '']], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_str import SplitExtract
-    >>> X = ks.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]})
-    >>> obj = SplitExtract(
-    ...     columns=['A','A'], str_split_vec=['*', '*'], idx_split_vec=[0, 1])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['qw*e', 1, 'qw', 'e'],
-           ['a*qd', 2, 'a', 'qd'],
-           ['zxq*', 3, 'zxq', '']], dtype=object)
-
     """
 
     def __init__(
@@ -96,13 +84,14 @@ class SplitExtract(_BaseStringFeature):
         idx_split_vec: List[int],
         column_names: List[str] = None,
     ):
-        if not isinstance(columns, list):
+
+        if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
-        if not isinstance(str_split_vec, list):
+        if not isinstance(str_split_vec, (list, np.ndarray)):
             raise TypeError("`str_split_vec` should be a list.")
         if len(columns) != len(str_split_vec):
             raise ValueError("Length of `columns` and `str_split_vec` should match.")
-        if not isinstance(idx_split_vec, list):
+        if not isinstance(idx_split_vec, (list, np.ndarray)):
             raise TypeError("`idx_split_vec` should be a list.")
         if len(columns) != len(idx_split_vec):
             raise ValueError("Length of `columns` and `idx_split_vec` should match.")
@@ -111,37 +100,35 @@ class SplitExtract(_BaseStringFeature):
                 f"{col}__split_by_{split}_idx_{idx}"
                 for col, split, idx in zip(columns, str_split_vec, idx_split_vec)
             ]
+        self.str_split_vec = str_split_vec
+        self.idx_split_vec = idx_split_vec
+        self.str_split_vec_np = np.array(str_split_vec, object)
+        self.idx_split_vec_np = np.array(idx_split_vec, int)
         _BaseStringFeature.__init__(self, columns, column_names)
-        self.str_split_vec = np.array(str_split_vec, object)
-        self.idx_split_vec = np.array(idx_split_vec, int)
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
         for col, idx, str_split, name in zip(
             self.columns, self.idx_split_vec, self.str_split_vec, self.column_names
         ):
-            n = idx if idx > 0 else 1
-            X.loc[:, name] = (
-                X[col].str.split(str_split, n=n, expand=True)[idx].fillna("MISSING")
-            )
+            X[name] = X[col].str.split(str_split).str.get(idx).fillna("MISSING")
+        self.columns_ = list(X.columns)
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -150,10 +137,10 @@ class SplitExtract(_BaseStringFeature):
 
         Returns
         -------
-        np.ndarray
+        X : np.ndarray
             Transformed array.
         """
         self.check_array(X)
         return split_and_extract_str(
-            X, self.idx_columns, self.str_split_vec, self.idx_split_vec
+            X, self.idx_columns, self.str_split_vec_np, self.idx_split_vec_np
         )

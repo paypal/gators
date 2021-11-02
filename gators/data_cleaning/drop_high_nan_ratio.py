@@ -1,11 +1,10 @@
 # License: Apache-2.0
-from typing import List, Union
-
-import databricks.koalas as ks
-import pandas as pd
+from typing import List
 
 from ..util import util
 from ._base_data_cleaning import _BaseDataCleaning
+
+from gators import DataFrame, Series
 
 
 class DropHighNaNRatio(_BaseDataCleaning):
@@ -19,62 +18,48 @@ class DropHighNaNRatio(_BaseDataCleaning):
     Examples
     ---------
 
-    * fit & transform with `pandas`
+    Imports and initialization:
 
-    >>> import numpy as np
-    >>> import pandas as pd
     >>> from gators.data_cleaning import DropHighNaNRatio
+    >>> obj = DropHighNaNRatio(max_ratio=0.5)
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> X = dd.from_pandas(pd.DataFrame(
+    ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import databricks.koalas as ks
+    >>> X = ks.DataFrame(
+    ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
+
+    * and `pandas` dataframes:
+
+    >>> import pandas as pd
     >>> X = pd.DataFrame(
     ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
-    >>> obj = DropHighNaNRatio(max_ratio=0.5)
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
        A
     0  1
     1  2
     2  3
 
-    * fit & transform with `koalas`
-
-    >>> import numpy as np
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropHighNaNRatio
-    >>> X = ks.DataFrame(
-    ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
-    >>> obj = DropHighNaNRatio(max_ratio=0.5)
-    >>> obj.fit_transform(X)
-       A
-    0  1
-    1  2
-    2  3
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import DropHighNaNRatio
     >>> X = pd.DataFrame(
     ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
-    >>> obj = DropHighNaNRatio(max_ratio=0.5)
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([[1],
            [2],
            [3]], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import numpy as np
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropHighNaNRatio
-    >>> X = ks.DataFrame(
-    ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
-    >>> obj = DropHighNaNRatio(max_ratio=0.5)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1],
-           [2],
-           [3]], dtype=object)
-
     """
 
     def __init__(self, max_ratio: float):
@@ -83,7 +68,7 @@ class DropHighNaNRatio(_BaseDataCleaning):
         _BaseDataCleaning.__init__(self)
         self.max_ratio = max_ratio
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "DropHighNaNRatio":
+    def fit(self, X: DataFrame, y: Series = None) -> "DropHighNaNRatio":
         """Fit the transformer on the dataframe X.
 
         Get the list of column names to remove and the array of
@@ -91,14 +76,15 @@ class DropHighNaNRatio(_BaseDataCleaning):
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Input dataframe.
-        y : None
-           None
+        y : Series, default to None.
+           Target values.
 
         Returns
         -------
-        DropHighNaNRatio: Instance of itself.
+        self : DropHighNaNRatio
+            Instance of itself.
         """
         self.check_dataframe(X)
         self.columns = self.get_columns_to_drop(X=X, max_ratio=self.max_ratio)
@@ -111,9 +97,7 @@ class DropHighNaNRatio(_BaseDataCleaning):
         return self
 
     @staticmethod
-    def get_columns_to_drop(
-        X: Union[pd.DataFrame, ks.DataFrame], max_ratio: float
-    ) -> List[str]:
+    def get_columns_to_drop(X: DataFrame, max_ratio: float) -> List[str]:
         """Get  the list of column names to drop.
 
         Parameters
@@ -128,8 +112,6 @@ class DropHighNaNRatio(_BaseDataCleaning):
         List[str]
             List of column names to drop.
         """
-        mask_columns = X.isnull().mean() > max_ratio
-        columns_to_drop = mask_columns[mask_columns].index
-        if isinstance(columns_to_drop, ks.indexes.Index):
-            columns_to_drop = columns_to_drop.to_pandas()
+        mask_columns = util.get_function(X).to_pandas(X.isnull().mean()) > max_ratio
+        columns_to_drop = list(mask_columns[mask_columns].index)
         return columns_to_drop

@@ -18,19 +18,13 @@ class LGBMTreeliteDumper:
     >>> y_train = np.array([0, 1, 1, 0])
     >>> model = LGBMClassifier(max_depth=1, n_estimators=1).fit(X_train, y_train)
     >>> LGBMTreeliteDumper.dump(
-    ...     model=model,
-    ...     toolchain='gcc',
-    ...     parallel_comp=1,
-    ...     model_path='.',
-    ...     model_name='dummy')
-    [00:00:00] ../src/compiler/ast/split.cc:31: Parallel compilation enabled; member trees will be divided into 1 translation units.
-    [00:00:01] ../src/compiler/ast_native.cc:45: Using ASTNativeCompiler
-    [00:00:01] ../src/compiler/ast/split.cc:31: Parallel compilation enabled; member trees will be divided into 1 translation units.
-    [00:00:01] ../src/c_api/c_api.cc:121: Code generation finished. Writing code to files...
-    [00:00:01] ../src/c_api/c_api.cc:126: Writing file tu0.c...
-    [00:00:01] ../src/c_api/c_api.cc:126: Writing file header.h...
-    [00:00:01] ../src/c_api/c_api.cc:126: Writing file recipe.json...
-    [00:00:01] ../src/c_api/c_api.cc:126: Writing file main.c...
+    ... model=model,
+    ... toolchain='gcc',
+    ... parallel_comp=1,
+    ... model_path='.',
+    ... model_name='dummy')
+    [00:00:00] /Users/travis/build/dmlc/treelite/src/compiler/ast/split.cc:29: Parallel compilation enabled; member trees will be divided into 1 translation units.
+    [00:00:01] /Users/travis/build/dmlc/treelite/src/compiler/ast/split.cc:29: Parallel compilation enabled; member trees will be divided into 1 translation units.
     """
 
     @staticmethod
@@ -40,6 +34,7 @@ class LGBMTreeliteDumper:
         parallel_comp: int,
         model_path: str,
         model_name: str,
+        verbose: bool = False,
     ):
         """Dump the XGBoost treelite as a .so and a
         .dylib file.
@@ -59,6 +54,8 @@ class LGBMTreeliteDumper:
             Model path.
         model_name : str
             Model name.
+        verbose: bool, default to False.
+            Verbosity.
         """
         if not isinstance(model, (LGBMClassifier, LGBMRegressor)):
             raise TypeError("`model` should be a LGBMClassifier or LGBMRegressor.")
@@ -90,5 +87,5 @@ class LGBMTreeliteDumper:
             params={"parallel_comp": parallel_comp},
             pkgpath=os.path.join(model_path, model_name + ".zip"),
             libname=os.path.join(model_path, model_name + format_dict[toolchain]),
-            verbose=True,
+            verbose=verbose,
         )

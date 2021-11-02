@@ -53,7 +53,7 @@
 </div>
 <div id="source">
     <p id="t1" class="pln"><span class="n"><a href="#t1">1</a></span><span class="t"><span class="com"># License: Apache-2.0</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t2" class="run"><span class="n"><a href="#t2">2</a></span><span class="t"><span class="key">from</span> <span class="op">.</span><span class="nam">_base_discretizer</span> <span class="key">import</span> <span class="nam">_BaseDiscretizer</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t2" class="run"><span class="n"><a href="#t2">2</a></span><span class="t"><span class="key">from</span> <span class="op">.</span><span class="nam">_base_discretizer</span> <span class="key">import</span> <span class="nam">_BaseBinning</span>&nbsp;</span><span class="r"></span></p>
     <p id="t3" class="run"><span class="n"><a href="#t3">3</a></span><span class="t"><span class="key">from</span> <span class="nam">typing</span> <span class="key">import</span> <span class="nam">Tuple</span><span class="op">,</span> <span class="nam">List</span><span class="op">,</span> <span class="nam">Union</span>&nbsp;</span><span class="r"></span></p>
     <p id="t4" class="run"><span class="n"><a href="#t4">4</a></span><span class="t"><span class="key">import</span> <span class="nam">numpy</span> <span class="key">as</span> <span class="nam">np</span>&nbsp;</span><span class="r"></span></p>
     <p id="t5" class="run"><span class="n"><a href="#t5">5</a></span><span class="t"><span class="key">import</span> <span class="nam">pandas</span> <span class="key">as</span> <span class="nam">pd</span>&nbsp;</span><span class="r"></span></p>
@@ -63,10 +63,10 @@
     <p id="t9" class="run"><span class="n"><a href="#t9">9</a></span><span class="t"><span class="nam">EPSILON</span> <span class="op">=</span> <span class="num">1e-10</span>&nbsp;</span><span class="r"></span></p>
     <p id="t10" class="pln"><span class="n"><a href="#t10">10</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t11" class="pln"><span class="n"><a href="#t11">11</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t12" class="run"><span class="n"><a href="#t12">12</a></span><span class="t"><span class="key">class</span> <span class="nam">QuantileDiscretizer</span><span class="op">(</span><span class="nam">_BaseDiscretizer</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t13" class="pln"><span class="n"><a href="#t13">13</a></span><span class="t">    <span class="str">"""Discretize the columns using quantile-based splits.</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t12" class="run"><span class="n"><a href="#t12">12</a></span><span class="t"><span class="key">class</span> <span class="nam">QuantileBinning</span><span class="op">(</span><span class="nam">_BaseBinning</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t13" class="pln"><span class="n"><a href="#t13">13</a></span><span class="t">    <span class="str">"""Bin the columns using quantile-based splits.</span>&nbsp;</span><span class="r"></span></p>
     <p id="t14" class="pln"><span class="n"><a href="#t14">14</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t15" class="pln"><span class="n"><a href="#t15">15</a></span><span class="t"><span class="str">    The discretization can be done inplace or by adding the discretized</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t15" class="pln"><span class="n"><a href="#t15">15</a></span><span class="t"><span class="str">    The binning can be done inplace or by adding the binned</span>&nbsp;</span><span class="r"></span></p>
     <p id="t16" class="pln"><span class="n"><a href="#t16">16</a></span><span class="t"><span class="str">    variables to the existing data.</span>&nbsp;</span><span class="r"></span></p>
     <p id="t17" class="pln"><span class="n"><a href="#t17">17</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t18" class="pln"><span class="n"><a href="#t18">18</a></span><span class="t"><span class="str">    Parameters</span>&nbsp;</span><span class="r"></span></p>
@@ -74,7 +74,7 @@
     <p id="t20" class="pln"><span class="n"><a href="#t20">20</a></span><span class="t"><span class="str">    n_bins : int</span>&nbsp;</span><span class="r"></span></p>
     <p id="t21" class="pln"><span class="n"><a href="#t21">21</a></span><span class="t"><span class="str">        Number of bins to use.</span>&nbsp;</span><span class="r"></span></p>
     <p id="t22" class="pln"><span class="n"><a href="#t22">22</a></span><span class="t"><span class="str">    inplace : bool, default to False</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t23" class="pln"><span class="n"><a href="#t23">23</a></span><span class="t"><span class="str">        If False, return the dataframe with the new discretized columns</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t23" class="pln"><span class="n"><a href="#t23">23</a></span><span class="t"><span class="str">        If False, return the dataframe with the new binned columns</span>&nbsp;</span><span class="r"></span></p>
     <p id="t24" class="pln"><span class="n"><a href="#t24">24</a></span><span class="t"><span class="str">        with the names '`column_name`__bin'). Otherwise, return</span>&nbsp;</span><span class="r"></span></p>
     <p id="t25" class="pln"><span class="n"><a href="#t25">25</a></span><span class="t"><span class="str">        the dataframe with the existing binned columns.</span>&nbsp;</span><span class="r"></span></p>
     <p id="t26" class="pln"><span class="n"><a href="#t26">26</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -83,9 +83,9 @@
     <p id="t29" class="pln"><span class="n"><a href="#t29">29</a></span><span class="t"><span class="str">    * fit &amp; transform with pandas</span>&nbsp;</span><span class="r"></span></p>
     <p id="t30" class="pln"><span class="n"><a href="#t30">30</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t31" class="pln"><span class="n"><a href="#t31">31</a></span><span class="t"><span class="str">    >>> import pandas as pd</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t32" class="pln"><span class="n"><a href="#t32">32</a></span><span class="t"><span class="str">    >>> from gators.binning import QuantileDiscretizer</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t32" class="pln"><span class="n"><a href="#t32">32</a></span><span class="t"><span class="str">    >>> from gators.binning import QuantileBinning</span>&nbsp;</span><span class="r"></span></p>
     <p id="t33" class="pln"><span class="n"><a href="#t33">33</a></span><span class="t"><span class="str">    >>> X = pd.DataFrame({'A': [-1, 0, 1], 'B': [1, 2, 3]})</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t34" class="pln"><span class="n"><a href="#t34">34</a></span><span class="t"><span class="str">    >>> obj = QuantileDiscretizer(n_bins=3)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t34" class="pln"><span class="n"><a href="#t34">34</a></span><span class="t"><span class="str">    >>> obj = QuantileBinning(n_bins=3)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t35" class="pln"><span class="n"><a href="#t35">35</a></span><span class="t"><span class="str">    >>> obj.fit_transform(X)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t36" class="pln"><span class="n"><a href="#t36">36</a></span><span class="t"><span class="str">       A  B  A_bin  B_bin</span>&nbsp;</span><span class="r"></span></p>
     <p id="t37" class="pln"><span class="n"><a href="#t37">37</a></span><span class="t"><span class="str">    0 -1  1    0.0    0.0</span>&nbsp;</span><span class="r"></span></p>
@@ -95,9 +95,9 @@
     <p id="t41" class="pln"><span class="n"><a href="#t41">41</a></span><span class="t"><span class="str">    * fit &amp; transform with koalas</span>&nbsp;</span><span class="r"></span></p>
     <p id="t42" class="pln"><span class="n"><a href="#t42">42</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t43" class="pln"><span class="n"><a href="#t43">43</a></span><span class="t"><span class="str">    >>> import databricks.koalas as ks</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t44" class="pln"><span class="n"><a href="#t44">44</a></span><span class="t"><span class="str">    >>> from gators.binning import QuantileDiscretizer</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t44" class="pln"><span class="n"><a href="#t44">44</a></span><span class="t"><span class="str">    >>> from gators.binning import QuantileBinning</span>&nbsp;</span><span class="r"></span></p>
     <p id="t45" class="pln"><span class="n"><a href="#t45">45</a></span><span class="t"><span class="str">    >>> X = ks.DataFrame({'A': [-1, 0, 1], 'B': [1, 2, 3]})</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t46" class="pln"><span class="n"><a href="#t46">46</a></span><span class="t"><span class="str">    >>> obj = QuantileDiscretizer(n_bins=3)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t46" class="pln"><span class="n"><a href="#t46">46</a></span><span class="t"><span class="str">    >>> obj = QuantileBinning(n_bins=3)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t47" class="pln"><span class="n"><a href="#t47">47</a></span><span class="t"><span class="str">    >>> obj.fit_transform(X)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t48" class="pln"><span class="n"><a href="#t48">48</a></span><span class="t"><span class="str">       A  B  A_bin  B_bin</span>&nbsp;</span><span class="r"></span></p>
     <p id="t49" class="pln"><span class="n"><a href="#t49">49</a></span><span class="t"><span class="str">    0 -1  1    0.0    0.0</span>&nbsp;</span><span class="r"></span></p>
@@ -107,9 +107,9 @@
     <p id="t53" class="pln"><span class="n"><a href="#t53">53</a></span><span class="t"><span class="str">    * fit with pandas &amp; transform with numpy</span>&nbsp;</span><span class="r"></span></p>
     <p id="t54" class="pln"><span class="n"><a href="#t54">54</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t55" class="pln"><span class="n"><a href="#t55">55</a></span><span class="t"><span class="str">    >>> import pandas as pd</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t56" class="pln"><span class="n"><a href="#t56">56</a></span><span class="t"><span class="str">    >>> from gators.binning import QuantileDiscretizer</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t56" class="pln"><span class="n"><a href="#t56">56</a></span><span class="t"><span class="str">    >>> from gators.binning import QuantileBinning</span>&nbsp;</span><span class="r"></span></p>
     <p id="t57" class="pln"><span class="n"><a href="#t57">57</a></span><span class="t"><span class="str">    >>> X = pd.DataFrame({'A': [-1., 0., 1.], 'B': [1., 2., 3.]})</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t58" class="pln"><span class="n"><a href="#t58">58</a></span><span class="t"><span class="str">    >>> obj = QuantileDiscretizer(n_bins=3)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t58" class="pln"><span class="n"><a href="#t58">58</a></span><span class="t"><span class="str">    >>> obj = QuantileBinning(n_bins=3)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t59" class="pln"><span class="n"><a href="#t59">59</a></span><span class="t"><span class="str">    >>> _ = obj.fit(X)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t60" class="pln"><span class="n"><a href="#t60">60</a></span><span class="t"><span class="str">    >>> obj.transform_numpy(X.to_numpy())</span>&nbsp;</span><span class="r"></span></p>
     <p id="t61" class="pln"><span class="n"><a href="#t61">61</a></span><span class="t"><span class="str">    array([[-1.,  1.,  0.,  0.],</span>&nbsp;</span><span class="r"></span></p>
@@ -119,9 +119,9 @@
     <p id="t65" class="pln"><span class="n"><a href="#t65">65</a></span><span class="t"><span class="str">    * fit with koalas &amp; transform with numpy</span>&nbsp;</span><span class="r"></span></p>
     <p id="t66" class="pln"><span class="n"><a href="#t66">66</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t67" class="pln"><span class="n"><a href="#t67">67</a></span><span class="t"><span class="str">    >>> import databricks.koalas as ks</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t68" class="pln"><span class="n"><a href="#t68">68</a></span><span class="t"><span class="str">    >>> from gators.binning import QuantileDiscretizer</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t68" class="pln"><span class="n"><a href="#t68">68</a></span><span class="t"><span class="str">    >>> from gators.binning import QuantileBinning</span>&nbsp;</span><span class="r"></span></p>
     <p id="t69" class="pln"><span class="n"><a href="#t69">69</a></span><span class="t"><span class="str">    >>> X = ks.DataFrame({'A': [-1, 0, 1], 'B': [1, 2, 3]})</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t70" class="pln"><span class="n"><a href="#t70">70</a></span><span class="t"><span class="str">    >>> obj = QuantileDiscretizer(n_bins=3)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t70" class="pln"><span class="n"><a href="#t70">70</a></span><span class="t"><span class="str">    >>> obj = QuantileBinning(n_bins=3)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t71" class="pln"><span class="n"><a href="#t71">71</a></span><span class="t"><span class="str">    >>> _ = obj.fit(X)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t72" class="pln"><span class="n"><a href="#t72">72</a></span><span class="t"><span class="str">    >>> obj.transform_numpy(X.to_numpy())</span>&nbsp;</span><span class="r"></span></p>
     <p id="t73" class="pln"><span class="n"><a href="#t73">73</a></span><span class="t"><span class="str">    array([[-1.,  1.,  0.,  0.],</span>&nbsp;</span><span class="r"></span></p>
@@ -130,15 +130,15 @@
     <p id="t76" class="pln"><span class="n"><a href="#t76">76</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t77" class="pln"><span class="n"><a href="#t77">77</a></span><span class="t"><span class="str">    See Also</span>&nbsp;</span><span class="r"></span></p>
     <p id="t78" class="pln"><span class="n"><a href="#t78">78</a></span><span class="t"><span class="str">    --------</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t79" class="pln"><span class="n"><a href="#t79">79</a></span><span class="t"><span class="str">    gators.binning.Discretizer</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t80" class="pln"><span class="n"><a href="#t80">80</a></span><span class="t"><span class="str">        Discretize using equal splits.</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t81" class="pln"><span class="n"><a href="#t81">81</a></span><span class="t"><span class="str">    gators.binning.CustomDiscretizer</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t82" class="pln"><span class="n"><a href="#t82">82</a></span><span class="t"><span class="str">        Discretize using the variable quantiles.</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t79" class="pln"><span class="n"><a href="#t79">79</a></span><span class="t"><span class="str">    gators.binning.Binning</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t80" class="pln"><span class="n"><a href="#t80">80</a></span><span class="t"><span class="str">        Bin using equal splits.</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t81" class="pln"><span class="n"><a href="#t81">81</a></span><span class="t"><span class="str">    gators.binning.CustomBinning</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t82" class="pln"><span class="n"><a href="#t82">82</a></span><span class="t"><span class="str">        Bin using the variable quantiles.</span>&nbsp;</span><span class="r"></span></p>
     <p id="t83" class="pln"><span class="n"><a href="#t83">83</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t84" class="pln"><span class="n"><a href="#t84">84</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p id="t85" class="pln"><span class="n"><a href="#t85">85</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t86" class="run"><span class="n"><a href="#t86">86</a></span><span class="t">    <span class="key">def</span> <span class="nam">__init__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">n_bins</span><span class="op">:</span> <span class="nam">int</span><span class="op">,</span> <span class="nam">inplace</span><span class="op">=</span><span class="key">False</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t87" class="run"><span class="n"><a href="#t87">87</a></span><span class="t">        <span class="nam">_BaseDiscretizer</span><span class="op">.</span><span class="nam">__init__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">n_bins</span><span class="op">=</span><span class="nam">n_bins</span><span class="op">,</span> <span class="nam">inplace</span><span class="op">=</span><span class="nam">inplace</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t87" class="run"><span class="n"><a href="#t87">87</a></span><span class="t">        <span class="nam">_BaseBinning</span><span class="op">.</span><span class="nam">__init__</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">n_bins</span><span class="op">=</span><span class="nam">n_bins</span><span class="op">,</span> <span class="nam">inplace</span><span class="op">=</span><span class="nam">inplace</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t88" class="pln"><span class="n"><a href="#t88">88</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t89" class="run"><span class="n"><a href="#t89">89</a></span><span class="t">    <span class="op">@</span><span class="nam">staticmethod</span>&nbsp;</span><span class="r"></span></p>
     <p id="t90" class="run"><span class="n"><a href="#t90">90</a></span><span class="t">    <span class="key">def</span> <span class="nam">compute_bins</span><span class="op">(</span><span class="nam">X</span><span class="op">:</span> <span class="nam">Union</span><span class="op">[</span><span class="nam">pd</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">,</span> <span class="nam">ks</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">]</span><span class="op">,</span> <span class="nam">n_bins</span><span class="op">:</span> <span class="nam">int</span>&nbsp;</span><span class="r"></span></p>
@@ -158,7 +158,7 @@
     <p id="t104" class="pln"><span class="n"><a href="#t104">104</a></span><span class="t"><span class="str">        -------</span>&nbsp;</span><span class="r"></span></p>
     <p id="t105" class="pln"><span class="n"><a href="#t105">105</a></span><span class="t"><span class="str">        bins : List[List[float]]</span>&nbsp;</span><span class="r"></span></p>
     <p id="t106" class="pln"><span class="n"><a href="#t106">106</a></span><span class="t"><span class="str">            Bin splits definition.</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t107" class="pln"><span class="n"><a href="#t107">107</a></span><span class="t"><span class="str">            The dictionary keys are the column names to discretize,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t107" class="pln"><span class="n"><a href="#t107">107</a></span><span class="t"><span class="str">            The dictionary keys are the column names to bin,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t108" class="pln"><span class="n"><a href="#t108">108</a></span><span class="t"><span class="str">            its values are the split arrays.</span>&nbsp;</span><span class="r"></span></p>
     <p id="t109" class="pln"><span class="n"><a href="#t109">109</a></span><span class="t"><span class="str">        bins_np : np.ndarray</span>&nbsp;</span><span class="r"></span></p>
     <p id="t110" class="pln"><span class="n"><a href="#t110">110</a></span><span class="t"><span class="str">            Bin splits definition for NumPy.</span>&nbsp;</span><span class="r"></span></p>

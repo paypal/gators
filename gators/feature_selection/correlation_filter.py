@@ -1,12 +1,13 @@
 # License: Apache-2.0
-from typing import Union
 
-import databricks.koalas as ks
+
 import numpy as np
 import pandas as pd
 
 from ..util import util
 from ._base_feature_selection import _BaseFeatureSelection
+
+from gators import DataFrame, Series
 
 
 class CorrelationFilter(_BaseFeatureSelection):
@@ -19,59 +20,43 @@ class CorrelationFilter(_BaseFeatureSelection):
 
     Examples
     ---------
+    Imports and initialization:
 
-    * fit & transform with `pandas`
+    >>> from gators.feature_selection import CorrelationFilter
+    >>> obj = CorrelationFilter(max_corr=0.9)
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import databricks.koalas as ks
+    >>> X = ks.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_selection import CorrelationFilter
-    >>> X = pd.DataFrame(
-    ... {'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
-    >>> obj = CorrelationFilter(max_corr=0.9)
+    >>> X = pd.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
          B     C
     0  1.0  0.00
     1  2.0  0.00
     2  3.0  0.15
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_selection import CorrelationFilter
-    >>> X = ks.DataFrame(
-    ... {'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
-    >>> obj = CorrelationFilter(max_corr=0.9)
-    >>> obj.fit_transform(X)
-         B     C
-    0  1.0  0.00
-    1  2.0  0.00
-    2  3.0  0.15
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_selection import CorrelationFilter
-    >>> X = pd.DataFrame(
-    ... {'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
-    >>> obj = CorrelationFilter(max_corr=0.9)
+    >>> X = pd.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([[1.  , 0.  ],
            [2.  , 0.  ],
            [3.  , 0.15]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_selection import CorrelationFilter
-    >>> X = ks.DataFrame(
-    ... {'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
-    >>> obj = CorrelationFilter(max_corr=0.9)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1.  , 0.  ],
-           [2.  , 0.  ],
-           [3.  , 0.15]])
-
     """
 
     def __init__(self, max_corr: float):
@@ -80,29 +65,24 @@ class CorrelationFilter(_BaseFeatureSelection):
         _BaseFeatureSelection.__init__(self)
         self.max_corr = max_corr
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "CorrelationFilter":
+    def fit(self, X: DataFrame, y: Series = None) -> "CorrelationFilter":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
-        y : None
-            None.
+        y : Series, default to None.
+            Target values.
 
         Returns
         -------
-            CorrelationFilter: Instance of itself.
+        self : "CorrelationFilter"
+            Instance of itself.
         """
         self.check_dataframe(X)
         columns = X.columns
-        corr = X.corr().abs()
-        if not isinstance(X, pd.DataFrame):
-            corr = corr.to_pandas()
+        corr = util.get_function(X).to_pandas(X.corr()).abs()
         stacked_corr = (
             corr.where(np.tril(np.ones(corr.shape), k=-1).astype(np.bool))
             .stack()

@@ -62,10 +62,10 @@
     <p id="t8" class="run"><span class="n"><a href="#t8">8</a></span><span class="t"><span class="key">import</span> <span class="nam">databricks</span><span class="op">.</span><span class="nam">koalas</span> <span class="key">as</span> <span class="nam">ks</span>&nbsp;</span><span class="r"></span></p>
     <p id="t9" class="pln"><span class="n"><a href="#t9">9</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t10" class="pln"><span class="n"><a href="#t10">10</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t11" class="run"><span class="n"><a href="#t11">11</a></span><span class="t"><span class="key">class</span> <span class="nam">BinRareEvents</span><span class="op">(</span><span class="nam">Transformer</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t11" class="run"><span class="n"><a href="#t11">11</a></span><span class="t"><span class="key">class</span> <span class="nam">BinRareCategories</span><span class="op">(</span><span class="nam">Transformer</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t12" class="pln"><span class="n"><a href="#t12">12</a></span><span class="t">    <span class="str">"""Replace low occurence categories by the value "OTHERS".</span>&nbsp;</span><span class="r"></span></p>
     <p id="t13" class="pln"><span class="n"><a href="#t13">13</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t14" class="pln"><span class="n"><a href="#t14">14</a></span><span class="t"><span class="str">    Use `BinRareEvents` to reduce the cardinality</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t14" class="pln"><span class="n"><a href="#t14">14</a></span><span class="t"><span class="str">    Use `BinRareCategories` to reduce the cardinality</span>&nbsp;</span><span class="r"></span></p>
     <p id="t15" class="pln"><span class="n"><a href="#t15">15</a></span><span class="t"><span class="str">    of high cardinal variables. This transformer is also useful</span>&nbsp;</span><span class="r"></span></p>
     <p id="t16" class="pln"><span class="n"><a href="#t16">16</a></span><span class="t"><span class="str">    to replace unseen categories by a value which is already</span>&nbsp;</span><span class="r"></span></p>
     <p id="t17" class="pln"><span class="n"><a href="#t17">17</a></span><span class="t"><span class="str">    taken it account by the encoders.</span>&nbsp;</span><span class="r"></span></p>
@@ -79,8 +79,8 @@
     <p id="t25" class="pln"><span class="n"><a href="#t25">25</a></span><span class="t"><span class="str">    ---------</span>&nbsp;</span><span class="r"></span></p>
     <p id="t26" class="pln"><span class="n"><a href="#t26">26</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t27" class="pln"><span class="n"><a href="#t27">27</a></span><span class="t"><span class="str">    >>> import pandas as pd</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t28" class="pln"><span class="n"><a href="#t28">28</a></span><span class="t"><span class="str">    >>> from gators.binning import BinRareEvents</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t29" class="pln"><span class="n"><a href="#t29">29</a></span><span class="t"><span class="str">    >>> obj = BinRareEvents(min_ratio=0.5)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t28" class="pln"><span class="n"><a href="#t28">28</a></span><span class="t"><span class="str">    >>> from gators.binning import BinRareCategories</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t29" class="pln"><span class="n"><a href="#t29">29</a></span><span class="t"><span class="str">    >>> obj = BinRareCategories(min_ratio=0.5)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t30" class="pln"><span class="n"><a href="#t30">30</a></span><span class="t"><span class="str">    >>> X = pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']})</span>&nbsp;</span><span class="r"></span></p>
     <p id="t31" class="pln"><span class="n"><a href="#t31">31</a></span><span class="t"><span class="str">    >>> obj.fit_transform(X)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t32" class="pln"><span class="n"><a href="#t32">32</a></span><span class="t"><span class="str">            A       B</span>&nbsp;</span><span class="r"></span></p>
@@ -91,8 +91,8 @@
     <p id="t37" class="pln"><span class="n"><a href="#t37">37</a></span><span class="t"><span class="str">    * fit &amp; transform with koalas</span>&nbsp;</span><span class="r"></span></p>
     <p id="t38" class="pln"><span class="n"><a href="#t38">38</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t39" class="pln"><span class="n"><a href="#t39">39</a></span><span class="t"><span class="str">    >>> import databricks.koalas as ks</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t40" class="pln"><span class="n"><a href="#t40">40</a></span><span class="t"><span class="str">    >>> from gators.binning import BinRareEvents</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t41" class="pln"><span class="n"><a href="#t41">41</a></span><span class="t"><span class="str">    >>> obj = BinRareEvents(min_ratio=0.5)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t40" class="pln"><span class="n"><a href="#t40">40</a></span><span class="t"><span class="str">    >>> from gators.binning import BinRareCategories</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t41" class="pln"><span class="n"><a href="#t41">41</a></span><span class="t"><span class="str">    >>> obj = BinRareCategories(min_ratio=0.5)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t42" class="pln"><span class="n"><a href="#t42">42</a></span><span class="t"><span class="str">    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']})</span>&nbsp;</span><span class="r"></span></p>
     <p id="t43" class="pln"><span class="n"><a href="#t43">43</a></span><span class="t"><span class="str">    >>> obj.fit_transform(X)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t44" class="pln"><span class="n"><a href="#t44">44</a></span><span class="t"><span class="str">            A       B</span>&nbsp;</span><span class="r"></span></p>
@@ -103,8 +103,8 @@
     <p id="t49" class="pln"><span class="n"><a href="#t49">49</a></span><span class="t"><span class="str">    * fit with pandas &amp; transform with numpy</span>&nbsp;</span><span class="r"></span></p>
     <p id="t50" class="pln"><span class="n"><a href="#t50">50</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t51" class="pln"><span class="n"><a href="#t51">51</a></span><span class="t"><span class="str">    >>> import pandas as pd</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t52" class="pln"><span class="n"><a href="#t52">52</a></span><span class="t"><span class="str">    >>> from gators.binning import BinRareEvents</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t53" class="pln"><span class="n"><a href="#t53">53</a></span><span class="t"><span class="str">    >>> obj = BinRareEvents(min_ratio=0.5)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t52" class="pln"><span class="n"><a href="#t52">52</a></span><span class="t"><span class="str">    >>> from gators.binning import BinRareCategories</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t53" class="pln"><span class="n"><a href="#t53">53</a></span><span class="t"><span class="str">    >>> obj = BinRareCategories(min_ratio=0.5)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t54" class="pln"><span class="n"><a href="#t54">54</a></span><span class="t"><span class="str">    >>> X = pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']})</span>&nbsp;</span><span class="r"></span></p>
     <p id="t55" class="pln"><span class="n"><a href="#t55">55</a></span><span class="t"><span class="str">    >>> _ = obj.fit(X)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t56" class="pln"><span class="n"><a href="#t56">56</a></span><span class="t"><span class="str">    >>> obj.transform_numpy(X.to_numpy())</span>&nbsp;</span><span class="r"></span></p>
@@ -115,8 +115,8 @@
     <p id="t61" class="pln"><span class="n"><a href="#t61">61</a></span><span class="t"><span class="str">    * fit with koalas &amp; transform with numpy</span>&nbsp;</span><span class="r"></span></p>
     <p id="t62" class="pln"><span class="n"><a href="#t62">62</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t63" class="pln"><span class="n"><a href="#t63">63</a></span><span class="t"><span class="str">    >>> import databricks.koalas as ks</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t64" class="pln"><span class="n"><a href="#t64">64</a></span><span class="t"><span class="str">    >>> from gators.binning import BinRareEvents</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t65" class="pln"><span class="n"><a href="#t65">65</a></span><span class="t"><span class="str">    >>> obj = BinRareEvents(min_ratio=0.5)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t64" class="pln"><span class="n"><a href="#t64">64</a></span><span class="t"><span class="str">    >>> from gators.binning import BinRareCategories</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t65" class="pln"><span class="n"><a href="#t65">65</a></span><span class="t"><span class="str">    >>> obj = BinRareCategories(min_ratio=0.5)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t66" class="pln"><span class="n"><a href="#t66">66</a></span><span class="t"><span class="str">    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']})</span>&nbsp;</span><span class="r"></span></p>
     <p id="t67" class="pln"><span class="n"><a href="#t67">67</a></span><span class="t"><span class="str">    >>> _ = obj.fit(X)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t68" class="pln"><span class="n"><a href="#t68">68</a></span><span class="t"><span class="str">    >>> obj.transform_numpy(X.to_numpy())</span>&nbsp;</span><span class="r"></span></p>
@@ -139,7 +139,7 @@
     <p id="t85" class="run"><span class="n"><a href="#t85">85</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">categories_to_keep_dict</span><span class="op">:</span> <span class="nam">Dict</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">np</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="op">}</span>&nbsp;</span><span class="r"></span></p>
     <p id="t86" class="pln"><span class="n"><a href="#t86">86</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t87" class="run"><span class="n"><a href="#t87">87</a></span><span class="t">    <span class="key">def</span> <span class="nam">fit</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">X</span><span class="op">:</span> <span class="nam">Union</span><span class="op">[</span><span class="nam">pd</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">,</span> <span class="nam">ks</span><span class="op">.</span><span class="nam">DataFrame</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t88" class="pln"><span class="n"><a href="#t88">88</a></span><span class="t">            <span class="nam">y</span><span class="op">=</span><span class="key">None</span><span class="op">)</span> <span class="op">-></span> <span class="str">'BinRareEvents'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t88" class="pln"><span class="n"><a href="#t88">88</a></span><span class="t">            <span class="nam">y</span><span class="op">=</span><span class="key">None</span><span class="op">)</span> <span class="op">-></span> <span class="str">'BinRareCategories'</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t89" class="pln"><span class="n"><a href="#t89">89</a></span><span class="t">        <span class="str">"""Fit the transformer on the dataframe `X`.</span>&nbsp;</span><span class="r"></span></p>
     <p id="t90" class="pln"><span class="n"><a href="#t90">90</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t91" class="pln"><span class="n"><a href="#t91">91</a></span><span class="t"><span class="str">        Parameters</span>&nbsp;</span><span class="r"></span></p>
@@ -151,7 +151,7 @@
     <p id="t97" class="pln"><span class="n"><a href="#t97">97</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t98" class="pln"><span class="n"><a href="#t98">98</a></span><span class="t"><span class="str">        Returns</span>&nbsp;</span><span class="r"></span></p>
     <p id="t99" class="pln"><span class="n"><a href="#t99">99</a></span><span class="t"><span class="str">        -------</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t100" class="pln"><span class="n"><a href="#t100">100</a></span><span class="t"><span class="str">        BinRareEvents</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t100" class="pln"><span class="n"><a href="#t100">100</a></span><span class="t"><span class="str">        BinRareCategories</span>&nbsp;</span><span class="r"></span></p>
     <p id="t101" class="pln"><span class="n"><a href="#t101">101</a></span><span class="t"><span class="str">            Instance of itself.</span>&nbsp;</span><span class="r"></span></p>
     <p id="t102" class="pln"><span class="n"><a href="#t102">102</a></span><span class="t"><span class="str">        """</span>&nbsp;</span><span class="r"></span></p>
     <p id="t103" class="run"><span class="n"><a href="#t103">103</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">check_dataframe</span><span class="op">(</span><span class="nam">X</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>

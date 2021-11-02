@@ -1,14 +1,14 @@
 # License: Apache-2.0
-from typing import Dict, List, Union
+from typing import Dict, List
 
-import databricks.koalas as ks
 import numpy as np
-import pandas as pd
 
 from feature_gen import one_hot
 
 from ..util import util
 from ._base_feature_generation import _BaseFeatureGeneration
+
+from gators import DataFrame, Series
 
 
 class OneHot(_BaseFeatureGeneration):
@@ -21,48 +21,39 @@ class OneHot(_BaseFeatureGeneration):
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.feature_generation import OneHot
+    >>> categories_dict = {'A': ['b', 'c'], 'B': ['z']}
+    >>> obj = OneHot(categories_dict=categories_dict)
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': ['a', 'b', 'c'], 'B': ['z', 'a', 'a']}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import databricks.koalas as ks
+    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['z', 'a', 'a']})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation import OneHot
     >>> X = pd.DataFrame({'A': ['a', 'b', 'c'], 'B': ['z', 'a', 'a']})
-    >>> obj = OneHot(categories_dict={'A': ['b', 'c'], 'B': ['z']})
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
        A  B  A__onehot__b  A__onehot__c  B__onehot__z
     0  a  z         False         False          True
     1  b  a          True         False         False
     2  c  a         False          True         False
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import OneHot
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['z', 'a', 'a']})
-    >>> obj = OneHot(categories_dict={'A': ['b', 'c'], 'B': ['z']})
-    >>> obj.fit_transform(X)
-       A  B  A__onehot__b  A__onehot__c  B__onehot__z
-    0  a  z         False         False          True
-    1  b  a          True         False         False
-    2  c  a         False          True         False
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation import OneHot
     >>> X = pd.DataFrame({'A': ['a', 'b', 'c'], 'B': ['z', 'a', 'a']})
-    >>> obj = OneHot(categories_dict={'A': ['b', 'c'], 'B': ['z']})
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['a', 'z', False, False, True],
-           ['b', 'a', True, False, False],
-           ['c', 'a', False, True, False]], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import OneHot
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['z', 'a', 'a']})
-    >>> obj = OneHot(categories_dict={'A': ['b', 'c'], 'B': ['z']})
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([['a', 'z', False, False, True],
@@ -76,7 +67,7 @@ class OneHot(_BaseFeatureGeneration):
     ):
         if not isinstance(categories_dict, dict):
             raise TypeError("`categories_dict` should be a dict.")
-        if column_names is not None and not isinstance(column_names, list):
+        if column_names is not None and not isinstance(column_names, (list, np.ndarray)):
             raise TypeError("`column_names` should be None or a list.")
         self.categories_dict = categories_dict
         columns = list(set(categories_dict.keys()))
@@ -86,15 +77,6 @@ class OneHot(_BaseFeatureGeneration):
                 for col, cats in categories_dict.items()
                 for cat in cats
             ]
-            column_mapping = {
-                f"{col}__onehot__{cat}": col
-                for col, cats in categories_dict.items()
-                for cat in cats
-            }
-        else:
-            column_mapping = {
-                name: col for name, col in zip(column_names, categories_dict.keys())
-            }
         columns = [col for col, cats in categories_dict.items() for cat in cats]
         n_cats = sum([len(cat) for cat in categories_dict.values()])
         if column_names and n_cats != len(column_names):
@@ -106,28 +88,23 @@ class OneHot(_BaseFeatureGeneration):
             self,
             columns=columns,
             column_names=column_names,
-            column_mapping=column_mapping,
-            dtype=None,
         )
         self.mapping = dict(zip(self.column_names, self.columns))
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ):
+    def fit(self, X: DataFrame, y: Series = None):
         """
         Fit the dataframe X.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
             y (np.ndarray, optional): labels. Defaults to None.
 
         Returns
         -------
-            OneHot: Instance of itself.
+        self : OneHot
+            Instance of itself.
         """
         self.check_dataframe(X)
         self.cats = np.array(
@@ -139,33 +116,29 @@ class OneHot(_BaseFeatureGeneration):
         self.idx_columns = util.get_idx_columns(X, cols_flatten)
         return self
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        if isinstance(X, pd.DataFrame):
-            for name, col, cat in zip(self.column_names, self.columns, self.cats):
-                X.loc[:, name] = X[col] == cat
-            return X
-
+        util.get_function(X).set_option("compute.ops_on_diff_frames", True)
         for name, col, cat in zip(self.column_names, self.columns, self.cats):
-            X = X.assign(dummy=(X[col] == cat)).rename(columns={"dummy": name})
+            X[name] = X[col] == cat
+        util.get_function(X).set_option("compute.ops_on_diff_frames", False)
+        self.columns_ = list(X.columns)
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -174,7 +147,7 @@ class OneHot(_BaseFeatureGeneration):
 
         Returns
         -------
-        np.ndarray
+        X : np.ndarray
             Transformed array.
         """
         self.check_array(X)

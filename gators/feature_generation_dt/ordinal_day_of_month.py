@@ -1,7 +1,6 @@
 # Licence Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
 import pandas as pd
 
@@ -9,108 +8,95 @@ import feature_gen_dt
 
 from ._base_datetime_feature import _BaseDatetimeFeature
 
+from gators import DataFrame
+
 
 class OrdinalDayOfMonth(_BaseDatetimeFeature):
     """Create new columns based on the day of the month.
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns.
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
 
-    >>> import pandas as pd
     >>> from gators.feature_generation_dt import OrdinalDayOfMonth
-    >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18', pd.NaT], 'B': [0, 1, 0]})
     >>> obj = OrdinalDayOfMonth(columns=['A'])
-    >>> obj.fit_transform(X)
-                        A  B A__day_of_month
-    0 2020-01-01 23:00:00  0             1.0
-    1 2020-12-15 18:00:00  1            15.0
-    2                 NaT  0             nan
 
-    * fit & transform with `koalas`
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]}), npartitions=1)
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
+
+    * `koalas` dataframes:
 
     >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_dt import OrdinalDayOfMonth
-    >>> X = ks.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = OrdinalDayOfMonth(columns=['A'])
-    >>> obj.fit_transform(X)
-                        A  B A__day_of_month
-    0 2020-01-01 23:00:00  0             1.0
-    1 2020-12-15 18:00:00  1            15.0
-    2                 NaT  0             nan
+    >>> X = ks.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
 
-    * fit with `pandas` & transform with `NumPy`
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation_dt import OrdinalDayOfMonth
-    >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = OrdinalDayOfMonth(columns=['A'])
+    >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
+    >>> obj.fit_transform(X)
+                        A  B  A__day_of_month
+    0 2020-01-01 23:00:00  0              1.0
+    1 2020-12-15 18:00:00  1             15.0
+    2                 NaT  0              NaN
+
+    >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
-    array([[Timestamp('2020-01-01 23:00:00'), 0, '1.0'],
-           [Timestamp('2020-12-15 18:00:00'), 1, '15.0'],
-           [NaT, 0, 'nan']], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_dt import OrdinalDayOfMonth
-    >>> X = ks.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = OrdinalDayOfMonth(columns=['A'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[Timestamp('2020-01-01 23:00:00'), 0, '1.0'],
-           [Timestamp('2020-12-15 18:00:00'), 1, '15.0'],
-           [NaT, 0, 'nan']], dtype=object)
-
-
+    array([[Timestamp('2020-01-01 23:00:00'), 0, 1.0],
+           [Timestamp('2020-12-15 18:00:00'), 1, 15.0],
+           [NaT, 0, nan]], dtype=object)
     """
 
-    def __init__(self, columns: List[str]):
-        if not isinstance(columns, list):
+    def __init__(self, columns: List[str], date_format: str = "ymd"):
+        if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
         if not columns:
             raise ValueError("`columns` should not be empty.")
         column_names = [f"{c}__day_of_month" for c in columns]
-        column_mapping = dict(zip(column_names, columns))
-        _BaseDatetimeFeature.__init__(self, columns, column_names, column_mapping)
+        _BaseDatetimeFeature.__init__(
+            self, columns, date_format, column_names
+        )
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        if isinstance(X, pd.DataFrame):
-            X_ordinal = X[self.columns].apply(
-                lambda x: x.dt.day.astype(np.float64).astype(str)
-            )
-            X_ordinal.columns = self.column_names
-            return X.join(X_ordinal)
 
-        for col, name in zip(self.columns, self.column_names):
-            X = X.assign(dummy=X[col].dt.day.astype(np.float64).astype(str)).rename(
-                columns={"dummy": name}
-            )
+        for name, col in zip(self.column_names, self.columns):
+            X[name] = X[col].dt.day
+
+        self.columns_ = list(X.columns)
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the array X.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -119,7 +105,11 @@ class OrdinalDayOfMonth(_BaseDatetimeFeature):
 
         Returns
         -------
-            np.ndarray: Dataset with the Tree features.
+        X : np.ndarray
+            Transformed array.
         """
         self.check_array(X)
-        return feature_gen_dt.ordinal_day_of_month(X, self.idx_columns)
+        X_new = feature_gen_dt.ordinal_datetime(
+            X[:, self.idx_columns], self.idx_day_bounds
+        )
+        return np.concatenate([X, X_new], axis=1)

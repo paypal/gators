@@ -1,11 +1,10 @@
 # License: Apache-2.0
-from typing import Union
-
-import databricks.koalas as ks
-import pandas as pd
+import numpy as np
 
 from ..util import util
 from ._base_data_cleaning import _BaseDataCleaning
+
+from gators import DataFrame, Series
 
 
 class DropColumns(_BaseDataCleaning):
@@ -13,69 +12,57 @@ class DropColumns(_BaseDataCleaning):
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns to drop.
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.data_cleaning import DropColumns
+    >>> obj = DropColumns(columns=['B'])
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import databricks.koalas as ks
+    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.data_cleaning import DropColumns
     >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = DropColumns(['B'])
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
        A
     0  1
     1  2
     2  3
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropColumns
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = DropColumns(['B'])
-    >>> obj.fit_transform(X)
-       A
-    0  1
-    1  2
-    2  3
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import DropColumns
     >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = DropColumns(['B'])
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([[1],
            [2],
            [3]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropColumns
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = DropColumns(['B'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1],
-           [2],
-           [3]])
-
     """
 
     def __init__(self, columns):
-        if not isinstance(columns, list):
+        if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
-
-        _BaseDataCleaning.__init__(self)
         self.columns = columns
+        _BaseDataCleaning.__init__(self)
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "DropColumns":
+    def fit(self, X: DataFrame, y: Series = None) -> "DropColumns":
         """Fit the transformer on the dataframe X.
 
         Get the list of column names to remove and the array of
@@ -83,14 +70,15 @@ class DropColumns(_BaseDataCleaning):
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Input dataframe.
-        y : Union[pd.Series, ks.Series], default to None.
-            Labels.
+        y : Series, default to None.
+            Target values.
 
         Returns
         -------
-        DropColumns: Instance of itself.
+        self : DropColumns
+            Instance of itself.
         """
         self.check_dataframe(X)
         self.columns_to_keep = util.exclude_columns(

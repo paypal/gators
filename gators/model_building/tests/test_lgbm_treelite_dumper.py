@@ -14,8 +14,8 @@ def test():
     X_train = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
     y_train = np.array([0, 1, 1, 0])
     model = LGBMClassifier(max_depth=1, n_estimators=1).fit(X_train, y_train)
-    if platform.system() == 'Linux':
-        
+
+    if platform.system() == "Linux":
 
         LGBMTreeliteDumper.dump(
             model=model,
@@ -24,8 +24,8 @@ def test():
             model_path=".",
             model_name="dummy",
         )
-        print(glob.glob("*"))
-    elif platform.system() == 'Darwin':
+
+    elif platform.system() == "Darwin":
         LGBMTreeliteDumper.dump(
             model=model,
             toolchain="clang",
@@ -33,17 +33,17 @@ def test():
             model_path=".",
             model_name="dummy",
         )
-    elif platform.system() == 'Windows':
+    elif platform.system() == "Windows":
         LGBMTreeliteDumper.dump(
-        model=model,
-        toolchain="msvc",
-        parallel_comp=1,
-        model_path=".",
-        model_name="dummy", 
+            model=model,
+            toolchain="msvc",
+            parallel_comp=1,
+            model_path=".",
+            model_name="dummy",
         )
     else:
         pass
-    [os.remove(f) for f in glob.glob("*") if f.startswith('dummy')]
+    [os.remove(f) for f in glob.glob("*") if f.startswith("dummy")]
 
 
 def test_input():

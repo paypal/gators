@@ -1,0 +1,7 @@
+{
+    "restructuredtext.confPath": "${workspaceFolder}/.tox/py38-linux/lib/python3.8/site-packages/numpydoc/tests/tinybuild",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "python.formatting.provider": "black"
+}

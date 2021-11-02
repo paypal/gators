@@ -6,13 +6,8 @@ from Cython.Build import cythonize
 from gators import __version__
 
 with open('README.md', 'r') as f:
-    long_description = f.read().replace('![Gators logo](doc_data/GATORS_LOGO.png)\n\n', '')
+    long_description = f.read()
 
-
-# rootdir = os.path.normpath(os.path.join(__file__, os.pardir))
-# print(rootdir)
-# import sys
-# sys.exit()
 extensions = [
     setuptools.Extension(
         'imputer',
@@ -88,47 +83,28 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     license='Apache-2.0 Software License',
-    setup_requires=['numpy', 'Cython'],
+    setup_requires=['numpy', 'cython'],
     install_requires=[
-        'Cython',
         'setuptools>=41.0.0',
-        'numpy==1.19.5',
         'requests>=2.23.0',
         'tqdm>=4.43.0',
-        'scipy>=1.5.2',
-        'Cython>=0.29.21',
+        'scipy',
         'dill>=0.3.1.1',
         'scikit-learn',
-        'seaborn>=0.11.0',
-        'pandas',  # >=0.25.3<1.2
+        'seaborn',
+        'pandas',
         'treelite>=0.93',
         'treelite-runtime>=0.93',
         'pyDOE>=0.3.8',
         'scikit-optimize>=0.8.1',
-        'emcee>=3.0.2',
-        'pyspark>=2.4.3',
-        'koalas',
-        'hyperopt>=0.2.5',
-        'Lightgbm',
-        'pytest>=5.0.0',
-        'pytest-cov>=2.6.0',
-        'pylama>=7.6.5',
-        'docutils==0.16.0',
-        'sphinx>=3.3.0',
-        'nbsphinx>=0.8.0',
-        'pydata_sphinx_theme',
-        'ipykernel',
-        'jupyter',
-        'numpydoc',
-        'tox',
-        'tox-wheel',
-        'xgboost>=0.90',
+        # 'emcee>=3.0.2',
         'lightgbm',
-        'pytest>=5.0.0',
-        'pytest-cov',
+        'xgboost>=0.90',
         ],
     extras_require={
         'dev': [
+            'docutils==0.16.0',
+            'pytest-cov',
             'pylama>=7.6.5',
             'ipykernel',
             'jupyter',
@@ -142,9 +118,16 @@ setuptools.setup(
             'black',
             'isort',
         ],
+        'koalas':[
+            'pyspark>=2.4.3',
+            'koalas',
+        ],
+        'dask': [
+            'dask',
+        ]
     },
     package_data={'gators': [
-        '*.c',
+        '*.pyx',
     ]},
     include_package_data=True,
     ext_modules=cythonize(extensions, compiler_directives={
