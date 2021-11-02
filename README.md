@@ -1,6 +1,6 @@
 # gators
 
-
+![PyPI](https://img.shields.io/pypi/v/gators)
 [![build](https://github.com/paypal/gators/actions/workflows/build.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/paypal/gators/branch/graph/badge.svg?token=vllGApc9v9)](https://codecov.io/gh/paypal/gators)
 ![GitHub](https://img.shields.io/github/license/paypal/gators)
