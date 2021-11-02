@@ -15,8 +15,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
-        os: [macos-latest, ubuntu-latest] #[windows-latest]   # 
+        python-version: [3.9]
+        os: [ubuntu-latest] #ubuntu-latest [macos-latest, ]   # 
 
     env:
       PYTHON_VERSION: ${{ matrix.python-version }}
@@ -48,21 +48,20 @@ jobs:
       shell: bash
     - name: install dependencies
       run: |
-        python -m pip install --upgrade pip
+        pip install --upgrade pip
+        pip install certifi
         pip install tox tox-wheel tox-gh-actions
-        pip install numpy==1.19.5
-        pip install Cython
-        pip install scipy
-        python setup.py build_ext --inplace
-        python setup.py install
+        pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements_tox.txt
+        python setup_build.py build_ext --inplace
+        python setup_build.py install
     - name: tests
       run: |
-        coverage run --omit test*.py -m pytest gators -m "not koalas" && coverage report && coverage xml
+        coverage run --omit gators/*/test*.py -m pytest gators && coverage report && coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
-        file: coverage.xml
         token: ${{ secrets.CODECOV_TOKEN }}
+        file: coverage.xml
 
 # run: |
 # - name: Test with tox

@@ -1,5 +1,7 @@
 # License: Apache-2.0
+import glob
 import os
+import platform
 
 import numpy as np
 import pytest
@@ -14,23 +16,34 @@ def test():
     y_train = np.array([0, 1, 1, 0])
     dtrain = xgboost.DMatrix(X_train, label=y_train)
     model = xgboost.train({"max_depth": 1}, dtrain, num_boost_round=1)
-    XGBTreeliteDumper.dump(
+    if platform.system() == 'Linux':
+        XGBTreeliteDumper.dump(
+            model=model,
+            toolchain="gcc",
+            parallel_comp=1,
+            model_path=".",
+            model_name="dummy",
+        )
+    elif platform.system() == 'Darwin':
+        XGBTreeliteDumper.dump(
+            model=model,
+            toolchain="clang",
+            parallel_comp=1,
+            model_path=".",
+            model_name="dummy",
+        )
+    elif platform.system() == 'Windows':
+        XGBTreeliteDumper.dump(
         model=model,
-        toolchain="gcc",
+        toolchain="msvc",
         parallel_comp=1,
         model_path=".",
-        model_name="dummy",
-    )
-    XGBTreeliteDumper.dump(
-        model=model,
-        toolchain="clang",
-        parallel_comp=1,
-        model_path=".",
-        model_name="dummy",
-    )
-    os.remove("dummy.zip")
-    os.remove("dummy.so")
-    os.remove("dummy.dylib")
+        model_name="dummy", 
+        )
+    else:
+        pass
+    
+    [os.remove(f) for f in glob.glob("*") if f.startswith('dummy')]
 
 
 def test_input():
