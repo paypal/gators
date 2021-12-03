@@ -1,4 +1,4 @@
-name: build and test
+name: Build and Test
 
 on:
   push:
@@ -63,6 +63,7 @@ jobs:
 
   build_wheels:
     runs-on: ${{ matrix.os }}
+    needs: [test]
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest]
