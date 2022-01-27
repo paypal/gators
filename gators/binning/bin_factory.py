@@ -10,6 +10,7 @@ from gators import DataFrame
 
 EPSILON = 1e-10
 
+
 class BinFactory(ABC):
     def bin(self) -> DataFrame:
         """Add the binned columns to the input dataframe."""
@@ -49,15 +50,12 @@ class BinPandas(BinFactory):
         """
 
         for name, col in zip(output_columns, columns):
-            X[name] = (
-                pd.cut(
-                    X[col],
-                    bins=splits[col],
-                    labels=labels[col],
-                    duplicates="drop",
-                )
-                .astype(object)
-            )
+            X[name] = pd.cut(
+                X[col],
+                bins=splits[col],
+                labels=labels[col],
+                duplicates="drop",
+            ).astype(object)
         return X
 
     def bin_inplace(
@@ -87,17 +85,14 @@ class BinPandas(BinFactory):
         -------
         DataFrame
             Transformed dataframe.
-        """        
+        """
         for name, col in zip(output_columns, columns):
-            X[col] = (
-                pd.cut(
-                    X[col],
-                    bins=splits[col],
-                    labels=labels[col],
-                    duplicates="drop",
-                )
-                .astype(object)
-            )
+            X[col] = pd.cut(
+                X[col],
+                bins=splits[col],
+                labels=labels[col],
+                duplicates="drop",
+            ).astype(object)
         return X
 
 
@@ -129,7 +124,7 @@ class BinKoalas(BinFactory):
         -------
         DataFrame
             Transformed dataframe.
-        """    
+        """
         from pyspark.ml.feature import Bucketizer
 
         bins_np = [np.unique(b) + EPSILON for b in splits.values()]
@@ -170,7 +165,7 @@ class BinKoalas(BinFactory):
         -------
         DataFrame
             Transformed dataframe.
-        """        
+        """
         from pyspark.ml.feature import Bucketizer
 
         bins_np = [np.unique(b) + EPSILON for b in splits.values()]
@@ -216,10 +211,11 @@ class BinDask(BinFactory):
         -------
         DataFrame
             Transformed dataframe.
-        """        
+        """
         for name, col in zip(output_columns, columns):
             X[name] = (
-                X[col].map_partitions(
+                X[col]
+                .map_partitions(
                     pd.cut,
                     bins=splits[col],
                     labels=labels[col],
@@ -256,10 +252,11 @@ class BinDask(BinFactory):
         -------
         DataFrame
             Transformed dataframe.
-        """        
+        """
         for name, col in zip(output_columns, columns):
             X[col] = (
-                X[col].map_partitions(
+                X[col]
+                .map_partitions(
                     pd.cut,
                     bins=splits[col],
                     labels=labels[col],
@@ -272,7 +269,7 @@ class BinDask(BinFactory):
 
 def get_bin(X: DataFrame) -> Union[BinPandas, BinKoalas, BinDask]:
     """Return the `Bin` class based on the dataframe library.
-    
+
     Parameters
     ----------
     X : DataFrame
@@ -282,7 +279,7 @@ def get_bin(X: DataFrame) -> Union[BinPandas, BinKoalas, BinDask]:
     -------
     Union[BinPandas, BinKoalas, BinDask]
         `Bin` class assocaited to the dataframe librarry.
-    """    
+    """
     factories = {
         "<class 'pandas.core.frame.DataFrame'>": BinPandas(),
         "<class 'databricks.koalas.frame.DataFrame'>": BinKoalas(),

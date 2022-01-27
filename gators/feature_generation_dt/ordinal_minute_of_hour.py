@@ -73,9 +73,7 @@ class OrdinalMinuteOfHour(_BaseDatetimeFeature):
         if not columns:
             raise ValueError("`columns` should not be empty.")
         column_names = [f"{c}__minute_of_hour" for c in columns]
-        _BaseDatetimeFeature.__init__(
-            self, columns, date_format, column_names
-        )
+        _BaseDatetimeFeature.__init__(self, columns, date_format, column_names)
 
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.

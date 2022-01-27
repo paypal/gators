@@ -89,9 +89,7 @@ class PolynomialFeatures(Transformer):
         if not isinstance(interaction_only, bool):
             raise TypeError("`interaction_only` should be a bool.")
         if interaction_only == True and len(columns) == 1:
-            raise ValueError(
-                "Cannot create interaction only terms from one column."
-            )
+            raise ValueError("Cannot create interaction only terms from one column.")
         self.interaction_only = interaction_only
         self.columns = columns
         self.degree = degree

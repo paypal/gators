@@ -61,6 +61,6 @@ def test_init():
     with pytest.raises(ValueError):
         _ = OrdinalMonthOfYear(columns=[])
     with pytest.raises(TypeError):
-        _ = OrdinalMonthOfYear(columns=['A'], date_format=0)
+        _ = OrdinalMonthOfYear(columns=["A"], date_format=0)
     with pytest.raises(ValueError):
-        _ = OrdinalMonthOfYear(columns=['A'], date_format='ydn')
+        _ = OrdinalMonthOfYear(columns=["A"], date_format="ydn")

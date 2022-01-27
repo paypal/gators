@@ -17,7 +17,7 @@ class OrdinalEncoder(_BaseEncoder):
     ----------
     dtype : type, default to np.float64.
         Numerical datatype of the output data.
-        
+
     add_missing_categories : bool, default to True.
         If True, add the columns 'OTHERS' and 'MISSING'
         to the mapping even if the categories are not
@@ -68,7 +68,9 @@ class OrdinalEncoder(_BaseEncoder):
     """
 
     def __init__(self, dtype: type = np.float64, add_missing_categories: bool = True):
-        _BaseEncoder.__init__(self, dtype=dtype, add_missing_categories=add_missing_categories)
+        _BaseEncoder.__init__(
+            self, dtype=dtype, add_missing_categories=add_missing_categories
+        )
 
     def fit(self, X: DataFrame, y: Series = None) -> "OrdinalEncoder":
         """Fit the transformer on the dataframe `X`.
@@ -92,7 +94,9 @@ class OrdinalEncoder(_BaseEncoder):
                 `{self.__class__.__name__}` is not needed"""
             )
             return self
-        self.mapping = self.generate_mapping(X[self.columns], self.add_missing_categories)
+        self.mapping = self.generate_mapping(
+            X[self.columns], self.add_missing_categories
+        )
         self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
         columns, self.values_vec, self.encoded_values_vec = self.decompose_mapping(
             mapping=self.mapping,

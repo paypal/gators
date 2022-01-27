@@ -68,9 +68,7 @@ class OrdinalHourOfDay(_BaseDatetimeFeature):
         if not columns:
             raise ValueError("`columns` should not be empty.")
         column_names = [f"{c}__hour_of_day" for c in columns]
-        _BaseDatetimeFeature.__init__(
-            self, columns, date_format, column_names
-        )
+        _BaseDatetimeFeature.__init__(self, columns, date_format, column_names)
 
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.

@@ -14,7 +14,7 @@ from gators import DataFrame, Series
 
 class PolynomialObjectFeatures(Transformer):
     """Create new columns based on object columns addition.
-    
+
 
     Parameters
     ----------
@@ -51,7 +51,7 @@ class PolynomialObjectFeatures(Transformer):
 
     >>> import pandas as pd
     >>> X = pd.DataFrame({'A': [None, 'b', 'c'], 'B': ['z', 'a', 'a'], 'C': ['c', 'd', 'd']})
-    
+
     The result is a transformed dataframe belonging to the same dataframe library.
 
     >>> obj.fit_transform(X)

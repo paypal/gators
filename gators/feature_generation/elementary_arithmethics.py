@@ -9,6 +9,7 @@ from gators import DataFrame, Series
 
 EPSILON = 1e-10
 
+
 class ElementaryArithmetics(_BaseFeatureGeneration):
     """Create new columns based on elementary arithmetics.
 

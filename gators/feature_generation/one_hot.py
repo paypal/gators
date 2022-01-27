@@ -67,7 +67,9 @@ class OneHot(_BaseFeatureGeneration):
     ):
         if not isinstance(categories_dict, dict):
             raise TypeError("`categories_dict` should be a dict.")
-        if column_names is not None and not isinstance(column_names, (list, np.ndarray)):
+        if column_names is not None and not isinstance(
+            column_names, (list, np.ndarray)
+        ):
             raise TypeError("`column_names` should be None or a list.")
         self.categories_dict = categories_dict
         columns = list(set(categories_dict.keys()))

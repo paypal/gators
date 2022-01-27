@@ -74,9 +74,7 @@ class CyclicMonthOfYear(_BaseDatetimeFeature):
         if not columns:
             raise ValueError("`columns` should not be empty.")
         column_names = self.get_cyclic_column_names(columns, "month_of_year")
-        _BaseDatetimeFeature.__init__(
-            self, columns, date_format, column_names
-        )
+        _BaseDatetimeFeature.__init__(self, columns, date_format, column_names)
 
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
@@ -115,14 +113,14 @@ class CyclicMonthOfYear(_BaseDatetimeFeature):
 
     def compute_cyclic_month_of_year(self, X: DataFrame) -> DataFrame:
         """Compute the cyclic hours of the day features.
-        
+
         Parameters
         ----------
         X : DataFrame
             Dataframe of datetime columns.
         column_names : List[str], default to None.
          List of column names.
-    
+
         Returns
         -------
         X : DataFrame

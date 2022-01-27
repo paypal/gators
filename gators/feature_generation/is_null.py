@@ -72,7 +72,9 @@ class IsNull(_BaseFeatureGeneration):
             raise TypeError("`columns` should be a list.")
         if not columns:
             raise ValueError("`columns` should not be empty.")
-        if column_names is not None and not isinstance(column_names, (list, np.ndarray)):
+        if column_names is not None and not isinstance(
+            column_names, (list, np.ndarray)
+        ):
             raise TypeError("`column_names` should be a list.")
         if not column_names:
             column_names = [f"{c}__is_null" for c in columns]

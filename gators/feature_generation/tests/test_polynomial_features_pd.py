@@ -56,6 +56,7 @@ def data():
     )
     return obj, X, X_expected
 
+
 @pytest.fixture
 def data_degree1():
     X = pd.DataFrame(
@@ -66,7 +67,9 @@ def data_degree1():
             "D": ["a", "b", "c"],
         },
     )
-    obj = PolynomialFeatures(degree=1, interaction_only=False, columns=["A", "B", "C"]).fit(X)
+    obj = PolynomialFeatures(
+        degree=1, interaction_only=False, columns=["A", "B", "C"]
+    ).fit(X)
     X_expected = pd.DataFrame(
         {
             "A": [0.0, 3.0, 6.0],
@@ -76,6 +79,7 @@ def data_degree1():
         }
     )
     return obj, X, X_expected
+
 
 def test_interaction_pd(data_interaction):
     obj, X, X_expected = data_interaction
@@ -115,6 +119,7 @@ def test_pd_np(data_degree1):
     X_new = pd.DataFrame(X_numpy_new)
     X_expected = pd.DataFrame(X_expected.values)
     assert_frame_equal(X_new, X_expected)
+
 
 def test_init():
     with pytest.raises(TypeError):

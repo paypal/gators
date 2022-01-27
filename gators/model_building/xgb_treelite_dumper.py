@@ -34,7 +34,7 @@ class XGBTreeliteDumper:
         parallel_comp: int,
         model_path: str,
         model_name: str,
-        verbose: bool = False
+        verbose: bool = False,
     ):
         """Dump the XGBoost treelite as a .so and a
         .dylib file.

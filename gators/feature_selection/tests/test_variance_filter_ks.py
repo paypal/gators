@@ -20,7 +20,7 @@ def data_ks():
             "F": [1, 2, 3, 1, 2, 4],
         }
     )
-    X_expected = X[["A",  "D"]].copy().to_pandas()
+    X_expected = X[["A", "D"]].copy().to_pandas()
     y = ks.Series([1, 1, 1, 0, 0, 0])
     obj = VarianceFilter(min_var=min_var).fit(X, y)
     return obj, X, X_expected

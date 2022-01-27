@@ -10,22 +10,22 @@ from gators.binning import BinSingleTargetClassCategories
 def data():
     X = pd.DataFrame(
         {
-        "A": ["_0", "_1", "_2", '_2', '_1'],
-        "B": ["_1", "_2", "_1", '_1', '_1'],
-        "C": ["_0", "_0", "_1", '_2', '_2'],
-        "D": ["_0", '_0', '_1', '_1', '_1'],
-        "E": [1, 2, 3, 4, 5],
+            "A": ["_0", "_1", "_2", "_2", "_1"],
+            "B": ["_1", "_2", "_1", "_1", "_1"],
+            "C": ["_0", "_0", "_1", "_2", "_2"],
+            "D": ["_0", "_0", "_1", "_1", "_1"],
+            "E": [1, 2, 3, 4, 5],
         }
     )
-    y = pd.Series([0, 1, 1, 0, 0], name='Target')
+    y = pd.Series([0, 1, 1, 0, 0], name="Target")
 
     X_expected = pd.DataFrame(
         {
-            'A': ['_0|_1', '_0|_1', '_2', '_2', '_0|_1'],
-            'B': ['_1|_2', '_1|_2', '_1|_2', '_1|_2', '_1|_2'],
-            'C': ['_0|_1|_2', '_0|_1|_2', '_0|_1|_2', '_0|_1|_2', '_0|_1|_2'],
-            'D': ['_0', '_0', '_1', '_1', '_1'],
-            'E': [1, 2, 3, 4, 5]
+            "A": ["_0|_1", "_0|_1", "_2", "_2", "_0|_1"],
+            "B": ["_1|_2", "_1|_2", "_1|_2", "_1|_2", "_1|_2"],
+            "C": ["_0|_1|_2", "_0|_1|_2", "_0|_1|_2", "_0|_1|_2", "_0|_1|_2"],
+            "D": ["_0", "_0", "_1", "_1", "_1"],
+            "E": [1, 2, 3, 4, 5],
         }
     )
     obj = BinSingleTargetClassCategories().fit(X, y)
@@ -36,13 +36,13 @@ def data():
 def data_no_binning():
     X = pd.DataFrame(
         {
-        "A": ["_0", "_1", "_0", '_0', '_1'],
+            "A": ["_0", "_1", "_0", "_0", "_1"],
         }
     )
-    y = pd.Series([0, 1, 1, 0, 0], name='Target')
+    y = pd.Series([0, 1, 1, 0, 0], name="Target")
     X_expected = pd.DataFrame(
         {
-        "A": ["_0", "_1", "_0", '_0', '_1'],
+            "A": ["_0", "_1", "_0", "_0", "_1"],
         }
     )
     obj = BinSingleTargetClassCategories().fit(X, y)
@@ -56,7 +56,7 @@ def data_num():
             "D": [1, 2, 3, 4, 5],
         }
     )
-    y = pd.Series([0, 1, 1, 0, 0], name='Target')
+    y = pd.Series([0, 1, 1, 0, 0], name="Target")
     X_expected = pd.DataFrame(
         {
             "D": [1, 2, 3, 4, 5],
@@ -92,7 +92,6 @@ def test_no_binning_pd_np(data_no_binning):
     X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
     X_expected.index = X_new.index
     assert_frame_equal(X_new, X_expected.astype(object))
-
 
 
 def test__num_pd(data_num):
