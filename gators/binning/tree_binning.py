@@ -156,17 +156,19 @@ class TreeBinning(_BaseBinning):
                 util.get_function(X).to_numpy(X[[c]]).astype(np.float32),
                 util.get_function(X).to_numpy(y).astype(np.int32),
             )
-            
+
             splits = sorted(
-                    [
-                        float(node.split("<=")[1])
-                        for node in tree.export_text(self.tree, decimals=6).split(
-                            "|   "
-                        )
-                        if "<=" in node
-                    ]
-                )
-            self.bins[c] = np.unique([-np.inf] + splits + [np.inf]) if len(splits) else np.array([-np.inf, np.inf])
+                [
+                    float(node.split("<=")[1])
+                    for node in tree.export_text(self.tree, decimals=6).split("|   ")
+                    if "<=" in node
+                ]
+            )
+            self.bins[c] = (
+                np.unique([-np.inf] + splits + [np.inf])
+                if len(splits)
+                else np.array([-np.inf, np.inf])
+            )
         max_bins = max([len(v) for v in self.bins.values()])
         self.bins_np = np.inf * np.ones((max_bins, n_cols))
         for i, b in enumerate(self.bins.values()):

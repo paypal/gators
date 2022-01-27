@@ -80,7 +80,7 @@ class PlaneRotation(Transformer):
     """
 
     def __init__(self, columns: List[List[str]], theta_vec: List[float]):
-        
+
         if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
         if not isinstance(theta_vec, (list, np.ndarray)):
@@ -126,8 +126,12 @@ class PlaneRotation(Transformer):
         self.check_dataframe(X)
         flatten_columns = [c for cols in self.columns for c in cols]
         self.check_dataframe_is_numerics(X[list(set(flatten_columns))])
-        self.idx_columns_x = util.get_idx_columns(X[flatten_columns], flatten_columns[::2])
-        self.idx_columns_y = util.get_idx_columns(X[flatten_columns], flatten_columns[1::2])
+        self.idx_columns_x = util.get_idx_columns(
+            X[flatten_columns], flatten_columns[::2]
+        )
+        self.idx_columns_y = util.get_idx_columns(
+            X[flatten_columns], flatten_columns[1::2]
+        )
         self.idx_subarray = util.get_idx_columns(X.columns, flatten_columns)
         self.flatten_columns = flatten_columns
         return self

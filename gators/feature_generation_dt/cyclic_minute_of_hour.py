@@ -75,9 +75,7 @@ class CyclicMinuteOfHour(_BaseDatetimeFeature):
         if not columns:
             raise ValueError("`columns` should not be empty.")
         column_names = self.get_cyclic_column_names(columns, "minute_of_hour")
-        _BaseDatetimeFeature.__init__(
-            self, columns, date_format, column_names
-        )
+        _BaseDatetimeFeature.__init__(self, columns, date_format, column_names)
 
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
@@ -109,18 +107,17 @@ class CyclicMinuteOfHour(_BaseDatetimeFeature):
             Transformed array.
         """
         self.check_array(X)
-        X_new = feature_gen_dt.cyclic_minute_of_hour(
-            X[:, self.idx_columns], PREFACTOR)
+        X_new = feature_gen_dt.cyclic_minute_of_hour(X[:, self.idx_columns], PREFACTOR)
         return np.concatenate([X, X_new], axis=1)
 
     def compute_cyclic_minute_of_hour(self, X: DataFrame) -> DataFrame:
         """Compute the cyclic hours of the day features.
-        
+
         Parameters
         ----------
         X_datetime : DataFrame
             Dataframe of datetime columns.
-        
+
         Returns
         -------
         X : DataFrame

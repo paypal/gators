@@ -48,7 +48,7 @@ class BinSingleTargetClassCategories(Transformer):
     ... "D": ["_0", '_0', '_1', '_1', '_1'],
     ... "E": [1, 2, 3, 4, 5]})
     >>> y = ks.Series([0, 1, 1, 0, 0], name='Target')
-    
+
     * and `pandas` dataframes:
 
     >>> import pandas as pd
@@ -121,11 +121,17 @@ class BinSingleTargetClassCategories(Transformer):
             .melt(
                 util.get_function(X).join(X[self.columns], y.to_frame()), id_vars=y_name
             )
-            .groupby(["variable", "value"], )
+            .groupby(
+                ["variable", "value"],
+            )
             .mean()[y_name]
         )
         means = util.get_function(X).to_pandas(means)
-        means = means.groupby("variable").apply(lambda x: x.sort_index(level=1).sort_values()).droplevel(0)
+        means = (
+            means.groupby("variable")
+            .apply(lambda x: x.sort_index(level=1).sort_values())
+            .droplevel(0)
+        )
 
         extreme_columns = (
             means[(means == 0) | (means == 1)].index.get_level_values(0).unique()
@@ -135,18 +141,20 @@ class BinSingleTargetClassCategories(Transformer):
             cats_0, cats_1 = [], []
             idx = (means[c] == 0).sum()
             if idx:
-                cats_0 = list(means[c].index[:idx+1])
+                cats_0 = list(means[c].index[: idx + 1])
             idx = (means[c] == 1).sum()
             if idx:
-                cats_1 = list(means[c].index[-idx-1:])
+                cats_1 = list(means[c].index[-idx - 1 :])
             if bool(set(cats_0) & set(cats_1)):
-                cats_0 = sorted(list(set(cats_0+cats_1)))
-                cats_1 = sorted(list(set(cats_0+cats_1)))
-            
-            d_0 = dict(zip(cats_0, len(cats_0)*['|'.join(cats_0)]))
-            d_1 = dict(zip(cats_1, len(cats_1)*['|'.join(cats_1)]))
+                cats_0 = sorted(list(set(cats_0 + cats_1)))
+                cats_1 = sorted(list(set(cats_0 + cats_1)))
+
+            d_0 = dict(zip(cats_0, len(cats_0) * ["|".join(cats_0)]))
+            d_1 = dict(zip(cats_1, len(cats_1) * ["|".join(cats_1)]))
             self.mapping[c] = {**d_0, **d_1}
-        self.is_binned = True if sum([len(val) for val in self.mapping.values()]) else False
+        self.is_binned = (
+            True if sum([len(val) for val in self.mapping.values()]) else False
+        )
         if not self.is_binned:
             return self
         self.replace = Replace(to_replace_dict=self.mapping).fit(X)

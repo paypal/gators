@@ -5,6 +5,7 @@ from sklearn.base import BaseEstimator
 from ..util import util
 from gators import DataFrame, Series
 
+
 class SparkMLWrapper(BaseEstimator):
     """SparkML wrapper class.
 
@@ -35,7 +36,7 @@ class SparkMLWrapper(BaseEstimator):
         """
         self.model = model
 
-    def fit(self, X: DataFrame, y: Series) -> 'SparkMLWrapper':
+    def fit(self, X: DataFrame, y: Series) -> "SparkMLWrapper":
         """Fit the model on X and y.
 
         Parameters
@@ -49,7 +50,7 @@ class SparkMLWrapper(BaseEstimator):
         -------
         "SparkMLWrapper"
             Instance of itself.
-        """        
+        """
         self.model = util.get_function(X).fit(self.model, X, y)
         return self
 
@@ -65,10 +66,10 @@ class SparkMLWrapper(BaseEstimator):
         -------
         DataFrame
             The predicted classes of the input dataframe.
-        """        
+        """
         return util.get_function(X).predict(self.model, X)
 
-    def predict_proba(self, X): 
+    def predict_proba(self, X):
         """Predict class probabilities for X.
 
         Parameters

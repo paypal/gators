@@ -12,10 +12,10 @@ def data():
     k = 3
     X = pd.DataFrame(
         {
-        "A": ['a', 'b', 'a', 'b', 'c', 'b'],
-        "B": ['true', 'true', 'false', 'true', 'false', 'false'],
-        "D": ['a', 'b', 'c', 'd', 'e', 'f'],
-        "F": ['e', 'f', 'g', 'e', 'f', 'g'],
+            "A": ["a", "b", "a", "b", "c", "b"],
+            "B": ["true", "true", "false", "true", "false", "false"],
+            "D": ["a", "b", "c", "d", "e", "f"],
+            "F": ["e", "f", "g", "e", "f", "g"],
         }
     )
     X_expected = X[["A", "B", "F"]].copy()

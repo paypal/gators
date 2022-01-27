@@ -17,8 +17,8 @@ from gators import DataFrame, Series
 class BinnedColumnsEncoder(_BaseEncoder):
     """Encode the categorical variables after running a **Gators** Binning transformer.
 
-    Replace the bins "_X" by *X*, where *X* is an integer. 
-    
+    Replace the bins "_X" by *X*, where *X* is an integer.
+
     Parameters
     ----------
     dtype : type, default to np.float64.

@@ -17,7 +17,7 @@ def data():
             "F": [1, 2, 3, 1, 2, 4],
         }
     )
-    X_expected = X[["A",  "D"]].copy()
+    X_expected = X[["A", "D"]].copy()
     y = pd.Series([1, 1, 1, 0, 0, 0])
     obj = VarianceFilter(min_var=min_var).fit(X, y)
     return obj, X, X_expected

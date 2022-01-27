@@ -21,7 +21,7 @@ def data():
         ),
         npartitions=1,
     )
-    X_expected = X[["A",  "D"]].copy().compute()
+    X_expected = X[["A", "D"]].copy().compute()
     y = dd.from_pandas(pd.Series([1, 1, 1, 0, 0, 0]), npartitions=1)
     obj = VarianceFilter(min_var=min_var).fit(X, y)
     return obj, X, X_expected

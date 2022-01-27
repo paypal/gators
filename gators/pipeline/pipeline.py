@@ -151,18 +151,22 @@ class Pipeline(SciKitPipeline, Transformer):
         cmap : Union[str, 'colormap']
             Matplotlib colormap.
         k : int, default to 5.
-            Number of mappings displayed.  
+            Number of mappings displayed.
         decimals : int
             Number of decimal places to use.
-        """    
+        """
         from IPython.display import display
-        encoder_list = [p[1] for p in self.steps if 'Encoder' in str(p[1])]
+
+        encoder_list = [p[1] for p in self.steps if "Encoder" in str(p[1])]
         if not encoder_list:
             return
         encoder = encoder_list[0]
-        describe = encoder.__class__.__name__.replace(
-            'Encoder', '').upper().replace('TARGET', 'MEAN TARGET')
-        binning_list = [p[1] for p in self.steps if 'Binning' in str(p[1])]
+        describe = (
+            encoder.__class__.__name__.replace("Encoder", "")
+            .upper()
+            .replace("TARGET", "MEAN TARGET")
+        )
+        binning_list = [p[1] for p in self.steps if "Binning" in str(p[1])]
         if binning_list:
             binning_mapping = binning_list[0].mapping
         else:
@@ -170,20 +174,22 @@ class Pipeline(SciKitPipeline, Transformer):
         mapping = pd.DataFrame(encoder.mapping)
         vmin = mapping.min().min()
         vmax = mapping.max().max()
-        columns = list((mapping.max()-mapping.min()).sort_values(ascending=False).index)
+        columns = list(
+            (mapping.max() - mapping.min()).sort_values(ascending=False).index
+        )
         for c in columns[:k]:
             values = mapping[[c]]
-            values['bins'] = values.index
-            if c.replace('__bin', '') in binning_mapping:
-                splits = binning_mapping[c.replace('__bin', '')]
-                values['bins'] = values['bins'].replace(splits)
+            values["bins"] = values.index
+            if c.replace("__bin", "") in binning_mapping:
+                splits = binning_mapping[c.replace("__bin", "")]
+                values["bins"] = values["bins"].replace(splits)
             else:
                 values = values.sort_values(c)
-            values = values.set_index('bins').dropna()
+            values = values.set_index("bins").dropna()
             if decimals:
                 values = values.round(decimals)
             else:
                 values = values.astype(int)
-            values.index.name = f'{c}'
-            values.columns = [f'{describe} values']
+            values.index.name = f"{c}"
+            values.columns = [f"{describe} values"]
             display(values.style.background_gradient(cmap=cmap, vmin=vmin, vmax=vmax))

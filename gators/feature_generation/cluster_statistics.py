@@ -93,7 +93,9 @@ class ClusterStatistics(_BaseFeatureGeneration):
                 """`clusters_dict` values should be
                 lists with a length larger than 1."""
             )
-        if column_names is not None and not isinstance(column_names, (list, np.ndarray)):
+        if column_names is not None and not isinstance(
+            column_names, (list, np.ndarray)
+        ):
             raise TypeError("`column_names` should be None or a list.")
         if not column_names:
             column_names = self.get_column_names(clusters_dict)

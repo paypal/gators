@@ -70,9 +70,11 @@ class TargetEncoder(_BaseEncoder):
            [0. , 0.5]])
     """
 
-    def __init__(self, add_missing_categories: bool=True, dtype: type = np.float64):
-        
-        _BaseEncoder.__init__(self, add_missing_categories=add_missing_categories, dtype=dtype)
+    def __init__(self, add_missing_categories: bool = True, dtype: type = np.float64):
+
+        _BaseEncoder.__init__(
+            self, add_missing_categories=add_missing_categories, dtype=dtype
+        )
 
     def fit(self, X: DataFrame, y: Series) -> "TargetEncoder":
         """Fit the encoder.

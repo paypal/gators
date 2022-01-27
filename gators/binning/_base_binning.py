@@ -117,16 +117,19 @@ class _BaseBinning(Transformer):
         mapping = {}
         for col in bins.keys():
             if len(bins[col]) == 2:
-                mapping[col] = {'_0': '(-inf, inf)'}
+                mapping[col] = {"_0": "(-inf, inf)"}
             else:
                 mapping[col] = dict(
                     zip(
-                        [f'_{b}' for b in range(len(bins[col]))], 
+                        [f"_{b}" for b in range(len(bins[col]))],
                         (
                             [f"(-inf, {bins[col][1]}]"]
-                            + [f"({b1}, {b2}]" for b1, b2 in zip(bins[col][1:-2], bins[col][2:-1])]
+                            + [
+                                f"({b1}, {b2}]"
+                                for b1, b2 in zip(bins[col][1:-2], bins[col][2:-1])
+                            ]
                             + [f"({bins[col][-2]}, inf)"]
-                        )
+                        ),
                     )
                 )
         return mapping

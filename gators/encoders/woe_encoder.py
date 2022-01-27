@@ -17,12 +17,12 @@ class WOEEncoder(_BaseEncoder):
     ----------
     regularization : float, default to 0.5.
         Insure that the weights of evidence are finite.
-        
+
     add_missing_categories : bool, default to True.
         If True, add the columns 'OTHERS' and 'MISSING'
         to the mapping even if the categories are not
         present in the data.
-    
+
     dtype : type, default to np.float64.
         Numerical datatype of the output data.
 
@@ -73,11 +73,18 @@ class WOEEncoder(_BaseEncoder):
            [-1.09861229,  0.        ]])
     """
 
-    def __init__(self, regularization: float = 0.5, add_missing_categories=True, dtype: type = np.float64):
+    def __init__(
+        self,
+        regularization: float = 0.5,
+        add_missing_categories=True,
+        dtype: type = np.float64,
+    ):
         if not isinstance(regularization, (int, float)) or regularization < 0:
             raise TypeError("""`min_ratio` should be a positive float.""")
         self.regularization = regularization
-        _BaseEncoder.__init__(self, add_missing_categories=add_missing_categories, dtype=dtype)
+        _BaseEncoder.__init__(
+            self, add_missing_categories=add_missing_categories, dtype=dtype
+        )
 
     def fit(self, X: DataFrame, y: Series) -> "WOEEncoder":
         """Fit the encoder.
@@ -142,10 +149,11 @@ class WOEEncoder(_BaseEncoder):
         )
         counts = util.get_function(X).to_pandas(counts)
         counts.columns = ["1", "count"]
-        counts["0"] = (counts["count"] - counts["1"] + self.regularization
-                       ) / counts["count"]
+        counts["0"] = (counts["count"] - counts["1"] + self.regularization) / counts[
+            "count"
+        ]
         counts["1"] = (counts["1"] + self.regularization) / counts["count"]
         woe = np.log(counts["1"] / counts["0"])
         mapping = {c: woe[c].to_dict() for c in columns}
-        
+
         return self.clean_mapping(mapping, self.add_missing_categories)

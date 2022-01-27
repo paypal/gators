@@ -38,7 +38,6 @@ class _BaseDatetimeFeature(Transformer):
         self.column_names = column_names
         self.date_format = date_format
 
-
     def fit(self, X: DataFrame, y: Series = None) -> "Transformer":
         """Fit the transformer on the dataframe `X`.
 

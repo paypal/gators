@@ -104,7 +104,7 @@ class _BaseEncoder(Transformer):
         max_categories = max([len(m) for m in mapping.values()])
         encoded_values_vec = np.zeros((n_columns, max_categories))
         values_vec = np.zeros((n_columns, max_categories), dtype=object)
-        for i, c in enumerate(columns):   
+        for i, c in enumerate(columns):
             mapping_col = mapping[c]
             n_values = len(mapping_col)
             encoded_values_vec[i, :n_values] = np.array(list(mapping_col.values()))
@@ -129,7 +129,7 @@ class _BaseEncoder(Transformer):
         -------
         Dict[str, Dict[str, List[float]]]
             Cleaned mapping
-        """        
+        """
         mapping = {
             col: {k: v for k, v in mapping[col].items() if v == v}
             for col in mapping.keys()
