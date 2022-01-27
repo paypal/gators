@@ -1,13 +1,14 @@
 # License: Apache-2.0
 from abc import ABC, abstractmethod
-from typing import Union
 
-import databricks.koalas as ks
-import pandas as pd
+
+from ..util import util
+
+from gators import DataFrame, Series
 
 
 class TransformerXY(ABC):
-    """Abstract **gators** class to transform both X and y.
+    """Abstract **gators** transformer class to transform both X and y.
 
     Examples
     ---------
@@ -21,8 +22,8 @@ class TransformerXY(ABC):
 
     >>> import pandas as pd
     >>> X, y = FirsRows().transform(
-    ...     X=pd.DataFrame({'A':[1, 2], 'B':[3, 4]}),
-    ...     y=pd.Series([0, 1],name='TARGET'))
+    ... X=pd.DataFrame({'A':[1, 2], 'B':[3, 4]}),
+    ... y=pd.Series([0, 1],name='TARGET'))
     >>> X
        A  B
     0  1  3
@@ -34,8 +35,8 @@ class TransformerXY(ABC):
 
     >>> import databricks.koalas as ks
     >>> X, y = FirsRows().transform(
-    ...     X=ks.DataFrame({'A':[1, 2], 'B':[3, 4]}),
-    ...     y=ks.Series([0, 1],name='TARGET'))
+    ... X=ks.DataFrame({'A':[1, 2], 'B':[3, 4]}),
+    ... y=ks.Series([0, 1],name='TARGET'))
     >>> X
        A  B
     0  1  3
@@ -46,57 +47,50 @@ class TransformerXY(ABC):
     """
 
     @abstractmethod
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame], y: Union[pd.Series, ks.Series]
-    ):
+    def transform(self, X: DataFrame, y: Series):
         """Fit and Transform the dataframes `X`ad `y`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
-        y : Union[pd.Series, ks.Series]
+        y : Series
             None.
 
         Returns
         -------
-        Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.Series, ks.Series]]
+        Tuple[DataFrame, Series]
             Transformed dataframes.
         """
 
     @staticmethod
-    def check_dataframe(X: Union[pd.DataFrame, ks.DataFrame]):
+    def check_dataframe(X: DataFrame):
         """Validate dataframe.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Input dataframe.
         """
-        if not isinstance(X, (pd.DataFrame, ks.DataFrame)):
-            raise TypeError(
-                """`X` should be a pandas dataframe or a koalas dataframe."""
-            )
+        util.get_function(X)
         for c in X.columns:
             if not isinstance(c, str):
                 raise TypeError("Column names of `X` should be of type str.")
 
     @staticmethod
-    def check_y(X: Union[pd.DataFrame, ks.DataFrame], y: Union[pd.Series, ks.Series]):
+    def check_target(X: DataFrame, y: Series):
         """Validate target.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
-            Dataframe
-        y : Union[pd.Series, ks.Series]
-            Labels
+        X : DataFrame
+            Dataframe.
+        y : Series
+            Target values.
         """
-        if isinstance(X, pd.DataFrame) and (not isinstance(y, pd.Series)):
-            raise TypeError('`y` should be a pandas series.')
-        if not isinstance(X, pd.DataFrame) and (not isinstance(y, ks.Series)):
-            raise TypeError('`y` should be a koalas series.')
+        util.get_function(X).raise_y_dtype_error(y)
         if not isinstance(y.name, str):
             raise TypeError("Name of `y` should be a str.")
-        if X.shape[0] != y.shape[0]:
+        shape = util.get_function(X).shape
+        if shape(X)[0] != shape(y)[0]:
             raise ValueError("Length of `X` and `y` should match.")

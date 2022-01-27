@@ -1,4 +1,6 @@
-numpy==1.19.5
+setuptools>=40.8.0
+wheel
+numpy<=1.21
 Cython
 requests>=2.23.0
 tqdm>=4.43.0
@@ -8,6 +10,7 @@ dill>=0.3.1.1
 scikit-learn
 seaborn>=0.11.0
 pandas
+dask
 treelite>=0.93
 treelite-runtime>=0.93
 pyDOE>=0.3.8

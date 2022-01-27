@@ -1,14 +1,16 @@
 # License: Apache-2.0
 import warnings
-from typing import Union
 
-import databricks.koalas as ks
+
 import numpy as np
 import pandas as pd
+
 from imputer import object_imputer
 
 from ..util import util
 from ._base_imputer import _BaseImputer
+
+from gators import DataFrame, Series
 
 
 class ObjectImputer(_BaseImputer):
@@ -29,92 +31,89 @@ class ObjectImputer(_BaseImputer):
 
     Examples
     ---------
+    >>> from gators.imputers import ObjectImputer
 
-    * fit & transform with `pandas`
+    The imputation can be done for the selected categorical columns
 
-        - impute all the object columns
+    >>> obj = ObjectImputer(strategy='most_frequent', columns=['A'])
 
-            >>> import pandas as pd
-            >>> import numpy as np
-            >>> from gators.imputers import ObjectImputer
-            >>> X = pd.DataFrame(
-            ... {'A': ['a', 'b', 'a', None],
-            ... 'B': ['c', 'c', 'd', None],
-            ... 'C': [0, 1, 2, np.nan]})
-            >>> obj = ObjectImputer(strategy='most_frequent')
-            >>> obj.fit_transform(X)
-               A  B    C
-            0  a  c  0.0
-            1  b  c  1.0
-            2  a  d  2.0
-            3  a  c  NaN
+    or for all the categorical columns
 
-        - impute selected object columns
+    >>> obj = ObjectImputer(strategy='most_frequent')
 
-            >>> import pandas as pd
-            >>> import numpy as np
-            >>> from gators.imputers import ObjectImputer
-            >>> X = pd.DataFrame(
-            ... {'A': ['a', 'b', 'a', None],
-            ... 'B': ['c', 'c', 'd', None],
-            ... 'C': [0, 1, 2, np.nan]})
-            >>> obj = ObjectImputer(strategy='most_frequent', columns=['A'])
-            >>> obj.fit_transform(X)
-               A     B    C
-            0  a     c  0.0
-            1  b     c  1.0
-            2  a     d  2.0
-            3  a  None  NaN
+    The `fit`, `transform`, and `fit_transform` methods accept:
 
+    * `dask` dataframes:
 
-    * fit & transform with `koalas`
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> X = dd.from_pandas(pd.DataFrame(
+    ... {'A': ['a', 'b', 'a', None],
+    ... 'B': ['c', 'c', 'd', None],
+    ... 'C': [0, 1, 2, np.nan]}), npartitions=1)
+
+    * `koalas` dataframes:
 
     >>> import databricks.koalas as ks
     >>> import numpy as np
-    >>> from gators.imputers import ObjectImputer
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'a', np.nan], 'B': [0, 1, 2, np.nan]})
-    >>> obj = ObjectImputer(strategy='most_frequent')
-    >>> obj.fit_transform(X)
-       A    B
-    0  a  0.0
-    1  b  1.0
-    2  a  2.0
-    3  a  NaN
+    >>> X = ks.DataFrame(
+    ... {'A': ['a', 'b', 'a', None],
+    ... 'B': ['c', 'c', 'd', None],
+    ... 'C': [0, 1, 2, np.nan]})
 
-    * fit with `pandas` & transform with `NumPy`
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
     >>> import numpy as np
-    >>> from gators.imputers import ObjectImputer
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'a', np.nan], 'B': [0, 1, 2, np.nan]})
-    >>> obj = ObjectImputer(strategy='most_frequent')
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['a', 0.0],
-           ['b', 1.0],
-           ['a', 2.0],
-           ['a', nan]], dtype=object)
+    >>> X = pd.DataFrame(
+    ... {'A': ['a', 'b', 'a', None],
+    ... 'B': ['c', 'c', 'd', None],
+    ... 'C': [0, 1, 2, np.nan]})
 
-    * fit with `koalas` & transform with `NumPy`
+    The result is a transformed dataframe belonging to the same dataframe library.
 
-    >>> import databricks.koalas as ks
-    >>> import numpy as np
-    >>> from gators.imputers import ObjectImputer
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'a', np.nan], 'B': [0, 1, 2, np.nan]})
+    * imputation done for the selected columns:
+
+    >>> obj = ObjectImputer(strategy='most_frequent', columns=['A'])
+    >>> obj.fit_transform(X)
+       A     B    C
+    0  a     c  0.0
+    1  b     c  1.0
+    2  a     d  2.0
+    3  a  None  NaN
+
+    * imputation done for all the columns:
+
+    >>> X = pd.DataFrame(
+    ... {'A': ['a', 'b', 'a', None],
+    ... 'B': ['c', 'c', 'd', None],
+    ... 'C': [0, 1, 2, np.nan]})
     >>> obj = ObjectImputer(strategy='most_frequent')
-    >>> _ = obj.fit(X)
+    >>> obj.fit_transform(X)
+       A  B    C
+    0  a  c  0.0
+    1  b  c  1.0
+    2  a  d  2.0
+    3  a  c  NaN
+
+
+    Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
+    and returns a transformed NumPy array. Note that this transformer should **only** be used
+    when the number of rows is small *e.g.* in real-time environment.
+
+    >>> X = pd.DataFrame(
+    ... {'A': ['a', 'b', 'a', None],
+    ... 'B': ['c', 'c', 'd', None],
+    ... 'C': [0, 1, 2, np.nan]})
     >>> obj.transform_numpy(X.to_numpy())
-    array([['a', 0.0],
-           ['b', 1.0],
-           ['a', 2.0],
-           ['a', nan]], dtype=object)
+    array([['a', 'c', 0.0],
+           ['b', 'c', 1.0],
+           ['a', 'd', 2.0],
+           ['a', 'c', nan]], dtype=object)
 
     See Also
     --------
-    gators.imputers.IntImputer
-        Impute integer columns.
-    gators.imputers.FloatImputer
-        Impute float columns.
     gators.imputers.NumericsImputer
         Impute numerical columns.
 
@@ -133,23 +132,20 @@ class ObjectImputer(_BaseImputer):
                 for the ObjectImputer class"""
             )
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "ObjectImputer":
+    def fit(self, X: DataFrame, y: Series = None) -> "ObjectImputer":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
-        y : None
-            None.
+        y : Series, default to None.
+            Target values.
 
         Returns
         -------
-            ObjectImputer: Instance of itself.
+        self : 'ObjectImputer'
+            Instance of itself.
         """
         self.check_dataframe(X)
         if not self.columns:
@@ -163,27 +159,24 @@ class ObjectImputer(_BaseImputer):
             return self
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         self.idx_columns = np.array(util.get_idx_columns(X, self.columns))
-        self.statistics = self.compute_statistics(
-            X=X,
-            columns=self.columns,
-            strategy=self.strategy,
-            value=self.value,
-        )
-        self.statistics_values = np.array(list(self.statistics.values())).astype(object)
+        self.statistics = self.compute_statistics(X=X, value=self.value)
+        self.statistics_np = np.array(list(self.statistics.values())).astype(object)
         return self
 
-    def transform_numpy(self, X: Union[pd.Series, ks.Series], y=None):
+    def transform_numpy(self, X: Series, y: Series = None):
         """Transform the numpy ndarray X.
 
         Parameters
         ----------
-        X (np.ndarray): Input ndarray.
+        X :np.ndarray:
+            Input array.
 
         Returns
         -------
-            np.ndarray: Imputed ndarray.
+        X : np.ndarray
+            Transformed array.
         """
         self.check_array(X)
         if self.idx_columns.size == 0:
             return X
-        return object_imputer(X, self.statistics_values, self.idx_columns)
+        return object_imputer(X, self.statistics_np, self.idx_columns)

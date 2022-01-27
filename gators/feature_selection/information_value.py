@@ -1,13 +1,11 @@
 # License: Apache-2.0
-from typing import Union
-
-import databricks.koalas as ks
 import numpy as np
 import pandas as pd
 
-from ..binning._base_discretizer import _BaseDiscretizer
 from ..util import util
 from ._base_feature_selection import _BaseFeatureSelection
+
+from gators import DataFrame, Series
 
 
 class InformationValue(_BaseFeatureSelection):
@@ -19,148 +17,119 @@ class InformationValue(_BaseFeatureSelection):
     ----------
     k : int
         Number of features to keep.
-    discretizer : _BaseDiscretizer
-        Discretizer transformer.
-
-    See Also
-    --------
-    gators.feature_selection.MultiClassInformationValue
-        Information value for muti-class classification problems.
-    gators.feature_selection.RegressionInformationValue
-        Information value for regression problems.
+    regularization : float, default to 0.5.
+        Insure that the weights of evidence are finite.
+    max_iv : int, default to 10.
+        Drop columns with an information larger than `max_iv`.
 
     Examples
     ---------
 
-    * fit & transform with `pandas`
+    Imports and initialization:
 
-    >>> import pandas as pd
     >>> from gators.feature_selection import InformationValue
-    >>> from gators.binning import Discretizer
-    >>> X = pd.DataFrame({
-    ...         'A': [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
-    ...         'B': [1, 1, 0, 1, 0, 0],
-    ...         'C': ['a', 'b', 'b', 'b', 'a', 'a'],
-    ...         'D': [11.0, 22.0, 33.0, 44.0, 55.0, 66.2],
-    ...         'F': [1, 2, 3, 1, 2, 4]})
-    >>> X_expected = X[['A', 'B', 'C']].copy()
-    >>> y = pd.Series([1, 1, 1, 0, 0, 0], name='TARGET')
-    >>> obj = InformationValue(k=3, discretizer=Discretizer(n_bins=4))
-    >>> obj.fit_transform(X, y)
-           A  B  C
-    0  87.25  1  a
-    1   5.25  1  b
-    2  70.25  0  b
-    3   5.25  1  b
-    4   0.25  0  a
-    5   7.25  0  a
+    >>> from gators.binning import Binning
+    >>> obj = InformationValue(k=3)
 
-    * fit & transform with `koalas`
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({
+    ... "A": ['a', 'b', 'a', 'b', 'c', 'b'],
+    ... "B": ['true', 'true', 'false', 'true', 'false', 'false'],
+    ... "D": ['a', 'b', 'c', 'd', 'e', 'f'],
+    ... "F": ['e', 'f', 'g', 'e', 'f', 'g']}), npartitions=1)
+    >>> y = dd.from_pandas(pd.Series([1, 1, 1, 0, 0, 0], name='TARGET'), npartitions=1)
+
+    * `koalas` dataframes:
 
     >>> import databricks.koalas as ks
-    >>> from gators.binning import Discretizer
-    >>> from gators.feature_selection import InformationValue
     >>> X = ks.DataFrame({
-    ...         'A': [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
-    ...         'B': [1, 1, 0, 1, 0, 0],
-    ...         'C': ['a', 'b', 'b', 'b', 'a', 'a'],
-    ...         'D': [11.0, 22.0, 33.0, 44.0, 55.0, 66.2],
-    ...         'F': [1, 2, 3, 1, 2, 4]})
-    >>> X_expected = X[['A', 'B', 'C']].copy()
+    ... "A": ['a', 'b', 'a', 'b', 'c', 'b'],
+    ... "B": ['true', 'true', 'false', 'true', 'false', 'false'],
+    ... "D": ['a', 'b', 'c', 'd', 'e', 'f'],
+    ... "F": ['e', 'f', 'g', 'e', 'f', 'g']})
     >>> y = ks.Series([1, 1, 1, 0, 0, 0], name='TARGET')
-    >>> obj = InformationValue(k=3, discretizer=Discretizer(n_bins=4))
-    >>> obj.fit_transform(X, y)
-           A  B  C
-    0  87.25  1  a
-    1   5.25  1  b
-    2  70.25  0  b
-    3   5.25  1  b
-    4   0.25  0  a
-    5   7.25  0  a
 
-    * fit with `pandas` & transform with `NumPy`
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_selection import InformationValue
-    >>> from gators.binning import Discretizer
     >>> X = pd.DataFrame({
-    ...         'A': [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
-    ...         'B': [1, 1, 0, 1, 0, 0],
-    ...         'C': ['a', 'b', 'b', 'b', 'a', 'a'],
-    ...         'D': [11.0, 22.0, 33.0, 44.0, 55.0, 66.2],
-    ...         'F': [1, 2, 3, 1, 2, 4]})
-    >>> X_expected = X[['A', 'B', 'C']].copy()
+    ... "A": ['a', 'b', 'a', 'b', 'c', 'b'],
+    ... "B": ['true', 'true', 'false', 'true', 'false', 'false'],
+    ... "D": ['a', 'b', 'c', 'd', 'e', 'f'],
+    ... "F": ['e', 'f', 'g', 'e', 'f', 'g']})
     >>> y = pd.Series([1, 1, 1, 0, 0, 0], name='TARGET')
-    >>> obj = InformationValue(k=3, discretizer=Discretizer(n_bins=4))
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
+    >>> obj.fit_transform(X, y)
+       A      B  F
+    0  a   true  e
+    1  b   true  f
+    2  a  false  g
+    3  b   true  e
+    4  c  false  f
+    5  b  false  g
+
+    >>> X = pd.DataFrame({
+    ... "A": ['a', 'b', 'a', 'b', 'c', 'b'],
+    ... "B": ['true', 'true', 'false', 'true', 'false', 'false'],
+    ... "D": ['a', 'b', 'c', 'd', 'e', 'f'],
+    ... "F": ['e', 'f', 'g', 'e', 'f', 'g']})
     >>> _ = obj.fit(X, y)
     >>> obj.transform_numpy(X.to_numpy())
-    array([[87.25, 1, 'a'],
-           [5.25, 1, 'b'],
-           [70.25, 0, 'b'],
-           [5.25, 1, 'b'],
-           [0.25, 0, 'a'],
-           [7.25, 0, 'a']], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_selection import InformationValue
-    >>> from gators.binning import Discretizer
-    >>> X = ks.DataFrame({
-    ...         'A': [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
-    ...         'B': [1, 1, 0, 1, 0, 0],
-    ...         'C': ['a', 'b', 'b', 'b', 'a', 'a'],
-    ...         'D': [11.0, 22.0, 33.0, 44.0, 55.0, 66.2],
-    ...         'F': [1, 2, 3, 1, 2, 4]})
-    >>> y = ks.Series([1, 1, 1, 0, 0, 0], name='TARGET')
-    >>> obj = InformationValue(k=3, discretizer=Discretizer(n_bins=4))
-    >>> _ = obj.fit(X, y)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[87.25, 1, 'a'],
-           [5.25, 1, 'b'],
-           [70.25, 0, 'b'],
-           [5.25, 1, 'b'],
-           [0.25, 0, 'a'],
-           [7.25, 0, 'a']], dtype=object)
+    array([['a', 'true', 'e'],
+           ['b', 'true', 'f'],
+           ['a', 'false', 'g'],
+           ['b', 'true', 'e'],
+           ['c', 'false', 'f'],
+           ['b', 'false', 'g']], dtype=object)
     """
 
-    def __init__(self, k: int, discretizer: _BaseDiscretizer):
+    def __init__(
+        self,
+        k: int,
+        regularization: float = 0.1,
+        max_iv: float = 10.0,
+    ):
         if not isinstance(k, int):
             raise TypeError("`k` should be an int.")
-        if not isinstance(discretizer, _BaseDiscretizer):
-            raise TypeError("`discretizer` should derive from _BaseDiscretizer.")
+        if not isinstance(regularization, (int, float)) or regularization < 0:
+            raise TypeError("`k` should be a positive float.")
+        if not isinstance(max_iv, (int, float)) or max_iv < 0:
+            raise TypeError("`max_iv` should be a positive float.")
         _BaseFeatureSelection.__init__(self)
         self.k = k
-        self.discretizer = discretizer
+        self.regularization = regularization
+        self.max_iv = max_iv
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "InformationValue":
+    def fit(self, X: DataFrame, y: Series) -> "InformationValue":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
         ----------
-        X: Union[pd.DataFrame, ks.DataFrame]
+        X: DataFrame
             Input dataframe.
-        y: Union[pd.Series, ks.Series], default to None.
-            Labels.
+        y: Series
+            Target values.
 
-        Returns
-        -------
-            InformationValue: Instance of itself.
+        self : "InformationValue"
+            Instance of itself.
         """
         self.check_dataframe(X)
-        self.check_y(X, y)
-        self.check_binary_target(y)
-        columns = X.columns
-        self.feature_importances_ = self.compute_information_value(
-            X, y, self.discretizer
+        self.check_target(X, y)
+        X, self.feature_importances_ = self.compute_information_value(
+            X, y, self.regularization
         )
+        mask = self.feature_importances_ < self.max_iv
+        self.feature_importances_ = self.feature_importances_[mask]
         self.feature_importances_.sort_values(ascending=False, inplace=True)
         self.selected_columns = list(self.feature_importances_.index[: self.k])
-        self.columns_to_drop = [c for c in columns if c not in self.selected_columns]
+        self.columns_to_drop = [c for c in X.columns if c not in self.selected_columns]
         self.idx_selected_columns = util.get_idx_columns(
             X.columns, self.selected_columns
         )
@@ -168,54 +137,36 @@ class InformationValue(_BaseFeatureSelection):
 
     @staticmethod
     def compute_information_value(
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series],
-        discretizer: _BaseDiscretizer,
+        X: DataFrame, y: Series, regularization: float
     ) -> pd.Series:
         """Compute information value.
 
         Parameters
         ----------
-        X: Union[pd.DataFrame, ks.DataFrame]
+        X: DataFrame
             Input dataframe.
         y: np.ndarray
             Target values.
-        discretizer: _BaseDiscretizer
-            Discretizer.
 
         Returns
         -------
         pd.Series
             Information value.
         """
-        discretizer.inplace = False
-        object_columns = util.get_datatype_columns(X, object)
-        numerical_columns = util.get_numerical_columns(X)
-        binned_columns = [f"{c}__bin" for c in numerical_columns]
-        iv_columns = object_columns.copy() + binned_columns.copy()
-        X = discretizer.fit_transform(X)
-        iv = pd.Series(0, index=iv_columns)
-        X = X.join(y)
         y_name = y.name
-        for col in iv_columns:
-            if isinstance(X, pd.DataFrame):
-                tab = X.groupby([col, y_name])[y_name].count().unstack().fillna(0)
-            else:
-                tab = (
-                    X[[col, y_name]]
-                    .groupby([col, y_name])[y_name]
-                    .count()
-                    .to_pandas()
-                    .unstack()
-                    .fillna(0)
-                )
-            tab /= tab.sum()
-            tab = tab.to_numpy()
-            with np.errstate(divide="ignore"):
-                woe = pd.Series(np.log(tab[:, 1] / tab[:, 0]))
-            woe[(woe == np.inf) | (woe == -np.inf)] = 0.0
-            iv.loc[col] = np.sum(woe * (tab[:, 1] - tab[:, 0]))
-
-        X = X.drop(binned_columns + [y_name], axis=1)
-        iv.index = [c.split("__bin")[0] for c in iv.index]
-        return iv.sort_values(ascending=False).fillna(0)
+        counts = (
+            util.get_function(X)
+            .melt(util.get_function(X).join(X, y.to_frame()), id_vars=y_name)
+            .groupby(["variable", "value"])
+            .agg(["sum", "count"])[y_name]
+        )
+        counts = util.get_function(X).to_pandas(counts)
+        counts.columns = ["1", "count"]
+        counts["0"] = (counts["count"] - counts["1"] + regularization) / counts["count"]
+        counts["1"] = (counts["1"] + regularization) / counts["count"]
+        iv = (
+            ((counts["1"] - counts["0"]) * np.log(counts["1"] / counts["0"]))
+            .groupby(level=[0])
+            .sum()
+        )
+        return X, iv.sort_values(ascending=False).fillna(0)

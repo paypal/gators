@@ -1,10 +1,9 @@
-from typing import Dict, Tuple, Union
-
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
+from typing import Dict, Tuple
 
 from ..transformers import TransformerXY
+from ..util import util
+
+from gators import DataFrame, Series
 
 
 class UnsupervisedSampling(TransformerXY):
@@ -17,17 +16,41 @@ class UnsupervisedSampling(TransformerXY):
 
     Examples
     --------
+    >>> from gators.sampling import UnsupervisedSampling
+    >>> obj = UnsupervisedSampling(n_samples=3)
 
-    * pandas transform
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({
+    ... 'A': [0, 3, 6, 9, 12, 15],
+    ... 'B': [1, 4, 7, 10, 13, 16],
+    ... 'C': [2, 5, 8, 11, 14, 17]}), npartitions=1)
+    >>> y = dd.from_pandas(pd.Series([0, 0, 1, 1, 2, 3], name='TARGET'), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import databricks.koalas as ks
+    >>> X = ks.DataFrame({
+    ... 'A': [0, 3, 6, 9, 12, 15],
+    ... 'B': [1, 4, 7, 10, 13, 16],
+    ... 'C': [2, 5, 8, 11, 14, 17]})
+    >>> y = ks.Series([0, 0, 1, 1, 2, 3], name='TARGET')
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.sampling import UnsupervisedSampling
     >>> X = pd.DataFrame({
-    ... 'A': {0: 0, 1: 3, 2: 6, 3: 9, 4: 12, 5: 15},
-    ... 'B': {0: 1, 1: 4, 2: 7, 3: 10, 4: 13, 5: 16},
-    ... 'C': {0: 2, 1: 5, 2: 8, 3: 11, 4: 14, 5: 17}})
+    ... 'A': [0, 3, 6, 9, 12, 15],
+    ... 'B': [1, 4, 7, 10, 13, 16],
+    ... 'C': [2, 5, 8, 11, 14, 17]})
     >>> y = pd.Series([0, 0, 1, 1, 2, 3], name='TARGET')
-    >>> obj = UnsupervisedSampling(n_samples=3)
+
+    The result is a transformed dataframe and series belonging to the same dataframe library.
+
     >>> X, y = obj.transform(X, y)
     >>> X
         A   B   C
@@ -39,29 +62,6 @@ class UnsupervisedSampling(TransformerXY):
     2    1
     1    0
     Name: TARGET, dtype: int64
-
-    * koalas transform
-
-    >>> import databricks.koalas as ks
-    >>> from gators.sampling import UnsupervisedSampling
-    >>> X = ks.DataFrame({
-    ... 'A': {0: 0, 1: 3, 2: 6, 3: 9, 4: 12, 5: 15},
-    ... 'B': {0: 1, 1: 4, 2: 7, 3: 10, 4: 13, 5: 16},
-    ... 'C': {0: 2, 1: 5, 2: 8, 3: 11, 4: 14, 5: 17}})
-    >>> y = ks.Series([0, 0, 1, 1, 2, 3], name='TARGET')
-    >>> obj = UnsupervisedSampling(n_samples=3)
-    >>> X, y = obj.transform(X, y)
-    >>> X
-       A   B   C
-    0  0   1   2
-    3  9  10  11
-    2  6   7   8
-    >>> y
-    0    0
-    3    1
-    2    1
-    Name: TARGET, dtype: int64
-
     """
 
     def __init__(self, n_samples: int):
@@ -69,29 +69,32 @@ class UnsupervisedSampling(TransformerXY):
             raise TypeError("`n_samples` should be an int.")
         self.n_samples = n_samples
 
-    def transform(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series],
-    ) -> Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.Series, ks.Series]]:
+    def transform(self, X: DataFrame, y: Series) -> Tuple[DataFrame, Series]:
         """Fit and transform the dataframe `X` and the series `y`.
 
-        Parameters:
-        X : Union[pd.DataFrame, ks.DataFrame]
+        Parameters
+        ----------
+        X : DataFrame
             Input dataframe.
-        y : Union[pd.Series, ks.Series]
+        y : Series
             Input target.
 
         Returns
         -------
-        Tuple[Union[pd.DataFrame, ks.DataFrame], Union[pd.Series, ks.Series]]:
-            Transformed dataframe and the series.
+        X : DataFrame
+            Sampled dataframe.
+        y : Series
+            Sampled series.
         """
         self.check_dataframe(X)
-        self.check_y(X, y)
-        frac = self.n_samples / X.shape[0]
+        self.check_target(X, y)
+        frac = self.n_samples / util.get_function(X).shape(X)[0]
         if frac >= 1.0:
             return X, y
         y_name = y.name
-        Xy = X.join(y).sample(frac=round(frac, 3), random_state=0)
+        Xy = (
+            util.get_function(X)
+            .join(X, y.to_frame())
+            .sample(frac=round(frac, 3), random_state=0)
+        )
         return Xy.drop(y_name, axis=1), Xy[y_name]

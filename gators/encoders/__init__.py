@@ -1,18 +1,15 @@
 from ._base_encoder import _BaseEncoder
-from .multiclass_encoder import MultiClassEncoder
+from .binned_columns_encoder import BinnedColumnsEncoder
 from .ordinal_encoder import OrdinalEncoder
 from .onehot_encoder import OneHotEncoder
 from .target_encoder import TargetEncoder
 from .woe_encoder import WOEEncoder
 
-from .regression_encoder import RegressionEncoder
-
 __all__ = [
     "_BaseEncoder",
+    "BinnedColumnsEncoder",
     "OrdinalEncoder",
     "OneHotEncoder",
     "WOEEncoder",
     "TargetEncoder",
-    "MultiClassEncoder",
-    "RegressionEncoder",
 ]

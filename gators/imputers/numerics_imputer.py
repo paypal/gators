@@ -1,14 +1,16 @@
 # License: Apache-2.0
 import warnings
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
 import pandas as pd
+
 from imputer import float_imputer, float_imputer_object
 
 from ..util import util
 from ._base_imputer import _BaseImputer
+
+from gators import DataFrame, Series
 
 
 class NumericsImputer(_BaseImputer):
@@ -31,116 +33,105 @@ class NumericsImputer(_BaseImputer):
     Examples
     ---------
 
-    * fit & transform with `pandas`
+    >>> from gators.imputers import NumericsImputer
 
-        - impute all the numerical columns
+    >>> bins = {'A':[-np.inf, 0, np.inf], 'B':[-np.inf, 1, np.inf]}
 
-            >>> import pandas as pd
-            >>> import numpy as np
-            >>> from gators.imputers import NumericsImputer
-            >>> X = pd.DataFrame(
-            ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']})
-            >>> obj = NumericsImputer(strategy='mean')
-            >>> obj.fit_transform(X)
-                  A    B  C
-            0  0.10  1.0  z
-            1  0.20  2.0  a
-            2  0.15  1.5  a
+    The imputation can be done for the selected numerical columns
 
-        - impute selected numerical columns
+    >>> obj = NumericsImputer(strategy='mean', columns=['A'])
 
-            >>> import pandas as pd
-            >>> import numpy as np
-            >>> from gators.imputers import NumericsImputer
-            >>> X = pd.DataFrame(
-            ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']})
-            >>> obj = NumericsImputer(strategy='mean', columns=['A'])
-            >>> obj.fit_transform(X)
-                  A    B  C
-            0  0.10  1.0  z
-            1  0.20  2.0  a
-            2  0.15  NaN  a
+    or for all the numerical columns
 
-    * fit & transform with `koalas`
+    >>> obj = NumericsImputer(strategy='mean')
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> import numpy as np
+    >>> X = dd.from_pandas(pd.DataFrame(
+    ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']}), npartitions=1)
+
+    * `koalas` dataframes:
 
     >>> import databricks.koalas as ks
     >>> import numpy as np
-    >>> from gators.imputers import NumericsImputer
-    >>> X = ks.DataFrame({'A': [0.1, 0.2, np.nan], 'B': ['z', 'a', 'a']})
-    >>> obj = NumericsImputer(strategy='mean')
-    >>> obj.fit_transform(X)
-          A  B
-    0  0.10  z
-    1  0.20  a
-    2  0.15  a
+    >>> X = ks.DataFrame(
+    ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']})
 
-    * fit with `pandas` & transform with `NumPy`
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
     >>> import numpy as np
-    >>> from gators.imputers import NumericsImputer
-    >>> X = pd.DataFrame({'A': [0.1, 0.2, np.nan], 'B': ['z', 'a', 'a']})
-    >>> obj = NumericsImputer(strategy='mean')
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[0.1, 'z'],
-           [0.2, 'a'],
-           [0.15000000000000002, 'a']], dtype=object)
+    >>> X = pd.DataFrame(
+    ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']})
 
-    * fit with `koalas` & transform with `NumPy`
+    The result is a transformed dataframe belonging to the same dataframe library.
 
-    >>> import databricks.koalas as ks
-    >>> import numpy as np
-    >>> from gators.imputers import NumericsImputer
-    >>> X = ks.DataFrame({'A': [0.1, 0.2, np.nan], 'B': ['z', 'a', 'a']})
+    * imputation done for the selected columns:
+
+    >>> obj = NumericsImputer(strategy='mean', columns=['A'])
+    >>> obj.fit_transform(X)
+          A    B  C
+    0  0.10  1.0  z
+    1  0.20  2.0  a
+    2  0.15  NaN  a
+
+    * imputation done for all the columns:
+
+    >>> X = pd.DataFrame(
+    ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']})
     >>> obj = NumericsImputer(strategy='mean')
-    >>> _ = obj.fit(X)
+    >>> obj.fit_transform(X)
+          A    B  C
+    0  0.10  1.0  z
+    1  0.20  2.0  a
+    2  0.15  1.5  a
+
+
+    Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
+    and returns a transformed NumPy array. Note that this transformer should **only** be used
+    when the number of rows is small *e.g.* in real-time environment.
+
+    >>> X = pd.DataFrame(
+    ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']})
     >>> obj.transform_numpy(X.to_numpy())
-    array([[0.1, 'z'],
-           [0.2, 'a'],
-           [0.15000000000000002, 'a']], dtype=object)
+    array([[0.1, 1.0, 'z'],
+           [0.2, 2.0, 'a'],
+           [0.15000000000000002, 1.5, 'a']], dtype=object)
 
     See Also
     --------
-    gators.imputers.IntImputer
-        Impute integer columns.
-    gators.imputers.FloatImputer
-        Impute float columns.
     gators.imputers.ObjectImputer
         Impute categorical columns.
-
     """
 
     def __init__(self, strategy: str, value: float = None, columns: List[str] = None):
         _BaseImputer.__init__(self, strategy, value, columns)
-        if strategy not in ["constant", "mean", "median"]:
-            raise ValueError(
-                """`strategy` should be "constant", ,"mean"
-                     or "median" for NumericsImputer Transformer."""
-            )
-        if strategy == "constant" and not isinstance(value, float):
+        if strategy == "constant" and not isinstance(self.value, (int, float)):
             raise TypeError(
-                """`value` should be a float
+                """`value` should be an int or a float
                 for the NumericsImputer class"""
             )
+        self.value = float(self.value) if self.value is not None else None
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "NumericsImputer":
+    def fit(self, X: DataFrame, y: Series = None) -> "NumericsImputer":
         """Fit the transformer on the pandas/koalas dataframe X.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
-        y : None
-            None.
+        y : Series, default to None.
+            Target values.
 
         Returns
         -------
-            'NumericsImputer': Instance of itself.
+        self : 'NumericsImputer'
+            Instance of itself.
         """
         self.check_dataframe(X)
         if not self.columns:
@@ -153,54 +144,30 @@ class NumericsImputer(_BaseImputer):
             self.idx_columns = np.array([])
             return self
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
-        self.statistics = self.compute_statistics(
-            X=X,
-            columns=self.columns,
-            strategy=self.strategy,
-            value=self.value,
-        )
-        self.statistics_values = np.array(list(self.statistics.values()))
+        self.statistics = self.compute_statistics(X=X, value=self.value)
+        self.statistics_np = np.array(list(self.statistics.values()))
         return self
-
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
-        """Transform the dataframe `X`.
-
-        Parameters
-        ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
-
-        Returns
-        -------
-        Union[pd.DataFrame, ks.DataFrame]
-            Transformed dataframe.
-        """
-        self.check_dataframe(X)
-        if isinstance(X, pd.DataFrame):
-            return X.fillna(self.statistics)
-        for col, val in self.statistics.items():
-            X[col] = X[col].replace({np.nan: val})
-        return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the numpy ndarray X.
 
         Parameters
         ----------
-        X (np.ndarray): Input ndarray.
+        X :np.ndarray:
+            Input array.
 
         Returns
         -------
-        np.ndarray:
+        X : np.ndarray:
             Transformed NumPy array.
         """
         self.check_array(X)
+        if isinstance(X[0, 0], np.integer):
+            return X
         if self.idx_columns.size == 0:
             return X
         if X.dtype == object:
             return float_imputer_object(
-                X, self.statistics_values.astype(object), self.idx_columns
+                X, self.statistics_np.astype(object), self.idx_columns
             )
-        return float_imputer(X, self.statistics_values, self.idx_columns)
+        return float_imputer(X, self.statistics_np, self.idx_columns)

@@ -1,12 +1,13 @@
 # Licence Apache-2.0
-from typing import List, Union
 
-import databricks.koalas as ks
+from typing import List
+
 import numpy as np
-import pandas as pd
 
 from ..transformers.transformer import Transformer
 from ..util import util
+
+from gators import DataFrame, Series
 
 
 class _BaseStringFeature(Transformer):
@@ -14,7 +15,7 @@ class _BaseStringFeature(Transformer):
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns.
     column_names : List[str], default to None.
         List of column names.
@@ -22,37 +23,32 @@ class _BaseStringFeature(Transformer):
     """
 
     def __init__(self, columns: List[str], column_names: List[str]):
-        if not isinstance(columns, list):
+        if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
         if not columns:
             raise ValueError("`columns` should not be empty.")
-        if column_names and not isinstance(column_names, list):
+        if column_names and not isinstance(column_names, (list, np.ndarray)):
             raise TypeError("`column_names` should be a list.")
         if column_names and len(column_names) != len(columns):
             raise ValueError("Length of `columns` and `column_names` should match.")
         Transformer.__init__(self)
         self.columns = columns
         self.column_names: List[str] = column_names
-        self.column_mapping = dict(zip(column_names, columns))
         self.idx_columns: np.ndarray = np.array([])
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "_BaseStringFeature":
+    def fit(self, X: DataFrame, y: Series = None) -> "Transformer":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
         ----------
         X : pd.DataFrame
             Input dataframe.
-        y : Union[pd.Series, ks.Series], default to None.
+        y : Series, default to None.
             Target values.
 
         Returns
         -------
-        _BaseStringFeature
+        Transformer
             Instance of itself.
         """
         self.check_dataframe(X)

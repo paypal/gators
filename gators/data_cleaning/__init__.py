@@ -1,4 +1,5 @@
 from ._base_data_cleaning import _BaseDataCleaning
+from .convert_column_datatype import ConvertColumnDatatype
 from .drop_columns import DropColumns
 from .drop_datatype_columns import DropDatatypeColumns
 from .drop_high_cardinality import DropHighCardinality
@@ -9,6 +10,7 @@ from .replace import Replace
 
 __all__ = [
     "_BaseDataCleaning",
+    "ConvertColumnDatatype",
     "DropColumns",
     "DropDatatypeColumns",
     "DropHighCardinality",

@@ -3,8 +3,8 @@
 ![PyPI](https://img.shields.io/pypi/v/gators)
 [![build](https://github.com/paypal/gators/actions/workflows/build.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/paypal/gators/branch/graph/badge.svg?token=vllGApc9v9)](https://codecov.io/gh/paypal/gators)
+![Python Version](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue)
 ![GitHub](https://img.shields.io/github/license/paypal/gators)
-
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
