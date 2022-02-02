@@ -242,16 +242,7 @@ For in-memory datasets it is recommended to use Pandas, Dask or Koalas otherwise
 Does the transformation order matter?
 #####################################
 
-Absolutely! While Pandas, Dask and Koalas dataframes hold the datatype of each column,
-Numpy does not.
-
-It is then important to group the transformations according to the datatype of the columns
-they consider.
-
-    1. datetime column transformations
-    2. object column transformations
-    3. encoding transformations
-    4. numerical transformations
+The datetime feature generation steps should be done before the encoding.
 
 .. Note::
 
@@ -335,10 +326,10 @@ The default installation (in-memory data only):
 >>> pip install gators
 >>> conda install gators
 
-To handle out-of-core data, you can choose to Dask, Koalas, or both: 
+To handle out-of-core data, you can choose to install Dask, Koalas, or both: 
 
->>> pip install gators "[dask, koalas]"
->>> conda install gators "[dask, koalas]"
+>>> pip install gators"[dask, koalas]"
+>>> conda install gators"[dask, koalas]"
 
 
 From source available on GitHub

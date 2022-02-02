@@ -21,7 +21,7 @@ class BinnedColumnsEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
 
     Examples
@@ -83,7 +83,7 @@ class BinnedColumnsEncoder(_BaseEncoder):
         ----------
         X : DataFrame:
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -104,7 +104,7 @@ class BinnedColumnsEncoder(_BaseEncoder):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None
+        y : Series, default None
              Target values.
 
         Returns

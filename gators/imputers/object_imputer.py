@@ -26,7 +26,7 @@ class ObjectImputer(_BaseImputer):
             - 'constant'
             - 'most_frequent'
 
-    value : str, default to None.
+    value : str, default None.
         Imputation value used for `strategy=constant`.
 
     Examples
@@ -139,7 +139,7 @@ class ObjectImputer(_BaseImputer):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -164,7 +164,7 @@ class ObjectImputer(_BaseImputer):
         return self
 
     def transform_numpy(self, X: Series, y: Series = None):
-        """Transform the numpy ndarray X.
+        """Transform the NumPy array X.
 
         Parameters
         ----------

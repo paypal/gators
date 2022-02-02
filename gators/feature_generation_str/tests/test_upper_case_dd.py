@@ -18,7 +18,7 @@ def data():
                 "C": [0.0, 0.0, 0.0],
                 "D": ["q", "qq", "QQq"],
                 "E": ["w", "WW", "WWw"],
-                "F": ["nan", None, ""],
+                "F": ["abc", None, ""],
             }
         ),
         npartitions=1,
@@ -26,26 +26,14 @@ def data():
 
     obj = UpperCase(columns=list("DEF")).fit(X)
     X_expected = pd.DataFrame(
-        [
-            [
-                0.0,
-                0.0,
-                0.0,
-                "Q",
-                "W",
-                "nan",
-            ],
-            [
-                0.0,
-                0.0,
-                0.0,
-                "QQ",
-                "WW",
-                None,
-            ],
-            [0.0, 0.0, 0.0, "QQQ", "WWW", ""],
-        ],
-        columns=list("ABCDEF"),
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["Q", "QQ", "QQQ"],
+            "E": ["W", "WW", "WWW"],
+            "F": ["ABC", None, ""],
+        }
     )
     return obj, X, X_expected
 

@@ -43,6 +43,7 @@ def test_concat_ks(data_ks):
     )
 
 
+@pytest.mark.koalas
 def test_fillna(data_ks):
     X = data_ks
     _ = util.get_function(X).fillna(X.astype(int), value={"A": 0})

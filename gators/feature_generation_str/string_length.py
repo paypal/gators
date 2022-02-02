@@ -78,7 +78,7 @@ class StringLength(_BaseStringFeature):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -109,10 +109,8 @@ class StringLength(_BaseStringFeature):
 
         for name, col in zip(self.column_names, self.columns):
             X[name] = (
-                X[col]
-                .fillna("")
-                .astype(str)
-                .replace({"nan": ""})
+                util.get_function(X)
+                .replace(X[col].fillna("").astype(str), {"nan": ""})
                 .str.len()
                 .astype(np.float64)
             )

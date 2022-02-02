@@ -39,43 +39,6 @@ def data():
     return obj, X, X_expected
 
 
-# @pytest.fixture
-# def data_all_others():
-#     X = pd.DataFrame(
-#         {
-#             "A": ["w", "z", "q", "q", "q", "z"],
-#             "B": ["x", "x", "w", "w", "w", "x"],
-#             "C": ["c", "c", "e", "d", "d", "c"],
-#             "D": [1, 2, 3, 4, 5, 6],
-#         }
-#     )
-#     X_expected = pd.DataFrame(
-#         {
-#             "A": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
-#             "B": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
-#             "C": ["OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS", "OTHERS"],
-#             "D": [1, 2, 3, 4, 5, 6],
-#         }
-#     )
-#     obj = BinRareCategories(min_ratio=1.0).fit(X)
-#     return obj, X, X_expected
-
-
-# @pytest.fixture
-# def data_no_other():
-#     X = pd.DataFrame(
-#         {
-#             "A": ["w", "z", "q", "q", "q", "z"],
-#             "B": ["x", "x", "w", "w", "w", "x"],
-#             "C": ["c", "c", "e", "d", "d", "c"],
-#             "D": [1, 2, 3, 4, 5, 6],
-#         }
-#     )
-#     obj = BinRareCategories(min_ratio=0.0).fit(X)
-#     obj = BinRareCategories(min_ratio=0.0).fit(X)
-#     return obj, X, X.copy()
-
-
 def test_pd(data):
     obj, X, X_expected = data
     X_new = obj.transform(X)

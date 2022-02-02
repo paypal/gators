@@ -118,7 +118,7 @@ class CyclicMonthOfYear(_BaseDatetimeFeature):
         ----------
         X : DataFrame
             Dataframe of datetime columns.
-        column_names : List[str], default to None.
+        column_names : List[str], default None.
          List of column names.
 
         Returns

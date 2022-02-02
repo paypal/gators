@@ -99,7 +99,7 @@ class Extract(_BaseStringFeature):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -131,7 +131,9 @@ class Extract(_BaseStringFeature):
         for col, i_min, i_max, name in zip(
             self.columns, self.i_min_vec, self.i_max_vec, self.column_names
         ):
-            X[name] = X[col].str.slice(start=i_min, stop=i_max).replace({"": "MISSING"})
+            X[name] = X[col].str.slice(
+                start=i_min, stop=i_max
+            )  # .replace({"": "MISSING"})
         self.columns_ = list(X.columns)
         return X
 

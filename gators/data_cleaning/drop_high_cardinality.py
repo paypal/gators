@@ -72,7 +72,7 @@ class DropHighCardinality(_BaseDataCleaning):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
            Target values.
 
         Returns

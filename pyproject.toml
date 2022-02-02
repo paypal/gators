@@ -1,10 +1,10 @@
 [tool.poetry]
 name = 'gators'
-version = '0.1.0'
+version = '0.2.0'
 description = 'Streamline model building and productionization processes.'
-authors = ['Simility Data Team']
+authors = ['The Gators Development Team']
 readme = 'README.md'
-include = ['*.so', '*.c']
+include = ['*.pyx', '*.c']
 keywords = ['machine learning']
 
 [build-system]

@@ -190,8 +190,7 @@ class BinSingleTargetClassCategories(Transformer):
         Returns
         -------
         X : np.ndarray
-            Transformed NumPy array.
-
+            Transformed array.
         """
         self.check_array(X)
         if not self.is_binned:

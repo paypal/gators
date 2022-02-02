@@ -7,7 +7,7 @@ from pyspark.ml.classification import RandomForestClassifier as RFCSpark
 from sklearn.datasets import load_iris
 
 from gators.feature_selection.select_from_model import SelectFromModel
-from gators.model_building.sparkml_wrapper import SparkMLWrapper
+from gators.model_building.model import Model
 from gators.pipeline.pipeline import Pipeline
 from gators.transformers.transformer import Transformer
 
@@ -61,22 +61,6 @@ def pipeline_example():
 
 
 @pytest.fixture
-def pipeline_with_feature_selection_example():
-    X = ks.DataFrame(data["data"], columns=data["feature_names"])
-    y = ks.Series(data["target"], name="TARGET")
-
-    model = RFCSpark(numTrees=5, maxDepth=2, labelCol=y.name, seed=0)
-    steps = [
-        ["MultiplyTransformer1", MultiplyTransformer(4.0)],
-        ["MultiplyTransformer2", MultiplyTransformer(0.5)],
-        ["NameTransformer", NameTransformer()],
-        ["SelectFromModel", SelectFromModel(model=model, k=3)],
-    ]
-    pipe = Pipeline(steps).fit(X, y)
-    return pipe, X
-
-
-@pytest.fixture
 def pipeline_with_model_example():
     X = ks.DataFrame(data["data"], columns=data["feature_names"])
     y = ks.Series(data["target"], name="TARGET")
@@ -86,7 +70,7 @@ def pipeline_with_model_example():
         ["MultiplyTransformer1", MultiplyTransformer(4.0)],
         ["MultiplyTransformer2", MultiplyTransformer(0.5)],
         ["NameTransformer", NameTransformer()],
-        ["Estimator", SparkMLWrapper(model)],
+        ["Estimator", Model(model)],
     ]
     pipe = Pipeline(steps).fit(X, y)
     return pipe, X

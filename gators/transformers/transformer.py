@@ -81,7 +81,7 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -127,7 +127,7 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Input target.
 
         Returns

@@ -9,6 +9,15 @@ from gators import DataFrame
 
 
 class FunctionFactory(ABC):
+    def fit(self):
+        """fit."""
+
+    def predict(self):
+        """predict."""
+
+    def predict_proba(self):
+        """predict_proba."""
+
     def head(self):
         """head."""
 
@@ -54,6 +63,9 @@ class FunctionFactory(ABC):
     def join(self):
         """join."""
 
+    def replace(self):
+        """replace."""
+
 
 class FunctionPandas(FunctionFactory):
     def set_option(self, option, value):
@@ -65,14 +77,14 @@ class FunctionPandas(FunctionFactory):
     def tail(self, X, n):
         return X.tail(n)
 
-    # def predict(self, model, X):
-    #     return model.predict(X)
+    def fit(self, model, X, y):
+        return model.fit(X.to_numpy(), y.to_numpy())
 
-    # def predict_proba(self, model, X):
-    #     return model.predict_proba(X)
+    def predict(self, model, X):
+        return model.predict(X.to_numpy())
 
-    # def fit(self, model, X, y):
-    #     return model.fit(X.to_numpy(), y)
+    def predict_proba(self, model, X):
+        return model.predict_proba(X.to_numpy())
 
     def feature_importances_(self, model, X, y):
         model.fit(X.to_numpy(), y.to_numpy())
@@ -122,6 +134,9 @@ class FunctionPandas(FunctionFactory):
 
     def join(self, X, other):
         return X.join(other)
+
+    def replace(self, X, replace_dict):
+        return X.replace(replace_dict)
 
     def raise_y_dtype_error(self, y):
         if not isinstance(y, pd.Series):
@@ -242,6 +257,9 @@ class FunctionKoalas(FunctionFactory):
 
         return X.join(other).sort_index()
 
+    def replace(self, X, replace_dict):
+        return X.replace(replace_dict)
+
     def raise_y_dtype_error(self, y):
         import databricks.koalas as ks
 
@@ -259,11 +277,14 @@ class FunctionDask(FunctionFactory):
     def tail(self, X, n):
         return X.tail(n, compute=False)
 
-    # def predict(self, model, X):
-    #     return model.predict(X)
+    def fit(self, model, X, y):
+        return model.fit(X.values, y.values)
 
-    # def predict_proba(self, model, X):
-    #     return model.predict_proba(X)
+    def predict(self, model, X):
+        return model.predict(X.values)
+
+    def predict_proba(self, model, X):
+        return model.predict_proba(X.values)
 
     def shape(self, X):
         X_shape = X.shape
@@ -275,17 +296,6 @@ class FunctionDask(FunctionFactory):
             X_shape[0] if isinstance(X_shape[0], int) else X_shape[0].compute(),
             X_shape[1] if isinstance(X_shape[1], int) else X_shape[1].compute(),
         )
-
-    # def fit_xgb(self, model, X, y, client, params):
-    #     import xgboost as xgb
-    #     dtrain = xgb.dask.DaskDMatrix(client, X, y)
-    #     return xgb.dask.train(
-    #     client,
-    #     params,
-    #     dtrain,
-    #     num_boost_round=4,
-    #     evals=[(dtrain, "train")],
-    # )
 
     def feature_importances_(self, model, X, y):
         model.fit(X, y)
@@ -341,6 +351,12 @@ class FunctionDask(FunctionFactory):
     def join(self, X, other):
         return X.join(other)
 
+    def replace(self, X, replace_dict):
+        def replace_(X, replace_dict):
+            return X.replace(replace_dict)
+
+        return X.map_partitions(replace_, replace_dict)
+
     def raise_y_dtype_error(self, y):
         import dask.dataframe as dd
 
@@ -370,7 +386,7 @@ def get_bounds(X_dtype: type) -> List:
 
     Parameters
     ----------
-    X_dtype : type, default to np.float64
+    X_dtype : type, default np.float64
         Numerical NumPy datatype.
 
     Returns

@@ -69,7 +69,7 @@ class VarianceFilter(_BaseFeatureSelection):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
         Returns
         -------

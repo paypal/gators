@@ -161,7 +161,6 @@ def test_ks(data_ks):
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-##
 @pytest.mark.koalas
 def test_ks_np(data_ks):
     obj, X, X_expected = data_ks

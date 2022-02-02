@@ -22,7 +22,7 @@ class TreeBinning(_BaseBinning):
     ----------
     tree : 'DecisionTree'
         Decision tree model used to create the bin intervals.
-    inplace : bool, default to False
+    inplace : bool, default False
         If False, return the dataframe with the new binned columns
         with the names "column_name__bin"). Otherwise, return
         the dataframe with the existing binned columns.
@@ -134,7 +134,7 @@ class TreeBinning(_BaseBinning):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns

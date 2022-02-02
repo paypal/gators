@@ -61,7 +61,7 @@ def generate_per_sample_benchmarking(
         List of transformers.
     Xs List[pd.DataFrame]:
         List of dataFrames.
-    ys List[pd.Series], default to None:
+    ys List[pd.Series], default None:
         List of target values.
 
 

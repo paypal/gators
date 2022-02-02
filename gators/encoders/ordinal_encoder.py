@@ -15,10 +15,10 @@ class OrdinalEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
 
-    add_missing_categories : bool, default to True.
+    add_missing_categories : bool, default True.
         If True, add the columns 'OTHERS' and 'MISSING'
         to the mapping even if the categories are not
         present in the data.
@@ -79,7 +79,7 @@ class OrdinalEncoder(_BaseEncoder):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns

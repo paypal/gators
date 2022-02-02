@@ -54,7 +54,7 @@ class LGBMTreeliteDumper:
             Model path.
         model_name : str
             Model name.
-        verbose: bool, default to False.
+        verbose: bool, default False.
             Verbosity.
         """
         if not isinstance(model, (LGBMClassifier, LGBMRegressor)):

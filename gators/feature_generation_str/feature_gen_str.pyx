@@ -23,7 +23,7 @@ cpdef np.ndarray[object, ndim = 2] extract_str(
         for i in range(n_columns):
             value = X[k, idx_columns[i]]
             if value is None or isinstance(value, float) or (i_max_vec[i] > len(value)):
-                X_new[k, i] = 'MISSING'
+                X_new[k, i] = ''
                 continue
             X_new[k, i] = X[k, idx_columns[i]][i_min_vec[i]: i_max_vec[i]]
     return np.concatenate((X, X_new), axis=1)

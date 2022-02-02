@@ -18,7 +18,7 @@ class IsNull(_BaseFeatureGeneration):
     ----------
     theta_vec : List[float]
         List of columns.
-    dtype : type, default to np.float64
+    dtype : type, default np.float64
         Numpy dtype of the output columns.
 
     Examples

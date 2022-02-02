@@ -15,10 +15,10 @@ class TargetEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
 
-    add_missing_categories : bool, default to True.
+    add_missing_categories : bool, default True.
         If True, add the columns 'OTHERS' and 'MISSING'
         to the mapping even if the categories are not
         present in the data.
@@ -75,6 +75,7 @@ class TargetEncoder(_BaseEncoder):
         _BaseEncoder.__init__(
             self, add_missing_categories=add_missing_categories, dtype=dtype
         )
+        self.y_name = ""
 
     def fit(self, X: DataFrame, y: Series) -> "TargetEncoder":
         """Fit the encoder.
@@ -83,7 +84,7 @@ class TargetEncoder(_BaseEncoder):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -125,13 +126,13 @@ class TargetEncoder(_BaseEncoder):
         Dict[str, Dict[str, float]]
             Mapping.
         """
-        y_name = y.name
+        self.y_name = y.name
         columns = X.columns
         means = (
             util.get_function(X)
-            .melt(util.get_function(X).join(X, y.to_frame()), id_vars=y_name)
+            .melt(util.get_function(X).join(X, y.to_frame()), id_vars=self.y_name)
             .groupby(["variable", "value"])
-            .mean()[y_name]
+            .mean()[self.y_name]
         )
         means = util.get_function(X).to_pandas(means)
         mapping = {c: means[c].to_dict() for c in columns}

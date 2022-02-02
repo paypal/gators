@@ -18,7 +18,7 @@ class StandardScaler(Transformer):
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
 
     Examples
@@ -76,7 +76,7 @@ class StandardScaler(Transformer):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -117,7 +117,7 @@ class StandardScaler(Transformer):
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the numpy ndarray X.
+        """Transform the NumPy array X.
 
         Parameters
         ----------

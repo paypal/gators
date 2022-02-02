@@ -17,7 +17,7 @@ class _BaseDatetimeFeature(Transformer):
     ----------
     theta_vec : List[float]
         List of columns.
-    column_names : List[str], default to None.
+    column_names : List[str], default None.
         List of column names.
     """
 
@@ -45,7 +45,7 @@ class _BaseDatetimeFeature(Transformer):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns

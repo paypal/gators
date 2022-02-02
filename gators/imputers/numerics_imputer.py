@@ -27,7 +27,7 @@ class NumericsImputer(_BaseImputer):
             - 'mean'
             - 'median'
 
-    value : str, default to None.
+    value : str, default None.
         Imputation value used for `strategy=constant`.
 
     Examples
@@ -125,7 +125,7 @@ class NumericsImputer(_BaseImputer):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -149,7 +149,7 @@ class NumericsImputer(_BaseImputer):
         return self
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the numpy ndarray X.
+        """Transform the NumPy array X.
 
         Parameters
         ----------
@@ -159,7 +159,7 @@ class NumericsImputer(_BaseImputer):
         Returns
         -------
         X : np.ndarray:
-            Transformed NumPy array.
+            Transformed array. 
         """
         self.check_array(X)
         if isinstance(X[0, 0], np.integer):
