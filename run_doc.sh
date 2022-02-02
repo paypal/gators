@@ -326,10 +326,10 @@ The default installation (in-memory data only):
 >>> pip install gators
 >>> conda install gators
 
-To handle out-of-core data, you can choose to Dask, Koalas, or both: 
+To handle out-of-core data, you can choose to install Dask, Koalas, or both: 
 
->>> pip install gators "[dask, koalas]"
->>> conda install gators "[dask, koalas]"
+>>> pip install gators"[dask, koalas]"
+>>> conda install gators"[dask, koalas]"
 
 
 From source available on GitHub
