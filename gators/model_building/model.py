@@ -6,8 +6,8 @@ from ..util import util
 from gators import DataFrame, Series
 
 
-class SparkMLWrapper(BaseEstimator):
-    """SparkML wrapper class.
+class Model(BaseEstimator):
+    """Model wrapper class.
 
     Examples
     --------
@@ -27,7 +27,7 @@ class SparkMLWrapper(BaseEstimator):
     """
 
     def __init__(self, model):
-        """Wrap the PySpark ML model in the SKLearn fit-transform method.
+        """Wrap the model in the SKLearn fit-transform method.
 
         Parameters
         ----------
@@ -36,7 +36,7 @@ class SparkMLWrapper(BaseEstimator):
         """
         self.model = model
 
-    def fit(self, X: DataFrame, y: Series) -> "SparkMLWrapper":
+    def fit(self, X: DataFrame, y: Series) -> "Model":
         """Fit the model on X and y.
 
         Parameters

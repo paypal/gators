@@ -107,7 +107,7 @@ class DeltaTime(Transformer):
         ----------
         X : pd.DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -132,10 +132,12 @@ class DeltaTime(Transformer):
             selected_columns=columns,
         )
         self.idx_columns_a = util.get_idx_columns(
+            # columns=X.columns,
             columns=columns,
             selected_columns=self.columns_a,
         )
         self.idx_columns_b = util.get_idx_columns(
+            # columns=X.columns,
             columns=columns,
             selected_columns=self.columns_b,
         )
@@ -172,8 +174,10 @@ class DeltaTime(Transformer):
         Returns
         -------
         X : np.ndarray:
-            Array with the datetime features added.
+            Transformed array.
         """
         self.check_array(X)
-        X_new = feature_gen_dt.deltatime(X, self.idx_columns_a, self.idx_columns_b)
+        X_new = feature_gen_dt.deltatime(
+            X[:, self.idx_columns], self.idx_columns_a, self.idx_columns_b
+        )
         return np.concatenate([X, X_new], axis=1)

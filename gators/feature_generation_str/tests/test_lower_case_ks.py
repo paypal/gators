@@ -25,26 +25,14 @@ def data_ks():
 
     obj = LowerCase(columns=list("DEF")).fit(X)
     X_expected = pd.DataFrame(
-        [
-            [
-                0.0,
-                0.0,
-                0.0,
-                "q",
-                "w",
-                "nan",
-            ],
-            [
-                0.0,
-                0.0,
-                0.0,
-                "qq",
-                "ww",
-                None,
-            ],
-            [0.0, 0.0, 0.0, "qqq", "www", ""],
-        ],
-        columns=list("ABCDEF"),
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["q", "qq", "qqq"],
+            "E": ["w", "ww", "www"],
+            "F": ["nan", None, ""],
+        }
     )
     return obj, X, X_expected
 

@@ -17,9 +17,9 @@ class InformationValue(_BaseFeatureSelection):
     ----------
     k : int
         Number of features to keep.
-    regularization : float, default to 0.5.
+    regularization : float, default 0.5.
         Insure that the weights of evidence are finite.
-    max_iv : int, default to 10.
+    max_iv : int, default 10.
         Drop columns with an information larger than `max_iv`.
 
     Examples

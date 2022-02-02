@@ -32,7 +32,7 @@ class SelectFromModels(_BaseFeatureSelection):
 
     Note that the model can be:
 
-          * a **dask-ml** or a **sklearn** model for `dask` dataframes
+          * a **xgboost.dask** or a **sklearn** model for `dask` dataframes
           * a **sklearn** model for `pandas` and `pandas` dataframes
           * a **pyspark.ml** model for `koalas` dataframes
 
@@ -40,19 +40,23 @@ class SelectFromModels(_BaseFeatureSelection):
 
     * `dask` dataframes:
 
-     >>> import dask.dataframe as dd
-     >>> from dask.distributed import Client
-     >>> from dask_ml.xgboost import XGBClassifier
-     >>> import pandas as pd
-     >>> client = Client()
-     >>> X = dd.from_pandas(pd.DataFrame({
-     ... 'A': [0.94, 0.09, -0.43, 0.31, 0.99, 1.05, 1.02, -0.77, 0.03, 0.99],
-     ... 'B': [0.13, 0.01, -0.06, 0.04, 0.14, 0.14, 0.14, -0.1, 0.0, 0.13],
-     ... 'C': [0.8, 0.08, -0.37, 0.26, 0.85, 0.9, 0.87, -0.65, 0.02, 0.84]}), npartitions=1)
-     >>> y = dd.from_pandas(pd.Series([1, 0, 0, 0, 1, 1, 1, 0, 0, 1], name='TARGET'), npartitions=1)
-     >>> models = [XGBClassifier(num_boost_round=1, random_state=0),
-     ... XGBClassifier(num_boost_round=1, random_state=1)]
-     >>> obj = SelectFromModels(models=models, k=1)
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> from xgboost.dask import XGBClassifier
+    >>> from distributed import Client, LocalCluster
+    >>> cluster = LocalCluster()
+    >>> client = Client(cluster)
+    >>> X = dd.from_pandas(pd.DataFrame({
+    ... 'A': [0.94, 0.09, -0.43, 0.31, 0.99, 1.05, 1.02, -0.77, 0.03, 0.99],
+    ... 'B': [0.13, 0.01, -0.06, 0.04, 0.14, 0.14, 0.14, -0.1, 0.0, 0.13],
+    ... 'C': [0.8, 0.08, -0.37, 0.26, 0.85, 0.9, 0.87, -0.65, 0.02, 0.84]}), npartitions=1)
+    >>> y = dd.from_pandas(pd.Series([1, 0, 0, 0, 1, 1, 1, 0, 0, 1], name='TARGET'), npartitions=1)
+    >>> models = [
+    ... XGBClassifier(n_estimators=1, random_state=0, eval_metric='logloss', use_label_encoder=False),
+    ... XGBClassifier(n_estimators=1, random_state=1, eval_metric='logloss', use_label_encoder=False)]
+    >>> models[0].client = client
+    >>> models[1].client = client
+    >>> obj = SelectFromModels(models=models, k=1)
 
     * `koalas` dataframes:
 
@@ -128,7 +132,7 @@ class SelectFromModels(_BaseFeatureSelection):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns

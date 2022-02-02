@@ -25,7 +25,7 @@ class PolynomialFeatures(Transformer):
     interaction_only : bool, default = False
         Allows to keep only interaction terms.
         If true, only A * B will be produced from features A and B.
-    dtype : type, default to np.float64
+    dtype : type, default np.float64
         Numpy dtype of the output data.
 
     Examples

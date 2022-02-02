@@ -6,6 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 from gators.encoders.woe_encoder import WOEEncoder
 from gators.binning.binning import Binning
+from gators.model_building.model import Model
 from gators.feature_selection.select_from_model import SelectFromModel
 from gators.pipeline.pipeline import Pipeline
 from gators.transformers.transformer import Transformer
@@ -81,7 +82,7 @@ def pipeline_with_model_example():
         ["MultiplyTransformer1", MultiplyTransformer(4.0)],
         ["MultiplyTransformer2", MultiplyTransformer(0.5)],
         ["NameTransformer", NameTransformer()],
-        ["Estimator", model],
+        ["Estimator", Model(model)],
     ]
     pipe = Pipeline(steps).fit(X, y)
     return pipe, X
@@ -96,8 +97,8 @@ def test_display_encoder_mapping_inplace():
         ["Encoder", WOEEncoder()],
     ]
     pipe = Pipeline(steps).fit(X, y)
-    pipe.display_encoder_mapping_nb(cmap="Reds")
-    pipe.display_encoder_mapping_nb(cmap="Reds", decimals=0)
+    pipe.display_encoder_mapping(cmap="Reds")
+    pipe.display_encoder_mapping(cmap="Reds", decimals=0)
     assert True
 
 
@@ -110,7 +111,7 @@ def test_display_encoder_mapping():
         ["Encoder", WOEEncoder()],
     ]
     pipe = Pipeline(steps).fit(X, y)
-    pipe.display_encoder_mapping_nb(cmap="Reds")
+    pipe.display_encoder_mapping(cmap="Reds")
     assert True
 
 
@@ -122,7 +123,7 @@ def test_display_encoder_mapping_no_encoding():
         ["Binning", Binning(n_bins=4, inplace=False)],
     ]
     pipe = Pipeline(steps).fit(X, y)
-    pipe.display_encoder_mapping_nb(cmap="Reds")
+    pipe.display_encoder_mapping(cmap="Reds")
     assert True
 
 
@@ -134,7 +135,7 @@ def test_display_encoder_mapping_no_binning():
         ["Encoder", WOEEncoder()],
     ]
     pipe = Pipeline(steps).fit(X, y)
-    pipe.display_encoder_mapping_nb(cmap="Reds")
+    pipe.display_encoder_mapping(cmap="Reds")
     assert True
 
 
@@ -182,18 +183,6 @@ def test_pipeline_numpy(pipeline_example):
     assert X_numpy_new.shape == (150, 4)
 
 
-def test_pipeline_predict_numpy(pipeline_with_model_example):
-    pipe, X = pipeline_with_model_example
-    y_pred = pipe.predict_numpy(X.to_numpy())
-    assert y_pred.shape == (150,)
-
-
-def test_pipeline_predict_proba_numpy(pipeline_with_model_example):
-    pipe, X = pipeline_with_model_example
-    y_pred = pipe.predict_proba_numpy(X.to_numpy())
-    assert y_pred.shape == (150, 3)
-
-
 def test_init():
     with pytest.raises(TypeError):
         _ = Pipeline(0)
@@ -212,49 +201,6 @@ def test_pipeline_transform_input_data(pipeline_example):
         _ = pipe.transform(X, X)
     with pytest.raises(TypeError):
         _ = pipe.transform_numpy(X)
-
-
-# def test_get_feature_importances(pipeline_with_feature_selection_example):
-#     pipe, _ = pipeline_with_feature_selection_example
-#     feature_importances_expected = pd.Series(
-#         {"petal width (cm)_new": 0.6427904, "petal length (cm)_new": 0.18456636}
-#     )
-#     feature_importances = pipe.get_feature_importances(k=2)
-#     assert_series_equal(feature_importances, feature_importances_expected)
-
-
-# def test_get_features(pipeline_with_feature_selection_example):
-#     pipe, _ = pipeline_with_feature_selection_example
-#     assert [
-#         "petal width (cm)_new",
-#         "petal length (cm)_new",
-#         "sepal length (cm)_new",
-#     ] == pipe.get_features()
-
-
-# def test_get_feature_importances_no_feature_selection(pipeline_example):
-#     pipe, _ = pipeline_example
-#     with pytest.raises(AttributeError):
-#         pipe.get_feature_importances(k=2)
-
-
-# def test_get_features_no_feature_selection(pipeline_example):
-#     pipe, _ = pipeline_example
-#     with pytest.raises(AttributeError):
-#         pipe.get_features()
-
-
-# def test_get_production_columns(pipeline_with_feature_selection_example):
-#     pipe, _ = pipeline_with_feature_selection_example
-#     assert sorted(pipe.get_production_columns()) == sorted(
-#         ["sepal length (cm)", "petal length (cm)", "petal width (cm)"]
-#     )
-
-
-# def test_get_production_columns_no_feature_selection(pipeline_example):
-#     pipe, _ = pipeline_example
-#     with pytest.raises(AttributeError):
-#         pipe.get_production_columns()
 
 
 def test_verbose():

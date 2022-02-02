@@ -3,6 +3,7 @@ from typing import List, Tuple, Dict
 import numpy as np
 from encoder import encoder
 
+from ..util import util
 from ..transformers.transformer import (
     NUMERICS_DTYPES,
     PRINT_NUMERICS_DTYPES,
@@ -17,7 +18,7 @@ class _BaseEncoder(Transformer):
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
     """
 
@@ -50,7 +51,7 @@ class _BaseEncoder(Transformer):
         """
         self.check_dataframe(X)
         self.columns_ = list(X.columns)
-        return X.replace(self.mapping).astype(self.dtype)
+        return util.get_function(X).replace(X, self.mapping).astype(self.dtype)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.

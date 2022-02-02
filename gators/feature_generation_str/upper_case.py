@@ -75,7 +75,7 @@ class UpperCase(_BaseStringFeature):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -105,8 +105,8 @@ class UpperCase(_BaseStringFeature):
         self.check_dataframe(X)
 
         for col in self.columns:
-            X[col] = (
-                X[col].astype(str).str.upper().replace({"NAN": "nan", "NONE": None})
+            X[col] = util.get_function(X).replace(
+                X[col].astype(str).str.upper(), {"NONE": None, "NAN": None}
             )
         self.columns_ = list(X.columns)
         return X

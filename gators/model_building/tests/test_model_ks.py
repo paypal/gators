@@ -3,7 +3,7 @@ import databricks.koalas as ks
 import pytest
 from pyspark.ml.classification import RandomForestClassifier as RFCSpark
 
-from gators.model_building.sparkml_wrapper import SparkMLWrapper
+from gators.model_building.model import Model
 
 ks.set_option("compute.default_index_type", "distributed-sequence")
 
@@ -17,7 +17,7 @@ def data():
     X = ks.DataFrame(data_iris["data"], columns=data_iris["feature_names"])
     y = ks.Series(data_iris["target"], name="TARGET")
     model = RFCSpark(numTrees=5, maxDepth=2, labelCol=y.name, seed=0)
-    obj = SparkMLWrapper(model=model).fit(X, y)
+    obj = Model(model=model).fit(X, y)
     return obj, X, y
 
 

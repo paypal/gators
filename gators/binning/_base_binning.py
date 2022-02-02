@@ -46,7 +46,7 @@ class _BaseBinning(Transformer):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -99,7 +99,7 @@ class _BaseBinning(Transformer):
         Returns
         -------
         X : np.ndarray
-            Transformed NumPy array.
+            Transformed array. 
         """
         self.check_array(X)
         if self.idx_columns.size == 0:

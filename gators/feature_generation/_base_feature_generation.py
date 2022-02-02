@@ -16,7 +16,7 @@ class _BaseFeatureGeneration(Transformer):
     ----------
     theta_vec : List[float]
         List of columns.
-    column_names : List[str], default to None.
+    column_names : List[str], default None.
         List of generated columns.
     patterns : List[str]
         List of patterns.

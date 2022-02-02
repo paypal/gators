@@ -23,7 +23,7 @@ class StringContains(_BaseStringFeature):
         List of columns.
     contains_vec : List[int]
         List of substrings.
-    column_names : List[int], default to None.
+    column_names : List[int], default None.
         List new column names.
 
     Examples

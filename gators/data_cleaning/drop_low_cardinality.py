@@ -8,7 +8,7 @@ from gators import DataFrame, Series
 
 
 class DropLowCardinality(_BaseDataCleaning):
-    """Drop the catgorical columns having a low cardinality.
+    """Drop the categorical columns having a low cardinality.
 
     Parameters
     ----------
@@ -72,7 +72,7 @@ class DropLowCardinality(_BaseDataCleaning):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
            Target values.
         Returns
         -------

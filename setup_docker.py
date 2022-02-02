@@ -99,7 +99,6 @@ setuptools.setup(
         'emcee>=3.0.2',
         'pyspark>=2.4.3',
         'koalas',
-        'hyperopt>=0.2.5',
         'Lightgbm',
         'pytest>=5.0.0',
         'pytest-cov>=2.6.0',

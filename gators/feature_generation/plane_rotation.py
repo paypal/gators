@@ -28,7 +28,7 @@ class PlaneRotation(Transformer):
         List of pair-wise columns.
     theta_vec : List[float]
         List of rotation angles.
-    dtype : type, default to np.float64
+    dtype : type, default np.float64
         Numpy dtype of the output data.
 
     Examples
@@ -115,7 +115,7 @@ class PlaneRotation(Transformer):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns

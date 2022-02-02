@@ -242,16 +242,7 @@ For in-memory datasets it is recommended to use Pandas, Dask or Koalas otherwise
 Does the transformation order matter?
 #####################################
 
-Absolutely! While Pandas, Dask and Koalas dataframes hold the datatype of each column,
-Numpy does not.
-
-It is then important to group the transformations according to the datatype of the columns
-they consider.
-
-    1. datetime column transformations
-    2. object column transformations
-    3. encoding transformations
-    4. numerical transformations
+The datetime feature generation steps should be done before the encoding.
 
 .. Note::
 

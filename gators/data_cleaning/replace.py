@@ -99,7 +99,7 @@ class Replace(Transformer):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -108,7 +108,6 @@ class Replace(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        # self.check_nans(X, self.columns)
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         return self
 
@@ -126,7 +125,7 @@ class Replace(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        return X.replace(self.to_replace_dict)
+        return util.get_function(X).replace(X, self.to_replace_dict)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.

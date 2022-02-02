@@ -16,7 +16,7 @@ class MinMaxScaler(Transformer):
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
 
     Examples
@@ -75,7 +75,7 @@ class MinMaxScaler(Transformer):
         ----------
         X : DataFrame
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns

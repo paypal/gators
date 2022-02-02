@@ -18,7 +18,7 @@ class QuantileBinning(_BaseBinning):
     ----------
     n_bins : int
         Number of bins to use.
-    inplace : bool, default to False
+    inplace : bool, default False
         If False, return the dataframe with the new binned columns
         with the names "column_name__bin"). Otherwise, return
         the dataframe with the existing binned columns.

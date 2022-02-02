@@ -1,6 +1,5 @@
 import cython
 import numpy as np
-
 cimport numpy as np
 from libc.math cimport cos, isnan, pi, sin
 

@@ -23,9 +23,9 @@ class _BaseImputer(Transformer):
         * mean (only for the FloatImputer class)
         * median (only for the FloatImputer class)
 
-    value (Union[float, str, None]) : Imputation value, default to None.
+    value (Union[float, str, None]) : Imputation value, default None.
         used for `strategy=constant`.
-    theta_vec : List[float], default to None.
+    theta_vec : List[float], default None.
         List of columns.
     """
 

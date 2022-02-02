@@ -75,7 +75,7 @@ class LowerCase(_BaseStringFeature):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
@@ -104,7 +104,9 @@ class LowerCase(_BaseStringFeature):
         """
 
         for col in self.columns:
-            X[col] = X[col].astype(str).str.lower().replace({"none": None})
+            X[col] = util.get_function(X).replace(
+                X[col].astype(str).str.lower(), {"none": None}
+            )
         self.columns_ = list(X.columns)
         return X
 

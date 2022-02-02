@@ -30,14 +30,14 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         * '*' for multiplication
         * '/' for division
 
-    column_names : List[str], default to None.
+    column_names : List[str], default None.
         List of new column names.
-    coef : float, default to 1.
+    coef : float, default 1.
         Coefficient value for the addition.
 
             X[new] = X[column_a] + coef * X[column_b]
 
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
 
     Examples
@@ -137,7 +137,7 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns

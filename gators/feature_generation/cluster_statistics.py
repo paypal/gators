@@ -22,7 +22,7 @@ class ClusterStatistics(_BaseFeatureGeneration):
     ----------
     clusters_dict : Dict[str, List[str]]
         Dictionary of clusters of features.
-    column_names : List[str], default to None.
+    column_names : List[str], default None.
         List of new column names
 
     Examples
@@ -120,7 +120,7 @@ class ClusterStatistics(_BaseFeatureGeneration):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : Series, default to None.
+        y : Series, default None.
             Target values.
 
         Returns
