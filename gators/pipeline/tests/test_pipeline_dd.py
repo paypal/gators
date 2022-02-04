@@ -1,13 +1,10 @@
 # License: Apache-2.0
-import dask.dataframe as dd
-import numpy as np
-import pandas as pd
 import pytest
-from pandas.testing import assert_frame_equal, assert_series_equal
+import dask.dataframe as dd
+import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
 
-from gators.feature_selection.select_from_model import SelectFromModel
 from gators.model_building.model import Model
 from gators.pipeline.pipeline import Pipeline
 from gators.transformers.transformer import Transformer
