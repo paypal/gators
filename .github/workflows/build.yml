@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.9]
+        python-version: [3.8]
         os: [ubuntu-latest] #ubuntu-latest [macos-latest, ]   # 
 
     env:
@@ -49,9 +49,12 @@ jobs:
         pip install --upgrade pip
         pip install certifi
         pip install tox tox-wheel tox-gh-actions
-        pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements_tox.txt
-        python setup_build.py build_ext --inplace
-        python setup_build.py install
+        # pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements_tox.txt
+        # python setup.py build_ext --inplace
+        # python setup.py install
+        pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
+        pip install -e ."[dev]"
+  
     - name: tests
       run: |
         coverage run --omit gators/*/test*.py -m pytest gators && coverage report && coverage xml
@@ -93,15 +96,16 @@ jobs:
       - name: Build MacOS wheel
         if: matrix.os == 'macos-latest'
         env:
-          CIBW_BUILD: "cp36-macosx_x86_64 cp37-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64"
+          CIBW_BUILD: "cp37-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64"
           CIBW_BEFORE_ALL: brew install libomp
         run: python -m cibuildwheel --platform macos --output-dir dist
 
       - name: Install linux wheels
         if: matrix.os == 'ubuntu-latest'
         env:
-          CIBW_BUILD: "cp36-manylinux_x86_64 cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
-        run: python -m cibuildwheel --output-dir dist
+          CIBW_BUILD: "cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
+        run: python -m cibuildwheel --output-dir wheelhouse
+
 
       - uses: actions/upload-artifact@v2
         with:
