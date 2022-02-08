@@ -106,6 +106,7 @@ jobs:
           CIBW_BUILD: "cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
         run: python -m cibuildwheel --output-dir wheelhouse
 
+
       - uses: actions/upload-artifact@v2
         with:
           name: wheels
