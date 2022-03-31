@@ -161,96 +161,96 @@ def test_ks(data_ks):
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
-def test_ks_np(data_ks):
-    obj, X, X_expected = data_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(
-        X_numpy_new, columns=X_expected.columns, index=X_expected.index
-    )
-    assert_frame_equal(X_new, X_expected.astype(object))
+# @pytest.mark.koalas
+# def test_ks_np(data_ks):
+#     obj, X, X_expected = data_ks
+#     X_numpy_new = obj.transform_numpy(X.to_numpy())
+#     X_new = pd.DataFrame(
+#         X_numpy_new, columns=X_expected.columns, index=X_expected.index
+#     )
+#     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
-def test_int16_ks(data_int16_ks):
-    obj, X, X_expected = data_int16_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
+# @pytest.mark.koalas
+# def test_int16_ks(data_int16_ks):
+#     obj, X, X_expected = data_int16_ks
+#     X_new = obj.transform(X)
+#     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
-def test_int16_ks_np(data_int16_ks):
-    obj, X, X_expected = data_int16_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(
-        X_numpy_new, columns=X_expected.columns, index=X_expected.index
-    )
-    assert_frame_equal(X_new, X_expected.astype(object))
+# @pytest.mark.koalas
+# def test_int16_ks_np(data_int16_ks):
+#     obj, X, X_expected = data_int16_ks
+#     X_numpy_new = obj.transform_numpy(X.to_numpy())
+#     X_new = pd.DataFrame(
+#         X_numpy_new, columns=X_expected.columns, index=X_expected.index
+#     )
+#     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
-def test_no_num_ks(data_no_num_ks):
-    obj, X, X_expected = data_no_num_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
+# @pytest.mark.koalas
+# def test_no_num_ks(data_no_num_ks):
+#     obj, X, X_expected = data_no_num_ks
+#     X_new = obj.transform(X)
+#     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
-def test_no_num_ks_np(data_no_num_ks):
-    obj, X, X_expected = data_no_num_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(
-        X_numpy_new, columns=X_expected.columns, index=X_expected.index
-    )
-    assert_frame_equal(X_new, X_expected.astype(object))
+# @pytest.mark.koalas
+# def test_no_num_ks_np(data_no_num_ks):
+#     obj, X, X_expected = data_no_num_ks
+#     X_numpy_new = obj.transform_numpy(X.to_numpy())
+#     X_new = pd.DataFrame(
+#         X_numpy_new, columns=X_expected.columns, index=X_expected.index
+#     )
+#     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
-def test_num_ks(data_num_ks):
-    obj, X, X_expected = data_num_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
+# @pytest.mark.koalas
+# def test_num_ks(data_num_ks):
+#     obj, X, X_expected = data_num_ks
+#     X_new = obj.transform(X)
+#     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
-def test_num_ks_np(data_num_ks):
-    obj, X, X_expected = data_num_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(
-        X_numpy_new, columns=X_expected.columns, index=X_expected.index
-    )
-    assert_frame_equal(X_new, X_expected.astype(object))
+# @pytest.mark.koalas
+# def test_num_ks_np(data_num_ks):
+#     obj, X, X_expected = data_num_ks
+#     X_numpy_new = obj.transform_numpy(X.to_numpy())
+#     X_new = pd.DataFrame(
+#         X_numpy_new, columns=X_expected.columns, index=X_expected.index
+#     )
+#     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
-def test_inplace_ks(data_inplace_ks):
-    obj, X, X_expected = data_inplace_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
+# @pytest.mark.koalas
+# def test_inplace_ks(data_inplace_ks):
+#     obj, X, X_expected = data_inplace_ks
+#     X_new = obj.transform(X)
+#     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
-def test_inplace_ks_np(data_inplace_ks):
-    obj, X, X_expected = data_inplace_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(
-        X_numpy_new, columns=X_expected.columns, index=X_expected.index
-    )
-    assert_frame_equal(X_new, X_expected.astype(object))
+# @pytest.mark.koalas
+# def test_inplace_ks_np(data_inplace_ks):
+#     obj, X, X_expected = data_inplace_ks
+#     X_numpy_new = obj.transform_numpy(X.to_numpy())
+#     X_new = pd.DataFrame(
+#         X_numpy_new, columns=X_expected.columns, index=X_expected.index
+#     )
+#     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
-def test_inplace_num_ks(data_num_inplace_ks):
-    obj, X, X_expected = data_num_inplace_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
+# @pytest.mark.koalas
+# def test_inplace_num_ks(data_num_inplace_ks):
+#     obj, X, X_expected = data_num_inplace_ks
+#     X_new = obj.transform(X)
+#     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
-def test_inplace_num_ks_np(data_num_inplace_ks):
-    obj, X, X_expected = data_num_inplace_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(
-        X_numpy_new, columns=X_expected.columns, index=X_expected.index
-    )
-    assert_frame_equal(X_new, X_expected.astype(object))
+# @pytest.mark.koalas
+# def test_inplace_num_ks_np(data_num_inplace_ks):
+#     obj, X, X_expected = data_num_inplace_ks
+#     X_numpy_new = obj.transform_numpy(X.to_numpy())
+#     X_new = pd.DataFrame(
+#         X_numpy_new, columns=X_expected.columns, index=X_expected.index
+#     )
+#     assert_frame_equal(X_new, X_expected.astype(object))

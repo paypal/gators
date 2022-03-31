@@ -283,6 +283,7 @@ def get_bin(X: DataFrame) -> Union[BinPandas, BinKoalas, BinDask]:
     factories = {
         "<class 'pandas.core.frame.DataFrame'>": BinPandas(),
         "<class 'databricks.koalas.frame.DataFrame'>": BinKoalas(),
+        "databricks.koalas.frame.DataFrame": BinKoalas(),  # needed for python3.6
         "<class 'dask.dataframe.core.DataFrame'>": BinDask(),
     }
     return factories[str(type(X))]

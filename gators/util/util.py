@@ -368,9 +368,11 @@ def get_function(X):
     factories = {
         "<class 'pandas.core.frame.DataFrame'>": FunctionPandas(),
         "<class 'databricks.koalas.frame.DataFrame'>": FunctionKoalas(),
+        "databricks.koalas.frame.DataFrame": FunctionKoalas(),  # needed for python3.6
         "<class 'dask.dataframe.core.DataFrame'>": FunctionDask(),
         "<class 'pandas.core.series.Series'>": FunctionPandas(),
         "<class 'databricks.koalas.series.Series'>": FunctionKoalas(),
+        "databricks.koalas.series.Series": FunctionKoalas(),  # needed for python3.6
         "<class 'dask.dataframe.core.Series'>": FunctionDask(),
     }
     if str(type(X)) not in factories:

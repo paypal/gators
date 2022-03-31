@@ -80,7 +80,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.6',
     license='License :: OSI Approved :: Apache Software License v2.0',
     setup_requires=['numpy', 'Cython'],
     install_requires=[
