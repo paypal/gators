@@ -98,6 +98,7 @@ setuptools.setup(
     extras_require={
         'dev': [
             'docutils==0.16.0',
+            'pytest',
             'pytest-cov',
             'coverage',
             'pylama>=7.6.5',
