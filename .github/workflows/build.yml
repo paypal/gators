@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.6]
+        python-version: [3.8]
         os: [ubuntu-latest] #ubuntu-latest [macos-latest, ]   # 
 
     env:
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/setup-python@v2
         name: Install Python
         with:
-          python-version: '3.6'
+          python-version: '3.8'
 
 
       - name: Install python depencies
@@ -97,14 +97,14 @@ jobs:
       - name: Build MacOS wheel
         if: matrix.os == 'macos-latest'
         env:
-          CIBW_BUILD: "cp36-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64"
+          CIBW_BUILD: "cp36-macosx_x86_64 cp37-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64"
           CIBW_BEFORE_ALL: brew install libomp
         run: python -m cibuildwheel --platform macos --output-dir dist
 
       - name: Install linux wheels
         if: matrix.os == 'ubuntu-latest'
         env:
-          CIBW_BUILD: "cp36-manylinux_x86_64"
+          CIBW_BUILD: "cp36-manylinux_x86_64 cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
         run: python -m cibuildwheel --output-dir dist
 
 
