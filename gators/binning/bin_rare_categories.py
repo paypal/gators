@@ -138,7 +138,7 @@ class BinRareCategories(Transformer):
             X[col] = X[col].mask(
                 ~X[col].isin(self.categories_to_keep_dict[col]), "OTHERS"
             )
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

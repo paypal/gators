@@ -147,7 +147,7 @@
     <p class="pln"><span class="n"><a id="t88" href="#t88">88</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t89" href="#t89">89</a></span><span class="t">        <span class="key">for</span> <span class="nam">name</span><span class="op">,</span> <span class="nam">col</span> <span class="key">in</span> <span class="nam">zip</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">column_names</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">columns</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t90" href="#t90">90</a></span><span class="t">            <span class="nam">X</span><span class="op">[</span><span class="nam">name</span><span class="op">]</span> <span class="op">=</span> <span class="nam">X</span><span class="op">[</span><span class="nam">col</span><span class="op">]</span><span class="op">.</span><span class="nam">dt</span><span class="op">.</span><span class="nam">month</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">columns_</span> <span class="op">=</span> <span class="nam">list</span><span class="op">(</span><span class="nam">X</span><span class="op">.</span><span class="nam">columns</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t91" href="#t91">91</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">dtypes_</span> <span class="op">=</span> <span class="nam">X</span><span class="op">.</span><span class="nam">dtypes</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t92" href="#t92">92</a></span><span class="t">        <span class="key">return</span> <span class="nam">X</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t93" href="#t93">93</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t94" href="#t94">94</a></span><span class="t">    <span class="key">def</span> <span class="nam">transform_numpy</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">X</span><span class="op">:</span> <span class="nam">np</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">)</span> <span class="op">-></span> <span class="nam">np</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -172,8 +172,8 @@
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.3</a>,
-            created at 2022-02-01 11:31 +0000
+            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.3.1</a>,
+            created at 2022-09-05 09:35 +0100
         </p>
     </div>
 </footer>

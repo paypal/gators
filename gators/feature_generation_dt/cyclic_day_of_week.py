@@ -8,9 +8,6 @@ import feature_gen_dt
 
 from ._base_datetime_feature import _BaseDatetimeFeature
 
-PREFACTOR = 2 * pi / 6.0
-
-
 from gators import DataFrame
 
 
@@ -54,8 +51,8 @@ class CyclicDayOfWeek(_BaseDatetimeFeature):
 
     >>> obj.fit_transform(X)
                         A  B  A__day_of_week_cos  A__day_of_week_sin
-    0 2020-01-01 23:00:00  0                -0.5            0.866025
-    1 2020-12-15 18:00:00  1                 0.5            0.866025
+    0 2020-01-01 23:00:00  0           -0.222521            0.974928
+    1 2020-12-15 18:00:00  1            0.623490            0.781831
     2                 NaT  0                 NaN                 NaN
 
 
@@ -63,10 +60,10 @@ class CyclicDayOfWeek(_BaseDatetimeFeature):
     >>> X['A'] = X['A'].astype('datetime64[ns]')
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
-    array([[Timestamp('2020-01-01 23:00:00'), 0, -0.4999999999999998,
-            0.8660254037844388],
-           [Timestamp('2020-12-15 18:00:00'), 1, 0.5000000000000001,
-            0.8660254037844386],
+    array([[Timestamp('2020-01-01 23:00:00'), 0, -0.22252093395631434,
+            0.9749279121818236],
+           [Timestamp('2020-12-15 18:00:00'), 1, 0.6234898018587336,
+            0.7818314824680297],
            [NaT, 0, nan, nan]], dtype=object)
 
     """
@@ -77,6 +74,7 @@ class CyclicDayOfWeek(_BaseDatetimeFeature):
         if not columns:
             raise ValueError("`columns` should not be empty.")
         column_names = self.get_cyclic_column_names(columns, "day_of_week")
+        self.prefactor = 2 * pi / 7.0
         _BaseDatetimeFeature.__init__(self, columns, date_format, column_names)
 
     def transform(self, X: DataFrame) -> DataFrame:
@@ -93,7 +91,7 @@ class CyclicDayOfWeek(_BaseDatetimeFeature):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        return self.compute_cyclic_day_of_week(X)
+        return self.compute_cyclic_day_of_week(X, self.prefactor)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.
@@ -109,16 +107,19 @@ class CyclicDayOfWeek(_BaseDatetimeFeature):
             Transformed array.
         """
         self.check_array(X)
-        X_new = feature_gen_dt.cyclic_day_of_week(X[:, self.idx_columns], PREFACTOR)
+        X_new = feature_gen_dt.cyclic_day_of_week(X[:, self.idx_columns], self.prefactor)
         return np.concatenate([X, X_new], axis=1)
 
-    def compute_cyclic_day_of_week(self, X: DataFrame) -> DataFrame:
+    def compute_cyclic_day_of_week(self, X: DataFrame, prefactor: float) -> DataFrame:
         """Compute the cyclic day of the week features.
 
         Parameters
         ----------
         X : DataFrame
-            Dataframe. of datetime columns.
+            Dataframe. of datetime columns
+            
+        prefactor: float
+            Prefactor.
 
         Returns
         -------
@@ -128,6 +129,6 @@ class CyclicDayOfWeek(_BaseDatetimeFeature):
 
         for i, c in enumerate(self.columns):
             dayofweek = X[c].dt.dayofweek
-            X[self.column_names[2 * i]] = np.cos(PREFACTOR * dayofweek)
-            X[self.column_names[2 * i + 1]] = np.sin(PREFACTOR * dayofweek)
+            X[self.column_names[2 * i]] = np.cos(prefactor * dayofweek)
+            X[self.column_names[2 * i + 1]] = np.sin(prefactor * dayofweek)
         return X

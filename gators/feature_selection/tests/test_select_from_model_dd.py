@@ -3,7 +3,8 @@ import dask.dataframe as dd
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
-from xgboost import XGBClassifier
+from xgboost.dask import DaskXGBClassifier
+from distributed import Client
 
 from gators.feature_selection.select_from_model import SelectFromModel
 
@@ -24,7 +25,7 @@ def data():
         pd.Series([0, 1, 1, 1, 0, 0, 0, 0, 1, 1], name="TARGET"), npartitions=1
     )
     X_expected = X[["A"]].compute().copy()
-    model = XGBClassifier(
+    model = DaskXGBClassifier(
         random_state=0,
         subsample=1.0,
         n_estimators=2,
@@ -32,6 +33,7 @@ def data():
         eval_metric="logloss",
         use_label_encoder=False,
     )
+    model.client = Client()
     obj = SelectFromModel(model=model, k=1).fit(X, y)
     return obj, X, X_expected
 

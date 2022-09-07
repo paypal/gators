@@ -31,7 +31,7 @@ def data_ks():
             "C": [0.0, 0.0, 0.0],
             "D": ["q", "qq", "qqq"],
             "E": ["w", "ww", "www"],
-            "F": ["nan", None, ""],
+            "F": [None, None, ""],
         }
     )
     return obj, X, X_expected

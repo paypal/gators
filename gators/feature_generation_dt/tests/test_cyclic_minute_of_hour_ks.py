@@ -27,16 +27,16 @@ def data_ks():
     X[columns] = X[columns].astype("datetime64[ns]")
     X_expected = pd.DataFrame(
         {
-            "A__minute_of_hour_cos": [1.0, np.nan],
-            "A__minute_of_hour_sin": [0.0, np.nan],
-            "B__minute_of_hour_cos": [0.48455087033265026, np.nan],
-            "B__minute_of_hour_sin": [0.8747630845319612, np.nan],
-            "C__minute_of_hour_cos": [-0.5304209081197424, np.nan],
-            "C__minute_of_hour_sin": [0.847734427889671, np.nan],
-            "D__minute_of_hour_cos": [-0.43730732045885556, np.nan],
-            "D__minute_of_hour_sin": [-0.8993121301712191, np.nan],
-            "E__minute_of_hour_cos": [1.0, np.nan],
-            "E__minute_of_hour_sin": [-2.4492935982947064e-16, np.nan],
+ 'A__minute_of_hour_cos': [1.0, np.nan],
+ 'A__minute_of_hour_sin': [0.0, np.nan],
+ 'B__minute_of_hour_cos': [0.5000000000000001, np.nan],
+ 'B__minute_of_hour_sin': [0.8660254037844386, np.nan],
+ 'C__minute_of_hour_cos': [-0.4999999999999998, np.nan],
+ 'C__minute_of_hour_sin': [0.8660254037844388, np.nan],
+ 'D__minute_of_hour_cos': [-0.5000000000000004, np.nan],
+ 'D__minute_of_hour_sin': [-0.8660254037844384, np.nan],
+ 'E__minute_of_hour_cos': [0.9945218953682733, np.nan],
+ 'E__minute_of_hour_sin': [-0.1045284632676543, np.nan]
         }
     )
     X_expected_np = np.concatenate((X_np, X_expected.to_numpy()), axis=1)

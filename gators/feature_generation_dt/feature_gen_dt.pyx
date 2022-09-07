@@ -166,7 +166,7 @@ cpdef np.ndarray[np.float64_t, ndim=2] cyclic_day_of_month(
                 X_new[i, 2*j] = np.nan
                 X_new[i, 2*j+1] = np.nan
             else:
-                days_in_month = (((np.array(X[i, j]).astype('datetime64[M]')+1).astype('datetime64[D]') - np.array(X[i, j]).astype('datetime64[M]')) // np.timedelta64(1, 'D') - 1)
+                days_in_month = (((np.array(X[i, j]).astype('datetime64[M]')+1).astype('datetime64[D]') - np.array(X[i, j]).astype('datetime64[M]')) // np.timedelta64(1, 'D'))
                 val = 2 * pi * (float(str(X[i, j])[start_idx: end_idx]) -1.) / days_in_month
                 X_new[i, 2*j] = cos(val)
                 X_new[i, 2*j+1] = sin(val)

@@ -97,17 +97,19 @@ def generate_per_sample_benchmarking(
         extra_info_X_vec = len(Xs) * [""]
     for i, (obj, extra_info_O) in enumerate(zip(objs, extra_info_O_vec)):
         for X, y, extra_info_X in zip(Xs, ys, extra_info_X_vec):
-            mask = pd.Series({c: True for c in X.columns if c.startswith('Dates')})
+            mask = pd.Series({c: True for c in X.columns if c.startswith("Dates")})
             X_row = X.iloc[[0]].copy()
             X_row_np = X_row.to_numpy().copy()
-            
-            if mask.sum():  # ensure that the input datatype is an object for NumPy and a datetime for Pandas
+
+            if (
+                mask.sum()
+            ):  # ensure that the input datatype is an object for NumPy and a datetime for Pandas
                 X = X.astype(object)
                 X_row = X.iloc[[0]].copy()
                 X_row_np = X_row.to_numpy().copy()
                 cols = mask[mask].index
-                X[cols] = X[cols].astype('datetime64[ns]')
-                X_row[cols] = X_row[cols].astype('datetime64[ns]')
+                X[cols] = X[cols].astype("datetime64[ns]")
+                X_row[cols] = X_row[cols].astype("datetime64[ns]")
             _ = obj.fit(X.copy(), y)
             dummy = get_ipython().run_line_magic(
                 "timeit", f"-o {timeit_args} -q obj.transform(X_row.copy())"

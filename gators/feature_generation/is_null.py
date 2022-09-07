@@ -123,7 +123,7 @@ class IsNull(_BaseFeatureGeneration):
         self.check_dataframe(X)
         for col, name in zip(self.columns, self.column_names):
             X[name] = X[col].isnull().astype(np.float64)
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -186,7 +186,7 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
             else:
                 X[c] = X[c_a] / (X[c_b] + EPSILON)
             X[c] = X[c]
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

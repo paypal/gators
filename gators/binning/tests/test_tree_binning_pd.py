@@ -31,13 +31,12 @@ def data():
         }
     )
     tree = DecisionTreeClassifier(max_depth=2, random_state=0)
-    obj = TreeBinning(tree=tree).fit(X, y)
+    obj = TreeBinning(tree=tree, inplace=False).fit(X, y)
     return obj, X, X_expected
 
 
 @pytest.fixture
 def data_regression():
-    max_depth = 2
     X = pd.DataFrame(
         {
             "A": [-0.1, 1.45, 0.98, -0.98],

@@ -46,18 +46,70 @@ def data():
 
 
 @pytest.fixture()
-def data_num():
-    X_int = pd.DataFrame(
-        {"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]}, dtype=np.float32
-    )
-    X_float = pd.DataFrame(
-        {"C": [0.1, 1.1, 2.1, np.nan], "D": [2.1, 3.1, 4.1, np.nan]}, dtype=np.float32
-    )
+def data_not_inplace():
+    X_int = pd.DataFrame({"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]})
+    X_float = pd.DataFrame({"C": [0.1, 1.1, 2.1, np.nan], "D": [2.1, 3.1, 4.1, np.nan]})
+    X_object = pd.DataFrame({"E": ["q", "w", "w", None], "F": ["a", "a", "s", np.nan]})
     X_int_expected = pd.DataFrame(
-        {"A": [0.0, 1.0, 1.0, -9.0], "B": [3.0, 4.0, 4.0, -9.0]}, dtype=np.float32
+        {
+            "A": [0, 1, 1, np.nan],
+            "B": [3, 4, 4, np.nan],
+            "A__impute": [0.0, 1.0, 1.0, -9.0],
+            "B__impute": [3.0, 4.0, 4.0, -9.0],
+        }
     )
     X_float_expected = pd.DataFrame(
-        {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}, dtype=np.float32
+        {
+            "C": [0.1, 1.1, 2.1, np.nan],
+            "D": [2.1, 3.1, 4.1, np.nan],
+            "C__impute": [0.1, 1.1, 2.1, 1.1],
+            "D__impute": [2.1, 3.1, 4.1, 3.1],
+        }
+    )
+    X_object_expected = pd.DataFrame(
+        {
+            "E": ["q", "w", "w", None],
+            "F": ["a", "a", "s", np.nan],
+            "E__impute": ["q", "w", "w", "MISSING"],
+            "F__impute": ["a", "a", "s", "MISSING"],
+        }
+    )
+    obj_int = NumericsImputer(
+        strategy="constant", value=-9, columns=list("AB"), inplace=False
+    ).fit(X_int)
+    obj_float = NumericsImputer(strategy="mean", columns=list("CD"), inplace=False).fit(
+        X_float
+    )
+    obj_object = ObjectImputer(strategy="constant", value="MISSING", inplace=False).fit(
+        X_object
+    )
+    X_dict = {
+        "int": X_int,
+        "float": X_float,
+        "object": X_object,
+    }
+    X_expected_dict = {
+        "int": X_int_expected,
+        "float": X_float_expected,
+        "object": X_object_expected,
+    }
+    objs_dict = {
+        "int": obj_int,
+        "float": obj_float,
+        "object": obj_object,
+    }
+    return objs_dict, X_dict, X_expected_dict
+
+
+@pytest.fixture()
+def data_num():
+    X_int = pd.DataFrame({"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]})
+    X_float = pd.DataFrame({"C": [0.1, 1.1, 2.1, np.nan], "D": [2.1, 3.1, 4.1, np.nan]})
+    X_int_expected = pd.DataFrame(
+        {"A": [0.0, 1.0, 1.0, -9.0], "B": [3.0, 4.0, 4.0, -9.0]}
+    )
+    X_float_expected = pd.DataFrame(
+        {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}
     )
     obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
@@ -419,6 +471,8 @@ def test_imputers_stategy():
         _ = NumericsImputer(strategy="constant").fit(X)
     with pytest.raises(ValueError):
         _ = NumericsImputer(strategy="abc").fit(X)
+    with pytest.raises(TypeError):
+        _ = NumericsImputer(strategy="mean", inplace="abc").fit(X)
 
 
 def test_compute_stategy():
@@ -463,3 +517,48 @@ def test_num_idx_columns_empty():
     assert_frame_equal(
         pd.DataFrame(obj.transform_numpy(X.to_numpy())), pd.DataFrame(X.to_numpy())
     )
+
+
+def test_not_inplace_int_pd(data_not_inplace):
+    objs_dict, X_dict, X_expected_dict = data_not_inplace
+    assert_frame_equal(
+        objs_dict["int"].transform(X_dict["int"]),
+        X_expected_dict["int"],
+    )
+
+
+def test_not_inplace_float_pd(data_not_inplace):
+    objs_dict, X_dict, X_expected_dict = data_not_inplace
+    assert_frame_equal(
+        objs_dict["float"].transform(X_dict["float"]),
+        X_expected_dict["float"],
+    )
+
+
+def test_not_inplace_object_pd(data_not_inplace):
+    objs_dict, X_dict, X_expected_dict = data_not_inplace
+    assert_frame_equal(
+        objs_dict["object"].transform(X_dict["object"]),
+        X_expected_dict["object"],
+    )
+
+
+def test_not_inplace_int_pd_np(data_not_inplace):
+    objs_dict, X_dict, X_expected_dict = data_not_inplace
+    X_new_np = objs_dict["int"].transform_numpy(X_dict["int"].to_numpy())
+    X_new = pd.DataFrame(X_new_np, columns=X_expected_dict["int"].columns)
+    assert_frame_equal(X_new, X_expected_dict["int"])
+
+
+def test_not_inplace_float_pd_np(data_not_inplace):
+    objs_dict, X_dict, X_expected_dict = data_not_inplace
+    X_new_np = objs_dict["float"].transform_numpy(X_dict["float"].to_numpy())
+    X_new = pd.DataFrame(X_new_np, columns=X_expected_dict["float"].columns)
+    assert_frame_equal(X_new, X_expected_dict["float"])
+
+
+def test_not_inplace_object_pd_np(data_not_inplace):
+    objs_dict, X_dict, X_expected_dict = data_not_inplace
+    X_new_np = objs_dict["object"].transform_numpy(X_dict["object"].to_numpy())
+    X_new = pd.DataFrame(X_new_np, columns=X_expected_dict["object"].columns)
+    assert_frame_equal(X_new, X_expected_dict["object"])

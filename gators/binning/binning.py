@@ -67,7 +67,7 @@ class Binning(_BaseBinning):
     >>> obj.fit_transform(X)
         A   B
     0  _0  _2
-    1  _1  _0
+    1  _1  _1
     2  _2  _0
 
     * with `inplace=False`
@@ -77,7 +77,7 @@ class Binning(_BaseBinning):
     >>> obj.fit_transform(X)
        A  B A__bin B__bin
     0 -1  3     _0     _2
-    1  0  1     _1     _0
+    1  0  1     _1     _1
     2  1  0     _2     _0
 
     Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
@@ -87,7 +87,7 @@ class Binning(_BaseBinning):
     >>> X = pd.DataFrame({'A': [-1, 0, 1], 'B': [3, 1, 0]})
     >>> obj.transform_numpy(X.to_numpy())
     array([[-1, 3, '_0', '_2'],
-           [0, 1, '_1', '_0'],
+           [0, 1, '_1', '_1'],
            [1, 0, '_2', '_0']], dtype=object)
 
     See Also
@@ -133,8 +133,8 @@ class Binning(_BaseBinning):
         bins_np[0, :] = util.get_bounds(X_dtype)[0]
         infinity = util.get_bounds(X_dtype)[1]
         bins_np[-1, :] = infinity
-        x_min = util.get_function(X).to_pandas(X.quantile(0.001))
-        x_max = util.get_function(X).to_pandas(X.quantile(0.999))
+        x_min = util.get_function(X).to_pandas(X.min())
+        x_max = util.get_function(X).to_pandas(X.max())
         deltas = x_max - x_min
         for i in range(1, self.n_bins):
             bins_np[i, :] = x_min + i * deltas / self.n_bins

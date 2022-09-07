@@ -1,25 +1,22 @@
 # License: Apache-2.0
 
 
-import numpy as np
-
-from scaler import standard_scaler
-
-from ..transformers.transformer import Transformer
+from ._base_scaler import _BaseScaler
 from ..util import util
 
 from gators import DataFrame, Series
 
 
-class StandardScaler(Transformer):
+class StandardScaler(_BaseScaler):
     """Scale each column by setting the mean to 0 and the standard deviation to 1.
 
 
 
     Parameters
     ----------
-    dtype : type, default np.float64.
-        Numerical datatype of the output data.
+    inplace : bool, default True.
+        If True, perform the scaling in-place.
+        If False, create new columns.
 
     Examples
     --------
@@ -62,12 +59,8 @@ class StandardScaler(Transformer):
            [ 1.        ,  0.80064077]])
     """
 
-    def __init__(self, dtype: type = np.float64):
-        self.dtype = dtype
-        self.X_mean: DataFrame = None
-        self.X_std: DataFrame = None
-        self.X_mean_np = np.array([])
-        self.X_std_np = np.array([])
+    def __init__(self, inplace: bool = True):
+        _BaseScaler.__init__(self, inplace=inplace)
 
     def fit(self, X: DataFrame, y: Series = None) -> "StandardScaler":
         """Fit the transformer on the pandas/koalas dataframe X.
@@ -85,50 +78,17 @@ class StandardScaler(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
-        self.columns = list(X.columns)
-        self.X_mean = util.get_function(X).to_pandas(X.mean()).astype(self.dtype)
-        self.X_std = util.get_function(X).to_pandas(X.std()).astype(self.dtype)
-        self.X_mean_np = util.get_function(self.X_mean).to_numpy(self.X_mean)
-        self.X_std_np = util.get_function(self.X_std).to_numpy(self.X_std)
-        self.X_mean = self.X_mean.to_dict()
-        self.X_std = self.X_std.to_dict()
+        self.columns = util.get_numerical_columns(X)
+        self.idx_columns = util.get_idx_columns(X, self.columns)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "scale")
+        self.X_offset = (
+            util.get_function(X).to_pandas(X[self.columns].mean()).astype(float)
+        )
+        self.X_scale = (
+            1.0 / util.get_function(X).to_pandas(X[self.columns].std())
+        ).astype(float)
+        self.X_offset_np = util.get_function(self.X_offset).to_numpy(self.X_offset)
+        self.X_scale_np = util.get_function(self.X_scale).to_numpy(self.X_scale)
+        self.X_offset = self.X_offset.to_dict()
+        self.X_scale = self.X_scale.to_dict()
         return self
-
-    def transform(self, X):
-        """Transform the dataframe `X`.
-
-        Parameters
-        ----------
-        X : DataFrame.
-            Input dataframe.
-
-        Returns
-        -------
-        X : DataFrame
-            Transformed dataframe.
-        """
-        self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
-
-        for col in self.columns:
-            X[col] = (X[col] - self.X_mean[col]) / self.X_std[col]
-        self.columns_ = list(X.columns)
-        return X
-
-    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array X.
-
-        Parameters
-        ----------
-        X :np.ndarray:
-            Input array.
-
-        Returns
-        -------
-        X : np.ndarray
-            Transformed array.
-        """
-        self.check_array(X)
-        self.check_array_is_numerics(X)
-        return standard_scaler(X.astype(self.dtype), self.X_mean_np, self.X_std_np)

@@ -106,17 +106,17 @@ cpdef np.ndarray[object, ndim=2] contains(
 @cython.wraparound(False)
 cpdef np.ndarray[object, ndim=2] upper_case(
         np.ndarray[object, ndim=2] X,
-        np.ndarray[np.int_t, ndim=1] idx_columns,
 ):
     cdef int i
     cdef int j
     cdef int n_rows = X.shape[0]
-    cdef int n_cols = idx_columns.shape[0]
+    cdef int n_cols = X.shape[1]
     for j in range(n_cols):
         for i in range(n_rows):
-            if X[i, idx_columns[j]] is None or X[i, idx_columns[j]] == 'nan':
-                continue
-            X[i, idx_columns[j]] = X[i, idx_columns[j]].upper()
+            if X[i, j] is None or X[i, j] == 'nan':
+                X[i, j] = None
+            else:
+                X[i, j] = X[i, j].upper()
     return X
 
 
@@ -124,17 +124,17 @@ cpdef np.ndarray[object, ndim=2] upper_case(
 @cython.wraparound(False)
 cpdef np.ndarray[object, ndim=2] lower_case(
         np.ndarray[object, ndim=2] X,
-        np.ndarray[np.int_t, ndim=1] idx_columns,
 ):
     cdef int i
     cdef int j
     cdef int n_rows = X.shape[0]
-    cdef int n_cols = idx_columns.shape[0]
+    cdef int n_cols = X.shape[1]
     for j in range(n_cols):
         for i in range(n_rows):
-            if X[i, idx_columns[j]] is None or X[i, idx_columns[j]] == 'nan':
-                continue
-            X[i, idx_columns[j]] = X[i, idx_columns[j]].lower()
+            if X[i, j] is None or X[i, j] == 'nan':
+                X[i, j] = None
+            else:
+                X[i, j] = X[i, j].lower()
     return X
 
 

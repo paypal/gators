@@ -90,7 +90,7 @@ class OrdinalDayOfMonth(_BaseDatetimeFeature):
         for name, col in zip(self.column_names, self.columns):
             X[name] = X[col].dt.day
 
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

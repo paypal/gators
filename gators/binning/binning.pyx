@@ -65,7 +65,7 @@ cpdef np.ndarray[num_t, ndim = 2] bin_numerics(
             j_col = idx_columns[j]
             val = X[i, j_col]
             for k in range(1, n_bins):
-                if val <= bin_limits[k, j]:
+                if val < bin_limits[k, j]:
                     X_bin[i, j] = bins[k-1, j]
                     break
     return np.concatenate((X, X_bin), axis=1)
@@ -88,7 +88,7 @@ cpdef np.ndarray[object, ndim = 2] binning_inplace(
         for j in range(n_cols):
             j_col = idx_columns[j]
             for k in range(1, n_bins):
-                if X[i, j_col] <= bins_np[k, j]:
+                if X[i, j_col] < bins_np[k, j]:
                     X[i, j_col] = '_' + str(k - 1)
                     break
     return X
@@ -112,7 +112,7 @@ cpdef np.ndarray[object, ndim = 2] binning(
         for j in range(n_cols):
             j_col = idx_columns[j]
             for k in range(1, n_bins):
-                if float(X[i, j_col]) <= bins_np[k, j]:
+                if float(X[i, j_col]) < bins_np[k, j]:
                     X_bin[i, j] = '_' + str(k - 1)
                     break
     return np.concatenate((X, X_bin), axis=1)

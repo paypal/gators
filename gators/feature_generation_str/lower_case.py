@@ -61,12 +61,16 @@ class LowerCase(_BaseStringFeature):
            ['', None]], dtype=object)
     """
 
-    def __init__(self, columns: List[str]):
+    def __init__(self, columns: List[str], inplace: bool = True):
         if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
         if not columns:
             raise ValueError("`columns` should not be empty.")
+        if not isinstance(inplace, bool):
+            raise TypeError("`inplace` should be a bool.")
         self.columns = columns
+        self.inplace = inplace
+        self.column_names = self.get_column_names(self.inplace, self.columns, "lower")
 
     def fit(self, X: DataFrame, y: Series = None) -> "LowerCase":
         """Fit the transformer on the dataframe `X`.
@@ -102,12 +106,12 @@ class LowerCase(_BaseStringFeature):
         X : DataFrame
             Transformed dataframe.
         """
-
-        for col in self.columns:
-            X[col] = util.get_function(X).replace(
-                X[col].astype(str).str.lower(), {"none": None}
+        self.check_dataframe(X)
+        for col, name in zip(self.columns, self.column_names):
+            X[name] = util.get_function(X).replace(
+                X[col].astype(str).str.lower(), {"none": None, "nan": None}
             )
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -124,4 +128,9 @@ class LowerCase(_BaseStringFeature):
             Transformed array.
         """
         self.check_array(X)
-        return lower_case(X, self.idx_columns)
+        if self.inplace:
+            X[:, self.idx_columns] = lower_case(X[:, self.idx_columns])
+            return X
+        else:
+            X_upper = lower_case(X[:, self.idx_columns])
+            return np.concatenate((X, X_upper), axis=1)

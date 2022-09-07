@@ -42,7 +42,7 @@ def data_inplace():
             "A": ["_0", "_0", "_1"],
             "B": ["_0", "_1", "_1"],
             "C": ["_1", "_0", "_1"],
-            "D": [1, 2, 3],
+            "D": [1.0, 2.0, 3.0],
         }
     )
     X_expected = pd.DataFrame(
@@ -50,7 +50,7 @@ def data_inplace():
             "A": [0.0, 0.0, 1.0],
             "B": [0.0, 1.0, 1.0],
             "C": [1.0, 0.0, 1.0],
-            "D": [1, 2, 3],
+            "D": [1.0, 2.0, 3.0],
         }
     )
     obj = BinnedColumnsEncoder(columns=list("ABC")).fit(X)

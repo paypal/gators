@@ -15,13 +15,10 @@ class TargetEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    dtype : type, default np.float64.
-        Numerical datatype of the output data.
+    inplace : bool, default to True.
+        If True, replace in-place the categorical values by numerical ones.
+        If False, keep the categorical columns and create new encoded columns.
 
-    add_missing_categories : bool, default True.
-        If True, add the columns 'OTHERS' and 'MISSING'
-        to the mapping even if the categories are not
-        present in the data.
 
     Examples
     --------
@@ -70,11 +67,9 @@ class TargetEncoder(_BaseEncoder):
            [0. , 0.5]])
     """
 
-    def __init__(self, add_missing_categories: bool = True, dtype: type = np.float64):
+    def __init__(self, inplace=True):
 
-        _BaseEncoder.__init__(
-            self, add_missing_categories=add_missing_categories, dtype=dtype
-        )
+        _BaseEncoder.__init__(self, inplace=inplace)
         self.y_name = ""
 
     def fit(self, X: DataFrame, y: Series) -> "TargetEncoder":
@@ -94,7 +89,9 @@ class TargetEncoder(_BaseEncoder):
         """
         self.check_dataframe(X)
         self.check_target(X, y)
+        self.input_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, object)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "target")
         if not self.columns:
             warnings.warn(
                 f"""`X` does not contain object columns:
@@ -136,4 +133,4 @@ class TargetEncoder(_BaseEncoder):
         )
         means = util.get_function(X).to_pandas(means)
         mapping = {c: means[c].to_dict() for c in columns}
-        return self.clean_mapping(mapping, self.add_missing_categories)
+        return mapping

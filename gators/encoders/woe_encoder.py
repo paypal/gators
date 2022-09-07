@@ -6,6 +6,7 @@ import numpy as np
 
 from ..util import util
 from ._base_encoder import _BaseEncoder
+from ..util.iv import compute_iv
 
 from gators import DataFrame, Series
 
@@ -18,13 +19,10 @@ class WOEEncoder(_BaseEncoder):
     regularization : float, default 0.5.
         Insure that the weights of evidence are finite.
 
-    add_missing_categories : bool, default True.
-        If True, add the columns 'OTHERS' and 'MISSING'
-        to the mapping even if the categories are not
-        present in the data.
+    inplace : bool, default to True.
+        If True, replace in-place the categorical values by numerical ones.
+        If False, keep the categorical columns and create new encoded columns.
 
-    dtype : type, default np.float64.
-        Numerical datatype of the output data.
 
     Examples
     --------
@@ -59,32 +57,31 @@ class WOEEncoder(_BaseEncoder):
 
     >>> obj.fit_transform(X, y)
               A         B
-    0  1.609438  1.098612
-    1  1.609438  0.000000
-    2 -1.098612  0.000000
+    0  1.203973  0.693147
+    1  1.203973 -0.405465
+    2 -1.504077 -0.405465
 
     Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
     and returns a transformed NumPy array. Note that this transformer should **only** be used
     when the number of rows is small *e.g.* in real-time environment.
 
     >>> obj.transform_numpy(X.to_numpy())
-    array([[ 1.60943791,  1.09861229],
-           [ 1.60943791,  0.        ],
-           [-1.09861229,  0.        ]])
+    array([[ 1.2039728 ,  0.69314718],
+           [ 1.2039728 , -0.40546511],
+           [-1.5040774 , -0.40546511]])
     """
 
     def __init__(
         self,
         regularization: float = 0.5,
-        add_missing_categories=True,
-        dtype: type = np.float64,
+        inplace: bool = True,
     ):
-        if not isinstance(regularization, (int, float)) or regularization < 0:
-            raise TypeError("""`min_ratio` should be a positive float.""")
+        if not isinstance(regularization, (int, float)):
+            raise TypeError("""`regularization` should be a float.""")
+        if regularization < 0:
+            raise ValueError("""`regularization` should be a positive float.""")
         self.regularization = regularization
-        _BaseEncoder.__init__(
-            self, add_missing_categories=add_missing_categories, dtype=dtype
-        )
+        _BaseEncoder.__init__(self, inplace=inplace)
 
     def fit(self, X: DataFrame, y: Series) -> "WOEEncoder":
         """Fit the encoder.
@@ -103,7 +100,9 @@ class WOEEncoder(_BaseEncoder):
         """
         self.check_dataframe(X)
         self.check_target(X, y)
+        self.input_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, object)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "woe")
         if not self.columns:
             warnings.warn(
                 f"""`X` does not contain object columns:
@@ -139,21 +138,29 @@ class WOEEncoder(_BaseEncoder):
         Dict[str, Dict[str, float]]
             Mapping.
         """
-        y_name = y.name
-        columns = list(X.columns)
-        counts = (
-            util.get_function(X)
-            .melt(util.get_function(X).join(X, y.to_frame()), id_vars=y_name)
-            .groupby(["variable", "value"])
-            .agg(["sum", "count"])[y_name]
+        _, stats = compute_iv(X, y, regularization=self.regularization)
+        mapping = (
+            stats[["woe"]]
+            .groupby(level=0)
+            .apply(lambda df: df.xs(df.name)["woe"].to_dict())
+            .to_dict()
         )
-        counts = util.get_function(X).to_pandas(counts)
-        counts.columns = ["1", "count"]
-        counts["0"] = (counts["count"] - counts["1"] + self.regularization) / counts[
-            "count"
-        ]
-        counts["1"] = (counts["1"] + self.regularization) / counts["count"]
-        woe = np.log(counts["1"] / counts["0"])
-        mapping = {c: woe[c].to_dict() for c in columns}
 
-        return self.clean_mapping(mapping, self.add_missing_categories)
+        # y_name = y.name
+        # columns = list(X.columns)
+        # counts = (
+        #     util.get_function(X)
+        #     .melt(util.get_function(X).join(X, y.to_frame()), id_vars=y_name)
+        #     .groupby(["variable", "value"])
+        #     .agg(["sum", "count"])[y_name]
+        # )
+        # counts = util.get_function(X).to_pandas(counts)
+        # counts.columns = ["1", "count"]
+        # counts["0"] = (counts["count"] - counts["1"] + self.regularization) / counts[
+        #     "count"
+        # ]
+        # counts["1"] = (counts["1"] + self.regularization) / counts["count"]
+        # woe = np.log(counts["1"] / counts["0"])
+        # mapping = {c: woe[c].to_dict() for c in columns}
+
+        return mapping

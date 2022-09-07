@@ -40,7 +40,7 @@ class _BaseFeatureSelection(Transformer):
         ]  # needed for dask
         if len(columns_to_drop):
             return X.drop(columns_to_drop, axis=1)
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -33,7 +33,7 @@ class _BaseBinning(Transformer):
         self.n_bins = n_bins
         self.inplace = inplace
         self.columns = []
-        self.output_columns = []
+        self.column_names = []
         self.idx_columns = np.array([])
         self.bins = {}
         self.mapping = {}
@@ -56,11 +56,10 @@ class _BaseBinning(Transformer):
         """
         self.check_dataframe(X)
         self.columns = util.get_numerical_columns(X)
-        self.output_columns = [f"{c}__bin" for c in self.columns]
+        self.column_names = self.get_column_names(inplace=False, columns=self.columns, suffix='bin')
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         if self.idx_columns.size == 0:
             return self
-
         self.bins, self.bins_np = self.compute_bins(X[self.columns], y)
         self.mapping = self.compute_mapping(self.bins)
         return self
@@ -84,9 +83,9 @@ class _BaseBinning(Transformer):
             return X
         if self.inplace:
             return bin.bin_inplace(
-                X, self.bins, self.mapping, self.columns, self.output_columns
+                X, self.bins, self.mapping, self.columns, self.column_names
             )
-        return bin.bin(X, self.bins, self.mapping, self.columns, self.output_columns)
+        return bin.bin(X, self.bins, self.mapping, self.columns, self.column_names)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.
@@ -99,7 +98,7 @@ class _BaseBinning(Transformer):
         Returns
         -------
         X : np.ndarray
-            Transformed array. 
+            Transformed array.
         """
         self.check_array(X)
         if self.idx_columns.size == 0:
@@ -123,12 +122,12 @@ class _BaseBinning(Transformer):
                     zip(
                         [f"_{b}" for b in range(len(bins[col]))],
                         (
-                            [f"(-inf, {bins[col][1]}]"]
+                            [f"(-inf, {bins[col][1]})"]
                             + [
                                 f"({b1}, {b2}]"
                                 for b1, b2 in zip(bins[col][1:-2], bins[col][2:-1])
                             ]
-                            + [f"({bins[col][-2]}, inf)"]
+                            + [f"[{bins[col][-2]}, inf)"]
                         ),
                     )
                 )

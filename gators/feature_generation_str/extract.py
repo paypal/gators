@@ -134,7 +134,7 @@ class Extract(_BaseStringFeature):
             X[name] = X[col].str.slice(
                 start=i_min, stop=i_max
             )  # .replace({"": "MISSING"})
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

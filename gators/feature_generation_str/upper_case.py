@@ -61,12 +61,16 @@ class UpperCase(_BaseStringFeature):
            ['', None]], dtype=object)
     """
 
-    def __init__(self, columns: List[str], column_names: List[str] = None):
+    def __init__(self, columns: List[str], inplace: bool = True):
         if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
         if not columns:
             raise ValueError("`columns` should not be empty.")
+        if not isinstance(inplace, bool):
+            raise TypeError("`inplace` should be a bool.")
         self.columns = columns
+        self.inplace = inplace
+        self.column_names = self.get_column_names(self.inplace, self.columns, "upper")
 
     def fit(self, X: DataFrame, y: Series = None) -> "UpperCase":
         """Fit the transformer on the dataframe `X`.
@@ -103,12 +107,11 @@ class UpperCase(_BaseStringFeature):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-
-        for col in self.columns:
-            X[col] = util.get_function(X).replace(
+        for col, name in zip(self.columns, self.column_names):
+            X[name] = util.get_function(X).replace(
                 X[col].astype(str).str.upper(), {"NONE": None, "NAN": None}
             )
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -125,4 +128,9 @@ class UpperCase(_BaseStringFeature):
             Transformed array.
         """
         self.check_array(X)
-        return upper_case(X, self.idx_columns)
+        if self.inplace:
+            X[:, self.idx_columns] = upper_case(X[:, self.idx_columns])
+            return X
+        else:
+            X_upper = upper_case(X[:, self.idx_columns].copy())
+            return np.concatenate((X, X_upper), axis=1)

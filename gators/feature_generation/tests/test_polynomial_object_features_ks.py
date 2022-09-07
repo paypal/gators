@@ -21,10 +21,10 @@ def data_ks():
             "A": [None, "b", "c"],
             "B": ["z", "a", "a"],
             "C": ["c", "d", "d"],
-            "A__B": ["z", "ba", "ca"],
-            "A__C": ["c", "bd", "cd"],
-            "B__C": ["zc", "ad", "ad"],
-            "A__B__C": ["zc", "bad", "cad"],
+            "A__x__B": ["z", "ba", "ca"],
+            "A__x__C": ["c", "bd", "cd"],
+            "B__x__C": ["zc", "ad", "ad"],
+            "A__x__B__x__C": ["zc", "bad", "cad"],
         }
     )
     obj = PolynomialObjectFeatures(columns=["A", "B", "C"], degree=3).fit(X)

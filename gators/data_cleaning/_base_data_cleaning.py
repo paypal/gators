@@ -1,5 +1,4 @@
 # License: Apache-2.0
-# from abc import ABC
 from typing import List
 
 import numpy as np
@@ -33,10 +32,10 @@ class _BaseDataCleaning(Transformer):
             Transformed dataset.
         """
         self.check_dataframe(X)
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         if len(self.columns):
             return X.drop(self.columns, axis=1)
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -174,7 +174,7 @@ class BinSingleTargetClassCategories(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         if not self.is_binned:
             return X
         return self.replace.transform(X)

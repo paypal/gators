@@ -315,3 +315,26 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
                 to use the transformer {self.__class__.__name__}.
                 Use `gators.imputers.ObjectImputer` before calling it."""
             )
+
+    @staticmethod
+    def get_column_names(inplace: bool, columns: List[str], suffix: str):
+        """Return the names of the modified columns.
+
+        Parameters
+        ----------
+        inplace : bool
+            If True return `columns`.
+            If False return `columns__suffix`.
+        columns : List[str]
+            List of columns.
+        suffix : str
+            Suffix used if `inplace` is False.
+
+        Returns
+        -------
+        List[str]
+            List of column names.
+        """
+        if inplace:
+            return columns
+        return [f"{c}__{suffix}" for c in columns]

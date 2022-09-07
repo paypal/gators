@@ -34,14 +34,14 @@ def data():
         {
             "A__month_of_year_cos": [1.0, np.nan, np.nan],
             "A__month_of_year_sin": [0.0, np.nan, np.nan],
-            "B__month_of_year_cos": [-0.142314838273285, np.nan, np.nan],
-            "B__month_of_year_sin": [0.9898214418809328, np.nan, np.nan],
-            "C__month_of_year_cos": [-0.9594929736144975, np.nan, np.nan],
-            "C__month_of_year_sin": [-0.28173255684142945, np.nan, np.nan],
-            "D__month_of_year_cos": [0.41541501300188605, np.nan, np.nan],
-            "D__month_of_year_sin": [-0.9096319953545186, np.nan, np.nan],
-            "E__month_of_year_cos": [1.0, np.nan, np.nan],
-            "E__month_of_year_sin": [-1.133107779529596e-16, np.nan, np.nan],
+            "B__month_of_year_cos": [0., np.nan, np.nan],
+            "B__month_of_year_sin": [1., np.nan, np.nan],
+            "C__month_of_year_cos": [-1., np.nan, np.nan],
+            "C__month_of_year_sin": [-0., np.nan, np.nan],
+            "D__month_of_year_cos": [0., np.nan, np.nan],
+            "D__month_of_year_sin": [-1, np.nan, np.nan],
+            "E__month_of_year_cos": [0.8660254037844384, np.nan, np.nan],
+            "E__month_of_year_sin": [-0.5, np.nan, np.nan],
         }
     )
     X_expected_np = np.concatenate((X_np, X_expected.to_numpy()), axis=1)

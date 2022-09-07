@@ -114,7 +114,7 @@ class StringLength(_BaseStringFeature):
                 .str.len()
                 .astype(np.float64)
             )
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

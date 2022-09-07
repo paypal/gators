@@ -28,6 +28,9 @@ class ObjectImputer(_BaseImputer):
 
     value : str, default None.
         Imputation value used for `strategy=constant`.
+    inplace : List[float], default None.
+        If True, impute in-place.
+        If False, create new imputed columns.
 
     Examples
     ---------
@@ -119,8 +122,10 @@ class ObjectImputer(_BaseImputer):
 
     """
 
-    def __init__(self, strategy: str, value: str = None, columns=None):
-        _BaseImputer.__init__(self, strategy, value, columns=columns)
+    def __init__(
+        self, strategy: str, value: str = None, columns=None, inplace: bool = True
+    ):
+        _BaseImputer.__init__(self, strategy, value, columns=columns, inplace=inplace)
         if strategy not in ["constant", "most_frequent"]:
             raise ValueError(
                 """`strategy` should be "constant" or "most_frequent"
@@ -150,6 +155,7 @@ class ObjectImputer(_BaseImputer):
         self.check_dataframe(X)
         if not self.columns:
             self.columns = util.get_datatype_columns(X, object)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
         if not self.columns:
             warnings.warn(
                 """`X` does not contain object columns:
@@ -157,7 +163,6 @@ class ObjectImputer(_BaseImputer):
             )
             self.idx_columns = np.array([])
             return self
-        self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         self.idx_columns = np.array(util.get_idx_columns(X, self.columns))
         self.statistics = self.compute_statistics(X=X, value=self.value)
         self.statistics_np = np.array(list(self.statistics.values())).astype(object)
@@ -179,4 +184,8 @@ class ObjectImputer(_BaseImputer):
         self.check_array(X)
         if self.idx_columns.size == 0:
             return X
-        return object_imputer(X, self.statistics_np, self.idx_columns)
+        if self.inplace:
+            return object_imputer(X, self.statistics_np, self.idx_columns)
+        else:
+            X_impute = object_imputer(X.copy(), self.statistics_np, self.idx_columns)
+            return np.concatenate((X, X_impute[:, self.idx_columns]), axis=1)

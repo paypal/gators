@@ -17,8 +17,9 @@ class OneHotEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    dtype : type, default np.float64.
-        Numerical datatype of the output data.
+    inplace : bool, default to True.
+        If True, replace in-place the categorical values by numerical ones.
+        If False, keep the categorical columns and create new encoded columns.
 
     Examples
     ---------
@@ -64,11 +65,11 @@ class OneHotEncoder(_BaseEncoder):
            [0., 1., 0., 1.]])
     """
 
-    def __init__(self, dtype: type = np.float64):
-        _BaseEncoder.__init__(self, add_missing_categories=False, dtype=dtype)
-        self.ordinal_encoder = OrdinalEncoder(dtype=dtype, add_missing_categories=False)
+    def __init__(self, inplace=True):
+        _BaseEncoder.__init__(self, inplace=inplace)
+        self.ordinal_encoder = OrdinalEncoder()
         self.idx_numerical_columns = np.array([])
-        self.onehot_columns = []
+        self.column_names = []
         self.numerical_columns = []
 
     def fit(self, X: DataFrame, y: Series = None) -> "OneHotEncoder":
@@ -86,6 +87,7 @@ class OneHotEncoder(_BaseEncoder):
         OneHotEncoder: Instance of itself.
         """
         self.check_dataframe(X)
+        self.input_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, object)
         columns = list(X.columns)
         if not self.columns:
@@ -94,25 +96,23 @@ class OneHotEncoder(_BaseEncoder):
                 `{self.__class__.__name__}` is not needed"""
             )
             return self
-        self.onehot_columns = list(
+        self.column_names = list(
             util.get_function(X).get_dummies(
                 X[self.columns], self.columns, prefix_sep="__"
             )
         )
-        self.onehot_columns = sorted(self.onehot_columns)
-        object_columns = [
-            "__".join(col.split("__")[:-1]) for col in self.onehot_columns
-        ]
+        self.column_names = sorted(self.column_names)
+        object_columns = ["__".join(col.split("__")[:-1]) for col in self.column_names]
         self.idx_columns = util.get_idx_columns(X, object_columns)
         self.idx_columns_to_keep = [
             i
-            for i, col in enumerate(columns + self.onehot_columns)
+            for i, col in enumerate(columns + self.column_names)
             if col not in self.columns
         ]
 
-        self.cats = np.array(
-            [col.split("__")[-1] for col in self.onehot_columns]
-        ).astype(object)
+        self.cats = np.array([col.split("__")[-1] for col in self.column_names]).astype(
+            object
+        )
         return self
 
     def transform(self, X: DataFrame) -> DataFrame:
@@ -131,13 +131,15 @@ class OneHotEncoder(_BaseEncoder):
         self.check_dataframe(X)
         if not self.columns:
             return X
-        for onehot_col in self.onehot_columns:
-            dummy = onehot_col.split("__")
+        for name in self.column_names:
+            dummy = name.split("__")
             col = "__".join(dummy[:-1])
             cat = dummy[-1]
-            X[onehot_col] = X[col] == cat
-        X = X.drop(self.columns, axis=1).astype(self.dtype)
-        self.columns_ = list(X.columns)
+            X[name] = X[col] == cat
+        X[self.column_names] = X[self.column_names].astype(float)
+        if self.inplace:
+            X = X.drop(self.columns, axis=1)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -156,6 +158,9 @@ class OneHotEncoder(_BaseEncoder):
         self.check_array(X)
         if self.idx_columns.size == 0:
             return X
-        return onehot_encoder(X, self.idx_columns, self.cats)[
+        X_encoded = onehot_encoder(X.copy(), self.idx_columns, self.cats)[
             :, self.idx_columns_to_keep
-        ].astype(self.dtype)
+        ]
+        if self.inplace:
+            return X_encoded.astype(float)
+        return np.concatenate((X, X_encoded[:, -len(self.column_names) :]), axis=1)

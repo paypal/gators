@@ -57,23 +57,18 @@ def data():
 @pytest.fixture()
 def data_num():
     X_int = dd.from_pandas(
-        pd.DataFrame(
-            {"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]}, dtype=np.float32
-        ),
+        pd.DataFrame({"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]}),
         npartitions=1,
     )
     X_float = dd.from_pandas(
-        pd.DataFrame(
-            {"C": [0.1, 1.1, 2.1, np.nan], "D": [2.1, 3.1, 4.1, np.nan]},
-            dtype=np.float32,
-        ),
+        pd.DataFrame({"C": [0.1, 1.1, 2.1, np.nan], "D": [2.1, 3.1, 4.1, np.nan]}),
         npartitions=1,
     )
     X_int_expected = pd.DataFrame(
-        {"A": [0.0, 1.0, 1.0, -9.0], "B": [3.0, 4.0, 4.0, -9.0]}, dtype=np.float32
+        {"A": [0.0, 1.0, 1.0, -9.0], "B": [3.0, 4.0, 4.0, -9.0]}
     )
     X_float_expected = pd.DataFrame(
-        {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}, dtype=np.float32
+        {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}
     )
     obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
@@ -213,10 +208,7 @@ def test_object_dd_np(data):
 def test_num_int_dd(data_num):
     objs_dict, X_dict, X_expected_dict = data_num
     assert_frame_equal(
-        objs_dict["int"]
-        .transform(X_dict["int"])
-        .compute()
-        .astype(np.float32),  # DASK problem
+        objs_dict["int"].transform(X_dict["int"]).compute(),
         X_expected_dict["int"],
     )
 
@@ -224,10 +216,7 @@ def test_num_int_dd(data_num):
 def test_num_float_dd(data_num):
     objs_dict, X_dict, X_expected_dict = data_num
     assert_frame_equal(
-        objs_dict["float"]
-        .transform(X_dict["float"])
-        .compute()
-        .astype(np.float32),  # DASK problem
+        objs_dict["float"].transform(X_dict["float"]).compute(),
         X_expected_dict["float"],
     )
 

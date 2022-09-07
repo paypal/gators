@@ -160,7 +160,7 @@ class PolynomialFeatures(Transformer):
             X[name] = X[combi[0]]
             for c in combi[1:]:
                 X[name] *= X[c]
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

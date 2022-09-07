@@ -55,7 +55,7 @@ class CyclicDayOfMonth(_BaseDatetimeFeature):
     >>> obj.fit_transform(X)
                         A  B  A__day_of_month_cos  A__day_of_month_sin
     0 2020-01-01 23:00:00  0             1.000000             0.000000
-    1 2020-12-15 18:00:00  1            -0.978148             0.207912
+    1 2020-12-15 18:00:00  1            -0.954139             0.299363
     2                 NaT  0                  NaN                  NaN
 
 
@@ -64,8 +64,8 @@ class CyclicDayOfMonth(_BaseDatetimeFeature):
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([[Timestamp('2020-01-01 23:00:00'), 0, 1.0, 0.0],
-           [Timestamp('2020-12-15 18:00:00'), 1, -0.9781476007338057,
-            0.2079116908177593],
+           [Timestamp('2020-12-15 18:00:00'), 1, -0.9541392564000488,
+            0.299363122973358],
            [NaT, 0, nan, nan]], dtype=object)
     """
 
@@ -129,7 +129,7 @@ class CyclicDayOfMonth(_BaseDatetimeFeature):
 
         for i, c in enumerate(self.columns):
             day_of_month = X[c].dt.day - 1
-            n_days_in_month = X[c].dt.daysinmonth - 1
+            n_days_in_month = X[c].dt.daysinmonth
             prefactors = 2 * np.pi / n_days_in_month
             X[self.column_names[2 * i]] = np.cos(prefactors * day_of_month)
             X[self.column_names[2 * i + 1]] = np.sin(prefactors * day_of_month)

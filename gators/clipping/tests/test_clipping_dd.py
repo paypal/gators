@@ -39,20 +39,6 @@ def data():
 
 
 @pytest.fixture
-def data_int16():
-    np.random.seed(0)
-    X = dd.from_pandas(
-        pd.DataFrame(5 * np.random.randn(5, 3), columns=list("ABC")), npartitions=1
-    ).astype(np.int16)
-    clip_dict = {"A": [-5, 2], "B": [-1, 3], "C": [-2, 5]}
-    obj = Clipping(clip_dict=clip_dict, dtype=np.int16).fit(X)
-    X_expected = pd.DataFrame(
-        {"A": [2, 2, 2, 2, 2], "B": [2, 3, 0, 0, 0], "C": [4, -2, 0, 5, 2]}
-    ).astype(np.int16)
-    return obj, X, X_expected
-
-
-@pytest.fixture
 def data_partial():
     np.random.seed(0)
     X = dd.from_pandas(
@@ -90,19 +76,6 @@ def test_dd(data):
 
 def test_dd_np(data):
     obj, X, X_expected = data
-    X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
-    X_new = pd.DataFrame(X_numpy_new)
-    assert np.allclose(X_new, X_expected.to_numpy())
-
-
-def test_int16_dd(data_int16):
-    obj, X, X_expected = data_int16
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
-
-
-def test_int16_dd_np(data_int16):
-    obj, X, X_expected = data_int16
     X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
     X_new = pd.DataFrame(X_numpy_new)
     assert np.allclose(X_new, X_expected.to_numpy())

@@ -135,7 +135,7 @@ class IsEqual(_BaseFeatureGeneration):
         self.check_dataframe(X)
         for a, b, name in zip(self.columns_a, self.columns_b, self.column_names):
             X[name] = (X[a] == X[b]).astype(float)
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

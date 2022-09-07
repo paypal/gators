@@ -156,7 +156,7 @@ class PlaneRotation(Transformer):
                 sin_theta = sin(theta * PI / 180)
                 X[f"{x}{y}_x_{theta}deg"] = X[x] * cos_theta - X[y] * sin_theta
                 X[f"{x}{y}_y_{theta}deg"] = X[x] * sin_theta + X[y] * cos_theta
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -55,10 +55,10 @@ class PolynomialObjectFeatures(Transformer):
     The result is a transformed dataframe belonging to the same dataframe library.
 
     >>> obj.fit_transform(X)
-          A  B  C A__B A__C B__C A__B__C
-    0  None  z  c    z    c   zc      zc
-    1     b  a  d   ba   bd   ad     bad
-    2     c  a  d   ca   cd   ad     cad
+          A  B  C A__x__B A__x__C B__x__C A__x__B__x__C
+    0  None  z  c       z       c      zc            zc
+    1     b  a  d      ba      bd      ad           bad
+    2     c  a  d      ca      cd      ad           cad
 
     Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
     and returns a transformed NumPy array. Note that this transformer should **only** be used
@@ -95,7 +95,7 @@ class PolynomialObjectFeatures(Transformer):
             )
         )
         column_names = [
-            "__".join(map(str, combination)) for combination in self.combinations
+            "__x__".join(map(str, combination)) for combination in self.combinations
         ]
         _BaseFeatureGeneration.__init__(
             self,
@@ -158,8 +158,8 @@ class PolynomialObjectFeatures(Transformer):
             return X
         for combi, name in zip(self.combinations, self.column_names):
             X[name] = X[combi[0]].fillna("")
-            X[name] += X["__".join(combi[1:])].fillna("")
-        self.columns_ = list(X.columns)
+            X[name] += X["__x__".join(combi[1:])].fillna("")
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

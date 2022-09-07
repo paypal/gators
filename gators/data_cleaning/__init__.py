@@ -7,6 +7,8 @@ from .drop_high_nan_ratio import DropHighNaNRatio
 from .drop_low_cardinality import DropLowCardinality
 from .keep_columns import KeepColumns
 from .replace import Replace
+from .rename_columns import RenameColumns
+
 
 __all__ = [
     "_BaseDataCleaning",
@@ -18,4 +20,5 @@ __all__ = [
     "DropLowCardinality",
     "KeepColumns",
     "Replace",
+    "RenameColumns",
 ]

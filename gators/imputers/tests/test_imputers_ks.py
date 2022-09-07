@@ -61,17 +61,13 @@ def data_ks():
 
 @pytest.fixture()
 def data_num_ks():
-    X_int = ks.DataFrame(
-        {"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]}, dtype=np.float32
-    )
-    X_float = ks.DataFrame(
-        {"C": [0.1, 1.1, 2.1, np.nan], "D": [2.1, 3.1, 4.1, np.nan]}, dtype=np.float32
-    )
+    X_int = ks.DataFrame({"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]})
+    X_float = ks.DataFrame({"C": [0.1, 1.1, 2.1, np.nan], "D": [2.1, 3.1, 4.1, np.nan]})
     X_int_expected = pd.DataFrame(
-        {"A": [0.0, 1.0, 1.0, -9.0], "B": [3.0, 4.0, 4.0, -9.0]}, dtype=np.float32
+        {"A": [0.0, 1.0, 1.0, -9.0], "B": [3.0, 4.0, 4.0, -9.0]}
     )
     X_float_expected = pd.DataFrame(
-        {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}, dtype=np.float32
+        {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}
     )
     obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int

@@ -5,7 +5,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-from imputer import float_imputer, float_imputer_object
+from imputer import float_imputer
 
 from ..util import util
 from ._base_imputer import _BaseImputer
@@ -29,6 +29,9 @@ class NumericsImputer(_BaseImputer):
 
     value : str, default None.
         Imputation value used for `strategy=constant`.
+    inplace : List[float], default None.
+        If True, impute in-place.
+        If False, create new imputed columns.
 
     Examples
     ---------
@@ -109,8 +112,14 @@ class NumericsImputer(_BaseImputer):
         Impute categorical columns.
     """
 
-    def __init__(self, strategy: str, value: float = None, columns: List[str] = None):
-        _BaseImputer.__init__(self, strategy, value, columns)
+    def __init__(
+        self,
+        strategy: str,
+        value: float = None,
+        columns: List[str] = None,
+        inplace: bool = True,
+    ):
+        _BaseImputer.__init__(self, strategy, value, columns=columns, inplace=inplace)
         if strategy == "constant" and not isinstance(self.value, (int, float)):
             raise TypeError(
                 """`value` should be an int or a float
@@ -136,6 +145,8 @@ class NumericsImputer(_BaseImputer):
         self.check_dataframe(X)
         if not self.columns:
             self.columns = util.get_datatype_columns(X, float)
+            self.columns += util.get_datatype_columns(X, int)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
         if not self.columns:
             warnings.warn(
                 """`X` does not contain numerical columns,
@@ -145,6 +156,7 @@ class NumericsImputer(_BaseImputer):
             return self
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         self.statistics = self.compute_statistics(X=X, value=self.value)
+        
         self.statistics_np = np.array(list(self.statistics.values()))
         return self
 
@@ -159,15 +171,16 @@ class NumericsImputer(_BaseImputer):
         Returns
         -------
         X : np.ndarray:
-            Transformed array. 
+            Transformed array.
         """
         self.check_array(X)
         if isinstance(X[0, 0], np.integer):
             return X
         if self.idx_columns.size == 0:
             return X
-        if X.dtype == object:
-            return float_imputer_object(
-                X, self.statistics_np.astype(object), self.idx_columns
-            )
-        return float_imputer(X, self.statistics_np, self.idx_columns)
+        if self.inplace:
+            X[:, self.idx_columns] = float_imputer(X[:, self.idx_columns].astype(float), self.statistics_np)
+            return X
+        else:
+            X_impute = float_imputer(X[:, self.idx_columns].copy().astype(float), self.statistics_np)
+            return np.concatenate((X, X_impute), axis=1)

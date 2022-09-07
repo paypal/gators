@@ -89,6 +89,7 @@ class ConvertColumnDatatype(Transformer):
             raise TypeError("`datatype` should be a type.")
         self.columns = columns
         self.datatype = datatype
+        self.column_names = []
 
     def fit(self, X: DataFrame, y: Series = None) -> "ConvertColumnDatatype":
         """Fit the transformer on the dataframe X.
@@ -122,7 +123,7 @@ class ConvertColumnDatatype(Transformer):
             Transformed dataframe.
         """
         X[self.columns] = X[self.columns].astype(self.datatype)
-        self.columns_ = list(X.columns)
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray, y: Series = None) -> np.ndarray:

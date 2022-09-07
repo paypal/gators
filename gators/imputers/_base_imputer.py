@@ -25,12 +25,19 @@ class _BaseImputer(Transformer):
 
     value (Union[float, str, None]) : Imputation value, default None.
         used for `strategy=constant`.
-    theta_vec : List[float], default None.
+    columns : List[float], default None.
         List of columns.
+    inplace : List[float], default None.
+        If True, impute in-place.
+        If False, create new imputed columns.
     """
 
     def __init__(
-        self, strategy: str, value: Union[float, str, None], columns: List[str]
+        self,
+        strategy: str,
+        value: Union[float, str, None],
+        columns: List[str],
+        inplace: bool = True,
     ):
         if not isinstance(strategy, str):
             raise TypeError("`strategy` should be a string.")
@@ -40,11 +47,14 @@ class _BaseImputer(Transformer):
             raise ValueError("Imputation `strategy` not implemented.")
         if not isinstance(columns, list) and columns is not None:
             raise TypeError("`columns` should be a list or None.")
-
+        if not isinstance(inplace, bool):
+            raise TypeError("`inplace` should be a bool.")
         Transformer.__init__(self)
         self.strategy = strategy
         self.value = value
         self.columns = columns
+        self.inplace = inplace
+        self.column_names = []
         self.statistics: Dict = {}
         self.statistics_np: np.ndarray = None
         self.idx_columns: np.ndarray = None
@@ -64,8 +74,15 @@ class _BaseImputer(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        self.columns_ = list(X.columns)
-        return util.get_function(X).fillna(X, value=self.statistics)
+        self.dtypes_ = X.dtypes
+        self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
+        X_impute = util.get_function(X).fillna(X, value=self.statistics)
+        if self.inplace:
+            return X_impute
+        X_impute = X_impute[self.columns].rename(
+            columns=dict(zip(self.columns, self.column_names))
+        )
+        return X.join(X_impute)
 
     def compute_statistics(
         self, X: DataFrame, value: Union[float, int, str, None]

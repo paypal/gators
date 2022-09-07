@@ -32,7 +32,7 @@ class CustomBinning(_BaseBinning):
     --------
     >>> from gators.binning import Binning
 
-    >>> bins = {'A':[-np.inf, 0, np.inf], 'B':[-np.inf, 1, np.inf]}
+    >>> bins = {'A':[-np.inf, 1, np.inf], 'B':[-np.inf, 2, np.inf]}
 
     The binning can be done inplace by modifying the existing columns:
 
@@ -125,7 +125,7 @@ class CustomBinning(_BaseBinning):
         """
         self.check_dataframe(X)
         self.columns = list(self.bins.keys())
-        self.output_columns = [f"{c}__bin" for c in self.columns]
+        self.column_names = [f"{c}__bin" for c in self.columns]
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         n_cols = self.idx_columns.size
         if n_cols == 0:

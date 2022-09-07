@@ -4,6 +4,7 @@ from typing import Dict, List
 import numpy as np
 
 from clipping import clipping
+from clipping import _clipping
 
 from ..transformers.transformer import Transformer
 from ..util import util
@@ -86,14 +87,16 @@ class Clipping(Transformer):
            [ 0.5,  0.1,  0.4]])
     """
 
-    def __init__(self, clip_dict: Dict[str, List[float]], dtype: type = np.float64):
+    def __init__(self, clip_dict: Dict[str, List[float]], inplace: bool = True):
         if not isinstance(clip_dict, dict):
             raise TypeError("`clip_dict` should be a dictionary.")
         if len(clip_dict) == 0:
             raise ValueError("Length of `clip_dict` should be not zero.")
+        if not isinstance(inplace, bool):
+            raise TypeError("`inplace` should be a bool.")
         self.clip_dict = clip_dict
-        self.dtype = dtype
-        self.clip_np = np.array(list(clip_dict.values())).astype(self.dtype)
+        self.inplace = inplace
+        self.clip_np = np.array(list(clip_dict.values()))
         self.columns = list(clip_dict.keys())
 
     def fit(self, X: DataFrame, y: Series = None) -> "Clipping":
@@ -112,8 +115,9 @@ class Clipping(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
+        self.input_columns = list(X.columns)
         self.idx_columns = util.get_idx_columns(X, self.clip_dict.keys())
+        self.column_names = self.get_column_names(self.inplace, self.columns, "clip")
         return self
 
     def transform(self, X):
@@ -130,16 +134,9 @@ class Clipping(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
-        self.columns_ = list(X.columns)
-
-        for col in self.columns:
-            X[col] = (
-                X[col]
-                .clip(self.clip_dict[col][0], self.clip_dict[col][1])
-                .astype(self.dtype)
-            )
-        self.columns_ = list(X.columns)
+        for col, name in zip(self.columns, self.column_names):
+            X[name] = X[col].clip(self.clip_dict[col][0], self.clip_dict[col][1])
+        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -156,4 +153,11 @@ class Clipping(Transformer):
             Transformed array.
         """
         self.check_array(X)
-        return clipping(X, self.idx_columns, self.clip_np)
+        if self.inplace:
+            X[:, self.idx_columns] = _clipping(
+                X[:, self.idx_columns].astype(float), self.clip_np
+            )
+            return X
+        else:
+            X_clip = _clipping(X[:, self.idx_columns].astype(float), self.clip_np)
+            return np.concatenate((X, X_clip), axis=1)

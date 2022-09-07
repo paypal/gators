@@ -15,13 +15,10 @@ class OrdinalEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    dtype : type, default np.float64.
-        Numerical datatype of the output data.
+    inplace : bool, default to True.
+        If True, replace in-place the categorical values by numerical ones.
+        If False, keep the categorical columns and create new encoded columns.
 
-    add_missing_categories : bool, default True.
-        If True, add the columns 'OTHERS' and 'MISSING'
-        to the mapping even if the categories are not
-        present in the data.
 
     Examples
     ---------
@@ -67,10 +64,8 @@ class OrdinalEncoder(_BaseEncoder):
            [0., 1.]])
     """
 
-    def __init__(self, dtype: type = np.float64, add_missing_categories: bool = True):
-        _BaseEncoder.__init__(
-            self, dtype=dtype, add_missing_categories=add_missing_categories
-        )
+    def __init__(self, inplace=True):
+        _BaseEncoder.__init__(self, inplace=inplace)
 
     def fit(self, X: DataFrame, y: Series = None) -> "OrdinalEncoder":
         """Fit the transformer on the dataframe `X`.
@@ -87,16 +82,16 @@ class OrdinalEncoder(_BaseEncoder):
         OrdinalEncoder: Instance of itself.
         """
         self.check_dataframe(X)
+        self.input_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, object)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "ordinal")
         if not self.columns:
             warnings.warn(
                 f"""`X` does not contain object columns:
                 `{self.__class__.__name__}` is not needed"""
             )
             return self
-        self.mapping = self.generate_mapping(
-            X[self.columns], self.add_missing_categories
-        )
+        self.mapping = self.generate_mapping(X[self.columns])
         self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
         columns, self.values_vec, self.encoded_values_vec = self.decompose_mapping(
             mapping=self.mapping,
@@ -106,19 +101,13 @@ class OrdinalEncoder(_BaseEncoder):
         )
         return self
 
-    def generate_mapping(
-        self, X: DataFrame, add_missing_categories: bool
-    ) -> Dict[str, Dict[str, float]]:
+    def generate_mapping(self, X: DataFrame) -> Dict[str, Dict[str, float]]:
         """Generate the mapping to perform the encoding.
 
         Parameters
         ----------
         X : DataFrame
             Input dataframe.
-        add_missing_categories: bool
-            If True, add the columns 'OTHERS' and 'MISSING'
-            to the mapping even if the categories are not
-            present in the data.
 
         Returns
         -------
@@ -134,9 +123,7 @@ class OrdinalEncoder(_BaseEncoder):
         )
         mapping = {}
         for c in X.columns:
-            mapping[c] = dict(zip(size.loc[c].index, range(len(size.loc[c].index))))
-            if add_missing_categories and "MISSING" not in mapping[c]:
-                mapping[c]["MISSING"] = -1.0
-            if add_missing_categories and "OTHERS" not in mapping[c]:
-                mapping[c]["OTHERS"] = -1.0
+            mapping[c] = dict(
+                zip(size.loc[c].index, np.arange(len(size.loc[c]), dtype=float))
+            )
         return mapping

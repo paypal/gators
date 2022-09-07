@@ -26,21 +26,21 @@ class BinPandas(BinFactory):
         splits: pd.DataFrame,
         labels: Dict[str, str],
         columns: List[str],
-        output_columns: List[str],
+        column_names: List[str],
     ) -> DataFrame:
         """Add the binned columns to the input Pandas dataframe.
 
         Parameters
         ----------
         X : DataFrame
-            Input dataframe
+            Input dataframe.
         splits : pd.DataFrame
             Dictionary of splits. The keys are the column names, the values are the split arrays.
         labels : Dict[str, str]
             Dictionary of labels. The keys are the column names, the values are the label arrays.
         columns : List[str]
             List of columns.
-        output_columns : List[str]
+        column_names : List[str]
              List of output columns, only used where `inplace=True`.
 
         Returns
@@ -48,13 +48,14 @@ class BinPandas(BinFactory):
         DataFrame
             Transformed dataframe.
         """
-
-        for name, col in zip(output_columns, columns):
+        for name, col in zip(column_names, columns):
             X[name] = pd.cut(
                 X[col],
                 bins=splits[col],
                 labels=labels[col],
                 duplicates="drop",
+                include_lowest=True,
+                right=False,
             ).astype(object)
         return X
 
@@ -64,21 +65,21 @@ class BinPandas(BinFactory):
         splits: pd.DataFrame,
         labels: Dict[str, str],
         columns: List[str],
-        output_columns: List[str],
+        column_names: List[str],
     ) -> DataFrame:
         """Add in-place the binned columns to the input Pandas dataframe.
 
         Parameters
         ----------
         X : DataFrame
-            Input dataframe
+            Input dataframe.
         splits : pd.DataFrame
             Dictionary of splits. The keys are the column names, the values are the split arrays.
         labels : Dict[str, str]
             Dictionary of labels. The keys are the column names, the values are the label arrays.
         columns : List[str]
             List of columns.
-        output_columns : List[str]
+        column_names : List[str]
              List of output columns, only used where `inplace=True`.
 
         Returns
@@ -86,12 +87,14 @@ class BinPandas(BinFactory):
         DataFrame
             Transformed dataframe.
         """
-        for name, col in zip(output_columns, columns):
+        for name, col in zip(column_names, columns):
             X[col] = pd.cut(
                 X[col],
                 bins=splits[col],
                 labels=labels[col],
                 duplicates="drop",
+                include_lowest=True,
+                right=False,
             ).astype(object)
         return X
 
@@ -103,21 +106,21 @@ class BinKoalas(BinFactory):
         splits: pd.DataFrame,
         labels: Dict[str, str],
         columns: List[str],
-        output_columns: List[str],
+        column_names: List[str],
     ) -> DataFrame:
         """Add the binned columns to the input Koalas dataframe.
 
         Parameters
         ----------
         X : DataFrame
-            Input dataframe
+            Input dataframe.
         splits : pd.DataFrame
             Dictionary of splits. The keys are the column names, the values are the split arrays.
         labels : Dict[str, str]
             Dictionary of labels. The keys are the column names, the values are the label arrays.
         columns : List[str]
             List of columns.
-        output_columns : List[str]
+        column_names : List[str]
              List of output columns, only used where `inplace=True`.
 
         Returns
@@ -126,16 +129,15 @@ class BinKoalas(BinFactory):
             Transformed dataframe.
         """
         from pyspark.ml.feature import Bucketizer
-
-        bins_np = [np.unique(b) + EPSILON for b in splits.values()]
+        bins_np = [np.unique(b)-1e-10 for b in splits.values()]
         X = (
             Bucketizer(
-                splitsArray=bins_np, inputCols=columns, outputCols=output_columns
+                splitsArray=bins_np, inputCols=columns, outputCols=column_names
             )
             .transform(X.to_spark())
             .to_koalas()
         )
-        X[output_columns] = "_" + X[output_columns].astype(int).astype(str)
+        X[column_names] = "_" + X[column_names].astype(int).astype(str)
         return X
 
     def bin_inplace(
@@ -144,21 +146,21 @@ class BinKoalas(BinFactory):
         splits: pd.DataFrame,
         labels: Dict[str, str],
         columns: List[str],
-        output_columns: List[str],
+        column_names: List[str],
     ) -> DataFrame:
         """Add in-place the binned columns to the input Koalas dataframe.
 
         Parameters
         ----------
         X : DataFrame
-            Input dataframe
+            Input dataframe.
         splits : pd.DataFrame
             Dictionary of splits. The keys are the column names, the values are the split arrays.
         labels : Dict[str, str]
             Dictionary of labels. The keys are the column names, the values are the label arrays.
         columns : List[str]
             List of columns.
-        output_columns : List[str]
+        column_names : List[str]
              List of output columns, only used where `inplace=True`.
 
         Returns
@@ -168,20 +170,19 @@ class BinKoalas(BinFactory):
         """
         from pyspark.ml.feature import Bucketizer
 
-        bins_np = [np.unique(b) + EPSILON for b in splits.values()]
+        bins_np = [np.unique(b)-1e-10 for b in splits.values()]
         ordered_columns = X.columns
         X = (
             Bucketizer(
-                splitsArray=bins_np, inputCols=columns, outputCols=output_columns
+                splitsArray=bins_np, inputCols=columns, outputCols=column_names
             )
             .transform(X.to_spark())
             .to_koalas()
             .drop(columns, axis=1)
-            .rename(columns=dict(zip(output_columns, columns)))
+            .rename(columns=dict(zip(column_names, columns)))
         )
         X[columns] = "_" + X[columns].astype(int).astype(str)
         return X[ordered_columns]
-
 
 class BinDask(BinFactory):
     def bin(
@@ -190,21 +191,21 @@ class BinDask(BinFactory):
         splits: pd.DataFrame,
         labels: Dict[str, str],
         columns: List[str],
-        output_columns: List[str],
+        column_names: List[str],
     ) -> DataFrame:
         """Add the binned columns to the input Dask dataframe.
 
         Parameters
         ----------
         X : DataFrame
-            Input dataframe
+            Input dataframe.
         splits : pd.DataFrame
             Dictionary of splits. The keys are the column names, the values are the split arrays.
         labels : Dict[str, str]
             Dictionary of labels. The keys are the column names, the values are the label arrays.
         columns : List[str]
             List of columns.
-        output_columns : List[str]
+        column_names : List[str]
              List of output columns, only used where `inplace=True`.
 
         Returns
@@ -212,7 +213,7 @@ class BinDask(BinFactory):
         DataFrame
             Transformed dataframe.
         """
-        for name, col in zip(output_columns, columns):
+        for name, col in zip(column_names, columns):
             X[name] = (
                 X[col]
                 .map_partitions(
@@ -220,6 +221,8 @@ class BinDask(BinFactory):
                     bins=splits[col],
                     labels=labels[col],
                     duplicates="drop",
+                    include_lowest=True,
+                    right=False,
                 )
                 .astype(object)
             )
@@ -231,21 +234,21 @@ class BinDask(BinFactory):
         splits: pd.DataFrame,
         labels: Dict[str, str],
         columns: List[str],
-        output_columns: List[str],
+        column_names: List[str],
     ) -> DataFrame:
         """Add in-place the binned columns to the input Dask dataframe.
 
         Parameters
         ----------
         X : DataFrame
-            Input dataframe
+            Input dataframe.
         splits : pd.DataFrame
             Dictionary of splits. The keys are the column names, the values are the split arrays.
         labels : Dict[str, str]
             Dictionary of labels. The keys are the column names, the values are the label arrays.
         columns : List[str]
             List of columns.
-        output_columns : List[str]
+        column_names : List[str]
              List of output columns, only used where `inplace=True`.
 
         Returns
@@ -253,7 +256,7 @@ class BinDask(BinFactory):
         DataFrame
             Transformed dataframe.
         """
-        for name, col in zip(output_columns, columns):
+        for name, col in zip(column_names, columns):
             X[col] = (
                 X[col]
                 .map_partitions(
@@ -261,6 +264,8 @@ class BinDask(BinFactory):
                     bins=splits[col],
                     labels=labels[col],
                     duplicates="drop",
+                    include_lowest=True,
+                    right=False,
                 )
                 .astype(object)
             )
