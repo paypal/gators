@@ -1,0 +1,13 @@
+﻿
+gators.binning.TreeBinning
+==========================
+
+.. currentmodule:: gators.binning
+
+.. autoclass:: TreeBinning
+
+    
+
+ 
+
+     

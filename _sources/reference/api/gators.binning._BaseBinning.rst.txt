@@ -1,0 +1,13 @@
+﻿
+gators.binning.\_BaseBinning
+============================
+
+.. currentmodule:: gators.binning
+
+.. autoclass:: _BaseBinning
+
+    
+
+ 
+
+     

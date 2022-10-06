@@ -1,0 +1,13 @@
+﻿
+gators.binning.BinRareCategories
+================================
+
+.. currentmodule:: gators.binning
+
+.. autoclass:: BinRareCategories
+
+    
+
+ 
+
+     

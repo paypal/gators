@@ -7,8 +7,9 @@ Converter
 .. currentmodule:: gators.converter
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-    ConvertColumnDatatype
-    KoalasToPandas
+    ToPandas
     ToNumpy

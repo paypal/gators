@@ -4,40 +4,40 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>gators.encoders.OneHotEncoder &#8212; gators  documentation</title>
     
-  <link href="../../_static/css/theme.css" rel="stylesheet">
-  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
-
+    <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
     
-  <link rel="stylesheet"
-    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
+    <link rel="stylesheet"
+      href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
     
       
-
+  
     
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/blank.css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles/pydata-sphinx-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/gators.css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="shortcut icon" href="../../_static/gators_logo.ico"/>
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="gators.encoders.WOEEncoder" href="gators.encoders.WOEEncoder.html" />
-    <link rel="prev" title="gators.encoders.OrdinalEncoder" href="gators.encoders.OrdinalEncoder.html" />
+    <link rel="next" title="gators.encoders.BinnedColumnsEncoder" href="gators.encoders.BinnedColumnsEncoder.html" />
+    <link rel="prev" title="gators.encoders.FrequencyEncoder" href="gators.encoders.FrequencyEncoder.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -58,7 +58,7 @@
 
 <a class="navbar-brand" href="../../index.html">
   <img src="../../_static/GATORS_LOGO.png" class="logo" alt="logo">
-</a>      
+</a>
 
 
     
@@ -92,6 +92,12 @@
  </a>
 </li>
 
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../examples/index.html">
+  Examples
+ </a>
+</li>
+
 <li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="../index.html">
   API Reference
@@ -115,10 +121,8 @@
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/paypal/Gators/" rel="noopener" target="_blank" title="GitHub">
-            <span><i class="fab fa-github-square"></i></span>
-            <label class="sr-only">GitHub</label>
-          </a>
+          <a class="nav-link" href="https://github.paypal.com/Simility-R/gators/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
       </ul>
       </div>
@@ -134,7 +138,8 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -193,6 +198,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="gators.data_cleaning.ConvertColumnDatatype.html">
+     gators.data_cleaning.ConvertColumnDatatype
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="gators.data_cleaning.DropColumns.html">
      gators.data_cleaning.DropColumns
     </a>
@@ -225,28 +235,38 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning.BinRareEvents.html">
-     gators.binning.BinRareEvents
+    <a class="reference internal" href="gators.binning.BinRareCategories.html">
+     gators.binning.BinRareCategories
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning._BaseDiscretizer.html">
-     gators.binning._BaseDiscretizer
+    <a class="reference internal" href="gators.binning.BinSingleTargetClassCategories.html">
+     gators.binning.BinSingleTargetClassCategories
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning.Discretizer.html">
-     gators.binning.Discretizer
+    <a class="reference internal" href="gators.binning._BaseBinning.html">
+     gators.binning._BaseBinning
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning.QuantileDiscretizer.html">
-     gators.binning.QuantileDiscretizer
+    <a class="reference internal" href="gators.binning.Binning.html">
+     gators.binning.Binning
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning.CustomDiscretizer.html">
-     gators.binning.CustomDiscretizer
+    <a class="reference internal" href="gators.binning.QuantileBinning.html">
+     gators.binning.QuantileBinning
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.binning.TreeBinning.html">
+     gators.binning.TreeBinning
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.binning.CustomBinning.html">
+     gators.binning.CustomBinning
     </a>
    </li>
   </ul>
@@ -288,6 +308,11 @@
      gators.scalers.StandardScaler
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.scalers.YeoJohnson.html">
+     gators.scalers.YeoJohnson
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
@@ -308,16 +333,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="gators.imputers.NumericsImputer.html">
      gators.imputers.NumericsImputer
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.imputers.IntImputer.html">
-     gators.imputers.IntImputer
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.imputers.FloatImputer.html">
-     gators.imputers.FloatImputer
     </a>
    </li>
    <li class="toctree-l2">
@@ -347,9 +362,19 @@
      gators.encoders.OrdinalEncoder
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.encoders.FrequencyEncoder.html">
+     gators.encoders.FrequencyEncoder
+    </a>
+   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      gators.encoders.OneHotEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.encoders.BinnedColumnsEncoder.html">
+     gators.encoders.BinnedColumnsEncoder
     </a>
    </li>
    <li class="toctree-l2">
@@ -360,16 +385,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="gators.encoders.TargetEncoder.html">
      gators.encoders.TargetEncoder
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.encoders.MultiClassEncoder.html">
-     gators.encoders.MultiClassEncoder
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.encoders.RegressionEncoder.html">
-     gators.encoders.RegressionEncoder
     </a>
    </li>
   </ul>
@@ -400,8 +415,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.feature_generation.PlaneRotation.html">
-     gators.feature_generation.PlaneRotation
+    <a class="reference internal" href="gators.feature_generation.PlanRotation.html">
+     gators.feature_generation.PlanRotation
     </a>
    </li>
    <li class="toctree-l2">
@@ -412,6 +427,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="gators.feature_generation.OneHot.html">
      gators.feature_generation.OneHot
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.feature_generation.PolynomialObjectFeatures.html">
+     gators.feature_generation.PolynomialObjectFeatures
     </a>
    </li>
    <li class="toctree-l2">
@@ -571,18 +591,13 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="gators.feature_selection.SupervizedCorrelationFilter.html">
+     gators.feature_selection.SupervizedCorrelationFilter
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="gators.feature_selection.InformationValue.html">
      gators.feature_selection.InformationValue
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.feature_selection.MultiClassInformationValue.html">
-     gators.feature_selection.MultiClassInformationValue
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.feature_selection.RegressionInformationValue.html">
-     gators.feature_selection.RegressionInformationValue
     </a>
    </li>
    <li class="toctree-l2">
@@ -630,11 +645,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.model_building.HyperOpt.html">
-     gators.model_building.HyperOpt
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="gators.model_building.XGBBoosterBuilder.html">
      gators.model_building.XGBBoosterBuilder
     </a>
@@ -662,13 +672,8 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.converter.ConvertColumnDatatype.html">
-     gators.converter.ConvertColumnDatatype
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.converter.KoalasToPandas.html">
-     gators.converter.KoalasToPandas
+    <a class="reference internal" href="gators.converter.ToPandas.html">
+     gators.converter.ToPandas
     </a>
    </li>
    <li class="toctree-l2">
@@ -704,6 +709,9 @@
 
   </div>
 </nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
             </div>
             
           
@@ -736,166 +744,458 @@
               
               <div>
                 
-  <section id="gators-encoders-onehotencoder">
+  <div class="section" id="gators-encoders-onehotencoder">
 <h1>gators.encoders.OneHotEncoder<a class="headerlink" href="#gators-encoders-onehotencoder" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="gators.encoders.OneHotEncoder">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">OneHotEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dtype:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gators/encoders/onehot_encoder.html#OneHotEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder" title="Permalink to this definition">¶</a></dt>
+<dt id="gators.encoders.OneHotEncoder">
+<em class="property">class </em><code class="sig-prename descclassname">gators.encoders.</code><code class="sig-name descname">OneHotEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gators/encoders/onehot_encoder.html#OneHotEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encode the categorical columns as one-hot numeric columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>dtype</strong><span class="classifier">type, default to np.float64.</span></dt><dd><p>Numerical datatype of the output data.</p>
+<dt><strong>inplace</strong><span class="classifier">bool, default to True.</span></dt><dd><p>If True, replace in-place the categorical values by numerical ones.
+If False, keep the categorical columns and create new encoded columns.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<ul class="simple">
-<li><p>fit &amp; transform with <cite>pandas</cite></p></li>
-</ul>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.encoders</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]})</span>
+<p>Imports and initialization:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.encoders</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">   A__b  A__a  B__d  B__c</span>
-<span class="go">0   0.0   1.0   0.0   1.0</span>
-<span class="go">1   0.0   1.0   1.0   0.0</span>
-<span class="go">2   1.0   0.0   1.0   0.0</span>
+</pre></div>
+</div>
+<p>The <cite>fit</cite>, <cite>transform</cite>, and <cite>fit_transform</cite> methods accept:</p>
+<ul class="simple">
+<li><p><cite>dask</cite> dataframes:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]}),</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>fit &amp; transform with <cite>koalas</cite></p></li>
+<li><p><cite>koalas</cite> dataframes:</p></li>
 </ul>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.encoders</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">   A__b  A__a  B__d  B__c</span>
-<span class="go">0   0.0   1.0   0.0   1.0</span>
-<span class="go">1   0.0   1.0   1.0   0.0</span>
-<span class="go">2   1.0   0.0   1.0   0.0</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>fit with <cite>pandas</cite> &amp; transform with <cite>NumPy</cite></p></li>
+<li><p>and <cite>pandas</cite> dataframes:</p></li>
 </ul>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.encoders</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
-<span class="go">array([[0., 1., 0., 1.],</span>
-<span class="go">       [0., 1., 1., 0.],</span>
-<span class="go">       [1., 0., 1., 0.]])</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>fit with <cite>koalas</cite> &amp; transform with <cite>NumPy</cite></p></li>
-</ul>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.encoders</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">]})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
-<span class="go">array([[0., 1., 0., 1.],</span>
-<span class="go">       [0., 1., 1., 0.],</span>
-<span class="go">       [1., 0., 1., 0.]])</span>
+<p>The result is a transformed dataframe belonging to the same dataframe library.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">   A__a  A__b  B__c  B__d</span>
+<span class="go">0   1.0   0.0   1.0   0.0</span>
+<span class="go">1   1.0   0.0   0.0   1.0</span>
+<span class="go">2   0.0   1.0   0.0   1.0</span>
+</pre></div>
+</div>
+<p>Independly of the dataframe library used to fit the transformer, the <cite>tranform_numpy</cite> method only accepts NumPy arrays
+and returns a transformed NumPy array. Note that this transformer should <strong>only</strong> be used
+when the number of rows is small <em>e.g.</em> in real-time environment.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<span class="go">array([[1., 0., 1., 0.],</span>
+<span class="go">       [1., 0., 0., 1.],</span>
+<span class="go">       [0., 1., 0., 1.]])</span>
 </pre></div>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="gators.encoders.OneHotEncoder.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dtype:</span> <span class="pre">type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gators/encoders/onehot_encoder.html#OneHotEncoder.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gators.encoders.OneHotEncoder.__init__" title="gators.encoders.OneHotEncoder.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([dtype])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_array</span></code>(X)</p></td>
-<td><p>Validate array.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_array_is_numerics</span></code>(X)</p></td>
-<td><p>Check if array is only numerics.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_binary_target</span></code>(y)</p></td>
-<td><p>Raise an error if the target datatype is not binary.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_dataframe</span></code>(X)</p></td>
-<td><p>Validate dataframe.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_dataframe_contains_numerics</span></code>(X)</p></td>
-<td><p>Check if dataframe is only numerics.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_dataframe_is_numerics</span></code>(X)</p></td>
-<td><p>Check if dataframe is only numerics.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_dataframe_with_objects</span></code>(X)</p></td>
-<td><p>Check if dataframe contains object columns.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_datatype</span></code>(dtype, accepted_dtypes)</p></td>
-<td><p>Check if dataframe is only numerics.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_multiclass_target</span></code>(y)</p></td>
-<td><p>Raise an error if the target datatype is not discrete.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_nans</span></code>(X, columns)</p></td>
-<td><p>Raise an error if X contains NaN values.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_regression_target</span></code>(y)</p></td>
-<td><p>Raise an error if the target datatype is not discrete.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_y</span></code>(X, y)</p></td>
-<td><p>Validate target.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">decompose_mapping</span></code>(mapping)</p></td>
-<td><p>Decompose the mapping.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code>(X[, y])</p></td>
-<td><p>Fit the transformer on the dataframe <cite>X</cite>.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_transform</span></code>(X[, y])</p></td>
-<td><p>Fit and Transform the dataframe <cite>X</cite>.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>(X)</p></td>
-<td><p>Transform the dataframe <cite>X</cite>.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform_numpy</span></code>(X)</p></td>
-<td><p>Transform the input array.</p></td>
-</tr>
-</tbody>
-</table>
+<dt id="gators.encoders.OneHotEncoder.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; gators.encoders.onehot_encoder.OneHotEncoder<a class="reference internal" href="../../_modules/gators/encoders/onehot_encoder.html#OneHotEncoder.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the transformer on the dataframe <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame.</span></dt><dd><p>Input dataframe.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Series, default None.</span></dt><dd><p>Target values.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>OneHotEncoder: Instance of itself.</dt><dd></dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
-</section>
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.transform">
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span><a class="reference internal" href="../../_modules/gators/encoders/onehot_encoder.html#OneHotEncoder.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the dataframe <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame.</span></dt><dd><p>Input dataframe.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Transformed dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.transform_numpy">
+<code class="sig-name descname">transform_numpy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../../_modules/gators/encoders/onehot_encoder.html#OneHotEncoder.transform_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder.transform_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the array <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">np.ndarray</span></dt><dd><p>Encoded array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_array">
+<em class="property">static </em><code class="sig-name descname">check_array</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">np.ndarray</span></dt><dd><p>Array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_array_is_numerics">
+<code class="sig-name descname">check_array_is_numerics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_array_is_numerics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if array is only numerics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">np.ndarray</span></dt><dd><p>Array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_binary_target">
+<em class="property">static </em><code class="sig-name descname">check_binary_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_binary_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise an error if the target is not binary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">Series</span></dt><dd><p>Target values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_dataframe">
+<em class="property">static </em><code class="sig-name descname">check_dataframe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_dataframe_contains_numerics">
+<em class="property">static </em><code class="sig-name descname">check_dataframe_contains_numerics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_dataframe_contains_numerics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if dataframe is only numerics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_dataframe_is_numerics">
+<em class="property">static </em><code class="sig-name descname">check_dataframe_is_numerics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_dataframe_is_numerics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if dataframe is only numerics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_dataframe_with_objects">
+<code class="sig-name descname">check_dataframe_with_objects</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_dataframe_with_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if dataframe contains object columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_datatype">
+<code class="sig-name descname">check_datatype</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dtype</span></em>, <em class="sig-param"><span class="n">accepted_dtypes</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_datatype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if dataframe is only numerics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_multiclass_target">
+<em class="property">static </em><code class="sig-name descname">check_multiclass_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_multiclass_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise an error if the target is not discrete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">Series</span></dt><dd><p>Target values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_nans">
+<code class="sig-name descname">check_nans</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">columns</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_nans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise an error if X contains NaN values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+<dt><strong>theta_vec</strong><span class="classifier">List[float]</span></dt><dd><p>List of columns.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_regression_target">
+<em class="property">static </em><code class="sig-name descname">check_regression_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_regression_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise an error if the target is not discrete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>y</strong><span class="classifier">Series</span></dt><dd><p>Target values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.check_target">
+<em class="property">static </em><code class="sig-name descname">check_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.check_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Series</span></dt><dd><p>Target values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.decompose_mapping">
+<em class="property">static </em><code class="sig-name descname">decompose_mapping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mapping</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Dict<span class="p">[</span>str<span class="p">, </span>float<span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">, </span>numpy.ndarray<span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.decompose_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decompose the mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>mapping</strong><span class="classifier">Dict[str, Dict[str, float]]</span></dt><dd><p>The dictionary keys are the categorical columns,
+the keys are the mapping itself for the assocaited column.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>columns</strong><span class="classifier">List[float]</span></dt><dd><p>List of columns.</p>
+</dd>
+<dt><strong>values_vec</strong><span class="classifier">np.ndarray</span></dt><dd><p>Values to encode.</p>
+</dd>
+<dt><strong>encoded_values_vec</strong><span class="classifier">np.ndarray</span></dt><dd><p>Values used to encode.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.display_mapping">
+<code class="sig-name descname">display_mapping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmap</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>colormap<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">decimal</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.display_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the encoder mapping in a jupyter notebook.
+Parameters
+———-
+cmap : Union[str, ‘colormap’]</p>
+<blockquote>
+<div><p>Matplotlib colormap.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>k<span class="classifier">int, default 5.</span></dt><dd><p>Number of mappings displayed.</p>
+</dd>
+<dt>decimals<span class="classifier">int, default 2.</span></dt><dd><p>Number of decimal places to use.</p>
+</dd>
+<dt>title<span class="classifier">str, default ‘’.</span></dt><dd><p>Plot title.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.fit_transform">
+<code class="sig-name descname">fit_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit and Transform the dataframe <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame.</span></dt><dd><p>Input dataframe.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Series, default None.</span></dt><dd><p>Input target.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Transformed dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.get_column_names">
+<em class="property">static </em><code class="sig-name descname">get_column_names</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inplace</span><span class="p">:</span> <span class="n">bool</span></em>, <em class="sig-param"><span class="n">columns</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">suffix</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.get_column_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the names of the modified columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>inplace</strong><span class="classifier">bool</span></dt><dd><p>If True return <cite>columns</cite>.
+If False return <cite>columns__suffix</cite>.</p>
+</dd>
+<dt><strong>columns</strong><span class="classifier">List[str]</span></dt><dd><p>List of columns.</p>
+</dd>
+<dt><strong>suffix</strong><span class="classifier">str</span></dt><dd><p>Suffix used if <cite>inplace</cite> is False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>List[str]</dt><dd><p>List of column names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.get_params">
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">deep</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.encoders.OneHotEncoder.set_params">
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.encoders.OneHotEncoder.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 
 
               </div>
               
               
               <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="gators.encoders.OrdinalEncoder.html" title="previous page">
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="gators.encoders.FrequencyEncoder.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">gators.encoders.OrdinalEncoder</p>
+            <p class="prev-next-title">gators.encoders.FrequencyEncoder</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="gators.encoders.WOEEncoder.html" title="next page">
+    <a class='right-next' id="next-link" href="gators.encoders.BinnedColumnsEncoder.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">gators.encoders.WOEEncoder</p>
+        <p class="prev-next-title">gators.encoders.BinnedColumnsEncoder</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -907,19 +1207,19 @@
       </div>
     </div>
   
-  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
-<footer class="footer mt-5 mt-md-0">
+    <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021, the gators development team..<br>
+    &copy; Copyright 2021, Gators development team (Apache-2.0 License)..<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.0.<br>
 </p>
     </div>
     

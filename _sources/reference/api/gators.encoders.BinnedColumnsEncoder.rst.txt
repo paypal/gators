@@ -1,0 +1,13 @@
+﻿
+gators.encoders.BinnedColumnsEncoder
+====================================
+
+.. currentmodule:: gators.encoders
+
+.. autoclass:: BinnedColumnsEncoder
+
+    
+
+ 
+
+     

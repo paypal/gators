@@ -1,0 +1,13 @@
+﻿
+gators.scalers.YeoJohnson
+=========================
+
+.. currentmodule:: gators.scalers
+
+.. autoclass:: YeoJohnson
+
+    
+
+ 
+
+     

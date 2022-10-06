@@ -4,39 +4,39 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>gators.model_building.TrainTestSplit &#8212; gators  documentation</title>
     
-  <link href="../../_static/css/theme.css" rel="stylesheet">
-  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
-
+    <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
     
-  <link rel="stylesheet"
-    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
+    <link rel="stylesheet"
+      href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
     
       
-
+  
     
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/blank.css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles/pydata-sphinx-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/gators.css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="shortcut icon" href="../../_static/gators_logo.ico"/>
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="gators.model_building.HyperOpt" href="gators.model_building.HyperOpt.html" />
+    <link rel="next" title="gators.model_building.XGBBoosterBuilder" href="gators.model_building.XGBBoosterBuilder.html" />
     <link rel="prev" title="Model Building" href="../model_building.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -58,7 +58,7 @@
 
 <a class="navbar-brand" href="../../index.html">
   <img src="../../_static/GATORS_LOGO.png" class="logo" alt="logo">
-</a>      
+</a>
 
 
     
@@ -92,6 +92,12 @@
  </a>
 </li>
 
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../examples/index.html">
+  Examples
+ </a>
+</li>
+
 <li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="../index.html">
   API Reference
@@ -115,10 +121,8 @@
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/paypal/Gators/" rel="noopener" target="_blank" title="GitHub">
-            <span><i class="fab fa-github-square"></i></span>
-            <label class="sr-only">GitHub</label>
-          </a>
+          <a class="nav-link" href="https://github.paypal.com/Simility-R/gators/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
       </ul>
       </div>
@@ -134,7 +138,8 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -193,6 +198,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="gators.data_cleaning.ConvertColumnDatatype.html">
+     gators.data_cleaning.ConvertColumnDatatype
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="gators.data_cleaning.DropColumns.html">
      gators.data_cleaning.DropColumns
     </a>
@@ -225,28 +235,38 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning.BinRareEvents.html">
-     gators.binning.BinRareEvents
+    <a class="reference internal" href="gators.binning.BinRareCategories.html">
+     gators.binning.BinRareCategories
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning._BaseDiscretizer.html">
-     gators.binning._BaseDiscretizer
+    <a class="reference internal" href="gators.binning.BinSingleTargetClassCategories.html">
+     gators.binning.BinSingleTargetClassCategories
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning.Discretizer.html">
-     gators.binning.Discretizer
+    <a class="reference internal" href="gators.binning._BaseBinning.html">
+     gators.binning._BaseBinning
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning.QuantileDiscretizer.html">
-     gators.binning.QuantileDiscretizer
+    <a class="reference internal" href="gators.binning.Binning.html">
+     gators.binning.Binning
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.binning.CustomDiscretizer.html">
-     gators.binning.CustomDiscretizer
+    <a class="reference internal" href="gators.binning.QuantileBinning.html">
+     gators.binning.QuantileBinning
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.binning.TreeBinning.html">
+     gators.binning.TreeBinning
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.binning.CustomBinning.html">
+     gators.binning.CustomBinning
     </a>
    </li>
   </ul>
@@ -288,6 +308,11 @@
      gators.scalers.StandardScaler
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.scalers.YeoJohnson.html">
+     gators.scalers.YeoJohnson
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
@@ -308,16 +333,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="gators.imputers.NumericsImputer.html">
      gators.imputers.NumericsImputer
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.imputers.IntImputer.html">
-     gators.imputers.IntImputer
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.imputers.FloatImputer.html">
-     gators.imputers.FloatImputer
     </a>
    </li>
    <li class="toctree-l2">
@@ -348,8 +363,18 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="gators.encoders.FrequencyEncoder.html">
+     gators.encoders.FrequencyEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="gators.encoders.OneHotEncoder.html">
      gators.encoders.OneHotEncoder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.encoders.BinnedColumnsEncoder.html">
+     gators.encoders.BinnedColumnsEncoder
     </a>
    </li>
    <li class="toctree-l2">
@@ -360,16 +385,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="gators.encoders.TargetEncoder.html">
      gators.encoders.TargetEncoder
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.encoders.MultiClassEncoder.html">
-     gators.encoders.MultiClassEncoder
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.encoders.RegressionEncoder.html">
-     gators.encoders.RegressionEncoder
     </a>
    </li>
   </ul>
@@ -400,8 +415,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.feature_generation.PlaneRotation.html">
-     gators.feature_generation.PlaneRotation
+    <a class="reference internal" href="gators.feature_generation.PlanRotation.html">
+     gators.feature_generation.PlanRotation
     </a>
    </li>
    <li class="toctree-l2">
@@ -412,6 +427,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="gators.feature_generation.OneHot.html">
      gators.feature_generation.OneHot
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="gators.feature_generation.PolynomialObjectFeatures.html">
+     gators.feature_generation.PolynomialObjectFeatures
     </a>
    </li>
    <li class="toctree-l2">
@@ -571,18 +591,13 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="gators.feature_selection.SupervizedCorrelationFilter.html">
+     gators.feature_selection.SupervizedCorrelationFilter
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="gators.feature_selection.InformationValue.html">
      gators.feature_selection.InformationValue
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.feature_selection.MultiClassInformationValue.html">
-     gators.feature_selection.MultiClassInformationValue
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.feature_selection.RegressionInformationValue.html">
-     gators.feature_selection.RegressionInformationValue
     </a>
    </li>
    <li class="toctree-l2">
@@ -630,11 +645,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.model_building.HyperOpt.html">
-     gators.model_building.HyperOpt
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="gators.model_building.XGBBoosterBuilder.html">
      gators.model_building.XGBBoosterBuilder
     </a>
@@ -662,13 +672,8 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="gators.converter.ConvertColumnDatatype.html">
-     gators.converter.ConvertColumnDatatype
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="gators.converter.KoalasToPandas.html">
-     gators.converter.KoalasToPandas
+    <a class="reference internal" href="gators.converter.ToPandas.html">
+     gators.converter.ToPandas
     </a>
    </li>
    <li class="toctree-l2">
@@ -704,6 +709,9 @@
 
   </div>
 </nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
             </div>
             
           
@@ -736,11 +744,11 @@
               
               <div>
                 
-  <section id="gators-model-building-traintestsplit">
+  <div class="section" id="gators-model-building-traintestsplit">
 <h1>gators.model_building.TrainTestSplit<a class="headerlink" href="#gators-model-building-traintestsplit" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="gators.model_building.TrainTestSplit">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gators.model_building.</span></span><span class="sig-name descname"><span class="pre">TrainTestSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_ratio</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gators/model_building/train_test_split.html#TrainTestSplit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.model_building.TrainTestSplit" title="Permalink to this definition">¶</a></dt>
+<dt id="gators.model_building.TrainTestSplit">
+<em class="property">class </em><code class="sig-prename descclassname">gators.model_building.</code><code class="sig-name descname">TrainTestSplit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_ratio</span><span class="p">:</span> <span class="n">float</span></em>, <em class="sig-param"><span class="n">strategy</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gators/model_building/train_test_split.html#TrainTestSplit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gators.model_building.TrainTestSplit" title="Permalink to this definition">¶</a></dt>
 <dd><p>TrainTestSplit class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -763,19 +771,51 @@
 <p>Note that the <cite>random</cite> and <cite>stratified</cite> strategies will be give different
 results for pandas and koalas.</p>
 <p class="rubric">Examples</p>
-<ul>
-<li><p>transform with <cite>pandas</cite></p>
-<blockquote>
-<div><ul class="simple">
-<li><p>ordered split</p></li>
+<p>Imports and initialization:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.sampling</span> <span class="kn">import</span> <span class="n">UnsupervisedSampling</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">UnsupervisedSampling</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <cite>transform</cite> method accept:</p>
+<ul class="simple">
+<li><p><cite>dask</cite> dataframes:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">21</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">23</span><span class="p">]}),</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TARGET&#39;</span><span class="p">),</span> <span class="n">npartitions</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><cite>koalas</cite> dataframes:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">21</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">23</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TARGET&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>and <cite>pandas</cite> dataframes:</p></li>
 </ul>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.model_building</span> <span class="kn">import</span> <span class="n">TrainTestSplit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">21</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span>
+<span class="gp">... </span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">23</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TARGET&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test_ratio</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="n">test_ratio</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;ordered&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is a transformed dataframe and series belonging to the same dataframe library.</p>
+<ul class="simple">
+<li><p><cite>ordered</cite> strategy:</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;ordered&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span>
 <span class="go">   A   B   C</span>
@@ -804,242 +844,183 @@ results for pandas and koalas.</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>random split</p></li>
+<li><p><cite>random</cite> strategy:</p></li>
 </ul>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.model_building</span> <span class="kn">import</span> <span class="n">TrainTestSplit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TARGET&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test_ratio</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="n">test_ratio</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span>
-<span class="go">    A   B   C</span>
-<span class="go">0   0   1   2</span>
-<span class="go">3   9  10  11</span>
-<span class="go">4  12  13  14</span>
-<span class="go">5  15  16  17</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span>
 <span class="go">    A   B   C</span>
 <span class="go">6  18  19  20</span>
 <span class="go">2   6   7   8</span>
 <span class="go">1   3   4   5</span>
 <span class="go">7  21  22  23</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span>
+<span class="go">    A   B   C</span>
+<span class="go">0   0   1   2</span>
+<span class="go">3   9  10  11</span>
+<span class="go">4  12  13  14</span>
+<span class="go">5  15  16  17</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span>
-<span class="go">0    0</span>
-<span class="go">3    0</span>
-<span class="go">4    1</span>
-<span class="go">5    2</span>
-<span class="go">Name: TARGET, dtype: int64</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span>
 <span class="go">6    0</span>
 <span class="go">2    2</span>
 <span class="go">1    1</span>
 <span class="go">7    1</span>
 <span class="go">Name: TARGET, dtype: int64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span>
+<span class="go">0    0</span>
+<span class="go">3    0</span>
+<span class="go">4    1</span>
+<span class="go">5    2</span>
+<span class="go">Name: TARGET, dtype: int64</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>stratified split</p></li>
+<li><p><cite>stratified</cite> strategy:</p></li>
 </ul>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.model_building</span> <span class="kn">import</span> <span class="n">TrainTestSplit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TARGET&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test_ratio</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="n">test_ratio</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;stratified&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;stratified&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span>
+<span class="go">    A   B   C</span>
+<span class="go">7  21  22  23</span>
+<span class="go">6  18  19  20</span>
+<span class="go">3   9  10  11</span>
+<span class="go">4  12  13  14</span>
+<span class="go">5  15  16  17</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span>
 <span class="go">   A  B  C</span>
-<span class="go">0  0  1  2</span>
-<span class="go">1  3  4  5</span>
 <span class="go">2  6  7  8</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span>
-<span class="go">    A   B   C</span>
-<span class="go">6  18  19  20</span>
-<span class="go">3   9  10  11</span>
-<span class="go">7  21  22  23</span>
-<span class="go">4  12  13  14</span>
-<span class="go">5  15  16  17</span>
+<span class="go">1  3  4  5</span>
+<span class="go">0  0  1  2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span>
-<span class="go">0    0</span>
-<span class="go">1    1</span>
-<span class="go">2    2</span>
-<span class="go">Name: TARGET, dtype: int64</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span>
+<span class="go">7    1</span>
 <span class="go">6    0</span>
 <span class="go">3    0</span>
-<span class="go">7    1</span>
 <span class="go">4    1</span>
 <span class="go">5    2</span>
 <span class="go">Name: TARGET, dtype: int64</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p>transform with <cite>koalas</cite></p>
-<blockquote>
-<div><ul class="simple">
-<li><p>ordered split</p></li>
-</ul>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.model_building</span> <span class="kn">import</span> <span class="n">TrainTestSplit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TARGET&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test_ratio</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="n">test_ratio</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;ordered&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span>
-<span class="go">   A   B   C</span>
-<span class="go">0  0   1   2</span>
-<span class="go">1  3   4   5</span>
-<span class="go">2  6   7   8</span>
-<span class="go">3  9  10  11</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span>
-<span class="go">    A   B   C</span>
-<span class="go">4  12  13  14</span>
-<span class="go">5  15  16  17</span>
-<span class="go">6  18  19  20</span>
-<span class="go">7  21  22  23</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span>
-<span class="go">0    0</span>
-<span class="go">1    1</span>
-<span class="go">2    2</span>
-<span class="go">3    0</span>
-<span class="go">Name: TARGET, dtype: int64</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span>
-<span class="go">4    1</span>
-<span class="go">5    2</span>
-<span class="go">6    0</span>
-<span class="go">7    1</span>
-<span class="go">Name: TARGET, dtype: int64</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>random split</p></li>
-</ul>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.model_building</span> <span class="kn">import</span> <span class="n">TrainTestSplit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TARGET&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test_ratio</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="n">test_ratio</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span>
-<span class="go">    A   B   C</span>
-<span class="go">0   0   1   2</span>
-<span class="go">7  21  22  23</span>
-<span class="go">3   9  10  11</span>
-<span class="go">2   6   7   8</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span>
-<span class="go">    A   B   C</span>
-<span class="go">6  18  19  20</span>
-<span class="go">5  15  16  17</span>
-<span class="go">1   3   4   5</span>
-<span class="go">4  12  13  14</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span>
-<span class="go">0    0</span>
-<span class="go">7    1</span>
-<span class="go">3    0</span>
 <span class="go">2    2</span>
-<span class="go">Name: TARGET, dtype: int64</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span>
-<span class="go">6    0</span>
-<span class="go">5    2</span>
 <span class="go">1    1</span>
-<span class="go">4    1</span>
-<span class="go">Name: TARGET, dtype: int64</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>stratified split</p></li>
-</ul>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gators.model_building</span> <span class="kn">import</span> <span class="n">TrainTestSplit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TARGET&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test_ratio</span> <span class="o">=</span> <span class="mf">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">TrainTestSplit</span><span class="p">(</span><span class="n">test_ratio</span><span class="o">=</span><span class="n">test_ratio</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;stratified&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span>
-<span class="go">    A   B   C</span>
-<span class="go">0   0   1   2</span>
-<span class="go">3   9  10  11</span>
-<span class="go">7  21  22  23</span>
-<span class="go">2   6   7   8</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span>
-<span class="go">    A   B   C</span>
-<span class="go">6  18  19  20</span>
-<span class="go">1   3   4   5</span>
-<span class="go">4  12  13  14</span>
-<span class="go">5  15  16  17</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span>
 <span class="go">0    0</span>
-<span class="go">3    0</span>
-<span class="go">7    1</span>
-<span class="go">2    2</span>
-<span class="go">Name: TARGET, dtype: int64</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span>
-<span class="go">6    0</span>
-<span class="go">1    1</span>
-<span class="go">4    1</span>
-<span class="go">5    2</span>
 <span class="go">Name: TARGET, dtype: int64</span>
 </pre></div>
 </div>
-</div></blockquote>
-</li>
-</ul>
 <dl class="py method">
-<dt class="sig sig-object py" id="gators.model_building.TrainTestSplit.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_ratio</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gators/model_building/train_test_split.html#TrainTestSplit.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.model_building.TrainTestSplit.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<p class="rubric">Methods</p>
-<table class="longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#gators.model_building.TrainTestSplit.__init__" title="gators.model_building.TrainTestSplit.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(test_ratio, strategy[, random_state])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_dataframe</span></code>(X)</p></td>
-<td><p>Validate dataframe.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_y</span></code>(X, y)</p></td>
-<td><p>Validate target.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ordered_split</span></code>(X, y)</p></td>
-<td><p>Perform random split.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_split</span></code>(Xy, x_name)</p></td>
-<td><p>Perform random split.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">stratified_split</span></code>(Xy, x_name, y_name)</p></td>
-<td><p>Perform stratified split.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>(X, y)</p></td>
-<td><p>Transform dataframe and series.</p></td>
-</tr>
-</tbody>
-</table>
+<dt id="gators.model_building.TrainTestSplit.transform">
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span><span class="p">, </span>Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span><span class="p">, </span>Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span><span class="p">, </span>Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span><span class="p">]</span><a class="reference internal" href="../../_modules/gators/model_building/train_test_split.html#TrainTestSplit.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gators.model_building.TrainTestSplit.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform dataframe and series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Series</span></dt><dd><p>Target values.</p>
+</dd>
+<dt><strong>test_ratio</strong><span class="classifier">float</span></dt><dd><p>Ratio of data points used for the test set.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_train</strong><span class="classifier">Dataframe</span></dt><dd><p>Train set X data.</p>
+</dd>
+<dt><strong>X_test</strong><span class="classifier">Dataframe</span></dt><dd><p>Test set X data.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">Series</span></dt><dd><p>Train set y data.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">Series</span></dt><dd><p>Test set y data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
-</section>
+<dl class="py method">
+<dt id="gators.model_building.TrainTestSplit.ordered_split">
+<code class="sig-name descname">ordered_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Xy</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span><span class="p">, </span>Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span><span class="p">]</span><a class="reference internal" href="../../_modules/gators/model_building/train_test_split.html#TrainTestSplit.ordered_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gators.model_building.TrainTestSplit.ordered_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform random split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Xy</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>Xy_train</strong><span class="classifier">DataFrame</span></dt><dd><p>Train set.</p>
+</dd>
+<dt><strong>Xy_test</strong><span class="classifier">DataFrame:</span></dt><dd><p>Test set.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.model_building.TrainTestSplit.stratified_split">
+<code class="sig-name descname">stratified_split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Xy</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">y_name</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span><span class="p">, </span>Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span><span class="p">]</span><a class="reference internal" href="../../_modules/gators/model_building/train_test_split.html#TrainTestSplit.stratified_split"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gators.model_building.TrainTestSplit.stratified_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform stratified split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Xy</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+<dt><strong>y_name</strong><span class="classifier">str</span></dt><dd><p>Target name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>Xy_train</strong><span class="classifier">DataFrame</span></dt><dd><p>Train set.</p>
+</dd>
+<dt><strong>Xy_test</strong><span class="classifier">DataFrame:</span></dt><dd><p>Test set.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.model_building.TrainTestSplit.check_dataframe">
+<em class="property">static </em><code class="sig-name descname">check_dataframe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.model_building.TrainTestSplit.check_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Input dataframe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gators.model_building.TrainTestSplit.check_target">
+<em class="property">static </em><code class="sig-name descname">check_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.DataFrame<span class="p">, </span>ks.DataFrame<span class="p">, </span>dd.DataFrame<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">y</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>pd.Series<span class="p">, </span>ks.Series<span class="p">, </span>dd.Series<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gators.model_building.TrainTestSplit.check_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">DataFrame</span></dt><dd><p>Dataframe.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Series</span></dt><dd><p>Target values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 
 
               </div>
               
               
               <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="../model_building.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1047,10 +1028,10 @@ results for pandas and koalas.</p>
             <p class="prev-next-title">Model Building</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="gators.model_building.HyperOpt.html" title="next page">
+    <a class='right-next' id="next-link" href="gators.model_building.XGBBoosterBuilder.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">gators.model_building.HyperOpt</p>
+        <p class="prev-next-title">gators.model_building.XGBBoosterBuilder</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -1062,19 +1043,19 @@ results for pandas and koalas.</p>
       </div>
     </div>
   
-  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
-<footer class="footer mt-5 mt-md-0">
+    <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021, the gators development team..<br>
+    &copy; Copyright 2021, Gators development team (Apache-2.0 License)..<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.0.<br>
 </p>
     </div>
     

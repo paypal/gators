@@ -1,0 +1,246 @@
+
+*fit_transform* benchmarking
+=============================
+
+
+
+Data Cleaning
+-------------
+
+.. image:: ../../_static/benchmarks/DropColumns_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/DropDatatypeColumns_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/KeepColumns_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Replace_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Binning
+-------
+
+.. image:: ../../_static/benchmarks/BinRareCategories_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CustomBinning_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Binning_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/QuantileBinning_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Clipping
+--------
+
+.. image:: ../../_static/benchmarks/Clipping_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Scalers
+-------
+
+.. image:: ../../_static/benchmarks/MinMaxScaler_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/StandardScaler_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Imputers
+--------
+.. image:: ../../_static/benchmarks/NumericsImputer_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IntImputer_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/FloatImputer_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/ObjectImputer_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Encoders
+--------
+
+.. image:: ../../_static/benchmarks/OneHotEncoder_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalEncoder_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/TargetEncoder_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/WOEEncoder_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Feature Generation
+------------------
+
+.. image:: ../../_static/benchmarks/ElementaryArithmetics_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IsEqual_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IsNull_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/ClusterStatistics_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OneHot_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+
+.. image:: ../../_static/benchmarks/PlaneRotation_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/PolynomialFeatures_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Feature Generation String
+-------------------------
+.. image:: ../../_static/benchmarks/LowerCase_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/UpperCase_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Extract_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/StringContains_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/StringLength_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/SplitExtract_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Feature Generation DateTime
+---------------------------
+
+.. image:: ../../_static/benchmarks/OrdinalMinuteOfHour_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalHourOfDay_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalDayOfWeek_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalDayOfMonth_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalMonthOfYear_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicMinuteOfHour_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicHourOfDay_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicDayOfWeek_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicDayOfMonth_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicMonthOfYear_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/DeltaTime_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left

@@ -9,12 +9,16 @@ Feature Generation String
 Base String Feature Generation
 ##############################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
   
     _BaseStringFeature
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     SplitExtract
     Extract

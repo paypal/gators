@@ -9,14 +9,18 @@ Feature Generation DateTime
 Base Datetime Feature Generation
 ################################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
   
     _BaseDatetimeFeature
 
 Ordinal Datetime Features
 #########################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
   
     OrdinalMinuteOfHour
     OrdinalHourOfDay
@@ -28,7 +32,9 @@ Cyclic Datetime Features
 ########################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     CyclicMinuteOfHour
     CyclicHourOfDay
@@ -40,7 +46,9 @@ Delta Time Features
 ###################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     DeltaTime
 

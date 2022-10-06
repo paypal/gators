@@ -7,31 +7,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Overview: module code &#8212; gators  documentation</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
-
+    <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
     
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
+    <link rel="stylesheet"
+      href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
     
       
-
+  
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/pydata-sphinx-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/gators.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="shortcut icon" href="../_static/gators_logo.ico"/>
     <link rel="search" title="Search" href="../search.html" />
@@ -55,7 +56,7 @@
 
 <a class="navbar-brand" href="../index.html">
   <img src="../_static/GATORS_LOGO.png" class="logo" alt="logo">
-</a>      
+</a>
 
 
     
@@ -90,6 +91,12 @@
 </li>
 
 <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../reference/index.html">
   API Reference
  </a>
@@ -112,10 +119,8 @@
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/paypal/Gators/" rel="noopener" target="_blank" title="GitHub">
-            <span><i class="fab fa-github-square"></i></span>
-            <label class="sr-only">GitHub</label>
-          </a>
+          <a class="nav-link" href="https://github.paypal.com/Simility-R/gators/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
       </ul>
       </div>
@@ -131,7 +136,8 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -139,6 +145,9 @@
     
   </div>
 </nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
             </div>
             
           
@@ -158,16 +167,18 @@
               <div>
                 
   <h1>All modules for which code is available</h1>
-<ul><li><a href="gators/binning/_base_discretizer.html">gators.binning._base_discretizer</a></li>
-<li><a href="gators/binning/bin_rare_events.html">gators.binning.bin_rare_events</a></li>
-<li><a href="gators/binning/custom_discretizer.html">gators.binning.custom_discretizer</a></li>
-<li><a href="gators/binning/discretizer.html">gators.binning.discretizer</a></li>
-<li><a href="gators/binning/quantile_discretizer.html">gators.binning.quantile_discretizer</a></li>
+<ul><li><a href="gators/binning/_base_binning.html">gators.binning._base_binning</a></li>
+<li><a href="gators/binning/bin_rare_categories.html">gators.binning.bin_rare_categories</a></li>
+<li><a href="gators/binning/bin_single_target_class_categories.html">gators.binning.bin_single_target_class_categories</a></li>
+<li><a href="gators/binning/binning.html">gators.binning.binning</a></li>
+<li><a href="gators/binning/custom_binning.html">gators.binning.custom_binning</a></li>
+<li><a href="gators/binning/quantile_binning.html">gators.binning.quantile_binning</a></li>
+<li><a href="gators/binning/tree_binning.html">gators.binning.tree_binning</a></li>
 <li><a href="gators/clipping/clipping.html">gators.clipping.clipping</a></li>
-<li><a href="gators/converter/convert_column_datatype.html">gators.converter.convert_column_datatype</a></li>
-<li><a href="gators/converter/koalas_to_pandas.html">gators.converter.koalas_to_pandas</a></li>
 <li><a href="gators/converter/to_numpy.html">gators.converter.to_numpy</a></li>
+<li><a href="gators/converter/to_pandas.html">gators.converter.to_pandas</a></li>
 <li><a href="gators/data_cleaning/_base_data_cleaning.html">gators.data_cleaning._base_data_cleaning</a></li>
+<li><a href="gators/data_cleaning/convert_column_datatype.html">gators.data_cleaning.convert_column_datatype</a></li>
 <li><a href="gators/data_cleaning/drop_columns.html">gators.data_cleaning.drop_columns</a></li>
 <li><a href="gators/data_cleaning/drop_datatype_columns.html">gators.data_cleaning.drop_datatype_columns</a></li>
 <li><a href="gators/data_cleaning/drop_high_cardinality.html">gators.data_cleaning.drop_high_cardinality</a></li>
@@ -176,10 +187,10 @@
 <li><a href="gators/data_cleaning/keep_columns.html">gators.data_cleaning.keep_columns</a></li>
 <li><a href="gators/data_cleaning/replace.html">gators.data_cleaning.replace</a></li>
 <li><a href="gators/encoders/_base_encoder.html">gators.encoders._base_encoder</a></li>
-<li><a href="gators/encoders/multiclass_encoder.html">gators.encoders.multiclass_encoder</a></li>
+<li><a href="gators/encoders/binned_columns_encoder.html">gators.encoders.binned_columns_encoder</a></li>
+<li><a href="gators/encoders/frequency_encoder.html">gators.encoders.frequency_encoder</a></li>
 <li><a href="gators/encoders/onehot_encoder.html">gators.encoders.onehot_encoder</a></li>
 <li><a href="gators/encoders/ordinal_encoder.html">gators.encoders.ordinal_encoder</a></li>
-<li><a href="gators/encoders/regression_encoder.html">gators.encoders.regression_encoder</a></li>
 <li><a href="gators/encoders/target_encoder.html">gators.encoders.target_encoder</a></li>
 <li><a href="gators/encoders/woe_encoder.html">gators.encoders.woe_encoder</a></li>
 <li><a href="gators/feature_generation/_base_feature_generation.html">gators.feature_generation._base_feature_generation</a></li>
@@ -188,8 +199,9 @@
 <li><a href="gators/feature_generation/is_equal.html">gators.feature_generation.is_equal</a></li>
 <li><a href="gators/feature_generation/is_null.html">gators.feature_generation.is_null</a></li>
 <li><a href="gators/feature_generation/one_hot.html">gators.feature_generation.one_hot</a></li>
-<li><a href="gators/feature_generation/plane_rotation.html">gators.feature_generation.plane_rotation</a></li>
+<li><a href="gators/feature_generation/plan_rotation.html">gators.feature_generation.plan_rotation</a></li>
 <li><a href="gators/feature_generation/polynomial_features.html">gators.feature_generation.polynomial_features</a></li>
+<li><a href="gators/feature_generation/polynomial_object_features.html">gators.feature_generation.polynomial_object_features</a></li>
 <li><a href="gators/feature_generation_dt/_base_datetime_feature.html">gators.feature_generation_dt._base_datetime_feature</a></li>
 <li><a href="gators/feature_generation_dt/cyclic_day_of_month.html">gators.feature_generation_dt.cyclic_day_of_month</a></li>
 <li><a href="gators/feature_generation_dt/cyclic_day_of_week.html">gators.feature_generation_dt.cyclic_day_of_week</a></li>
@@ -212,17 +224,13 @@
 <li><a href="gators/feature_selection/_base_feature_selection.html">gators.feature_selection._base_feature_selection</a></li>
 <li><a href="gators/feature_selection/correlation_filter.html">gators.feature_selection.correlation_filter</a></li>
 <li><a href="gators/feature_selection/information_value.html">gators.feature_selection.information_value</a></li>
-<li><a href="gators/feature_selection/multiclass_information_value.html">gators.feature_selection.multiclass_information_value</a></li>
-<li><a href="gators/feature_selection/regression_information_value.html">gators.feature_selection.regression_information_value</a></li>
 <li><a href="gators/feature_selection/select_from_model.html">gators.feature_selection.select_from_model</a></li>
 <li><a href="gators/feature_selection/select_from_models.html">gators.feature_selection.select_from_models</a></li>
+<li><a href="gators/feature_selection/supervized_correlation_filter.html">gators.feature_selection.supervized_correlation_filter</a></li>
 <li><a href="gators/feature_selection/variance_filter.html">gators.feature_selection.variance_filter</a></li>
 <li><a href="gators/imputers/_base_imputer.html">gators.imputers._base_imputer</a></li>
-<li><a href="gators/imputers/float_imputer.html">gators.imputers.float_imputer</a></li>
-<li><a href="gators/imputers/int_imputer.html">gators.imputers.int_imputer</a></li>
 <li><a href="gators/imputers/numerics_imputer.html">gators.imputers.numerics_imputer</a></li>
 <li><a href="gators/imputers/object_imputer.html">gators.imputers.object_imputer</a></li>
-<li><a href="gators/model_building/hyperopt.html">gators.model_building.hyperopt</a></li>
 <li><a href="gators/model_building/lgbm_treelite_dumper.html">gators.model_building.lgbm_treelite_dumper</a></li>
 <li><a href="gators/model_building/train_test_split.html">gators.model_building.train_test_split</a></li>
 <li><a href="gators/model_building/xgb_booster_builder.html">gators.model_building.xgb_booster_builder</a></li>
@@ -230,10 +238,14 @@
 <li><a href="gators/pipeline/pipeline.html">gators.pipeline.pipeline</a></li>
 <li><a href="gators/sampling/supervised_sampling.html">gators.sampling.supervised_sampling</a></li>
 <li><a href="gators/sampling/unsupervised_sampling.html">gators.sampling.unsupervised_sampling</a></li>
+<li><a href="gators/scalers/_base_scaler.html">gators.scalers._base_scaler</a></li>
 <li><a href="gators/scalers/minmax_scaler.html">gators.scalers.minmax_scaler</a></li>
 <li><a href="gators/scalers/standard_scaler.html">gators.scalers.standard_scaler</a></li>
+<li><a href="gators/scalers/yeo_johnson.html">gators.scalers.yeo_johnson</a></li>
 <li><a href="gators/transformers/transformer.html">gators.transformers.transformer</a></li>
 <li><a href="gators/transformers/transformer_xy.html">gators.transformers.transformer_xy</a></li>
+<li><a href="sklearn/base.html">sklearn.base</a></li>
+<li><a href="sklearn/pipeline.html">sklearn.pipeline</a></li>
 </ul>
 
               </div>
@@ -249,19 +261,19 @@
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
-<footer class="footer mt-5 mt-md-0">
+    <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021, the gators development team..<br>
+    &copy; Copyright 2021, Gators development team (Apache-2.0 License)..<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.0.<br>
 </p>
     </div>
     

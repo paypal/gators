@@ -1,0 +1,13 @@
+﻿
+gators.data\_cleaning.ConvertColumnDatatype
+===========================================
+
+.. currentmodule:: gators.data_cleaning
+
+.. autoclass:: ConvertColumnDatatype
+
+    
+
+ 
+
+     

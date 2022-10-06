@@ -4,35 +4,35 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>10 minutes to gators &#8212; gators  documentation</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
-
+    <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
     
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
+    <link rel="stylesheet"
+      href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
     
       
-
+  
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/pydata-sphinx-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/gators.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="shortcut icon" href="../_static/gators_logo.ico"/>
     <link rel="search" title="Search" href="../search.html" />
@@ -58,7 +58,7 @@
 
 <a class="navbar-brand" href="../index.html">
   <img src="../_static/GATORS_LOGO.png" class="logo" alt="logo">
-</a>      
+</a>
 
 
     
@@ -93,6 +93,12 @@
 </li>
 
 <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../reference/index.html">
   API Reference
  </a>
@@ -115,10 +121,8 @@
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/paypal/Gators/" rel="noopener" target="_blank" title="GitHub">
-            <span><i class="fab fa-github-square"></i></span>
-            <label class="sr-only">GitHub</label>
-          </a>
+          <a class="nav-link" href="https://github.paypal.com/Simility-R/gators/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
       </ul>
       </div>
@@ -134,7 +138,8 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -154,6 +159,9 @@
 
   </div>
 </nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
             </div>
             
           
@@ -525,7 +533,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
@@ -563,15 +571,17 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="10-minutes-to-gators">
+<div class="section" id="10-minutes-to-gators">
 <h1>10 minutes to gators<a class="headerlink" href="#10-minutes-to-gators" title="Permalink to this headline">¶</a></h1>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -579,8 +589,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">copy</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">pandas.testing</span> <span class="kn">import</span> <span class="n">assert_frame_equal</span>
@@ -595,11 +604,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># imputers</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># data cleaning</span>
+<span class="kn">from</span> <span class="nn">gators.data_cleaning</span> <span class="kn">import</span> <span class="n">ConvertColumnDatatype</span>
+<span class="c1"># imputers</span>
 <span class="kn">from</span> <span class="nn">gators.imputers</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">FloatImputer</span><span class="p">,</span>
-    <span class="n">IntImputer</span><span class="p">,</span>
+    <span class="n">NumericsImputer</span><span class="p">,</span>
     <span class="n">ObjectImputer</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># encoders</span>
@@ -611,7 +620,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<section id="end-to-end-simple-worflow">
+<div class="section" id="end-to-end-simple-worflow">
 <h2>end-to-end simple worflow<a class="headerlink" href="#end-to-end-simple-worflow" title="Permalink to this headline">¶</a></h2>
 <p>The workflow is as followed:</p>
 <p>1- create a pipeline to take care of the data preproprocessing.</p>
@@ -629,17 +638,16 @@ div.rendered_html tbody tr:hover {
 <ul class="simple">
 <li><p>ObjectImputer</p></li>
 <li><p>WOEEncoder</p></li>
-<li><p>FloatImputer</p></li>
-<li><p>IntImputer</p></li>
+<li><p>NumericsImputer</p></li>
 </ul>
-<section id="with-pandas">
+<div class="section" id="with-pandas">
 <h3>with pandas<a class="headerlink" href="#with-pandas" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;data/titanic.parquet&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;SibSp&#39;</span><span class="p">,</span> <span class="s1">&#39;Parch&#39;</span><span class="p">,</span> <span class="s1">&#39;Cabin&#39;</span><span class="p">,</span> <span class="s1">&#39;Survived&#39;</span><span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;data/titanic.parquet&#39;</span><span class="p">)[</span><span class="n">columns</span><span class="p">]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Survived&#39;</span><span class="p">]</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Survived&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">X</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -669,74 +677,45 @@ div.rendered_html tbody tr:hover {
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Pclass</th>
-      <th>Name</th>
       <th>Sex</th>
       <th>Age</th>
       <th>SibSp</th>
       <th>Parch</th>
-      <th>Ticket</th>
-      <th>Fare</th>
       <th>Cabin</th>
-      <th>Embarked</th>
-    </tr>
-    <tr>
-      <th>PassengerId</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>1</th>
-      <td>3</td>
-      <td>Braund, Mr. Owen Harris</td>
+      <th>0</th>
       <td>male</td>
       <td>22.0</td>
       <td>1</td>
       <td>0</td>
-      <td>A/5 21171</td>
-      <td>7.2500</td>
       <td>None</td>
-      <td>S</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>1</td>
-      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
+      <th>1</th>
       <td>female</td>
       <td>38.0</td>
       <td>1</td>
       <td>0</td>
-      <td>PC 17599</td>
-      <td>71.2833</td>
       <td>C85</td>
-      <td>C</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<section id="pipeline">
+<div class="section" id="pipeline">
 <h4>pipeline<a class="headerlink" href="#pipeline" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">prepro_steps</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">ObjectImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;MISSING&#39;</span><span class="p">),</span>
-    <span class="n">WOEEncoder</span><span class="p">(),</span>
-    <span class="n">FloatImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">),</span>
-    <span class="n">IntImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prepro_steps</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;ObjectImputer&#39;</span><span class="p">,</span> <span class="n">ObjectImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;MISSING&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;WOEEncoder&#39;</span><span class="p">,</span> <span class="n">WOEEncoder</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;ConvertColumnDatatype&#39;</span><span class="p">,</span> <span class="n">ConvertColumnDatatype</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SibSp&#39;</span><span class="p">,</span> <span class="s1">&#39;Parch&#39;</span><span class="p">],</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;NumericsImputer&#39;</span><span class="p">,</span> <span class="n">NumericsImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
 <span class="p">]</span>
 <span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">prepro_steps</span><span class="p">)</span>
 <span class="n">X_prepro</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -748,13 +727,35 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">X_prepro</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_prepro_np</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[-0.98142372, 22.        ,  1.        ,  0.        , -0.37441799],
+       [ 1.52476689, 38.        ,  1.        ,  0.        ,  1.57080012],
+       [ 1.52476689, 26.        ,  0.        ,  0.        , -0.37441799],
+       ...,
+       [ 1.52476689, 29.69911765,  1.        ,  2.        , -0.37441799],
+       [-0.98142372, 26.        ,  0.        ,  0.        ,  1.57080012],
+       [-0.98142372, 32.        ,  0.        ,  0.        , -0.37441799]])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_prepro</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -776,70 +777,105 @@ div.rendered_html tbody tr:hover {
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Pclass</th>
-      <th>Name</th>
       <th>Sex</th>
       <th>Age</th>
       <th>SibSp</th>
       <th>Parch</th>
-      <th>Ticket</th>
-      <th>Fare</th>
       <th>Cabin</th>
-      <th>Embarked</th>
-    </tr>
-    <tr>
-      <th>PassengerId</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>1</th>
-      <td>3.0</td>
-      <td>0.0</td>
-      <td>-0.983833</td>
+      <th>0</th>
+      <td>-0.981424</td>
       <td>22.0</td>
       <td>1.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>7.2500</td>
-      <td>-0.374703</td>
-      <td>-0.203599</td>
+      <td>-0.374418</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.529877</td>
+      <th>1</th>
+      <td>1.524767</td>
       <td>38.0</td>
       <td>1.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>71.2833</td>
-      <td>0.000000</td>
-      <td>0.688399</td>
+      <td>1.570800</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<section id="check-transform-and-tranform_numpy-output">
+<div class="section" id="check-transform-and-tranform_numpy-output">
 <h5>check <code class="docutils literal notranslate"><span class="pre">transform</span></code> and <code class="docutils literal notranslate"><span class="pre">tranform_numpy</span></code> output<a class="headerlink" href="#check-transform-and-tranform_numpy-output" title="Permalink to this headline">¶</a></h5>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">assert</span> <span class="n">X_prepro</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">X_prepro_np</span><span class="o">.</span><span class="n">shape</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_prepro_np_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">X_prepro_np</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="n">X_prepro</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+    <span class="n">columns</span><span class="o">=</span><span class="n">X_prepro</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">X_prepro_np_pd</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>SibSp</th>
+      <th>Parch</th>
+      <th>Cabin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-0.981424</td>
+      <td>22.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>-0.374418</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.524767</td>
+      <td>38.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1.570800</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">X_prepro</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">X_prepro_np</span><span class="o">.</span><span class="n">shape</span>
 <span class="n">X_prepro_np_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
     <span class="n">X_prepro_np</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="n">X_prepro</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
@@ -849,17 +885,16 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-</section>
-</section>
-<section id="model-building">
+</div>
+</div>
+</div>
+<div class="section" id="model-building">
 <h3>model building<a class="headerlink" href="#model-building" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span>
     <span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -868,39 +903,36 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<section id="pandas-model">
+<div class="section" id="pandas-model">
 <h4>pandas model<a class="headerlink" href="#pandas-model" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model_pd</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_pd</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">model_pd</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_prepro</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="numpy-model">
+</div>
+<div class="section" id="numpy-model">
 <h4>numpy model<a class="headerlink" href="#numpy-model" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_prepro</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_prepro</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="treelite-model">
+</div>
+<div class="section" id="treelite-model">
 <h4>treelite model<a class="headerlink" href="#treelite-model" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">xgb_booster</span> <span class="o">=</span> <span class="n">XGBBoosterBuilder</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgb_booster</span> <span class="o">=</span> <span class="n">XGBBoosterBuilder</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
     <span class="n">X_train</span><span class="o">=</span><span class="n">X_prepro_np</span><span class="p">,</span>
     <span class="n">y_train</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
@@ -908,7 +940,7 @@ div.rendered_html tbody tr:hover {
 
 <span class="n">treelite_model</span> <span class="o">=</span> <span class="n">treelite</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">from_xgboost</span><span class="p">(</span><span class="n">xgb_booster</span><span class="p">)</span>
 <span class="n">treelite_model</span><span class="o">.</span><span class="n">export_lib</span><span class="p">(</span>
-    <span class="n">toolchain</span><span class="o">=</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span>
+    <span class="n">toolchain</span><span class="o">=</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span>
     <span class="n">libpath</span><span class="o">=</span><span class="s1">&#39;./models/treelite_simple_xgb.so&#39;</span><span class="p">,</span>
     <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;parallel_comp&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -922,34 +954,33 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[11:41:25] ../src/compiler/ast_native.cc:45: Using ASTNativeCompiler
-[11:41:25] ../src/compiler/ast/split.cc:31: Parallel compilation enabled; member trees will be divided into 4 translation units.
-[11:41:25] ../src/c_api/c_api.cc:121: Code generation finished. Writing code to files...
-[11:41:25] ../src/c_api/c_api.cc:126: Writing file recipe.json...
-[11:41:25] ../src/c_api/c_api.cc:126: Writing file tu3.c...
-[11:41:25] ../src/c_api/c_api.cc:126: Writing file tu2.c...
-[11:41:25] ../src/c_api/c_api.cc:126: Writing file tu1.c...
-[11:41:25] ../src/c_api/c_api.cc:126: Writing file tu0.c...
-[11:41:25] ../src/c_api/c_api.cc:126: Writing file header.h...
-[11:41:25] ../src/c_api/c_api.cc:126: Writing file main.c...
-[11:41:25] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/util.py:105: Compiling sources files in directory ./models/tmpsdrk142d into object files (*.o)...
-[11:41:25] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/util.py:134: Generating dynamic shared library ./models/tmpsdrk142d/predictor.dylib...
-[11:41:25] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/__init__.py:278: Generated shared library in 0.34 seconds
+[16:09:44] ../src/compiler/ast_native.cc:45: Using ASTNativeCompiler
+[16:09:44] ../src/compiler/ast/split.cc:31: Parallel compilation enabled; member trees will be divided into 4 translation units.
+[16:09:44] ../src/c_api/c_api.cc:121: Code generation finished. Writing code to files...
+[16:09:44] ../src/c_api/c_api.cc:126: Writing file recipe.json...
+[16:09:44] ../src/c_api/c_api.cc:126: Writing file tu3.c...
+[16:09:44] ../src/c_api/c_api.cc:126: Writing file tu2.c...
+[16:09:44] ../src/c_api/c_api.cc:126: Writing file tu1.c...
+[16:09:44] ../src/c_api/c_api.cc:126: Writing file tu0.c...
+[16:09:44] ../src/c_api/c_api.cc:126: Writing file header.h...
+[16:09:44] ../src/c_api/c_api.cc:126: Writing file main.c...
+[16:09:44] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/util.py:105: Compiling sources files in directory ./models/tmppmwz3168 into object files (*.o)...
+[16:09:44] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/util.py:134: Generating dynamic shared library ./models/tmppmwz3168/predictor.dylib...
+[16:09:44] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/__init__.py:278: Generated shared library in 0.40 seconds
 </pre></div></div>
 </div>
-<section id="per-sample-model-benchmarking">
+<div class="section" id="per-sample-model-benchmarking">
 <h5>per-sample model benchmarking<a class="headerlink" href="#per-sample-model-benchmarking" title="Permalink to this headline">¶</a></h5>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]]</span>
-<span class="n">xnp</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">x_np</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 <span class="n">stats_pd</span> <span class="o">=</span> <span class="o">%</span><span class="k">timeit</span> -o model_pd.predict_proba(pipe.transform(x))[0][1]
 <span class="n">stats_pd_tl</span> <span class="o">=</span> <span class="o">%</span><span class="k">timeit</span> -o model_tl.predict(treelite_runtime.DMatrix(pipe.transform(x).to_numpy()))
-<span class="n">stats_np</span> <span class="o">=</span> <span class="o">%</span><span class="k">timeit</span> -o model.predict_proba(pipe.transform_numpy(xnp))[0][1]
-<span class="n">stats_np_tl</span> <span class="o">=</span> <span class="o">%</span><span class="k">timeit</span> -o model_tl.predict(treelite_runtime.DMatrix(pipe.transform_numpy(xnp)))
+<span class="n">stats_np</span> <span class="o">=</span> <span class="o">%</span><span class="k">timeit</span> -o model.predict_proba(pipe.transform_numpy(x_np.copy()))[0][1]
+<span class="n">stats_np_tl</span> <span class="o">=</span> <span class="o">%</span><span class="k">timeit</span> -o model_tl.predict(treelite_runtime.DMatrix(pipe.transform_numpy(x_np.copy())))
 </pre></div>
 </div>
 </div>
@@ -958,95 +989,133 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-55.1 ms ± 1.83 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
-59.8 ms ± 5.49 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
-114 µs ± 6.14 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
-110 µs ± 6.57 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+13.7 ms ± 1.13 ms per loop (mean ± std. dev. of 7 runs, 100 loops each)
+6.85 ms ± 230 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+1.48 ms ± 108 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+67.6 µs ± 2.27 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
 <p>Overall speed-up</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">speedup</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stats_pd</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stats_np_tl</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">speedup</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stats_pd</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stats_np_tl</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 <span class="sa">f</span><span class="s1">&#39;Speed-up Pandas VS Numpy&amp;Treelite x</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">speedup</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;Speed-up Pandas VS Numpy&amp;Treelite x500.91&#39;
+&#39;Speed-up Pandas VS Numpy&amp;Treelite x203&#39;
 </pre></div></div>
 </div>
-</section>
-</section>
-<section id="check-model-predictions">
+</div>
+</div>
+<div class="section" id="check-model-predictions">
 <h4>check model predictions<a class="headerlink" href="#check-model-predictions" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">X_np</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_np</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 <span class="n">y_pred_pd</span> <span class="o">=</span> <span class="n">model_pd</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))[:,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">y_pred_np</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">X_np</span><span class="p">))[:,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">y_pred_tl</span> <span class="o">=</span> <span class="n">model_tl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">treelite_runtime</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">X_np</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)))</span>
+<span class="n">y_pred_np</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">X_np</span><span class="o">.</span><span class="n">copy</span><span class="p">()))[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">y_pred_tl</span> <span class="o">=</span> <span class="n">model_tl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+    <span class="n">treelite_runtime</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span>
+        <span class="n">pipe</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">X_np</span><span class="o">.</span><span class="n">copy</span><span class="p">()))</span>
+    <span class="p">)</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">y_pred_np</span><span class="p">,</span> <span class="n">y_pred_pd</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">y_pred_np</span><span class="p">,</span> <span class="n">y_pred_tl</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="dumping-both-model-and-pipeline">
+</div>
+<div class="section" id="dumping-both-model-and-pipeline">
 <h4>dumping both model and pipeline<a class="headerlink" href="#dumping-both-model-and-pipeline" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;models/simple_xgb.dill&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;models/simple_xgb.dill&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">dill</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;pipelines/simple_pipeline.dill&#39;</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;models/simple_pipeline.dill&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">dill</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</section>
-</section>
-<section id="with-koalas">
+</div>
+</div>
+<div class="section" id="with-koalas">
 <h3>with koalas<a class="headerlink" href="#with-koalas" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
-<span class="kn">from</span> <span class="nn">gators.converter</span> <span class="kn">import</span> <span class="n">KoalasToPandas</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkConf</span><span class="p">,</span> <span class="n">SparkContext</span>
+
+<span class="n">conf</span> <span class="o">=</span> <span class="n">SparkConf</span><span class="p">()</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;spark.executor.memory&#39;</span><span class="p">,</span> <span class="s1">&#39;2g&#39;</span><span class="p">)</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;spark.sql.codegen.wholeStage&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
+<span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;spark.sql.autoBroadcastJoinThreshold&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">SparkContext</span><span class="p">(</span><span class="n">conf</span><span class="o">=</span><span class="n">conf</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
+<span class="n">ks</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;compute.default_index_type&#39;</span><span class="p">,</span> <span class="s1">&#39;distributed-sequence&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.spark.unsafe.Platform (file:/Users/cpoli/gators38/lib/python3.8/site-packages/pyspark/jars/spark-unsafe_2.12-3.1.3.jar) to constructor java.nio.DirectByteBuffer(long,int)
+WARNING: Please consider reporting this to the maintainers of org.apache.spark.unsafe.Platform
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+22/10/05 16:10:21 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to &#34;WARN&#34;.
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">databricks.koalas</span> <span class="k">as</span> <span class="nn">ks</span>
+<span class="kn">from</span> <span class="nn">gators.converter</span> <span class="kn">import</span> <span class="n">ToPandas</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">data</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;data/titanic.parquet&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">ks</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;data/titanic.parquet&#39;</span><span class="p">)[</span><span class="n">columns</span><span class="p">]</span>
 <span class="n">y_ks</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Survived&#39;</span><span class="p">]</span>
 <span class="n">X_ks</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Survived&#39;</span><span class="p">,</span> <span class="s1">&#39;PassengerId&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">X_ks</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1068,92 +1137,81 @@ div.rendered_html tbody tr:hover {
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Pclass</th>
-      <th>Name</th>
       <th>Sex</th>
       <th>Age</th>
       <th>SibSp</th>
       <th>Parch</th>
-      <th>Ticket</th>
-      <th>Fare</th>
       <th>Cabin</th>
-      <th>Embarked</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>3</td>
-      <td>Braund, Mr. Owen Harris</td>
       <td>male</td>
       <td>22.0</td>
       <td>1</td>
       <td>0</td>
-      <td>A/5 21171</td>
-      <td>7.2500</td>
       <td>None</td>
-      <td>S</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>1</td>
-      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>
       <td>female</td>
       <td>38.0</td>
       <td>1</td>
       <td>0</td>
-      <td>PC 17599</td>
-      <td>71.2833</td>
       <td>C85</td>
-      <td>C</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">X_prepro_ks</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_ks</span><span class="p">,</span> <span class="n">y_ks</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_prepro_ks</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_ks</span><span class="p">,</span> <span class="n">y_ks</span><span class="p">)</span>
 <span class="n">X_prepro_ks_np</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">X_prepro_ks_pd</span><span class="p">,</span> <span class="n">y_ks_pd</span> <span class="o">=</span> <span class="n">KoalasToPandas</span><span class="p">()</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_prepro_ks</span><span class="p">,</span> <span class="n">y_ks</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_prepro_ks_pd</span><span class="p">,</span> <span class="n">y_ks_pd</span> <span class="o">=</span> <span class="n">ToPandas</span><span class="p">()</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_prepro_ks</span><span class="p">,</span> <span class="n">y_ks</span><span class="p">)</span>
 <span class="n">X_prepro_ks_pd</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">X_prepro</span><span class="o">.</span><span class="n">index</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">assert_frame_equal</span><span class="p">(</span><span class="n">X_prepro_ks_pd</span><span class="p">,</span> <span class="n">X_prepro</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">assert_frame_equal</span><span class="p">(</span><span class="n">X_prepro_ks_pd</span><span class="p">,</span> <span class="n">X_prepro</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">X_prepro_ks_np</span><span class="p">,</span> <span class="n">X_prepro</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>Since we have a pandas dataframe, the same steps from the pandas section can now followed</p>
-</section>
-</section>
-<section id="Create-you-own-transformers:-example-with-log10">
+</div>
+</div>
+<div class="section" id="Create-you-own-transformers:-example-with-log10">
 <h2>Create you own transformers: example with log10<a class="headerlink" href="#Create-you-own-transformers:-example-with-log10" title="Permalink to this headline">¶</a></h2>
-<section id="imports">
+<div class="section" id="imports">
 <h3>imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log10</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -1163,15 +1221,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="Inplace-transformer-on-the-all-dataframe">
+</div>
+<div class="section" id="Inplace-transformer-on-the-all-dataframe">
 <h3>Inplace transformer on the all dataframe<a class="headerlink" href="#Inplace-transformer-on-the-all-dataframe" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">class</span> <span class="nc">Log10Inplace</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Log10Inplace</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
@@ -1198,11 +1255,10 @@ div.rendered_html tbody tr:hover {
 <p><code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">pd.DataFrame(np.log10(X.to_numpy()),</span> <span class="pre">columns=X.columns,</span> <span class="pre">index=X.index)</span></code></p>
 <p>which is significantly faster.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
     <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABCDEFGHIJ&#39;</span><span class="p">))</span>
 <span class="o">%</span><span class="k">timeit</span> _ = X.applymap(log10)
 <span class="o">%</span><span class="k">timeit</span> _ = pd.DataFrame(np.log10(X.to_numpy()), columns=X.columns, index=X.index)
@@ -1214,12 +1270,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-2.09 ms ± 192 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-45.2 µs ± 1.99 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+1.41 ms ± 30.4 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
+30.1 µs ± 238 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 </pre></div></div>
 </div>
-</section>
-<section id="Inplace-transformer-on-the-selected-columns">
+</div>
+<div class="section" id="Inplace-transformer-on-the-selected-columns">
 <h3>Inplace transformer on the selected columns<a class="headerlink" href="#Inplace-transformer-on-the-selected-columns" title="Permalink to this headline">¶</a></h3>
 <p>Transform the given columns can be interesting in the following ways:</p>
 <ul class="simple">
@@ -1228,11 +1284,10 @@ div.rendered_html tbody tr:hover {
 <li><p>The transformation should not be applied on the encoded columns, and the name of the base columns are obtained before the transformation.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">class</span> <span class="nc">Log10ColumnsInplace</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Log10ColumnsInplace</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`columns` should be a list.&#39;</span><span class="p">)</span>
@@ -1264,8 +1319,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="transformer-creating-new-columns">
+</div>
+<div class="section" id="transformer-creating-new-columns">
 <h3>transformer creating new columns<a class="headerlink" href="#transformer-creating-new-columns" title="Permalink to this headline">¶</a></h3>
 <p>Creating new columns can be interesting if</p>
 <ul class="simple">
@@ -1273,11 +1328,10 @@ div.rendered_html tbody tr:hover {
 <li><p>the raw data still contains some meaningful predictive information.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">class</span> <span class="nc">Log10Columns</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Log10Columns</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`columns` should be a list.&#39;</span><span class="p">)</span>
@@ -1285,7 +1339,6 @@ div.rendered_html tbody tr:hover {
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;`columns` should not be empty.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1">__log10&#39;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">colum_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
@@ -1312,50 +1365,16 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p><strong>Notes</strong></p>
-<p>The class parameter <code class="docutils literal notranslate"><span class="pre">colum_names</span></code> will be used to clean up the pipeline.</p>
-</section>
-<section id="tests">
+</div>
+<div class="section" id="tests">
 <h3>tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABCDEFGHIJ&#39;</span><span class="p">))</span>
-<span class="n">X_np</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">columns</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_datatype_columns</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-<span class="n">X_new_inplace_all</span> <span class="o">=</span> <span class="n">Log10Inplace</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">columns</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_datatype_columns</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-<span class="n">X_new_inplace_cols</span> <span class="o">=</span> <span class="n">Log10ColumnsInplace</span><span class="p">(</span>
-    <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">columns</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_datatype_columns</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
-<span class="n">X_new</span> <span class="o">=</span> <span class="n">Log10Columns</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="s1">&#39;ABCDEFGHIJ&#39;</span><span class="p">))</span>
+<span class="n">X_np</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1363,8 +1382,35 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_datatype_columns</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+<span class="n">X_new_inplace_all</span> <span class="o">=</span> <span class="n">Log10Inplace</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_datatype_columns</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+<span class="n">X_new_inplace_cols</span> <span class="o">=</span> <span class="n">Log10ColumnsInplace</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_datatype_columns</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+<span class="n">X_new</span> <span class="o">=</span> <span class="n">Log10Columns</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
     <span class="n">X_new_inplace_all</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">X_new_inplace_cols</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;A__log10&#39;</span><span class="p">,</span> <span class="s1">&#39;B__log10&#39;</span><span class="p">,</span> <span class="s1">&#39;C__log10&#39;</span><span class="p">,</span> <span class="s1">&#39;D__log10&#39;</span><span class="p">,</span> <span class="s1">&#39;E__log10&#39;</span><span class="p">,</span>
@@ -1375,15 +1421,14 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="per-sample-benchmarking">
+</div>
+<div class="section" id="per-sample-benchmarking">
 <h3>per-sample benchmarking<a class="headerlink" href="#per-sample-benchmarking" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">n_cols</span> <span class="o">=</span> <span class="mi">1000</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
     <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_cols</span><span class="p">)),</span>
@@ -1395,32 +1440,29 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 <span class="n">obj</span> <span class="o">=</span> <span class="n">Log10ColumnsInplace</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># result saved to be compared with the transform_numpy using Cython.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># result saved to be compared with the transform_numpy using Cython.</span>
 <span class="n">x_np_new</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">x_np</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">timeit</span> _ = obj.transform(x.copy())
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> _ = obj.transform(x.copy())
 <span class="o">%</span><span class="k">timeit</span> _ = obj.transform_numpy(x_np.copy())
 </pre></div>
 </div>
@@ -1430,18 +1472,17 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-223 ms ± 11.1 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
-17 µs ± 714 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+234 ms ± 4.38 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+16.1 µs ± 108 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
 <p><strong>Notes:</strong></p>
 <p>Since the transformation happens inplace, the <code class="docutils literal notranslate"><span class="pre">.copy()</span></code> is neccessary however, the <code class="docutils literal notranslate"><span class="pre">.copy()</span></code> runtime is negligeable:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">timeit</span> x.copy()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> x.copy()
 <span class="o">%</span><span class="k">timeit</span> x_np.copy()
 </pre></div>
 </div>
@@ -1451,28 +1492,26 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-20.8 µs ± 1.46 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
-590 ns ± 24.1 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)
+18.4 µs ± 876 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+500 ns ± 16 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 <span class="n">obj</span> <span class="o">=</span> <span class="n">Log10Columns</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">timeit</span> _ = obj.transform(x.copy())
-<span class="o">%</span><span class="k">timeit</span> _ = obj.transform_numpy(x_np.copy())
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">timeit</span> _ = obj.transform(x.copy())
+<span class="n">stats_log_np</span> <span class="o">=</span> <span class="o">%</span><span class="k">timeit</span> -o obj.transform_numpy(x_np.copy())
 </pre></div>
 </div>
 </div>
@@ -1481,29 +1520,27 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-152 ms ± 4.37 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
-16.7 µs ± 673 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+109 ms ± 7.99 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+14.7 µs ± 1.71 µs per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
 </pre></div></div>
 </div>
-</section>
-<section id="Cython">
+</div>
+<div class="section" id="Cython">
 <h3>Cython<a class="headerlink" href="#Cython" title="Permalink to this headline">¶</a></h3>
 <p>The per-sample runtime of the <code class="docutils literal notranslate"><span class="pre">transform_numpy</span></code> is already pretty good. But, it some cases, Cython will allow to get even faster.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">load_ext</span> Cython
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> Cython
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
-<div class="input_area highlight-cython notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%%</span><span class="n">cython</span>
+<div class="input_area highlight-cython notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">cython</span>
 <span class="k">import</span> <span class="nn">cython</span>
 <span class="k">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="k">cimport</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1529,11 +1566,10 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">class</span> <span class="nc">Log10ColumnsInplaceWithCython</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Log10ColumnsInplaceWithCython</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`columns` should be a list.&#39;</span><span class="p">)</span>
@@ -1541,9 +1577,7 @@ div.rendered_html tbody tr:hover {
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;`columns` should not be empty.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-            <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
-            <span class="n">y</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">ks</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Log10Columns&#39;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Log10Columns&#39;</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_dataframe</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">idx_columns</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_idx_columns</span><span class="p">(</span>
             <span class="n">columns</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
@@ -1551,14 +1585,12 @@ div.rendered_html tbody tr:hover {
         <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ks</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_dataframe</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">log10</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">X</span>
 
-    <span class="k">def</span> <span class="nf">transform_numpy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">transform_numpy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="n">X</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">cython_log10</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx_columns</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">X</span>
@@ -1566,31 +1598,28 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 <span class="n">obj</span> <span class="o">=</span> <span class="n">Log10ColumnsInplaceWithCython</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">x_np</span><span class="o">.</span><span class="n">copy</span><span class="p">()),</span> <span class="n">x_np_new</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">transform_numpy</span><span class="p">(</span><span class="n">x_np</span><span class="o">.</span><span class="n">copy</span><span class="p">()),</span> <span class="n">x_np_new</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">%</span><span class="k">timeit</span> _ = obj.transform_numpy(x_np.copy())
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats_log_cy</span> <span class="o">=</span> <span class="o">%</span><span class="k">timeit</span> -o obj.transform_numpy(x_np.copy())
 </pre></div>
 </div>
 </div>
@@ -1599,22 +1628,40 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-13.2 µs ± 720 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+9.95 µs ± 284 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">speedup</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stats_log_np</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stats_log_cy</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="sa">f</span><span class="s1">&#39;Speed-up Cython VS Numpy x</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">speedup</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;Speed-up Cython VS Numpy x1.48&#39;
 </pre></div></div>
 </div>
 <p>A slight runtime improvement is obtained for this transformer.</p>
 <p><strong>Notes:</strong></p>
 <p>In some cases, for example the Encoders, Cython leads to a significant runtime improvement.</p>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
               </div>
               
               
               <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="install.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1637,19 +1684,19 @@ div.rendered_html tbody tr:hover {
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
-<footer class="footer mt-5 mt-md-0">
+    <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021, the gators development team..<br>
+    &copy; Copyright 2021, Gators development team (Apache-2.0 License)..<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.0.<br>
 </p>
     </div>
     

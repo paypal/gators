@@ -9,10 +9,12 @@ Sampling
 .. note::
 
     **UnsupevisedSampling** should be used for regression problems, and
-    *SupervisedSampling* should be used for classification problems.
+    *SupervisedSampling* can be used for classification problems.
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    UnsupervisedSampling
    SupervisedSampling

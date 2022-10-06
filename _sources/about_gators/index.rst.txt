@@ -11,21 +11,21 @@ About Gators
 History of development
 ######################
 
-In 2018, **Gators** development began at Simility and had been open sourced in 2021,
+In 2018, **Gators** development began at **Simility** and had been open sourced in 2021,
 
 ========
 Timeline
 ========
 * **2018**: Development of **Gators** started.
-* **2020**: Koalas and Cython packages are added to tackle out-of-core memory datasets and fast real-time pre-processing. 
-* **2021**: **Gators** becomes open source.
+* **2020**: Dask, Koalas and Cython packages are added to tackle out-of-core memory datasets and fast real-time pre-processing. 
+* **2021**: **Gators** becomes open-sourced.
 
 ##################
 Library Highlights
 ##################
 
 * Data pre-processing can be done for both in-memory and out-of-memory datasets using the same interface.
-* Using Cython, the real-time data pre-processing is carried out on NumPy arrays with compiled C-code leading to fast response times, similar to compiled languages.
+* Using Cython, the real-time data pre-processing is carried out on NumPy arrays with compiled C-code leading to fast response times, similar to compiled-languages.
 
 ##########
 Our Vision
@@ -37,7 +37,7 @@ A world where data scientists can develop and push their models in production us
 Python packages leveraged in gators
 ###################################
 
-.. centered:: "If I have seen further it is by standing on the shoulders of Giants."
+.. centered:: "If I have seen further it is by standing on the shoulders of giants."
 
 .. centered:: Sir Isaac Newton
 
@@ -50,23 +50,34 @@ Data pre-processing
 ===================
 
 .. image:: ../_static/pandas_logo.png
+    :width: 170 px
+    :target: https://pandas.pydata.org/docs/
 
-The most well known package for data analysis is used for data pre-processing during the model building phase. This package should be used as long as the data can fit in memory.
+The well-known package for data analysis is used for data pre-processing during the model building phase. This package should be used as long as the data can fit in memory.
 
 .. image:: ../_static/koalas_logo.png
     :width: 170 px
+    :target: https://koalas.readthedocs.io/en/latest/
 
-koalas has been chosen to replace pandas if the data does not fit in memory. The main advantage of koalas compared to other big data packages such as PySpark and Dask, is the fact that the syntax is close to pandas.
+Koalas is one of the two libraries chosen to handle the preprocessing when the data does not fit in memory. 
+
+.. image:: ../_static/dask_logo.png
+    :width: 170 px
+    :target: https://docs.dask.org/en/latest/
+
+Dask can also be used to handle the preprocessing when the data does not fit in memory. 
 
 .. image:: ../_static/numpy_logo.png
     :width: 170 px
+    :target: https://numpy.org/doc/
 
 NumPy is used in the production environment when the pre-processing needs to be as fast as possible.
 
 .. image:: ../_static/cython_logo.jpeg
     :width: 170 px
+    :target: https://cython.readthedocs.io/en/latest/
 
-In the production environment, the pre-processing with be done by pre-compile Cython code on NumPy arrays.
+In the production environment, the pre-processing with be done by pre-compiled Cython code on NumPy arrays.
 
 ==============
 Model building
@@ -74,31 +85,25 @@ Model building
 
 .. image:: ../_static/sklearn_logo.png
     :width: 170 px
+    :target: https://scikit-learn.org/stable/
 
 The most well known package for model building is used for cross-validation and model evaluation.
 
-.. image:: ../_static/hyperopt_logo.png
-    :width: 170 px
-
-This package is used for hyperparameter tuning. The three algorithms currently available to perform hyperparameter tuning are:
-
-* Random Search
-* Tree of Parzen Estimators (TPE)
-* Adaptative TPE
-
 .. image:: ../_static/xgboost_logo.png
     :width: 170 px
+    :target: https://xgboost.readthedocs.io/en/latest/
 
 Decision tree-based package used for model building. XGBoost algorithm applies level-wise tree growth.
 
 .. image:: ../_static/lightgbm_logo.png
     :width: 170 px
+    :target: https://lightgbm.readthedocs.io/en/latest/
 
 Decision tree-based package used for model building. LightGBM algorithm applies leaf-wise tree growth.
 
 .. image:: ../_static/treelite_logo.png
     :width: 170 px
+    :target: https://treelite.readthedocs.io/
 
 Treelite is used to compile the trained models in C before being deployed in production,
 and treelite-runtime is used for real-time model scoring.
-

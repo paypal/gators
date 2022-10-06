@@ -7,31 +7,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>gators.model_building.xgb_treelite_dumper &#8212; gators  documentation</title>
     
-  <link href="../../../_static/css/theme.css" rel="stylesheet">
-  <link href="../../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
-
+    <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
     
-  <link rel="stylesheet"
-    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
+    <link rel="stylesheet"
+      href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
     
       
-
+  
     
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/blank.css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/styles/pydata-sphinx-theme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/gators.css" />
     
-  <link rel="preload" as="script" href="../../../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="shortcut icon" href="../../../_static/gators_logo.ico"/>
     <link rel="search" title="Search" href="../../../search.html" />
@@ -55,7 +56,7 @@
 
 <a class="navbar-brand" href="../../../index.html">
   <img src="../../../_static/GATORS_LOGO.png" class="logo" alt="logo">
-</a>      
+</a>
 
 
     
@@ -90,6 +91,12 @@
 </li>
 
 <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../../../reference/index.html">
   API Reference
  </a>
@@ -112,10 +119,8 @@
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/paypal/Gators/" rel="noopener" target="_blank" title="GitHub">
-            <span><i class="fab fa-github-square"></i></span>
-            <label class="sr-only">GitHub</label>
-          </a>
+          <a class="nav-link" href="https://github.paypal.com/Simility-R/gators/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
       </ul>
       </div>
@@ -131,7 +136,8 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -139,6 +145,9 @@
     
   </div>
 </nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
             </div>
             
           
@@ -160,10 +169,9 @@
   <h1>Source code for gators.model_building.xgb_treelite_dumper</h1><div class="highlight"><pre>
 <span></span><span class="c1"># License: Apache-2.0</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">xgboost</span>
-<span class="kn">from</span> <span class="nn">xgboost.sklearn</span> <span class="kn">import</span> <span class="n">XGBClassifier</span>
+
 <span class="kn">import</span> <span class="nn">treelite</span>
+<span class="kn">import</span> <span class="nn">xgboost</span>
 
 
 <div class="viewcode-block" id="XGBTreeliteDumper"><a class="viewcode-back" href="../../../reference/api/gators.model_building.XGBTreeliteDumper.html#gators.model_building.XGBTreeliteDumper">[docs]</a><span class="k">class</span> <span class="nc">XGBTreeliteDumper</span><span class="p">:</span>
@@ -179,25 +187,24 @@
 <span class="sd">    &gt;&gt;&gt; dtrain = xgb.DMatrix(X_train, label=y_train)</span>
 <span class="sd">    &gt;&gt;&gt; model = xgb.train({&#39;max_depth&#39;: 1}, dtrain, num_boost_round=1)</span>
 <span class="sd">    &gt;&gt;&gt; XGBTreeliteDumper.dump(</span>
-<span class="sd">    ...     model=model,</span>
-<span class="sd">    ...     toolchain=&#39;gcc&#39;,</span>
-<span class="sd">    ...     parallel_comp=1,</span>
-<span class="sd">    ...     model_path=&#39;.&#39;,</span>
-<span class="sd">    ...     model_name=&#39;dummy&#39;)</span>
-<span class="sd">    [00:00:00] ../src/compiler/ast/split.cc:31: Parallel compilation enabled; member trees will be divided into 1 translation units.</span>
-<span class="sd">    [00:00:01] ../src/compiler/ast_native.cc:45: Using ASTNativeCompiler</span>
-<span class="sd">    [00:00:01] ../src/compiler/ast/split.cc:31: Parallel compilation enabled; member trees will be divided into 1 translation units.</span>
-<span class="sd">    [00:00:01] ../src/c_api/c_api.cc:121: Code generation finished. Writing code to files...</span>
-<span class="sd">    [00:00:01] ../src/c_api/c_api.cc:126: Writing file tu0.c...</span>
-<span class="sd">    [00:00:01] ../src/c_api/c_api.cc:126: Writing file header.h...</span>
-<span class="sd">    [00:00:01] ../src/c_api/c_api.cc:126: Writing file recipe.json...</span>
-<span class="sd">    [00:00:01] ../src/c_api/c_api.cc:126: Writing file main.c...</span>
+<span class="sd">    ... model=model,</span>
+<span class="sd">    ... toolchain=&#39;gcc&#39;,</span>
+<span class="sd">    ... parallel_comp=1,</span>
+<span class="sd">    ... model_path=&#39;.&#39;,</span>
+<span class="sd">    ... model_name=&#39;dummy&#39;)</span>
+<span class="sd">    [00:00:00] /Users/travis/build/dmlc/treelite/src/compiler/ast/split.cc:29: Parallel compilation enabled; member trees will be divided into 1 translation units.</span>
+<span class="sd">    [00:00:01] /Users/travis/build/dmlc/treelite/src/compiler/ast/split.cc:29: Parallel compilation enabled; member trees will be divided into 1 translation units.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Booster</span><span class="p">,</span> <span class="n">toolchain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-             <span class="n">parallel_comp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-             <span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="XGBTreeliteDumper.dump"><a class="viewcode-back" href="../../../reference/api/gators.model_building.XGBTreeliteDumper.html#gators.model_building.XGBTreeliteDumper.dump">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Booster</span><span class="p">,</span>
+        <span class="n">toolchain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">parallel_comp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dump the XGBoost treelite as a .so and a</span>
 <span class="sd">        .dylib file.</span>
 
@@ -216,40 +223,39 @@
 <span class="sd">            Model path.</span>
 <span class="sd">        model_name : str</span>
 <span class="sd">            Model name.</span>
+<span class="sd">        verbose: bool, default False.</span>
+<span class="sd">            Verbosity.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">xgboost</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">Booster</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`model` should be an xgboost.core.Booster.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`model` should be an xgboost.core.Booster.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">toolchain</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`toolchain` should be a str.&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">toolchain</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;msvc&#39;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;`toolchain` should be `gcc`, `clang`, or `msvc`.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`toolchain` should be a str.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">toolchain</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;gcc&quot;</span><span class="p">,</span> <span class="s2">&quot;clang&quot;</span><span class="p">,</span> <span class="s2">&quot;msvc&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`toolchain` should be `gcc`, `clang`, or `msvc`.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parallel_comp</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`parallel_comp` should be an int.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`parallel_comp` should be an int.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`model_path` should be a str.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`model_path` should be a str.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`model_name` should be a str.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`model_name` should be a str.&quot;</span><span class="p">)</span>
         <span class="n">model_</span> <span class="o">=</span> <span class="n">treelite</span><span class="o">.</span><span class="n">Model</span><span class="o">.</span><span class="n">from_xgboost</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">platform_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gcc&#39;</span><span class="p">:</span> <span class="s1">&#39;unix&#39;</span><span class="p">,</span> <span class="s1">&#39;clang&#39;</span><span class="p">:</span> <span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;msvc&#39;</span><span class="p">:</span> <span class="s1">&#39;windows&#39;</span><span class="p">}</span>
-        <span class="n">format_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gcc&#39;</span><span class="p">:</span> <span class="s1">&#39;.so&#39;</span><span class="p">,</span> <span class="s1">&#39;clang&#39;</span><span class="p">:</span> <span class="s1">&#39;.dylib&#39;</span><span class="p">,</span> <span class="s1">&#39;msvc&#39;</span><span class="p">:</span> <span class="s1">&#39;.dll&#39;</span><span class="p">}</span>
+        <span class="n">platform_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gcc&quot;</span><span class="p">:</span> <span class="s2">&quot;unix&quot;</span><span class="p">,</span> <span class="s2">&quot;clang&quot;</span><span class="p">:</span> <span class="s2">&quot;osx&quot;</span><span class="p">,</span> <span class="s2">&quot;msvc&quot;</span><span class="p">:</span> <span class="s2">&quot;windows&quot;</span><span class="p">}</span>
+        <span class="n">format_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gcc&quot;</span><span class="p">:</span> <span class="s2">&quot;.so&quot;</span><span class="p">,</span> <span class="s2">&quot;clang&quot;</span><span class="p">:</span> <span class="s2">&quot;.dylib&quot;</span><span class="p">,</span> <span class="s2">&quot;msvc&quot;</span><span class="p">:</span> <span class="s2">&quot;.dll&quot;</span><span class="p">}</span>
         <span class="n">model_</span><span class="o">.</span><span class="n">export_lib</span><span class="p">(</span>
             <span class="n">toolchain</span><span class="o">=</span><span class="n">toolchain</span><span class="p">,</span>
-            <span class="n">libpath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="n">model_path</span><span class="p">,</span> <span class="n">model_name</span> <span class="o">+</span> <span class="n">format_dict</span><span class="p">[</span><span class="n">toolchain</span><span class="p">]),</span>
+            <span class="n">libpath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">model_name</span> <span class="o">+</span> <span class="n">format_dict</span><span class="p">[</span><span class="n">toolchain</span><span class="p">]),</span>
             <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;parallel_comp&#39;</span><span class="p">:</span> <span class="n">parallel_comp</span><span class="p">},</span>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;parallel_comp&quot;</span><span class="p">:</span> <span class="n">parallel_comp</span><span class="p">},</span>
             <span class="n">nthread</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">model_</span><span class="o">.</span><span class="n">export_srcpkg</span><span class="p">(</span>
             <span class="n">platform</span><span class="o">=</span><span class="n">platform_dict</span><span class="p">[</span><span class="n">toolchain</span><span class="p">],</span>
             <span class="n">toolchain</span><span class="o">=</span><span class="n">toolchain</span><span class="p">,</span>
-            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;parallel_comp&#39;</span><span class="p">:</span> <span class="n">parallel_comp</span><span class="p">},</span>
-            <span class="n">pkgpath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">model_name</span> <span class="o">+</span> <span class="s1">&#39;.zip&#39;</span><span class="p">),</span>
-            <span class="n">libname</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="n">model_path</span><span class="p">,</span> <span class="n">model_name</span> <span class="o">+</span> <span class="n">format_dict</span><span class="p">[</span><span class="n">toolchain</span><span class="p">]),</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="p">)</span></div>
+            <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;parallel_comp&quot;</span><span class="p">:</span> <span class="n">parallel_comp</span><span class="p">},</span>
+            <span class="n">pkgpath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">model_name</span> <span class="o">+</span> <span class="s2">&quot;.zip&quot;</span><span class="p">),</span>
+            <span class="n">libname</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">model_name</span> <span class="o">+</span> <span class="n">format_dict</span><span class="p">[</span><span class="n">toolchain</span><span class="p">]),</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
               </div>
@@ -265,19 +271,19 @@
       </div>
     </div>
   
-  <script src="../../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
-<footer class="footer mt-5 mt-md-0">
+    <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021, the gators development team..<br>
+    &copy; Copyright 2021, Gators development team (Apache-2.0 License)..<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.0.<br>
 </p>
     </div>
     

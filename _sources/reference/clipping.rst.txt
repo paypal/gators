@@ -7,6 +7,8 @@ Clipping
 .. currentmodule:: gators.clipping
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     Clipping

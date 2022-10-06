@@ -10,7 +10,9 @@ Base Feature Generation Transformer
 ###################################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     _BaseFeatureGeneration
 
@@ -19,25 +21,32 @@ Numerical Feature Generation
 ############################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     ClusterStatistics
     ElementaryArithmetics
-    PlaneRotation
+    PlanRotation
     PolynomialFeatures
 
 Categorical Feature Generation
 ##############################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     OneHot
+    PolynomialObjectFeatures
 
 Feature Generation
 ##################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     IsEqual
     IsNull

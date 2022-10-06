@@ -14,7 +14,9 @@ Base data_cleaning transformer
 ##############################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
    
     _BaseDataCleaning 
 
@@ -22,7 +24,9 @@ Off-line data cleaning
 ###################### 
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     DropHighCardinality    
     DropHighNaNRatio     
@@ -32,8 +36,11 @@ Realtime data cleaning
 ###################### 
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
+    ConvertColumnDatatype
     DropColumns 
     DropDatatypeColumns     
     KeepColumns

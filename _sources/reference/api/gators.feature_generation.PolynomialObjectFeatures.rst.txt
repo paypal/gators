@@ -1,0 +1,13 @@
+﻿
+gators.feature\_generation.PolynomialObjectFeatures
+===================================================
+
+.. currentmodule:: gators.feature_generation
+
+.. autoclass:: PolynomialObjectFeatures
+
+    
+
+ 
+
+     

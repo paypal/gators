@@ -1,0 +1,12 @@
+********
+Examples
+********
+
+.. toctree::
+    :maxdepth: 2
+
+    titanic
+    sf_crime
+    house_price
+    templates
+    libraries

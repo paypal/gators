@@ -1,0 +1,244 @@
+
+Per-sample *transform* benchmarking
+====================================
+
+Data Cleaning
+-------------
+
+.. image:: ../../_static/benchmarks/DropColumns_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/DropDatatypeColumns_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/KeepColumns_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Replace_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+Binning
+-------
+
+.. image:: ../../_static/benchmarks/BinRareCategories_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CustomBinning_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Binning_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/QuantileBinning_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+Clipping
+--------
+
+.. image:: ../../_static/benchmarks/Clipping_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+Scalers
+-------
+
+.. image:: ../../_static/benchmarks/MinMaxScaler_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/StandardScaler_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+Imputers
+--------
+.. image:: ../../_static/benchmarks/NumericsImputer_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IntImputer_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/FloatImputer_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/ObjectImputer_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+Encoders
+--------
+
+.. image:: ../../_static/benchmarks/OneHotEncoder_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalEncoder_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/TargetEncoder_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/WOEEncoder_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+Feature Generation
+------------------
+
+.. image:: ../../_static/benchmarks/ElementaryArithmetics_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IsEqual_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IsNull_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/ClusterStatistics_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OneHot_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+
+.. image:: ../../_static/benchmarks/PlaneRotation_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/PolynomialFeatures_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+Feature Generation String
+-------------------------
+.. image:: ../../_static/benchmarks/LowerCase_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/UpperCase_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Extract_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/StringContains_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/StringLength_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/SplitExtract_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+Feature Generation DateTime
+---------------------------
+
+.. image:: ../../_static/benchmarks/OrdinalMinuteOfHour_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalHourOfDay_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalDayOfWeek_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalDayOfMonth_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalMonthOfYear_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicMinuteOfHour_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicHourOfDay_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicDayOfWeek_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicDayOfMonth_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicMonthOfYear_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/DeltaTime_transform_numpy.jpg
+   :width: 800px
+   :alt: alternate text
+   :align: left

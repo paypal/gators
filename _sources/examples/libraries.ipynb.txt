@@ -1,0 +1,807 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# comparison between Pandas, Dask, and Koalas"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%load_ext autoreload\n",
+    "%autoreload 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import copy\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "from pandas.testing import assert_frame_equal\n",
+    "from pandas.testing import assert_series_equal\n",
+    "from sklearn.tree import DecisionTreeClassifier\n",
+    "from lightgbm import LGBMClassifier\n",
+    "from lightgbm import DaskLGBMClassifier\n",
+    "import treelite\n",
+    "import treelite_runtime\n",
+    "import dill\n",
+    "import joblib\n",
+    "from sklearn.metrics import make_scorer\n",
+    "from sklearn.model_selection import StratifiedKFold\n",
+    "from sklearn.model_selection import RandomizedSearchCV\n",
+    "from pyspark.ml.classification import RandomForestClassifier as RFCSpark"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Gators** imports"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Users/cpoli/gators38/lib/python3.8/site-packages/xgboost/compat.py:36: FutureWarning: pandas.Int64Index is deprecated and will be removed from pandas in a future version. Use pandas.Index with the appropriate dtype instead.\n",
+      "  from pandas import MultiIndex, Int64Index\n"
+     ]
+    }
+   ],
+   "source": [
+    "# data cleaning\n",
+    "from gators.data_cleaning import (\n",
+    "    DropColumns,\n",
+    "    Replace,\n",
+    ")\n",
+    "# imputers\n",
+    "from gators.imputers import (\n",
+    "    NumericsImputer, \n",
+    "    ObjectImputer,\n",
+    ")\n",
+    "# encoders\n",
+    "from gators.encoders import (\n",
+    "    WOEEncoder,\n",
+    ")\n",
+    "# binning\n",
+    "from gators.binning import (\n",
+    "    BinRareCategories,\n",
+    "    BinSingleTargetClassCategories,\n",
+    "    Binning,\n",
+    "    CustomBinning,\n",
+    "    QuantileBinning,\n",
+    "    TreeBinning,\n",
+    ")\n",
+    "# feature generation\n",
+    "from gators.feature_generation import (\n",
+    "    PolynomialFeatures,\n",
+    "    ElementaryArithmetics,\n",
+    "    PolynomialObjectFeatures,\n",
+    "    IsNull,\n",
+    ")\n",
+    "from gators.feature_generation_str import (\n",
+    "    StringContains,\n",
+    "    StringLength,\n",
+    "    Extract,\n",
+    "    SplitExtract,\n",
+    ")\n",
+    "# feature selection\n",
+    "from gators.feature_selection import (\n",
+    "    SelectFromModel,\n",
+    "    InformationValue\n",
+    ")\n",
+    "# model building\n",
+    "from gators.model_building import (\n",
+    "    Model,\n",
+    "    TrainTestSplit,\n",
+    "    XGBBoosterBuilder,\n",
+    "    XGBTreeliteDumper,\n",
+    ")\n",
+    "# pipeline\n",
+    "from gators.pipeline import Pipeline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## pipeline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# preprocessing pipeline\n",
+    "steps = [\n",
+    "    ('SplitExtractName', SplitExtract(['Name'], [', '], [1], ['Dummy'])),\n",
+    "    ('SplitExtractTitle', SplitExtract(['Dummy'], ['.'], [0], ['Title'])),\n",
+    "    ('StringLength', StringLength(columns=['Cabin', 'Ticket'])),\n",
+    "    ('DropColumns', DropColumns(['Name', 'Dummy', 'Cabin', 'Ticket'])),\n",
+    "    ('ObjectImputer', ObjectImputer(strategy='constant', value='MISSING')),\n",
+    "    ('BinSingleTargetClassCategories', BinSingleTargetClassCategories()),\n",
+    "    ('NumericsImputer', NumericsImputer(strategy='mean')),\n",
+    "    ('Encoder', WOEEncoder()),\n",
+    "]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Pandas pipeline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data = pd.read_parquet('data/titanic.parquet')\n",
+    "data = data.reset_index(drop=True)\n",
+    "y = data['Survived']\n",
+    "X = data.drop('Survived', axis=1)\n",
+    "train_test_split = TrainTestSplit(test_ratio=0.3, strategy='ordered')\n",
+    "X_train, X_test, y_train, y_test = train_test_split.transform(X, y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model = LGBMClassifier(random_state=0)\n",
+    "steps_pd = steps + [('Model', Model(model=model))]\n",
+    "\n",
+    "pipe = Pipeline(steps=steps_pd, verbose=False)\n",
+    "_ = pipe.fit(X_train, y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# split prod pipeline and model\n",
+    "model_pd = pipe[-1].model\n",
+    "prod_pipe_pd = copy.deepcopy(pipe)\n",
+    "_ = prod_pipe_pd.steps.pop(-1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_train_prepro_pd = prod_pipe_pd.transform(X_train)\n",
+    "X_test_prepro_pd = prod_pipe_pd.transform(X_test)\n",
+    "y_test_pred_proba_pd = model_pd.predict_proba(X_test_prepro_pd.to_numpy())[:, 1]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Dask pipeline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "    <div style=\"width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;\"> </div>\n",
+       "    <div style=\"margin-left: 48px;\">\n",
+       "        <h3 style=\"margin-bottom: 0px;\">Client</h3>\n",
+       "        <p style=\"color: #9D9D9D; margin-bottom: 0px;\">Client-e981a354-43e7-11ed-991c-acde48001122</p>\n",
+       "        <table style=\"width: 100%; text-align: left;\">\n",
+       "\n",
+       "        <tr>\n",
+       "        \n",
+       "            <td style=\"text-align: left;\"><strong>Connection method:</strong> Cluster object</td>\n",
+       "            <td style=\"text-align: left;\"><strong>Cluster type:</strong> distributed.LocalCluster</td>\n",
+       "        \n",
+       "        </tr>\n",
+       "\n",
+       "        \n",
+       "            <tr>\n",
+       "                <td style=\"text-align: left;\">\n",
+       "                    <strong>Dashboard: </strong> <a href=\"http://127.0.0.1:8787/status\" target=\"_blank\">http://127.0.0.1:8787/status</a>\n",
+       "                </td>\n",
+       "                <td style=\"text-align: left;\"></td>\n",
+       "            </tr>\n",
+       "        \n",
+       "\n",
+       "        </table>\n",
+       "\n",
+       "        \n",
+       "            <details>\n",
+       "            <summary style=\"margin-bottom: 20px;\"><h3 style=\"display: inline;\">Cluster Info</h3></summary>\n",
+       "            <div class=\"jp-RenderedHTMLCommon jp-RenderedHTML jp-mod-trusted jp-OutputArea-output\">\n",
+       "    <div style=\"width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;\">\n",
+       "    </div>\n",
+       "    <div style=\"margin-left: 48px;\">\n",
+       "        <h3 style=\"margin-bottom: 0px; margin-top: 0px;\">LocalCluster</h3>\n",
+       "        <p style=\"color: #9D9D9D; margin-bottom: 0px;\">c57805ca</p>\n",
+       "        <table style=\"width: 100%; text-align: left;\">\n",
+       "            <tr>\n",
+       "                <td style=\"text-align: left;\">\n",
+       "                    <strong>Dashboard:</strong> <a href=\"http://127.0.0.1:8787/status\" target=\"_blank\">http://127.0.0.1:8787/status</a>\n",
+       "                </td>\n",
+       "                <td style=\"text-align: left;\">\n",
+       "                    <strong>Workers:</strong> 4\n",
+       "                </td>\n",
+       "            </tr>\n",
+       "            <tr>\n",
+       "                <td style=\"text-align: left;\">\n",
+       "                    <strong>Total threads:</strong> 16\n",
+       "                </td>\n",
+       "                <td style=\"text-align: left;\">\n",
+       "                    <strong>Total memory:</strong> 64.00 GiB\n",
+       "                </td>\n",
+       "            </tr>\n",
+       "            \n",
+       "            <tr>\n",
+       "    <td style=\"text-align: left;\"><strong>Status:</strong> running</td>\n",
+       "    <td style=\"text-align: left;\"><strong>Using processes:</strong> True</td>\n",
+       "</tr>\n",
+       "\n",
+       "            \n",
+       "        </table>\n",
+       "\n",
+       "        <details>\n",
+       "            <summary style=\"margin-bottom: 20px;\">\n",
+       "                <h3 style=\"display: inline;\">Scheduler Info</h3>\n",
+       "            </summary>\n",
+       "\n",
+       "            <div style=\"\">\n",
+       "    <div>\n",
+       "        <div style=\"width: 24px; height: 24px; background-color: #FFF7E5; border: 3px solid #FF6132; border-radius: 5px; position: absolute;\"> </div>\n",
+       "        <div style=\"margin-left: 48px;\">\n",
+       "            <h3 style=\"margin-bottom: 0px;\">Scheduler</h3>\n",
+       "            <p style=\"color: #9D9D9D; margin-bottom: 0px;\">Scheduler-d3f20527-56a6-4489-8f40-52feca9361c1</p>\n",
+       "            <table style=\"width: 100%; text-align: left;\">\n",
+       "                <tr>\n",
+       "                    <td style=\"text-align: left;\">\n",
+       "                        <strong>Comm:</strong> tcp://127.0.0.1:63343\n",
+       "                    </td>\n",
+       "                    <td style=\"text-align: left;\">\n",
+       "                        <strong>Workers:</strong> 4\n",
+       "                    </td>\n",
+       "                </tr>\n",
+       "                <tr>\n",
+       "                    <td style=\"text-align: left;\">\n",
+       "                        <strong>Dashboard:</strong> <a href=\"http://127.0.0.1:8787/status\" target=\"_blank\">http://127.0.0.1:8787/status</a>\n",
+       "                    </td>\n",
+       "                    <td style=\"text-align: left;\">\n",
+       "                        <strong>Total threads:</strong> 16\n",
+       "                    </td>\n",
+       "                </tr>\n",
+       "                <tr>\n",
+       "                    <td style=\"text-align: left;\">\n",
+       "                        <strong>Started:</strong> Just now\n",
+       "                    </td>\n",
+       "                    <td style=\"text-align: left;\">\n",
+       "                        <strong>Total memory:</strong> 64.00 GiB\n",
+       "                    </td>\n",
+       "                </tr>\n",
+       "            </table>\n",
+       "        </div>\n",
+       "    </div>\n",
+       "\n",
+       "    <details style=\"margin-left: 48px;\">\n",
+       "        <summary style=\"margin-bottom: 20px;\">\n",
+       "            <h3 style=\"display: inline;\">Workers</h3>\n",
+       "        </summary>\n",
+       "\n",
+       "        \n",
+       "        <div style=\"margin-bottom: 20px;\">\n",
+       "            <div style=\"width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;\"> </div>\n",
+       "            <div style=\"margin-left: 48px;\">\n",
+       "            <details>\n",
+       "                <summary>\n",
+       "                    <h4 style=\"margin-bottom: 0px; display: inline;\">Worker: 0</h4>\n",
+       "                </summary>\n",
+       "                <table style=\"width: 100%; text-align: left;\">\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Comm: </strong> tcp://127.0.0.1:63366\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Total threads: </strong> 4\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Dashboard: </strong> <a href=\"http://127.0.0.1:63367/status\" target=\"_blank\">http://127.0.0.1:63367/status</a>\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Memory: </strong> 16.00 GiB\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Nanny: </strong> tcp://127.0.0.1:63348\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\"></td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td colspan=\"2\" style=\"text-align: left;\">\n",
+       "                            <strong>Local directory: </strong> /Users/cpoli/opensource/gators/examples/dask-worker-space/worker-o8uw6nv6\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "\n",
+       "                    \n",
+       "\n",
+       "                    \n",
+       "\n",
+       "                </table>\n",
+       "            </details>\n",
+       "            </div>\n",
+       "        </div>\n",
+       "        \n",
+       "        <div style=\"margin-bottom: 20px;\">\n",
+       "            <div style=\"width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;\"> </div>\n",
+       "            <div style=\"margin-left: 48px;\">\n",
+       "            <details>\n",
+       "                <summary>\n",
+       "                    <h4 style=\"margin-bottom: 0px; display: inline;\">Worker: 1</h4>\n",
+       "                </summary>\n",
+       "                <table style=\"width: 100%; text-align: left;\">\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Comm: </strong> tcp://127.0.0.1:63363\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Total threads: </strong> 4\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Dashboard: </strong> <a href=\"http://127.0.0.1:63364/status\" target=\"_blank\">http://127.0.0.1:63364/status</a>\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Memory: </strong> 16.00 GiB\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Nanny: </strong> tcp://127.0.0.1:63349\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\"></td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td colspan=\"2\" style=\"text-align: left;\">\n",
+       "                            <strong>Local directory: </strong> /Users/cpoli/opensource/gators/examples/dask-worker-space/worker-tqgoum22\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "\n",
+       "                    \n",
+       "\n",
+       "                    \n",
+       "\n",
+       "                </table>\n",
+       "            </details>\n",
+       "            </div>\n",
+       "        </div>\n",
+       "        \n",
+       "        <div style=\"margin-bottom: 20px;\">\n",
+       "            <div style=\"width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;\"> </div>\n",
+       "            <div style=\"margin-left: 48px;\">\n",
+       "            <details>\n",
+       "                <summary>\n",
+       "                    <h4 style=\"margin-bottom: 0px; display: inline;\">Worker: 2</h4>\n",
+       "                </summary>\n",
+       "                <table style=\"width: 100%; text-align: left;\">\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Comm: </strong> tcp://127.0.0.1:63357\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Total threads: </strong> 4\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Dashboard: </strong> <a href=\"http://127.0.0.1:63359/status\" target=\"_blank\">http://127.0.0.1:63359/status</a>\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Memory: </strong> 16.00 GiB\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Nanny: </strong> tcp://127.0.0.1:63347\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\"></td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td colspan=\"2\" style=\"text-align: left;\">\n",
+       "                            <strong>Local directory: </strong> /Users/cpoli/opensource/gators/examples/dask-worker-space/worker-metkvmd8\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "\n",
+       "                    \n",
+       "\n",
+       "                    \n",
+       "\n",
+       "                </table>\n",
+       "            </details>\n",
+       "            </div>\n",
+       "        </div>\n",
+       "        \n",
+       "        <div style=\"margin-bottom: 20px;\">\n",
+       "            <div style=\"width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;\"> </div>\n",
+       "            <div style=\"margin-left: 48px;\">\n",
+       "            <details>\n",
+       "                <summary>\n",
+       "                    <h4 style=\"margin-bottom: 0px; display: inline;\">Worker: 3</h4>\n",
+       "                </summary>\n",
+       "                <table style=\"width: 100%; text-align: left;\">\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Comm: </strong> tcp://127.0.0.1:63358\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Total threads: </strong> 4\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Dashboard: </strong> <a href=\"http://127.0.0.1:63361/status\" target=\"_blank\">http://127.0.0.1:63361/status</a>\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Memory: </strong> 16.00 GiB\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td style=\"text-align: left;\">\n",
+       "                            <strong>Nanny: </strong> tcp://127.0.0.1:63346\n",
+       "                        </td>\n",
+       "                        <td style=\"text-align: left;\"></td>\n",
+       "                    </tr>\n",
+       "                    <tr>\n",
+       "                        <td colspan=\"2\" style=\"text-align: left;\">\n",
+       "                            <strong>Local directory: </strong> /Users/cpoli/opensource/gators/examples/dask-worker-space/worker-pfd4nf4e\n",
+       "                        </td>\n",
+       "                    </tr>\n",
+       "\n",
+       "                    \n",
+       "\n",
+       "                    \n",
+       "\n",
+       "                </table>\n",
+       "            </details>\n",
+       "            </div>\n",
+       "        </div>\n",
+       "        \n",
+       "\n",
+       "    </details>\n",
+       "</div>\n",
+       "\n",
+       "        </details>\n",
+       "    </div>\n",
+       "</div>\n",
+       "            </details>\n",
+       "        \n",
+       "\n",
+       "    </div>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "<Client: 'tcp://127.0.0.1:63343' processes=4 threads=16, memory=64.00 GiB>"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import dask.dataframe as dd\n",
+    "import dask.distributed\n",
+    "client = dask.distributed.Client(n_workers=4)\n",
+    "client"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_dd = dd.read_parquet('data/titanic.parquet')\n",
+    "data_dd = data_dd.reset_index(drop=True)\n",
+    "y_dd = data_dd['Survived']\n",
+    "X_dd = data_dd.drop('Survived', axis=1)\n",
+    "\n",
+    "n_partitions = 4\n",
+    "train_test_split = TrainTestSplit(test_ratio=0.3, strategy='ordered')\n",
+    "X_train_dd, X_test_dd, y_train_dd, y_test_dd = train_test_split.transform(X_dd, y_dd)\n",
+    "X_train_dd = client.persist(X_train_dd.repartition(n_partitions))\n",
+    "X_test_dd = client.persist(X_test_dd.repartition(n_partitions))\n",
+    "y_train_dd = client.persist(y_train_dd.repartition(n_partitions))\n",
+    "y_test_dd = client.persist(y_test_dd.repartition(n_partitions))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Users/cpoli/gators38/lib/python3.8/site-packages/lightgbm/dask.py:525: UserWarning: Parameter n_jobs will be ignored.\n",
+      "  _log_warning(f\"Parameter {param_alias} will be ignored.\")\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Finding random open ports for workers\n",
+      "[LightGBM] [Warning] num_threads is set=4, n_jobs=-1 will be ignored. Current value: num_threads=4\n"
+     ]
+    }
+   ],
+   "source": [
+    "model_dd = DaskLGBMClassifier(random_state=0, client=client, n_jobs=n_partitions)\n",
+    "steps_dd = steps + [('Model', Model(model=model_dd))]\n",
+    "\n",
+    "pipe = Pipeline(steps=steps_dd, verbose=False)\n",
+    "_ = pipe.fit(X_train_dd, y_train_dd)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# split prod pipeline and model\n",
+    "model_dd = pipe[-1].model\n",
+    "prod_pipe_dd = copy.deepcopy(pipe)\n",
+    "_ = prod_pipe_dd.steps.pop(-1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_train_prepro_dd = prod_pipe_dd.transform(X_train_dd)\n",
+    "X_test_prepro_dd = prod_pipe_dd.transform(X_test_dd)\n",
+    "y_test_pred_proba_dd = model_dd.predict_proba(X_test_prepro_dd).compute()[:, 1]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Koalas pipeline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "WARNING: An illegal reflective access operation has occurred\n",
+      "WARNING: Illegal reflective access by org.apache.spark.unsafe.Platform (file:/Users/cpoli/gators38/lib/python3.8/site-packages/pyspark/jars/spark-unsafe_2.12-3.1.3.jar) to constructor java.nio.DirectByteBuffer(long,int)\n",
+      "WARNING: Please consider reporting this to the maintainers of org.apache.spark.unsafe.Platform\n",
+      "WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations\n",
+      "WARNING: All illegal access operations will be denied in a future release\n",
+      "22/10/04 14:24:55 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n",
+      "Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties\n",
+      "Setting default log level to \"WARN\".\n",
+      "To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).\n"
+     ]
+    }
+   ],
+   "source": [
+    "from pyspark import SparkConf, SparkContext\n",
+    "\n",
+    "conf = SparkConf()\n",
+    "conf.set('spark.executor.memory', '2g')\n",
+    "conf.set('spark.sql.codegen.wholeStage', 'false')\n",
+    "conf.set('spark.sql.autoBroadcastJoinThreshold', -1)\n",
+    "SparkContext(conf=conf)\n",
+    "import databricks.koalas as ks\n",
+    "ks.set_option('compute.default_index_type', 'distributed-sequence')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                                                                                \r"
+     ]
+    }
+   ],
+   "source": [
+    "data_ks = ks.read_parquet('data/titanic.parquet')\n",
+    "data_ks = data_ks.reset_index(drop=True)\n",
+    "y_ks = data_ks['Survived']\n",
+    "X_ks = data_ks.drop('Survived', axis=1)\n",
+    "train_test_split = TrainTestSplit(test_ratio=0.3, strategy='ordered')\n",
+    "X_train_ks, X_test_ks, y_train_ks, y_test_ks = train_test_split.transform(X_ks, y_ks)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Users/cpoli/gators38/lib/python3.8/site-packages/pyspark/sql/pandas/functions.py:389: UserWarning: In Python 3.6+ and Spark 3.0+, it is preferred to specify type hints for pandas UDF instead of specifying pandas UDF type which will be deprecated in the future releases. See SPARK-28264 for more details.\n",
+      "  warnings.warn(\n",
+      "                                                                                \r"
+     ]
+    }
+   ],
+   "source": [
+    "from pyspark.ml.classification import RandomForestClassifier as RFCSpark\n",
+    "\n",
+    "model = RFCSpark(numTrees=15, maxDepth=3, labelCol='Survived', seed=0)\n",
+    "steps_ks = steps + [('Model', Model(model=model))]\n",
+    "\n",
+    "pipe_ks = Pipeline(steps=steps_ks, verbose=False)\n",
+    "_ = pipe_ks.fit(X_train_ks, y_train_ks)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# split prod pipeline and model\n",
+    "# note that koalas pipelines cannot be pickled\n",
+    "model_ks = pipe_ks[-1]\n",
+    "prod_pipe_ks = pipe_ks\n",
+    "_ = pipe_ks.steps.pop(-1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Users/cpoli/gators38/lib/python3.8/site-packages/pyspark/sql/pandas/functions.py:389: UserWarning: In Python 3.6+ and Spark 3.0+, it is preferred to specify type hints for pandas UDF instead of specifying pandas UDF type which will be deprecated in the future releases. See SPARK-28264 for more details.\n",
+      "  warnings.warn(\n"
+     ]
+    }
+   ],
+   "source": [
+    "X_train_prepro_ks = prod_pipe_ks.transform(X_train_ks)\n",
+    "X_test_prepro_ks = prod_pipe_ks.transform(X_test_ks)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                                                                                \r"
+     ]
+    }
+   ],
+   "source": [
+    "y_test_pred_proba_ks = model_ks.predict_proba(X_test_prepro_ks)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## check results match"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### check pandas, dask, and koalas results match - production pipeline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                                                                                \r"
+     ]
+    }
+   ],
+   "source": [
+    "assert_frame_equal(\n",
+    "    X_train_prepro_pd,\n",
+    "    X_train_prepro_dd.compute())\n",
+    "assert_frame_equal(\n",
+    "    X_train_prepro_pd,\n",
+    "    X_train_prepro_ks.to_pandas())\n",
+    "assert_frame_equal(\n",
+    "    X_test_prepro_pd,\n",
+    "    X_test_prepro_dd.compute())\n",
+    "assert_frame_equal(\n",
+    "    X_test_prepro_pd,\n",
+    "    X_test_prepro_ks.to_pandas())\n",
+    "assert np.allclose(y_test_pred_proba_dd, y_test_pred_proba_pd)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "gators38",
+   "language": "python",
+   "name": "gators38"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

@@ -2,24 +2,29 @@
  "cells": [
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "# 10 minutes to gators"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "%load_ext autoreload\n",
-    "%autoreload 2"
-   ],
-   "outputs": [],
-   "metadata": {}
+    "%autoreload 2\n",
+    "\n",
+    "import warnings\n",
+    "warnings.filterwarnings('ignore')"
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "import copy\n",
     "import numpy as np\n",
@@ -29,18 +34,19 @@
     "import treelite\n",
     "import treelite_runtime\n",
     "import dill"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
    "source": [
+    "# data cleaning\n",
+    "from gators.data_cleaning import ConvertColumnDatatype\n",
     "# imputers\n",
     "from gators.imputers import (\n",
-    "    FloatImputer, \n",
-    "    IntImputer, \n",
+    "    NumericsImputer, \n",
     "    ObjectImputer,\n",
     ")\n",
     "# encoders\n",
@@ -49,19 +55,18 @@
     "from gators.pipeline import Pipeline\n",
     "# model building\n",
     "from gators.model_building import XGBBoosterBuilder"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "## end-to-end simple worflow"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "The workflow is as followed:\n",
     "\n",
@@ -82,40 +87,32 @@
     "* *koalas* and/or *pandas* are used offline,\n",
     "by means of the `fit` and `transform methods`.\n",
     "* In production, *numpy* is used with `transform_numpy`."
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "The pipeline will be only composed of the following four transformers:\n",
     "\n",
     "* ObjectImputer\n",
     "* WOEEncoder\n",
-    "* FloatImputer\n",
-    "* IntImputer"
-   ],
-   "metadata": {}
+    "* NumericsImputer"
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "### with pandas"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 4,
-   "source": [
-    "data = pd.read_parquet('data/titanic.parquet')\n",
-    "y = data['Survived']\n",
-    "X = data.drop(['Survived'], axis=1)\n",
-    "X.head(2)"
-   ],
+   "metadata": {},
    "outputs": [
     {
-     "output_type": "execute_result",
      "data": {
       "text/html": [
        "<div>\n",
@@ -136,113 +133,109 @@
        "  <thead>\n",
        "    <tr style=\"text-align: right;\">\n",
        "      <th></th>\n",
-       "      <th>Pclass</th>\n",
-       "      <th>Name</th>\n",
        "      <th>Sex</th>\n",
        "      <th>Age</th>\n",
        "      <th>SibSp</th>\n",
        "      <th>Parch</th>\n",
-       "      <th>Ticket</th>\n",
-       "      <th>Fare</th>\n",
        "      <th>Cabin</th>\n",
-       "      <th>Embarked</th>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>PassengerId</th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
        "    </tr>\n",
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>1</th>\n",
-       "      <td>3</td>\n",
-       "      <td>Braund, Mr. Owen Harris</td>\n",
+       "      <th>0</th>\n",
        "      <td>male</td>\n",
        "      <td>22.0</td>\n",
        "      <td>1</td>\n",
        "      <td>0</td>\n",
-       "      <td>A/5 21171</td>\n",
-       "      <td>7.2500</td>\n",
        "      <td>None</td>\n",
-       "      <td>S</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2</th>\n",
-       "      <td>1</td>\n",
-       "      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>\n",
+       "      <th>1</th>\n",
        "      <td>female</td>\n",
        "      <td>38.0</td>\n",
        "      <td>1</td>\n",
        "      <td>0</td>\n",
-       "      <td>PC 17599</td>\n",
-       "      <td>71.2833</td>\n",
        "      <td>C85</td>\n",
-       "      <td>C</td>\n",
        "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
        "</div>"
       ],
       "text/plain": [
-       "             Pclass                                               Name  \\\n",
-       "PassengerId                                                              \n",
-       "1                 3                            Braund, Mr. Owen Harris   \n",
-       "2                 1  Cumings, Mrs. John Bradley (Florence Briggs Th...   \n",
-       "\n",
-       "                Sex   Age  SibSp  Parch     Ticket     Fare Cabin Embarked  \n",
-       "PassengerId                                                                 \n",
-       "1              male  22.0      1      0  A/5 21171   7.2500  None        S  \n",
-       "2            female  38.0      1      0   PC 17599  71.2833   C85        C  "
+       "      Sex   Age  SibSp  Parch Cabin\n",
+       "0    male  22.0      1      0  None\n",
+       "1  female  38.0      1      0   C85"
       ]
      },
+     "execution_count": 4,
      "metadata": {},
-     "execution_count": 4
+     "output_type": "execute_result"
     }
    ],
-   "metadata": {}
+   "source": [
+    "columns = ['Sex', 'Age', 'SibSp', 'Parch', 'Cabin', 'Survived']\n",
+    "data = pd.read_parquet('data/titanic.parquet')[columns]\n",
+    "y = data['Survived']\n",
+    "X = data.drop(['Survived'], axis=1)\n",
+    "X.head(2)"
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "#### pipeline"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "prepro_steps = [\n",
-    "    ObjectImputer(strategy='constant', value='MISSING'),\n",
-    "    WOEEncoder(),\n",
-    "    FloatImputer(strategy='mean'),\n",
-    "    IntImputer(strategy='constant', value=-1),\n",
+    "    ('ObjectImputer', ObjectImputer(strategy='constant', value='MISSING')),\n",
+    "    ('WOEEncoder', WOEEncoder(inplace=True)),\n",
+    "    ('ConvertColumnDatatype', ConvertColumnDatatype(columns=['SibSp', 'Parch'], datatype=float)),\n",
+    "    ('NumericsImputer', NumericsImputer(strategy='mean', inplace=True)),\n",
     "]\n",
     "pipe = Pipeline(steps=prepro_steps)\n",
     "X_prepro = pipe.fit_transform(X, y)\n",
     "X_prepro_np = pipe.transform_numpy(X.to_numpy())"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 6,
-   "source": [
-    "X_prepro.head(2)"
-   ],
+   "metadata": {},
    "outputs": [
     {
-     "output_type": "execute_result",
+     "data": {
+      "text/plain": [
+       "array([[-0.98142372, 22.        ,  1.        ,  0.        , -0.37441799],\n",
+       "       [ 1.52476689, 38.        ,  1.        ,  0.        ,  1.57080012],\n",
+       "       [ 1.52476689, 26.        ,  0.        ,  0.        , -0.37441799],\n",
+       "       ...,\n",
+       "       [ 1.52476689, 29.69911765,  1.        ,  2.        , -0.37441799],\n",
+       "       [-0.98142372, 26.        ,  0.        ,  0.        ,  1.57080012],\n",
+       "       [-0.98142372, 32.        ,  0.        ,  0.        , -0.37441799]])"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "X_prepro_np"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
      "data": {
       "text/html": [
        "<div>\n",
@@ -263,90 +256,135 @@
        "  <thead>\n",
        "    <tr style=\"text-align: right;\">\n",
        "      <th></th>\n",
-       "      <th>Pclass</th>\n",
-       "      <th>Name</th>\n",
        "      <th>Sex</th>\n",
        "      <th>Age</th>\n",
        "      <th>SibSp</th>\n",
        "      <th>Parch</th>\n",
-       "      <th>Ticket</th>\n",
-       "      <th>Fare</th>\n",
        "      <th>Cabin</th>\n",
-       "      <th>Embarked</th>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>PassengerId</th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
-       "      <th></th>\n",
        "    </tr>\n",
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>1</th>\n",
-       "      <td>3.0</td>\n",
-       "      <td>0.0</td>\n",
-       "      <td>-0.983833</td>\n",
+       "      <th>0</th>\n",
+       "      <td>-0.981424</td>\n",
        "      <td>22.0</td>\n",
        "      <td>1.0</td>\n",
        "      <td>0.0</td>\n",
-       "      <td>0.0</td>\n",
-       "      <td>7.2500</td>\n",
-       "      <td>-0.374703</td>\n",
-       "      <td>-0.203599</td>\n",
+       "      <td>-0.374418</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>2</th>\n",
-       "      <td>1.0</td>\n",
-       "      <td>0.0</td>\n",
-       "      <td>1.529877</td>\n",
+       "      <th>1</th>\n",
+       "      <td>1.524767</td>\n",
        "      <td>38.0</td>\n",
        "      <td>1.0</td>\n",
        "      <td>0.0</td>\n",
-       "      <td>0.0</td>\n",
-       "      <td>71.2833</td>\n",
-       "      <td>0.000000</td>\n",
-       "      <td>0.688399</td>\n",
+       "      <td>1.570800</td>\n",
        "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
        "</div>"
       ],
       "text/plain": [
-       "             Pclass  Name       Sex   Age  SibSp  Parch  Ticket     Fare  \\\n",
-       "PassengerId                                                                \n",
-       "1               3.0   0.0 -0.983833  22.0    1.0    0.0     0.0   7.2500   \n",
-       "2               1.0   0.0  1.529877  38.0    1.0    0.0     0.0  71.2833   \n",
-       "\n",
-       "                Cabin  Embarked  \n",
-       "PassengerId                      \n",
-       "1           -0.374703 -0.203599  \n",
-       "2            0.000000  0.688399  "
+       "        Sex   Age  SibSp  Parch     Cabin\n",
+       "0 -0.981424  22.0    1.0    0.0 -0.374418\n",
+       "1  1.524767  38.0    1.0    0.0  1.570800"
       ]
      },
+     "execution_count": 7,
      "metadata": {},
-     "execution_count": 6
+     "output_type": "execute_result"
     }
    ],
-   "metadata": {}
+   "source": [
+    "X_prepro.head(2)"
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "##### check `transform` and `tranform_numpy` output"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Sex</th>\n",
+       "      <th>Age</th>\n",
+       "      <th>SibSp</th>\n",
+       "      <th>Parch</th>\n",
+       "      <th>Cabin</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>-0.981424</td>\n",
+       "      <td>22.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-0.374418</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>1.524767</td>\n",
+       "      <td>38.0</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>1.570800</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        Sex   Age  SibSp  Parch     Cabin\n",
+       "0 -0.981424  22.0    1.0    0.0 -0.374418\n",
+       "1  1.524767  38.0    1.0    0.0  1.570800"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "X_prepro_np_pd = pd.DataFrame(\n",
+    "    X_prepro_np, \n",
+    "    index=X_prepro.index, \n",
+    "    columns=X_prepro.columns,\n",
+    ")\n",
+    "X_prepro_np_pd.head(2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "assert X_prepro.shape == X_prepro_np.shape\n",
     "X_prepro_np_pd = pd.DataFrame(\n",
@@ -355,20 +393,20 @@
     "    columns=X_prepro.columns,\n",
     ")\n",
     "assert_frame_equal(X_prepro, X_prepro_np_pd)"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "### model building"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "model = XGBClassifier(\n",
     "    max_depth=2,\n",
@@ -376,53 +414,73 @@
     "    random_state=0, \n",
     "    eval_metric='mlogloss', \n",
     "    use_label_encoder=False)"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "#### pandas model"
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 9,
-   "source": [
-    "model_pd = copy.copy(model)\n",
-    "_ = model_pd.fit(X_prepro, y)"
-   ],
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
-   "source": [
-    "#### numpy model"
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 10,
-   "source": [
-    "model = model.fit(X_prepro.to_numpy(), y.to_numpy())"
-   ],
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
-   "source": [
-    "#### treelite model"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model_pd = copy.copy(model)\n",
+    "_ = model_pd.fit(X_prepro, y)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### numpy model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model = model.fit(X_prepro.to_numpy(), y.to_numpy())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### treelite model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[16:09:44] ../src/compiler/ast_native.cc:45: Using ASTNativeCompiler\n",
+      "[16:09:44] ../src/compiler/ast/split.cc:31: Parallel compilation enabled; member trees will be divided into 4 translation units.\n",
+      "[16:09:44] ../src/c_api/c_api.cc:121: Code generation finished. Writing code to files...\n",
+      "[16:09:44] ../src/c_api/c_api.cc:126: Writing file recipe.json...\n",
+      "[16:09:44] ../src/c_api/c_api.cc:126: Writing file tu3.c...\n",
+      "[16:09:44] ../src/c_api/c_api.cc:126: Writing file tu2.c...\n",
+      "[16:09:44] ../src/c_api/c_api.cc:126: Writing file tu1.c...\n",
+      "[16:09:44] ../src/c_api/c_api.cc:126: Writing file tu0.c...\n",
+      "[16:09:44] ../src/c_api/c_api.cc:126: Writing file header.h...\n",
+      "[16:09:44] ../src/c_api/c_api.cc:126: Writing file main.c...\n",
+      "[16:09:44] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/util.py:105: Compiling sources files in directory ./models/tmppmwz3168 into object files (*.o)...\n",
+      "[16:09:44] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/util.py:134: Generating dynamic shared library ./models/tmppmwz3168/predictor.dylib...\n",
+      "[16:09:44] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/__init__.py:278: Generated shared library in 0.40 seconds\n"
+     ]
+    }
+   ],
    "source": [
     "xgb_booster = XGBBoosterBuilder.train(\n",
     "    model=model, \n",
@@ -432,167 +490,182 @@
     "\n",
     "treelite_model = treelite.Model.from_xgboost(xgb_booster)\n",
     "treelite_model.export_lib(\n",
-    "    toolchain='gcc', \n",
+    "    toolchain='clang', \n",
     "    libpath='./models/treelite_simple_xgb.so', \n",
     "    params={'parallel_comp': 4},\n",
     "    verbose=True)\n",
     "model_tl = treelite_runtime.Predictor(\n",
     "    './models/treelite_simple_xgb.so', verbose=False)"
-   ],
-   "outputs": [
-    {
-     "output_type": "stream",
-     "name": "stdout",
-     "text": [
-      "[11:41:25] ../src/compiler/ast_native.cc:45: Using ASTNativeCompiler\n",
-      "[11:41:25] ../src/compiler/ast/split.cc:31: Parallel compilation enabled; member trees will be divided into 4 translation units.\n",
-      "[11:41:25] ../src/c_api/c_api.cc:121: Code generation finished. Writing code to files...\n",
-      "[11:41:25] ../src/c_api/c_api.cc:126: Writing file recipe.json...\n",
-      "[11:41:25] ../src/c_api/c_api.cc:126: Writing file tu3.c...\n",
-      "[11:41:25] ../src/c_api/c_api.cc:126: Writing file tu2.c...\n",
-      "[11:41:25] ../src/c_api/c_api.cc:126: Writing file tu1.c...\n",
-      "[11:41:25] ../src/c_api/c_api.cc:126: Writing file tu0.c...\n",
-      "[11:41:25] ../src/c_api/c_api.cc:126: Writing file header.h...\n",
-      "[11:41:25] ../src/c_api/c_api.cc:126: Writing file main.c...\n",
-      "[11:41:25] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/util.py:105: Compiling sources files in directory ./models/tmpsdrk142d into object files (*.o)...\n",
-      "[11:41:25] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/util.py:134: Generating dynamic shared library ./models/tmpsdrk142d/predictor.dylib...\n",
-      "[11:41:25] /Users/cpoli/gators38/lib/python3.8/site-packages/treelite/contrib/__init__.py:278: Generated shared library in 0.34 seconds\n"
-     ]
-    }
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "##### per-sample model benchmarking"
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 12,
-   "source": [
-    "x = X.iloc[[0]]\n",
-    "xnp = x.to_numpy()\n",
-    "stats_pd = %timeit -o model_pd.predict_proba(pipe.transform(x))[0][1]\n",
-    "stats_pd_tl = %timeit -o model_tl.predict(treelite_runtime.DMatrix(pipe.transform(x).to_numpy()))\n",
-    "stats_np = %timeit -o model.predict_proba(pipe.transform_numpy(xnp))[0][1]\n",
-    "stats_np_tl = %timeit -o model_tl.predict(treelite_runtime.DMatrix(pipe.transform_numpy(xnp)))"
-   ],
-   "outputs": [
-    {
-     "output_type": "stream",
-     "name": "stdout",
-     "text": [
-      "55.1 ms ± 1.83 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)\n",
-      "59.8 ms ± 5.49 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)\n",
-      "114 µs ± 6.14 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)\n",
-      "110 µs ± 6.57 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)\n"
-     ]
-    }
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
-   "source": [
-    "Overall speed-up"
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 13,
-   "source": [
-    "speedup = 1e3 * float(str(stats_pd).split(' ')[0]) / float(str(stats_np_tl).split(' ')[0])\n",
-    "f'Speed-up Pandas VS Numpy&Treelite x{round(speedup)}'"
-   ],
-   "outputs": [
-    {
-     "output_type": "execute_result",
-     "data": {
-      "text/plain": [
-       "'Speed-up Pandas VS Numpy&Treelite x500.91'"
-      ]
-     },
-     "metadata": {},
-     "execution_count": 13
-    }
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
-   "source": [
-    "#### check model predictions"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 14,
-   "source": [
-    "X_np = X.to_numpy()\n",
-    "y_pred_pd = model_pd.predict_proba(pipe.transform(X))[:, 1]\n",
-    "y_pred_np = model.predict_proba(pipe.transform_numpy(X_np))[:, 1]\n",
-    "y_pred_tl = model_tl.predict(treelite_runtime.DMatrix(pipe.transform_numpy(X_np).astype(float)))\n",
-    "assert np.allclose(y_pred_np, y_pred_pd)\n",
-    "assert np.allclose(y_pred_np, y_pred_tl)"
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "13.7 ms ± 1.13 ms per loop (mean ± std. dev. of 7 runs, 100 loops each)\n",
+      "6.85 ms ± 230 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)\n",
+      "1.48 ms ± 108 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)\n",
+      "67.6 µs ± 2.27 µs per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
    ],
-   "outputs": [],
-   "metadata": {}
+   "source": [
+    "x = X.iloc[[0]]\n",
+    "x_np = x.to_numpy()\n",
+    "stats_pd = %timeit -o model_pd.predict_proba(pipe.transform(x))[0][1]\n",
+    "stats_pd_tl = %timeit -o model_tl.predict(treelite_runtime.DMatrix(pipe.transform(x).to_numpy()))\n",
+    "stats_np = %timeit -o model.predict_proba(pipe.transform_numpy(x_np.copy()))[0][1]\n",
+    "stats_np_tl = %timeit -o model_tl.predict(treelite_runtime.DMatrix(pipe.transform_numpy(x_np.copy())))"
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
-    "#### dumping both model and pipeline "
-   ],
-   "metadata": {}
+    "Overall speed-up"
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 15,
-   "source": [
-    "model_path = 'models/simple_xgb.dill'\n",
-    "with open(model_path, 'wb') as file:\n",
-    "    dill.dump(model, file)\n",
-    "model_path = 'pipelines/simple_pipeline.dill'\n",
-    "with open(model_path, 'wb') as file:\n",
-    "    dill.dump(model, file)"
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Speed-up Pandas VS Numpy&Treelite x203'"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
    ],
-   "outputs": [],
-   "metadata": {}
+   "source": [
+    "speedup = 1e3 * float(str(stats_pd).split(' ')[0]) / float(str(stats_np_tl).split(' ')[0])\n",
+    "f'Speed-up Pandas VS Numpy&Treelite x{round(speedup)}'"
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
-    "### with koalas"
-   ],
-   "metadata": {}
+    "#### check model predictions"
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 16,
-   "source": [
-    "import databricks.koalas as ks\n",
-    "from gators.converter import KoalasToPandas"
-   ],
+   "metadata": {},
    "outputs": [],
-   "metadata": {}
+   "source": [
+    "X_np = X.to_numpy()\n",
+    "y_pred_pd = model_pd.predict_proba(pipe.transform(X))[:, 1]\n",
+    "y_pred_np = model.predict_proba(pipe.transform_numpy(X_np.copy()))[:, 1]\n",
+    "y_pred_tl = model_tl.predict(\n",
+    "    treelite_runtime.DMatrix(\n",
+    "        pipe.transform_numpy(X_np.copy()))\n",
+    "    )\n",
+    "assert np.allclose(y_pred_np, y_pred_pd)\n",
+    "assert np.allclose(y_pred_np, y_pred_tl)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### dumping both model and pipeline "
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
    "source": [
-    "data = ks.read_parquet('data/titanic.parquet')\n",
-    "y_ks = data['Survived']\n",
-    "X_ks = data.drop(['Survived', 'PassengerId'], axis=1)\n",
-    "X_ks.head(2)"
-   ],
+    "model_path = 'models/simple_xgb.dill'\n",
+    "with open(model_path, 'wb') as file:\n",
+    "    dill.dump(model, file)\n",
+    "model_path = 'models/simple_pipeline.dill'\n",
+    "with open(model_path, 'wb') as file:\n",
+    "    dill.dump(model, file)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### with koalas"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
    "outputs": [
     {
-     "output_type": "execute_result",
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "WARNING: An illegal reflective access operation has occurred\n",
+      "WARNING: Illegal reflective access by org.apache.spark.unsafe.Platform (file:/Users/cpoli/gators38/lib/python3.8/site-packages/pyspark/jars/spark-unsafe_2.12-3.1.3.jar) to constructor java.nio.DirectByteBuffer(long,int)\n",
+      "WARNING: Please consider reporting this to the maintainers of org.apache.spark.unsafe.Platform\n",
+      "WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations\n",
+      "WARNING: All illegal access operations will be denied in a future release\n",
+      "22/10/05 16:10:21 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n",
+      "Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties\n",
+      "Setting default log level to \"WARN\".\n",
+      "To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).\n"
+     ]
+    }
+   ],
+   "source": [
+    "from pyspark import SparkConf, SparkContext\n",
+    "\n",
+    "conf = SparkConf()\n",
+    "conf.set('spark.executor.memory', '2g')\n",
+    "conf.set('spark.sql.codegen.wholeStage', 'false')\n",
+    "conf.set('spark.sql.autoBroadcastJoinThreshold', -1)\n",
+    "SparkContext(conf=conf)\n",
+    "import databricks.koalas as ks\n",
+    "ks.set_option('compute.default_index_type', 'distributed-sequence')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import databricks.koalas as ks\n",
+    "from gators.converter import ToPandas"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                                                                                \r"
+     ]
+    },
+    {
      "data": {
       "text/html": [
        "<div>\n",
@@ -613,122 +686,123 @@
        "  <thead>\n",
        "    <tr style=\"text-align: right;\">\n",
        "      <th></th>\n",
-       "      <th>Pclass</th>\n",
-       "      <th>Name</th>\n",
        "      <th>Sex</th>\n",
        "      <th>Age</th>\n",
        "      <th>SibSp</th>\n",
        "      <th>Parch</th>\n",
-       "      <th>Ticket</th>\n",
-       "      <th>Fare</th>\n",
        "      <th>Cabin</th>\n",
-       "      <th>Embarked</th>\n",
        "    </tr>\n",
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
        "      <th>0</th>\n",
-       "      <td>3</td>\n",
-       "      <td>Braund, Mr. Owen Harris</td>\n",
        "      <td>male</td>\n",
        "      <td>22.0</td>\n",
        "      <td>1</td>\n",
        "      <td>0</td>\n",
-       "      <td>A/5 21171</td>\n",
-       "      <td>7.2500</td>\n",
        "      <td>None</td>\n",
-       "      <td>S</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>1</th>\n",
-       "      <td>1</td>\n",
-       "      <td>Cumings, Mrs. John Bradley (Florence Briggs Th...</td>\n",
        "      <td>female</td>\n",
        "      <td>38.0</td>\n",
        "      <td>1</td>\n",
        "      <td>0</td>\n",
-       "      <td>PC 17599</td>\n",
-       "      <td>71.2833</td>\n",
        "      <td>C85</td>\n",
-       "      <td>C</td>\n",
        "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
        "</div>"
       ],
       "text/plain": [
-       "   Pclass                                                 Name     Sex   Age  SibSp  Parch     Ticket     Fare Cabin Embarked\n",
-       "0       3                              Braund, Mr. Owen Harris    male  22.0      1      0  A/5 21171   7.2500  None        S\n",
-       "1       1  Cumings, Mrs. John Bradley (Florence Briggs Thayer)  female  38.0      1      0   PC 17599  71.2833   C85        C"
+       "      Sex   Age  SibSp  Parch Cabin\n",
+       "0    male  22.0      1      0  None\n",
+       "1  female  38.0      1      0   C85"
       ]
      },
+     "execution_count": 20,
      "metadata": {},
-     "execution_count": 17
+     "output_type": "execute_result"
     }
    ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 18,
    "source": [
-    "X_prepro_ks = pipe.fit_transform(X_ks, y_ks)\n",
-    "X_prepro_ks_np = pipe.transform_numpy(X.to_numpy())"
-   ],
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 19,
-   "source": [
-    "X_prepro_ks_pd, y_ks_pd = KoalasToPandas().transform(X_prepro_ks, y_ks)\n",
-    "X_prepro_ks_pd.index = X_prepro.index"
-   ],
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
-   "source": [
-    "##### check `pandas` and `koalas` output"
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 20,
-   "source": [
-    "assert_frame_equal(X_prepro_ks_pd, X_prepro)\n",
-    "assert np.allclose(X_prepro_ks_np, X_prepro)"
-   ],
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
-   "source": [
-    "Since we have a pandas dataframe, the same steps from the pandas section can now followed"
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
-   "source": [
-    "## Create you own transformers: example with log10"
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
-   "source": [
-    "### imports"
-   ],
-   "metadata": {}
+    "data = ks.read_parquet('data/titanic.parquet')[columns]\n",
+    "y_ks = data['Survived']\n",
+    "X_ks = data.drop(['Survived', 'PassengerId'], axis=1)\n",
+    "X_ks.head(2)"
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                                                                                \r"
+     ]
+    }
+   ],
+   "source": [
+    "X_prepro_ks = pipe.fit_transform(X_ks, y_ks)\n",
+    "X_prepro_ks_np = pipe.transform_numpy(X.to_numpy())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_prepro_ks_pd, y_ks_pd = ToPandas().transform(X_prepro_ks, y_ks)\n",
+    "X_prepro_ks_pd.index = X_prepro.index"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### check `pandas` and `koalas` output"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "assert_frame_equal(X_prepro_ks_pd, X_prepro)\n",
+    "assert np.allclose(X_prepro_ks_np, X_prepro)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Since we have a pandas dataframe, the same steps from the pandas section can now followed"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Create you own transformers: example with log10"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### imports"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "from typing import List, Union\n",
     "from math import log10\n",
@@ -737,20 +811,20 @@
     "import databricks.koalas as ks\n",
     "from gators.util import util\n",
     "from gators.transformers import Transformer"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "### Inplace transformer on the all dataframe"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "class Log10Inplace(Transformer):\n",
     "    def __init__(self):\n",
@@ -771,12 +845,11 @@
     "    def transform_numpy(self, X: np.ndarray) -> np.ndarray:\n",
     "        self.check_array(X)\n",
     "        return np.log10(X)"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "**Notes:**\n",
     "\n",
@@ -785,51 +858,52 @@
     "`return pd.DataFrame(np.log10(X.to_numpy()), columns=X.columns, index=X.index)`\n",
     "\n",
     "which is significantly faster."
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1.41 ms ± 30.4 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)\n",
+      "30.1 µs ± 238 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)\n"
+     ]
+    }
+   ],
    "source": [
     "X = pd.DataFrame(\n",
     "    np.abs(np.random.randn(10, 10)), columns=list('ABCDEFGHIJ'))\n",
     "%timeit _ = X.applymap(log10)\n",
     "%timeit _ = pd.DataFrame(np.log10(X.to_numpy()), columns=X.columns, index=X.index)"
-   ],
-   "outputs": [
-    {
-     "output_type": "stream",
-     "name": "stdout",
-     "text": [
-      "2.09 ms ± 192 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)\n",
-      "45.2 µs ± 1.99 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)\n"
-     ]
-    }
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "### Inplace transformer on the selected columns"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "Transform the given columns can be interesting in the following ways:\n",
     "\n",
     "* Only a few colums need to be transformed.\n",
     "* Only a given datatype should be transformed.\n",
     "* The transformation should not be applied on the encoded columns, and the name of the base columns are obtained before the transformation."
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 24,
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "class Log10ColumnsInplace(Transformer):\n",
     "    def __init__(self, columns: List[str]):\n",
@@ -861,30 +935,30 @@
     "        X[:, self.idx_columns] = np.log10(X[:, self.idx_columns])\n",
     "        return X\n",
     "    "
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "### transformer creating new columns"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "Creating new columns can be interesting if\n",
     "\n",
     "* the raw data are needed for other transformations. \n",
     "* the raw data still contains some meaningful predictive information. "
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 25,
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "class Log10Columns(Transformer):\n",
     "    def __init__(self, columns: List[str]):\n",
@@ -894,7 +968,6 @@
     "            raise ValueError('`columns` should not be empty.')\n",
     "        self.columns = columns\n",
     "        self.column_names = [f'{c}__log10' for c in self.columns]\n",
-    "        self.colum_mapping = dict(zip(self.column_names, self.columns))\n",
     "\n",
     "    def fit(self,\n",
     "            X: Union[pd.DataFrame, ks.DataFrame],\n",
@@ -918,71 +991,62 @@
     "        self.check_array(X)\n",
     "        X_new = np.log10(X[:, self.idx_columns])\n",
     "        return np.concatenate((X, X_new), axis=1)"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
-   "source": [
-    "**Notes**\n",
-    "\n",
-    "The class parameter `colum_names` will be used to clean up the pipeline."
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "### tests"
-   ],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 26,
-   "source": [
-    "X = pd.DataFrame(\n",
-    "    np.abs(np.random.randn(10, 10)), columns=list('ABCDEFGHIJ'))\n",
-    "X_np = X.to_numpy()"
-   ],
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 27,
-   "source": [
-    "columns = util.get_datatype_columns(X, float)\n",
-    "X_new_inplace_all = Log10Inplace().fit_transform(X.copy())"
-   ],
-   "outputs": [],
-   "metadata": {}
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 28,
-   "source": [
-    "columns = util.get_datatype_columns(X, float)\n",
-    "X_new_inplace_cols = Log10ColumnsInplace(\n",
-    "    columns=columns).fit_transform(X.copy())"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 29,
-   "source": [
-    "columns = util.get_datatype_columns(X, float)\n",
-    "X_new = Log10Columns(columns=columns).fit_transform(X)"
-   ],
+   "metadata": {},
    "outputs": [],
-   "metadata": {}
+   "source": [
+    "X = pd.DataFrame(\n",
+    "    np.abs(np.random.randn(10, 10)), columns=list('ABCDEFGHIJ'))\n",
+    "X_np = X.to_numpy()"
+   ]
   },
   {
    "cell_type": "code",
    "execution_count": 30,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "columns = util.get_datatype_columns(X, float)\n",
+    "X_new_inplace_all = Log10Inplace().fit_transform(X.copy())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "columns = util.get_datatype_columns(X, float)\n",
+    "X_new_inplace_cols = Log10ColumnsInplace(\n",
+    "    columns=columns).fit_transform(X.copy())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "columns = util.get_datatype_columns(X, float)\n",
+    "X_new = Log10Columns(columns=columns).fit_transform(X)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "assert np.allclose(\n",
     "    X_new_inplace_all.to_numpy(), X_new_inplace_cols.to_numpy())\n",
@@ -992,20 +1056,20 @@
     "]\n",
     "assert np.allclose(\n",
     "    X_new_inplace_all.to_numpy(), X_new[cols].to_numpy())"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "### per-sample benchmarking"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 31,
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "np.random.seed(0)\n",
     "n_cols = 1000\n",
@@ -1015,136 +1079,136 @@
     "X_np = X.to_numpy()\n",
     "x = X.iloc[[0]]\n",
     "x_np = x.to_numpy()"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 32,
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "columns = list(X.columns)\n",
     "obj = Log10ColumnsInplace(columns=columns)\n",
     "_ = obj.fit(X)"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 33,
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "# result saved to be compared with the transform_numpy using Cython.\n",
     "x_np_new = obj.transform_numpy(x_np.copy())"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
-   "source": [
-    "%timeit _ = obj.transform(x.copy())\n",
-    "%timeit _ = obj.transform_numpy(x_np.copy())"
-   ],
+   "execution_count": 37,
+   "metadata": {},
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
+     "output_type": "stream",
      "text": [
-      "223 ms ± 11.1 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)\n",
-      "17 µs ± 714 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)\n"
+      "234 ms ± 4.38 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)\n",
+      "16.1 µs ± 108 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
      ]
     }
    ],
-   "metadata": {}
+   "source": [
+    "%timeit _ = obj.transform(x.copy())\n",
+    "%timeit _ = obj.transform_numpy(x_np.copy())"
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "**Notes:**\n",
     "    \n",
     "Since the transformation happens inplace, the `.copy()` is \n",
     "neccessary however, the `.copy()` runtime is negligeable: "
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 35,
-   "source": [
-    "%timeit x.copy()\n",
-    "%timeit x_np.copy()"
-   ],
+   "execution_count": 38,
+   "metadata": {},
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
+     "output_type": "stream",
      "text": [
-      "20.8 µs ± 1.46 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)\n",
-      "590 ns ± 24.1 ns per loop (mean ± std. dev. of 7 runs, 1000000 loops each)\n"
+      "18.4 µs ± 876 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n",
+      "500 ns ± 16 ns per loop (mean ± std. dev. of 7 runs, 1,000,000 loops each)\n"
      ]
     }
    ],
-   "metadata": {}
+   "source": [
+    "%timeit x.copy()\n",
+    "%timeit x_np.copy()"
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 36,
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "columns = list(X.columns)\n",
     "obj = Log10Columns(columns=columns)\n",
     "_ = obj.fit(X)"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 37,
-   "source": [
-    "%timeit _ = obj.transform(x.copy())\n",
-    "%timeit _ = obj.transform_numpy(x_np.copy())"
-   ],
+   "execution_count": 40,
+   "metadata": {},
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
+     "output_type": "stream",
      "text": [
-      "152 ms ± 4.37 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)\n",
-      "16.7 µs ± 673 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)\n"
+      "109 ms ± 7.99 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)\n",
+      "14.7 µs ± 1.71 µs per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
      ]
     }
    ],
-   "metadata": {}
+   "source": [
+    "%timeit _ = obj.transform(x.copy())\n",
+    "stats_log_np = %timeit -o obj.transform_numpy(x_np.copy())"
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "### Cython"
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "The per-sample runtime of the `transform_numpy` is already pretty good.\n",
     "But, it some cases, Cython will allow to get even faster.  "
-   ],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "%load_ext Cython"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "%%cython\n",
     "import cython\n",
@@ -1168,13 +1232,13 @@
     "            for j in range(n_cols):\n",
     "                X[i, j] = log10(X[i, j])\n",
     "    return X"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 40,
+   "execution_count": 43,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "class Log10ColumnsInplaceWithCython(Transformer):\n",
     "    def __init__(self, columns: List[str]):\n",
@@ -1184,9 +1248,7 @@
     "            raise ValueError('`columns` should not be empty.')\n",
     "        self.columns = columns\n",
     "        \n",
-    "    def fit(self,\n",
-    "            X: Union[pd.DataFrame, ks.DataFrame],\n",
-    "            y: Union[pd.Series, ks.Series] = None) -> 'Log10Columns':\n",
+    "    def fit(self, X, y=None) -> 'Log10Columns':\n",
     "        self.check_dataframe(X)\n",
     "        self.idx_columns = util.get_idx_columns(\n",
     "            columns=X.columns,\n",
@@ -1194,68 +1256,85 @@
     "        )\n",
     "        return self\n",
     "\n",
-    "    def transform(\n",
-    "        self, X: Union[pd.DataFrame, ks.DataFrame]\n",
-    "    ) -> Union[pd.DataFrame, ks.DataFrame]:\n",
+    "    def transform(self, X):\n",
     "        self.check_dataframe(X)\n",
     "        X[self.columns] = X[self.columns].applymap(log10)\n",
     "        return X\n",
     "\n",
-    "    def transform_numpy(self, X: np.ndarray) -> np.ndarray:\n",
+    "    def transform_numpy(self, X):\n",
     "        self.check_array(X)\n",
     "        X[:, self.idx_columns] = cython_log10(X, self.idx_columns)\n",
     "        return X"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 41,
+   "execution_count": 45,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "columns = list(X.columns)\n",
     "obj = Log10ColumnsInplaceWithCython(columns=columns)\n",
     "_ = obj.fit(X)"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 42,
+   "execution_count": 46,
+   "metadata": {},
+   "outputs": [],
    "source": [
     "assert np.allclose(obj.transform_numpy(x_np.copy()), x_np_new)"
-   ],
-   "outputs": [],
-   "metadata": {}
+   ]
   },
   {
    "cell_type": "code",
-   "execution_count": 43,
-   "source": [
-    "%timeit _ = obj.transform_numpy(x_np.copy())"
-   ],
+   "execution_count": 47,
+   "metadata": {},
    "outputs": [
     {
-     "output_type": "stream",
      "name": "stdout",
+     "output_type": "stream",
      "text": [
-      "13.2 µs ± 720 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)\n"
+      "9.95 µs ± 284 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)\n"
      ]
     }
    ],
-   "metadata": {}
+   "source": [
+    "stats_log_cy = %timeit -o obj.transform_numpy(x_np.copy())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Speed-up Cython VS Numpy x1.48'"
+      ]
+     },
+     "execution_count": 48,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "speedup = float(str(stats_log_np).split(' ')[0]) / float(str(stats_log_cy).split(' ')[0])\n",
+    "f'Speed-up Cython VS Numpy x{round(speedup, 2)}'"
+   ]
   },
   {
    "cell_type": "markdown",
+   "metadata": {},
    "source": [
     "A slight runtime improvement is obtained for this transformer.\n",
     "\n",
     "**Notes:**\n",
     "\n",
     "In some cases, for example the Encoders, Cython leads to a significant runtime improvement. "
-   ],
-   "metadata": {}
+   ]
   }
  ],
  "metadata": {
@@ -1274,7 +1353,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.8.7"
+   "version": "3.8.10"
   }
  },
  "nbformat": 4,

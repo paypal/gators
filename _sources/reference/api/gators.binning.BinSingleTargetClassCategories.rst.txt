@@ -1,0 +1,13 @@
+﻿
+gators.binning.BinSingleTargetClassCategories
+=============================================
+
+.. currentmodule:: gators.binning
+
+.. autoclass:: BinSingleTargetClassCategories
+
+    
+
+ 
+
+     

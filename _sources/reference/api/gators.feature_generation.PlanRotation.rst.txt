@@ -1,0 +1,13 @@
+﻿
+gators.feature\_generation.PlanRotation
+=======================================
+
+.. currentmodule:: gators.feature_generation
+
+.. autoclass:: PlanRotation
+
+    
+
+ 
+
+     

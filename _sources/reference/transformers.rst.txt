@@ -8,7 +8,9 @@ Transformers
 .. currentmodule:: gators.transformers
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    Transformer
    TransformerXY

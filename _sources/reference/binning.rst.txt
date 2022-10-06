@@ -9,26 +9,34 @@ Binning
 Categorical variable binning
 ############################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-    BinRareEvents
+    BinRareCategories
+    BinSingleTargetClassCategories
 
 Numerical variable binning
 ##########################
 
-Base discretizer
+Base binning
 ----------------
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-    _BaseDiscretizer
+    _BaseBinning
 
-Discretizers
+Binnings
 ------------
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-    Discretizer
-    QuantileDiscretizer
-    CustomDiscretizer
+    Binning
+    QuantileBinning
+    TreeBinning
+    CustomBinning
 

@@ -1,0 +1,13 @@
+﻿
+gators.feature\_selection.SupervizedCorrelationFilter
+=====================================================
+
+.. currentmodule:: gators.feature_selection
+
+.. autoclass:: SupervizedCorrelationFilter
+
+    
+
+ 
+
+     

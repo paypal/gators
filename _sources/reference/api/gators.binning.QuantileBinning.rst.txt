@@ -1,0 +1,13 @@
+﻿
+gators.binning.QuantileBinning
+==============================
+
+.. currentmodule:: gators.binning
+
+.. autoclass:: QuantileBinning
+
+    
+
+ 
+
+     

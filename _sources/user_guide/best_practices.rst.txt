@@ -2,49 +2,43 @@
 Best Practices
 **************
 
-Pandas or Koalas?
-#################
+Pandas, Dask or Koalas?
+#######################
 
-The choice of using `Pandas <https://pandas.pydata.org/>`__ or `Koalas <https://koalas.readthedocs.io/en/latest/>`__ will be dictated by your data set.
-For in-memory datasets it is recommended to use pandas, koalas otherwise.
+The choice of using `Pandas <https://pandas.pydata.org/>`__, `Dask <https://docs.dask.org/en/latest/>`__,  or `Koalas <https://koalas.readthedocs.io/en/latest/>`__ will be dictated by your dataset size.
+For in-memory datasets it is recommended to use Pandas, Dask or Koalas otherwise.
 
 Does the transformation order matter?
 #####################################
 
-Absolutely! While Pandas and Koalas dataframes hold the datatype of each column,
-Numpy does not.
-
-It is then important to group the transformations according to the datatype of the columns
-they consider.
-
-    1. datetime column transformations
-    2. object column transformations
-    3. encoding transformation
-    4. numerical transformations
+The datetime feature generation steps should be done before the encoding.
 
 .. Note::
 
-     After an encoding transformation, all the column datatypes with be set to *np.float32* or *np.float64*,
+     After an encoding transformation, the data will be only composed of numerical columns,
      any datetime columns should then be removed before this step.
 
 What are the models currently supported by gators?
 ##################################################
 
-**Gators** mainly focuses on data pre-processing in both offline and in real-time but
-a submodule uses the package `treelite <https://treelite.readthedocs.io/en/latest/>`__ which compiles in C tree-based
+**Gators** mainly focuses on data pre-processing in both offline and in real-time, and model deployment
+with the package `treelite <https://treelite.readthedocs.io/en/latest/>`__ which compiles in C tree-based
 models. Only this type of models is currently supported. Note that for deep learning
 models, the `tvm package <https://tvm.apache.org/>`__ could be interesting to consider.
  
-When using NumPy?
-##################
+When using the method `transform_numpy()`?
+######################################################
 
-In **gators**, NumPy, by means of the method `transform_numpy()` , should only be used in the production environment where the response time of the data pre-processing is critical.
+The method `transform_numpy()`, have been designed to speed-up the pre-processing in a production-like environment, where the response time of the data pre-processing is critical.
+It is recommended to use `transform_numpy()` off-line to validate the prouction pipeline.
+
+
 
 Why the method `fit_numpy()` is not defined?
 ##############################################
 
-The offline model building steps are only done with pandas or koalas dataframes.
-First, the excellent `Sklearn  <https://scikit#learn.org/stable/>`__ package already handle NumPy arrays, second,
+The offline model building steps are only done with Pandas, Dask, or Koalas dataframes.
+First, the excellent `Sklearn <https://scikit#learn.org/stable/>`__ package already handle NumPy arrays, second,
 NumPy is not suitable for large-scale data.
 
 

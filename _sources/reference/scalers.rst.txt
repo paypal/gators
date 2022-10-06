@@ -7,8 +7,11 @@ Scalers
 .. currentmodule:: gators.scalers
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    MinMaxScaler
    StandardScaler
+   YeoJohnson
 

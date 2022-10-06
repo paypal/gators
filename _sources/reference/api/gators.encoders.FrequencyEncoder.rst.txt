@@ -1,0 +1,13 @@
+﻿
+gators.encoders.FrequencyEncoder
+================================
+
+.. currentmodule:: gators.encoders
+
+.. autoclass:: FrequencyEncoder
+
+    
+
+ 
+
+     

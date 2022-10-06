@@ -11,7 +11,9 @@ Base Feature Selection Transformer
 ##################################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     _BaseFeatureSelection
 
@@ -20,7 +22,9 @@ Unsupervised Feature Selection
 ##############################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     VarianceFilter
     CorrelationFilter
@@ -30,11 +34,12 @@ Supervised Feature Selection
 ############################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
+    SupervizedCorrelationFilter
     InformationValue
-    MultiClassInformationValue
-    RegressionInformationValue
     SelectFromModel
     SelectFromModels
 
