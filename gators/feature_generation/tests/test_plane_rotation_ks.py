@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.feature_generation.plane_rotation import PlaneRotation
+from gators.feature_generation.plan_rotation import PlanRotation
 
 ks.set_option("compute.default_index_type", "distributed-sequence")
 
@@ -28,7 +28,7 @@ def data_ks():
             "XZ_y_60deg": [223.20508075688775, 244.36533479473212],
         }
     )
-    obj = PlaneRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=[45, 60]).fit(X)
+    obj = PlanRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=[45, 60]).fit(X)
     return obj, X, X_expected
 
 
@@ -53,7 +53,7 @@ def data_object_ks():
             "XZ_y_60deg": [223.20508075688775, 244.36533479473212],
         }
     )
-    obj = PlaneRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=[45, 60]).fit(X)
+    obj = PlanRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=[45, 60]).fit(X)
     return obj, X, X_expected
 
 

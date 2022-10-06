@@ -188,7 +188,6 @@ gators.egg-info/top_level.txt
 gators/__pycache__/__init__.cpython-36.pyc
 gators/binning/__init__.py
 gators/binning/_base_binning.py
-gators/binning/bin_factory.py
 gators/binning/bin_rare_categories.py
 gators/binning/bin_single_target_class_categories.py
 gators/binning/binning.py
@@ -410,7 +409,7 @@ gators/feature_generation/feature_gen.pyx
 gators/feature_generation/is_equal.py
 gators/feature_generation/is_null.py
 gators/feature_generation/one_hot.py
-gators/feature_generation/plane_rotation.py
+gators/feature_generation/plan_rotation.py
 gators/feature_generation/polynomial_features.py
 gators/feature_generation/polynomial_object_features.py
 gators/feature_generation/tests/test_cluster_statistics_dd.py
@@ -614,6 +613,7 @@ gators/feature_selection/correlation_filter.py
 gators/feature_selection/information_value.py
 gators/feature_selection/select_from_model.py
 gators/feature_selection/select_from_models.py
+gators/feature_selection/supervized_correlation_filter.py
 gators/feature_selection/variance_filter.py
 gators/feature_selection/__pycache__/__init__.cpython-38.pyc
 gators/feature_selection/__pycache__/_base_feature_selection.cpython-38.pyc
@@ -636,6 +636,9 @@ gators/feature_selection/tests/test_select_from_model_pd.py
 gators/feature_selection/tests/test_select_from_models_dd.py
 gators/feature_selection/tests/test_select_from_models_ks.py
 gators/feature_selection/tests/test_select_from_models_pd.py
+gators/feature_selection/tests/test_supervized_correlation_filter_dd.py
+gators/feature_selection/tests/test_supervized_correlation_filter_ks.py
+gators/feature_selection/tests/test_supervized_correlation_filter_pd.py
 gators/feature_selection/tests/test_variance_filter_dd.py
 gators/feature_selection/tests/test_variance_filter_ks.py
 gators/feature_selection/tests/test_variance_filter_pd.py

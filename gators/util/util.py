@@ -1,6 +1,5 @@
 # License: Apache-2.0
 from abc import ABC
-from distutils.log import error
 from typing import List
 
 import numpy as np
@@ -291,7 +290,7 @@ class FunctionDask(FunctionFactory):
         return X.tail(n, compute=False)
 
     def fit(self, model, X, y):
-        return model.fit(X.values, y.values)
+        return model.fit(X, y)
 
     def predict(self, model, X):
         return model.predict(X.values)
@@ -564,9 +563,7 @@ def flatten_list(list_to_flatten: List):
     return list_flatten
 
 
-def prettify_number(x, precision, infinity):
-    if abs(x) >= infinity:
-        return x
+def prettify_number(x, precision):
     if (abs(x) > 1) or (x == 0):
         return round(x, precision)
     exponent = np.floor(np.log10(abs(x)))

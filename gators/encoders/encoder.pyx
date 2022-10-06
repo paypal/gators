@@ -30,6 +30,32 @@ cpdef np.ndarray[object, ndim=2] encoder(
     return X
 
 
+# @cython.boundscheck(False)
+# @cython.wraparound(False)
+cpdef np.ndarray[object, ndim=2] encoder_new(
+        np.ndarray[object, ndim=2] X,
+        np.ndarray[np.int64_t, ndim=1] num_categories_vec,
+        np.ndarray[object, ndim=2] values_vec,
+        np.ndarray[np.float64_t, ndim=2] encoded_values_vec):
+    cdef np.int64_t i
+    cdef np.int64_t j
+    cdef np.int64_t k
+    cdef np.int64_t j_max
+    cdef object value
+    cdef np.int64_t n_rows = X.shape[0]
+    cdef np.int64_t n_cols = len(values_vec)
+    cdef np.ndarray[np.float64_t, ndim=2] X_encoded = np.empty((n_rows, n_cols))
+    for k in range(n_rows):
+        for i in range(n_cols):
+            value = X[k, i]
+            j_max = num_categories_vec[i]
+            for j in range(j_max):
+                if value == values_vec[i, j]:
+                    X_encoded[k, i] = encoded_values_vec[i, j]
+                    break
+    return X_encoded
+
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
 cpdef np.ndarray[object, ndim=2] onehot_encoder(
@@ -79,6 +105,4 @@ cpdef np.ndarray[object, ndim=2] binned_columns_encoder_inplace(
     for i in range(n_rows):
         for j in range(n_cols):
             X[i, idx_columns[j]] = float(X[i, idx_columns[j]][1:])
-    print(X.dtype)
-    print(X.astype(object).dtype)
     return X.astype(object)

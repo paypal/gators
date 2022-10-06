@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.feature_generation.plane_rotation import PlaneRotation
+from gators.feature_generation.plan_rotation import PlanRotation
 
 
 @pytest.fixture
@@ -25,7 +25,7 @@ def data():
             "XZ_y_60deg": [223.20508075688775, 244.36533479473212],
         }
     )
-    obj = PlaneRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=[45, 60]).fit(X)
+    obj = PlanRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=[45, 60]).fit(X)
     return obj, X, X_expected
 
 
@@ -50,7 +50,7 @@ def data_object():
             "XZ_y_60deg": [223.20508075688775, 244.36533479473212],
         }
     )
-    obj = PlaneRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=[45, 60]).fit(X)
+    obj = PlanRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=[45, 60]).fit(X)
     return obj, X, X_expected
 
 
@@ -82,14 +82,14 @@ def test_object_pd_np(data_object):
 
 def test_input():
     with pytest.raises(TypeError):
-        _ = PlaneRotation(columns=0, theta_vec=[45, 60])
+        _ = PlanRotation(columns=0, theta_vec=[45, 60])
     with pytest.raises(TypeError):
-        _ = PlaneRotation(columns=[["X", "Y"]], theta_vec=0)
+        _ = PlanRotation(columns=[["X", "Y"]], theta_vec=0)
     with pytest.raises(TypeError):
-        _ = PlaneRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=0)
+        _ = PlanRotation(columns=[["X", "Y"], ["X", "Z"]], theta_vec=0)
     with pytest.raises(TypeError):
-        _ = PlaneRotation(columns=["X", "Y", "X", "Z"], theta_vec=[45, 60])
+        _ = PlanRotation(columns=["X", "Y", "X", "Z"], theta_vec=[45, 60])
     with pytest.raises(ValueError):
-        _ = PlaneRotation(columns=[], theta_vec=[0])
+        _ = PlanRotation(columns=[], theta_vec=[0])
     with pytest.raises(TypeError):
-        _ = PlaneRotation(columns=[["X", "Y"]], theta_vec=[45, "60"])
+        _ = PlanRotation(columns=[["X", "Y"]], theta_vec=[45, "60"])

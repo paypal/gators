@@ -138,6 +138,7 @@ def data_not_inplace():
     obj = WOEEncoder(regularization=0.5, inplace=False).fit(X, y)
     return obj, X, X_expected
 
+
 @pytest.mark.koalas
 def test_data_not_inplace_pd(data_not_inplace):
     obj, X, X_expected = data_not_inplace

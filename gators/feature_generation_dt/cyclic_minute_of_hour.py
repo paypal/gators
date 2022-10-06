@@ -105,10 +105,14 @@ class CyclicMinuteOfHour(_BaseDatetimeFeature):
             Transformed array.
         """
         self.check_array(X)
-        X_new = feature_gen_dt.cyclic_minute_of_hour(X[:, self.idx_columns], self.prefactor)
+        X_new = feature_gen_dt.cyclic_minute_of_hour(
+            X[:, self.idx_columns], self.prefactor
+        )
         return np.concatenate([X, X_new], axis=1)
 
-    def compute_cyclic_minute_of_hour(self, X: DataFrame, prefactor: float) -> DataFrame:
+    def compute_cyclic_minute_of_hour(
+        self, X: DataFrame, prefactor: float
+    ) -> DataFrame:
         """Compute the cyclic hours of the day features.
 
         Parameters

@@ -116,3 +116,28 @@ cpdef np.ndarray[object, ndim = 2] binning(
                     X_bin[i, j] = '_' + str(k - 1)
                     break
     return np.concatenate((X, X_bin), axis=1)
+
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef np.ndarray[object, ndim = 2] binning_new(
+        np.ndarray[num_t, ndim=2] X,
+        np.ndarray[num_t, ndim=2] bins_np,
+        np.ndarray[object, ndim=2] labels_np,
+        ):
+    cdef int i
+    cdef int j
+    cdef int k
+    cdef int j_col
+    cdef int n_rows = X.shape[0]
+    cdef int n_cols = X.shape[1]
+    cdef int n_bins = bins_np.shape[0]
+    cdef np.ndarray[object, ndim=2] X_bin = np.empty((n_rows, n_cols), object)
+    for i in range(n_rows):
+        for j in range(n_cols):
+            for k in range(1, n_bins):
+                if float(X[i, j]) < bins_np[k, j]:
+                    X_bin[i, j] = labels_np[k-1, j]
+                    break
+    return X_bin

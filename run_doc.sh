@@ -132,7 +132,7 @@ Library Highlights
 ##################
 
 * Data pre-processing can be done for both in-memory and out-of-memory datasets using the same interface.
-* Using Cython, the real-time data pre-processing is carried out on NumPy arrays with compiled C-code leading to fast response times, similar to compiled languages.
+* Using Cython, the real-time data pre-processing is carried out on NumPy arrays with compiled C-code leading to fast response times, similar to compiled-languages.
 
 ##########
 Our Vision
@@ -184,7 +184,7 @@ NumPy is used in the production environment when the pre-processing needs to be 
     :width: 170 px
     :target: https://cython.readthedocs.io/en/latest/
 
-In the production environment, the pre-processing with be done by pre-compile Cython code on NumPy arrays.
+In the production environment, the pre-processing with be done by pre-compiled Cython code on NumPy arrays.
 
 ==============
 Model building
@@ -269,7 +269,7 @@ Why the method \`fit_numpy()\` is not defined?
 ##############################################
 
 The offline model building steps are only done with Pandas, Dask, or Koalas dataframes.
-First, the excellent \`Sklearn  <https://scikit#learn.org/stable/>\`__ package already handle NumPy arrays, second,
+First, the excellent \`Sklearn <https://scikit#learn.org/stable/>\`__ package already handle NumPy arrays, second,
 NumPy is not suitable for large-scale data.
 
 
@@ -340,7 +340,7 @@ commands to get a copy from Github and install all dependencies:
 
 >>> git clone git@github.paypal.com:Simility-R/gators.git
 >>> cd gators
->>> pip install  -r requirements.txt 
+>>> pip install -r requirements.txt 
 >>> python setup.py build_ext --inplace
 >>> pip install .
 
@@ -349,7 +349,7 @@ Extra packages
 
 >>> git clone git@github.paypal.com:Simility-R/gators.git
 >>> cd gators
->>> pip install  -r requirements.txt 
+>>> pip install -r requirements.txt 
 >>> python setup.py build_ext --inplace
 >>> brew install libomp
 >>> pip install .[dev]
@@ -384,6 +384,7 @@ cp ../examples/titanic.ipynb examples/
 cp ../examples/sf_crime.ipynb examples/
 cp ../examples/house_price.ipynb examples/
 cp ../examples/templates.ipynb examples/
+cp ../examples/libraries.ipynb examples/
 
 cat > examples/index.rst <<EOL
 ********
@@ -397,6 +398,7 @@ Examples
     sf_crime
     house_price
     templates
+    libraries
 EOL
 
 mkdir reference
@@ -614,6 +616,7 @@ Unsupervised Encoders
    :template: class.rst
 
    OrdinalEncoder
+   FrequencyEncoder
    OneHotEncoder
    BinnedColumnsEncoder
 
@@ -630,8 +633,8 @@ Supervised Encoders
 
 .. Note::
 
-   **WOEEncoder** is only valid for binary classification problems, and **TargetEncoder** works for binary and regression problems.
-   In the case of a multiclass classification problem, it is recommended to use a one-versus-all approach in order to use these supervised encoders. 
+   **WOEEncoder** is only valid for binary classification problems, **TargetEncoder** works for binary and regression problems.
+   In the case of a multiclass classification problem, it is recommended to use a one-versus-all approach in order to use the supervised encoders. 
 
 EOL
 
@@ -665,7 +668,7 @@ Numerical Feature Generation
 
     ClusterStatistics
     ElementaryArithmetics
-    PlaneRotation
+    PlanRotation
     PolynomialFeatures
 
 Categorical Feature Generation
@@ -817,6 +820,7 @@ Supervised Feature Selection
    :toctree: api/
    :template: class.rst
 
+    SupervizedCorrelationFilter
     InformationValue
     SelectFromModel
     SelectFromModels
@@ -891,6 +895,7 @@ Scalers
 
    MinMaxScaler
    StandardScaler
+   YeoJohnson
 
 EOL
 

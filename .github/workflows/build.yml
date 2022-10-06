@@ -56,14 +56,14 @@ jobs:
         pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
         pip install -e ."[dev]"
   
-    # - name: tests
-    #   run: |
-    #     coverage run --omit gators/*/test*.py -m pytest gators && coverage report && coverage xml
-    # - name: Upload coverage to Codecov
-    #   uses: codecov/codecov-action@v2
-    #   with:
-    #     token: ${{ secrets.CODECOV_TOKEN }}
-    #     file: coverage.xml
+    - name: tests
+      run: |
+        coverage run --omit gators/*/test*.py -m pytest gators && coverage report && coverage xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: coverage.xml
 
   build_wheels:
     runs-on: ${{ matrix.os }}

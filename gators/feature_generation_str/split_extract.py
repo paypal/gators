@@ -67,7 +67,7 @@ class SplitExtract(_BaseStringFeature):
           A  B A__split_by_*_idx_0 A__split_by_*_idx_1
     0  qw*e  1                  qw                   e
     1  a*qd  2                   a                  qd
-    2  zxq*  3                 zxq                    
+    2  zxq*  3                 zxq
     >>> X = pd.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]})
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())

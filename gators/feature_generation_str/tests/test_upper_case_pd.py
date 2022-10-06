@@ -63,10 +63,6 @@ def data_inplace():
     return obj, X, X_expected
 
 
-
-
-
-
 def test_pd(data):
     obj, X, X_expected = data
     X_new = obj.transform(X)
@@ -99,4 +95,4 @@ def test_init():
     with pytest.raises(ValueError):
         _ = UpperCase(columns=[])
     with pytest.raises(TypeError):
-        _ = UpperCase(columns=['x'], inplace='x')
+        _ = UpperCase(columns=["x"], inplace="x")

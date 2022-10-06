@@ -15,12 +15,12 @@ from ._base_feature_generation import _BaseFeatureGeneration
 from gators import DataFrame, Series
 
 
-class PlaneRotation(Transformer):
-    """Create new columns based on the plane rotation mapping.
+class PlanRotation(Transformer):
+    """Create new columns based on the plan rotation mapping.
 
     The data should be composed of numerical columns only.
     Use `gators.encoders` to replace the categorical columns by
-    numerical ones before using `PlaneRotation`.
+    numerical ones before using `PlanRotation`.
 
     Parameters
     ----------
@@ -35,8 +35,8 @@ class PlaneRotation(Transformer):
     ---------
     Imports and initialization:
 
-    >>> from gators.feature_generation import PlaneRotation
-    >>> obj = PlaneRotation(
+    >>> from gators.feature_generation import PlanRotation
+    >>> obj = PlanRotation(
     ... columns=[['X', 'Y'], ['X', 'Z']] , theta_vec=[45.0, 60.0])
 
     The `fit`, `transform`, and `fit_transform` methods accept:
@@ -108,7 +108,7 @@ class PlaneRotation(Transformer):
         self.cos_theta_vec = np.cos(self.theta_vec_np * np.pi / 180)
         self.sin_theta_vec = np.sin(self.theta_vec_np * np.pi / 180)
 
-    def fit(self, X: DataFrame, y: Series = None) -> "PlaneRotation":
+    def fit(self, X: DataFrame, y: Series = None) -> "PlanRotation":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
@@ -120,7 +120,7 @@ class PlaneRotation(Transformer):
 
         Returns
         -------
-        PlaneRotation
+        PlanRotation
             Instance of itself.
         """
         self.check_dataframe(X)

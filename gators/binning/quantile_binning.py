@@ -59,20 +59,20 @@ class QuantileBinning(_BaseBinning):
 
     >>> obj = QuantileBinning(n_bins=3, inplace=True)
     >>> obj.fit_transform(X)
-        A   B
-    0  _0  _2
-    1  _1  _1
-    2  _2  _0
+                   A             B
+    0  (-inf, -0.33)   [2.33, inf)
+    1  [-0.33, 0.33)  [1.67, 2.33)
+    2    [0.33, inf)  (-inf, 1.67)
 
     * with `inplace=False`
 
     >>> X = pd.DataFrame({'A': [-1, 0, 1], 'B': [3, 2, 1]})
     >>> obj = QuantileBinning(n_bins=3, inplace=False)
     >>> obj.fit_transform(X)
-       A  B A__bin B__bin
-    0 -1  3     _0     _2
-    1  0  2     _1     _1
-    2  1  1     _2     _0
+       A  B         A__bin        B__bin
+    0 -1  3  (-inf, -0.33)   [2.33, inf)
+    1  0  2  [-0.33, 0.33)  [1.67, 2.33)
+    2  1  1    [0.33, inf)  (-inf, 1.67)
 
     Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
     and returns a transformed NumPy array. Note that this transformer should **only** be used
@@ -80,9 +80,9 @@ class QuantileBinning(_BaseBinning):
 
     >>> X = pd.DataFrame({'A': [-1, 0, 1], 'B': [3, 2, 1]})
     >>> obj.transform_numpy(X.to_numpy())
-    array([[-1, 3, '_0', '_2'],
-           [0, 2, '_1', '_1'],
-           [1, 1, '_2', '_0']], dtype=object)
+    array([[-1, 3, '(-inf, -0.33)', '[2.33, inf)'],
+           [0, 2, '[-0.33, 0.33)', '[1.67, 2.33)'],
+           [1, 1, '[0.33, inf)', '(-inf, 1.67)']], dtype=object)
 
     See Also
     --------
@@ -121,24 +121,23 @@ class QuantileBinning(_BaseBinning):
             Bin splits definition for NumPy.
         """
         q = np.linspace(0.001, 0.999, self.n_bins + 1)[1:-1].tolist()
-        X_dtype = X.dtypes.to_numpy()[0]
         bins = X.quantile(q=q)
         bins = util.get_function(bins).to_pandas(bins)
-
-        bins.loc[-np.inf, :] = util.get_bounds(X_dtype)[0]
-        infinity = util.get_bounds(X_dtype)[1]
-        bins.loc[np.inf, :] = infinity
+        bins.loc[-np.inf, :] = -np.inf
+        bins.loc[np.inf, :] = np.inf
         bins = bins.sort_index()
         for c in X.columns:
             unique_bins = bins[c].iloc[1:-1].unique()
             n_unique = unique_bins.shape[0]
             bins[c].iloc[1 : 1 + n_unique] = unique_bins
-            bins[c].iloc[1 + n_unique :] = infinity
+            bins[c].iloc[1 + n_unique :] = np.inf
 
-        bins = bins.applymap(
-            lambda x: util.prettify_number(x, precision=2, infinity=infinity)
-        )
+        bins = bins.applymap(lambda x: util.prettify_number(x, precision=2))
         bins_np = bins.to_numpy()
-        bins = bins.to_dict(orient="list")
-        bins = {col: np.unique(bins[col]) for col in bins.keys()}
-        return bins, bins_np
+        bins_dict = bins.to_dict(orient="list")
+        bins_dict = {k: np.unique(v) for k, v in bins_dict.items()}
+        pretty_bins_dict = {
+            k: [util.prettify_number(x, precision=2) for x in v]
+            for k, v in bins_dict.items()
+        }
+        return bins_dict, pretty_bins_dict, bins_np

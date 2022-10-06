@@ -76,11 +76,11 @@ class TreeBinning(_BaseBinning):
 
     >>> obj = TreeBinning(tree=DecisionTreeClassifier(max_depth=2, random_state=0), inplace=True)
     >>> obj.fit_transform(X, y)
-        A   B   C
-    0  _1  _0  _0
-    1  _0  _1  _2
-    2  _1  _0  _2
-    3  _2  _1  _1
+                   A              B              C
+    0   [-2.06, 1.4)  (-inf, -0.25)  (-inf, -1.05)
+    1  (-inf, -2.06)   [-0.25, inf)    [0.07, inf)
+    2   [-2.06, 1.4)  (-inf, -0.25)    [0.07, inf)
+    3     [1.4, inf)   [-0.25, inf)  [-1.05, 0.07)
 
     * with `inplace=False`
 
@@ -90,11 +90,11 @@ class TreeBinning(_BaseBinning):
     ... 'C': [-1.15, 1.92, 1.09, -0.95]})
     >>> obj = TreeBinning(tree=DecisionTreeClassifier(max_depth=2, random_state=0), inplace=False)
     >>> obj.fit_transform(X, y)
-          A     B     C A__bin B__bin C__bin
-    0  1.07 -1.19 -1.15     _1     _0     _0
-    1 -2.59 -0.22  1.92     _0     _1     _2
-    2 -1.54 -0.28  1.09     _1     _0     _2
-    3  1.72  1.28 -0.95     _2     _1     _1
+          A     B     C         A__bin         B__bin         C__bin
+    0  1.07 -1.19 -1.15   [-2.06, 1.4)  (-inf, -0.25)  (-inf, -1.05)
+    1 -2.59 -0.22  1.92  (-inf, -2.06)   [-0.25, inf)    [0.07, inf)
+    2 -1.54 -0.28  1.09   [-2.06, 1.4)  (-inf, -0.25)    [0.07, inf)
+    3  1.72  1.28 -0.95     [1.4, inf)   [-0.25, inf)  [-1.05, 0.07)
 
     Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
     and returns a transformed NumPy array. Note that this transformer should **only** be used
@@ -105,10 +105,14 @@ class TreeBinning(_BaseBinning):
     ... 'B': [-1.19, -0.22, -0.28, 1.28],
     ... 'C': [-1.15, 1.92, 1.09, -0.95]})
     >>> obj.transform_numpy(X.to_numpy())
-    array([[1.07, -1.19, -1.15, '_1', '_0', '_0'],
-           [-2.59, -0.22, 1.92, '_0', '_1', '_2'],
-           [-1.54, -0.28, 1.09, '_1', '_0', '_2'],
-           [1.72, 1.28, -0.95, '_2', '_1', '_1']], dtype=object)
+    array([[1.07, -1.19, -1.15, '[-2.06, 1.4)', '(-inf, -0.25)',
+            '(-inf, -1.05)'],
+           [-2.59, -0.22, 1.92, '(-inf, -2.06)', '[-0.25, inf)',
+            '[0.07, inf)'],
+           [-1.54, -0.28, 1.09, '[-2.06, 1.4)', '(-inf, -0.25)',
+            '[0.07, inf)'],
+           [1.72, 1.28, -0.95, '[1.4, inf)', '[-0.25, inf)', '[-1.05, 0.07)']],
+          dtype=object)
 
     See Also
     --------
@@ -165,7 +169,11 @@ class TreeBinning(_BaseBinning):
                 ]
             )
             self.bins[c] = (
-                np.unique([-np.inf] + splits + [np.inf])
+                np.unique(
+                    [-np.inf]
+                    + [util.prettify_number(x, precision=2) for x in splits]
+                    + [np.inf]
+                )
                 if len(splits)
                 else np.array([-np.inf, np.inf])
             )
@@ -173,6 +181,10 @@ class TreeBinning(_BaseBinning):
         self.bins_np = np.inf * np.ones((max_bins, n_cols))
         for i, b in enumerate(self.bins.values()):
             self.bins_np[: len(b), i] = b
-        self.bins = {col: np.unique(self.bins[col]) for col in self.bins.keys()}
-        self.mapping = self.compute_mapping(self.bins)
+        self.bins_dict = {col: np.unique(self.bins[col]) for col in self.bins.keys()}
+        self.pretty_bins_dict = {
+            k: [util.prettify_number(x, precision=2) for x in v]
+            for k, v in self.bins_dict.items()
+        }
+        self.labels, self.labels_np = self.get_labels(self.pretty_bins_dict)
         return self

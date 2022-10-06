@@ -1,11 +1,13 @@
 # License: Apache-2.0
+from typing import Dict
+
+import pandas as pd
 import numpy as np
 
-from binning import binning, binning_inplace
+from binning import binning_new
 
 from ..transformers.transformer import Transformer
 from ..util import util
-from .bin_factory import get_bin
 
 from gators import DataFrame, Series
 
@@ -56,12 +58,16 @@ class _BaseBinning(Transformer):
         """
         self.check_dataframe(X)
         self.columns = util.get_numerical_columns(X)
-        self.column_names = self.get_column_names(inplace=False, columns=self.columns, suffix='bin')
+        self.column_names = self.get_column_names(
+            inplace=False, columns=self.columns, suffix="bin"
+        )
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         if self.idx_columns.size == 0:
             return self
-        self.bins, self.bins_np = self.compute_bins(X[self.columns], y)
-        self.mapping = self.compute_mapping(self.bins)
+        self.bins_dict, self.pretty_bins_dict, self.bins_np = self.compute_bins(
+            X[self.columns], y
+        )
+        self.labels, self.labels_np = self.get_labels(self.pretty_bins_dict)
         return self
 
     def transform(self, X: DataFrame) -> DataFrame:
@@ -77,15 +83,43 @@ class _BaseBinning(Transformer):
         X : DataFrame
             Transformed dataframe.
         """
-        bin = get_bin(X)
         self.check_dataframe(X)
         if self.idx_columns.size == 0:
             return X
+
         if self.inplace:
-            return bin.bin_inplace(
-                X, self.bins, self.mapping, self.columns, self.column_names
-            )
-        return bin.bin(X, self.bins, self.mapping, self.columns, self.column_names)
+            for c in self.columns:
+                n_bins = len(self.bins_dict[c])
+                dummy = X[c].where(~(X[c] < self.bins_dict[c][1]), self.labels[c][0])
+                for j in range(1, n_bins - 1):
+                    dummy = dummy.where(
+                        ~(
+                            (X[c] >= self.bins_dict[c][j])
+                            & (X[c] < self.bins_dict[c][j + 1])
+                        ),
+                        self.labels[c][j],
+                    )
+                dummy = dummy.where(~(X[c] > self.bins_dict[c][-2]), self.labels[c][-1])
+                X[c] = dummy
+            X[self.columns] = X[self.columns].astype(str)
+            return X
+
+        for c, name in zip(self.columns, self.column_names):
+            n_bins = len(self.bins_dict[c])
+            dummy = X[c].where(~(X[c] < self.bins_dict[c][1]), self.labels[c][0])
+            for j in range(1, n_bins - 1):
+                dummy = dummy.where(
+                    ~(
+                        (X[c] >= self.bins_dict[c][j])
+                        & (X[c] < self.bins_dict[c][j + 1])
+                    ),
+                    self.labels[c][j],
+                )
+            dummy = dummy.where(~(X[c] > self.bins_dict[c][-2]), self.labels[c][-1])
+            X[name] = dummy
+
+        X[self.column_names] = X[self.column_names].astype(str)
+        return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.
@@ -103,32 +137,46 @@ class _BaseBinning(Transformer):
         self.check_array(X)
         if self.idx_columns.size == 0:
             return X
+        X_bin = binning_new(
+            X[:, self.idx_columns].astype(float), self.bins_np, self.labels_np
+        )
         if self.inplace:
-            if X.dtype == object:
-                return binning_inplace(X, self.bins_np, self.idx_columns)
-            return binning_inplace(X.astype(object), self.bins_np, self.idx_columns)
-        if X.dtype == object:
-            return binning(X, self.bins_np, self.idx_columns)
-        return binning(X.astype(object), self.bins_np, self.idx_columns)
+            X = X.astype(object)
+            X[:, self.idx_columns] = X_bin
+            return X
+        return np.concatenate((X, X_bin), axis=1)
 
     @staticmethod
-    def compute_mapping(bins):
-        mapping = {}
-        for col in bins.keys():
-            if len(bins[col]) == 2:
-                mapping[col] = {"_0": "(-inf, inf)"}
+    def get_labels(pretty_bins_dict: Dict[str, np.array]):
+        """Get the labels of the bins.
+
+        Parameters
+        ----------
+        pretty_bins_dict : Dict[str, np.array])
+            pretified bins used to generate the labels.
+
+        Returns
+        -------
+        Dict[str, np.array]
+            Labels.
+        np.array
+            Labels.
+        """
+        labels = {}
+        for col, bins in pretty_bins_dict.items():
+            if len(bins) == 2:
+                labels[col] = ["(-inf, inf)"]
             else:
-                mapping[col] = dict(
-                    zip(
-                        [f"_{b}" for b in range(len(bins[col]))],
-                        (
-                            [f"(-inf, {bins[col][1]})"]
-                            + [
-                                f"({b1}, {b2}]"
-                                for b1, b2 in zip(bins[col][1:-2], bins[col][2:-1])
-                            ]
-                            + [f"[{bins[col][-2]}, inf)"]
-                        ),
-                    )
+                labels[col] = (
+                    [f"(-inf, {bins[1]})"]
+                    + [f"[{b1}, {b2})" for b1, b2 in zip(bins[1:-2], bins[2:-1])]
+                    + [f"[{bins[-2]}, inf)"]
                 )
-        return mapping
+        labels_np = (
+            pd.DataFrame(
+                {k: {i: x for i, x in enumerate(v)} for k, v in labels.items()}
+            )
+            .fillna(0)
+            .to_numpy()
+        )
+        return labels, labels_np

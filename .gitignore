@@ -76,7 +76,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-doc
+doc/
 
 # PyBuilder
 target/
@@ -134,3 +134,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#dask
+dask-worker-space

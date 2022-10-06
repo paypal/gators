@@ -88,57 +88,6 @@ def pipeline_with_model_example():
     return pipe, X
 
 
-def test_display_encoder_mapping_inplace():
-    X = pd.DataFrame(data["data"], columns=data["feature_names"])
-    y = pd.Series(data["target"], name="TARGET")
-    y = (y == 0).astype(int)
-    steps = [
-        ["Binning", Binning(n_bins=4)],
-        ["Encoder", WOEEncoder()],
-    ]
-    pipe = Pipeline(steps).fit(X, y)
-    pipe.display_encoder_mapping(cmap="Reds")
-    pipe.display_encoder_mapping(cmap="Reds", decimals=0)
-    assert True
-
-
-def test_display_encoder_mapping():
-    X = pd.DataFrame(data["data"], columns=data["feature_names"])
-    y = pd.Series(data["target"], name="TARGET")
-    y = (y == 0).astype(int)
-    steps = [
-        ["Binning", Binning(n_bins=4, inplace=False)],
-        ["Encoder", WOEEncoder()],
-    ]
-    pipe = Pipeline(steps).fit(X, y)
-    pipe.display_encoder_mapping(cmap="Reds")
-    assert True
-
-
-def test_display_encoder_mapping_no_encoding():
-    X = pd.DataFrame(data["data"], columns=data["feature_names"])
-    y = pd.Series(data["target"], name="TARGET")
-    y = (y == 0).astype(int)
-    steps = [
-        ["Binning", Binning(n_bins=4, inplace=False)],
-    ]
-    pipe = Pipeline(steps).fit(X, y)
-    pipe.display_encoder_mapping(cmap="Reds")
-    assert True
-
-
-def test_display_encoder_mapping_no_binning():
-    X = pd.DataFrame(data["data"], columns=data["feature_names"]).astype(str)
-    y = pd.Series(data["target"], name="TARGET")
-    y = (y == 0).astype(int)
-    steps = [
-        ["Encoder", WOEEncoder()],
-    ]
-    pipe = Pipeline(steps).fit(X, y)
-    pipe.display_encoder_mapping(cmap="Reds")
-    assert True
-
-
 def test_pipeline_fit_and_transform(pipeline_example):
     pipe, X = pipeline_example
     _ = pipe.fit(X)

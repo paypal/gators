@@ -1,10 +1,7 @@
 # License: Apache-2.0
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.pipeline import Pipeline as SciKitPipeline
 from ..transformers.transformer import Transformer
 
@@ -116,64 +113,3 @@ class Pipeline(SciKitPipeline, Transformer):
         for step in self.steps[: self.n_transformations]:
             X = step[1].transform_numpy(X)
         return X
-
-    def display_encoder_mapping(
-        self, cmap: Union[str, "colormap"], k=5, decimals=2, describe: str = ""
-    ):
-        """Display the encoder mapping in a jupyter notebook.
-
-        Parameters
-        ----------
-        cmap : Union[str, 'colormap']
-            Matplotlib colormap.
-        k : int, default 5.
-            Number of mappings displayed.
-        decimals : int, default 2.
-            Number of decimal places to use.
-        describe : str, default ''.
-            Name of the encoded values.
-        """
-        encoder_list = [p[1] for p in self.steps if "Encoder" in str(p[1])]
-        figs = []
-        if not encoder_list:
-            return
-        encoder = encoder_list[0]
-        binning_list = [p[1] for p in self.steps if "Binning" in str(p[1])]
-        if binning_list:
-            binning_mapping = binning_list[0].mapping
-        else:
-            binning_mapping = {}
-        mapping = pd.DataFrame(encoder.mapping)
-        columns = list(
-            (mapping.max() - mapping.min()).sort_values(ascending=False).index
-        )
-        for c in columns[:k]:
-            values = mapping[[c]]
-            values["bins"] = values.index
-            if c.replace("__bin", "") in binning_mapping:
-                splits = binning_mapping[c.replace("__bin", "")]
-                new_splits = {}
-                for k, v in splits.items():
-                    s1, s2 = v.split(",")
-                    if "-inf" not in s1:
-                        v = v.replace(s1[1:], str(round(float(s1[1:]), 2)))
-                    if "inf" not in s2:
-                        v = v.replace(s2[:-1], str(round(float(s2[:-1]), 2)))
-                    new_splits[k] = v.replace(",", ", ")
-                values["bins"] = values["bins"].replace(new_splits)
-            else:
-                values = values.sort_values(c, ascending=False)
-            values = values.set_index("bins").dropna()
-            if decimals:
-                values = values.round(decimals)
-            else:
-                values = values.astype(int)
-            values.columns = [""]
-            x, y = 0.6 * len(values) / 1.62, 0.6 * len(values)
-            fig, ax = plt.subplots(figsize=(x, y))
-            _ = sns.heatmap(values, ax=ax, cmap=cmap, annot=True, cbar=False)
-            _ = ax.set_title(describe)
-            _ = ax.set_ylabel(None)
-            _ = ax.set_ylabel(c)
-            figs.append(fig)
-        return figs

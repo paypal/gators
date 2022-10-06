@@ -27,16 +27,16 @@ def data_ks():
     X[columns] = X[columns].astype("datetime64[ns]")
     X_expected = pd.DataFrame(
         {
- 'A__day_of_week_cos': [1.0, np.nan, np.nan],
- 'A__day_of_week_sin': [0.0, np.nan, np.nan],
- 'B__day_of_week_cos': [-0.22252093395631434, np.nan, np.nan],
- 'B__day_of_week_sin': [0.9749279121818236, np.nan, np.nan],
- 'C__day_of_week_cos': [-0.9009688679024191, np.nan, np.nan],
- 'C__day_of_week_sin': [-0.433883739117558, np.nan, np.nan],
- 'D__day_of_week_cos': [-0.2225209339563146, np.nan, np.nan],
- 'D__day_of_week_sin': [-0.9749279121818235, np.nan, np.nan],
- 'E__day_of_week_cos': [0.6234898018587334, np.nan, np.nan],
- 'E__day_of_week_sin': [-0.7818314824680299, np.nan, np.nan]
+            "A__day_of_week_cos": [1.0, np.nan, np.nan],
+            "A__day_of_week_sin": [0.0, np.nan, np.nan],
+            "B__day_of_week_cos": [-0.22252093395631434, np.nan, np.nan],
+            "B__day_of_week_sin": [0.9749279121818236, np.nan, np.nan],
+            "C__day_of_week_cos": [-0.9009688679024191, np.nan, np.nan],
+            "C__day_of_week_sin": [-0.433883739117558, np.nan, np.nan],
+            "D__day_of_week_cos": [-0.2225209339563146, np.nan, np.nan],
+            "D__day_of_week_sin": [-0.9749279121818235, np.nan, np.nan],
+            "E__day_of_week_cos": [0.6234898018587334, np.nan, np.nan],
+            "E__day_of_week_sin": [-0.7818314824680299, np.nan, np.nan],
         }
     )
     X_expected_np = np.concatenate((X_np, X_expected.to_numpy()), axis=1)

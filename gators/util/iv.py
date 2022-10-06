@@ -25,5 +25,4 @@ def compute_iv(X: DataFrame, y: Series, regularization=0.1):
     iv = iv.groupby("variable").sum()
     iv.name = "iv"
     iv.index.name = None
-    # stats.index.name = None
     return iv, stats

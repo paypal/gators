@@ -54,7 +54,7 @@ class CyclicMonthOfYear(_BaseDatetimeFeature):
     0 2020-01-01 23:00:00  0              1.000000                   0.0
     1 2020-12-15 18:00:00  1              0.866025                  -0.5
     2                 NaT  0                   NaN                   NaN
-    
+
     >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
     >>> X['A'] = X['A'].astype('datetime64[ns]')
     >>> _ = obj.fit(X)

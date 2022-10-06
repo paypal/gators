@@ -1,11 +1,12 @@
 Metadata-Version: 2.1
 Name: gators
-Version: 0.3.0
+Version: 0.3.1
 Summary: Model building and model scoring library
 Home-page: https://paypal.github.io/gators/
 Author: The Gators Development Team
 Maintainer: Charles Poli
 License: License :: OSI Approved :: Apache Software License v2.0
+Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.6
@@ -40,4 +41,6 @@ The goal of Gators is to be able to manage both model building and model serving
 Gators helps to streamline the model building and productionization processes. The model building part is done using the Pandas library for datasets held in memory, or Koalas for big data. On the model serving side, the pre-processing is carried out directly with Python, using NumPy and Cython. As a result, the speed-up using both NumPy and Cython for pre-processing is around x100 compared to standard Python code. Moreover, the per-sample response time becomes similar to other compiled languages (microsecond scale).
 
 In summary, Gators is a package to handle model building with big data and fast real-time pre-processing, even for a large number of QPS, using only Python.
+
+
 

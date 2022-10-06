@@ -46,6 +46,7 @@ def test_not_inplace_pd(data_not_inplace):
     assert np.allclose(X_new.iloc[:, 5:].max().mean(), 1)
     assert X_new.shape[1] == 10
 
+
 @pytest.mark.koalas
 def test_not_inplace_pd_np(data_not_inplace):
     obj, X = data_not_inplace

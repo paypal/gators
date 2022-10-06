@@ -15,6 +15,9 @@ from gators import DataFrame, Series
 class YeoJohnson(Transformer):
     """Scale the data accoring to the Yeo-Johnson transformation.
 
+    .. note::
+       It is recommanded to use the StandardScaler transformer before running YeoJohnson.
+
     Parameters
     ----------
     lambdas_dict : Dict[str, List[float]]

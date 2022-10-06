@@ -1,6 +1,4 @@
 # License: Apache-2.0
-
-
 from ..util import util
 from ._base_feature_selection import _BaseFeatureSelection
 
@@ -39,9 +37,8 @@ class SelectFromModel(_BaseFeatureSelection):
     >>> import dask.dataframe as dd
     >>> import pandas as pd
     >>> from xgboost.dask import XGBClassifier
-    >>> from distributed import Client, LocalCluster
-    >>> cluster = LocalCluster()
-    >>> client = Client(cluster)
+    >>> from distributed import Client
+    >>> client = Client(n_workers=2)
     >>> X = dd.from_pandas(pd.DataFrame({
     ... 'A': [0.94, 0.09, -0.43, 0.31, 0.99, 1.05, 1.02, -0.77, 0.03, 0.99],
     ... 'B': [0.13, 0.01, -0.06, 0.04, 0.14, 0.14, 0.14, -0.1, 0.0, 0.13],

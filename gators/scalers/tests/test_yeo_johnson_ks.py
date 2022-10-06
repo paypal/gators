@@ -206,6 +206,7 @@ def test_pd_np(data):
     X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
     assert_frame_equal(X_new, X_expected)
 
+
 @pytest.mark.koalas
 def test_not_inplace_pd_np(data_not_inplace):
     obj, X, X_expected = data_not_inplace

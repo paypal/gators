@@ -112,7 +112,7 @@ setuptools.setup(
             "tox-wheel",
             "black",
             "isort",
-            "pyspark",
+            "pyspark<=3.1.3",
             "koalas",
             "distributed",
             "dask",
@@ -125,6 +125,8 @@ setuptools.setup(
             "fsspec>=0.3.3",
             "distributed",
             "dask",
+            "dask_ml",
+            "bokeh",
         ],
     },
     package_data={

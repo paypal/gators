@@ -32,7 +32,6 @@ def data():
             "D__lower": ["q", "qq", "qqq"],
             "E__lower": ["w", "ww", "www"],
             "F__lower": [None, None, ""],
-
         }
     )
     return obj, X, X_expected
@@ -89,11 +88,12 @@ def test_inplace_pd_np(data_inplace):
     X_numpy_new = obj.transform_numpy(X.to_numpy())
     X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
     assert_frame_equal(X_new, X_expected.astype(object))
-    
+
+
 def test_init():
     with pytest.raises(TypeError):
         _ = LowerCase(columns="x")
     with pytest.raises(ValueError):
         _ = LowerCase(columns=[])
     with pytest.raises(TypeError):
-        _ = LowerCase(columns=['x'], inplace='x')
+        _ = LowerCase(columns=["x"], inplace="x")

@@ -142,6 +142,12 @@ def test_data_not_inplace_pd_np(data_not_inplace):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
+def test_display_mapping(data_not_inplace):
+    obj, _, _ = data_not_inplace
+    obj.display_mapping(cmap="Reds")
+    assert True
+
+
 def test_init():
     with pytest.raises(TypeError):
         _ = WOEEncoder(inplace="yes")
@@ -149,3 +155,17 @@ def test_init():
         _ = WOEEncoder(regularization="a")
     with pytest.raises(ValueError):
         _ = WOEEncoder(regularization=-1)
+
+
+def test_display_mapping_input(data_not_inplace):
+    obj, _, _ = data_not_inplace
+    with pytest.raises(TypeError):
+        obj.display_mapping(cmap="Reds", decimal=-1)
+    with pytest.raises(TypeError):
+        obj.display_mapping(cmap="Reds", decimal=1.1)
+    with pytest.raises(TypeError):
+        obj.display_mapping(cmap="Reds", title=0)
+    with pytest.raises(TypeError):
+        obj.display_mapping(cmap="Reds", k=0)
+    with pytest.raises(TypeError):
+        obj.display_mapping(cmap="Reds", k=1.5)

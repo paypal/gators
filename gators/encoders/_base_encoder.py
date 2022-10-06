@@ -1,8 +1,11 @@
 # License: Apache-2.0
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Union
+import pandas as pd
 import numpy as np
-from encoder import encoder
 
+
+from encoder import encoder
+from encoder import encoder_new
 from ..util import util
 from ..transformers.transformer import (
     NUMERICS_DTYPES,
@@ -77,16 +80,17 @@ class _BaseEncoder(Transformer):
         self.check_array(X)
         if self.idx_columns.size == 0:
             return X
-        X_encoded = encoder(
-            X.copy(),
+
+        X_encoded = encoder_new(
+            X[:, self.idx_columns],
             self.num_categories_vec,
             self.values_vec,
             self.encoded_values_vec,
-            self.idx_columns,
         )
         if self.inplace:
-            return X_encoded.astype(float)
-        return np.concatenate((X, X_encoded[:, self.idx_columns]), axis=1)
+            X[:, self.idx_columns] = X_encoded
+            return X.astype(float)
+        return np.concatenate((X, X_encoded), axis=1)
 
     @staticmethod
     def decompose_mapping(
@@ -122,3 +126,50 @@ class _BaseEncoder(Transformer):
             encoded_values_vec[i, :n_values] = np.array(list(mapping_col.values()))
             values_vec[i, :n_values] = np.array(list(mapping_col.keys()))
         return columns, values_vec, encoded_values_vec
+
+    def display_mapping(self, cmap: Union[str, "colormap"], k=5, decimal=2, title=""):
+        """Display the encoder mapping in a jupyter notebook.
+        Parameters
+        ----------
+        cmap : Union[str, 'colormap']
+            Matplotlib colormap.
+        k : int, default 5.
+            Number of mappings displayed.
+        decimals : int, default 2.
+            Number of decimal places to use.
+        title : str, default ''.
+            Plot title.
+        """
+
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+
+        if not isinstance(decimal, int) or decimal < 1:
+            raise TypeError(f"`decimal` should be a positive int.")
+        if not isinstance(k, int) or k < 1:
+            raise TypeError(f"`k` should be a positive int.")
+        if not isinstance(title, str):
+            raise TypeError(f"`title` should be a str.")
+
+        mapping = pd.DataFrame(self.mapping)
+        vmin = mapping.min().min()
+        vmax = mapping.max().max()
+
+        cols = mapping.max().sort_values(ascending=False).index
+        for c in cols[:k]:
+            encoder_mapping_col = (
+                mapping[[c]].dropna().sort_values(c, ascending=False).round(decimal)
+            )
+            x, y = 0.8 * len(encoder_mapping_col) / 1.62, 0.8 * len(encoder_mapping_col)
+            _, ax = plt.subplots(figsize=(x, y))
+            sns.heatmap(
+                encoder_mapping_col,
+                vmin=vmin,
+                vmax=vmax,
+                cmap=cmap,
+                annot=True,
+                cbar=False,
+            )
+            _ = ax.set_title(title)
+            _ = ax.set_ylabel(None)
+            _ = ax.set_ylabel(c)

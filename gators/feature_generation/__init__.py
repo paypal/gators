@@ -4,7 +4,7 @@ from .elementary_arithmethics import ElementaryArithmetics
 from .is_equal import IsEqual
 from .is_null import IsNull
 from .one_hot import OneHot
-from .plane_rotation import PlaneRotation
+from .plan_rotation import PlanRotation
 from .polynomial_features import PolynomialFeatures
 from .polynomial_object_features import PolynomialObjectFeatures
 
@@ -15,7 +15,7 @@ __all__ = [
     "OneHot",
     "ElementaryArithmetics",
     "ClusterStatistics",
-    "PlaneRotation",
+    "PlanRotation",
     "PolynomialFeatures",
     "PolynomialObjectFeatures",
 ]

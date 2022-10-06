@@ -27,16 +27,16 @@ def data_ks():
     X[columns] = X[columns].astype("datetime64[ns]")
     X_expected = pd.DataFrame(
         {
-        "A__hour_of_day_cos": [1.0, None, np.nan],
-        "A__hour_of_day_sin": [0.0, None, np.nan],
-        "B__hour_of_day_cos": [0., None, np.nan],
-        "B__hour_of_day_sin": [1., None, np.nan],
-        "C__hour_of_day_cos": [-1, None, np.nan],
-        "C__hour_of_day_sin": [0., None, np.nan],
-        "D__hour_of_day_cos": [0., None, np.nan],
-        "D__hour_of_day_sin": [-1., None, np.nan],
-        "E__hour_of_day_cos": [0.9659258262890681, None, np.nan],
-        "E__hour_of_day_sin": [-0.2588190451025215, None, np.nan],
+            "A__hour_of_day_cos": [1.0, None, np.nan],
+            "A__hour_of_day_sin": [0.0, None, np.nan],
+            "B__hour_of_day_cos": [0.0, None, np.nan],
+            "B__hour_of_day_sin": [1.0, None, np.nan],
+            "C__hour_of_day_cos": [-1, None, np.nan],
+            "C__hour_of_day_sin": [0.0, None, np.nan],
+            "D__hour_of_day_cos": [0.0, None, np.nan],
+            "D__hour_of_day_sin": [-1.0, None, np.nan],
+            "E__hour_of_day_cos": [0.9659258262890681, None, np.nan],
+            "E__hour_of_day_sin": [-0.2588190451025215, None, np.nan],
         }
     )
     X_expected_np = np.concatenate((X_np, X_expected.to_numpy()), axis=1)

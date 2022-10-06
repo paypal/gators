@@ -25,9 +25,30 @@ def data():
             "C": ["a", "b", "c", "d", "e", "f"],
             "D": [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
             "F": [3, 1, 2, 1, 2, 3],
-            "A__bin": ["_0", "_2", "_0", "_2", "_1", "_1"],
-            "D__bin": ["_0", "_1", "_0", "_1", "_1", "_1"],
-            "F__bin": ["_1", "_0", "_1", "_0", "_1", "_1"],
+            "A__bin": [
+                "(-inf, 8.0)",
+                "[40.0, inf)",
+                "(-inf, 8.0)",
+                "[40.0, inf)",
+                "[8.0, 40.0)",
+                "[8.0, 40.0)",
+            ],
+            "D__bin": [
+                "(-inf, 30.0)",
+                "[30.0, inf)",
+                "(-inf, 30.0)",
+                "[30.0, inf)",
+                "[30.0, inf)",
+                "[30.0, inf)",
+            ],
+            "F__bin": [
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "[2.0, inf)",
+            ],
         }
     )
     bins = {
@@ -65,17 +86,38 @@ def data_inplace():
     )
     X_expected = pd.DataFrame(
         {
-            "A": ["_0", "_2", "_0", "_2", "_1", "_1"],
+            "A": [
+                "(-inf, 8.0)",
+                "[40.0, inf)",
+                "(-inf, 8.0)",
+                "[40.0, inf)",
+                "[8.0, 40.0)",
+                "[8.0, 40.0)",
+            ],
             "B": [1, 1, 0, 1, 0, 0],
             "C": ["a", "b", "c", "d", "e", "f"],
-            "D": ["_0", "_1", "_0", "_1", "_1", "_1"],
-            "F": ["_1", "_0", "_1", "_0", "_1", "_1"],
+            "D": [
+                "(-inf, 30.0)",
+                "[30.0, inf)",
+                "(-inf, 30.0)",
+                "[30.0, inf)",
+                "[30.0, inf)",
+                "[30.0, inf)",
+            ],
+            "F": [
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+            ],
         }
     )
     bins = {
         "A": [-np.inf, 8.0, 40.0, np.inf],
         "D": [-np.inf, 30, np.inf],
-        "F": [-np.inf, 2.0, np.inf],
+        "F": [-np.inf, np.inf],
     }
     obj = CustomBinning(bins, inplace=True).fit(X)
     return obj, X, X_expected
@@ -97,9 +139,30 @@ def data_num():
             "B": [1, 1, 0, 1, 0, 0],
             "D": [22.0, 38.0, 26.0, 35.0, 35.0, 31.2],
             "F": [3, 1, 2, 1, 2, 3],
-            "A__bin": ["_0", "_2", "_0", "_2", "_1", "_1"],
-            "D__bin": ["_0", "_1", "_0", "_1", "_1", "_1"],
-            "F__bin": ["_1", "_0", "_1", "_0", "_1", "_1"],
+            "A__bin": [
+                "(-inf, 8.0)",
+                "[40.0, inf)",
+                "(-inf, 8.0)",
+                "[40.0, inf)",
+                "[8.0, 40.0)",
+                "[8.0, 40.0)",
+            ],
+            "D__bin": [
+                "(-inf, 30.0)",
+                "[30.0, inf)",
+                "(-inf, 30.0)",
+                "[30.0, inf)",
+                "[30.0, inf)",
+                "[30.0, inf)",
+            ],
+            "F__bin": [
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "[2.0, inf)",
+            ],
         }
     )
     bins = {
@@ -123,16 +186,37 @@ def data_num_inplace():
     )
     X_expected = pd.DataFrame(
         {
-            "A": ["_0", "_2", "_0", "_2", "_1", "_1"],
+            "A": [
+                "(-inf, 8.0)",
+                "[40.0, inf)",
+                "(-inf, 8.0)",
+                "[40.0, inf)",
+                "[8.0, 40.0)",
+                "[8.0, 40.0)",
+            ],
             "B": [1, 1, 0, 1, 0, 0],
-            "D": ["_0", "_1", "_0", "_1", "_1", "_1"],
-            "F": ["_0", "_0", "_0", "_0", "_0", "_0"],
+            "D": [
+                "(-inf, 30.0)",
+                "[30.0, inf)",
+                "(-inf, 30.0)",
+                "[30.0, inf)",
+                "[30.0, inf)",
+                "[30.0, inf)",
+            ],
+            "F": [
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "[2.0, inf)",
+            ],
         }
     )
     bins = {
         "A": [-np.inf, 8.0, 40.0, np.inf],
         "D": [-np.inf, 30, np.inf],
-        "F": [-np.inf, np.inf],
+        "F": [-np.inf, 2, np.inf],
     }
     obj = CustomBinning(bins, inplace=True).fit(X)
     return obj, X, X_expected
@@ -183,7 +267,7 @@ def test_num_pd_np(data_num):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-# # inplace
+# # # inplace
 
 
 def test_inplace_pd(data_inplace):
@@ -218,6 +302,6 @@ def test_inplace_num_pd_np(data_num_inplace):
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = CustomBinning(bins="a")
+        _ = CustomBinning(bins_dict="a")
     with pytest.raises(TypeError):
-        _ = CustomBinning(bins={"A": [-np.inf, np.inf]}, inplace="a")
+        _ = CustomBinning(bins_dict={"A": [-np.inf, np.inf]}, inplace="a")

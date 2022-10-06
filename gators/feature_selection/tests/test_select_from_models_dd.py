@@ -3,7 +3,7 @@ import dask.dataframe as dd
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
-from xgboost.dask import DaskXGBClassifier, DaskXGBRFClassifier
+from xgboost.dask import XGBClassifier
 from distributed import Client
 
 from gators.feature_selection.select_from_models import SelectFromModels
@@ -25,7 +25,7 @@ def data():
         pd.Series([0, 1, 1, 1, 0, 0, 0, 0, 1, 1], name="TARGET"), npartitions=1
     )
     X_expected = X[["A"]].compute().copy()
-    model1 = DaskXGBClassifier(
+    model1 = XGBClassifier(
         random_state=0,
         subsample=1.0,
         n_estimators=2,
@@ -33,7 +33,7 @@ def data():
         eval_metric="logloss",
         use_label_encoder=False,
     )
-    model2 = DaskXGBRFClassifier(
+    model2 = XGBClassifier(
         random_state=0,
         subsample=1.0,
         n_estimators=2,
@@ -47,14 +47,14 @@ def data():
     return obj, X, X_expected
 
 
-# def test_dd(data):
-#     obj, X, X_expected = data
-#     X_new = obj.transform(X)
-#     assert_frame_equal(X_new.compute(), X_expected)
+def test_dd(data):
+    obj, X, X_expected = data
+    X_new = obj.transform(X)
+    assert_frame_equal(X_new.compute(), X_expected)
 
 
-# def test_dd_np(data):
-#     obj, X, X_expected = data
-#     X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
-#     X_new = pd.DataFrame(X_numpy_new)
-#     assert_frame_equal(X_new, pd.DataFrame(X_expected.to_numpy()))
+def test_dd_np(data):
+    obj, X, X_expected = data
+    X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
+    X_new = pd.DataFrame(X_numpy_new)
+    assert_frame_equal(X_new, pd.DataFrame(X_expected.to_numpy()))

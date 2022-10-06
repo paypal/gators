@@ -115,14 +115,12 @@ class FrequencyEncoder(_BaseEncoder):
         Dict[str, Dict[str, float]]
             Mapping.
         """
-        size = (
-            util.get_function(X)
-            .to_pandas(
-                util.get_function(X).melt(X).groupby(["variable", "value"]).size()
-            )
-            .sort_values()
-        ).astype(float)
         mapping = {}
         for c in X.columns:
-            mapping[c] = size.loc[c].to_dict()
+            mapping[c] = (
+                util.get_function(X)
+                .to_pandas(X[c].value_counts())
+                .astype(float)
+                .to_dict()
+            )
         return mapping

@@ -65,20 +65,20 @@ class Binning(_BaseBinning):
 
     >>> obj = Binning(n_bins=3, inplace=True)
     >>> obj.fit_transform(X)
-        A   B
-    0  _0  _2
-    1  _1  _1
-    2  _2  _0
+                   A            B
+    0  (-inf, -0.33)   [2.0, inf)
+    1  [-0.33, 0.33)   [1.0, 2.0)
+    2    [0.33, inf)  (-inf, 1.0)
 
     * with `inplace=False`
 
     >>> X = pd.DataFrame({'A': [-1, 0, 1], 'B': [3, 1, 0]})
     >>> obj = Binning(n_bins=3, inplace=False)
     >>> obj.fit_transform(X)
-       A  B A__bin B__bin
-    0 -1  3     _0     _2
-    1  0  1     _1     _1
-    2  1  0     _2     _0
+       A  B         A__bin       B__bin
+    0 -1  3  (-inf, -0.33)   [2.0, inf)
+    1  0  1  [-0.33, 0.33)   [1.0, 2.0)
+    2  1  0    [0.33, inf)  (-inf, 1.0)
 
     Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
     and returns a transformed NumPy array. Note that this transformer should **only** be used
@@ -86,9 +86,9 @@ class Binning(_BaseBinning):
 
     >>> X = pd.DataFrame({'A': [-1, 0, 1], 'B': [3, 1, 0]})
     >>> obj.transform_numpy(X.to_numpy())
-    array([[-1, 3, '_0', '_2'],
-           [0, 1, '_1', '_1'],
-           [1, 0, '_2', '_0']], dtype=object)
+    array([[-1, 3, '(-inf, -0.33)', '[2.0, inf)'],
+           [0, 1, '[-0.33, 0.33)', '[1.0, 2.0)'],
+           [1, 0, '[0.33, inf)', '(-inf, 1.0)']], dtype=object)
 
     See Also
     --------
@@ -128,21 +128,18 @@ class Binning(_BaseBinning):
             Bin splits definition for NumPy.
         """
         n_cols = X.shape[1]
-        X_dtype = X.dtypes.to_numpy()[0]
         bins_np = np.empty((self.n_bins + 1, n_cols))
-        bins_np[0, :] = util.get_bounds(X_dtype)[0]
-        infinity = util.get_bounds(X_dtype)[1]
-        bins_np[-1, :] = infinity
+        bins_np[0, :] = -np.inf
+        bins_np[-1, :] = np.inf
         x_min = util.get_function(X).to_pandas(X.min())
         x_max = util.get_function(X).to_pandas(X.max())
         deltas = x_max - x_min
         for i in range(1, self.n_bins):
             bins_np[i, :] = x_min + i * deltas / self.n_bins
-        bins = pd.DataFrame(bins_np, columns=X.columns)
-        bins = bins.applymap(
-            lambda x: util.prettify_number(x, precision=2, infinity=infinity)
-        )
-        bins = bins.to_dict(orient="list")
-        bins = {col: np.unique(bins[col]) for col in bins.keys()}
-        self.mapping = self.compute_mapping(self.bins)
-        return bins, bins_np
+        bins_dict = pd.DataFrame(bins_np, columns=X.columns).to_dict(orient="list")
+        bins_dict = {k: np.unique(v) for k, v in bins_dict.items()}
+        pretty_bins_dict = {
+            k: [util.prettify_number(x, precision=2) for x in v]
+            for k, v in bins_dict.items()
+        }
+        return bins_dict, pretty_bins_dict, bins_np

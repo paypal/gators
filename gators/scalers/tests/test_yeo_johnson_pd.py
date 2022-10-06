@@ -230,4 +230,4 @@ def test_inputs():
     with pytest.raises(ValueError):
         YeoJohnson(lambdas_dict={})
     with pytest.raises(TypeError):
-        YeoJohnson(lambdas_dict={'A': 0.5}, inplace='x')
+        YeoJohnson(lambdas_dict={"A": 0.5}, inplace="x")

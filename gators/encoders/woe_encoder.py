@@ -110,6 +110,7 @@ class WOEEncoder(_BaseEncoder):
             )
             return self
         self.mapping = self.generate_mapping(X[self.columns], y)
+        self.mapping = {k: self.mapping[k] for k in self.columns}
         self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
         _, self.values_vec, self.encoded_values_vec = self.decompose_mapping(
             mapping=self.mapping
@@ -145,22 +146,4 @@ class WOEEncoder(_BaseEncoder):
             .apply(lambda df: df.xs(df.name)["woe"].to_dict())
             .to_dict()
         )
-
-        # y_name = y.name
-        # columns = list(X.columns)
-        # counts = (
-        #     util.get_function(X)
-        #     .melt(util.get_function(X).join(X, y.to_frame()), id_vars=y_name)
-        #     .groupby(["variable", "value"])
-        #     .agg(["sum", "count"])[y_name]
-        # )
-        # counts = util.get_function(X).to_pandas(counts)
-        # counts.columns = ["1", "count"]
-        # counts["0"] = (counts["count"] - counts["1"] + self.regularization) / counts[
-        #     "count"
-        # ]
-        # counts["1"] = (counts["1"] + self.regularization) / counts["count"]
-        # woe = np.log(counts["1"] / counts["0"])
-        # mapping = {c: woe[c].to_dict() for c in columns}
-
         return mapping

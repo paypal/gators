@@ -107,7 +107,9 @@ class CyclicDayOfWeek(_BaseDatetimeFeature):
             Transformed array.
         """
         self.check_array(X)
-        X_new = feature_gen_dt.cyclic_day_of_week(X[:, self.idx_columns], self.prefactor)
+        X_new = feature_gen_dt.cyclic_day_of_week(
+            X[:, self.idx_columns], self.prefactor
+        )
         return np.concatenate([X, X_new], axis=1)
 
     def compute_cyclic_day_of_week(self, X: DataFrame, prefactor: float) -> DataFrame:
@@ -117,7 +119,7 @@ class CyclicDayOfWeek(_BaseDatetimeFeature):
         ----------
         X : DataFrame
             Dataframe. of datetime columns
-            
+
         prefactor: float
             Prefactor.
 

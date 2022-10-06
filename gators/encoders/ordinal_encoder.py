@@ -114,16 +114,12 @@ class OrdinalEncoder(_BaseEncoder):
         Dict[str, Dict[str, float]]
             Mapping.
         """
-        size = (
-            util.get_function(X)
-            .to_pandas(
-                util.get_function(X).melt(X).groupby(["variable", "value"]).size()
-            )
-            .sort_values()
-        )
         mapping = {}
         for c in X.columns:
-            mapping[c] = dict(
-                zip(size.loc[c].index, np.arange(len(size.loc[c]), dtype=float))
+            mapping[c] = (
+                util.get_function(X)
+                .to_pandas(X[c].value_counts(ascending=True))
+                .to_dict()
             )
+            mapping[c] = {k: float(i) for i, (k, v) in enumerate(mapping[c].items())}
         return mapping

@@ -156,7 +156,7 @@ class NumericsImputer(_BaseImputer):
             return self
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         self.statistics = self.compute_statistics(X=X, value=self.value)
-        
+
         self.statistics_np = np.array(list(self.statistics.values()))
         return self
 
@@ -179,8 +179,12 @@ class NumericsImputer(_BaseImputer):
         if self.idx_columns.size == 0:
             return X
         if self.inplace:
-            X[:, self.idx_columns] = float_imputer(X[:, self.idx_columns].astype(float), self.statistics_np)
+            X[:, self.idx_columns] = float_imputer(
+                X[:, self.idx_columns].astype(float), self.statistics_np
+            )
             return X
         else:
-            X_impute = float_imputer(X[:, self.idx_columns].copy().astype(float), self.statistics_np)
+            X_impute = float_imputer(
+                X[:, self.idx_columns].copy().astype(float), self.statistics_np
+            )
             return np.concatenate((X, X_impute), axis=1)
