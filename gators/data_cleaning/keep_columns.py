@@ -82,6 +82,7 @@ class KeepColumns(_BaseDataCleaning):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.columns = util.exclude_columns(
             columns=X.columns, excluded_columns=self.columns_to_keep
         )

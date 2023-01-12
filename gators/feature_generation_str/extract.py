@@ -92,27 +92,6 @@ class Extract(_BaseStringFeature):
         self.i_min_vec = np.array(i_min_vec, int)
         self.i_max_vec = np.array(i_max_vec, int)
 
-    def fit(self, X: DataFrame, y: Series = None) -> "Extract":
-        """Fit the transformer on the dataframe `X`.
-
-        Parameters
-        ----------
-        X : DataFrame.
-            Input dataframe.
-        y : Series, default None.
-            Target values.
-
-        Returns
-        -------
-        Extract
-            Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns
-        )
-        return self
-
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
@@ -134,7 +113,7 @@ class Extract(_BaseStringFeature):
             X[name] = X[col].str.slice(
                 start=i_min, stop=i_max
             )  # .replace({"": "MISSING"})
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

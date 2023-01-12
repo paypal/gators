@@ -572,7 +572,7 @@ Numerical Imputers
    :toctree: api/
    :template: class.rst
 
-   NumericsImputer
+   NumericImputer
    ObjectImputer
 
 EOL
@@ -1067,7 +1067,7 @@ Scalers
 
 Imputers
 --------
-.. image:: ../../_static/benchmarks/NumericsImputer_transform_numpy.jpg
+.. image:: ../../_static/benchmarks/NumericImputer_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
@@ -1318,7 +1318,7 @@ Scalers
 
 Imputers
 --------
-.. image:: ../../_static/benchmarks/NumericsImputer_fit_transform.jpg
+.. image:: ../../_static/benchmarks/NumericImputer_fit_transform.jpg
    :width: 400px
    :alt: alternate text
    :align: left

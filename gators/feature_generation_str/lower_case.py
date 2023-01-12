@@ -72,27 +72,6 @@ class LowerCase(_BaseStringFeature):
         self.inplace = inplace
         self.column_names = self.get_column_names(self.inplace, self.columns, "lower")
 
-    def fit(self, X: DataFrame, y: Series = None) -> "LowerCase":
-        """Fit the transformer on the dataframe `X`.
-
-        Parameters
-        ----------
-        X : DataFrame.
-            Input dataframe.
-        y : Series, default None.
-            Target values.
-
-        Returns
-        -------
-        LowerCase
-            Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns
-        )
-        return self
-
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
@@ -111,7 +90,7 @@ class LowerCase(_BaseStringFeature):
             X[name] = util.get_function(X).replace(
                 X[col].astype(str).str.lower(), {"none": None, "nan": None}
             )
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

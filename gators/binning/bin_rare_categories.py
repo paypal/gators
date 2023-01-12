@@ -24,6 +24,10 @@ class BinRareCategories(Transformer):
     ----------
     min_ratio : float
         Min occurence ratio per category.
+    inplace : bool, default False
+        If False, return the dataframe with the new binned columns
+        with the names "column_name__bin_rare"). Otherwise, return
+        the dataframe with the existing binned columns.
 
     Examples
     ---------
@@ -69,13 +73,14 @@ class BinRareCategories(Transformer):
            ['OTHERS', 'OTHERS']], dtype=object)
     """
 
-    def __init__(self, min_ratio: float):
+    def __init__(self, min_ratio: float, inplace: bool = True):
         if not isinstance(min_ratio, (int, float)) or min_ratio < 0 or min_ratio > 1:
             raise TypeError(
                 """`min_ratio` should be a positive float betwwen 0.0 and 1.0."""
             )
         Transformer.__init__(self)
         self.min_ratio = min_ratio
+        self.inplace = inplace
         self.columns = []
         self.idx_columns: np.ndarray = np.array([])
         self.categories_to_keep_np: np.ndarray = None
@@ -104,7 +109,11 @@ class BinRareCategories(Transformer):
                 `BinRareCategories` is not needed"""
             )
             return self
+        self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, datatype=object)
+        self.column_names = self.get_column_names(
+            self.inplace, self.columns, "bin_rare"
+        )
         self.categories_to_keep_dict = self.compute_categories_to_keep_dict(
             X=X[self.columns],
             min_ratio=self.min_ratio,
@@ -134,11 +143,12 @@ class BinRareCategories(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        for col in self.columns:
-            X[col] = X[col].mask(
+        if not self.columns:
+            return X
+        for name, col in zip(self.column_names, self.columns):
+            X[name] = X[col].mask(
                 ~X[col].isin(self.categories_to_keep_dict[col]), "OTHERS"
             )
-        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -157,15 +167,15 @@ class BinRareCategories(Transformer):
         self.check_array(X)
         if self.idx_columns.size == 0:
             return X
-        if self.categories_to_keep_np.shape[0] == 0:
-            X[:, self.idx_columns] = "OTHERS"
-            return X
-        return bin_rare_events(
-            X,
+        X_rare = bin_rare_events(
+            X[:, self.idx_columns],
             self.categories_to_keep_np,
             self.n_categories_to_keep_np,
-            self.idx_columns,
         )
+        if self.inplace:
+            X[:, self.idx_columns] = X_rare
+            return X
+        return np.concatenate((X, X_rare), axis=1)
 
     @staticmethod
     def compute_categories_to_keep_dict(

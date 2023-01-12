@@ -3,7 +3,6 @@ import warnings
 
 
 import numpy as np
-import pandas as pd
 
 from imputer import object_imputer
 
@@ -28,7 +27,7 @@ class ObjectImputer(_BaseImputer):
 
     value : str, default None.
         Imputation value used for `strategy=constant`.
-    inplace : List[float], default None.
+    inplace : bool, default True.
         If True, impute in-place.
         If False, create new imputed columns.
 
@@ -117,7 +116,7 @@ class ObjectImputer(_BaseImputer):
 
     See Also
     --------
-    gators.imputers.NumericsImputer
+    gators.imputers.NumericImputer
         Impute numerical columns.
 
     """
@@ -153,6 +152,7 @@ class ObjectImputer(_BaseImputer):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         if not self.columns:
             self.columns = util.get_datatype_columns(X, object)
         self.column_names = self.get_column_names(self.inplace, self.columns, "impute")

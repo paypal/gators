@@ -8,6 +8,7 @@ from pandas.testing import assert_frame_equal
 from gators.feature_selection.supervized_correlation_filter import (
     SupervizedCorrelationFilter,
 )
+
 ks.set_option("compute.default_index_type", "distributed-sequence")
 
 

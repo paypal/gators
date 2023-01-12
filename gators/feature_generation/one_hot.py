@@ -109,6 +109,7 @@ class OneHot(_BaseFeatureGeneration):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.cats = np.array(
             [cat for cats in self.categories_dict.values() for cat in cats]
         ).astype(object)
@@ -136,7 +137,7 @@ class OneHot(_BaseFeatureGeneration):
         for name, col, cat in zip(self.column_names, self.columns, self.cats):
             X[name] = X[col] == cat
         util.get_function(X).set_option("compute.ops_on_diff_frames", False)
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

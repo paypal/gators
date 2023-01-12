@@ -19,8 +19,8 @@ class Class(Transformer):
 
 
 @pytest.mark.koalas
-def test_check_dataframe_contains_numerics():
-    Transformer.check_dataframe_contains_numerics(ks.DataFrame({"A": [1], "B": ["b"]}))
+def test_check_dataframe_contains_Numeric():
+    Transformer.check_dataframe_contains_Numeric(ks.DataFrame({"A": [1], "B": ["b"]}))
 
 
 @pytest.mark.koalas
@@ -45,9 +45,9 @@ def test_checks():
     with pytest.raises(TypeError):
         Transformer.check_target(X, [])
     with pytest.raises(ValueError):
-        Class().check_array_is_numerics(np.array(["a"]))
+        Class().check_array_is_Numeric(np.array(["a"]))
     with pytest.raises(ValueError):
-        Transformer.check_dataframe_is_numerics(ks.DataFrame({"A": [1], "x": ["x"]}))
+        Transformer.check_dataframe_is_Numeric(ks.DataFrame({"A": [1], "x": ["x"]}))
     with pytest.raises(ValueError):
         Transformer.check_binary_target(X, ks.Series([1, 2, 3], name="TARGET"))
     with pytest.raises(ValueError):
@@ -59,10 +59,8 @@ def test_checks():
     with pytest.raises(ValueError):
         Class().check_dataframe_with_objects(ks.DataFrame({"A": [1.1], "B": [0]}))
     with pytest.raises(ValueError):
-        Class().check_dataframe_contains_numerics(
-            ks.DataFrame({"A": ["a"], "B": ["b"]})
-        )
+        Class().check_dataframe_contains_Numeric(ks.DataFrame({"A": ["a"], "B": ["b"]}))
     with pytest.raises(ValueError):
         Class().check_datatype(object, [np.float64])
     with pytest.raises(ValueError):
-        Class().check_array_is_numerics(np.array([["a"], ["b"]]))
+        Class().check_array_is_Numeric(np.array([["a"], ["b"]]))

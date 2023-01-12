@@ -121,7 +121,7 @@ class BinnedColumnsEncoder(_BaseEncoder):
             return X
         for c in self.columns:
             X[f"{c}__ordinal"] = X[c].str.slice(start=1).astype(np.float64)
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

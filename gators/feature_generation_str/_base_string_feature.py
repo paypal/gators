@@ -52,6 +52,7 @@ class _BaseStringFeature(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.idx_columns = util.get_idx_columns(
             columns=X.columns,
             selected_columns=self.columns,

@@ -129,6 +129,8 @@ class PolynomialFeatures(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
+        self.X_dtypes = X.dtypes
         if self.degree == 1:
             return self
         self.idx_subarray = util.get_idx_columns(X.columns, self.columns)
@@ -160,7 +162,7 @@ class PolynomialFeatures(Transformer):
             X[name] = X[combi[0]]
             for c in combi[1:]:
                 X[name] *= X[c]
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

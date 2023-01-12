@@ -8,8 +8,8 @@ from encoder import encoder
 from encoder import encoder_new
 from ..util import util
 from ..transformers.transformer import (
-    NUMERICS_DTYPES,
-    PRINT_NUMERICS_DTYPES,
+    Numeric_DTYPES,
+    PRINT_Numeric_DTYPES,
     Transformer,
 )
 
@@ -50,11 +50,10 @@ class _BaseEncoder(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        self.dtypes_ = X.dtypes
+
         if self.inplace:
             X = util.get_function(X).replace(X, self.mapping)
             X = util.get_function(X).to_numeric(X, columns=self.columns)
-            self.dtypes_ = X.dtypes
             return X
         X_encoded = util.get_function(X).replace(X.copy(), self.mapping)[self.columns]
         X_encoded = X_encoded.rename(columns=dict(zip(self.columns, self.column_names)))
@@ -62,7 +61,7 @@ class _BaseEncoder(Transformer):
             X_encoded, columns=self.column_names
         )
         X = util.get_function(X).join(X, X_encoded)
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

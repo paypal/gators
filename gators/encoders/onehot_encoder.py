@@ -17,6 +17,9 @@ class OneHotEncoder(_BaseEncoder):
 
     Parameters
     ----------
+    drop_first : bool, default to True.
+        Whether to one-hot encode all the categories or all except one.
+
     inplace : bool, default to True.
         If True, replace in-place the categorical values by numerical ones.
         If False, keep the categorical columns and create new encoded columns.
@@ -65,8 +68,9 @@ class OneHotEncoder(_BaseEncoder):
            [0., 1., 0., 1.]])
     """
 
-    def __init__(self, inplace=True):
+    def __init__(self, drop_first=False, inplace=True):
         _BaseEncoder.__init__(self, inplace=inplace)
+        self.drop_first = drop_first
         self.ordinal_encoder = OrdinalEncoder()
         self.idx_numerical_columns = np.array([])
         self.column_names = []
@@ -87,7 +91,7 @@ class OneHotEncoder(_BaseEncoder):
         OneHotEncoder: Instance of itself.
         """
         self.check_dataframe(X)
-        self.input_columns = list(X.columns)
+        self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, object)
         columns = list(X.columns)
         if not self.columns:
@@ -98,7 +102,10 @@ class OneHotEncoder(_BaseEncoder):
             return self
         self.column_names = list(
             util.get_function(X).get_dummies(
-                X[self.columns], self.columns, prefix_sep="__"
+                X[self.columns],
+                self.columns,
+                prefix_sep="__",
+                drop_first=self.drop_first,
             )
         )
         self.column_names = sorted(self.column_names)
@@ -131,16 +138,35 @@ class OneHotEncoder(_BaseEncoder):
         self.check_dataframe(X)
         if not self.columns:
             return X
+
+        new_series_list = []
         for name in self.column_names:
-            dummy = name.split("__")
-            col = "__".join(dummy[:-1])
-            cat = dummy[-1]
-            X[name] = X[col] == cat
-        X[self.column_names] = X[self.column_names].astype(float)
+            dummy_names = name.split("__")
+            col = "__".join(dummy_names[:-1])
+            cat = dummy_names[-1]
+            dummy = (X[col] == cat).astype(float)
+            new_series_list.append(dummy.rename(name))
+
         if self.inplace:
-            X = X.drop(self.columns, axis=1)
-        self.dtypes_ = X.dtypes
-        return X
+            return util.get_function(X).concat(
+                [
+                    X.drop(self.columns, axis=1),
+                    util.get_function(X).concat(new_series_list, axis=1),
+                ],
+                axis=1,
+            )
+        return util.get_function(X).concat(
+            [X, util.get_function(X).concat(new_series_list, axis=1)], axis=1
+        )
+
+        # for name in self.column_names:
+        #     dummy = name.split("__")
+        #     col = "__".join(dummy[:-1])
+        #     cat = dummy[-1]
+        #     X[name] = (X[col] == cat).astype(float)
+        # if self.inplace:
+        #     X = X.drop(self.columns, axis=1)
+        # return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.

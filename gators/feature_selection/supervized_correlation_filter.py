@@ -9,15 +9,21 @@ from gators import DataFrame, Series
 
 class SupervizedCorrelationFilter(_BaseFeatureSelection):
     """Remove highly correlated columns.
-    
+
     Select the features based on the highest feature importance.
-    
+
     Parameters
     ----------
     feature_importances: Series
         Feature importances.
     max_corr : float
         Max correlation value tolerated between two columns.
+    method: str or callable
+        Method of correlation:
+
+        * pearson : standard correlation coefficient
+        * kendall : Kendall Tau correlation coefficient
+        * spearman : Spearman rank correlation
 
     Examples
     ---------
@@ -61,13 +67,18 @@ class SupervizedCorrelationFilter(_BaseFeatureSelection):
            [3.  , 0.15]])
     """
 
-    def __init__(self, feature_importances: Series, max_corr: float):
-        if 'Series' not in str(type(feature_importances)):
-            raise TypeError("`feature_importances` should be a pandas, dask, or koalas Series.")
+    def __init__(
+        self, feature_importances: Series, max_corr: float, method: str = "pearson"
+    ):
+        if "Series" not in str(type(feature_importances)):
+            raise TypeError(
+                "`feature_importances` should be a pandas, dask, or koalas Series."
+            )
         if not isinstance(max_corr, float):
             raise TypeError("`max_corr` should be a float.")
         _BaseFeatureSelection.__init__(self)
         self.max_corr = max_corr
+        self.method = method
         self.feature_importances = util.get_function(feature_importances).to_pandas(
             feature_importances
         )

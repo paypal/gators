@@ -89,7 +89,7 @@ class TargetEncoder(_BaseEncoder):
         """
         self.check_dataframe(X)
         self.check_target(X, y)
-        self.input_columns = list(X.columns)
+        self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, object)
         self.column_names = self.get_column_names(self.inplace, self.columns, "target")
         if not self.columns:

@@ -148,6 +148,7 @@ class TreeBinning(_BaseBinning):
         """
         self.check_dataframe(X)
         self.check_target(X, y)
+        self.base_columns = list(X.columns)
         self.columns = util.get_numerical_columns(X)
         self.column_names = [f"{c}__bin" for c in self.columns]
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)

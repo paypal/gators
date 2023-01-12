@@ -16,7 +16,7 @@ class _BaseScaler(Transformer):
         If True, perform the encoding inplace.
     """
 
-    def __init__(self, inplace: bool = True):
+    def __init__(self, inplace: bool):
         self.X_offset: DataFrame = None
         self.X_scale: DataFrame = None
         self.X_offset_np = np.array([])
@@ -40,7 +40,6 @@ class _BaseScaler(Transformer):
         X[self.columns] = X[self.columns].astype(float)
         for col, name in zip(self.columns, self.column_names):
             X[name] = (X[col] - self.X_offset[col]) * self.X_scale[col]
-        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

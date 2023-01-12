@@ -123,7 +123,7 @@ class SplitExtract(_BaseStringFeature):
             self.columns, self.idx_split_vec, self.str_split_vec, self.column_names
         ):
             X[name] = X[col].str.split(str_split).str.get(idx).fillna("MISSING")
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

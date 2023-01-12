@@ -23,7 +23,6 @@ class _BaseBinning(Transformer):
         If False, return the dataframe with the new binned columns
         with the names *column_name__bin*). Otherwise,
         return the dataframe with the existing binned columns.
-
     """
 
     def __init__(self, n_bins: int, inplace: bool):
@@ -34,6 +33,7 @@ class _BaseBinning(Transformer):
         Transformer.__init__(self)
         self.n_bins = n_bins
         self.inplace = inplace
+        self.base_columns = []
         self.columns = []
         self.column_names = []
         self.idx_columns = np.array([])
@@ -57,6 +57,7 @@ class _BaseBinning(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.columns = util.get_numerical_columns(X)
         self.column_names = self.get_column_names(
             inplace=False, columns=self.columns, suffix="bin"
@@ -87,24 +88,8 @@ class _BaseBinning(Transformer):
         if self.idx_columns.size == 0:
             return X
 
-        if self.inplace:
-            for c in self.columns:
-                n_bins = len(self.bins_dict[c])
-                dummy = X[c].where(~(X[c] < self.bins_dict[c][1]), self.labels[c][0])
-                for j in range(1, n_bins - 1):
-                    dummy = dummy.where(
-                        ~(
-                            (X[c] >= self.bins_dict[c][j])
-                            & (X[c] < self.bins_dict[c][j + 1])
-                        ),
-                        self.labels[c][j],
-                    )
-                dummy = dummy.where(~(X[c] > self.bins_dict[c][-2]), self.labels[c][-1])
-                X[c] = dummy
-            X[self.columns] = X[self.columns].astype(str)
-            return X
-
-        for c, name in zip(self.columns, self.column_names):
+        new_series_list = []
+        for c, n in zip(self.columns, self.column_names):
             n_bins = len(self.bins_dict[c])
             dummy = X[c].where(~(X[c] < self.bins_dict[c][1]), self.labels[c][0])
             for j in range(1, n_bins - 1):
@@ -116,10 +101,19 @@ class _BaseBinning(Transformer):
                     self.labels[c][j],
                 )
             dummy = dummy.where(~(X[c] > self.bins_dict[c][-2]), self.labels[c][-1])
-            X[name] = dummy
+            new_series_list.append(dummy.rename(n))
 
-        X[self.column_names] = X[self.column_names].astype(str)
-        return X
+        X_binning = util.get_function(X).concat(new_series_list, axis=1)
+        if self.inplace:
+            columns_dict = dict(zip(self.column_names, self.columns))
+            if len(self.base_columns) == len(self.column_names):
+                return X_binning.rename(columns=columns_dict)
+            return (
+                util.get_function(X)
+                .concat([X.drop(self.columns, axis=1), X_binning], axis=1)
+                .rename(columns=columns_dict)[self.base_columns]
+            )
+        return util.get_function(X).concat([X, X_binning], axis=1)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.

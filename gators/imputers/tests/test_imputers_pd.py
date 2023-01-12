@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.imputers.numerics_imputer import NumericsImputer
+from gators.imputers.numeric_imputer import NumericImputer
 from gators.imputers.object_imputer import ObjectImputer
 
 
@@ -22,10 +22,10 @@ def data():
     X_object_expected = pd.DataFrame(
         {"E": ["q", "w", "w", "MISSING"], "F": ["a", "a", "s", "MISSING"]}
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     obj_object = ObjectImputer(strategy="constant", value="MISSING").fit(X_object)
     X_dict = {
         "int": X_int,
@@ -74,10 +74,10 @@ def data_not_inplace():
             "F__impute": ["a", "a", "s", "MISSING"],
         }
     )
-    obj_int = NumericsImputer(
+    obj_int = NumericImputer(
         strategy="constant", value=-9, columns=list("AB"), inplace=False
     ).fit(X_int)
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD"), inplace=False).fit(
+    obj_float = NumericImputer(strategy="mean", columns=list("CD"), inplace=False).fit(
         X_float
     )
     obj_object = ObjectImputer(strategy="constant", value="MISSING", inplace=False).fit(
@@ -111,10 +111,10 @@ def data_num():
     X_float_expected = pd.DataFrame(
         {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     X_dict = {
         "int": X_int,
         "float": X_float,
@@ -135,10 +135,10 @@ def data_no_missing():
     X_int = pd.DataFrame({"A": [0, 1, 1, 8], "B": [3, 4, 4, 8]}, dtype=int)
     X_float = pd.DataFrame({"C": [0.1, 1.1, 2.1, 9.0], "D": [2.1, 3.1, 4.1, 9.0]})
     X_object = pd.DataFrame({"E": ["q", "w", "w", "x"], "F": ["a", "a", "s", "x"]})
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     obj_object = ObjectImputer(strategy="constant", value="MISSING").fit(X_object)
     X_dict = {
         "int": X_int,
@@ -173,8 +173,8 @@ def data_full():
         ],
         columns=["A", "B", "C", "D", "E", "F"],
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(X)
-    obj_float = NumericsImputer(strategy="median", columns=list("CD")).fit(X)
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(X)
+    obj_float = NumericImputer(strategy="median", columns=list("CD")).fit(X)
     obj_object = ObjectImputer(strategy="most_frequent").fit(X)
     objs_dict = {
         "int": obj_int,
@@ -335,14 +335,14 @@ def test_imputers_columns_pd():
         ],
         columns=["A", "B", "C", "D", "E", "F"],
     )
-    obj_int_A = NumericsImputer(strategy="constant", value=-9, columns=["A"]).fit(X)
-    obj_int_B = NumericsImputer(strategy="constant", value=-99, columns=["B"]).fit(X)
-    obj_float_C = NumericsImputer(strategy="constant", value=-999.0, columns=["C"]).fit(
+    obj_int_A = NumericImputer(strategy="constant", value=-9, columns=["A"]).fit(X)
+    obj_int_B = NumericImputer(strategy="constant", value=-99, columns=["B"]).fit(X)
+    obj_float_C = NumericImputer(strategy="constant", value=-999.0, columns=["C"]).fit(
         X
     )
-    obj_float_D = NumericsImputer(
-        strategy="constant", value=-9999.0, columns=["D"]
-    ).fit(X)
+    obj_float_D = NumericImputer(strategy="constant", value=-9999.0, columns=["D"]).fit(
+        X
+    )
     obj_object_E = ObjectImputer(
         strategy="constant", value="missing", columns=["E"]
     ).fit(X)
@@ -372,14 +372,14 @@ def test_imputers_columns_pd_np():
         ],
         columns=["A", "B", "C", "D", "E", "F"],
     )
-    obj_int_A = NumericsImputer(strategy="constant", value=-9, columns=["A"]).fit(X)
-    obj_int_B = NumericsImputer(strategy="constant", value=-99, columns=["B"]).fit(X)
-    obj_float_C = NumericsImputer(strategy="constant", value=-999.0, columns=["C"]).fit(
+    obj_int_A = NumericImputer(strategy="constant", value=-9, columns=["A"]).fit(X)
+    obj_int_B = NumericImputer(strategy="constant", value=-99, columns=["B"]).fit(X)
+    obj_float_C = NumericImputer(strategy="constant", value=-999.0, columns=["C"]).fit(
         X
     )
-    obj_float_D = NumericsImputer(
-        strategy="constant", value=-9999.0, columns=["D"]
-    ).fit(X)
+    obj_float_D = NumericImputer(strategy="constant", value=-9999.0, columns=["D"]).fit(
+        X
+    )
     obj_object_E = ObjectImputer(
         strategy="constant", value="missing", columns=["E"]
     ).fit(X)
@@ -411,7 +411,7 @@ def test_imputers_num_pd():
         ],
         columns=["A", "B", "C", "D", "E", "F"],
     )
-    obj_num = NumericsImputer(strategy="constant", value=-9.0).fit(X)
+    obj_num = NumericImputer(strategy="constant", value=-9.0).fit(X)
     obj_object = ObjectImputer(strategy="constant", value="MISSING").fit(X)
     X_new = obj_num.transform(X)
     X_new = obj_object.transform(X_new)
@@ -432,7 +432,7 @@ def test_imputers_num_pd_np():
         ],
         columns=["A", "B", "C", "D", "E", "F"],
     )
-    obj_num = NumericsImputer(strategy="constant", value=-9.0).fit(X)
+    obj_num = NumericImputer(strategy="constant", value=-9.0).fit(X)
     obj_object = ObjectImputer(strategy="constant", value="MISSING").fit(X)
     X_new = obj_num.transform_numpy(X.to_numpy())
     X_new = obj_object.transform_numpy(X_new)
@@ -443,22 +443,22 @@ def test_imputers_num_pd_np():
 
 def test_num_np():
     X = pd.DataFrame({"A": [0, 1, np.nan]})
-    obj = NumericsImputer(strategy="mean").fit(X)
+    obj = NumericImputer(strategy="mean").fit(X)
     assert obj.transform_numpy(X.to_numpy()).tolist() == [[0.0], [1.0], [0.5]]
 
 
 def test_imputers_stategy():
     X = pd.DataFrame([])
     with pytest.raises(TypeError):
-        _ = NumericsImputer(strategy=0)
+        _ = NumericImputer(strategy=0)
     with pytest.raises(TypeError):
-        _ = NumericsImputer(strategy=0)
+        _ = NumericImputer(strategy=0)
     with pytest.raises(TypeError):
-        _ = NumericsImputer(strategy="constant", value="a").fit(X)
+        _ = NumericImputer(strategy="constant", value="a").fit(X)
     with pytest.raises(TypeError):
         _ = ObjectImputer(strategy="constant", value=1).fit(X)
     with pytest.raises(ValueError):
-        _ = NumericsImputer(strategy="").fit(X)
+        _ = NumericImputer(strategy="").fit(X)
     with pytest.raises(ValueError):
         _ = ObjectImputer(strategy="").fit(X)
     with pytest.raises(ValueError):
@@ -468,18 +468,18 @@ def test_imputers_stategy():
     with pytest.raises(ValueError):
         _ = ObjectImputer(strategy="constant").fit(X)
     with pytest.raises(ValueError):
-        _ = NumericsImputer(strategy="constant").fit(X)
+        _ = NumericImputer(strategy="constant").fit(X)
     with pytest.raises(ValueError):
-        _ = NumericsImputer(strategy="abc").fit(X)
+        _ = NumericImputer(strategy="abc").fit(X)
     with pytest.raises(TypeError):
-        _ = NumericsImputer(strategy="mean", inplace="abc").fit(X)
+        _ = NumericImputer(strategy="mean", inplace="abc").fit(X)
 
 
 def test_compute_stategy():
     with pytest.raises(ValueError):
         X = pd.DataFrame(np.arange(9).reshape(3, 3) + 0.1, columns=list("qwe"))
         X.iloc[:, 0] = np.nan
-        _ = NumericsImputer(strategy="mean").fit(X)
+        _ = NumericImputer(strategy="mean").fit(X)
 
 
 def test_imputers_input_data():
@@ -495,7 +495,7 @@ def test_warnings_empty_columns(data):
         obj = ObjectImputer(strategy="most_frequent")
         obj.fit(X_dict["int"])
     with pytest.warns(Warning):
-        obj = NumericsImputer(strategy="mean")
+        obj = NumericImputer(strategy="mean")
         obj.fit(X_dict["object"])
 
 
@@ -511,7 +511,7 @@ def test_empty_columns_object():
 
 def test_num_idx_columns_empty():
     X = pd.DataFrame({"A": ["a", "b", "b", "c"]})
-    obj = NumericsImputer(strategy="mean").fit(X)
+    obj = NumericImputer(strategy="mean").fit(X)
     _ = obj.fit(X)
     assert_frame_equal(obj.transform(X.copy()), X)
     assert_frame_equal(

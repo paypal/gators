@@ -149,7 +149,7 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         self.columns = [
             c for c in X.columns if c in list(set(self.columns_a + self.columns_b))
         ]
-        self.check_dataframe_is_numerics(X[self.columns])
+        self.base_columns = list(X.columns)
 
         self.idx_subarray = self.get_idx_columns(
             columns=X.columns,
@@ -186,7 +186,7 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
             else:
                 X[c] = X[c_a] / (X[c_b] + EPSILON)
             X[c] = X[c]
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

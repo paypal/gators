@@ -71,27 +71,6 @@ class StringLength(_BaseStringFeature):
             column_names = [f"{col}__length" for col in columns]
         _BaseStringFeature.__init__(self, columns, column_names)
 
-    def fit(self, X: DataFrame, y: Series = None) -> "StringLength":
-        """Fit the transformer on the dataframe `X`.
-
-        Parameters
-        ----------
-        X : DataFrame.
-            Input dataframe.
-        y : Series, default None.
-            Target values.
-
-        Returns
-        -------
-        StringLength
-            Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns
-        )
-        return self
-
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
@@ -114,7 +93,7 @@ class StringLength(_BaseStringFeature):
                 .str.len()
                 .astype(np.float64)
             )
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -126,6 +126,7 @@ class CustomBinning(_BaseBinning):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.columns = list(self.bins_dict.keys())
         self.column_names = [f"{c}__bin" for c in self.columns]
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)

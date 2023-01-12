@@ -29,6 +29,31 @@ def data():
 
 
 @pytest.fixture
+def data_not_inplace():
+    X = pd.DataFrame(
+        {
+            "A": ["w", "z", "q", "q", "q", "z"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "e", "d", "d", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+        }
+    )
+    X_expected = pd.DataFrame(
+        {
+            "A": ["w", "z", "q", "q", "q", "z"],
+            "B": ["x", "x", "w", "w", "w", "x"],
+            "C": ["c", "c", "e", "d", "d", "c"],
+            "D": [1, 2, 3, 4, 5, 6],
+            "A__bin_rare": ["OTHERS", "OTHERS", "q", "q", "q", "OTHERS"],
+            "B__bin_rare": ["x", "x", "w", "w", "w", "x"],
+            "C__bin_rare": ["c", "c", "OTHERS", "OTHERS", "OTHERS", "c"],
+        }
+    )
+    obj = BinRareCategories(min_ratio=0.5, inplace=False).fit(X)
+    return obj, X, X_expected
+
+
+@pytest.fixture
 def data_all_others():
     X = pd.DataFrame(
         {
@@ -80,6 +105,20 @@ def test_pd(data):
 
 def test_pd_np(data):
     obj, X, X_expected = data
+    X_numpy_new = obj.transform_numpy(X.to_numpy())
+    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
+    X_expected.index = X_new.index
+    assert_frame_equal(X_new, X_expected.astype(object))
+
+
+def test_not_inplace_pd(data_not_inplace):
+    obj, X, X_expected = data_not_inplace
+    X_new = obj.transform(X)
+    assert_frame_equal(X_new, X_expected)
+
+
+def test_not_inplace_pd_np(data_not_inplace):
+    obj, X, X_expected = data_not_inplace
     X_numpy_new = obj.transform_numpy(X.to_numpy())
     X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
     X_expected.index = X_new.index

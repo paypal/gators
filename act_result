@@ -700,7 +700,7 @@
 [Build and Test/test          ]   | creating build/lib.linux-x86_64-3.9/gators
 [Build and Test/test          ]   | copying gators/__init__.py -> build/lib.linux-x86_64-3.9/gators
 [Build and Test/test          ]   | creating build/lib.linux-x86_64-3.9/gators/imputers
-[Build and Test/test          ]   | copying gators/imputers/numerics_imputer.py -> build/lib.linux-x86_64-3.9/gators/imputers
+[Build and Test/test          ]   | copying gators/imputers/Numeric_imputer.py -> build/lib.linux-x86_64-3.9/gators/imputers
 [Build and Test/test          ]   | copying gators/imputers/_base_imputer.py -> build/lib.linux-x86_64-3.9/gators/imputers
 [Build and Test/test          ]   | copying gators/imputers/object_imputer.py -> build/lib.linux-x86_64-3.9/gators/imputers
 [Build and Test/test          ]   | copying gators/imputers/__init__.py -> build/lib.linux-x86_64-3.9/gators/imputers
@@ -1041,7 +1041,7 @@
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/imputers/tests/test_imputers_ks.py -> build/bdist.linux-x86_64/egg/gators/imputers/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/imputers/tests/test_imputers_pd.py -> build/bdist.linux-x86_64/egg/gators/imputers/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/imputers/tests/test_imputers_dd.py -> build/bdist.linux-x86_64/egg/gators/imputers/tests
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/imputers/numerics_imputer.py -> build/bdist.linux-x86_64/egg/gators/imputers
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/imputers/Numeric_imputer.py -> build/bdist.linux-x86_64/egg/gators/imputers
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/imputers/_base_imputer.py -> build/bdist.linux-x86_64/egg/gators/imputers
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/imputers/object_imputer.py -> build/bdist.linux-x86_64/egg/gators/imputers
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/imputers/imputer.pyx -> build/bdist.linux-x86_64/egg/gators/imputers
@@ -1370,7 +1370,7 @@
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/imputers/tests/test_imputers_ks.py to test_imputers_ks.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/imputers/tests/test_imputers_pd.py to test_imputers_pd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/imputers/tests/test_imputers_dd.py to test_imputers_dd.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/imputers/numerics_imputer.py to numerics_imputer.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/imputers/Numeric_imputer.py to Numeric_imputer.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/imputers/_base_imputer.py to _base_imputer.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/imputers/object_imputer.py to object_imputer.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/imputers/__init__.py to __init__.cpython-39.pyc
@@ -4777,7 +4777,9 @@
 [Build and Test/test          ]   | WARNING:root:Found pyspark version "3.2.1" installed. The pyspark version 3.2 and above has a built-in "pandas APIs on Spark" module ported from Koalas. Try `import pyspark.pandas as ps` instead. 
 [Build and Test/test          ]   | WARNING:root:Found pyspark version "3.2.1" installed. The pyspark version 3.2 and above has a built-in "pandas APIs on Spark" module ported from Koalas. Try `import pyspark.pandas as ps` instead. 
 [Build and Test/test          ]   | WARNING:root:Found pyspark version "3.2.1" installed. The pyspark version 3.2 and above has a built-in "pandas APIs on Spark" module ported from Koalas. Try `import pyspark.pandas as ps` instead. 
-[Build and Test/test          ]   | [Stage 1055:>                                                       (0 + 8) / 8]----------------------------------------
+[Build and Test/test          ]   | 
+[Stage 1055:>                                                       (0 + 8) / 8]
+----------------------------------------
 [Build and Test/test          ]   | Exception occurred during processing of request from ('127.0.0.1', 59518)
 [Build and Test/test          ]   | Traceback (most recent call last):
 [Build and Test/test          ]   |   File "/opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/socketserver.py", line 316, in _handle_request_noblock
@@ -4811,11 +4813,11 @@
 [Build and Test/test          ]   |   File "/opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/py4j/java_gateway.py", line 1038, in send_command
 [Build and Test/test          ]   |     response = connection.send_command(command)
 [Build and Test/test          ]   |   File "/opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/py4j/clientserver.py", line 503, in send_command
-[Build and Test/test          ]   |     raise Py4JNetworkError(
+[Build and Test/test          ]   |     raise Py4JNetworkError(Numeric
 [Build and Test/test          ]   | py4j.protocol.Py4JNetworkError: Error while sending or receiving
 [Build and Test/test          ]   | ____________________ test_check_dataframe_contains_numerics ____________________
-[Build and Test/test          ]   | 
-[Build and Test/test          ]   |     @pytest.mark.koalas
+[Build and Test/test          ]   | Numeric
+[Build and Test/test          ]   |     @pytest.mark.koalasNumeric
 [Build and Test/test          ]   |     def test_check_dataframe_contains_numerics():
 [Build and Test/test          ]   | >       Transformer.check_dataframe_contains_numerics(ks.DataFrame({"A": [1], "B": ["b"]}))
 [Build and Test/test          ]   | 
@@ -5297,8 +5299,8 @@
 [Build and Test/test          ]   |   /Users/cpoli/opensource/gators/gators/imputers/object_imputer.py:154: UserWarning: `X` does not contain object columns:
 [Build and Test/test          ]   |                   `ObjectImputer` is not needed
 [Build and Test/test          ]   |     warnings.warn(
-[Build and Test/test          ]   | 
-[Build and Test/test          ]   | gators/imputers/tests/test_imputers_pd.py::test_num_idx_columns_empty
+[Build and Test/test          ]   | Numeric
+[Build and Test/test          ]   | gators/imputers/tesNumericimputers_pd.py::test_num_idx_columns_empty
 [Build and Test/test          ]   |   /Users/cpoli/opensource/gators/gators/imputers/numerics_imputer.py:140: UserWarning: `X` does not contain numerical columns,
 [Build and Test/test          ]   |                   `NumericsImputer` is not needed
 [Build and Test/test          ]   |     warnings.warn(
@@ -5323,7 +5325,7 @@
 [Build and Test/test          ]   |     header = (type(ind), ind._get_attributes_dict(), values.dtype, cat)
 [Build and Test/test          ]   | 
 [Build and Test/test          ]   | -- Docs: https://docs.pytest.org/en/stable/warnings.html
-[Build and Test/test          ]   | =========================== short test summary info ============================
+[Build and Test/test          ]   | =========================== short test summary info ============================Numeric
 [Build and Test/test          ]   | FAILED gators/feature_generation_str/tests/test_split_extract_ks.py::test_ks
 [Build and Test/test          ]   | FAILED gators/transformers/tests/test_transformer_ks.py::test_check_dataframe_contains_numerics
 [Build and Test/test          ]   | FAILED gators/transformers/tests/test_transformer_ks.py::test_checks - Connec...

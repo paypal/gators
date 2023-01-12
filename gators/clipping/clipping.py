@@ -34,7 +34,7 @@ class Clipping(Transformer):
     ---------
     Imports and initialization:
 
-    >>> from gators.binning import BinRareCategories
+    >>> from gators.clipping import Clipping
     >>> clip_dict = {'A':[-0.5, 0.5], 'B':[-0.5, 0.5], 'C':[-0., 1.]}
     >>> obj = Clipping(clip_dict=clip_dict)
 
@@ -115,7 +115,7 @@ class Clipping(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        self.input_columns = list(X.columns)
+        self.base_columns = list(X.columns)
         self.idx_columns = util.get_idx_columns(X, self.clip_dict.keys())
         self.column_names = self.get_column_names(self.inplace, self.columns, "clip")
         return self
@@ -136,7 +136,7 @@ class Clipping(Transformer):
         self.check_dataframe(X)
         for col, name in zip(self.columns, self.column_names):
             X[name] = X[col].clip(self.clip_dict[col][0], self.clip_dict[col][1])
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -111,6 +111,7 @@ class IsEqual(_BaseFeatureGeneration):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.idx_columns_a = util.get_idx_columns(
             columns=X.columns, selected_columns=self.columns_a
         )
@@ -135,7 +136,7 @@ class IsEqual(_BaseFeatureGeneration):
         self.check_dataframe(X)
         for a, b, name in zip(self.columns_a, self.columns_b, self.column_names):
             X[name] = (X[a] == X[b]).astype(float)
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -91,7 +91,6 @@ class OrdinalDayOfWeek(_BaseDatetimeFeature):
         for name, col in zip(self.column_names, self.columns):
             X[name] = X[col].dt.dayofweek
 
-        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

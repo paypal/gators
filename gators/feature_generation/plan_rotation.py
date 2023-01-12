@@ -124,8 +124,9 @@ class PlanRotation(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         flatten_columns = [c for cols in self.columns for c in cols]
-        self.check_dataframe_is_numerics(X[list(set(flatten_columns))])
+        self.check_dataframe_is_Numeric(X[list(set(flatten_columns))])
         self.idx_columns_x = util.get_idx_columns(
             X[flatten_columns], flatten_columns[::2]
         )
@@ -156,7 +157,7 @@ class PlanRotation(Transformer):
                 sin_theta = sin(theta * PI / 180)
                 X[f"{x}{y}_x_{theta}deg"] = X[x] * cos_theta - X[y] * sin_theta
                 X[f"{x}{y}_y_{theta}deg"] = X[x] * sin_theta + X[y] * cos_theta
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

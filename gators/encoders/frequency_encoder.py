@@ -81,7 +81,7 @@ class FrequencyEncoder(_BaseEncoder):
         FrequencyEncoder: Instance of itself.
         """
         self.check_dataframe(X)
-        self.input_columns = list(X.columns)
+        self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, object)
         self.column_names = self.get_column_names(
             self.inplace, self.columns, "frequency"

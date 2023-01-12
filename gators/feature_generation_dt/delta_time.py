@@ -160,7 +160,7 @@ class DeltaTime(Transformer):
         X = util.get_function(X).delta_time(
             X, self.column_names, self.columns_a, self.columns_b, self.deltatime_dtype
         )
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

@@ -78,9 +78,12 @@ class StandardScaler(_BaseScaler):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.columns = util.get_numerical_columns(X)
         self.idx_columns = util.get_idx_columns(X, self.columns)
-        self.column_names = self.get_column_names(self.inplace, self.columns, "scale")
+        self.column_names = self.get_column_names(
+            self.inplace, self.columns, "standard_scaler"
+        )
         self.X_offset = (
             util.get_function(X).to_pandas(X[self.columns].mean()).astype(float)
         )

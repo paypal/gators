@@ -21,6 +21,9 @@ class Replace(Transformer):
     to_replace_dict : Dict[str, Dict[str, str]]
         The dictionary keys are the columns and the dictionary values
         are the `to_replace` dictionary.
+    inplace : bool, default True.
+        If True, impute in-place.
+        If False, create new imputed columns.
 
     Examples
     ---------
@@ -68,11 +71,16 @@ class Replace(Transformer):
            ['c', 'f', 3]], dtype=object)
     """
 
-    def __init__(self, to_replace_dict: Dict[str, Dict[str, str]]):
+    def __init__(
+        self, to_replace_dict: Dict[str, Dict[str, str]], inplace: bool = True
+    ):
         if not isinstance(to_replace_dict, dict):
             raise TypeError("`to_replace_dict` should be a dict.")
+        if len(to_replace_dict) == 0:
+            raise ValueError("`to_replace_dict` should not be an empty dict.")
         Transformer.__init__(self)
         self.to_replace_dict = to_replace_dict
+        self.inplace = inplace
         self.columns = list(to_replace_dict.keys())
         n_cols = len(self.columns)
         n_rows = max([len(v) for v in self.to_replace_dict.values()])
@@ -108,6 +116,8 @@ class Replace(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "replace")
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)
         return self
 
@@ -125,7 +135,13 @@ class Replace(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        return util.get_function(X).replace(X, self.to_replace_dict)
+        X_replace = util.get_function(X).replace(X, self.to_replace_dict)
+        if self.inplace:
+            return X_replace
+        X_replace = X_replace[self.columns].rename(
+            columns=dict(zip(self.columns, self.column_names))
+        )
+        return X.join(X_replace)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.
@@ -141,10 +157,20 @@ class Replace(Transformer):
             Transformed array.
         """
         self.check_array(X)
-        return replace(
-            X,
-            self.idx_columns,
-            self.to_replace_np_keys,
-            self.to_replace_np_vals,
-            self.n_elements_vec,
-        )
+        if self.inplace:
+            return replace(
+                X,
+                self.idx_columns,
+                self.to_replace_np_keys,
+                self.to_replace_np_vals,
+                self.n_elements_vec,
+            )
+        else:
+            X_replace = replace(
+                X.copy(),
+                self.idx_columns,
+                self.to_replace_np_keys,
+                self.to_replace_np_vals,
+                self.n_elements_vec,
+            )
+            return np.concatenate((X, X_replace[:, self.idx_columns]), axis=1)

@@ -106,6 +106,7 @@ class YeoJohnson(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.idx_columns = util.get_idx_columns(X, self.columns)
         self.column_names = self.get_column_names(
             self.inplace, self.columns, "yeojohnson"
@@ -150,7 +151,7 @@ class YeoJohnson(Transformer):
                         X[col] >= 0, -((-X[col] + 1) ** (2 - lmbda) - 1) / (2 - lmbda)
                     )
                 )
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

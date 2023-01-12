@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.imputers.numerics_imputer import NumericsImputer
+from gators.imputers.numeric_imputer import NumericImputer
 from gators.imputers.object_imputer import ObjectImputer
 
 ks.set_option("compute.default_index_type", "distributed-sequence")
@@ -28,10 +28,10 @@ def data_ks():
     X_int_ks = ks.from_pandas(X_int)
     X_float_ks = ks.from_pandas(X_float)
     X_object_ks = ks.from_pandas(X_object)
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     obj_object = ObjectImputer(strategy="constant", value="MISSING").fit(X_object)
     X_dict = {
         "int": X_int,
@@ -69,10 +69,10 @@ def data_num_ks():
     X_float_expected = pd.DataFrame(
         {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     X_dict = {
         "int": X_int,
         "float": X_float,
@@ -93,10 +93,10 @@ def data_no_missing_ks():
     X_int = ks.DataFrame({"A": [0, 1, 1, 8], "B": [3, 4, 4, 8]}, dtype=int)
     X_float = ks.DataFrame({"C": [0.1, 1.1, 2.1, 9.0], "D": [2.1, 3.1, 4.1, 9.0]})
     X_object = ks.DataFrame({"E": ["q", "w", "w", "x"], "F": ["a", "a", "s", "x"]})
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     obj_object = ObjectImputer(strategy="constant", value="MISSING").fit(X_object)
     X_dict = {
         "int": X_int,
@@ -131,8 +131,8 @@ def data_full_ks():
         ],
         columns=["A", "B", "C", "D", "E", "F"],
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(X)
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X)
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(X)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X)
     obj_object = ObjectImputer(strategy="most_frequent").fit(X)
     objs_dict = {
         "int": obj_int,

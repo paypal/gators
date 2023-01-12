@@ -39,5 +39,5 @@ BinRareCategories,1020.0,12400.0,20600.0
 Binning,379.0,17100.0,28300.0
 QuantileBinning,644.0,11600.0,17500.0
 TreeBinning,17000.0,25100.0,12000.0
-NumericsImputer,84.1,12700.0,8500.0
+NumericImputer,84.1,12700.0,8500.0
 ObjectImputer,726.0,13600.0,11400.0

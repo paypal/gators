@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.imputers.numerics_imputer import NumericsImputer
+from gators.imputers.numeric_imputer import NumericImputer
 from gators.imputers.object_imputer import ObjectImputer
 
 
@@ -31,10 +31,10 @@ def data():
     X_object_expected = pd.DataFrame(
         {"E": ["q", "w", "w", "MISSING"], "F": ["a", "a", "s", "MISSING"]}
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     obj_object = ObjectImputer(strategy="constant", value="MISSING").fit(X_object)
     X_dict = {
         "int": X_int,
@@ -70,10 +70,10 @@ def data_num():
     X_float_expected = pd.DataFrame(
         {"C": [0.1, 1.1, 2.1, 1.1], "D": [2.1, 3.1, 4.1, 3.1]}
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     X_dict = {
         "int": X_int,
         "float": X_float,
@@ -102,10 +102,10 @@ def data_no_missing():
         pd.DataFrame({"E": ["q", "w", "w", "x"], "F": ["a", "a", "s", "x"]}),
         npartitions=1,
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(
         X_int
     )
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X_float)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X_float)
     obj_object = ObjectImputer(strategy="constant", value="MISSING").fit(X_object)
     X_dict = {
         "int": X_int,
@@ -148,8 +148,8 @@ def data_full():
         ],
         columns=["A", "B", "C", "D", "E", "F"],
     )
-    obj_int = NumericsImputer(strategy="constant", value=-9, columns=list("AB")).fit(X)
-    obj_float = NumericsImputer(strategy="mean", columns=list("CD")).fit(X)
+    obj_int = NumericImputer(strategy="constant", value=-9, columns=list("AB")).fit(X)
+    obj_float = NumericImputer(strategy="mean", columns=list("CD")).fit(X)
     obj_object = ObjectImputer(strategy="most_frequent").fit(X)
     objs_dict = {
         "int": obj_int,

@@ -3,7 +3,6 @@ import warnings
 from typing import List
 
 import numpy as np
-import pandas as pd
 
 from imputer import float_imputer
 
@@ -13,7 +12,7 @@ from ._base_imputer import _BaseImputer
 from gators import DataFrame, Series
 
 
-class NumericsImputer(_BaseImputer):
+class NumericImputer(_BaseImputer):
     """Impute the numerical columns using the strategy passed by the user.
 
     Parameters
@@ -29,24 +28,24 @@ class NumericsImputer(_BaseImputer):
 
     value : str, default None.
         Imputation value used for `strategy=constant`.
-    inplace : List[float], default None.
+    inplace : bool, default True.
         If True, impute in-place.
         If False, create new imputed columns.
 
     Examples
     ---------
 
-    >>> from gators.imputers import NumericsImputer
+    >>> from gators.imputers import NumericImputer
 
     >>> bins = {'A':[-np.inf, 0, np.inf], 'B':[-np.inf, 1, np.inf]}
 
     The imputation can be done for the selected numerical columns
 
-    >>> obj = NumericsImputer(strategy='mean', columns=['A'])
+    >>> obj = NumericImputer(strategy='mean', columns=['A'])
 
     or for all the numerical columns
 
-    >>> obj = NumericsImputer(strategy='mean')
+    >>> obj = NumericImputer(strategy='mean')
 
     The `fit`, `transform`, and `fit_transform` methods accept:
 
@@ -76,7 +75,7 @@ class NumericsImputer(_BaseImputer):
 
     * imputation done for the selected columns:
 
-    >>> obj = NumericsImputer(strategy='mean', columns=['A'])
+    >>> obj = NumericImputer(strategy='mean', columns=['A'])
     >>> obj.fit_transform(X)
           A    B  C
     0  0.10  1.0  z
@@ -87,7 +86,7 @@ class NumericsImputer(_BaseImputer):
 
     >>> X = pd.DataFrame(
     ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']})
-    >>> obj = NumericsImputer(strategy='mean')
+    >>> obj = NumericImputer(strategy='mean')
     >>> obj.fit_transform(X)
           A    B  C
     0  0.10  1.0  z
@@ -123,11 +122,11 @@ class NumericsImputer(_BaseImputer):
         if strategy == "constant" and not isinstance(self.value, (int, float)):
             raise TypeError(
                 """`value` should be an int or a float
-                for the NumericsImputer class"""
+                for the NumericImputer class"""
             )
         self.value = float(self.value) if self.value is not None else None
 
-    def fit(self, X: DataFrame, y: Series = None) -> "NumericsImputer":
+    def fit(self, X: DataFrame, y: Series = None) -> "NumericImputer":
         """Fit the transformer on the pandas/koalas dataframe X.
 
         Parameters
@@ -139,10 +138,11 @@ class NumericsImputer(_BaseImputer):
 
         Returns
         -------
-        self : 'NumericsImputer'
+        self : 'NumericImputer'
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         if not self.columns:
             self.columns = util.get_datatype_columns(X, float)
             self.columns += util.get_datatype_columns(X, int)
@@ -150,7 +150,7 @@ class NumericsImputer(_BaseImputer):
         if not self.columns:
             warnings.warn(
                 """`X` does not contain numerical columns,
-                `NumericsImputer` is not needed"""
+                `NumericImputer` is not needed"""
             )
             self.idx_columns = np.array([])
             return self

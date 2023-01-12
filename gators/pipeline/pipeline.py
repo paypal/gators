@@ -26,13 +26,13 @@ class Pipeline(SciKitPipeline, Transformer):
     ---------
     Imports and initialization:
 
-    >>> from gators.imputers import NumericsImputer
+    >>> from gators.imputers import NumericImputer
     >>> from gators.imputers import ObjectImputer
     >>> from gators.pipeline import Pipeline
     >>> steps = [
     ... ('ObjectImputer', ObjectImputer(strategy='constant', value='MISSING')),
-    ... ('NumericsImputerMedian', NumericsImputer(strategy='median', columns=['A'])),
-    ... ('NumericsImputerFrequent', NumericsImputer(strategy='most_frequent', columns=['B']))]
+    ... ('NumericImputerMedian', NumericImputer(strategy='median', columns=['A'])),
+    ... ('NumericImputerFrequent', NumericImputer(strategy='most_frequent', columns=['B']))]
     >>> obj = Pipeline(steps=steps)
 
     The `fit`, `transform`, and `fit_transform` methods accept:

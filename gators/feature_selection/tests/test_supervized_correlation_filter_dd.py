@@ -9,6 +9,7 @@ from gators.feature_selection.supervized_correlation_filter import (
     SupervizedCorrelationFilter,
 )
 
+
 @pytest.fixture
 def data():
     max_corr = 0.8
@@ -42,10 +43,6 @@ def test_dd_np(data):
     X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
     X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
     assert_frame_equal(X_new, X_expected.astype(np.float64))
-
-
-
-
 
 
 import dask.dataframe as dd

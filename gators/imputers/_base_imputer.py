@@ -27,7 +27,7 @@ class _BaseImputer(Transformer):
         used for `strategy=constant`.
     columns : List[float], default None.
         List of columns.
-    inplace : List[float], default None.
+    inplace : bool, default True.
         If True, impute in-place.
         If False, create new imputed columns.
     """
@@ -74,7 +74,6 @@ class _BaseImputer(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        self.dtypes_ = X.dtypes
         self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
         X_impute = util.get_function(X).fillna(X, value=self.statistics)
         if self.inplace:

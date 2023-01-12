@@ -123,7 +123,7 @@ class ConvertColumnDatatype(Transformer):
             Transformed dataframe.
         """
         X[self.columns] = X[self.columns].astype(self.datatype)
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray, y: Series = None) -> np.ndarray:

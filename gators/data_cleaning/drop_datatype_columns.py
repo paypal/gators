@@ -78,6 +78,7 @@ class DropDatatypeColumns(_BaseDataCleaning):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, self.dtype)
         self.columns_to_keep = util.exclude_columns(
             columns=X.columns, excluded_columns=self.columns

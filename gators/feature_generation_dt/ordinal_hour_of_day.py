@@ -88,7 +88,6 @@ class OrdinalHourOfDay(_BaseDatetimeFeature):
         for name, col in zip(self.column_names, self.columns):
             X[name] = X[col].dt.hour
 
-        self.dtypes_ = X.dtypes
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

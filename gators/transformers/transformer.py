@@ -10,8 +10,8 @@ from ..util import util
 
 from gators import DataFrame, Series
 
-NUMERICS_DTYPES = [np.int16, np.int32, np.int64, np.float32, np.float64]
-PRINT_NUMERICS_DTYPES = ", ".join([dtype.__name__ for dtype in NUMERICS_DTYPES])
+Numeric_DTYPES = [np.int16, np.int32, np.int64, np.float32, np.float64]
+PRINT_Numeric_DTYPES = ", ".join([dtype.__name__ for dtype in Numeric_DTYPES])
 
 
 class Transformer(ABC, BaseEstimator, TransformerMixin):
@@ -182,8 +182,8 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
             raise TypeError("`X` should be a NumPy array.")
 
     @staticmethod
-    def check_dataframe_is_numerics(X: DataFrame):
-        """Check if dataframe is only numerics.
+    def check_dataframe_is_Numeric(X: DataFrame):
+        """Check if dataframe is only Numeric.
 
         Parameters
         ----------
@@ -192,11 +192,11 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
         """
         X_dtypes = X.dtypes
         for x_dtype in X_dtypes:
-            if x_dtype not in NUMERICS_DTYPES:
-                raise ValueError(f"`X` should be of type {PRINT_NUMERICS_DTYPES}.")
+            if x_dtype not in Numeric_DTYPES:
+                raise ValueError(f"`X` should be of type {PRINT_Numeric_DTYPES}.")
 
     def check_datatype(self, dtype, accepted_dtypes):
-        """Check if dataframe is only numerics.
+        """Check if dataframe is only Numeric.
 
         Parameters
         ----------
@@ -248,8 +248,8 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
             raise ValueError("`y` should be float.")
 
     @staticmethod
-    def check_dataframe_contains_numerics(X: DataFrame):
-        """Check if dataframe is only numerics.
+    def check_dataframe_contains_Numeric(X: DataFrame):
+        """Check if dataframe is only Numeric.
 
         Parameters
         ----------
@@ -258,11 +258,11 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
         """
         X_dtypes = X.dtypes
         for x_dtype in X_dtypes:
-            if x_dtype in NUMERICS_DTYPES:
+            if x_dtype in Numeric_DTYPES:
                 return
         raise ValueError(
             f"""`X` should contains one of the following float dtypes:
-            {PRINT_NUMERICS_DTYPES}.
+            {PRINT_Numeric_DTYPES}.
             Use gators.converter.ConvertColumnDatatype before
             calling this transformer."""
         )
@@ -283,17 +283,17 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
                 {self.__class__.__name__}."""
             )
 
-    def check_array_is_numerics(self, X: np.ndarray):
-        """Check if array is only numerics.
+    def check_array_is_Numeric(self, X: np.ndarray):
+        """Check if array is only Numeric.
 
         Parameters
         ----------
         X : np.ndarray
              Array.
         """
-        if X.dtype not in NUMERICS_DTYPES:
+        if X.dtype not in Numeric_DTYPES:
             raise ValueError(
-                f"""`X` should be of type {PRINT_NUMERICS_DTYPES}
+                f"""`X` should be of type {PRINT_Numeric_DTYPES}
                 to use the transformer {self.__class__.__name__}.
                 Use gators.converter.ConvertColumnDatatype before calling it.
                 """

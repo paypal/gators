@@ -16,6 +16,13 @@ class BinSingleTargetClassCategories(Transformer):
     Ensure that the target class ratio for each categy is between 0 and 1 excluded.
     Note that this transformer should only be used for binary classification problems.
 
+    Parameters
+    ----------
+    inplace : bool
+        If False, return the dataframe with the new binned columns
+        with the names *column_name__bin_single*). Otherwise,
+        return the dataframe with the existing binned columns.
+
     Examples
     ---------
 
@@ -82,12 +89,13 @@ class BinSingleTargetClassCategories(Transformer):
            ['_0|_1', '_1|_2', '_0|_1|_2', '_1', 5]], dtype=object)
     """
 
-    def __init__(self):
+    def __init__(self, inplace: bool = True):
         Transformer.__init__(self)
+        self.inplace = inplace
         self.replace = None
         self.columns = []
         self.idx_columns: np.ndarray = np.array([])
-        self.mapping = {}
+        self.to_replace_dict = {}
         self.is_binned = False
 
     def fit(self, X: DataFrame, y: Series) -> "BinSingleTargetClassCategories":
@@ -115,6 +123,7 @@ class BinSingleTargetClassCategories(Transformer):
             )
             return self
         y_name = y.name
+        self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, datatype=object)
         means = (
             util.get_function(X)
@@ -132,11 +141,13 @@ class BinSingleTargetClassCategories(Transformer):
             .apply(lambda x: x.sort_index(level=1).sort_values())
             .droplevel(0)
         )
-
         extreme_columns = (
             means[(means == 0) | (means == 1)].index.get_level_values(0).unique()
         )
-        self.mapping = {c: {} for c in extreme_columns}
+        self.to_replace_dict = {c: {} for c in extreme_columns}
+        self.column_names = self.get_column_names(
+            self.inplace, extreme_columns, "bin_single"
+        )
         for c in extreme_columns:
             cats_0, cats_1 = [], []
             idx = (means[c] == 0).sum()
@@ -151,13 +162,15 @@ class BinSingleTargetClassCategories(Transformer):
 
             d_0 = dict(zip(cats_0, len(cats_0) * ["|".join(cats_0)]))
             d_1 = dict(zip(cats_1, len(cats_1) * ["|".join(cats_1)]))
-            self.mapping[c] = {**d_0, **d_1}
+            self.to_replace_dict[c] = {**d_0, **d_1}
         self.is_binned = (
-            True if sum([len(val) for val in self.mapping.values()]) else False
+            True if sum([len(val) for val in self.to_replace_dict.values()]) else False
         )
         if not self.is_binned:
             return self
-        self.replace = Replace(to_replace_dict=self.mapping).fit(X)
+        self.replace = Replace(
+            to_replace_dict=self.to_replace_dict, inplace=self.inplace
+        ).fit(X)
         return self
 
     def transform(self, X: DataFrame) -> DataFrame:
@@ -174,10 +187,11 @@ class BinSingleTargetClassCategories(Transformer):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        self.dtypes_ = X.dtypes
+
         if not self.is_binned:
             return X
-        return self.replace.transform(X)
+        columns = dict(zip(self.replace.column_names, self.column_names))
+        return self.replace.transform(X).rename(columns=columns)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.

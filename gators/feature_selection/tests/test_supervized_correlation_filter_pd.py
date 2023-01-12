@@ -28,7 +28,6 @@ def data():
     return obj, X, X_expected
 
 
-
 @pytest.fixture
 def data_():
     max_corr = 0.8
@@ -61,7 +60,6 @@ def test_pd_np(data):
     assert_frame_equal(X_new, X_expected.astype(np.float64))
 
 
-
 def test_pd(data_):
     obj, X, X_expected = data_
     X_new = obj.transform(X)
@@ -79,5 +77,6 @@ def test_init():
     with pytest.raises(TypeError):
         _ = SupervizedCorrelationFilter(feature_importances="a", max_corr="a")
     with pytest.raises(TypeError):
-        _ = SupervizedCorrelationFilter(feature_importances=pd.Series({'A': 0.1}), max_corr="a")
-
+        _ = SupervizedCorrelationFilter(
+            feature_importances=pd.Series({"A": 0.1}), max_corr="a"
+        )

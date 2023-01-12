@@ -246,11 +246,15 @@ gators/binning/tests/__pycache__/test_quantile_discretizer_pd.cpython-39-pytest-
 gators/clipping/__init__.py
 gators/clipping/clipping.py
 gators/clipping/clipping.pyx
+gators/clipping/quantile_clipping.py
 gators/clipping/__pycache__/__init__.cpython-38.pyc
 gators/clipping/__pycache__/clipping.cpython-38.pyc
 gators/clipping/tests/test_clipping_dd.py
 gators/clipping/tests/test_clipping_ks.py
 gators/clipping/tests/test_clipping_pd.py
+gators/clipping/tests/test_quantile_clipping_dd.py
+gators/clipping/tests/test_quantile_clipping_ks.py
+gators/clipping/tests/test_quantile_clipping_pd.py
 gators/clipping/tests/__pycache__/test_clipping.cpython-36-pytest-6.2.5.pyc
 gators/clipping/tests/__pycache__/test_clipping.cpython-37-pytest-6.2.5.pyc
 gators/clipping/tests/__pycache__/test_clipping.cpython-38-pytest-6.2.5.pyc
@@ -673,7 +677,7 @@ gators/feature_selection/tests/__pycache__/test_variance_filter.cpython-39-pytes
 gators/imputers/__init__.py
 gators/imputers/_base_imputer.py
 gators/imputers/imputer.pyx
-gators/imputers/numerics_imputer.py
+gators/imputers/numeric_imputer.py
 gators/imputers/object_imputer.py
 gators/imputers/tests/test_imputers_dd.py
 gators/imputers/tests/test_imputers_ks.py

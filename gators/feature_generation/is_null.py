@@ -102,6 +102,7 @@ class IsNull(_BaseFeatureGeneration):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.idx_columns = util.get_idx_columns(
             columns=X.columns, selected_columns=self.columns
         )
@@ -121,10 +122,13 @@ class IsNull(_BaseFeatureGeneration):
             Transformed dataframe.
         """
         self.check_dataframe(X)
+        X_list = []
         for col, name in zip(self.columns, self.column_names):
-            X[name] = X[col].isnull().astype(np.float64)
-        self.dtypes_ = X.dtypes
-        return X
+            x = X[col].isnull().astype(np.float64)
+            x.name = name
+            X_list.append(x)
+        X_new = util.get_function(X).concat(X_list, axis=1)
+        return util.get_function(X).concat([X, X_new], axis=1)
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.

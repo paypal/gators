@@ -121,7 +121,7 @@ class PolynomialObjectFeatures(Transformer):
         self.check_dataframe(X)
         if self.degree == 1:
             return self
-        columns = list(X.columns)
+        self.base_columns = list(X.columns)
         self.combinations = list(
             map(
                 list,
@@ -130,9 +130,9 @@ class PolynomialObjectFeatures(Transformer):
                 ),
             )
         )
-
         self.combinations_np = [
-            list(util.get_idx_columns(columns, cols)) for cols in self.combinations
+            list(util.get_idx_columns(self.base_columns, cols))
+            for cols in self.combinations
         ]
 
         for combi in self.combinations_np:
@@ -159,7 +159,7 @@ class PolynomialObjectFeatures(Transformer):
         for combi, name in zip(self.combinations, self.column_names):
             X[name] = X[combi[0]].fillna("")
             X[name] += X["__x__".join(combi[1:])].fillna("")
-        self.dtypes_ = X.dtypes
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

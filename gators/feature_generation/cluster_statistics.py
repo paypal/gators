@@ -129,7 +129,7 @@ class ClusterStatistics(_BaseFeatureGeneration):
             Instance of itself.
         """
         self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X[self.columns])
+        self.base_columns = list(X.columns)
         self.idx_subarray = util.get_idx_columns(X, self.columns)
         self.idx_columns = self.get_idx_columns(X[self.columns], self.clusters_dict)
         return self

@@ -43,8 +43,8 @@
             </div>
         </div>
         <h2>
-            <span class="text">80 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">80<span class="text"> run</span></button>
+            <span class="text">79 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">79<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">0<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
@@ -208,7 +208,7 @@
     <p class="run"><span class="n"><a id="t149" href="#t149">149</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">columns</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t150" href="#t150">150</a></span><span class="t">            <span class="nam">c</span> <span class="key">for</span> <span class="nam">c</span> <span class="key">in</span> <span class="nam">X</span><span class="op">.</span><span class="nam">columns</span> <span class="key">if</span> <span class="nam">c</span> <span class="key">in</span> <span class="nam">list</span><span class="op">(</span><span class="nam">set</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">columns_a</span> <span class="op">+</span> <span class="nam">self</span><span class="op">.</span><span class="nam">columns_b</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t151" href="#t151">151</a></span><span class="t">        <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t152" href="#t152">152</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">check_dataframe_is_numerics</span><span class="op">(</span><span class="nam">X</span><span class="op">[</span><span class="nam">self</span><span class="op">.</span><span class="nam">columns</span><span class="op">]</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t152" href="#t152">152</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">base_columns</span> <span class="op">=</span> <span class="nam">list</span><span class="op">(</span><span class="nam">X</span><span class="op">.</span><span class="nam">columns</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t153" href="#t153">153</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t154" href="#t154">154</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">idx_subarray</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">get_idx_columns</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t155" href="#t155">155</a></span><span class="t">            <span class="nam">columns</span><span class="op">=</span><span class="nam">X</span><span class="op">.</span><span class="nam">columns</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -245,7 +245,7 @@
     <p class="pln"><span class="n"><a id="t186" href="#t186">186</a></span><span class="t">            <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t187" href="#t187">187</a></span><span class="t">                <span class="nam">X</span><span class="op">[</span><span class="nam">c</span><span class="op">]</span> <span class="op">=</span> <span class="nam">X</span><span class="op">[</span><span class="nam">c_a</span><span class="op">]</span> <span class="op">/</span> <span class="op">(</span><span class="nam">X</span><span class="op">[</span><span class="nam">c_b</span><span class="op">]</span> <span class="op">+</span> <span class="nam">EPSILON</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t188" href="#t188">188</a></span><span class="t">            <span class="nam">X</span><span class="op">[</span><span class="nam">c</span><span class="op">]</span> <span class="op">=</span> <span class="nam">X</span><span class="op">[</span><span class="nam">c</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t189" href="#t189">189</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">dtypes_</span> <span class="op">=</span> <span class="nam">X</span><span class="op">.</span><span class="nam">dtypes</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t189" href="#t189">189</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t190" href="#t190">190</a></span><span class="t">        <span class="key">return</span> <span class="nam">X</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t191" href="#t191">191</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t192" href="#t192">192</a></span><span class="t">    <span class="key">def</span> <span class="nam">transform_numpy</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">X</span><span class="op">:</span> <span class="nam">np</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">)</span> <span class="op">-></span> <span class="nam">np</span><span class="op">.</span><span class="nam">ndarray</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -310,7 +310,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v6.3.1</a>,
-            created at 2022-09-28 13:08 +0100
+            created at 2023-01-12 13:06 +0000
         </p>
     </div>
 </footer>
