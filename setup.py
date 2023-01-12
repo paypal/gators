@@ -88,7 +88,7 @@ setuptools.setup(
         "scikit-learn",
         "seaborn",
         "pandas",
-        "numpy",
+        "numpy==1.23.1",
         "lightgbm",
         "xgboost",
         "treelite>=0.93",
