@@ -59,6 +59,7 @@ class UpperCase(_BaseStringFeature):
     array([['ABC', 'ABC'],
            ['AB', 'AB'],
            ['', None]], dtype=object)
+
     """
 
     def __init__(self, columns: List[str] = None, inplace: bool = True):
