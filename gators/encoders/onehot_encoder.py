@@ -159,15 +159,6 @@ class OneHotEncoder(_BaseEncoder):
             [X, util.get_function(X).concat(new_series_list, axis=1)], axis=1
         )
 
-        # for name in self.column_names:
-        #     dummy = name.split("__")
-        #     col = "__".join(dummy[:-1])
-        #     cat = dummy[-1]
-        #     X[name] = (X[col] == cat).astype(float)
-        # if self.inplace:
-        #     X = X.drop(self.columns, axis=1)
-        # return X
-
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.
 

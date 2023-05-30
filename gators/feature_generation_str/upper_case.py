@@ -61,16 +61,41 @@ class UpperCase(_BaseStringFeature):
            ['', None]], dtype=object)
     """
 
-    def __init__(self, columns: List[str], inplace: bool = True):
-        if not isinstance(columns, (list, np.ndarray)):
-            raise TypeError("`columns` should be a list.")
-        if not columns:
-            raise ValueError("`columns` should not be empty.")
+    def __init__(self, columns: List[str] = None, inplace: bool = True):
+        if not isinstance(columns, (list, np.ndarray)) and columns is not None:
+            raise TypeError("`columns` should be a list or None.")
+        if isinstance(columns, (list, np.ndarray)) and not columns:
+            raise ValueError("`columns` should not be an empty list")
         if not isinstance(inplace, bool):
             raise TypeError("`inplace` should be a bool.")
         self.columns = columns
         self.inplace = inplace
+
+    def fit(self, X: DataFrame, y: Series = None) -> "UpperCase":
+        """Fit the transformer on the dataframe `X`.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            Input dataframe.
+        y : Series, default None.
+            Target values.
+
+        Returns
+        -------
+        UpperCase
+            Instance of itself.
+        """
+        self.check_dataframe(X)
+        self.base_columns = list(X.columns)
+        if not self.columns:
+            self.columns = util.get_datatype_columns(X, object)
         self.column_names = self.get_column_names(self.inplace, self.columns, "upper")
+        self.idx_columns = util.get_idx_columns(
+            columns=X.columns,
+            selected_columns=self.columns,
+        )
+        return self
 
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
@@ -86,6 +111,7 @@ class UpperCase(_BaseStringFeature):
             Transformed dataframe.
         """
         self.check_dataframe(X)
+
         for col, name in zip(self.columns, self.column_names):
             X[name] = util.get_function(X).replace(
                 X[col].astype(str).str.upper(), {"NONE": None, "NAN": None}

@@ -37,6 +37,36 @@ def data():
 
 
 @pytest.fixture
+def data_no_columns():
+    X = pd.DataFrame(
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["q", "qq", "QQq"],
+            "E": ["w", "WW", "WWw"],
+            "F": ["abc", None, ""],
+        }
+    )
+
+    obj = UpperCase(inplace=False).fit(X)
+    X_expected = pd.DataFrame(
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["q", "qq", "QQq"],
+            "E": ["w", "WW", "WWw"],
+            "F": ["abc", None, ""],
+            "D__upper": ["Q", "QQ", "QQQ"],
+            "E__upper": ["W", "WW", "WWW"],
+            "F__upper": ["ABC", None, ""],
+        }
+    )
+    return obj, X, X_expected
+
+
+@pytest.fixture
 def data_inplace():
     X = pd.DataFrame(
         {
@@ -71,6 +101,19 @@ def test_pd(data):
 
 def test_pd_np(data):
     obj, X, X_expected = data
+    X_numpy_new = obj.transform_numpy(X.to_numpy())
+    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
+    assert_frame_equal(X_new, X_expected.astype(object))
+
+
+def test_no_columns_pd(data_no_columns):
+    obj, X, X_expected = data_no_columns
+    X_new = obj.transform(X)
+    assert_frame_equal(X_new, X_expected)
+
+
+def test_pd_no_columns_np(data_no_columns):
+    obj, X, X_expected = data_no_columns
     X_numpy_new = obj.transform_numpy(X.to_numpy())
     X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
     assert_frame_equal(X_new, X_expected.astype(object))

@@ -161,7 +161,6 @@ class TreeBinning(_BaseBinning):
                 util.get_function(X).to_numpy(X[[c]]).astype(np.float32),
                 util.get_function(X).to_numpy(y).astype(np.int32),
             )
-
             splits = sorted(
                 [
                     float(node.split("<=")[1])
@@ -178,11 +177,11 @@ class TreeBinning(_BaseBinning):
                 if len(splits)
                 else np.array([-np.inf, np.inf])
             )
-        max_bins = max([len(v) for v in self.bins.values()])
+        max_bins = max(len(v) for v in self.bins.values())
         self.bins_np = np.inf * np.ones((max_bins, n_cols))
         for i, b in enumerate(self.bins.values()):
             self.bins_np[: len(b), i] = b
-        self.bins_dict = {col: np.unique(self.bins[col]) for col in self.bins.keys()}
+        self.bins_dict = {col: np.unique(self.bins[col]) for col in self.bins}
         self.pretty_bins_dict = {
             k: [util.prettify_number(x, precision=2) for x in v]
             for k, v in self.bins_dict.items()

@@ -113,5 +113,4 @@ class DropHighNaNRatio(_BaseDataCleaning):
             List of column names to drop.
         """
         mask_columns = util.get_function(X).to_pandas(X.isnull().mean()) > max_ratio
-        columns_to_drop = list(mask_columns[mask_columns].index)
-        return columns_to_drop
+        return list(mask_columns[mask_columns].index)

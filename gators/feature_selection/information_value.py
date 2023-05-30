@@ -117,7 +117,9 @@ class InformationValue(_BaseFeatureSelection):
         y: Series
             Target values.
 
-        self : "InformationValue"
+        Returns
+        -------
+        "InformationValue"
             Instance of itself.
         """
         self.check_dataframe(X)

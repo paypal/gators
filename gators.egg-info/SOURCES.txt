@@ -1,4 +1,3 @@
-.coverage
 .coveragerc
 .gitignore
 LICENSE
@@ -6,7 +5,6 @@ MANIFEST.in
 README.md
 codecov.yml
 combined_cert.pem
-pyproject.toml
 pytest.ini
 requirements.txt
 requirements_tox.txt

@@ -63,8 +63,10 @@ class BinRareCategories(Transformer):
     1       a  OTHERS
     2  OTHERS  OTHERS
 
-    Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
-    and returns a transformed NumPy array. Note that this transformer should **only** be used
+    Independly of the dataframe library used to fit the transformer,
+    the `tranform_numpy` method only accepts NumPy arrays
+    and returns a transformed NumPy array.
+    Note that this transformer should **only** be used
     when the number of rows is small *e.g.* in real-time environment.
 
     >>> obj.transform_numpy(X.to_numpy())
@@ -198,13 +200,14 @@ class BinRareCategories(Transformer):
         freq = util.get_function(X).to_pandas(
             util.get_function(X).melt(X).groupby(["variable", "value"]).size() / len(X)
         )
-        freq = freq[freq >= min_ratio]
         mapping = {}
         for c in X.columns:
-            if c in list(freq.index.get_level_values(0)):
-                mapping[c] = list(freq.loc[c].index)
+            freq_column = freq.loc[c].sort_values()
+            mask = freq_column < min_ratio
+            if mask.sum() == 1:
+                mapping[c] = list(freq_column.iloc[2:].index)
             else:
-                mapping[c] = []
+                mapping[c] = list(freq_column[~mask].index)
         return mapping
 
     @staticmethod

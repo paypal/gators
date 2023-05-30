@@ -165,12 +165,11 @@ class Replace(Transformer):
                 self.to_replace_np_vals,
                 self.n_elements_vec,
             )
-        else:
-            X_replace = replace(
-                X.copy(),
-                self.idx_columns,
-                self.to_replace_np_keys,
-                self.to_replace_np_vals,
-                self.n_elements_vec,
-            )
-            return np.concatenate((X, X_replace[:, self.idx_columns]), axis=1)
+        X_replace = replace(
+            X.copy(),
+            self.idx_columns,
+            self.to_replace_np_keys,
+            self.to_replace_np_vals,
+            self.n_elements_vec,
+        )
+        return np.concatenate((X, X_replace[:, self.idx_columns]), axis=1)

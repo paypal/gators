@@ -144,11 +144,11 @@ class _BaseEncoder(Transformer):
         import seaborn as sns
 
         if not isinstance(decimal, int) or decimal < 1:
-            raise TypeError(f"`decimal` should be a positive int.")
+            raise TypeError("`decimal` should be a positive int.")
         if not isinstance(k, int) or k < 1:
-            raise TypeError(f"`k` should be a positive int.")
+            raise TypeError("`k` should be a positive int.")
         if not isinstance(title, str):
-            raise TypeError(f"`title` should be a str.")
+            raise TypeError("`title` should be a str.")
 
         mapping = pd.DataFrame(self.mapping)
         vmin = mapping.min().min()

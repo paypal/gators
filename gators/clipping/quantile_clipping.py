@@ -94,7 +94,7 @@ class QuantileClipping(Transformer):
             raise TypeError("`max_quantile` should be a float between [0, 1].")
         if not isinstance(inplace, bool):
             raise TypeError("`inplace` should be a bool.")
-        if len(columns) == 0:
+        if not columns:
             raise ValueError("`columns` should be a not empty list.")
         self.columns = columns
         self.min_quantile = min_quantile

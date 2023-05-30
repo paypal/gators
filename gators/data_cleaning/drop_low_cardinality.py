@@ -110,7 +110,10 @@ class DropLowCardinality(_BaseDataCleaning):
         if not object_columns:
             return []
         X_nunique = util.get_function(X).to_pandas(
-            util.get_function(X).melt(X).groupby("variable")["value"].nunique()
+            util.get_function(X)
+            .melt(X[object_columns])
+            .groupby("variable")["value"]
+            .nunique()
         )
         mask_columns = X_nunique < min_categories
         columns_to_drop = mask_columns[mask_columns].index

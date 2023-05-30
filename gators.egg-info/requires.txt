@@ -1,12 +1,10 @@
-scipy
 scikit-learn
 seaborn
 pandas
-numpy
 lightgbm
 xgboost
-treelite>=0.93
-treelite-runtime>=0.93
+treelite
+treelite-runtime
 dill
 
 [dask]
