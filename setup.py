@@ -124,8 +124,6 @@ setuptools.setup(
             "fsspec>=0.3.3",
             "distributed",
             "dask",
-            "dask_ml",
-            "bokeh",
         ],
     },
     package_data={
