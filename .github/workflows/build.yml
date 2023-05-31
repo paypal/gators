@@ -50,6 +50,8 @@ jobs:
         pip install --upgrade pip
         pip install certifi
         pip install numpy
+        pip install dask
+        pip install koalas
         pip install cython
         pip install pytest
         pip install coverage
