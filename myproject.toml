@@ -1,0 +1,11 @@
+[tool.poetry]
+name = 'gators'
+version = '0.3.3'
+description = 'Streamline model building and productionization processes.'
+authors = ['The Gators Development Team']
+readme = 'README.md'
+include = ['*.pyx', '*.c']
+keywords = ['machine learning']
+
+[build-system]
+requires = ['setuptools', 'wheel', 'numpy', 'Cython']
