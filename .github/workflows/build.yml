@@ -66,6 +66,16 @@ jobs:
   
     - name: tests
       run: |
+        pip install --upgrade pip
+        pip install certifi
+        pip install numpy
+        pip install dask
+        pip install distributed
+        pip install pyspark
+        pip install koalas
+        pip install cython
+        pip install pytest
+        pip install coverage
         coverage run --omit gators/*/test*.py -m pytest gators -m "not koalas" --ignore=gators/feature_generation_dt/tests && coverage report && coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
