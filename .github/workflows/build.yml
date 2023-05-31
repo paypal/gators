@@ -93,6 +93,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install certifi cibuildwheel==2.2.2
           python -m pip install -r requirements.txt
+          python -m pip install numpy
 
       - name: Build MacOS wheel
         if: matrix.os == 'macos-latest'
