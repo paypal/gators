@@ -100,8 +100,8 @@ jobs:
           CIBW_BUILD: "cp36-macosx_x86_64 cp37-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64"
           CIBW_BEFORE_ALL: >
             brew install libomp &&
-            pip install pip -U &&
-            pip install numpy==1.23.5
+            python -m pip install pip -U &&
+            python -m pip install numpy==1.23.5
         run: python -m cibuildwheel --platform macos --output-dir dist
 
       - name: Install linux wheels
@@ -109,8 +109,8 @@ jobs:
         env:
           CIBW_BUILD: "cp36-manylinux_x86_64 cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
           CIBW_BEFORE_ALL: >
-            pip install pip -U &&
-            pip install numpy==1.23.5
+            python -m pip install pip -U &&
+            python -m pip install numpy==1.23.5
         run: python -m cibuildwheel --output-dir dist
 
 
