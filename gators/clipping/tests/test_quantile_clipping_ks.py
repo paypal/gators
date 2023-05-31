@@ -74,12 +74,14 @@ def data_partial():
     return obj, X, X_expected
 
 
+@pytest.mark.koalas
 def test_ks(data):
     obj, X, X_expected = data
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
+@pytest.mark.koalas
 def test_ks_np(data):
     obj, X, X_expected = data
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -87,12 +89,14 @@ def test_ks_np(data):
     assert np.allclose(X_new, X_expected.to_numpy())
 
 
+@pytest.mark.koalas
 def test_not_inplace_ks(data_not_inplace):
     obj, X, X_expected = data_not_inplace
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
+@pytest.mark.koalas
 def test_not_inplace_ks_np(data_not_inplace):
     obj, X, X_expected = data_not_inplace
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -100,12 +104,14 @@ def test_not_inplace_ks_np(data_not_inplace):
     assert np.allclose(X_new, X_expected.to_numpy())
 
 
+@pytest.mark.koalas
 def test_partial_ks(data_partial):
     obj, X, X_expected = data_partial
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
+@pytest.mark.koalas
 def test_partial_ks_np(data_partial):
     obj, X, X_expected = data_partial
     X_numpy_new = obj.transform_numpy(X.to_numpy())
