@@ -51,6 +51,7 @@ jobs:
         pip install certifi
         pip install numpy
         pip install dask
+        pip install pyspark
         pip install koalas
         pip install cython
         pip install pytest
