@@ -51,6 +51,7 @@ jobs:
         pip install certifi
         pip install numpy
         pip install cython
+        pip install pytest
         pip install coverage
         pip install tox tox-wheel tox-gh-actions
         # pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements_tox.txt
