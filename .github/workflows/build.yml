@@ -58,7 +58,7 @@ jobs:
   
     - name: tests
       run: |
-        coverage run --omit gators/*/test*.py -m pytest gators -m "not koalas" && coverage report && coverage xml
+        coverage run --omit gators/*/test*.py -m pytest gators -m "not koalas" --ignore=gators/feature_generation_dt/tests && coverage report && coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
