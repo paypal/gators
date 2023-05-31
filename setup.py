@@ -114,6 +114,7 @@ setuptools.setup(
             "koalas",
             "distributed",
             "dask",
+            "numpy<=1.23.5",
         ],
         "koalas": [
             "pyspark",

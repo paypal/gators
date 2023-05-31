@@ -84,7 +84,7 @@ class CorrelationFilter(_BaseFeatureSelection):
         columns = X.columns
         corr = util.get_function(X).to_pandas(X.corr()).abs()
         stacked_corr = (
-            corr.where(np.tril(np.ones(corr.shape), k=-1).astype(np.bool))
+            corr.where(np.tril(np.ones(corr.shape), k=-1).astype(bool))
             .stack()
             .sort_values(ascending=False)
         )
