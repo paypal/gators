@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'gators'
-version = '0.2.0'
+version = '0.3.3'
 description = 'Streamline model building and productionization processes.'
 authors = ['The Gators Development Team']
 readme = 'README.md'
