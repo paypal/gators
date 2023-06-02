@@ -116,7 +116,7 @@ class _BaseEncoder(Transformer):
         """
         columns = list(mapping.keys())
         n_columns = len(columns)
-        max_categories = max([len(m) for m in mapping.values()])
+        max_categories = max(len(m) for m in mapping.values())
         encoded_values_vec = np.zeros((n_columns, max_categories))
         values_vec = np.zeros((n_columns, max_categories), dtype=object)
         for i, c in enumerate(columns):

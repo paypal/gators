@@ -30,8 +30,8 @@ cpdef np.ndarray[object, ndim=2] encoder(
     return X
 
 
-# @cython.boundscheck(False)
-# @cython.wraparound(False)
+@cython.boundscheck(False)
+@cython.wraparound(False)
 cpdef np.ndarray[object, ndim=2] encoder_new(
         np.ndarray[object, ndim=2] X,
         np.ndarray[np.int64_t, ndim=1] num_categories_vec,

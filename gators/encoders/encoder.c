@@ -1485,9 +1485,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
 /* ExtTypeTest.proto */
 static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
 
-/* BufferIndexError.proto */
-static void __Pyx_RaiseBufferIndexError(int axis);
-
 /* SliceObject.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyObject_GetSlice(
         PyObject* obj, Py_ssize_t cstart, Py_ssize_t cstop,
@@ -2338,8 +2335,8 @@ static PyObject *__pyx_pf_7encoder_encoder(CYTHON_UNUSED PyObject *__pyx_self, P
 }
 
 /* "encoder.pyx":35
- * # @cython.boundscheck(False)
- * # @cython.wraparound(False)
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
  * cpdef np.ndarray[object, ndim=2] encoder_new(             # <<<<<<<<<<<<<<
  *         np.ndarray[object, ndim=2] X,
  *         np.ndarray[np.int64_t, ndim=1] num_categories_vec,
@@ -2382,13 +2379,12 @@ static PyArrayObject *__pyx_f_7encoder_encoder_new(PyArrayObject *__pyx_v_X, PyA
   __pyx_t_5numpy_int64_t __pyx_t_13;
   __pyx_t_5numpy_int64_t __pyx_t_14;
   __pyx_t_5numpy_int64_t __pyx_t_15;
-  int __pyx_t_16;
+  __pyx_t_5numpy_int64_t __pyx_t_16;
   __pyx_t_5numpy_int64_t __pyx_t_17;
   __pyx_t_5numpy_int64_t __pyx_t_18;
-  __pyx_t_5numpy_int64_t __pyx_t_19;
-  int __pyx_t_20;
+  int __pyx_t_19;
+  __pyx_t_5numpy_int64_t __pyx_t_20;
   __pyx_t_5numpy_int64_t __pyx_t_21;
-  __pyx_t_5numpy_int64_t __pyx_t_22;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2540,19 +2536,6 @@ static PyArrayObject *__pyx_f_7encoder_encoder_new(PyArrayObject *__pyx_v_X, PyA
  */
       __pyx_t_14 = __pyx_v_k;
       __pyx_t_15 = __pyx_v_i;
-      __pyx_t_16 = -1;
-      if (__pyx_t_14 < 0) {
-        __pyx_t_14 += __pyx_pybuffernd_X.diminfo[0].shape;
-        if (unlikely(__pyx_t_14 < 0)) __pyx_t_16 = 0;
-      } else if (unlikely(__pyx_t_14 >= __pyx_pybuffernd_X.diminfo[0].shape)) __pyx_t_16 = 0;
-      if (__pyx_t_15 < 0) {
-        __pyx_t_15 += __pyx_pybuffernd_X.diminfo[1].shape;
-        if (unlikely(__pyx_t_15 < 0)) __pyx_t_16 = 1;
-      } else if (unlikely(__pyx_t_15 >= __pyx_pybuffernd_X.diminfo[1].shape)) __pyx_t_16 = 1;
-      if (unlikely(__pyx_t_16 != -1)) {
-        __Pyx_RaiseBufferIndexError(__pyx_t_16);
-        __PYX_ERR(0, 50, __pyx_L1_error)
-      }
       __pyx_t_2 = (PyObject *) *__Pyx_BufPtrStrided2d(PyObject **, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_14, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_15, __pyx_pybuffernd_X.diminfo[1].strides);
       __Pyx_INCREF((PyObject*)__pyx_t_2);
       __Pyx_XDECREF_SET(__pyx_v_value, __pyx_t_2);
@@ -2566,15 +2549,6 @@ static PyArrayObject *__pyx_f_7encoder_encoder_new(PyArrayObject *__pyx_v_X, PyA
  *                 if value == values_vec[i, j]:
  */
       __pyx_t_15 = __pyx_v_i;
-      __pyx_t_16 = -1;
-      if (__pyx_t_15 < 0) {
-        __pyx_t_15 += __pyx_pybuffernd_num_categories_vec.diminfo[0].shape;
-        if (unlikely(__pyx_t_15 < 0)) __pyx_t_16 = 0;
-      } else if (unlikely(__pyx_t_15 >= __pyx_pybuffernd_num_categories_vec.diminfo[0].shape)) __pyx_t_16 = 0;
-      if (unlikely(__pyx_t_16 != -1)) {
-        __Pyx_RaiseBufferIndexError(__pyx_t_16);
-        __PYX_ERR(0, 51, __pyx_L1_error)
-      }
       __pyx_v_j_max = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_int64_t *, __pyx_pybuffernd_num_categories_vec.rcbuffer->pybuffer.buf, __pyx_t_15, __pyx_pybuffernd_num_categories_vec.diminfo[0].strides));
 
       /* "encoder.pyx":52
@@ -2586,8 +2560,8 @@ static PyArrayObject *__pyx_f_7encoder_encoder_new(PyArrayObject *__pyx_v_X, PyA
  */
       __pyx_t_15 = __pyx_v_j_max;
       __pyx_t_14 = __pyx_t_15;
-      for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_14; __pyx_t_17+=1) {
-        __pyx_v_j = __pyx_t_17;
+      for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_14; __pyx_t_16+=1) {
+        __pyx_v_j = __pyx_t_16;
 
         /* "encoder.pyx":53
  *             j_max = num_categories_vec[i]
@@ -2596,28 +2570,15 @@ static PyArrayObject *__pyx_f_7encoder_encoder_new(PyArrayObject *__pyx_v_X, PyA
  *                     X_encoded[k, i] = encoded_values_vec[i, j]
  *                     break
  */
-        __pyx_t_18 = __pyx_v_i;
-        __pyx_t_19 = __pyx_v_j;
-        __pyx_t_16 = -1;
-        if (__pyx_t_18 < 0) {
-          __pyx_t_18 += __pyx_pybuffernd_values_vec.diminfo[0].shape;
-          if (unlikely(__pyx_t_18 < 0)) __pyx_t_16 = 0;
-        } else if (unlikely(__pyx_t_18 >= __pyx_pybuffernd_values_vec.diminfo[0].shape)) __pyx_t_16 = 0;
-        if (__pyx_t_19 < 0) {
-          __pyx_t_19 += __pyx_pybuffernd_values_vec.diminfo[1].shape;
-          if (unlikely(__pyx_t_19 < 0)) __pyx_t_16 = 1;
-        } else if (unlikely(__pyx_t_19 >= __pyx_pybuffernd_values_vec.diminfo[1].shape)) __pyx_t_16 = 1;
-        if (unlikely(__pyx_t_16 != -1)) {
-          __Pyx_RaiseBufferIndexError(__pyx_t_16);
-          __PYX_ERR(0, 53, __pyx_L1_error)
-        }
-        __pyx_t_2 = (PyObject *) *__Pyx_BufPtrStrided2d(PyObject **, __pyx_pybuffernd_values_vec.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_values_vec.diminfo[0].strides, __pyx_t_19, __pyx_pybuffernd_values_vec.diminfo[1].strides);
+        __pyx_t_17 = __pyx_v_i;
+        __pyx_t_18 = __pyx_v_j;
+        __pyx_t_2 = (PyObject *) *__Pyx_BufPtrStrided2d(PyObject **, __pyx_pybuffernd_values_vec.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_values_vec.diminfo[0].strides, __pyx_t_18, __pyx_pybuffernd_values_vec.diminfo[1].strides);
         __Pyx_INCREF((PyObject*)__pyx_t_2);
         __pyx_t_4 = PyObject_RichCompare(__pyx_v_value, __pyx_t_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 53, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_20 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_20 < 0)) __PYX_ERR(0, 53, __pyx_L1_error)
+        __pyx_t_19 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_19 < 0)) __PYX_ERR(0, 53, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (__pyx_t_20) {
+        if (__pyx_t_19) {
 
           /* "encoder.pyx":54
  *             for j in range(j_max):
@@ -2626,37 +2587,11 @@ static PyArrayObject *__pyx_f_7encoder_encoder_new(PyArrayObject *__pyx_v_X, PyA
  *                     break
  *     return X_encoded
  */
-          __pyx_t_19 = __pyx_v_i;
-          __pyx_t_18 = __pyx_v_j;
-          __pyx_t_16 = -1;
-          if (__pyx_t_19 < 0) {
-            __pyx_t_19 += __pyx_pybuffernd_encoded_values_vec.diminfo[0].shape;
-            if (unlikely(__pyx_t_19 < 0)) __pyx_t_16 = 0;
-          } else if (unlikely(__pyx_t_19 >= __pyx_pybuffernd_encoded_values_vec.diminfo[0].shape)) __pyx_t_16 = 0;
-          if (__pyx_t_18 < 0) {
-            __pyx_t_18 += __pyx_pybuffernd_encoded_values_vec.diminfo[1].shape;
-            if (unlikely(__pyx_t_18 < 0)) __pyx_t_16 = 1;
-          } else if (unlikely(__pyx_t_18 >= __pyx_pybuffernd_encoded_values_vec.diminfo[1].shape)) __pyx_t_16 = 1;
-          if (unlikely(__pyx_t_16 != -1)) {
-            __Pyx_RaiseBufferIndexError(__pyx_t_16);
-            __PYX_ERR(0, 54, __pyx_L1_error)
-          }
-          __pyx_t_21 = __pyx_v_k;
-          __pyx_t_22 = __pyx_v_i;
-          __pyx_t_16 = -1;
-          if (__pyx_t_21 < 0) {
-            __pyx_t_21 += __pyx_pybuffernd_X_encoded.diminfo[0].shape;
-            if (unlikely(__pyx_t_21 < 0)) __pyx_t_16 = 0;
-          } else if (unlikely(__pyx_t_21 >= __pyx_pybuffernd_X_encoded.diminfo[0].shape)) __pyx_t_16 = 0;
-          if (__pyx_t_22 < 0) {
-            __pyx_t_22 += __pyx_pybuffernd_X_encoded.diminfo[1].shape;
-            if (unlikely(__pyx_t_22 < 0)) __pyx_t_16 = 1;
-          } else if (unlikely(__pyx_t_22 >= __pyx_pybuffernd_X_encoded.diminfo[1].shape)) __pyx_t_16 = 1;
-          if (unlikely(__pyx_t_16 != -1)) {
-            __Pyx_RaiseBufferIndexError(__pyx_t_16);
-            __PYX_ERR(0, 54, __pyx_L1_error)
-          }
-          *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float64_t *, __pyx_pybuffernd_X_encoded.rcbuffer->pybuffer.buf, __pyx_t_21, __pyx_pybuffernd_X_encoded.diminfo[0].strides, __pyx_t_22, __pyx_pybuffernd_X_encoded.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float64_t *, __pyx_pybuffernd_encoded_values_vec.rcbuffer->pybuffer.buf, __pyx_t_19, __pyx_pybuffernd_encoded_values_vec.diminfo[0].strides, __pyx_t_18, __pyx_pybuffernd_encoded_values_vec.diminfo[1].strides));
+          __pyx_t_18 = __pyx_v_i;
+          __pyx_t_17 = __pyx_v_j;
+          __pyx_t_20 = __pyx_v_k;
+          __pyx_t_21 = __pyx_v_i;
+          *__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float64_t *, __pyx_pybuffernd_X_encoded.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_X_encoded.diminfo[0].strides, __pyx_t_21, __pyx_pybuffernd_X_encoded.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float64_t *, __pyx_pybuffernd_encoded_values_vec.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_encoded_values_vec.diminfo[0].strides, __pyx_t_17, __pyx_pybuffernd_encoded_values_vec.diminfo[1].strides));
 
           /* "encoder.pyx":55
  *                 if value == values_vec[i, j]:
@@ -2693,8 +2628,8 @@ static PyArrayObject *__pyx_f_7encoder_encoder_new(PyArrayObject *__pyx_v_X, PyA
   goto __pyx_L0;
 
   /* "encoder.pyx":35
- * # @cython.boundscheck(False)
- * # @cython.wraparound(False)
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
  * cpdef np.ndarray[object, ndim=2] encoder_new(             # <<<<<<<<<<<<<<
  *         np.ndarray[object, ndim=2] X,
  *         np.ndarray[np.int64_t, ndim=1] num_categories_vec,
@@ -6772,12 +6707,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
     PyErr_Format(PyExc_TypeError, "Cannot convert %.200s to %.200s",
                  Py_TYPE(obj)->tp_name, type->tp_name);
     return 0;
-}
-
-/* BufferIndexError */
-  static void __Pyx_RaiseBufferIndexError(int axis) {
-  PyErr_Format(PyExc_IndexError,
-     "Out of bounds on buffer access (axis %d)", axis);
 }
 
 /* SliceObject */

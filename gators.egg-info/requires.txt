@@ -11,8 +11,6 @@ dill
 fsspec>=0.3.3
 distributed
 dask
-dask_ml
-bokeh
 
 [dev]
 docutils>=0.16.0
