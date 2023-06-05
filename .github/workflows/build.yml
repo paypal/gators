@@ -101,7 +101,7 @@ jobs:
           CIBW_BEFORE_BUILD_MACOS: >
             python -m pip install pip -U &&
             python -m pip install setuptools &&
-            python -m pip install numpy<=1.23.5 &&
+            python -m pip install numpy==1.23.5 &&
             python -m pip install cython
         run: python -m cibuildwheel --platform macos --output-dir dist
 
@@ -112,7 +112,7 @@ jobs:
           CIBW_BEFORE_BUILD_LINUX: >
             python -m pip install pip -U &&
             python -m pip install setuptools &&
-            python -m pip install numpy<=1.23.5 &&
+            python -m pip install numpy==1.23.5 &&
             python -m pip install cython
 
 
