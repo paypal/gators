@@ -57,7 +57,7 @@ jobs:
   
     - name: tests
       run: |
-        coverage run --omit gators/*/test*.py -m pytest gators -m "not koalas" --ignore=gators/feature_generation_dt/tests && coverage report && coverage xml
+        coverage run --omit gators/*/test*.py -m pytest gators && coverage report && coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
@@ -105,7 +105,7 @@ jobs:
             python -m pip install cython
         run: python -m cibuildwheel --platform macos --output-dir dist
 
-      - name: Install linux wheels
+      - name: Build linux wheels
         if: matrix.os == 'ubuntu-latest'
         env:
           CIBW_BUILD: "cp36-manylinux_x86_64 cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp310-manylinux_x86_64"
