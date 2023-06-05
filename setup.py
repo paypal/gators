@@ -86,7 +86,7 @@ setuptools.setup(
     install_requires=[
         "scikit-learn",
         "seaborn",
-        "pandas",
+        "pandas<=1.5.3",
         "lightgbm",
         "xgboost",
         "treelite",
