@@ -1,6 +1,6 @@
 # License: Apache-2.0
 import warnings
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import numpy as np
 
@@ -88,6 +88,7 @@ class BinRareCategories(Transformer):
         self.categories_to_keep_np: np.ndarray = None
         self.n_categories_to_keep_np: np.ndarray = None
         self.categories_to_keep_dict: Dict[str, np.ndarray] = {}
+        self.categories_to_bin_dict: Dict[str, np.ndarray] = {}
 
     def fit(self, X: DataFrame, y: Series = None) -> "BinRareCategories":
         """Fit the transformer on the dataframe `X`.
@@ -116,7 +117,10 @@ class BinRareCategories(Transformer):
         self.column_names = self.get_column_names(
             self.inplace, self.columns, "bin_rare"
         )
-        self.categories_to_keep_dict = self.compute_categories_to_keep_dict(
+        (
+            self.categories_to_keep_dict,
+            self.categories_to_bin_dict,
+        ) = self.compute_mappings(
             X=X[self.columns],
             min_ratio=self.min_ratio,
         )
@@ -180,9 +184,9 @@ class BinRareCategories(Transformer):
         return np.concatenate((X, X_rare), axis=1)
 
     @staticmethod
-    def compute_categories_to_keep_dict(
+    def compute_mappings(
         X: DataFrame, min_ratio: float
-    ) -> Dict[str, List[str]]:
+    ) -> Union[Dict[str, List[str]], Dict[str, List[str]]]:
         """Compute the category frequency.
 
         Parameters
@@ -197,18 +201,26 @@ class BinRareCategories(Transformer):
         mapping : Dict[str, List[str]]
             Categories to keep.
         """
-        freq = util.get_function(X).to_pandas(
-            util.get_function(X).melt(X).groupby(["variable", "value"]).size() / len(X)
-        )
-        mapping = {}
-        for c in X.columns:
-            freq_column = freq.loc[c].sort_values()
-            mask = freq_column < min_ratio
-            if mask.sum() == 1:
-                mapping[c] = list(freq_column.iloc[2:].index)
-            else:
-                mapping[c] = list(freq_column[~mask].index)
-        return mapping
+        freq = (
+            util.get_function(X).to_pandas(
+                util.get_function(X).melt(X).groupby(["variable", "value"]).size()
+                / len(X)
+            )
+        ).sort_values()
+
+        cats_to_keep_dict = {}
+        cats_to_bin_dict = {}
+        for col in X.columns:
+            freq_column = freq.loc[col]
+            mask = freq_column >= min_ratio
+            cats_to_bin = list(mask[~mask].index)
+            cats_to_keep = list(mask[mask].index)
+            if (freq_column[cats_to_bin].sum() < min_ratio) and cats_to_bin:
+                cats_to_bin.append(cats_to_keep[0])
+                cats_to_keep = cats_to_keep[1:]
+            cats_to_keep_dict[col] = cats_to_keep
+            cats_to_bin_dict[col] = cats_to_bin
+        return cats_to_keep_dict, cats_to_bin_dict
 
     @staticmethod
     def get_categories_to_keep_np(

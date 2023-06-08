@@ -80,7 +80,7 @@ class OneHot(_BaseFeatureGeneration):
                 for cat in cats
             ]
         columns = [col for col, cats in categories_dict.items() for cat in cats]
-        n_cats = sum([len(cat) for cat in categories_dict.values()])
+        n_cats = sum(len(cat) for cat in categories_dict.values())
         if column_names and n_cats != len(column_names):
             raise ValueError(
                 "Length of `clusters_dict` and `column_names` should match."
@@ -91,7 +91,12 @@ class OneHot(_BaseFeatureGeneration):
             columns=columns,
             column_names=column_names,
         )
-        self.mapping = dict(zip(self.column_names, self.columns))
+        self.mapping = dict(
+            zip(
+                column_names,
+                [[col, cat] for col, cats in categories_dict.items() for cat in cats],
+            )
+        )
 
     def fit(self, X: DataFrame, y: Series = None):
         """
