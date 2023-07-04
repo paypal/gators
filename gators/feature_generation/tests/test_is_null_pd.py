@@ -126,8 +126,6 @@ def test_obj_np(data_obj):
 def test_init():
     with pytest.raises(TypeError):
         _ = IsNull(columns=0)
-    with pytest.raises(ValueError):
-        _ = IsNull(columns=[], column_names=["AIsNull"])
     with pytest.raises(TypeError):
         _ = IsNull(columns=list("ABC"), column_names=0)
     with pytest.raises(ValueError):

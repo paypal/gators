@@ -113,8 +113,6 @@ def test_partial_pd_np(data_partial):
 def test_init():
     with pytest.raises(TypeError):
         _ = QuantileClipping(columns=0, min_quantile=0.2, max_quantile=0.8)
-    with pytest.raises(ValueError):
-        _ = QuantileClipping(columns=[], min_quantile=0.2, max_quantile=0.8)
     with pytest.raises(TypeError):
         _ = QuantileClipping(columns=["A"], min_quantile="a", max_quantile=0.8)
     with pytest.raises(TypeError):

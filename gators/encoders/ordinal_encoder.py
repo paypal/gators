@@ -86,10 +86,6 @@ class OrdinalEncoder(_BaseEncoder):
         self.columns = util.get_datatype_columns(X, object)
         self.column_names = self.get_column_names(self.inplace, self.columns, "ordinal")
         if not self.columns:
-            warnings.warn(
-                f"""`X` does not contain object columns:
-                `{self.__class__.__name__}` is not needed"""
-            )
             return self
         self.mapping = self.generate_mapping(X[self.columns])
         self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])

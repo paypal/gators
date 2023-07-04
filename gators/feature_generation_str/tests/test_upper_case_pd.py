@@ -135,7 +135,5 @@ def test_inplace_pd_np(data_inplace):
 def test_init():
     with pytest.raises(TypeError):
         _ = UpperCase(columns="x")
-    with pytest.raises(ValueError):
-        _ = UpperCase(columns=[])
     with pytest.raises(TypeError):
         _ = UpperCase(columns=["x"], inplace="x")

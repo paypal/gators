@@ -68,7 +68,6 @@ class TargetEncoder(_BaseEncoder):
     """
 
     def __init__(self, inplace=True):
-
         _BaseEncoder.__init__(self, inplace=inplace)
         self.y_name = ""
 
@@ -93,10 +92,6 @@ class TargetEncoder(_BaseEncoder):
         self.columns = util.get_datatype_columns(X, object)
         self.column_names = self.get_column_names(self.inplace, self.columns, "target")
         if not self.columns:
-            warnings.warn(
-                f"""`X` does not contain object columns:
-                `{self.__class__.__name__}` is not needed"""
-            )
             return self
         self.mapping = self.generate_mapping(X[self.columns], y)
         self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])

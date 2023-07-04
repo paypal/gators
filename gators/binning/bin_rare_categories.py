@@ -107,10 +107,6 @@ class BinRareCategories(Transformer):
         """
         self.check_dataframe(X)
         if object not in X.dtypes.to_numpy():
-            warnings.warn(
-                """`X` does not contain object columns:
-                `BinRareCategories` is not needed"""
-            )
             return self
         self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, datatype=object)

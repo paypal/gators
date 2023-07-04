@@ -117,10 +117,6 @@ class BinSingleTargetClassCategories(Transformer):
         self.check_target(X, y)
         if object not in X.dtypes.to_numpy():
             self.is_binned = False
-            warnings.warn(
-                """`X` does not contain object columns:
-                `BinSingleTargetClassCategories` is not needed"""
-            )
             return self
         y_name = y.name
         self.base_columns = list(X.columns)

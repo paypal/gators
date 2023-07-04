@@ -148,10 +148,6 @@ class NumericImputer(_BaseImputer):
             self.columns += util.get_datatype_columns(X, int)
         self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
         if not self.columns:
-            warnings.warn(
-                """`X` does not contain numerical columns,
-                `NumericImputer` is not needed"""
-            )
             self.idx_columns = np.array([])
             return self
         self.idx_columns = util.get_idx_columns(X.columns, self.columns)

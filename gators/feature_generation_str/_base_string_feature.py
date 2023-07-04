@@ -25,8 +25,6 @@ class _BaseStringFeature(Transformer):
     def __init__(self, columns: List[str], column_names: List[str]):
         if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
-        if not columns:
-            raise ValueError("`columns` should not be empty.")
         if column_names and not isinstance(column_names, (list, np.ndarray)):
             raise TypeError("`column_names` should be a list.")
         if column_names and len(column_names) != len(columns):

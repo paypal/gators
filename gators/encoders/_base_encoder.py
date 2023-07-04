@@ -7,11 +7,7 @@ import numpy as np
 from encoder import encoder
 from encoder import encoder_new
 from ..util import util
-from ..transformers.transformer import (
-    Numeric_DTYPES,
-    PRINT_Numeric_DTYPES,
-    Transformer,
-)
+from ..transformers.transformer import Transformer
 
 from gators import DataFrame
 
@@ -27,7 +23,7 @@ class _BaseEncoder(Transformer):
 
     def __init__(self, inplace):
         if not isinstance(inplace, bool):
-            raise TypeError(f"`inplace` should be a bool.")
+            raise TypeError("`inplace` should be a bool.")
         Transformer.__init__(self)
         self.inplace = inplace
         self.columns = []

@@ -489,16 +489,6 @@ def test_imputers_input_data():
         _ = ObjectImputer(strategy="most_frequent", columns="a")
 
 
-def test_warnings_empty_columns(data):
-    _, X_dict, _ = data
-    with pytest.warns(Warning):
-        obj = ObjectImputer(strategy="most_frequent")
-        obj.fit(X_dict["int"])
-    with pytest.warns(Warning):
-        obj = NumericImputer(strategy="mean")
-        obj.fit(X_dict["object"])
-
-
 def test_empty_columns_object():
     X = pd.DataFrame({"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]})
     obj = ObjectImputer(strategy="most_frequent")

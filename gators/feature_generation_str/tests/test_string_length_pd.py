@@ -57,5 +57,3 @@ def test_pd_np(data):
 def test_init():
     with pytest.raises(TypeError):
         _ = StringLength(columns="x")
-    with pytest.raises(ValueError):
-        _ = StringLength(columns=[])

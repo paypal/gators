@@ -64,8 +64,6 @@ class LowerCase(_BaseStringFeature):
     def __init__(self, columns: List[str] = None, inplace: bool = True):
         if not isinstance(columns, (list, np.ndarray)) and columns is not None:
             raise TypeError("`columns` should be a list or None.")
-        if isinstance(columns, (list, np.ndarray)) and not columns:
-            raise ValueError("`columns` should not be an empty list")
         if not isinstance(inplace, bool):
             raise TypeError("`inplace` should be a bool.")
         self.columns = columns

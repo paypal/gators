@@ -73,7 +73,7 @@ class IsEqual(_BaseFeatureGeneration):
             raise TypeError("`columns_a` should be a list.")
         if len(columns_a) != len(columns_b):
             raise ValueError("Length of `columns_a` and `columns_b` should match.")
-        if len(columns_a) == 0:
+        if not columns_a:
             raise ValueError("`columns_a` and `columns_b` should not be empty.")
         if not column_names:
             column_names = [

@@ -95,10 +95,6 @@ class OneHotEncoder(_BaseEncoder):
         self.columns = util.get_datatype_columns(X, object)
         columns = list(X.columns)
         if not self.columns:
-            warnings.warn(
-                f"""`X` does not contain object columns:
-                `{self.__class__.__name__}` is not needed"""
-            )
             return self
         self.column_names = list(
             util.get_function(X).get_dummies(
