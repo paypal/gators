@@ -43,8 +43,8 @@ class SupervizedCorrelationFilter(_BaseFeatureSelection):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
 
     * and `pandas` dataframes:
 
@@ -72,7 +72,7 @@ class SupervizedCorrelationFilter(_BaseFeatureSelection):
     ):
         if "Series" not in str(type(feature_importances)):
             raise TypeError(
-                "`feature_importances` should be a pandas, dask, or koalas Series."
+                "`feature_importances` should be a pandas, dask, or pyspark Series."
             )
         if not isinstance(max_corr, float):
             raise TypeError("`max_corr` should be a float.")

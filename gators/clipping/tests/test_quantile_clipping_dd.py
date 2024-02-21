@@ -83,8 +83,8 @@ def data_partial():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -96,8 +96,8 @@ def test_dd_np(data):
 
 def test_not_inplace_dd(data_not_inplace):
     obj, X, X_expected = data_not_inplace
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_not_inplace_dd_np(data_not_inplace):
@@ -109,8 +109,8 @@ def test_not_inplace_dd_np(data_not_inplace):
 
 def test_partial_dd(data_partial):
     obj, X, X_expected = data_partial
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_partial_dd_np(data_partial):

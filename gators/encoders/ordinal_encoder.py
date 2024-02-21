@@ -38,8 +38,8 @@ class OrdinalEncoder(_BaseEncoder):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
 
     * and `pandas` dataframes:
 
@@ -64,40 +64,13 @@ class OrdinalEncoder(_BaseEncoder):
            [0., 1.]])
     """
 
-    def __init__(self, inplace=True):
-        _BaseEncoder.__init__(self, inplace=inplace)
+    def __init__(self, columns=None, inplace=True):
+        _BaseEncoder.__init__(self, columns=None, inplace=inplace)
+        self.suffix = "ordinal"
 
-    def fit(self, X: DataFrame, y: Series = None) -> "OrdinalEncoder":
-        """Fit the transformer on the dataframe `X`.
-
-        Parameters
-        ----------
-        X : DataFrame.
-            Input dataframe.
-        y : Series, default None.
-            Target values.
-
-        Returns
-        -------
-        OrdinalEncoder: Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.base_columns = list(X.columns)
-        self.columns = util.get_datatype_columns(X, object)
-        self.column_names = self.get_column_names(self.inplace, self.columns, "ordinal")
-        if not self.columns:
-            return self
-        self.mapping = self.generate_mapping(X[self.columns])
-        self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
-        columns, self.values_vec, self.encoded_values_vec = self.decompose_mapping(
-            mapping=self.mapping,
-        )
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=columns
-        )
-        return self
-
-    def generate_mapping(self, X: DataFrame) -> Dict[str, Dict[str, float]]:
+    def generate_mapping(
+        self, X: DataFrame, y: Series = None
+    ) -> Dict[str, Dict[str, float]]:
         """Generate the mapping to perform the encoding.
 
         Parameters
@@ -110,12 +83,15 @@ class OrdinalEncoder(_BaseEncoder):
         Dict[str, Dict[str, float]]
             Mapping.
         """
-        mapping = {}
-        for c in X.columns:
-            mapping[c] = (
-                util.get_function(X)
-                .to_pandas(X[c].value_counts(ascending=True))
-                .to_dict()
+        values = np.arange(len(X), dtype=float)
+        return {
+            c: (
+                dict(
+                    zip(
+                        util.get_function(X).to_pandas(X[c].value_counts()).keys(),
+                        values,
+                    )
+                )
             )
-            mapping[c] = {k: float(i) for i, (k, v) in enumerate(mapping[c].items())}
-        return mapping
+            for c in X.columns
+        }

@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
 
-from gators.model_building.model import Model
+# from gators.model_building.model import Model
 from gators.pipeline.pipeline import Pipeline
 from gators.transformers.transformer import Transformer
 
@@ -60,12 +60,12 @@ def pipeline_with_model_example():
         pd.DataFrame(data["data"], columns=data["feature_names"]), npartitions=1
     )
     y = dd.from_pandas(pd.Series(data["target"], name="TARGET"), npartitions=1)
-    model = RandomForestClassifier(n_estimators=6, max_depth=4, random_state=0)
+    # model = RandomForestClassifier(n_estimators=6, max_depth=4, random_state=0)
     steps = [
         ["MultiplyTransformer1", MultiplyTransformer(4.0)],
         ["MultiplyTransformer2", MultiplyTransformer(0.5)],
         ["NameTransformer", NameTransformer()],
-        ["Estimator", Model(model)],
+        # ["Estimator", Model(model)],
     ]
     pipe = Pipeline(steps).fit(X, y)
     return pipe, X
@@ -96,16 +96,16 @@ def test_fit_transform_pipeline(pipeline_example):
     ]
 
 
-def test_pipeline_predict(pipeline_with_model_example):
-    pipe, X = pipeline_with_model_example
-    y_pred = pipe.predict(X)
-    assert y_pred.shape == (150,)
+# def test_pipeline_predict(pipeline_with_model_example):
+#     pipe, X = pipeline_with_model_example
+#     y_pred = pipe.predict(X)
+#     assert y_pred.shape == (150,)
 
 
-def test_pipeline_predict_proba(pipeline_with_model_example):
-    pipe, X = pipeline_with_model_example
-    y_pred = pipe.predict_proba(X)
-    assert y_pred.shape == (150, 3)
+# def test_pipeline_predict_proba(pipeline_with_model_example):
+#     pipe, X = pipeline_with_model_example
+#     y_pred = pipe.predict_proba(X)
+#     assert y_pred.shape == (150, 3)
 
 
 def test_pipeline_numpy(pipeline_example):

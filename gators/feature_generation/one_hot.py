@@ -37,8 +37,8 @@ class OneHot(_BaseFeatureGeneration):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['z', 'a', 'a']})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'b', 'c'], 'B': ['z', 'a', 'a']})
 
     * and `pandas` dataframes:
 
@@ -138,12 +138,21 @@ class OneHot(_BaseFeatureGeneration):
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        util.get_function(X).set_option("compute.ops_on_diff_frames", True)
-        for name, col, cat in zip(self.column_names, self.columns, self.cats):
-            X[name] = X[col] == cat
-        util.get_function(X).set_option("compute.ops_on_diff_frames", False)
+        # util.get_function(X).set_option("compute.ops_on_diff_frames", True)
+        # for name, col, cat in zip(self.column_names, self.columns, self.cats):
+        #     X[name] = X[col] == cat
+        # util.get_function(X).set_option("compute.ops_on_diff_frames", False)
+        # return X
+        new_series_list = []
 
-        return X
+        for name, col, cat in zip(self.column_names, self.columns, self.cats):
+            dummy = X[col] == cat
+            new_series_list.append(dummy.rename(name))
+
+        return util.get_function(X).concat(
+            [X, util.get_function(X).concat(new_series_list, axis=1).astype(float)],
+            axis=1,
+        )
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
         """Transform the array `X`.

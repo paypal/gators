@@ -8,6 +8,13 @@ from pandas.testing import assert_frame_equal
 from gators.binning import Binning
 
 
+obj_columns = ["C", "A__bin", "B__bin", "D__bin", "F__bin"]
+obj_columns_no_num = ["C"]
+obj_columns_num = ["A__bin", "B__bin", "D__bin", "F__bin"]
+obj_columns_num_inplace = ["A", "B", "D", "F"]
+obj_columns_inplace = ["A", "B", "C", "D", "F"]
+
+
 @pytest.fixture
 def data():
     n_bins = 4
@@ -249,8 +256,9 @@ def data_num_inplace():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[obj_columns] = X_new[obj_columns].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -264,8 +272,9 @@ def test_dd_np(data):
 
 def test_no_num_dd(data_no_num):
     obj, X, X_expected = data_no_num
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[obj_columns_no_num] = X_new[obj_columns_no_num].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_no_num_dd_np(data_no_num):
@@ -279,8 +288,9 @@ def test_no_num_dd_np(data_no_num):
 
 def test_num_dd(data_num):
     obj, X, X_expected = data_num
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[obj_columns_num] = X_new[obj_columns_num].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_num_dd_np(data_num):
@@ -292,13 +302,14 @@ def test_num_dd_np(data_num):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-# # inplace
+# # # inplace
 
 
 def test_inplace_dd(data_inplace):
     obj, X, X_expected = data_inplace
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[obj_columns_inplace] = X_new[obj_columns_inplace].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_inplace_dd_np(data_inplace):
@@ -312,8 +323,9 @@ def test_inplace_dd_np(data_inplace):
 
 def test_inplace_num_dd(data_num_inplace):
     obj, X, X_expected = data_num_inplace
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[obj_columns_num_inplace] = X_new[obj_columns_num_inplace].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_inplace_num_dd_np(data_num_inplace):

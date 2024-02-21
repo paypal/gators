@@ -47,8 +47,8 @@ class PolynomialFeatures(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame(
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame(
     ... {'A': [0.0, 3.0, 6.0], 'B': [1.0, 4.0, 7.0], 'C': [2.0, 5.0, 8.0]})
 
     * and `pandas` dataframes:

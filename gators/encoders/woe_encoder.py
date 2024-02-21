@@ -1,10 +1,7 @@
 # License: Apache-2.0
-import warnings
-from typing import Dict
+from typing import List, Dict
 
-import numpy as np
 
-from ..util import util
 from ._base_encoder import _BaseEncoder
 from ..util.iv import compute_iv
 
@@ -43,9 +40,9 @@ class WOEEncoder(_BaseEncoder):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> y = ks.Series([1, 1, 0], name='TARGET')
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
+    >>> y = ps.Series([1, 1, 0], name='TARGET')
 
     * and `pandas` dataframes:
 
@@ -73,6 +70,7 @@ class WOEEncoder(_BaseEncoder):
 
     def __init__(
         self,
+        columns: List[str] = None,
         regularization: float = 0.5,
         inplace: bool = True,
     ):
@@ -81,46 +79,10 @@ class WOEEncoder(_BaseEncoder):
         if regularization < 0:
             raise ValueError("""`regularization` should be a positive float.""")
         self.regularization = regularization
-        _BaseEncoder.__init__(self, inplace=inplace)
+        _BaseEncoder.__init__(self, columns=columns, inplace=inplace)
+        self.suffix = "woe"
 
-    def fit(self, X: DataFrame, y: Series) -> "WOEEncoder":
-        """Fit the encoder.
-
-        Parameters
-        ----------
-        X : DataFrame:
-            Input dataframe.
-        y : Series, default None.
-            Target values.
-
-        Returns
-        -------
-        WOEEncoder:
-            Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.check_target(X, y)
-        self.base_columns = list(X.columns)
-        self.columns = util.get_datatype_columns(X, object)
-        self.column_names = self.get_column_names(self.inplace, self.columns, "woe")
-        if not self.columns:
-            return self
-        self.mapping = self.generate_mapping(X[self.columns], y)
-        self.mapping = {k: self.mapping[k] for k in self.columns}
-        self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
-        _, self.values_vec, self.encoded_values_vec = self.decompose_mapping(
-            mapping=self.mapping
-        )
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns
-        )
-        return self
-
-    def generate_mapping(
-        self,
-        X: DataFrame,
-        y: Series,
-    ) -> Dict[str, Dict[str, float]]:
+    def generate_mapping(self, X: DataFrame, y: Series) -> Dict[str, Dict[str, float]]:
         """Generate the mapping to perform the encoding.
 
         Parameters
@@ -136,10 +98,6 @@ class WOEEncoder(_BaseEncoder):
             Mapping.
         """
         _, stats = compute_iv(X, y, regularization=self.regularization)
-        mapping = (
-            stats[["woe"]]
-            .groupby(level=0)
-            .apply(lambda df: df.xs(df.name)["woe"].to_dict())
-            .to_dict()
-        )
-        return mapping
+        stats_woe = stats[["woe"]]
+        grouped_stats = stats_woe.groupby(level=0)
+        return {name: group.xs(name)["woe"].to_dict() for name, group in grouped_stats}

@@ -23,13 +23,12 @@ def data():
         ),
         npartitions=1,
     )
-    X_np = X.compute().to_numpy()
-
     X["A"] = X["A"].astype("datetime64[ns]")
     X["B"] = X["B"].astype("datetime64[ms]")
     X["C"] = X["C"].astype("datetime64[s]")
-    X["D"] = X["D"].astype("datetime64[m]")
-    X["E"] = X["E"].astype("datetime64[h]")
+    X["D"] = X["D"].astype("datetime64[s]")
+    X["E"] = X["E"].astype("datetime64[s]")
+    X_np = X.compute().to_numpy()
     X_expected = pd.DataFrame(
         {
             "A__day_of_week": [0.0, np.nan],
@@ -48,8 +47,8 @@ def data():
 
 def test_dd(data):
     obj, X, X_expected, X_np, X_expected_np = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):

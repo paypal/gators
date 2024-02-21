@@ -1,0 +1,3 @@
+gators/scalers/tests/test_standard_scaler_dd.py F.
+gators/feature_selection/tests/test_information_value_dd.py .F
+gators/encoders/tests/test_woe_encoder_dd.py ....F.

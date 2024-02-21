@@ -11,7 +11,7 @@ def test_init_pd():
         _ = obj.fit(X)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_dateformat():
     obj = OrdinalDayOfMonth(columns=["A"])
     with pytest.raises(TypeError):

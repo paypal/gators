@@ -6,7 +6,6 @@ import numpy as np
 
 from imputer import object_imputer
 
-from ..util import util
 from ._base_imputer import _BaseImputer
 
 from gators import DataFrame, Series
@@ -57,9 +56,9 @@ class ObjectImputer(_BaseImputer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
+    >>> import pyspark.pandas as ps
     >>> import numpy as np
-    >>> X = ks.DataFrame(
+    >>> X = ps.DataFrame(
     ... {'A': ['a', 'b', 'a', None],
     ... 'B': ['c', 'c', 'd', None],
     ... 'C': [0, 1, 2, np.nan]})
@@ -152,14 +151,7 @@ class ObjectImputer(_BaseImputer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        self.base_columns = list(X.columns)
-        if not self.columns:
-            self.columns = util.get_datatype_columns(X, object)
-        self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
-        if not self.columns:
-            self.idx_columns = np.array([])
-            return self
-        self.idx_columns = np.array(util.get_idx_columns(X, self.columns))
+        self.set_columns(X, [object, "string[pyarrow]"], suffix="impute")
         self.statistics = self.compute_statistics(X=X, value=self.value)
         self.statistics_np = np.array(list(self.statistics.values())).astype(object)
         return self

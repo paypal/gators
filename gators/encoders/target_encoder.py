@@ -39,9 +39,9 @@ class TargetEncoder(_BaseEncoder):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> y = ks.Series([1, 1, 0], name='TARGET')
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
+    >>> y = ps.Series([1, 1, 0], name='TARGET')
 
     * and `pandas` dataframes:
 
@@ -67,41 +67,9 @@ class TargetEncoder(_BaseEncoder):
            [0. , 0.5]])
     """
 
-    def __init__(self, inplace=True):
-        _BaseEncoder.__init__(self, inplace=inplace)
-        self.y_name = ""
-
-    def fit(self, X: DataFrame, y: Series) -> "TargetEncoder":
-        """Fit the encoder.
-
-        Parameters
-        ----------
-        X : DataFrame
-            Input dataframe.
-        y : Series, default None.
-            Target values.
-
-        Returns
-        -------
-        TargetEncoder:
-            Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.check_target(X, y)
-        self.base_columns = list(X.columns)
-        self.columns = util.get_datatype_columns(X, object)
-        self.column_names = self.get_column_names(self.inplace, self.columns, "target")
-        if not self.columns:
-            return self
-        self.mapping = self.generate_mapping(X[self.columns], y)
-        self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
-        columns, self.values_vec, self.encoded_values_vec = self.decompose_mapping(
-            mapping=self.mapping
-        )
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=columns
-        )
-        return self
+    def __init__(self, columns=None, inplace=True):
+        _BaseEncoder.__init__(self, columns=None, inplace=inplace)
+        self.suffix = "target"
 
     def generate_mapping(self, X: DataFrame, y: Series) -> Dict[str, Dict[str, float]]:
         """Generate the mapping to perform the encoding.
@@ -118,14 +86,12 @@ class TargetEncoder(_BaseEncoder):
         Dict[str, Dict[str, float]]
             Mapping.
         """
-        self.y_name = y.name
         columns = X.columns
         means = (
             util.get_function(X)
-            .melt(util.get_function(X).join(X, y.to_frame()), id_vars=self.y_name)
+            .melt(util.get_function(X).join(X, y.to_frame()), id_vars=y.name)
             .groupby(["variable", "value"])
-            .mean()[self.y_name]
+            .mean()[y.name]
         )
         means = util.get_function(X).to_pandas(means)
-        mapping = {c: means[c].to_dict() for c in columns}
-        return mapping
+        return {c: means[c].to_dict() for c in columns}

@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,13 +7,13 @@ from pandas.testing import assert_frame_equal
 
 from gators.binning import QuantileBinning
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
     n_bins = 4
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": [7.25, 71.2833, 7.925, 53.1, 8.05, 8.4583],
             "B": [1, 1, 0, 1, 0, 0],
@@ -38,12 +38,12 @@ def data_ks():
                 "[8.05, 53.1)",
             ],
             "B__bin": [
-                "[1.0, inf)",
-                "[1.0, inf)",
-                "[0.0, 1.0)",
-                "[1.0, inf)",
-                "[0.0, 1.0)",
-                "[0.0, 1.0)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
             ],
             "D__bin": [
                 "(-inf, 26.0)",
@@ -54,12 +54,12 @@ def data_ks():
                 "[27.2, 30.0)",
             ],
             "F__bin": [
-                "[3.0, inf)",
-                "[1.0, 2.0)",
-                "[2.0, 3.0)",
-                "[1.0, 2.0)",
-                "[2.0, 3.0)",
-                "[3.0, inf)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "[2.0, inf)",
             ],
         }
     )
@@ -70,7 +70,7 @@ def data_ks():
 @pytest.fixture
 def data_inplace_ks():
     n_bins = 4
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": [7.25, 71.2833, 7.925, 53.1, 8.05, 8.4583],
             "B": [1, 1, 0, 1, 0, 0],
@@ -90,12 +90,12 @@ def data_inplace_ks():
                 "[8.05, 53.1)",
             ],
             "B": [
-                "[1.0, inf)",
-                "[1.0, inf)",
-                "[0.0, 1.0)",
-                "[1.0, inf)",
-                "[0.0, 1.0)",
-                "[0.0, 1.0)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
             ],
             "C": ["a", "b", "c", "d", "e", "f"],
             "D": [
@@ -107,12 +107,12 @@ def data_inplace_ks():
                 "[27.2, 30.0)",
             ],
             "F": [
-                "[3.0, inf)",
-                "[1.0, 2.0)",
-                "[2.0, 3.0)",
-                "[1.0, 2.0)",
-                "[2.0, 3.0)",
-                "[3.0, inf)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "[2.0, inf)",
             ],
         }
     )
@@ -123,7 +123,7 @@ def data_inplace_ks():
 @pytest.fixture
 def data_no_num_ks():
     n_bins = 3
-    X = ks.DataFrame({"C": ["a", "b", "c", "d", "e", "f"]})
+    X = ps.DataFrame({"C": ["a", "b", "c", "d", "e", "f"]})
     X_expected = pd.DataFrame({"C": ["a", "b", "c", "d", "e", "f"]})
     obj = QuantileBinning(n_bins).fit(X)
     return obj, X, X_expected
@@ -132,7 +132,7 @@ def data_no_num_ks():
 @pytest.fixture
 def data_num_ks():
     n_bins = 4
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": [7.25, 71.2833, 7.925, 53.1, 8.05, 8.4583],
             "B": [1, 1, 0, 1, 0, 0],
@@ -155,12 +155,12 @@ def data_num_ks():
                 "[8.05, 53.1)",
             ],
             "B__bin": [
-                "[1.0, inf)",
-                "[1.0, inf)",
-                "[0.0, 1.0)",
-                "[1.0, inf)",
-                "[0.0, 1.0)",
-                "[0.0, 1.0)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
             ],
             "D__bin": [
                 "(-inf, 26.0)",
@@ -171,12 +171,12 @@ def data_num_ks():
                 "[27.2, 30.0)",
             ],
             "F__bin": [
-                "[3.0, inf)",
-                "[1.0, 2.0)",
-                "[2.0, 3.0)",
-                "[1.0, 2.0)",
-                "[2.0, 3.0)",
-                "[3.0, inf)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "[2.0, inf)",
             ],
         }
     )
@@ -187,7 +187,7 @@ def data_num_ks():
 @pytest.fixture
 def data_num_inplace_ks():
     n_bins = 4
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": [7.25, 71.2833, 7.925, 53.1, 8.05, 8.4583],
             "B": [1, 1, 0, 1, 0, 0],
@@ -206,12 +206,12 @@ def data_num_inplace_ks():
                 "[8.05, 53.1)",
             ],
             "B": [
-                "[1.0, inf)",
-                "[1.0, inf)",
-                "[0.0, 1.0)",
-                "[1.0, inf)",
-                "[0.0, 1.0)",
-                "[0.0, 1.0)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
+                "(-inf, inf)",
             ],
             "D": [
                 "(-inf, 26.0)",
@@ -222,12 +222,12 @@ def data_num_inplace_ks():
                 "[27.2, 30.0)",
             ],
             "F": [
-                "[3.0, inf)",
-                "[1.0, 2.0)",
-                "[2.0, 3.0)",
-                "[1.0, 2.0)",
-                "[2.0, 3.0)",
-                "[3.0, inf)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "(-inf, 2.0)",
+                "[2.0, inf)",
+                "[2.0, inf)",
             ],
         }
     )
@@ -235,14 +235,14 @@ def data_num_inplace_ks():
     return obj, X, X_expected
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected = data_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -252,7 +252,7 @@ def test_ks_np(data_ks):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_no_num_ks(data_no_num_ks):
     obj, X, X_expected = data_no_num_ks
     X_new = obj.transform(X)
@@ -260,7 +260,7 @@ def test_no_num_ks(data_no_num_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_no_num_ks_np(data_no_num_ks):
     obj, X, X_expected = data_no_num_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -270,7 +270,7 @@ def test_no_num_ks_np(data_no_num_ks):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_num_ks(data_num_ks):
     obj, X, X_expected = data_num_ks
     X_new = obj.transform(X)
@@ -278,7 +278,7 @@ def test_num_ks(data_num_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_num_ks_np(data_num_ks):
     obj, X, X_expected = data_num_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -288,7 +288,7 @@ def test_num_ks_np(data_num_ks):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_inplace_ks(data_inplace_ks):
     obj, X, X_expected = data_inplace_ks
     X_new = obj.transform(X)
@@ -296,7 +296,7 @@ def test_inplace_ks(data_inplace_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_inplace_ks_np(data_inplace_ks):
     obj, X, X_expected = data_inplace_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -306,7 +306,7 @@ def test_inplace_ks_np(data_inplace_ks):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_inplace_num_ks(data_num_inplace_ks):
     obj, X, X_expected = data_num_inplace_ks
     X_new = obj.transform(X)
@@ -314,7 +314,7 @@ def test_inplace_num_ks(data_num_inplace_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_inplace_num_ks_np(data_num_inplace_ks):
     obj, X, X_expected = data_num_inplace_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())

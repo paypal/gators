@@ -44,8 +44,8 @@ class StringContains(_BaseStringFeature):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['qwe', 'qwd', 'zwe'], 'B': [1, 2, 3]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['qwe', 'qwd', 'zwe'], 'B': [1, 2, 3]})
 
     * and `pandas` dataframes:
 

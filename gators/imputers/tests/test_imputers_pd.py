@@ -493,7 +493,7 @@ def test_empty_columns_object():
     X = pd.DataFrame({"A": [0, 1, 1, np.nan], "B": [3, 4, 4, np.nan]})
     obj = ObjectImputer(strategy="most_frequent")
     _ = obj.fit(X)
-    assert_frame_equal(obj.fit_transform(X.copy()), X)
+    assert_frame_equal(obj.transform(X.copy()), X)
     assert_frame_equal(
         pd.DataFrame(obj.transform_numpy(X.to_numpy())), pd.DataFrame(X.to_numpy())
     )

@@ -1,6 +1,7 @@
 from ._base_feature_selection import _BaseFeatureSelection
 from .correlation_filter import CorrelationFilter
 from .supervized_correlation_filter import SupervizedCorrelationFilter
+from .supervized_correlation_filter_new import SupervizedCorrelationFilterNew
 from .information_value import InformationValue
 from .select_from_model import SelectFromModel
 from .select_from_models import SelectFromModels
@@ -13,5 +14,6 @@ __all__ = [
     "VarianceFilter",
     "CorrelationFilter",
     "SupervizedCorrelationFilter",
+    "SupervizedCorrelationFilterNew",
     "InformationValue",
 ]

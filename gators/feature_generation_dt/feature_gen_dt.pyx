@@ -18,7 +18,7 @@ cpdef np.ndarray[np.float64_t, ndim=2] ordinal_datetime(
     cdef np.ndarray[np.float64_t, ndim=2] X_new = np.empty((n_rows, n_cols))
     for i in range(n_rows):
         for j in range(n_cols):
-            if (X[i, j] is None) or (X[i, j] != X[i, j]):
+            if X[i, j] != X[i, j]:
                 X_new[i, j] = np.nan
             else:
                 X_new[i, j] = float(str(X[i, j])[start_idx: end_idx])
@@ -37,7 +37,7 @@ cpdef np.ndarray[np.float64_t, ndim=2] ordinal_day_of_week(
     cdef np.ndarray[np.float64_t, ndim=2] X_new = np.empty((n_rows, n_cols))
     for i in range(n_rows):
         for j in range(n_cols):
-            if (X[i, j] is None) or (X[i, j] != X[i, j]):
+            if (X[i, j] != X[i, j]):
                 X_new[i, j] = np.nan
             else:
                 X_new[i, j] = (np.array(X[i, j]).astype('datetime64[D]').astype('float64') - 4) % 7
@@ -59,7 +59,7 @@ cpdef np.ndarray[np.float64_t, ndim=2] cyclic_minute_of_hour(
     cdef double val
     for i in range(n_rows):
         for j in range(n_cols):
-            if (X[i, j] is None) or (X[i, j] != X[i, j]):
+            if (X[i, j] != X[i, j]):
                 X_new[i, 2*j] = np.nan
                 X_new[i, 2*j+1] = np.nan
             else:
@@ -83,7 +83,7 @@ cpdef np.ndarray[np.float64_t, ndim=2] cyclic_hour_of_day(
     cdef double val
     for i in range(n_rows):
         for j in range(n_cols):
-            if (X[i, j] is None) or (X[i, j] != X[i, j]):
+            if (X[i, j] != X[i, j]):
                 X_new[i, 2*j] = np.nan
                 X_new[i, 2*j+1] = np.nan
             else:
@@ -107,7 +107,7 @@ cpdef np.ndarray[np.float64_t, ndim=2] cyclic_day_of_week(
     cdef double val
     for i in range(n_rows):
         for j in range(n_cols):
-            if (X[i, j] is None) or (X[i, j] != X[i, j]):
+            if (X[i, j] != X[i, j]):
                 X_new[i, 2*j] = np.nan
                 X_new[i, 2*j+1] = np.nan
             else:
@@ -134,7 +134,7 @@ cpdef np.ndarray[np.float64_t, ndim=2] cyclic_month_of_year(
     cdef double val
     for i in range(n_rows):
         for j in range(n_cols):
-            if (X[i, j] is None) or (X[i, j] != X[i, j]):
+            if (X[i, j] != X[i, j]):
                 X_new[i, 2*j] = np.nan
                 X_new[i, 2*j+1] = np.nan
             else:
@@ -162,7 +162,7 @@ cpdef np.ndarray[np.float64_t, ndim=2] cyclic_day_of_month(
 
     for i in range(n_rows):
         for j in range(n_cols):
-            if (X[i, j] is None) or (X[i, j] != X[i, j]):
+            if (X[i, j] != X[i, j]):
                 X_new[i, 2*j] = np.nan
                 X_new[i, 2*j+1] = np.nan
             else:

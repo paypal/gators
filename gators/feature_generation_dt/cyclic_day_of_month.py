@@ -40,8 +40,8 @@ class CyclicDayOfMonth(_BaseDatetimeFeature):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
     >>> X['A'] = X['A'].astype('datetime64[ns]')
 
     * and `pandas` dataframes:

@@ -19,13 +19,13 @@ def data():
             "X": ["x", "x"],
         }
     )
-    X_np = X.to_numpy()
     columns = ["A", "B", "C", "D", "E"]
     X["A"] = X["A"].astype("datetime64[ns]")
     X["B"] = X["B"].astype("datetime64[ms]")
     X["C"] = X["C"].astype("datetime64[s]")
-    X["D"] = X["D"].astype("datetime64[m]")
-    X["E"] = X["E"].astype("datetime64[h]")
+    X["D"] = X["D"].astype("datetime64[s]")
+    X["E"] = X["E"].astype("datetime64[s]")
+    X_np = X.to_numpy()
     X_expected = pd.DataFrame(
         {
             "A__month_of_year": [1.0, np.nan],

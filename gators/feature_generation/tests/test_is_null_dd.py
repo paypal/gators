@@ -75,6 +75,14 @@ def data_obj():
         ),
         npartitions=1,
     )
+    X_np = pd.DataFrame(
+        {
+            "A": [None, "a", "b"],
+            "B": [None, "c", "d"],
+            "C": [None, "e", "f"],
+            "D": [0, 1, np.nan],
+        }
+    ).to_numpy()
     X_expected = pd.DataFrame(
         {
             "A": [None, "a", "b"],
@@ -88,18 +96,19 @@ def data_obj():
         }
     )
     obj = IsNull(columns=list("ABCD")).fit(X)
-    return obj, X, X_expected
+    return obj, X, X_np, X_expected
 
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
     obj, X, X_expected = data
-    X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
+    X = X.compute()
+    X_numpy_new = obj.transform_numpy(X.to_numpy())
     X_new = pd.DataFrame(X_numpy_new)
     X_expected = pd.DataFrame(X_expected.values)
     assert_frame_equal(X_new, X_expected)
@@ -107,8 +116,8 @@ def test_dd_np(data):
 
 def test_names_dd(data_names):
     obj, X, X_expected = data_names
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_names_dd_np(data_names):
@@ -120,7 +129,8 @@ def test_names_dd_np(data_names):
 
 
 def test_obj(data_obj):
-    obj, X, X_expected = data_obj
+    obj, X, _, X_expected = data_obj
+    X[list("ABC")] = X[list("ABC")].astype(object)
     X_new = obj.transform(X).compute()
     assert_frame_equal(
         X_new.iloc[:, 4:].astype(float), X_expected.iloc[:, 4:].astype(float)
@@ -128,8 +138,8 @@ def test_obj(data_obj):
 
 
 def test_obj_np(data_obj):
-    obj, X, X_expected = data_obj
-    X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
+    obj, X, X_np, X_expected = data_obj
+    X_numpy_new = obj.transform_numpy(X_np)
     X_new = pd.DataFrame(X_numpy_new)
     X_expected = pd.DataFrame(X_expected.values)
     assert_frame_equal(

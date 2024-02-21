@@ -47,14 +47,14 @@ class BinSingleTargetClassCategories(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({
     ... "A": ["_0", "_1", "_2", '_2', '_1'],
     ... "B": ["_1", "_2", "_1", '_1', '_1'],
     ... "C": ["_0", "_0", "_1", '_2', '_2'],
     ... "D": ["_0", '_0', '_1', '_1', '_1'],
     ... "E": [1, 2, 3, 4, 5]})
-    >>> y = ks.Series([0, 1, 1, 0, 0], name='Target')
+    >>> y = ps.Series([0, 1, 1, 0, 0], name='Target')
 
     * and `pandas` dataframes:
 
@@ -115,12 +115,12 @@ class BinSingleTargetClassCategories(Transformer):
         """
         self.check_dataframe(X)
         self.check_target(X, y)
-        if object not in X.dtypes.to_numpy():
-            self.is_binned = False
-            return self
         y_name = y.name
         self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, datatype=object)
+        if not self.columns:
+            self.is_binned = False
+            return self
         means = (
             util.get_function(X)
             .melt(

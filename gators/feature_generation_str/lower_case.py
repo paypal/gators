@@ -37,8 +37,8 @@ class LowerCase(_BaseStringFeature):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
 
     * and `pandas` dataframes:
 
@@ -88,7 +88,8 @@ class LowerCase(_BaseStringFeature):
         self.base_columns = list(X.columns)
         if not self.columns:
             self.columns = util.get_datatype_columns(X, object)
-        self.column_names = self.get_column_names(self.inplace, self.columns, "upper")
+
+        self.column_names = self.get_column_names(self.inplace, self.columns, "lower")
         self.idx_columns = util.get_idx_columns(
             columns=X.columns,
             selected_columns=self.columns,
@@ -108,16 +109,9 @@ class LowerCase(_BaseStringFeature):
         X : DataFrame
             Transformed dataframe.
         """
-        if not self.columns:
-            self.columns = util.get_datatype_columns(X, object)
-        self.column_names = self.get_column_names(self.inplace, self.columns, "lower")
-
         self.check_dataframe(X)
         for col, name in zip(self.columns, self.column_names):
-            X[name] = util.get_function(X).replace(
-                X[col].astype(str).str.lower(), {"none": None, "nan": None}
-            )
-
+            X[name] = X[col].astype(str).str.lower()
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

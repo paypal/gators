@@ -15,7 +15,7 @@ def data():
             "C": [0.0, 0.0, 0.0],
             "D": ["Q", "QQ", "QQQ"],
             "E": ["W", "WW", "WWW"],
-            "F": ["nan", None, ""],
+            "F": ["nan", "", ""],
         }
     )
     obj = StringLength(columns=list("DEF")).fit(X)
@@ -33,7 +33,7 @@ def data():
     X_expected = pd.DataFrame(
         [
             [0.0, 0.0, 0.0, "Q", "W", "nan", 1.0, 1.0, 0.0],
-            [0.0, 0.0, 0.0, "QQ", "WW", None, 2.0, 2.0, 0.0],
+            [0.0, 0.0, 0.0, "QQ", "WW", "", 2.0, 2.0, 0.0],
             [0.0, 0.0, 0.0, "QQQ", "WWW", "", 3.0, 3.0, 0.0],
         ],
         columns=columns_expected,

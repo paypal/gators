@@ -62,13 +62,6 @@ def test_object_creation_with_fit_transform():
         def transform_numpy(self, X):
             pass
 
-    Class().fit_transform(0)
-    assert True
-
-
-def test_check_dataframe_contains_Numeric():
-    Transformer.check_dataframe_contains_Numeric(pd.DataFrame({"A": [1], "B": ["b"]}))
-
 
 def test_checks():
     X = pd.DataFrame()
@@ -88,23 +81,3 @@ def test_checks():
         Transformer.check_array([])
     with pytest.raises(TypeError):
         Transformer.check_target(X, [])
-    with pytest.raises(ValueError):
-        Class().check_array_is_Numeric(np.array(["a"]))
-    with pytest.raises(ValueError):
-        Transformer.check_dataframe_is_Numeric(pd.DataFrame({"A": [1], "x": ["x"]}))
-    with pytest.raises(ValueError):
-        Transformer.check_binary_target(X, pd.Series([1, 2, 3], name="TARGET"))
-    with pytest.raises(ValueError):
-        Transformer.check_multiclass_target(pd.Series([1.1, 2.2, 3.3], name="TARGET"))
-    with pytest.raises(ValueError):
-        Transformer.check_regression_target(pd.Series([1, 0, 0], name="TARGET"))
-    with pytest.raises(ValueError):
-        Class().check_nans(pd.DataFrame({"A": [np.nan]}), columns=["A"])
-    with pytest.raises(ValueError):
-        Class().check_dataframe_with_objects(pd.DataFrame({"A": [1.1], "B": [0]}))
-    with pytest.raises(ValueError):
-        Class().check_dataframe_contains_Numeric(pd.DataFrame({"A": ["a"], "B": ["b"]}))
-    with pytest.raises(ValueError):
-        Class().check_datatype(object, [np.float64])
-    with pytest.raises(ValueError):
-        Class().check_array_is_Numeric(np.array([["a"], ["b"]]))

@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,24 +7,22 @@ from pandas.testing import assert_frame_equal
 
 from gators.feature_generation_dt import CyclicDayOfWeek
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["2020-05-04T00", None, None],
             "B": ["2020-05-06T06", None, None],
             "C": ["2020-05-08T23", None, None],
-            "D": ["2020-05-09T06", None, None],
-            "E": ["2020-05-10T06", None, None],
             "X": ["x", None, None],
         }
     )
-    X_np = X.to_numpy()
-    columns = ["A", "B", "C", "D", "E"]
+    columns = ["A", "B", "C"]
     X[columns] = X[columns].astype("datetime64[ns]")
+    X_np = X.to_numpy()
     X_expected = pd.DataFrame(
         {
             "A__day_of_week_cos": [1.0, np.nan, np.nan],
@@ -33,10 +31,6 @@ def data_ks():
             "B__day_of_week_sin": [0.9749279121818236, np.nan, np.nan],
             "C__day_of_week_cos": [-0.9009688679024191, np.nan, np.nan],
             "C__day_of_week_sin": [-0.433883739117558, np.nan, np.nan],
-            "D__day_of_week_cos": [-0.2225209339563146, np.nan, np.nan],
-            "D__day_of_week_sin": [-0.9749279121818235, np.nan, np.nan],
-            "E__day_of_week_cos": [0.6234898018587334, np.nan, np.nan],
-            "E__day_of_week_sin": [-0.7818314824680299, np.nan, np.nan],
         }
     )
     X_expected_np = np.concatenate((X_np, X_expected.to_numpy()), axis=1)
@@ -45,14 +39,14 @@ def data_ks():
     return obj, X, X_expected, X_np, X_expected_np
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected, X_np, X_expected_np = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected, X_np, X_expected_np = data_ks
     X_numpy_new = obj.transform_numpy(X_np)

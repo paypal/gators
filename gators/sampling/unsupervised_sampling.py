@@ -33,12 +33,12 @@ class UnsupervisedSampling(TransformerXY):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({
     ... 'A': [0, 3, 6, 9, 12, 15],
     ... 'B': [1, 4, 7, 10, 13, 16],
     ... 'C': [2, 5, 8, 11, 14, 17]})
-    >>> y = ks.Series([0, 0, 1, 1, 2, 3], name='TARGET')
+    >>> y = ps.Series([0, 0, 1, 1, 2, 3], name='TARGET')
 
     * and `pandas` dataframes:
 

@@ -37,8 +37,8 @@ class UpperCase(_BaseStringFeature):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
 
     * and `pandas` dataframes:
 
@@ -112,9 +112,7 @@ class UpperCase(_BaseStringFeature):
         self.check_dataframe(X)
 
         for col, name in zip(self.columns, self.column_names):
-            X[name] = util.get_function(X).replace(
-                X[col].astype(str).str.upper(), {"NONE": None, "NAN": None}
-            )
+            X[name] = X[col].astype(str).str.upper()
 
         return X
 

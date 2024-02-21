@@ -53,8 +53,8 @@ class SplitExtract(_BaseStringFeature):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['qw*e', 'a*qd', 'zxq*'], 'B': [1, 2, 3]})
 
     * and `pandas` dataframes:
 
@@ -122,7 +122,7 @@ class SplitExtract(_BaseStringFeature):
         for col, idx, str_split, name in zip(
             self.columns, self.idx_split_vec, self.str_split_vec, self.column_names
         ):
-            X[name] = X[col].str.split(str_split).str.get(idx).fillna("MISSING")
+            X[name] = X[col].str.split(pad=str_split).str.get(idx).fillna("")
 
         return X
 

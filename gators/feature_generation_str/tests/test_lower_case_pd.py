@@ -16,7 +16,7 @@ def data():
             "C": [0.0, 0.0, 0.0],
             "D": ["q", "qq", "QQq"],
             "E": ["w", "WW", "WWw"],
-            "F": ["nan", None, ""],
+            "F": ["nan", "", ""],
         }
     )
 
@@ -28,10 +28,10 @@ def data():
             "C": [0.0, 0.0, 0.0],
             "D": ["q", "qq", "QQq"],
             "E": ["w", "WW", "WWw"],
-            "F": ["nan", None, ""],
+            "F": ["nan", "", ""],
             "D__lower": ["q", "qq", "qqq"],
             "E__lower": ["w", "ww", "www"],
-            "F__lower": [None, None, ""],
+            "F__lower": ["nan", "", ""],
         }
     )
     return obj, X, X_expected
@@ -46,7 +46,7 @@ def data_no_columns():
             "C": [0.0, 0.0, 0.0],
             "D": ["q", "qq", "QQq"],
             "E": ["w", "WW", "WWw"],
-            "F": ["nan", None, ""],
+            "F": ["nan", "", ""],
         }
     )
 
@@ -58,10 +58,10 @@ def data_no_columns():
             "C": [0.0, 0.0, 0.0],
             "D": ["q", "qq", "QQq"],
             "E": ["w", "WW", "WWw"],
-            "F": ["nan", None, ""],
+            "F": ["nan", "", ""],
             "D__lower": ["q", "qq", "qqq"],
             "E__lower": ["w", "ww", "www"],
-            "F__lower": [None, None, ""],
+            "F__lower": ["nan", "", ""],
         }
     )
     return obj, X, X_expected
@@ -76,7 +76,7 @@ def data_inplace():
             "C": [0.0, 0.0, 0.0],
             "D": ["q", "qq", "QQq"],
             "E": ["w", "WW", "WWw"],
-            "F": ["nan", None, ""],
+            "F": ["nan", "", ""],
         }
     )
 
@@ -88,7 +88,7 @@ def data_inplace():
             "C": [0.0, 0.0, 0.0],
             "D": ["q", "qq", "qqq"],
             "E": ["w", "ww", "www"],
-            "F": [None, None, ""],
+            "F": ["nan", "", ""],
         }
     )
     return obj, X, X_expected

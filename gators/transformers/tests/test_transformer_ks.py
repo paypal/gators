@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
@@ -18,49 +18,24 @@ class Class(Transformer):
         pass
 
 
-@pytest.mark.koalas
-def test_check_dataframe_contains_Numeric():
-    Transformer.check_dataframe_contains_Numeric(ks.DataFrame({"A": [1], "B": ["b"]}))
-
-
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_checks():
-    X = ks.DataFrame()
+    X = ps.DataFrame()
     with pytest.raises(TypeError):
         Transformer.check_dataframe([])
     with pytest.raises(TypeError):
-        Transformer.check_dataframe(ks.DataFrame({"A": [1], 0: ["x"]}))
+        Transformer.check_dataframe(ps.DataFrame({"A": [1], 0: ["x"]}))
     with pytest.raises(TypeError):
-        Transformer.check_target(ks.DataFrame({"A": [1], 0: ["x"]}), [])
+        Transformer.check_target(ps.DataFrame({"A": [1], 0: ["x"]}), [])
     with pytest.raises(TypeError):
-        Transformer.check_target(ks.DataFrame({"A": [1], 0: ["x"]}), [])
+        Transformer.check_target(ps.DataFrame({"A": [1], 0: ["x"]}), [])
     with pytest.raises(TypeError):
-        Transformer.check_target(ks.DataFrame({"A": [1], 0: ["x"]}), ks.Series([1]))
+        Transformer.check_target(ps.DataFrame({"A": [1], 0: ["x"]}), ps.Series([1]))
     with pytest.raises(ValueError):
         Transformer.check_target(
-            ks.DataFrame({"A": [1], 0: ["x"]}), ks.Series([1, 2], name="Y")
+            ps.DataFrame({"A": [1], 0: ["x"]}), ps.Series([1, 2], name="Y")
         )
     with pytest.raises(TypeError):
         Transformer.check_array([])
     with pytest.raises(TypeError):
         Transformer.check_target(X, [])
-    with pytest.raises(ValueError):
-        Class().check_array_is_Numeric(np.array(["a"]))
-    with pytest.raises(ValueError):
-        Transformer.check_dataframe_is_Numeric(ks.DataFrame({"A": [1], "x": ["x"]}))
-    with pytest.raises(ValueError):
-        Transformer.check_binary_target(X, ks.Series([1, 2, 3], name="TARGET"))
-    with pytest.raises(ValueError):
-        Transformer.check_multiclass_target(ks.Series([1.1, 2.2, 3.3], name="TARGET"))
-    with pytest.raises(ValueError):
-        Transformer.check_regression_target(ks.Series([1, 0, 0], name="TARGET"))
-    with pytest.raises(ValueError):
-        Class().check_nans(ks.DataFrame({"A": [np.nan]}), columns=["A"])
-    with pytest.raises(ValueError):
-        Class().check_dataframe_with_objects(ks.DataFrame({"A": [1.1], "B": [0]}))
-    with pytest.raises(ValueError):
-        Class().check_dataframe_contains_Numeric(ks.DataFrame({"A": ["a"], "B": ["b"]}))
-    with pytest.raises(ValueError):
-        Class().check_datatype(object, [np.float64])
-    with pytest.raises(ValueError):
-        Class().check_array_is_Numeric(np.array([["a"], ["b"]]))

@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,12 +7,12 @@ from pandas.testing import assert_frame_equal
 
 from gators.feature_generation.is_equal import IsEqual
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {"A": [99.0, 1.0, 2.0], "B": [99.0, 4.0, 5.0], "C": [99.0, 7.0, 8.0]}
     )
     X_expected = pd.DataFrame(
@@ -30,7 +30,7 @@ def data_ks():
 
 @pytest.fixture
 def data_obj_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["a", "b", "c"],
             "B": ["a", "f", "e"],
@@ -54,7 +54,7 @@ def data_obj_ks():
 
 @pytest.fixture
 def data_names_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {"A": [99.0, 1.0, 2.0], "B": [99.0, 4.0, 5.0], "C": [99.0, 7.0, 8.0]}
     )
     X_expected = pd.DataFrame(
@@ -72,14 +72,14 @@ def data_names_ks():
     return obj, X, X_expected
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected = data_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -88,14 +88,14 @@ def test_ks_np(data_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_obj_ks(data_obj_ks):
     obj, X, X_expected = data_obj_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_obj_ks_np(data_obj_ks):
     obj, X, X_expected = data_obj_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -104,14 +104,14 @@ def test_obj_ks_np(data_obj_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_names_ks(data_names_ks):
     obj, X, X_expected = data_names_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_names_ks_np(data_names_ks):
     obj, X, X_expected = data_names_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())

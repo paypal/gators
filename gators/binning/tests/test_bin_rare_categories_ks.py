@@ -1,12 +1,12 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
 from gators.binning.bin_rare_categories import BinRareCategories
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
@@ -33,7 +33,7 @@ def data():
 
 @pytest.fixture
 def data_not_inplace_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["w", "z", "q", "q", "q", "z"],
             "B": ["x", "x", "w", "w", "w", "x"],
@@ -102,7 +102,7 @@ def data_num():
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["w", "z", "q", "q", "q", "z"],
             "B": ["x", "x", "w", "w", "w", "x"],
@@ -124,7 +124,7 @@ def data_ks():
 
 @pytest.fixture
 def data_all_others_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["w", "z", "q", "q", "q", "z"],
             "B": ["x", "x", "w", "w", "w", "x"],
@@ -146,7 +146,7 @@ def data_all_others_ks():
 
 @pytest.fixture
 def data_no_other_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["w", "z", "q", "q", "q", "z"],
             "B": ["x", "x", "w", "w", "w", "x"],
@@ -161,19 +161,19 @@ def data_no_other_ks():
 
 @pytest.fixture
 def data_num_ks():
-    X = ks.DataFrame({"A": [1, 2, 3, 4, 5, 6], "B": [1, 2, 3, 4, 5, 6]})
+    X = ps.DataFrame({"A": [1, 2, 3, 4, 5, 6], "B": [1, 2, 3, 4, 5, 6]})
     obj = BinRareCategories(min_ratio=1.0).fit(X)
     return obj, X, X.to_pandas().copy()
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected = data_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -182,14 +182,14 @@ def test_ks_np(data_ks):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_not_inplace_ks(data_not_inplace_ks):
     obj, X, X_expected = data_not_inplace_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_not_inplace_ks_np(data_not_inplace_ks):
     obj, X, X_expected = data_not_inplace_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -198,14 +198,14 @@ def test_not_inplace_ks_np(data_not_inplace_ks):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_num_ks(data_num_ks):
     obj, X, X_expected = data_num_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_num_ks_np(data_num_ks):
     obj, X, X_expected = data_num_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -213,14 +213,14 @@ def test_num_ks_np(data_num_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_no_other_ks(data_no_other_ks):
     obj, X, X_expected = data_no_other_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_no_other_ks_np(data_no_other_ks):
     obj, X, X_expected = data_no_other_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -228,14 +228,14 @@ def test_no_other_ks_np(data_no_other_ks):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_all_others_ks(data_all_others_ks):
     obj, X, X_expected = data_all_others_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_all_others_ks_np(data_all_others_ks):
     obj, X, X_expected = data_all_others_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())

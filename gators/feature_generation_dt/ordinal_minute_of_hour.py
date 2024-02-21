@@ -37,8 +37,8 @@ class OrdinalMinuteOfHour(_BaseDatetimeFeature):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame(
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame(
     ... {'A': ['2020-01-01T23:00:00', '2020-12-15T18:59:00',  None], 'B': [0, 1, 0]})
     >>> X['A'] = X['A'].astype('datetime64[ns]')
 

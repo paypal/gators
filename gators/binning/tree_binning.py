@@ -54,12 +54,12 @@ class TreeBinning(_BaseBinning):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({
     ... 'A': [1.07, -2.59, -1.54, 1.72],
     ... 'B': [-1.19, -0.22, -0.28, 1.28],
     ... 'C': [-1.15, 1.92, 1.09, -0.95]})
-    >>> y = ks.Series([0, 1, 0, 1], name="TARGET")
+    >>> y = ps.Series([0, 1, 0, 1], name="TARGET")
 
     * and `pandas` dataframes:
 

@@ -38,8 +38,8 @@ class IsNull(_BaseFeatureGeneration):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': [None, 'a', 'b'], 'B': [np.nan, 1, 1]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [None, 'a', 'b'], 'B': [np.nan, 1, 1]})
 
     * and `pandas` dataframes:
 

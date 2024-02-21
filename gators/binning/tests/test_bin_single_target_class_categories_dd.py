@@ -41,8 +41,10 @@ def data():
 
 def test_pd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    columns = ["A", "B", "C", "D"]
+    X_new[columns] = X_new[columns].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_pd_np(data):

@@ -41,8 +41,8 @@ class StringLength(_BaseStringFeature):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['qwe', 'as', ''], 'B': [1, 22, 333]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['qwe', 'as', ''], 'B': [1, 22, 333]})
 
     * and `pandas` dataframes:
 

@@ -134,7 +134,7 @@ class FunctionPandas(FunctionFactory):
 
     def delta_time(self, X, column_names, columns_a, columns_b, deltatime_dtype):
         for name, c_a, c_b in zip(column_names, columns_a, columns_b):
-            X[name] = (X[c_a] - X[c_b]).astype(deltatime_dtype)
+            X[name] = (X[c_a] - X[c_b]).dt.total_seconds()
         return X
 
     def join(self, X, other):
@@ -148,11 +148,11 @@ class FunctionPandas(FunctionFactory):
             raise TypeError("`y` should be a pandas series.")
 
 
-class FunctionKoalas(FunctionFactory):
+class FunctionPySpark(FunctionFactory):
     def set_option(self, option, value):
-        import databricks.koalas as ks
+        import pyspark.pandas as ps
 
-        ks.set_option(option, value)
+        ps.set_option(option, value)
 
     def head(self, X, n, compute=False):
         return X.head(n)
@@ -206,22 +206,22 @@ class FunctionKoalas(FunctionFactory):
         return X.to_numpy()
 
     def concat(self, objs, **kwargs):
-        import databricks.koalas as ks
+        import pyspark.pandas as ps
 
-        return ks.concat(objs, **kwargs)
+        return ps.concat(objs, **kwargs)
 
     def melt(self, frame, **kwargs):
-        import databricks.koalas as ks
+        import pyspark.pandas as ps
 
-        return ks.melt(frame, **kwargs)
+        return ps.melt(frame, **kwargs)
 
     def nunique(self, X):
         return X.nunique()
 
     def get_dummies(self, X, columns, **kwargs):
-        import databricks.koalas as ks
+        import pyspark.pandas as ps
 
-        return ks.get_dummies(X, columns=columns, **kwargs)
+        return ps.get_dummies(X, columns=columns, **kwargs)
 
     def to_dict(self, X, **kwargs):
         return X.to_dict(**kwargs)
@@ -239,10 +239,10 @@ class FunctionKoalas(FunctionFactory):
         return X
 
     def to_numeric(self, X, columns):
-        import databricks.koalas as ks
+        import pyspark.pandas as ps
 
         for c in columns:
-            X[c] = ks.to_numeric(X[c]).fillna(0.0)
+            X[c] = ps.to_numeric(X[c]).fillna(0.0)
         return X
 
     def random_split(self, X, frac, random_state=None):
@@ -265,7 +265,7 @@ class FunctionKoalas(FunctionFactory):
         return X
 
     def join(self, X, other):
-        import databricks.koalas as ks
+        import pyspark.pandas as ps
 
         return X.join(other).sort_index()
 
@@ -273,10 +273,10 @@ class FunctionKoalas(FunctionFactory):
         return X.replace(replace_dict)
 
     def raise_y_dtype_error(self, y):
-        import databricks.koalas as ks
+        import pyspark.pandas as ps
 
-        if not isinstance(y, ks.Series):
-            raise TypeError("`y` should be a koalas series.")
+        if not isinstance(y, ps.Series):
+            raise TypeError("`y` should be a pyspark series.")
 
 
 class FunctionDask(FunctionFactory):
@@ -364,17 +364,19 @@ class FunctionDask(FunctionFactory):
 
     def delta_time(self, X, column_names, columns_a, columns_b, deltatime_dtype):
         for name, c_a, c_b in zip(column_names, columns_a, columns_b):
-            X[name] = (X[c_a] - X[c_b]).astype(deltatime_dtype)
+            X[name] = (X[c_a] - X[c_b]).dt.total_seconds()
         return X
 
     def join(self, X, other):
         return X.join(other)
 
     def replace(self, X, replace_dict):
-        def replace_(X, replace_dict):
-            return X.replace(replace_dict)
+        return X.replace(replace_dict)
 
-        return X.map_partitions(replace_, replace_dict)
+    # def replace_(X, replace_dict):
+    #     return X.replace(replace_dict)
+
+    # return X.map_partitions(replace_, replace_dict)
 
     def raise_y_dtype_error(self, y):
         import dask.dataframe as dd
@@ -386,20 +388,42 @@ class FunctionDask(FunctionFactory):
 def get_function(X):
     factories = {
         "<class 'pandas.core.frame.DataFrame'>": FunctionPandas(),
-        "<class 'databricks.koalas.frame.DataFrame'>": FunctionKoalas(),
-        "databricks.koalas.frame.DataFrame": FunctionKoalas(),  # needed for python3.6
+        "<class 'pyspark.pandas.frame.DataFrame'>": FunctionPySpark(),
+        "pyspark.pandas.frame.DataFrame": FunctionPySpark(),  # needed for python3.6
         "<class 'dask.dataframe.core.DataFrame'>": FunctionDask(),
         "<class 'pandas.core.series.Series'>": FunctionPandas(),
-        "<class 'databricks.koalas.series.Series'>": FunctionKoalas(),
-        "databricks.koalas.series.Series": FunctionKoalas(),  # needed for python3.6
+        "<class 'pyspark.pandas.series.Series'>": FunctionPySpark(),
+        "pyspark.pandas.series.Series": FunctionPySpark(),  # needed for python3.6
         "<class 'dask.dataframe.core.Series'>": FunctionDask(),
     }
     if str(type(X)) not in factories:
         raise TypeError(
-            """`X` should be a pandas, koalas, or dask dataframe and
-                        `y` should be a pandas, koalas, or dask series"""
+            """`X` should be a pandas, pyspark, or dask dataframe and
+                        `y` should be a pandas, pyspark, or dask series"""
         )
     return factories[str(type(X))]
+
+
+# def get_function(X):
+#     import pandas as pd
+#     import pyspark.pandas as ps
+#     import dask.dataframe as dd
+
+#     factories = {
+#         pd.DataFrame: FunctionPandas(),
+#         ps.DataFrame: FunctionPySpark(),
+#         dd.DataFrame: FunctionDask(),
+#         pd.Series: FunctionPandas(),
+#         ps.Series: FunctionPySpark(),
+#         dd.Series: FunctionDask(),
+#     }
+#     for key in factories:
+#         if isinstance(X, key):
+#             return factories[key]
+#     raise TypeError(
+#         """`X` should be a pandas, koalas, or dask dataframe and
+#                     `y` should be a pandas, koalas, or dask series"""
+#     )
 
 
 def get_bounds(X_dtype: type) -> List:
@@ -442,11 +466,13 @@ def get_datatype_columns(X: DataFrame, datatype: type) -> List[str]:
     if datatype != object:
         mask = X_dtypes == datatype
     else:
-        mask = ((X_dtypes.astype(str).str.startswith("<U")) | (X_dtypes == object)) | (
-            X_dtypes == bool
+        mask = (
+            (X_dtypes.astype(str).str.startswith("<U"))
+            | (X_dtypes == object)
+            | (X_dtypes == "string[pyarrow]")
+            | (X_dtypes == bool)
         )
-    datatype_columns = [c for c, m in zip(X_dtypes.index, mask) if m]
-    return datatype_columns
+    return [c for c, m in zip(X_dtypes.index, mask) if m]
 
 
 def exclude_columns(columns: List[str], excluded_columns: List[str]) -> List[str]:
@@ -537,8 +563,7 @@ def get_numerical_columns(X: DataFrame) -> List[str]:
         | (X_dtypes == np.float16)
         | (X_dtypes == np.int16)
     )
-    numerical_columns = [c for c, m in zip(X_dtypes.index, mask) if m]
-    return numerical_columns
+    return [c for c, m in zip(X_dtypes.index, mask) if m]
 
 
 def flatten_list(list_to_flatten: List):

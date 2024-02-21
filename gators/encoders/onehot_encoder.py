@@ -42,8 +42,8 @@ class OneHotEncoder(_BaseEncoder):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
 
     * and `pandas` dataframes:
 
@@ -69,9 +69,11 @@ class OneHotEncoder(_BaseEncoder):
     """
 
     def __init__(self, drop_first=False, inplace=True):
-        _BaseEncoder.__init__(self, inplace=inplace)
+        _BaseEncoder.__init__(self, columns=None, inplace=inplace)
         self.drop_first = drop_first
-        self.ordinal_encoder = OrdinalEncoder()
+        self.ordinal_encoder = OrdinalEncoder(
+            columns=None,
+        )
         self.idx_numerical_columns = np.array([])
         self.column_names = []
         self.numerical_columns = []

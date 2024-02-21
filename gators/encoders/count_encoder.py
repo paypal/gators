@@ -2,15 +2,13 @@
 import warnings
 from typing import Dict
 
-import numpy as np
-
 from ..util import util
 from ._base_encoder import _BaseEncoder
 
 from gators import DataFrame, Series
 
 
-class FrequencyEncoder(_BaseEncoder):
+class CountEncoder(_BaseEncoder):
     """Encode the categorical columns as integer columns based on the category count.
 
     Parameters
@@ -24,8 +22,8 @@ class FrequencyEncoder(_BaseEncoder):
 
     Imports and initialization:
 
-    >>> from gators.encoders import FrequencyEncoder
-    >>> obj = FrequencyEncoder()
+    >>> from gators.encoders import CountEncoder
+    >>> obj = CountEncoder()
 
     The `fit`, `transform`, and `fit_transform` methods accept:
 
@@ -37,8 +35,8 @@ class FrequencyEncoder(_BaseEncoder):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
 
     * and `pandas` dataframes:
 
@@ -63,42 +61,13 @@ class FrequencyEncoder(_BaseEncoder):
            [1., 2.]])
     """
 
-    def __init__(self, inplace=True):
-        _BaseEncoder.__init__(self, inplace=inplace)
+    def __init__(self, columns=None, inplace=True):
+        _BaseEncoder.__init__(self, columns=columns, inplace=inplace)
+        self.suffix = "frequency"
 
-    def fit(self, X: DataFrame, y: Series = None) -> "FrequencyEncoder":
-        """Fit the transformer on the dataframe `X`.
-
-        Parameters
-        ----------
-        X : DataFrame.
-            Input dataframe.
-        y : Series, default None.
-            Target values.
-
-        Returns
-        -------
-        FrequencyEncoder: Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.base_columns = list(X.columns)
-        self.columns = util.get_datatype_columns(X, object)
-        self.column_names = self.get_column_names(
-            self.inplace, self.columns, "frequency"
-        )
-        if not self.columns:
-            return self
-        self.mapping = self.generate_mapping(X[self.columns])
-        self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
-        columns, self.values_vec, self.encoded_values_vec = self.decompose_mapping(
-            mapping=self.mapping,
-        )
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=columns
-        )
-        return self
-
-    def generate_mapping(self, X: DataFrame) -> Dict[str, Dict[str, float]]:
+    def generate_mapping(
+        self, X: DataFrame, y: Series = None
+    ) -> Dict[str, Dict[str, float]]:
         """Generate the mapping to perform the encoding.
 
         Parameters
@@ -111,12 +80,12 @@ class FrequencyEncoder(_BaseEncoder):
         Dict[str, Dict[str, float]]
             Mapping.
         """
-        mapping = {}
-        for c in X.columns:
-            mapping[c] = (
+        return {
+            c: (
                 util.get_function(X)
                 .to_pandas(X[c].value_counts())
                 .astype(float)
                 .to_dict()
             )
-        return mapping
+            for c in X.columns
+        }

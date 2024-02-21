@@ -23,9 +23,9 @@ def data():
     )
     X_expected = pd.DataFrame(
         {
-            "A": [1.0, 1.0, 0.0],
-            "B": [0.0, 1.0, 1.0],
-            "C": [1.0, 0.0, 1.0],
+            "A": [0.0, 0.0, 1.0],
+            "B": [1.0, 0.0, 0.0],
+            "C": [0.0, 1.0, 0.0],
             "D": [1.0, 2.0, 3.0],
         }
     )
@@ -48,8 +48,8 @@ def data_no_cat():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute().astype(float)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -62,8 +62,8 @@ def test_dd_np(data):
 
 def test_no_cat_dd(data_no_cat):
     obj, X, X_expected = data_no_cat
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute().astype(float)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_no_cat_dd_np(data_no_cat):

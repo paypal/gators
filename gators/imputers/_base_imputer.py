@@ -100,21 +100,23 @@ class _BaseImputer(Transformer):
         statistics : Dict[str, Union[float, int, str]]
             Imputation value mapping.
         """
+
         if self.strategy == "mean":
             statistics = util.get_function(X).to_dict(X[self.columns].mean())
         elif self.strategy == "median":
             statistics = util.get_function(X).to_dict(X[self.columns].median())
         elif self.strategy == "most_frequent":
             statistics = util.get_function(X).most_frequent(X[self.columns])
-        else:  # strategy == 'constant'
-            values = len(self.columns) * [value]
-            statistics = dict(zip(self.columns, values))
+        elif self.strategy == "constant":
+            statistics = dict(zip(self.columns, len(self.columns) * [value]))
+
         if pd.Series(statistics).isnull().sum():
             raise ValueError(
                 """Some columns contains only NaN values and the
                 imputation values cannot be calculated.
                 Remove these columns
                 before performing the imputation
-                (e.g. with `gators.data_cleaning.drop_high_nan_ratio()`)."""
+                (e.g. with `gators.data_cleaning.drop_high_nan_ratio(max_ratio=0.99)`)."""
             )
+
         return statistics

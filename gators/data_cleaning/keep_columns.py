@@ -33,8 +33,8 @@ class KeepColumns(_BaseDataCleaning):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
 
     * and `pandas` dataframes:
 

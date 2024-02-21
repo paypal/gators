@@ -27,7 +27,7 @@ def data_not_inplace():
 
 def test_dd(data):
     obj, X = data
-    X_new = obj.transform(X)
+    X_new = obj.transform(X).compute()
     assert np.allclose(X_new.min().mean(), 0)
     assert np.allclose(X_new.max().mean(), 1)
 

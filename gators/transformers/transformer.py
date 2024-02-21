@@ -10,9 +10,6 @@ from ..util import util
 
 from gators import DataFrame, Series
 
-Numeric_DTYPES = [np.int16, np.int32, np.int64, np.float32, np.float64]
-PRINT_Numeric_DTYPES = ", ".join([dtype.__name__ for dtype in Numeric_DTYPES])
-
 
 class Transformer(ABC, BaseEstimator, TransformerMixin):
     """Abstract **gators** transformer class.
@@ -23,7 +20,7 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
     * A **Gators** transformer.
 
     >>> import pandas as pd
-    >>> import databricks.koalas as ks
+    >>> import pyspark.pandas as ps
     >>> import numpy as np
     >>> from gators.transformers import Transformer
     >>> class GetFirstColumn(Transformer):
@@ -46,9 +43,9 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
+    >>> import pyspark.pandas as ps
     >>> import numpy as np
-    >>> X = ks.DataFrame({'A':[1, 2], 'B':[3, 4]})
+    >>> X = ps.DataFrame({'A':[1, 2], 'B':[3, 4]})
 
     * and `pandas` dataframes:
 
@@ -120,22 +117,30 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
             Transformed array.
         """
 
-    def fit_transform(self, X: DataFrame, y: Series = None) -> DataFrame:
-        """Fit and Transform the dataframe `X`.
+    def set_columns(self, X: DataFrame, include: List[type], suffix: str):
+        """Set the columns of the transformer.
 
         Parameters
         ----------
-        X : DataFrame.
+        X : pd.DataFrame
             Input dataframe.
-        y : Series, default None.
-            Input target.
+        include : List[type]
+            A list of dtypes.
+        suffix : str
+            Suffix for the column names.
 
-        Returns
-        -------
-        X : DataFrame
-            Transformed dataframe.
         """
-        return self.fit(X, y).transform(X)
+        self.base_columns = list(X.columns)
+        if not self.columns:
+            self.columns = list(X.select_dtypes(include=include).columns)
+        self.column_names = (
+            self.columns if self.inplace else [f"{c}__{suffix}" for c in self.columns]
+        )
+        self.idx_columns = (
+            util.get_idx_columns(X.columns, self.columns)
+            if self.columns
+            else np.array([])
+        )
 
     @staticmethod
     def check_dataframe(X: DataFrame):
@@ -182,141 +187,6 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
             raise TypeError("`X` should be a NumPy array.")
 
     @staticmethod
-    def check_dataframe_is_Numeric(X: DataFrame):
-        """Check if dataframe is only Numeric.
-
-        Parameters
-        ----------
-        X : DataFrame
-            Dataframe.
-        """
-        X_dtypes = X.dtypes
-        for x_dtype in X_dtypes:
-            if x_dtype not in Numeric_DTYPES:
-                raise ValueError(f"`X` should be of type {PRINT_Numeric_DTYPES}.")
-
-    def check_datatype(self, dtype, accepted_dtypes):
-        """Check if dataframe is only Numeric.
-
-        Parameters
-        ----------
-        X : DataFrame
-            Dataframe.
-        """
-        print_dtypes = ", ".join([dtype.__name__ for dtype in accepted_dtypes])
-        if dtype not in accepted_dtypes:
-            raise ValueError(
-                f"""`X` should be of type {print_dtypes}.
-                        Use gators.converter.ConvertColumnDatatype before
-                        calling the transformer {self.__class__.__name__}."""
-            )
-
-    @staticmethod
-    def check_binary_target(X: DataFrame, y: Series):
-        """Raise an error if the target is not binary.
-
-        Parameters
-        ----------
-        y : Series
-            Target values.
-        """
-        if util.get_function(X).nunique(y) != 2 or "int" not in str(y.dtype):
-            raise ValueError("`y` should be binary.")
-
-    @staticmethod
-    def check_multiclass_target(y: Series):
-        """Raise an error if the target is not discrete.
-
-        Parameters
-        ----------
-        y : Series
-            Target values.
-        """
-        if "int" not in str(y.dtype):
-            raise ValueError("`y` should be discrete.")
-
-    @staticmethod
-    def check_regression_target(y: Series):
-        """Raise an error if the target is not discrete.
-
-        Parameters
-        ----------
-        y : Series
-            Target values.
-        """
-        if "float" not in str(y.dtype):
-            raise ValueError("`y` should be float.")
-
-    @staticmethod
-    def check_dataframe_contains_Numeric(X: DataFrame):
-        """Check if dataframe is only Numeric.
-
-        Parameters
-        ----------
-        X : DataFrame
-            Dataframe.
-        """
-        X_dtypes = X.dtypes
-        for x_dtype in X_dtypes:
-            if x_dtype in Numeric_DTYPES:
-                return
-        raise ValueError(
-            f"""`X` should contains one of the following float dtypes:
-            {PRINT_Numeric_DTYPES}.
-            Use gators.converter.ConvertColumnDatatype before
-            calling this transformer."""
-        )
-
-    def check_dataframe_with_objects(self, X: DataFrame):
-        """Check if dataframe contains object columns.
-
-        Parameters
-        ----------
-        X : DataFrame
-            Dataframe.
-        """
-        X_dtypes = X.dtypes
-        contains_object = object in X_dtypes
-        if not contains_object:
-            raise ValueError(
-                f"""`X` should contains object columns to use the transformer
-                {self.__class__.__name__}."""
-            )
-
-    def check_array_is_Numeric(self, X: np.ndarray):
-        """Check if array is only Numeric.
-
-        Parameters
-        ----------
-        X : np.ndarray
-             Array.
-        """
-        if X.dtype not in Numeric_DTYPES:
-            raise ValueError(
-                f"""`X` should be of type {PRINT_Numeric_DTYPES}
-                to use the transformer {self.__class__.__name__}.
-                Use gators.converter.ConvertColumnDatatype before calling it.
-                """
-            )
-
-    def check_nans(self, X: DataFrame, columns: List[str]):
-        """Raise an error if X contains NaN values.
-
-        Parameters
-        ----------
-        X : DataFrame
-            Dataframe.
-        theta_vec : List[float]
-            List of columns.
-        """
-        if util.get_function(X).to_numpy(X[columns].isnull().sum()).any():
-            raise ValueError(
-                f"""The object columns should not contain NaN values
-                to use the transformer {self.__class__.__name__}.
-                Use `gators.imputers.ObjectImputer` before calling it."""
-            )
-
-    @staticmethod
     def get_column_names(inplace: bool, columns: List[str], suffix: str):
         """Return the names of the modified columns.
 
@@ -335,6 +205,4 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
         List[str]
             List of column names.
         """
-        if inplace:
-            return columns
-        return [f"{c}__{suffix}" for c in columns]
+        return columns if inplace else [f"{c}__{suffix}" for c in columns]

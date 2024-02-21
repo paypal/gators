@@ -51,8 +51,8 @@ class Clipping(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame(
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame(
     ... {'A': [1.8, 2.2, 1.0, 0.4, 0.8],
     ... 'B': [0.4, 1.9, -0.2, 0.1, 0.1],
     ... 'C': [1.0, -1.0, -0.1, 1.5, 0.4]})
@@ -100,7 +100,7 @@ class Clipping(Transformer):
         self.columns = list(clip_dict.keys())
 
     def fit(self, X: DataFrame, y: Series = None) -> "Clipping":
-        """Fit the transformer on the pandas/koalas dataframe X.
+        """Fit the transformer on the dataframe X.
 
         Parameters
         ----------

@@ -44,8 +44,9 @@ def data_no_object():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[["A", "B"]] = X_new[["A", "B"]].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -57,8 +58,8 @@ def test_dd_np(data):
 
 def test_no_drop_dd(data_no_drop):
     obj, X, X_expected = data_no_drop
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_no_drop_dd_np(data_no_drop):
@@ -70,8 +71,8 @@ def test_no_drop_dd_np(data_no_drop):
 
 def test_no_object_dd(data_no_object):
     obj, X, X_expected = data_no_object
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_no_object_dd_np(data_no_object):

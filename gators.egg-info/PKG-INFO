@@ -1,20 +1,50 @@
 Metadata-Version: 2.1
 Name: gators
-Version: 0.3.3
+Version: 0.3.4
 Summary: Model building and model scoring library
 Home-page: https://paypal.github.io/gators/
 Author: The Gators Development Team
 Maintainer: Charles Poli
 License: License :: OSI Approved :: Apache Software License v2.0
-Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
-Provides-Extra: dev
-Provides-Extra: koalas
-Provides-Extra: dask
 License-File: LICENSE
+Requires-Dist: scikit-learn
+Requires-Dist: pandas
+Requires-Dist: lightgbm
+Requires-Dist: xgboost
+Requires-Dist: treelite
+Requires-Dist: treelite-runtime
+Requires-Dist: dill
+Provides-Extra: dev
+Requires-Dist: docutils; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: coverage; extra == "dev"
+Requires-Dist: pylama; extra == "dev"
+Requires-Dist: jupyter; extra == "dev"
+Requires-Dist: numpydoc; extra == "dev"
+Requires-Dist: sphinx; extra == "dev"
+Requires-Dist: nbsphinx; extra == "dev"
+Requires-Dist: pydata_sphinx_theme; extra == "dev"
+Requires-Dist: pandoc; extra == "dev"
+Requires-Dist: tox; extra == "dev"
+Requires-Dist: tox-wheel; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: isort; extra == "dev"
+Requires-Dist: pyspark; extra == "dev"
+Requires-Dist: pyspark; extra == "dev"
+Requires-Dist: distributed; extra == "dev"
+Requires-Dist: dask; extra == "dev"
+Requires-Dist: numpy; extra == "dev"
+Provides-Extra: pyspark
+Requires-Dist: pyspark; extra == "pyspark"
+Provides-Extra: dask
+Requires-Dist: fsspec>=0.3.3; extra == "dask"
+Requires-Dist: distributed; extra == "dask"
+Requires-Dist: dask; extra == "dask"
 
 # gators
 
@@ -41,6 +71,4 @@ The goal of Gators is to be able to manage both model building and model serving
 Gators helps to streamline the model building and productionization processes. The model building part is done using the Pandas library for datasets held in memory, or Koalas for big data. On the model serving side, the pre-processing is carried out directly with Python, using NumPy and Cython. As a result, the speed-up using both NumPy and Cython for pre-processing is around x100 compared to standard Python code. Moreover, the per-sample response time becomes similar to other compiled languages (microsecond scale).
 
 In summary, Gators is a package to handle model building with big data and fast real-time pre-processing, even for a large number of QPS, using only Python.
-
-
 

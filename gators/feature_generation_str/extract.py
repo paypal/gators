@@ -42,8 +42,8 @@ class Extract(_BaseStringFeature):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
 
     * and `pandas` dataframes:
 

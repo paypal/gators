@@ -50,8 +50,8 @@ class PlanRotation(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame(
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame(
     ... {'X': [200.0, 210.0], 'Y': [140.0, 160.0], 'Z': [100.0, 125.0]})
 
     * and `pandas` dataframes:
@@ -80,7 +80,6 @@ class PlanRotation(Transformer):
     """
 
     def __init__(self, columns: List[List[str]], theta_vec: List[float]):
-
         if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
         if not isinstance(theta_vec, (list, np.ndarray)):
@@ -126,7 +125,6 @@ class PlanRotation(Transformer):
         self.check_dataframe(X)
         self.base_columns = list(X.columns)
         flatten_columns = [c for cols in self.columns for c in cols]
-        self.check_dataframe_is_Numeric(X[list(set(flatten_columns))])
         self.idx_columns_x = util.get_idx_columns(
             X[flatten_columns], flatten_columns[::2]
         )

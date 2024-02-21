@@ -1,27 +1,27 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
 
 from gators.scalers.minmax_scaler import MinMaxScaler
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(np.arange(25).reshape((5, 5)), columns=list("ABCDF"))
+    X = ps.DataFrame(np.arange(25).reshape((5, 5)), columns=list("ABCDF"))
     return MinMaxScaler().fit(X), X
 
 
 @pytest.fixture
 def data_not_inplace():
-    X = ks.DataFrame(np.arange(25).reshape((5, 5)), columns=list("ABCDF"))
+    X = ps.DataFrame(np.arange(25).reshape((5, 5)), columns=list("ABCDF"))
     return MinMaxScaler(inplace=False).fit(X), X
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X = data_ks
     X_new = obj.transform(X)
@@ -29,7 +29,7 @@ def test_ks(data_ks):
     assert np.allclose(X_new.max().mean(), 1)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X = data_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -38,7 +38,7 @@ def test_ks_np(data_ks):
     assert np.allclose(X_new.max().mean(), 1)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_not_inplace_pd(data_not_inplace):
     obj, X = data_not_inplace
     X_new = obj.transform(X).to_pandas()
@@ -47,7 +47,7 @@ def test_not_inplace_pd(data_not_inplace):
     assert X_new.shape[1] == 10
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_not_inplace_pd_np(data_not_inplace):
     obj, X = data_not_inplace
     X_numpy_new = obj.transform_numpy(X.to_numpy())

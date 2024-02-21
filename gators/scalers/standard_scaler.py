@@ -35,8 +35,8 @@ class StandardScaler(_BaseScaler):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
 
     * and `pandas` dataframes:
 
@@ -63,7 +63,7 @@ class StandardScaler(_BaseScaler):
         _BaseScaler.__init__(self, inplace=inplace)
 
     def fit(self, X: DataFrame, y: Series = None) -> "StandardScaler":
-        """Fit the transformer on the pandas/koalas dataframe X.
+        """Fit the transformer on the dataframe X.
 
         Parameters
         ----------

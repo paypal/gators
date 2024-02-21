@@ -21,28 +21,28 @@ def data():
     X_expected = pd.DataFrame(
         {
             "A": {
-                0: -1.4350845252893225,
-                1: -1.4350845252893225,
-                2: -1.4350845252893225,
-                3: 1.0216512475319814,
-                4: 1.0216512475319814,
-                5: 1.0216512475319814,
+                0: -1.4351,
+                1: -1.4351,
+                2: -1.4351,
+                3: 1.0217,
+                4: 1.0217,
+                5: 1.0217,
             },
             "B": {
-                0: -1.0986122886681098,
-                1: -1.0986122886681098,
-                2: 0.5108256237659907,
-                3: 0.5108256237659907,
-                4: 0.5108256237659907,
-                5: 0.5108256237659907,
+                0: -1.0986,
+                1: -1.0986,
+                2: 0.5108,
+                3: 0.5108,
+                4: 0.5108,
+                5: 0.5108,
             },
             "C": {
-                0: -0.3364722366212129,
-                1: -0.3364722366212129,
-                2: -0.3364722366212129,
-                3: -0.3364722366212129,
-                4: 0.5108256237659907,
-                5: 0.5108256237659907,
+                0: -0.3365,
+                1: -0.3365,
+                2: -0.3365,
+                3: -0.3365,
+                4: 0.5108,
+                5: 0.5108,
             },
             "D": {0: 1.0, 1: 2.0, 2: 3.0, 3: 4.0, 4: 5.0, 5: 6.0},
         }
@@ -65,28 +65,28 @@ def data_not_inplace():
     X_expected = pd.DataFrame(
         {
             "A__woe": {
-                0: -1.4350845252893225,
-                1: -1.4350845252893225,
-                2: -1.4350845252893225,
-                3: 1.0216512475319814,
-                4: 1.0216512475319814,
-                5: 1.0216512475319814,
+                0: -1.4351,
+                1: -1.4351,
+                2: -1.4351,
+                3: 1.0217,
+                4: 1.0217,
+                5: 1.0217,
             },
             "B__woe": {
-                0: -1.0986122886681098,
-                1: -1.0986122886681098,
-                2: 0.5108256237659907,
-                3: 0.5108256237659907,
-                4: 0.5108256237659907,
-                5: 0.5108256237659907,
+                0: -1.0986,
+                1: -1.0986,
+                2: 0.5108,
+                3: 0.5108,
+                4: 0.5108,
+                5: 0.5108,
             },
             "C__woe": {
-                0: -0.3364722366212129,
-                1: -0.3364722366212129,
-                2: -0.3364722366212129,
-                3: -0.3364722366212129,
-                4: 0.5108256237659907,
-                5: 0.5108256237659907,
+                0: -0.3365,
+                1: -0.3365,
+                2: -0.3365,
+                3: -0.3365,
+                4: 0.5108,
+                5: 0.5108,
             },
         }
     )
@@ -142,12 +142,6 @@ def test_data_not_inplace_pd_np(data_not_inplace):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-def test_display_mapping(data_not_inplace):
-    obj, _, _ = data_not_inplace
-    obj.display_mapping(cmap="Reds")
-    assert True
-
-
 def test_init():
     with pytest.raises(TypeError):
         _ = WOEEncoder(inplace="yes")
@@ -155,17 +149,3 @@ def test_init():
         _ = WOEEncoder(regularization="a")
     with pytest.raises(ValueError):
         _ = WOEEncoder(regularization=-1)
-
-
-def test_display_mapping_input(data_not_inplace):
-    obj, _, _ = data_not_inplace
-    with pytest.raises(TypeError):
-        obj.display_mapping(cmap="Reds", decimal=-1)
-    with pytest.raises(TypeError):
-        obj.display_mapping(cmap="Reds", decimal=1.1)
-    with pytest.raises(TypeError):
-        obj.display_mapping(cmap="Reds", title=0)
-    with pytest.raises(TypeError):
-        obj.display_mapping(cmap="Reds", k=0)
-    with pytest.raises(TypeError):
-        obj.display_mapping(cmap="Reds", k=1.5)

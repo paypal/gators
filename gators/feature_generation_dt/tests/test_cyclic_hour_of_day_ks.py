@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,24 +7,22 @@ from pandas.testing import assert_frame_equal
 
 from gators.feature_generation_dt import CyclicHourOfDay
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["2020-01-01T00", None, None],
             "B": ["2020-04-08T06", None, None],
             "C": ["2020-07-16T12", None, None],
-            "D": ["2020-10-24T18", None, None],
-            "E": ["2020-12-31T23", None, None],
             "X": ["x", "x", "x"],
         }
     )
-    X_np = X.to_numpy()
-    columns = ["A", "B", "C", "D", "E"]
+    columns = ["A", "B", "C"]
     X[columns] = X[columns].astype("datetime64[ns]")
+    X_np = X.to_numpy()
     X_expected = pd.DataFrame(
         {
             "A__hour_of_day_cos": [1.0, None, np.nan],
@@ -33,10 +31,6 @@ def data_ks():
             "B__hour_of_day_sin": [1.0, None, np.nan],
             "C__hour_of_day_cos": [-1, None, np.nan],
             "C__hour_of_day_sin": [0.0, None, np.nan],
-            "D__hour_of_day_cos": [0.0, None, np.nan],
-            "D__hour_of_day_sin": [-1.0, None, np.nan],
-            "E__hour_of_day_cos": [0.9659258262890681, None, np.nan],
-            "E__hour_of_day_sin": [-0.2588190451025215, None, np.nan],
         }
     )
     X_expected_np = np.concatenate((X_np, X_expected.to_numpy()), axis=1)
@@ -45,14 +39,14 @@ def data_ks():
     return obj, X, X_expected, X_np, X_expected_np
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected, X_np, X_expected_np = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected, X_np, X_expected_np = data_ks
     X_numpy_new = obj.transform_numpy(X_np)

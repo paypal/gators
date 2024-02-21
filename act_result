@@ -4724,7 +4724,7 @@
 [Build and Test/test          ]   | 
 [Build and Test/test          ]   | [3 rows x 9 columns])
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   |     @pytest.mark.koalas
+[Build and Test/test          ]   |     @pytest.mark.pyspark
 [Build and Test/test          ]   |     def test_ks(data_ks):
 [Build and Test/test          ]   |         obj, X, X_expected = data_ks
 [Build and Test/test          ]   |         X_new = obj.transform(X)
@@ -4817,7 +4817,7 @@
 [Build and Test/test          ]   | py4j.protocol.Py4JNetworkError: Error while sending or receiving
 [Build and Test/test          ]   | ____________________ test_check_dataframe_contains_numerics ____________________
 [Build and Test/test          ]   | Numeric
-[Build and Test/test          ]   |     @pytest.mark.koalasNumeric
+[Build and Test/test          ]   |     @pytest.mark.pysparkNumeric
 [Build and Test/test          ]   |     def test_check_dataframe_contains_numerics():
 [Build and Test/test          ]   | >       Transformer.check_dataframe_contains_numerics(ks.DataFrame({"A": [1], "B": ["b"]}))
 [Build and Test/test          ]   | 
@@ -4857,7 +4857,7 @@
 [Build and Test/test          ]   | /opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/py4j/clientserver.py:402: ConnectionRefusedError
 [Build and Test/test          ]   | _________________________________ test_checks __________________________________
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   |     @pytest.mark.koalas
+[Build and Test/test          ]   |     @pytest.mark.pyspark
 [Build and Test/test          ]   |     def test_checks():
 [Build and Test/test          ]   | >       X = ks.DataFrame()
 [Build and Test/test          ]   | 
@@ -4897,7 +4897,7 @@
 [Build and Test/test          ]   | /opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/py4j/clientserver.py:402: ConnectionRefusedError
 [Build and Test/test          ]   | _________________________________ test_checks __________________________________
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   |     @pytest.mark.koalas
+[Build and Test/test          ]   |     @pytest.mark.pyspark
 [Build and Test/test          ]   |     def test_checks():
 [Build and Test/test          ]   |         with pytest.raises(TypeError):
 [Build and Test/test          ]   |             TransformerXY.check_dataframe([])

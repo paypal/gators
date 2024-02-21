@@ -17,6 +17,9 @@ def data():
         ),
         npartitions=1,
     )
+    X_np = pd.DataFrame(
+        {"A": [None, "b", "c"], "B": ["z", "a", "a"], "C": ["c", "d", "d"]}
+    ).to_numpy()
     X_expected = pd.DataFrame(
         {
             "A": [None, "b", "c"],
@@ -29,18 +32,19 @@ def data():
         }
     )
     obj = PolynomialObjectFeatures(columns=["A", "B", "C"], degree=3).fit(X)
-    return obj, X, X_expected
+    return obj, X, X_np, X_expected
 
 
 def test_dd(data):
-    obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute().iloc[:, -3:], X_expected.iloc[:, -3:])
+    obj, X, _, X_expected = data
+    X_new = obj.transform(X).compute()
+    X_new = X_new.astype(object)
+    assert_frame_equal(X_new.iloc[:, -3:], X_expected.iloc[:, -3:])
 
 
 def test_dd_np(data):
-    obj, X, X_expected = data
-    X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
+    obj, X, X_np, X_expected = data
+    X_numpy_new = obj.transform_numpy(X_np)
     X_new = pd.DataFrame(X_numpy_new)
     X_expected = pd.DataFrame(X_expected.values)
     assert_frame_equal(X_new, X_expected)

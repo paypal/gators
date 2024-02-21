@@ -32,12 +32,12 @@ class ToPandas(TransformerXY):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({
     ... 'A': [0.0, 3.0, 6.0],
     ... 'B': [1.0, 4.0, 7.0],
     ... 'C': [2.0, 5.0, 8.0]})
-    >>> y = ks.Series([0, 0, 1], name='TARGET')
+    >>> y = ps.Series([0, 0, 1], name='TARGET')
 
     * and `pandas` dataframes:
 
@@ -77,7 +77,7 @@ class ToPandas(TransformerXY):
         ----------
         X : DataFrame.
             Input dataframe.
-        y : [pd.Series, ks.Series]:
+        y : [pd.Series, ps.Series]:
             Target values.
 
         Returns

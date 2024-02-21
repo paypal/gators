@@ -45,7 +45,6 @@ def data():
 
 @pytest.fixture
 def data_regression():
-    max_depth = 2
     X = dd.from_pandas(
         pd.DataFrame(
             {
@@ -74,8 +73,10 @@ def data_regression():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    columns = ["A__bin", "B__bin", "C__bin", "D"]
+    X_new[columns] = X_new[columns].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -89,8 +90,9 @@ def test_dd_np(data):
 
 def test_regression_dd(data_regression):
     obj, X, X_expected = data_regression
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[list("ABC")] = X_new[list("ABC")].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_regression_dd_np(data_regression):

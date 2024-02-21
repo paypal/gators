@@ -6,7 +6,6 @@ import numpy as np
 
 from imputer import float_imputer
 
-from ..util import util
 from ._base_imputer import _BaseImputer
 
 from gators import DataFrame, Series
@@ -59,9 +58,9 @@ class NumericImputer(_BaseImputer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
+    >>> import pyspark.pandas as ps
     >>> import numpy as np
-    >>> X = ks.DataFrame(
+    >>> X = ps.DataFrame(
     ... {'A': [0.1, 0.2, np.nan], 'B': [1, 2, np.nan], 'C': ['z', 'a', 'a']})
 
     * and `pandas` dataframes:
@@ -127,7 +126,7 @@ class NumericImputer(_BaseImputer):
         self.value = float(self.value) if self.value is not None else None
 
     def fit(self, X: DataFrame, y: Series = None) -> "NumericImputer":
-        """Fit the transformer on the pandas/koalas dataframe X.
+        """Fit the transformer on the dataframe X.
 
         Parameters
         ----------
@@ -142,17 +141,8 @@ class NumericImputer(_BaseImputer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        self.base_columns = list(X.columns)
-        if not self.columns:
-            self.columns = util.get_datatype_columns(X, float)
-            self.columns += util.get_datatype_columns(X, int)
-        self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
-        if not self.columns:
-            self.idx_columns = np.array([])
-            return self
-        self.idx_columns = util.get_idx_columns(X.columns, self.columns)
+        self.set_columns(X, [int, float], suffix="impute")
         self.statistics = self.compute_statistics(X=X, value=self.value)
-
         self.statistics_np = np.array(list(self.statistics.values()))
         return self
 
@@ -170,8 +160,6 @@ class NumericImputer(_BaseImputer):
             Transformed array.
         """
         self.check_array(X)
-        if isinstance(X[0, 0], np.integer):
-            return X
         if self.idx_columns.size == 0:
             return X
         if self.inplace:
@@ -179,8 +167,50 @@ class NumericImputer(_BaseImputer):
                 X[:, self.idx_columns].astype(float), self.statistics_np
             )
             return X
-        else:
-            X_impute = float_imputer(
-                X[:, self.idx_columns].copy().astype(float), self.statistics_np
-            )
-            return np.concatenate((X, X_impute), axis=1)
+        X_impute = float_imputer(
+            X[:, self.idx_columns].copy().astype(float), self.statistics_np
+        )
+        return np.concatenate((X, X_impute), axis=1)
+
+
+# SOURCERY
+# class NumericImputer(_BaseImputer):
+#     def __init__(self, strategy: str, value: float = None, columns: List[str] = None, inplace: bool = True):
+#         _BaseImputer.__init__(self, strategy, value, columns=columns, inplace=inplace)
+#         self.value = value
+
+#     def fit(self, X: DataFrame, y: Series = None) -> "NumericImputer":
+#         self.check_dataframe(X)
+#         self.set_columns(X)
+#         self.compute_and_set_statistics(X)
+#         return self
+
+#     def set_columns(self, X: DataFrame):
+#         self.base_columns = list(X.columns)
+#         if not self.columns:
+#             self.columns = util.get_datatype_columns(X, float)
+#             self.columns += util.get_datatype_columns(X, int)
+#         self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
+#         self.idx_columns = util.get_idx_columns(X.columns, self.columns) if self.columns else np.array([])
+
+#     def compute_and_set_statistics(self, X: DataFrame):
+#         if self.columns:
+#             self.statistics = self.compute_statistics(X=X, value=self.value)
+#             self.statistics_np = np.array(list(self.statistics.values()))
+
+#     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
+#         self.check_array(X)
+#         return self.perform_transformation(X)
+
+#     def perform_transformation(self, X: np.ndarray):
+#         if isinstance(X[0, 0], np.integer) or self.idx_columns.size == 0:
+#             return X
+#         if self.inplace:
+#             X[:, self.idx_columns] = self.perform_float_imputation(X)
+#         else:
+#             X_impute = self.perform_float_imputation(X.copy())
+#             X = np.concatenate((X, X_impute), axis=1)
+#         return X
+
+#     def perform_float_imputation(self, X: np.ndarray):
+#         return float_imputer(X[:, self.idx_columns].astype(float), self.statistics_np)

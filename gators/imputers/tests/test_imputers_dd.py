@@ -176,15 +176,19 @@ def test_float_dd(data):
 
 def test_object_dd(data):
     objs_dict, X_dict, X_expected_dict = data
+    X_new = objs_dict["object"].transform(X_dict["object"]).compute()
+    X_new[["E", "F"]] = X_new[["E", "F"]].astype(object)
     assert_frame_equal(
-        objs_dict["object"].transform(X_dict["object"]).compute(),
+        X_new,
         X_expected_dict["object"],
     )
 
 
 def test_int_dd_np(data):
     objs_dict, X_dict, X_expected_dict = data
-    X_new_np = objs_dict["int"].transform_numpy(X_dict["int"].compute().to_numpy())
+    X_new_np = objs_dict["int"].transform_numpy(
+        X_dict["int"].compute().replace({pd.NA: None}).to_numpy()
+    )
     X_new = pd.DataFrame(X_new_np, columns=X_dict["int"].columns)
     assert_frame_equal(X_new, X_expected_dict["int"])
 
@@ -199,7 +203,7 @@ def test_float_dd_np(data):
 def test_object_dd_np(data):
     objs_dict, X_dict, X_expected_dict = data
     X_new_np = objs_dict["object"].transform_numpy(
-        X_dict["object"].compute().to_numpy()
+        X_dict["object"].compute().replace({pd.NA: None}).to_numpy()
     )
     X_new = pd.DataFrame(X_new_np, columns=X_dict["object"].columns)
     assert_frame_equal(X_new, X_expected_dict["object"])
@@ -223,14 +227,18 @@ def test_num_float_dd(data_num):
 
 def test_num_int_dd_np(data_num):
     objs_dict, X_dict, X_expected_dict = data_num
-    X_new_np = objs_dict["int"].transform_numpy(X_dict["int"].compute().to_numpy())
+    X_new_np = objs_dict["int"].transform_numpy(
+        X_dict["int"].compute().replace({pd.NA: None}).to_numpy()
+    )
     X_new = pd.DataFrame(X_new_np, columns=X_dict["int"].columns)
     assert_frame_equal(X_new, X_expected_dict["int"])
 
 
 def test_num_float_dd_np(data_num):
     objs_dict, X_dict, X_expected_dict = data_num
-    X_new_np = objs_dict["float"].transform_numpy(X_dict["float"].compute().to_numpy())
+    X_new_np = objs_dict["float"].transform_numpy(
+        X_dict["float"].compute().replace({pd.NA: None}).to_numpy()
+    )
     X_new = pd.DataFrame(X_new_np, columns=X_dict["float"].columns)
     assert_frame_equal(X_new, X_expected_dict["float"])
 
@@ -252,15 +260,23 @@ def test_no_missing_float_dd(data_no_missing):
 
 def test_no_missing_object_dd(data_no_missing):
     objs_dict, X_dict, X_expected_dict = data_no_missing
+    X_new = objs_dict["object"].transform(X_dict["object"]).compute()
     assert_frame_equal(
-        objs_dict["object"].transform(X_dict["object"]).compute(),
+        X_new,
         X_expected_dict["object"],
     )
+
+    # assert_frame_equal(
+    #     objs_dict["object"].transform(X_dict["object"]).compute(),
+    #     X_expected_dict["object"],
+    # )
 
 
 def test_no_missing_int_dd_np(data_no_missing):
     objs_dict, X_dict, X_expected_dict = data_no_missing
-    X_new_np = objs_dict["int"].transform_numpy(X_dict["int"].compute().to_numpy())
+    X_new_np = objs_dict["int"].transform_numpy(
+        X_dict["int"].compute().replace({pd.NA: None}).to_numpy()
+    )
     X_new = pd.DataFrame(X_new_np, columns=X_dict["int"].columns)
     assert_frame_equal(X_new, X_expected_dict["int"])
 
@@ -275,23 +291,33 @@ def test_no_missing_float_dd_np(data_no_missing):
 def test_no_missing_object_dd_np(data_no_missing):
     objs_dict, X_dict, X_expected_dict = data_no_missing
     X_new_np = objs_dict["object"].transform_numpy(
-        X_dict["object"].compute().to_numpy()
+        X_dict["object"].compute().replace({pd.NA: None}).to_numpy()
     )
     X_new = pd.DataFrame(X_new_np, columns=X_dict["object"].columns)
-    assert_frame_equal(X_new, X_expected_dict["object"])
+    assert_frame_equal(X_new, X_expected_dict["object"].astype(object))
 
 
 def test_full_dd(data_full):
     objs_dict, X, X_expected = data_full
     X_new = objs_dict["object"].transform(X)
     X_new = objs_dict["int"].transform(X_new)
-    X_new = objs_dict["float"].transform(X_new)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = objs_dict["float"].transform(X_new).compute()
+    X_new[["E", "F"]] = X_new[["E", "F"]].astype(object)
+    assert_frame_equal(X_new, X_expected)
+
+    # X_new = objs_dict["object"].transform(X_dict["object"]).compute()
+    # X_new[["E", "F"]] = X_new[["E", "F"]].astype(object)
+    # assert_frame_equal(
+    #     X_new,
+    #     X_expected_dict["object"],
+    # )
 
 
 def test_full_dd_np(data_full):
     objs_dict, X, X_expected = data_full
-    X_new = objs_dict["object"].transform_numpy(X.compute().to_numpy())
+    X_new = objs_dict["object"].transform_numpy(
+        X.compute().replace({pd.NA: None}).to_numpy()
+    )
     X_new = objs_dict["int"].transform_numpy(X_new)
     X_new = objs_dict["float"].transform_numpy(X_new)
     X_new = pd.DataFrame(X_new, columns=["A", "B", "C", "D", "E", "F"])

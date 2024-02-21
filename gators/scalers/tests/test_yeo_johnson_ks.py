@@ -1,18 +1,18 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
 from gators.scalers.yeo_johnson import YeoJohnson
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data():
 
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": {0: 3.0, 1: 1.0, 2: -3.0, 3: -1.0, 4: -3.0},
             "B": {0: 22.0, 1: 38.0, 2: -26.0, 3: 35.0, 4: 3 - 5.0},
@@ -52,7 +52,7 @@ def data():
 @pytest.fixture
 def data_not_inplace():
 
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": {0: 3.0, 1: 1.0, 2: -3.0, 3: -1.0, 4: -3.0},
             "B": {0: 22.0, 1: 38.0, 2: -26.0, 3: 35.0, 4: 3 - 5.0},
@@ -94,7 +94,7 @@ def data_not_inplace():
 
 @pytest.fixture
 def data_0lambda():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": {0: 3.0, 1: 1.0, 2: -3.0, 3: -1.0, 4: -3.0},
             "B": {0: 22.0, 1: 38.0, 2: -26.0, 3: 35.0, 4: 3 - 5.0},
@@ -134,7 +134,7 @@ def data_0lambda():
 @pytest.fixture
 def data_2lambda():
 
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": {0: 3.0, 1: 1.0, 2: -3.0, 3: -1.0, 4: -3.0},
             "B": {0: 22.0, 1: 38.0, 2: -26.0, 3: 35.0, 4: 3 - 5.0},
@@ -171,35 +171,35 @@ def data_2lambda():
     return YeoJohnson(lambdas_dict=lambdas_dict).fit(X), X, X_expected
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_pd(data):
     obj, X, X_expected = data
     X_new = obj.transform(X).to_pandas()
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_0lambda_pd(data_0lambda):
     obj, X, X_expected = data_0lambda
     X_new = obj.transform(X).to_pandas()
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_2lambda_pd(data_2lambda):
     obj, X, X_expected = data_2lambda
     X_new = obj.transform(X).to_pandas()
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_not_inplace_pd(data_not_inplace):
     obj, X, X_expected = data_not_inplace
     X_new = obj.transform(X).to_pandas()
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_pd_np(data):
     obj, X, X_expected = data
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -207,7 +207,7 @@ def test_pd_np(data):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_not_inplace_pd_np(data_not_inplace):
     obj, X, X_expected = data_not_inplace
     X_numpy_new = obj.transform_numpy(X.to_numpy())

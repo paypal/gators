@@ -44,8 +44,8 @@ class PolynomialObjectFeatures(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': [None, 'b', 'c'], 'B': ['z', 'a', 'a'], 'C': ['c', 'd', 'd']})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [None, 'b', 'c'], 'B': ['z', 'a', 'a'], 'C': ['c', 'd', 'd']})
 
     * and `pandas` dataframes:
 

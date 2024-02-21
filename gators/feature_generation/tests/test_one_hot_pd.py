@@ -15,12 +15,12 @@ def data():
             "A": ["q", "q", "a"],
             "B": ["w", "w", "s"],
             "C": ["e", "r", "d"],
-            "A__onehot__q": [True, True, False],
-            "A__onehot__a": [False, False, True],
-            "B__onehot__w": [True, True, False],
-            "B__onehot__s": [False, False, True],
-            "C__onehot__e": [True, False, False],
-            "C__onehot__d": [False, False, True],
+            "A__onehot__q": [1.0, 1.0, 0.0],
+            "A__onehot__a": [0.0, 0.0, 1.0],
+            "B__onehot__w": [1.0, 1.0, 0.0],
+            "B__onehot__s": [0.0, 0.0, 1.0],
+            "C__onehot__e": [1.0, 0.0, 0.0],
+            "C__onehot__d": [0.0, 0.0, 1.0],
         }
     )
     categories_dict = {"A": ["q", "a"], "B": ["w", "s"], "C": ["e", "d"]}
@@ -36,12 +36,12 @@ def data_names():
             "A": ["q", "q", "a"],
             "B": ["w", "w", "s"],
             "C": ["e", "r", "d"],
-            "Aq": [True, True, False],
-            "Aa": [False, False, True],
-            "Bw": [True, True, False],
-            "Bs": [False, False, True],
-            "Ce": [True, False, False],
-            "Cd": [False, False, True],
+            "Aq": [1.0, 1.0, 0.0],
+            "Aa": [0.0, 0.0, 1.0],
+            "Bw": [1.0, 1.0, 0.0],
+            "Bs": [0.0, 0.0, 1.0],
+            "Ce": [1.0, 0.0, 0.0],
+            "Cd": [0.0, 0.0, 1.0],
         }
     )
     column_names = ["Aq", "Aa", "Bw", "Bs", "Ce", "Cd"]

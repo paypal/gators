@@ -41,8 +41,8 @@ class DeltaTime(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({
     ... 'A': ['2020-01-01T23', '2020-01-02T00',  None],
     ... 'B': [0, 1, 0],
     ... 'C': ['2020-01-15T23', '2020-01-03T05',  None]})
@@ -132,12 +132,10 @@ class DeltaTime(Transformer):
             selected_columns=columns,
         )
         self.idx_columns_a = util.get_idx_columns(
-            # columns=X.columns,
             columns=columns,
             selected_columns=self.columns_a,
         )
         self.idx_columns_b = util.get_idx_columns(
-            # columns=X.columns,
             columns=columns,
             selected_columns=self.columns_b,
         )
@@ -160,7 +158,6 @@ class DeltaTime(Transformer):
         X = util.get_function(X).delta_time(
             X, self.column_names, self.columns_a, self.columns_b, self.deltatime_dtype
         )
-
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:

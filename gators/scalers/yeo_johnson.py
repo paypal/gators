@@ -42,8 +42,8 @@ class YeoJohnson(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({
     ... "A": [3., 1., -3., -1., -3.],
     ... "B": [22.0, 38.0, -26.0, 35.0, 3 - 5.0],
     ... "C": [7.25, 71.2833, -7.925, -53.1, -8.05]})
@@ -91,7 +91,7 @@ class YeoJohnson(Transformer):
         self.columns = list(lambdas_dict.keys())
 
     def fit(self, X: DataFrame, y: Series = None) -> "YeoJonhson":
-        """Fit the transformer on the pandas/koalas dataframe X.
+        """Fit the transformer on the dataframe X.
 
         Parameters
         ----------

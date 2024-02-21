@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.encoders import FrequencyEncoder
+from gators.encoders import CountEncoder
 
 
 @pytest.fixture
@@ -25,7 +25,7 @@ def data():
             "D": [1.0, 2.0, 3.0],
         }
     )
-    obj = FrequencyEncoder().fit(X)
+    obj = CountEncoder().fit(X)
     return obj, X, X_expected
 
 
@@ -35,7 +35,7 @@ def data_no_cat():
         np.zeros((3, 3)),
         columns=list("ABC"),
     )
-    obj = FrequencyEncoder().fit(X)
+    obj = CountEncoder().fit(X)
     return obj, X, X.copy()
 
 
@@ -71,7 +71,7 @@ def data_not_inplace():
             "C__frequency": [2.0, 1.0, 2.0],
         }
     ).astype(object)
-    obj = FrequencyEncoder(inplace=False).fit(X)
+    obj = CountEncoder(inplace=False).fit(X)
     return obj, X, X_expected, X_expected_numpy
 
 

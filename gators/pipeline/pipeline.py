@@ -48,8 +48,8 @@ class Pipeline(SciKitPipeline, Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({
     ... 'A': [0.1, 0.2, 0.3, np.nan],
     ... 'B': [1, 2, 2, np.nan],
     ... 'C': ['a', 'b', 'c', None]})

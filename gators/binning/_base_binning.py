@@ -57,12 +57,13 @@ class _BaseBinning(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        self.base_columns = list(X.columns)
-        self.columns = util.get_numerical_columns(X)
-        self.column_names = self.get_column_names(
-            inplace=False, columns=self.columns, suffix="bin"
-        )
-        self.idx_columns = util.get_idx_columns(X.columns, self.columns)
+        # self.base_columns = list(X.columns)
+        # self.columns = util.get_numerical_columns(X)
+        # self.column_names = self.get_column_names(
+        #     inplace=False, columns=self.columns, suffix="bin"
+        # )
+        # self.idx_columns = util.get_idx_columns(X.columns, self.columns)
+        self.set_columns(X, include=[int, float], suffix="bin")
         if self.idx_columns.size == 0:
             return self
         self.bins_dict, self.pretty_bins_dict, self.bins_np = self.compute_bins(

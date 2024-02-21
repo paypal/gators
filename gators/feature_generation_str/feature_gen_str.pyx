@@ -22,7 +22,7 @@ cpdef np.ndarray[object, ndim = 2] extract_str(
     for k in range(n_rows):
         for i in range(n_columns):
             value = X[k, idx_columns[i]]
-            if value is None or isinstance(value, float) or (i_max_vec[i] > len(value)):
+            if value == None or isinstance(value, float) or (i_max_vec[i] > len(value)):
                 X_new[k, i] = ''
                 continue
             X_new[k, i] = X[k, idx_columns[i]][i_min_vec[i]: i_max_vec[i]]
@@ -47,12 +47,12 @@ cpdef np.ndarray[object, ndim = 2] split_and_extract_str(
     for k in range(n_rows):
         for i in range(n_columns):
             value = X[k, idx_columns[i]]
-            if value is None or isinstance(value, float):
-                X_new[k, i] = 'MISSING'
+            if value == None or isinstance(value, float):
+                X_new[k, i] = ""
                 continue
             value_split = value.split(str_split_vec[i])
             if len(value_split) <= idx_split_vec[i]:
-                X_new[k, i] = 'MISSING'
+                X_new[k, i] = ""
                 continue
             X_new[k, i] = value_split[idx_split_vec[i]]
     return np.concatenate((X, X_new), axis=1)
@@ -74,7 +74,7 @@ cpdef np.ndarray[object, ndim=2] string_length(
     for j in range(n_cols):
         for i in range(n_rows):
             val = X[i, idx_columns[j]]
-            if val is None or val == 'nan':
+            if val == None or val == 'nan':
                 X_new[i, j] = 0
                 continue
             X_new[i, j] = len(str(val))
@@ -113,7 +113,7 @@ cpdef np.ndarray[object, ndim=2] upper_case(
     cdef int n_cols = X.shape[1]
     for j in range(n_cols):
         for i in range(n_rows):
-            if X[i, j] is None or X[i, j] == 'nan':
+            if X[i, j] == None:
                 X[i, j] = None
             else:
                 X[i, j] = X[i, j].upper()
@@ -131,7 +131,7 @@ cpdef np.ndarray[object, ndim=2] lower_case(
     cdef int n_cols = X.shape[1]
     for j in range(n_cols):
         for i in range(n_rows):
-            if X[i, j] is None or X[i, j] == 'nan':
+            if X[i, j] == None:
                 X[i, j] = None
             else:
                 X[i, j] = X[i, j].lower()

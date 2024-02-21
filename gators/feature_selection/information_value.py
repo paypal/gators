@@ -46,13 +46,13 @@ class InformationValue(_BaseFeatureSelection):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({
     ... "A": ['a', 'b', 'a', 'b', 'c', 'b'],
     ... "B": ['true', 'true', 'false', 'true', 'false', 'false'],
     ... "D": ['a', 'b', 'c', 'd', 'e', 'f'],
     ... "F": ['e', 'f', 'g', 'e', 'f', 'g']})
-    >>> y = ks.Series([1, 1, 1, 0, 0, 0], name='TARGET')
+    >>> y = ps.Series([1, 1, 1, 0, 0, 0], name='TARGET')
 
     * and `pandas` dataframes:
 

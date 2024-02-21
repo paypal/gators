@@ -44,8 +44,8 @@ class Replace(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame(
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame(
     ... {'A': ['a', 'b', 'c'], 'B': ['d', 'e', 'f'],'C': [1, 2, 3]})
 
     * and `pandas` dataframes:

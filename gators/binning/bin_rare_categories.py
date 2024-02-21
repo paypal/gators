@@ -47,8 +47,8 @@ class BinRareCategories(Transformer):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']})
 
     * and `pandas` dataframes:
 
@@ -106,10 +106,10 @@ class BinRareCategories(Transformer):
             Instance of itself.
         """
         self.check_dataframe(X)
-        if object not in X.dtypes.to_numpy():
-            return self
         self.base_columns = list(X.columns)
         self.columns = util.get_datatype_columns(X, datatype=object)
+        if not self.columns:
+            return self
         self.column_names = self.get_column_names(
             self.inplace, self.columns, "bin_rare"
         )

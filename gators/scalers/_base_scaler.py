@@ -4,7 +4,7 @@ import numpy as np
 from scaler import scaler
 
 from ..transformers.transformer import Transformer
-from gators import DataFrame, Series
+from gators import DataFrame
 
 
 class _BaseScaler(Transformer):

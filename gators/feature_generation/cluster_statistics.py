@@ -44,8 +44,8 @@ class ClusterStatistics(_BaseFeatureGeneration):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame(
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame(
     ... {'A': [9., 9., 7.], 'B': [3., 4., 5.], 'C': [6., 7., 8.]})
 
     * and `pandas` dataframes:

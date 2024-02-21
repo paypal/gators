@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,12 +7,12 @@ from pandas.testing import assert_frame_equal
 
 from gators.feature_generation.plan_rotation import PlanRotation
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame({"X": [200.0, 210.0], "Y": [140.0, 160.0], "Z": [100.0, 125.0]})
+    X = ps.DataFrame({"X": [200.0, 210.0], "Y": [140.0, 160.0], "Z": [100.0, 125.0]})
     X_expected = pd.DataFrame(
         {
             "X": [200.0, 210.0],
@@ -34,7 +34,7 @@ def data_ks():
 
 @pytest.fixture
 def data_object_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {"X": [200.0, 210.0], "A": ["a", "b"], "Y": [140.0, 160.0], "Z": [100.0, 125.0]}
     )
     X_expected = pd.DataFrame(
@@ -57,14 +57,14 @@ def data_object_ks():
     return obj, X, X_expected
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected = data_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -72,14 +72,14 @@ def test_ks_np(data_ks):
     assert np.allclose(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_object_ks(data_object_ks):
     obj, X, X_expected = data_object_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_object_ks_np(data_object_ks):
     obj, X, X_expected = data_object_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())

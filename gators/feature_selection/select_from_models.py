@@ -60,17 +60,17 @@ class SelectFromModels(_BaseFeatureSelection):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
+    >>> import pyspark.pandas as ps
     >>> from pyspark import SparkConf, SparkContext
     >>> from pyspark.ml.classification import RandomForestClassifier as RFCSpark
     >>> conf = SparkConf()
     >>> _ = conf.set('spark.executor.memory', '2g')
     >>> _ = SparkContext(conf=conf)
-    >>> X = ks.DataFrame({
+    >>> X = ps.DataFrame({
     ... 'A': [0.94, 0.09, -0.43, 0.31, 0.99, 1.05, 1.02, -0.77, 0.03, 0.99],
     ... 'B': [0.13, 0.01, -0.06, 0.04, 0.14, 0.14, 0.14, -0.1, 0.0, 0.13],
     ... 'C': [0.8, 0.08, -0.37, 0.26, 0.85, 0.9, 0.87, -0.65, 0.02, 0.84]})
-    >>> y = ks.Series([1, 0, 0, 0, 1, 1, 1, 0, 0, 1], name='TARGET')
+    >>> y = ps.Series([1, 0, 0, 0, 1, 1, 1, 0, 0, 1], name='TARGET')
     >>> models = [RFCSpark(numTrees=1, maxDepth=2, labelCol=y.name, seed=0),
     ... RFCSpark(numTrees=1, maxDepth=2, labelCol=y.name, seed=1)]
     >>> obj = SelectFromModels(models=models, k=1)

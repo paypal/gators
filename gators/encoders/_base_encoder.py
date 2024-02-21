@@ -1,10 +1,9 @@
 # License: Apache-2.0
-from typing import List, Tuple, Dict, Union
-import pandas as pd
+from typing import List, Dict
 import numpy as np
 
 
-from encoder import encoder
+from gators import DataFrame, Series
 from encoder import encoder_new
 from ..util import util
 from ..transformers.transformer import Transformer
@@ -21,17 +20,47 @@ class _BaseEncoder(Transformer):
         If True, perform the encoding inplace.
     """
 
-    def __init__(self, inplace):
+    def __init__(self, columns: List[str], inplace: bool):
         if not isinstance(inplace, bool):
             raise TypeError("`inplace` should be a bool.")
         Transformer.__init__(self)
         self.inplace = inplace
-        self.columns = []
+        self.columns = columns
         self.idx_columns: np.ndarray = np.array([])
         self.num_categories_vec = np.array([])
         self.values_vec = np.array([])
         self.encoded_values_vec = np.array([])
         self.mapping: Dict[str, Dict[str, float]] = {}
+
+    def fit(self, X: DataFrame, y: Series = None) -> "_BaseEncoder":
+        """Fit the encoder.
+
+        Parameters
+        ----------
+        X : DataFrame:
+            Input dataframe.
+        y : Series, default None.
+            Target values.
+
+        Returns
+        -------
+        WOEEncoder:
+            Instance of itself.
+        """
+        self.check_dataframe(X)
+        self.set_columns(
+            X=X, include=[bool, object, "string[pyarrow]"], suffix=self.suffix
+        )
+        if not self.columns:
+            return self
+        self.mapping = self.generate_mapping(X[self.columns], y)
+        self.mapping = {
+            k: {k: str(round(v, 4)) for k, v in v.items()}
+            for k, v in self.mapping.items()
+        }
+        self.set_num_categories_vec()
+        self.decompose_mapping()
+        return self
 
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
@@ -50,6 +79,7 @@ class _BaseEncoder(Transformer):
         if self.inplace:
             X = util.get_function(X).replace(X, self.mapping)
             X = util.get_function(X).to_numeric(X, columns=self.columns)
+            X[self.columns] = X[self.columns]
             return X
         X_encoded = util.get_function(X).replace(X.copy(), self.mapping)[self.columns]
         X_encoded = X_encoded.rename(columns=dict(zip(self.columns, self.column_names)))
@@ -87,10 +117,10 @@ class _BaseEncoder(Transformer):
             return X.astype(float)
         return np.concatenate((X, X_encoded), axis=1)
 
-    @staticmethod
-    def decompose_mapping(
-        mapping: Dict[str, Dict[str, float]],
-    ) -> Tuple[List[str], np.ndarray, np.ndarray]:
+    def set_num_categories_vec(self):
+        self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
+
+    def decompose_mapping(self):
         """Decompose the mapping.
 
         Parameters
@@ -110,61 +140,12 @@ class _BaseEncoder(Transformer):
         encoded_values_vec : np.ndarray
             Values used to encode.
         """
-        columns = list(mapping.keys())
-        n_columns = len(columns)
-        max_categories = max(len(m) for m in mapping.values())
-        encoded_values_vec = np.zeros((n_columns, max_categories))
-        values_vec = np.zeros((n_columns, max_categories), dtype=object)
-        for i, c in enumerate(columns):
-            mapping_col = mapping[c]
+        n_columns = len(self.columns)
+        max_categories = max(len(m) for m in self.mapping.values())
+        self.encoded_values_vec = np.zeros((n_columns, max_categories))
+        self.values_vec = np.zeros((n_columns, max_categories), dtype=object)
+        for i, c in enumerate(self.columns):
+            mapping_col = self.mapping[c]
             n_values = len(mapping_col)
-            encoded_values_vec[i, :n_values] = np.array(list(mapping_col.values()))
-            values_vec[i, :n_values] = np.array(list(mapping_col.keys()))
-        return columns, values_vec, encoded_values_vec
-
-    def display_mapping(self, cmap: Union[str, "colormap"], k=5, decimal=2, title=""):
-        """Display the encoder mapping in a jupyter notebook.
-        Parameters
-        ----------
-        cmap : Union[str, 'colormap']
-            Matplotlib colormap.
-        k : int, default 5.
-            Number of mappings displayed.
-        decimals : int, default 2.
-            Number of decimal places to use.
-        title : str, default ''.
-            Plot title.
-        """
-
-        import matplotlib.pyplot as plt
-        import seaborn as sns
-
-        if not isinstance(decimal, int) or decimal < 1:
-            raise TypeError("`decimal` should be a positive int.")
-        if not isinstance(k, int) or k < 1:
-            raise TypeError("`k` should be a positive int.")
-        if not isinstance(title, str):
-            raise TypeError("`title` should be a str.")
-
-        mapping = pd.DataFrame(self.mapping)
-        vmin = mapping.min().min()
-        vmax = mapping.max().max()
-
-        cols = mapping.max().sort_values(ascending=False).index
-        for c in cols[:k]:
-            encoder_mapping_col = (
-                mapping[[c]].dropna().sort_values(c, ascending=False).round(decimal)
-            )
-            x, y = 0.8 * len(encoder_mapping_col) / 1.62, 0.8 * len(encoder_mapping_col)
-            _, ax = plt.subplots(figsize=(x, y))
-            sns.heatmap(
-                encoder_mapping_col,
-                vmin=vmin,
-                vmax=vmax,
-                cmap=cmap,
-                annot=True,
-                cbar=False,
-            )
-            _ = ax.set_title(title)
-            _ = ax.set_ylabel(None)
-            _ = ax.set_ylabel(c)
+            self.encoded_values_vec[i, :n_values] = np.array(list(mapping_col.values()))
+            self.values_vec[i, :n_values] = np.array(list(mapping_col.keys()))

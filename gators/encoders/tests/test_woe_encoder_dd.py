@@ -25,28 +25,28 @@ def data():
     X_expected = pd.DataFrame(
         {
             "A": {
-                0: -1.4350845252893225,
-                1: -1.4350845252893225,
-                2: -1.4350845252893225,
-                3: 1.0216512475319814,
-                4: 1.0216512475319814,
-                5: 1.0216512475319814,
+                0: -1.4351,
+                1: -1.4351,
+                2: -1.4351,
+                3: 1.0217,
+                4: 1.0217,
+                5: 1.0217,
             },
             "B": {
-                0: -1.0986122886681098,
-                1: -1.0986122886681098,
-                2: 0.5108256237659907,
-                3: 0.5108256237659907,
-                4: 0.5108256237659907,
-                5: 0.5108256237659907,
+                0: -1.0986,
+                1: -1.0986,
+                2: 0.5108,
+                3: 0.5108,
+                4: 0.5108,
+                5: 0.5108,
             },
             "C": {
-                0: -0.3364722366212129,
-                1: -0.3364722366212129,
-                2: -0.3364722366212129,
-                3: -0.3364722366212129,
-                4: 0.5108256237659907,
-                5: 0.5108256237659907,
+                0: -0.3365,
+                1: -0.3365,
+                2: -0.3365,
+                3: -0.3365,
+                4: 0.5108,
+                5: 0.5108,
             },
             "D": {0: 1.0, 1: 2.0, 2: 3.0, 3: 4.0, 4: 5.0, 5: 6.0},
         }
@@ -72,28 +72,28 @@ def data_not_inplace():
     X_expected = pd.DataFrame(
         {
             "A__woe": {
-                0: -1.4350845252893225,
-                1: -1.4350845252893225,
-                2: -1.4350845252893225,
-                3: 1.0216512475319814,
-                4: 1.0216512475319814,
-                5: 1.0216512475319814,
+                0: -1.4351,
+                1: -1.4351,
+                2: -1.4351,
+                3: 1.0217,
+                4: 1.0217,
+                5: 1.0217,
             },
             "B__woe": {
-                0: -1.0986122886681098,
-                1: -1.0986122886681098,
-                2: 0.5108256237659907,
-                3: 0.5108256237659907,
-                4: 0.5108256237659907,
-                5: 0.5108256237659907,
+                0: -1.0986,
+                1: -1.0986,
+                2: 0.5108,
+                3: 0.5108,
+                4: 0.5108,
+                5: 0.5108,
             },
             "C__woe": {
-                0: -0.3364722366212129,
-                1: -0.3364722366212129,
-                2: -0.3364722366212129,
-                3: -0.3364722366212129,
-                4: 0.5108256237659907,
-                5: 0.5108256237659907,
+                0: -0.3365,
+                1: -0.3365,
+                2: -0.3365,
+                3: -0.3365,
+                4: 0.5108,
+                5: 0.5108,
             },
         }
     )
@@ -114,8 +114,8 @@ def data_no_cat():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute().astype(float)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -128,8 +128,8 @@ def test_dd_np(data):
 
 def test_no_cat_dd(data_no_cat):
     obj, X, X_expected = data_no_cat
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute().astype(float)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_no_cat_dd_np(data_no_cat):
@@ -142,8 +142,12 @@ def test_no_cat_dd_np(data_no_cat):
 
 def test_data_not_inplace_dd(data_not_inplace):
     obj, X, X_expected = data_not_inplace
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[["A", "B", "C"]] = X_new[["A", "B", "C"]].astype("string[pyarrow]")
+    X_new[["A__woe", "B__woe", "C__woe"]] = X_new[
+        ["A__woe", "B__woe", "C__woe"]
+    ].astype(float)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_data_not_inplace_dd_np(data_not_inplace):

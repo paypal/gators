@@ -33,10 +33,10 @@ class TransformerXY(ABC):
 
     * transform with `koalas`
 
-    >>> import databricks.koalas as ks
+    >>> import pyspark.pandas as ps
     >>> X, y = FirsRows().transform(
-    ... X=ks.DataFrame({'A':[1, 2], 'B':[3, 4]}),
-    ... y=ks.Series([0, 1],name='TARGET'))
+    ... X=ps.DataFrame({'A':[1, 2], 'B':[3, 4]}),
+    ... y=ps.Series([0, 1],name='TARGET'))
     >>> X
        A  B
     0  1  3

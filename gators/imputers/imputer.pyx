@@ -31,7 +31,7 @@ cpdef np.ndarray[object, ndim = 2] object_imputer(
     cdef int n_idx_columns = idx_columns.shape[0]
     for j in range(n_rows):
         for i in range(n_idx_columns):
-            if (X[j, idx_columns[i]] != X[j, idx_columns[i]]) or (X[j, idx_columns[i]] is None):
+            if (X[j, idx_columns[i]] != X[j, idx_columns[i]]) or (X[j, idx_columns[i]] == None):
                 X[j, idx_columns[i]] = statistics[i]
     return X
 

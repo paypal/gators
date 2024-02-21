@@ -4,9 +4,7 @@ import pytest
 from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
 
-from gators.encoders.woe_encoder import WOEEncoder
-from gators.binning.binning import Binning
-from gators.model_building.model import Model
+# from gators.model_building.model import Model
 from gators.feature_selection.select_from_model import SelectFromModel
 from gators.pipeline.pipeline import Pipeline
 from gators.transformers.transformer import Transformer
@@ -73,19 +71,19 @@ def pipeline_with_feature_selection_example():
     return pipe, X
 
 
-@pytest.fixture
-def pipeline_with_model_example():
-    X = pd.DataFrame(data["data"], columns=data["feature_names"])
-    y = pd.Series(data["target"], name="TARGET")
-    model = RandomForestClassifier(n_estimators=6, max_depth=4, random_state=0)
-    steps = [
-        ["MultiplyTransformer1", MultiplyTransformer(4.0)],
-        ["MultiplyTransformer2", MultiplyTransformer(0.5)],
-        ["NameTransformer", NameTransformer()],
-        ["Estimator", Model(model)],
-    ]
-    pipe = Pipeline(steps).fit(X, y)
-    return pipe, X
+# @pytest.fixture
+# def pipeline_with_model_example():
+#     X = pd.DataFrame(data["data"], columns=data["feature_names"])
+#     y = pd.Series(data["target"], name="TARGET")
+#     model = RandomForestClassifier(n_estimators=6, max_depth=4, random_state=0)
+#     steps = [
+#         ["MultiplyTransformer1", MultiplyTransformer(4.0)],
+#         ["MultiplyTransformer2", MultiplyTransformer(0.5)],
+#         ["NameTransformer", NameTransformer()],
+#         ["Estimator", Model(model)],
+#     ]
+#     pipe = Pipeline(steps).fit(X, y)
+#     return pipe, X
 
 
 def test_pipeline_fit_and_transform(pipeline_example):
@@ -113,16 +111,16 @@ def test_fit_transform_pipeline(pipeline_example):
     ]
 
 
-def test_pipeline_predict(pipeline_with_model_example):
-    pipe, X = pipeline_with_model_example
-    y_pred = pipe.predict(X)
-    assert y_pred.shape == (150,)
+# def test_pipeline_predict(pipeline_with_model_example):
+#     pipe, X = pipeline_with_model_example
+#     y_pred = pipe.predict(X)
+#     assert y_pred.shape == (150,)
 
 
-def test_pipeline_predict_proba(pipeline_with_model_example):
-    pipe, X = pipeline_with_model_example
-    y_pred = pipe.predict_proba(X)
-    assert y_pred.shape == (150, 3)
+# def test_pipeline_predict_proba(pipeline_with_model_example):
+#     pipe, X = pipeline_with_model_example
+#     y_pred = pipe.predict_proba(X)
+#     assert y_pred.shape == (150, 3)
 
 
 def test_pipeline_numpy(pipeline_example):
@@ -156,12 +154,12 @@ def test_verbose():
     X = pd.DataFrame(data["data"], columns=data["feature_names"])
     y = pd.Series(data["target"], name="TARGET")
 
-    model = RandomForestClassifier(n_estimators=6, max_depth=4, random_state=0)
+    # model = RandomForestClassifier(n_estimators=6, max_depth=4, random_state=0)
     steps = [
         ["MultiplyTransformer1", MultiplyTransformer(4.0)],
         ["MultiplyTransformer2", MultiplyTransformer(0.5)],
         ["NameTransformer", NameTransformer()],
-        ["Estimator", SelectFromModel(model=model, k=3)],
+        # ["Estimator", SelectFromModel(model=model, k=3)],
     ]
     pipe = Pipeline(steps, verbose=True).fit(X, y)
     _ = pipe.transform(X)

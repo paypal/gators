@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
@@ -9,7 +9,7 @@ from gators.binning import BinSingleTargetClassCategories
 
 @pytest.fixture
 def data():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["_0", "_1", "_2", "_2", "_1"],
             "B": ["_1", "_2", "_1", "_1", "_1"],
@@ -18,7 +18,7 @@ def data():
             "E": [1, 2, 3, 4, 5],
         }
     )
-    y = ks.Series([0, 1, 1, 0, 0], name="Target")
+    y = ps.Series([0, 1, 1, 0, 0], name="Target")
 
     X_expected = pd.DataFrame(
         {
@@ -33,14 +33,14 @@ def data():
     return obj, X, X_expected
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data):
     obj, X, X_expected = data
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def tesks_np(data):
     obj, X, X_expected = data
     X_numpy_new = obj.transform_numpy(X.to_numpy())

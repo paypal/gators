@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,12 +7,12 @@ from pandas.testing import assert_frame_equal
 
 from gators.encoders import OrdinalEncoder
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["Q", "Q", "W"],
             "B": ["Q", "W", "W"],
@@ -22,9 +22,9 @@ def data_ks():
     )
     X_expected = pd.DataFrame(
         {
-            "A": [1.0, 1.0, 0.0],
-            "B": [0.0, 1.0, 1.0],
-            "C": [1.0, 0.0, 1.0],
+            "A": [0.0, 0.0, 1.0],
+            "B": [1.0, 0.0, 0.0],
+            "C": [0.0, 1.0, 0.0],
             "D": [1.0, 2.0, 3.0],
         }
     )
@@ -34,7 +34,7 @@ def data_ks():
 
 @pytest.fixture
 def data_no_cat_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         np.zeros((3, 3)),
         columns=list("ABC"),
     )
@@ -42,14 +42,14 @@ def data_no_cat_ks():
     return obj, X, X.copy().to_pandas()
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected = data_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -57,14 +57,14 @@ def test_ks_np(data_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_no_cat_ks(data_no_cat_ks):
     obj, X, X_expected = data_no_cat_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_no_cat_ks_np(data_no_cat_ks):
     obj, X, X_expected = data_no_cat_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())

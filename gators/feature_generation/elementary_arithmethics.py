@@ -58,8 +58,8 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': [1, 1., 1.], 'B': [1., 2., 3.]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [1, 1., 1.], 'B': [1., 2., 3.]})
 
     * and `pandas` dataframes:
 

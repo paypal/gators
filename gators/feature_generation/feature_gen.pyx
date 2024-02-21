@@ -68,7 +68,7 @@ cpdef np.ndarray[object, ndim = 2] is_null_object(
 
     for i in range(n_rows):
         for j in range(n_cols):
-            if (X[i, idx_columns[j]] is None) or (X[i, idx_columns[j]] != X[i, idx_columns[j]]):
+            if (X[i, idx_columns[j]] == None) or (X[i, idx_columns[j]] != X[i, idx_columns[j]]):
                 X_new[i, j] = 1.
     return np.concatenate((X, X_new), axis=1)
 
@@ -244,7 +244,7 @@ cpdef np.ndarray[object, ndim = 2] polynomial_object(
             val = ''
             for k in range(degree):
                 if combinations_np[j, k] >= 0:
-                    if X[i, combinations_np[j, k]] is None:
+                    if X[i, combinations_np[j, k]] == None:
                         continue
                     val += str(X[i, combinations_np[j, k]])
             X_new[i, j] = val

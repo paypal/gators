@@ -26,7 +26,7 @@ def data():
 @pytest.fixture
 def data_ks():
     min_var = 2.0
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": [87.25, 5.25, 70.25, 5.25, 0.25, 7.25],
             "B": [1, 1, 0, 1, 0, 0],
@@ -36,7 +36,7 @@ def data_ks():
         }
     )
     X_expected = X[["A", "C", "D"]].to_pandas().copy()
-    y = ks.Series([1, 1, 1, 0, 0, 0])
+    y = ps.Series([1, 1, 1, 0, 0, 0])
     obj = VarianceFilter(min_var=min_var).fit(X, y)
     return obj, X, X_expected
 

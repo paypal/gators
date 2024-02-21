@@ -7,6 +7,12 @@ from pandas.testing import assert_frame_equal
 
 from gators.binning import QuantileBinning
 
+columns = ["C", "A__bin", "B__bin", "D__bin", "F__bin"]
+columns_inplace = ["A", "B", "C", "D", "F"]
+columns_num = ["A__bin", "B__bin", "D__bin", "F__bin"]
+columns_num_inplace = ["A", "B", "D", "F"]
+columns_no_num = ["C"]
+
 
 @pytest.fixture
 def data():
@@ -32,19 +38,19 @@ def data():
             "F": [3, 1, 2, 1, 2, 3],
             "A__bin": [
                 "(-inf, 7.96)",
-                "[41.83, inf)",
+                "[41.94, inf)",
                 "(-inf, 7.96)",
-                "[41.83, inf)",
+                "[41.94, inf)",
                 "[7.96, 8.25)",
-                "[8.25, 41.83)",
+                "[8.25, 41.94)",
             ],
             "B__bin": [
-                "[1.0, inf)",
-                "[1.0, inf)",
-                "[0.0, 0.5)",
-                "[1.0, inf)",
-                "[0.0, 0.5)",
-                "[0.0, 0.5)",
+                "[0.5, inf)",
+                "[0.5, inf)",
+                "(-inf, 0.5)",
+                "[0.5, inf)",
+                "(-inf, 0.5)",
+                "(-inf, 0.5)",
             ],
             "D__bin": [
                 "(-inf, 26.3)",
@@ -87,19 +93,19 @@ def data_inplace():
         {
             "A": [
                 "(-inf, 7.96)",
-                "[41.83, inf)",
+                "[41.94, inf)",
                 "(-inf, 7.96)",
-                "[41.83, inf)",
+                "[41.94, inf)",
                 "[7.96, 8.25)",
-                "[8.25, 41.83)",
+                "[8.25, 41.94)",
             ],
             "B": [
-                "[1.0, inf)",
-                "[1.0, inf)",
-                "[0.0, 0.5)",
-                "[1.0, inf)",
-                "[0.0, 0.5)",
-                "[0.0, 0.5)",
+                "[0.5, inf)",
+                "[0.5, inf)",
+                "(-inf, 0.5)",
+                "[0.5, inf)",
+                "(-inf, 0.5)",
+                "(-inf, 0.5)",
             ],
             "C": ["a", "b", "c", "d", "e", "f"],
             "D": [
@@ -157,19 +163,19 @@ def data_num():
             "F": [3, 1, 2, 1, 2, 3],
             "A__bin": [
                 "(-inf, 7.96)",
-                "[41.83, inf)",
+                "[41.94, inf)",
                 "(-inf, 7.96)",
-                "[41.83, inf)",
+                "[41.94, inf)",
                 "[7.96, 8.25)",
-                "[8.25, 41.83)",
+                "[8.25, 41.94)",
             ],
             "B__bin": [
-                "[1.0, inf)",
-                "[1.0, inf)",
-                "[0.0, 0.5)",
-                "[1.0, inf)",
-                "[0.0, 0.5)",
-                "[0.0, 0.5)",
+                "[0.5, inf)",
+                "[0.5, inf)",
+                "(-inf, 0.5)",
+                "[0.5, inf)",
+                "(-inf, 0.5)",
+                "(-inf, 0.5)",
             ],
             "D__bin": [
                 "(-inf, 26.3)",
@@ -211,19 +217,19 @@ def data_num_inplace():
         {
             "A": [
                 "(-inf, 7.96)",
-                "[41.83, inf)",
+                "[41.94, inf)",
                 "(-inf, 7.96)",
-                "[41.83, inf)",
+                "[41.94, inf)",
                 "[7.96, 8.25)",
-                "[8.25, 41.83)",
+                "[8.25, 41.94)",
             ],
             "B": [
-                "[1.0, inf)",
-                "[1.0, inf)",
-                "[0.0, 0.5)",
-                "[1.0, inf)",
-                "[0.0, 0.5)",
-                "[0.0, 0.5)",
+                "[0.5, inf)",
+                "[0.5, inf)",
+                "(-inf, 0.5)",
+                "[0.5, inf)",
+                "(-inf, 0.5)",
+                "(-inf, 0.5)",
             ],
             "D": [
                 "(-inf, 26.3)",
@@ -249,8 +255,9 @@ def data_num_inplace():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[columns] = X_new[columns].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -264,8 +271,9 @@ def test_dd_np(data):
 
 def test_no_num_dd(data_no_num):
     obj, X, X_expected = data_no_num
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[columns_no_num] = X_new[columns_no_num].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_no_num_dd_np(data_no_num):
@@ -279,8 +287,9 @@ def test_no_num_dd_np(data_no_num):
 
 def test_num_dd(data_num):
     obj, X, X_expected = data_num
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[columns_num] = X_new[columns_num].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_num_dd_np(data_num):
@@ -295,31 +304,33 @@ def test_num_dd_np(data_num):
 # # # inplace
 
 
-# def test_inplace_dd(data_inplace):
-#     obj, X, X_expected = data_inplace
-#     X_new = obj.transform(X)
-#     assert_frame_equal(X_new.compute(), X_expected)
+def test_inplace_dd(data_inplace):
+    obj, X, X_expected = data_inplace
+    X_new = obj.transform(X).compute()
+    X_new[columns_inplace] = X_new[columns_inplace].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
-# def test_inplace_dd_np(data_inplace):
-#     obj, X, X_expected = data_inplace
-#     X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
-#     X_new = pd.DataFrame(
-#         X_numpy_new, columns=X_expected.columns, index=X_expected.index
-#     )
-#     assert_frame_equal(X_new, X_expected.astype(object))
+def test_inplace_dd_np(data_inplace):
+    obj, X, X_expected = data_inplace
+    X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
+    X_new = pd.DataFrame(
+        X_numpy_new, columns=X_expected.columns, index=X_expected.index
+    )
+    assert_frame_equal(X_new, X_expected.astype(object))
 
 
-# def test_inplace_num_dd(data_num_inplace):
-#     obj, X, X_expected = data_num_inplace
-#     X_new = obj.transform(X)
-#     assert_frame_equal(X_new.compute(), X_expected)
+def test_inplace_num_dd(data_num_inplace):
+    obj, X, X_expected = data_num_inplace
+    X_new = obj.transform(X).compute()
+    X_new[columns_num_inplace] = X_new[columns_num_inplace].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
-# def test_inplace_num_dd_np(data_num_inplace):
-#     obj, X, X_expected = data_num_inplace
-#     X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
-#     X_new = pd.DataFrame(
-#         X_numpy_new, columns=X_expected.columns, index=X_expected.index
-#     )
-#     assert_frame_equal(X_new, X_expected.astype(object))
+def test_inplace_num_dd_np(data_num_inplace):
+    obj, X, X_expected = data_num_inplace
+    X_numpy_new = obj.transform_numpy(X.compute().to_numpy())
+    X_new = pd.DataFrame(
+        X_numpy_new, columns=X_expected.columns, index=X_expected.index
+    )
+    assert_frame_equal(X_new, X_expected.astype(object))

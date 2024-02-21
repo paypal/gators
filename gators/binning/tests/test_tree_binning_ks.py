@@ -1,18 +1,18 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 from gators.binning import TreeBinning
 
 
 @pytest.fixture
 def data():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": [1.07, -2.59, -1.54, 1.72],
             "B": [-1.19, -0.22, -0.28, 1.28],
@@ -20,7 +20,7 @@ def data():
             "D": ["a", "b", "c", "d"],
         }
     )
-    y = ks.Series([0, 1, 0, 1], name="TARGET")
+    y = ps.Series([0, 1, 0, 1], name="TARGET")
     X_expected = pd.DataFrame(
         {
             "A": [1.07, -2.59, -1.54, 1.72],
@@ -45,14 +45,14 @@ def data():
 @pytest.fixture
 def data_regression():
     max_depth = 2
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": [-0.1, 1.45, 0.98, -0.98],
             "B": [-0.15, 0.14, 0.4, 1.87],
             "C": [0.95, 0.41, 1.76, 2.24],
         }
     )
-    y = ks.Series([39.9596835, 36.65644911, 137.24445075, 300.15325913], name="TARGET")
+    y = ps.Series([39.9596835, 36.65644911, 137.24445075, 300.15325913], name="TARGET")
     X_expected = pd.DataFrame(
         {
             "A": ["[-0.54, 1.22)", "[1.22, inf)", "[-0.54, 1.22)", "(-inf, -0.54)"],
@@ -65,14 +65,14 @@ def data_regression():
     return obj, X, X_expected
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data):
     obj, X, X_expected = data
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data):
     obj, X, X_expected = data
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -82,14 +82,14 @@ def test_ks_np(data):
     assert_frame_equal(X_new, X_expected.astype(object))
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_regression_ks(data_regression):
     obj, X, X_expected = data_regression
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_regression_ks_np(data_regression):
     obj, X, X_expected = data_regression
     X_numpy_new = obj.transform_numpy(X.to_numpy())

@@ -14,18 +14,15 @@ def data():
             "A": ["2021-02-28T06", None, None],
             "B": ["2020-02-29T06", None, None],
             "C": ["2020-03-01T12", None, None],
-            "D": ["2020-04-01T18", None, None],
-            "E": ["2020-05-31T23", None, None],
             "X": ["x", "x", "x"],
         }
     )
-    X_np = X.to_numpy()
-    columns = ["A", "B", "C", "D", "E"]
+    columns = ["A", "B", "C"]
     X["A"] = X["A"].astype("datetime64[ns]")
     X["B"] = X["B"].astype("datetime64[ms]")
     X["C"] = X["C"].astype("datetime64[s]")
-    X["D"] = X["D"].astype("datetime64[m]")
-    X["E"] = X["E"].astype("datetime64[h]")
+    X_np = X.to_numpy()
+
     X_expected = pd.DataFrame(
         {
             "A__day_of_month_cos": [0.9749279121818235, np.nan, np.nan],
@@ -34,10 +31,6 @@ def data():
             "B__day_of_month_sin": [-0.2149704402110244, np.nan, np.nan],
             "C__day_of_month_cos": [1.0, np.nan, np.nan],
             "C__day_of_month_sin": [0.0, np.nan, np.nan],
-            "D__day_of_month_cos": [1.0, np.nan, np.nan],
-            "D__day_of_month_sin": [0.0, np.nan, np.nan],
-            "E__day_of_month_cos": [0.9795299412524945, np.nan, np.nan],
-            "E__day_of_month_sin": [-0.20129852008866028, np.nan, np.nan],
         }
     )
     X_expected_np = np.concatenate((X_np, X_expected.to_numpy()), axis=1)

@@ -32,8 +32,8 @@ class VarianceFilter(_BaseFeatureSelection):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
 
     * and `pandas` dataframes:
 
@@ -81,7 +81,7 @@ class VarianceFilter(_BaseFeatureSelection):
         self.feature_importances_ = util.get_function(X).to_pandas(
             X[numerical_columns].var()
         )
-        mask = self.feature_importances_ < self.min_var
+        mask = self.feature_importances_ <= self.min_var
         self.columns_to_drop = list(self.feature_importances_.index[mask])
         self.selected_columns = util.exclude_columns(X.columns, self.columns_to_drop)
         self.idx_selected_columns = util.get_idx_columns(

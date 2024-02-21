@@ -67,8 +67,8 @@ def data():
 
 def test_interaction_dd(data_interaction):
     obj, X, X_expected = data_interaction
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_interaction_dd_np(data_interaction):
@@ -79,8 +79,9 @@ def test_interaction_dd_np(data_interaction):
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new["D"] = X_new["D"].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):

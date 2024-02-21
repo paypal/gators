@@ -17,9 +17,9 @@ def data():
 
 def test_pd(data):
     obj, X = data
-    X_new = obj.transform(X)
-    assert np.allclose(X_new.compute().mean().mean(), 0)
-    assert np.allclose(X_new.compute().std().mean(), 1)
+    X_new = obj.transform(X).compute()
+    assert np.allclose(X_new.mean().mean(), 0)
+    assert np.allclose(X_new.std().mean(), 1)
 
 
 def test_pd_np(data):

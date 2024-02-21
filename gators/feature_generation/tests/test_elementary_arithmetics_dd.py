@@ -154,8 +154,8 @@ def data_div():
 
 def test_add_dd(data_add):
     obj, X, X_expected = data_add
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_add_dd_np(data_add):
@@ -168,8 +168,9 @@ def test_add_dd_np(data_add):
 
 def test_object_add_dd(data_object_add):
     obj, X, X_expected = data_object_add
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new["D"] = X_new["D"].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_object_add_dd_np(data_object_add):
@@ -182,8 +183,8 @@ def test_object_add_dd_np(data_object_add):
 
 def test_mult_dd(data_mult):
     obj, X, X_expected = data_mult
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_mult_dd_np(data_mult):
@@ -196,8 +197,8 @@ def test_mult_dd_np(data_mult):
 
 def test_div_dd(data_div):
     obj, X, X_expected = data_div
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_div_dd_np(data_div):
@@ -210,8 +211,8 @@ def test_div_dd_np(data_div):
 
 def test_name_add_dd(data_name_add):
     obj, X, X_expected = data_name_add
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_name_add_dd_np(data_name_add):

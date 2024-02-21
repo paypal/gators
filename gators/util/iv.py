@@ -17,6 +17,7 @@ def compute_iv(X: DataFrame, y: Series, regularization=0.1):
     stats.loc[:, "0"] = stats["count"] - stats["1"]
     stats = stats.drop("count", axis=1)
     stats = stats[["0", "1"]]
+    stats["N"] = stats[["0", "1"]].sum(axis=1)
     stats[["distrib_0", "distrib_1"]] = (stats[["0", "1"]] + regularization) / (
         stats[["0", "1"]].groupby("variable").sum() + 2 * regularization
     )
@@ -25,4 +26,7 @@ def compute_iv(X: DataFrame, y: Series, regularization=0.1):
     iv = iv.groupby("variable").sum()
     iv.name = "iv"
     iv.index.name = None
+    iv = iv.sort_values(ascending=False)
+    stats = stats.sort_values("woe", ascending=False)
+
     return iv, stats

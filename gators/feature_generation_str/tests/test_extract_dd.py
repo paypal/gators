@@ -47,8 +47,17 @@ def data():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    cols = [
+        "D",
+        "E",
+        "F",
+        "D__substring_0_to_1",
+        "E__substring_1_to_2",
+        "F__substring_2_to_3",
+    ]
+    X_new[cols] = X_new[cols].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):

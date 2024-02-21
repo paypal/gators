@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import numpy as np
 import pandas as pd
 import pytest
@@ -7,23 +7,23 @@ from pandas.testing import assert_frame_equal
 
 from gators.feature_generation.one_hot import OneHot
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(np.array(list("qweqwrasd")).reshape(3, 3), columns=list("ABC"))
+    X = ps.DataFrame(np.array(list("qweqwrasd")).reshape(3, 3), columns=list("ABC"))
     X_expected = pd.DataFrame(
         {
             "A": ["q", "q", "a"],
             "B": ["w", "w", "s"],
             "C": ["e", "r", "d"],
-            "A__onehot__q": [True, True, False],
-            "A__onehot__a": [False, False, True],
-            "B__onehot__w": [True, True, False],
-            "B__onehot__s": [False, False, True],
-            "C__onehot__e": [True, False, False],
-            "C__onehot__d": [False, False, True],
+            "A__onehot__q": [1.0, 1.0, 0.0],
+            "A__onehot__a": [0.0, 0.0, 1.0],
+            "B__onehot__w": [1.0, 1.0, 0.0],
+            "B__onehot__s": [0.0, 0.0, 1.0],
+            "C__onehot__e": [1.0, 0.0, 0.0],
+            "C__onehot__d": [0.0, 0.0, 1.0],
         }
     )
     categories_dict = {"A": ["q", "a"], "B": ["w", "s"], "C": ["e", "d"]}
@@ -33,18 +33,18 @@ def data_ks():
 
 @pytest.fixture
 def data_names_ks():
-    X = ks.DataFrame(np.array(list("qweqwrasd")).reshape(3, 3), columns=list("ABC"))
+    X = ps.DataFrame(np.array(list("qweqwrasd")).reshape(3, 3), columns=list("ABC"))
     X_expected = pd.DataFrame(
         {
             "A": ["q", "q", "a"],
             "B": ["w", "w", "s"],
             "C": ["e", "r", "d"],
-            "Aq": [True, True, False],
-            "Aa": [False, False, True],
-            "Bw": [True, True, False],
-            "Bs": [False, False, True],
-            "Ce": [True, False, False],
-            "Cd": [False, False, True],
+            "Aq": [1.0, 1.0, 0.0],
+            "Aa": [0.0, 0.0, 1.0],
+            "Bw": [1.0, 1.0, 0.0],
+            "Bs": [0.0, 0.0, 1.0],
+            "Ce": [1.0, 0.0, 0.0],
+            "Cd": [0.0, 0.0, 1.0],
         }
     )
     column_names = ["Aq", "Aa", "Bw", "Bs", "Ce", "Cd"]
@@ -53,14 +53,14 @@ def data_names_ks():
     return obj, X, X_expected
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas().iloc[:, -3:], X_expected.iloc[:, -3:])
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected = data_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())
@@ -69,14 +69,14 @@ def test_ks_np(data_ks):
     assert_frame_equal(X_new, X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_names_ks(data_names_ks):
     obj, X, X_expected = data_names_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_names_np(data_names_ks):
     obj, X, X_expected = data_names_ks
     X_numpy_new = obj.transform_numpy(X.to_numpy())

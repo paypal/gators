@@ -35,8 +35,8 @@ class DropHighNaNRatio(_BaseDataCleaning):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame(
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame(
     ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
 
     * and `pandas` dataframes:

@@ -35,8 +35,8 @@ class CorrelationFilter(_BaseFeatureSelection):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [0., 0., 0.1], 'B': [1., 2., 3.], 'C': [0., 0., 0.15]})
 
     * and `pandas` dataframes:
 

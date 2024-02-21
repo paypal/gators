@@ -89,8 +89,9 @@ def data_with_names():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[["D", "E", "F"]] = X_new[["D", "E", "F"]].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -102,8 +103,9 @@ def test_dd_np(data):
 
 def test_names_dd(data_with_names):
     obj, X, X_expected = data_with_names
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute()
+    X_new[["D", "E", "F"]] = X_new[["D", "E", "F"]].astype(object)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_names_dd_np(data_with_names):

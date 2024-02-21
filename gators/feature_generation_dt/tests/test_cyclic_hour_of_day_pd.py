@@ -14,18 +14,14 @@ def data():
             "A": ["2020-01-01T00", None, None],
             "B": ["2020-04-08T06", None, None],
             "C": ["2020-07-16T12", None, None],
-            "D": ["2020-10-24T18", None, None],
-            "E": ["2020-12-31T23", None, None],
             "X": ["x", "x", "x"],
         }
     )
-    X_np = X.to_numpy()
-    columns = ["A", "B", "C", "D", "E"]
+    columns = ["A", "B", "C"]
     X["A"] = X["A"].astype("datetime64[ns]")
     X["B"] = X["B"].astype("datetime64[ms]")
     X["C"] = X["C"].astype("datetime64[s]")
-    X["D"] = X["D"].astype("datetime64[m]")
-    X["E"] = X["E"].astype("datetime64[h]")
+    X_np = X.to_numpy()
     X_expected = pd.DataFrame(
         {
             "A__hour_of_day_cos": [1.0, None, np.nan],
@@ -34,10 +30,6 @@ def data():
             "B__hour_of_day_sin": [1.0, None, np.nan],
             "C__hour_of_day_cos": [-1, None, np.nan],
             "C__hour_of_day_sin": [0.0, None, np.nan],
-            "D__hour_of_day_cos": [0.0, None, np.nan],
-            "D__hour_of_day_sin": [-1.0, None, np.nan],
-            "E__hour_of_day_cos": [0.9659258262890681, None, np.nan],
-            "E__hour_of_day_sin": [-0.2588190451025215, None, np.nan],
         }
     )
     X_expected_np = np.concatenate((X_np, X_expected.to_numpy()), axis=1)

@@ -28,9 +28,9 @@ def data():
                 0.0,
                 0.0,
                 0.0,
-                0.6666666666666666,
-                0.6666666666666666,
-                0.6666666666666666,
+                0.6667,
+                0.6667,
+                0.6667,
             ],
             "B": [0.0, 0.0, 0.5, 0.5, 0.5, 0.5],
             "C": [0.25, 0.25, 0.25, 0.25, 0.5, 0.5],
@@ -57,8 +57,8 @@ def data_no_cat():
 
 def test_dd(data):
     obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute().astype(float)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_dd_np(data):
@@ -71,8 +71,8 @@ def test_dd_np(data):
 
 def test_no_cat_dd(data_no_cat):
     obj, X, X_expected = data_no_cat
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.compute(), X_expected)
+    X_new = obj.transform(X).compute().astype(float)
+    assert_frame_equal(X_new, X_expected)
 
 
 def test_no_cat_dd_np(data_no_cat):

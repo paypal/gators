@@ -1,5 +1,5 @@
 # License: Apache-2.0
-import databricks.koalas as ks
+import pyspark.pandas as ps
 import pandas as pd
 import numpy as np
 import pytest
@@ -7,12 +7,12 @@ from pandas.testing import assert_frame_equal
 
 from gators.feature_generation_dt import OrdinalMinuteOfHour
 
-ks.set_option("compute.default_index_type", "distributed-sequence")
+ps.set_option("compute.default_index_type", "distributed-sequence")
 
 
 @pytest.fixture
 def data_ks():
-    X = ks.DataFrame(
+    X = ps.DataFrame(
         {
             "A": ["2020-05-04 00:00:00", None],
             "B": ["2020-05-06 00:10:00", None],
@@ -22,9 +22,9 @@ def data_ks():
             "X": ["x", "x"],
         }
     )
-    X_np = X.to_numpy()
     columns = ["A", "B", "C", "D", "E"]
     X[columns] = X[columns].astype("datetime64[ns]")
+    X_np = X.to_numpy()
     X_expected = pd.DataFrame(
         {
             "A__minute_of_hour": [0.0, np.nan],
@@ -40,14 +40,14 @@ def data_ks():
     return obj, X, X_expected, X_np, X_expected_np
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks(data_ks):
     obj, X, X_expected, X_np, X_expected_np = data_ks
     X_new = obj.transform(X)
     assert_frame_equal(X_new.to_pandas(), X_expected)
 
 
-@pytest.mark.koalas
+@pytest.mark.pyspark
 def test_ks_np(data_ks):
     obj, X, X_expected, X_np, X_expected_np = data_ks
     X_numpy_new = obj.transform_numpy(X_np)

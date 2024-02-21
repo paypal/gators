@@ -32,8 +32,8 @@ class DropHighCardinality(_BaseDataCleaning):
 
     * `koalas` dataframes:
 
-    >>> import databricks.koalas as ks
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'e']})
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'e']})
 
     * and `pandas` dataframes:
 
