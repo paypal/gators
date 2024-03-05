@@ -143,7 +143,8 @@ def test_no_cat_dd_np(data_no_cat):
 def test_data_not_inplace_dd(data_not_inplace):
     obj, X, X_expected = data_not_inplace
     X_new = obj.transform(X).compute()
-    X_new[["A", "B", "C"]] = X_new[["A", "B", "C"]].astype("string[pyarrow]")
+    X_new[["A", "B", "C"]] = X_new[["A", "B", "C"]].astype(object)
+    X_expected[["A", "B", "C"]] = X_expected[["A", "B", "C"]].astype(object)
     X_new[["A__woe", "B__woe", "C__woe"]] = X_new[
         ["A__woe", "B__woe", "C__woe"]
     ].astype(float)
