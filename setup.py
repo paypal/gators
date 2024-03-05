@@ -86,10 +86,11 @@ setuptools.setup(
     install_requires=[
         "scikit-learn>=1.0.1",
         "pandas",
+        "pyarrow",
         "lightgbm",
         "xgboost",
-        "treelite",
-        "treelite-runtime",
+        # "treelite",
+        # "treelite-runtime",
         "dill",
     ],
     extras_require={
@@ -109,7 +110,6 @@ setuptools.setup(
             "tox-wheel",
             "black",
             "isort",
-            "pyspark",
             "pyspark",
             "distributed",
             "dask",
