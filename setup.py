@@ -84,7 +84,7 @@ setuptools.setup(
     license="License :: OSI Approved :: Apache Software License v2.0",
     setup_requires=["numpy", "Cython"],
     install_requires=[
-        "scikit-learn",
+        "scikit-learn>=1.0.1",
         "pandas",
         "lightgbm",
         "xgboost",
