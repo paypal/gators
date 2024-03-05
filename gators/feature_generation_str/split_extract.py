@@ -122,7 +122,7 @@ class SplitExtract(_BaseStringFeature):
         for col, idx, str_split, name in zip(
             self.columns, self.idx_split_vec, self.str_split_vec, self.column_names
         ):
-            X[name] = X[col].str.split(pad=str_split).str.get(idx).fillna("")
+            X[name] = X[col].str.split(str_split).str.get(idx).fillna("")
 
         return X
 

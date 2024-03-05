@@ -3,15 +3,14 @@ from typing import Dict, List
 
 import numpy as np
 
-from feature_gen import one_hot
-
 from ..util import util
-from ._base_feature_generation import _BaseFeatureGeneration
 
-from gators import DataFrame, Series
+from .is_larger_than import IsLargerThan
+
+from gators import DataFrame
 
 
-class LargerThanBool(_BaseFeatureGeneration):
+class IsSmallerThan(IsLargerThan):
     """Create new columns based on the following definition: X[binarized_col] = X[col] >= bound.
 
     Parameters
@@ -65,35 +64,19 @@ class LargerThanBool(_BaseFeatureGeneration):
     def __init__(
         self, bounds_dict: Dict[str, List[float]], column_names: List[str] = None
     ):
-        if not isinstance(bounds_dict, dict):
-            raise TypeError("`bounds_dict` should be a dict.")
-        if column_names is not None and not isinstance(
-            column_names, (list, np.ndarray)
-        ):
-            raise TypeError("`column_names` should be None or a list.")
-        self.bounds_dict = bounds_dict
-        columns = list(set(bounds_dict.keys()))
+        IsLargerThan.__init__(self, bounds_dict=bounds_dict, column_names=column_names)
         if not column_names:
-            column_names = [
-                f"{col}__{bound}_inf"
+            self.column_names = [
+                f"{col}__-inf_{bound}"
                 for col, bounds in bounds_dict.items()
                 for bound in bounds
             ]
-        columns = [col for col, bounds in bounds_dict.items() for _ in bounds]
-        n_bounds = sum(len(bound) for bound in bounds_dict.values())
-        if column_names and n_bounds != len(column_names):
-            raise ValueError(
-                "Length of `clusters_dict` and `column_names` should match."
-            )
-
-        _BaseFeatureGeneration.__init__(
-            self,
-            columns=columns,
-            column_names=column_names,
-        )
+        else:
+            self.column_names = column_names
+        self.columns = [col for col, bounds in bounds_dict.items() for _ in bounds]
         self.mapping = dict(
             zip(
-                column_names,
+                self.column_names,
                 [
                     [col, bound]
                     for col, bounds in bounds_dict.items()
@@ -101,32 +84,6 @@ class LargerThanBool(_BaseFeatureGeneration):
                 ],
             )
         )
-
-    def fit(self, X: DataFrame, y: Series = None):
-        """
-        Fit the dataframe X.
-
-        Parameters
-        ----------
-        X : DataFrame.
-            Input dataframe.
-            y (np.ndarray, optional): labels. Defaults to None.
-
-        Returns
-        -------
-        self : OneHot
-            Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.base_columns = list(X.columns)
-        self.bounds = np.array(
-            [bound for bounds in self.bounds_dict.values() for bound in bounds]
-        )
-        cols_flatten = np.array(
-            [col for col, bounds in self.bounds_dict.items() for _ in bounds]
-        )
-        self.idx_columns = util.get_idx_columns(X, cols_flatten)
-        return self
 
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
@@ -144,7 +101,7 @@ class LargerThanBool(_BaseFeatureGeneration):
         self.check_dataframe(X)
         new_series_list = []
         for name, col, bound in zip(self.column_names, self.columns, self.bounds):
-            dummy = X[col] >= bound
+            dummy = X[col] < bound
             new_series_list.append(dummy.rename(name))
 
         return util.get_function(X).concat(

@@ -63,7 +63,7 @@ class CountEncoder(_BaseEncoder):
 
     def __init__(self, columns=None, inplace=True):
         _BaseEncoder.__init__(self, columns=columns, inplace=inplace)
-        self.suffix = "frequency"
+        self.suffix = "count"
 
     def generate_mapping(
         self, X: DataFrame, y: Series = None

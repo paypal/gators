@@ -55,9 +55,9 @@ def data_not_inplace():
             "B": ["Q", "W", "W"],
             "C": ["W", "Q", "W"],
             "D": [1.0, 2.0, 3.0],
-            "A__frequency": [2.0, 2.0, 1.0],
-            "B__frequency": [1.0, 2.0, 2.0],
-            "C__frequency": [2.0, 1.0, 2.0],
+            "A__count": [2.0, 2.0, 1.0],
+            "B__count": [1.0, 2.0, 2.0],
+            "C__count": [2.0, 1.0, 2.0],
         }
     )
     X_expected_numpy = pd.DataFrame(
@@ -66,9 +66,9 @@ def data_not_inplace():
             "B": ["Q", "W", "W"],
             "C": ["W", "Q", "W"],
             "D": [1.0, 2.0, 3.0],
-            "A__frequency": [2.0, 2.0, 1.0],
-            "B__frequency": [1.0, 2.0, 2.0],
-            "C__frequency": [2.0, 1.0, 2.0],
+            "A__count": [2.0, 2.0, 1.0],
+            "B__count": [1.0, 2.0, 2.0],
+            "C__count": [2.0, 1.0, 2.0],
         }
     ).astype(object)
     obj = CountEncoder(inplace=False).fit(X)
