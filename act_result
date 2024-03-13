@@ -712,8 +712,8 @@
 [Build and Test/test          ]   | copying gators/feature_generation_str/split_extract.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
 [Build and Test/test          ]   | copying gators/feature_generation_str/lower_case.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
 [Build and Test/test          ]   | copying gators/feature_generation_str/upper_case.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
-[Build and Test/test          ]   | copying gators/feature_generation_str/string_length.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
-[Build and Test/test          ]   | copying gators/feature_generation_str/string_contains.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
+[Build and Test/test          ]   | copying gators/feature_generation_str/length.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
+[Build and Test/test          ]   | copying gators/feature_generation_str/contains.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
 [Build and Test/test          ]   | copying gators/feature_generation_str/extract.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
 [Build and Test/test          ]   | copying gators/feature_generation_str/_base_string_feature.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
 [Build and Test/test          ]   | copying gators/feature_generation_str/__init__.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str
@@ -830,12 +830,12 @@
 [Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_split_extract_dd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_split_extract_ks.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_split_extract_pd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_string_contains_dd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_string_contains_ks.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_string_contains_pd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_string_length_dd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_string_length_ks.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_string_length_pd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_contains_dd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_contains_ks.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_contains_pd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_length_dd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_length_ks.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_length_pd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_upper_case_dd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_upper_case_ks.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying gators/feature_generation_str/tests/test_upper_case_pd.py -> build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests
@@ -1059,30 +1059,30 @@
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/transformers/transformer_xy.py -> build/bdist.linux-x86_64/egg/gators/transformers
 [Build and Test/test          ]   | creating build/bdist.linux-x86_64/egg/gators/feature_generation_str
 [Build and Test/test          ]   | creating build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_string_length_dd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_length_dd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_upper_case_pd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_lower_case_dd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_extract_dd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_string_length_ks.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_length_ks.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_upper_case_dd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_split_extract_ks.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_string_length_pd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_length_pd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_split_extract_dd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_string_contains_ks.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_contains_ks.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_upper_case_ks.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_string_contains_dd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_contains_dd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_extract_pd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_extract_ks.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_split_extract_pd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_lower_case_ks.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_lower_case_pd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_string_contains_pd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/tests/test_contains_pd.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/split_extract.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/lower_case.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/upper_case.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/string_length.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/length.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/feature_gen_str.pyx -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
-[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/string_contains.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
+[Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/contains.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/extract.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/_base_string_feature.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
 [Build and Test/test          ]   | copying build/lib.linux-x86_64-3.9/gators/feature_generation_str/__init__.py -> build/bdist.linux-x86_64/egg/gators/feature_generation_str
@@ -1383,29 +1383,29 @@
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/transformers/tests/test_transformer_ks.py to test_transformer_ks.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/transformers/__init__.py to __init__.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/transformers/transformer_xy.py to transformer_xy.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_string_length_dd.py to test_string_length_dd.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_length_dd.py to test_length_dd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_upper_case_pd.py to test_upper_case_pd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_lower_case_dd.py to test_lower_case_dd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_extract_dd.py to test_extract_dd.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_string_length_ks.py to test_string_length_ks.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_length_ks.py to test_length_ks.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_upper_case_dd.py to test_upper_case_dd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_split_extract_ks.py to test_split_extract_ks.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_string_length_pd.py to test_string_length_pd.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_length_pd.py to test_length_pd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_split_extract_dd.py to test_split_extract_dd.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_string_contains_ks.py to test_string_contains_ks.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_contains_ks.py to test_contains_ks.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_upper_case_ks.py to test_upper_case_ks.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_string_contains_dd.py to test_string_contains_dd.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_contains_dd.py to test_contains_dd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_extract_pd.py to test_extract_pd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_extract_ks.py to test_extract_ks.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_split_extract_pd.py to test_split_extract_pd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_lower_case_ks.py to test_lower_case_ks.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_lower_case_pd.py to test_lower_case_pd.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_string_contains_pd.py to test_string_contains_pd.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/tests/test_contains_pd.py to test_contains_pd.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/split_extract.py to split_extract.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/lower_case.py to lower_case.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/upper_case.py to upper_case.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/string_length.py to string_length.cpython-39.pyc
-[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/string_contains.py to string_contains.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/length.py to length.cpython-39.pyc
+[Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/contains.py to contains.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/extract.py to extract.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/_base_string_feature.py to _base_string_feature.cpython-39.pyc
 [Build and Test/test          ]   | byte-compiling build/bdist.linux-x86_64/egg/gators/feature_generation_str/__init__.py to __init__.cpython-39.pyc
@@ -1973,12 +1973,12 @@
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_split_extract_dd.py ..          [ 70%]
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_split_extract_ks.py FE          [ 70%]
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_split_extract_pd.py ...         [ 71%]
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_dd.py ....      [ 71%]
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py EEEE      [ 72%]
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_pd.py .....     [ 72%]
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_dd.py ..          [ 73%]
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_ks.py EE          [ 73%]
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_pd.py ...         [ 73%]
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_dd.py ....      [ 71%]
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py EEEE      [ 72%]
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_pd.py .....     [ 72%]
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_dd.py ..          [ 73%]
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_ks.py EE          [ 73%]
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_pd.py ...         [ 73%]
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_upper_case_dd.py ..             [ 73%]
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_upper_case_ks.py EE             [ 74%]
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_upper_case_pd.py ...            [ 74%]
@@ -2099,7 +2099,7 @@
 [Build and Test/test          ]   |             }
 [Build and Test/test          ]   |         )
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py:14: 
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py:14: 
 [Build and Test/test          ]   | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 [Build and Test/test          ]   | /opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/databricks/koalas/frame.py:510: in __init__
 [Build and Test/test          ]   |     internal = InternalFrame.from_pandas(pdf)
@@ -2148,7 +2148,7 @@
 [Build and Test/test          ]   |             }
 [Build and Test/test          ]   |         )
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py:14: 
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py:14: 
 [Build and Test/test          ]   | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 [Build and Test/test          ]   | /opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/databricks/koalas/frame.py:510: in __init__
 [Build and Test/test          ]   |     internal = InternalFrame.from_pandas(pdf)
@@ -2197,7 +2197,7 @@
 [Build and Test/test          ]   |             }
 [Build and Test/test          ]   |         )
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py:49: 
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py:49: 
 [Build and Test/test          ]   | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 [Build and Test/test          ]   | /opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/databricks/koalas/frame.py:510: in __init__
 [Build and Test/test          ]   |     internal = InternalFrame.from_pandas(pdf)
@@ -2246,7 +2246,7 @@
 [Build and Test/test          ]   |             }
 [Build and Test/test          ]   |         )
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py:49: 
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py:49: 
 [Build and Test/test          ]   | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 [Build and Test/test          ]   | /opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/databricks/koalas/frame.py:510: in __init__
 [Build and Test/test          ]   |     internal = InternalFrame.from_pandas(pdf)
@@ -2295,7 +2295,7 @@
 [Build and Test/test          ]   |             }
 [Build and Test/test          ]   |         )
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_ks.py:14: 
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_ks.py:14: 
 [Build and Test/test          ]   | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 [Build and Test/test          ]   | /opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/databricks/koalas/frame.py:510: in __init__
 [Build and Test/test          ]   |     internal = InternalFrame.from_pandas(pdf)
@@ -2344,7 +2344,7 @@
 [Build and Test/test          ]   |             }
 [Build and Test/test          ]   |         )
 [Build and Test/test          ]   | 
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_ks.py:14: 
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_ks.py:14: 
 [Build and Test/test          ]   | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 [Build and Test/test          ]   | /opt/hostedtoolcache/Python/3.9.10/x64/lib/python3.9/site-packages/databricks/koalas/frame.py:510: in __init__
 [Build and Test/test          ]   |     internal = InternalFrame.from_pandas(pdf)
@@ -4997,8 +4997,8 @@
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_extract_ks.py: 106 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_lower_case_ks.py: 133 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_split_extract_ks.py: 129 warnings
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py: 16 warnings
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_ks.py: 8 warnings
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py: 16 warnings
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_ks.py: 8 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_upper_case_ks.py: 8 warnings
 [Build and Test/test          ]   | gators/feature_selection/tests/test_correlation_filter_ks.py: 10 warnings
 [Build and Test/test          ]   | gators/feature_selection/tests/test_information_value_ks.py: 2 warnings
@@ -5063,8 +5063,8 @@
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_extract_ks.py: 187 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_lower_case_ks.py: 244 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_split_extract_ks.py: 240 warnings
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py: 16 warnings
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_ks.py: 8 warnings
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py: 16 warnings
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_ks.py: 8 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_upper_case_ks.py: 8 warnings
 [Build and Test/test          ]   | gators/feature_selection/tests/test_correlation_filter_ks.py: 10 warnings
 [Build and Test/test          ]   | gators/feature_selection/tests/test_information_value_ks.py: 2 warnings
@@ -5130,8 +5130,8 @@
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_extract_ks.py: 187 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_lower_case_ks.py: 244 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_split_extract_ks.py: 240 warnings
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py: 16 warnings
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_ks.py: 8 warnings
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py: 16 warnings
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_ks.py: 8 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_upper_case_ks.py: 8 warnings
 [Build and Test/test          ]   | gators/feature_selection/tests/test_correlation_filter_ks.py: 10 warnings
 [Build and Test/test          ]   | gators/feature_selection/tests/test_information_value_ks.py: 2 warnings
@@ -5197,8 +5197,8 @@
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_extract_ks.py: 157 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_lower_case_ks.py: 214 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_split_extract_ks.py: 213 warnings
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_contains_ks.py: 4 warnings
-[Build and Test/test          ]   | gators/feature_generation_str/tests/test_string_length_ks.py: 2 warnings
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_contains_ks.py: 4 warnings
+[Build and Test/test          ]   | gators/feature_generation_str/tests/test_length_ks.py: 2 warnings
 [Build and Test/test          ]   | gators/feature_generation_str/tests/test_upper_case_ks.py: 2 warnings
 [Build and Test/test          ]   | gators/feature_selection/tests/test_correlation_filter_ks.py: 6 warnings
 [Build and Test/test          ]   | gators/feature_selection/tests/test_information_value_ks.py: 2 warnings
@@ -5331,12 +5331,12 @@
 [Build and Test/test          ]   | FAILED gators/transformers/tests/test_transformer_ks.py::test_checks - Connec...
 [Build and Test/test          ]   | FAILED gators/transformers/tests/test_transformer_xy_ks.py::test_checks - Con...
 [Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_split_extract_ks.py::test_ks_np
-[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_string_contains_ks.py::test_ks
-[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_string_contains_ks.py::test_ks_np
-[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_string_contains_ks.py::test_names_ks
-[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_string_contains_ks.py::test_names_ks_np
-[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_string_length_ks.py::test_ks
-[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_string_length_ks.py::test_ks_np
+[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_contains_ks.py::test_ks
+[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_contains_ks.py::test_ks_np
+[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_contains_ks.py::test_names_ks
+[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_contains_ks.py::test_names_ks_np
+[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_length_ks.py::test_ks
+[Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_length_ks.py::test_ks_np
 [Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_upper_case_ks.py::test_ks - Co...
 [Build and Test/test          ]   | ERROR gators/feature_generation_str/tests/test_upper_case_ks.py::test_ks_np
 [Build and Test/test          ]   | ERROR gators/feature_selection/tests/test_correlation_filter_ks.py::test_ks

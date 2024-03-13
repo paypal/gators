@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.feature_generation_str import StringContains
+from gators.feature_generation_str import Contains
 
 
 @pytest.fixture
@@ -18,7 +18,7 @@ def data():
             "F": ["0", "Q", ""],
         }
     )
-    obj = StringContains(columns=list("DEF"), contains_vec=["1", "2", "0"]).fit(X)
+    obj = Contains(columns=list("DEF"), contains_vec=["1", "2", "0"]).fit(X)
     columns_expected = [
         "A",
         "B",
@@ -54,7 +54,7 @@ def data_with_names():
         }
     )
 
-    obj = StringContains(
+    obj = Contains(
         columns=list("DEF"),
         contains_vec=["1", "2", "0"],
         column_names=["D_with_1", "E_with_2", "F_with_0"],
@@ -109,22 +109,12 @@ def test_names_pd_np(data_with_names):
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = StringContains(
-            columns="x", contains_vec=["z", "x"], column_names=["aa", "ss"]
-        )
+        _ = Contains(columns="x", contains_vec=["z", "x"], column_names=["aa", "ss"])
     with pytest.raises(TypeError):
-        _ = StringContains(
-            columns=["a", "s"], contains_vec="x", column_names=["aa", "ss"]
-        )
+        _ = Contains(columns=["a", "s"], contains_vec="x", column_names=["aa", "ss"])
     with pytest.raises(TypeError):
-        _ = StringContains(
-            columns=["a", "s"], contains_vec=["z", "x"], column_names="x"
-        )
+        _ = Contains(columns=["a", "s"], contains_vec=["z", "x"], column_names="x")
     with pytest.raises(ValueError):
-        _ = StringContains(
-            columns=["a", "s"], contains_vec=["z"], column_names=["aa", "ss"]
-        )
+        _ = Contains(columns=["a", "s"], contains_vec=["z"], column_names=["aa", "ss"])
     with pytest.raises(ValueError):
-        _ = StringContains(
-            columns=["a", "s"], contains_vec=["z", "x"], column_names=["aa"]
-        )
+        _ = Contains(columns=["a", "s"], contains_vec=["z", "x"], column_names=["aa"])

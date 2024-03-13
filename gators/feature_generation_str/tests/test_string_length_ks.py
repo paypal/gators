@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.feature_generation_str import StringLength
+from gators.feature_generation_str import Length
 
 ps.set_option("compute.default_index_type", "distributed-sequence")
 
@@ -21,7 +21,7 @@ def data_ks():
             "F": ["nan", "", ""],
         }
     )
-    obj = StringLength(columns=list("DEF")).fit(X)
+    obj = Length(columns=list("DEF")).fit(X)
     columns_expected = [
         "A",
         "B",

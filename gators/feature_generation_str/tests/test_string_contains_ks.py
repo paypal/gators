@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.feature_generation_str import StringContains
+from gators.feature_generation_str import Contains
 
 ps.set_option("compute.default_index_type", "distributed-sequence")
 
@@ -21,7 +21,7 @@ def data_ks():
             "F": ["0", "Q", ""],
         }
     )
-    obj = StringContains(columns=list("DEF"), contains_vec=["1", "2", "0"]).fit(X)
+    obj = Contains(columns=list("DEF"), contains_vec=["1", "2", "0"]).fit(X)
     columns_expected = [
         "A",
         "B",
@@ -56,7 +56,7 @@ def data_with_names_ks():
             "F": ["0", "Q", ""],
         }
     )
-    obj = StringContains(
+    obj = Contains(
         columns=list("DEF"),
         contains_vec=["1", "2", "0"],
         column_names=["D_with_1", "E_with_2", "F_with_0"],

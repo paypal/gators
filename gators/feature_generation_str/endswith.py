@@ -2,27 +2,25 @@
 from typing import List
 
 import numpy as np
-import pandas as pd
 
-from feature_gen_str import contains
+from feature_gen_str import endswith
 
-from ..util import util
 from ._base_string_feature import _BaseStringFeature
 
 from gators import DataFrame, Series
 
 
-class StringContains(_BaseStringFeature):
+class Endswith(_BaseStringFeature):
     """Create new binary columns.
 
-    The value is 1 if the element contains the given substring and 0 otherwise.
+    The value is 1 if the element endswith the given substring and 0 otherwise.
 
     Parameters
     ----------
-    theta_vec : List[float]
+    columns : List[float]
         List of columns.
-    contains_vec : List[int]
-        List of substrings.
+    pattern_vec : List[int]
+        List of pattern_vec.
     column_names : List[int], default None.
         List new column names.
 
@@ -30,8 +28,8 @@ class StringContains(_BaseStringFeature):
     ---------
     Imports and initialization:
 
-    >>> from gators.feature_generation_str import StringContains
-    >>> obj = StringContains(columns=['A', 'A'], contains_vec=['qw', 'we'])
+    >>> from gators.feature_generation_str import Startswith
+    >>> obj = Startswith(columns=['A', 'A'], pattern_vec=['qw', 'we'])
 
     The `fit`, `transform`, and `fit_transform` methods accept:
 
@@ -71,22 +69,22 @@ class StringContains(_BaseStringFeature):
     def __init__(
         self,
         columns: List[str],
-        contains_vec: List[str],
+        pattern_vec: List[str],
         column_names: List[str] = None,
     ):
         if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
-        if not isinstance(contains_vec, (list, np.ndarray)):
-            raise TypeError("`contains_vec` should be a list.")
-        if len(columns) != len(contains_vec):
-            raise ValueError("Length of `columns` and `contains_vec` should match.")
+        if not isinstance(pattern_vec, (list, np.ndarray)):
+            raise TypeError("`pattern_vec` should be a list.")
+        if len(columns) != len(pattern_vec):
+            raise ValueError("Length of `columns` and `pattern_vec` should match.")
         if not column_names:
             column_names = [
-                f"{col}__contains_{val}" for col, val in zip(columns, contains_vec)
+                f"{col}__endswith_{val}" for col, val in zip(columns, pattern_vec)
             ]
         _BaseStringFeature.__init__(self, columns, column_names)
-        self.contains_vec = contains_vec
-        self.contains_vec_np = np.array(self.contains_vec).astype(object)
+        self.pattern_vec = pattern_vec
+        self.pattern_vec_np = np.array(self.pattern_vec).astype(object)
 
     def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
@@ -103,9 +101,8 @@ class StringContains(_BaseStringFeature):
         """
 
         self.check_dataframe(X)
-        for col, val, name in zip(self.columns, self.contains_vec, self.column_names):
-            X[name] = X[col].str.contains(val, regex=False).astype(np.float64)
-
+        for col, val, name in zip(self.columns, self.pattern_vec, self.column_names):
+            X[name] = X[col].str.endswith(val).astype(np.float64)
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
@@ -122,4 +119,4 @@ class StringContains(_BaseStringFeature):
             Transformed array.
         """
         self.check_array(X)
-        return contains(X, self.idx_columns, self.contains_vec_np)
+        return endswith(X, self.idx_columns, self.pattern_vec_np)

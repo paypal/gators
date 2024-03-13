@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-from feature_gen_str import string_length
+from feature_gen_str import length
 
 from ..util import util
 from ._base_string_feature import _BaseStringFeature
@@ -15,7 +15,7 @@ pd.options.mode.chained_assignment = None
 from gators import DataFrame, Series
 
 
-class StringLength(_BaseStringFeature):
+class Length(_BaseStringFeature):
     """Create new columns based on the length of its elements.
 
     Parameters
@@ -27,8 +27,8 @@ class StringLength(_BaseStringFeature):
     ---------
     Imports and initialization:
 
-    >>> from gators.feature_generation_str import StringLength
-    >>> obj = StringLength(columns=['A', 'B'])
+    >>> from gators.feature_generation_str import Length
+    >>> obj = Length(columns=['A', 'B'])
 
     The `fit`, `transform`, and `fit_transform` methods accept:
 
@@ -110,4 +110,4 @@ class StringLength(_BaseStringFeature):
             Transformed array.
         """
         self.check_array(X)
-        return string_length(X, self.idx_columns)
+        return length(X, self.idx_columns)

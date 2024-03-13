@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.feature_generation_str import StringLength
+from gators.feature_generation_str import Length
 
 
 @pytest.fixture
@@ -22,7 +22,7 @@ def data():
         ),
         npartitions=1,
     )
-    obj = StringLength(columns=list("DEF")).fit(X)
+    obj = Length(columns=list("DEF")).fit(X)
     columns_expected = [
         "A",
         "B",

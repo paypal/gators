@@ -61,7 +61,7 @@ cpdef np.ndarray[object, ndim = 2] split_and_extract_str(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef np.ndarray[object, ndim=2] string_length(
+cpdef np.ndarray[object, ndim=2] length(
         np.ndarray[object, ndim=2] X,
         np.ndarray[np.int_t, ndim=1] idx_columns,
 ):
@@ -156,6 +156,63 @@ cpdef np.ndarray[object, ndim=2] isin(
         for j in range(n_cols):
             for k in range(n_values_vec[j]):
                 if X[i, idx_columns[j]] == values_vec_np[j, k]:
+                    X_new[i, j] = 1.
+                    break
+    return np.concatenate((X, X_new), axis=1)
+
+
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef np.ndarray[object, ndim=2] endswith(
+        np.ndarray[object, ndim=2] X,
+        np.ndarray[np.int64_t, ndim=1] idx_columns,
+        np.ndarray[object, ndim=2] pattern_np,
+
+):
+    cdef int i
+    cdef int j
+    cdef int n_rows = X.shape[0]
+    cdef int n_cols = idx_columns.shape[0]
+    cdef np.ndarray[np.float64_t, ndim=2] X_new = np.zeros((n_rows, n_cols))
+    cdef int n_chars
+    cdef int n
+    cdef object pat
+    cdef object val
+    for i in range(n_rows):
+        for j in range(n_cols):
+            for pat in range(pattern_np[j]):
+                n_chars = len(pat)
+                val = X[i, idx_columns[j]]
+                n = len(val)
+                if val[n - n_chars: n+1] == pat:
+                    X_new[i, j] = 1.
+                    break
+    return np.concatenate((X, X_new), axis=1)
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef np.ndarray[object, ndim=2] startswith(
+        np.ndarray[object, ndim=2] X,
+        np.ndarray[np.int64_t, ndim=1] idx_columns,
+        np.ndarray[object, ndim=2] pattern_np,
+
+):
+    cdef int i
+    cdef int j
+    cdef int n_rows = X.shape[0]
+    cdef int n_cols = idx_columns.shape[0]
+    cdef np.ndarray[np.float64_t, ndim=2] X_new = np.zeros((n_rows, n_cols))
+    cdef int n, n_chars
+    cdef object pat
+    for i in range(n_rows):
+        for j in range(n_cols):
+            for pat in range(pattern_np[j]):
+                n = len(pat)
+                n_chars = len(pat)
+                if X[i, idx_columns[j]][:n_chars] == pat:
                     X_new[i, j] = 1.
                     break
     return np.concatenate((X, X_new), axis=1)

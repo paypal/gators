@@ -774,8 +774,8 @@ Base String Feature Generation
 
     SplitExtract
     Extract
-    StringContains
-    StringLength
+    Contains
+    Length
     LowerCase
     UpperCase
 EOL
@@ -1166,12 +1166,12 @@ Feature Generation String
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarks/StringContains_transform_numpy.jpg
+.. image:: ../../_static/benchmarks/Contains_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarks/StringLength_transform_numpy.jpg
+.. image:: ../../_static/benchmarks/Length_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
@@ -1417,12 +1417,12 @@ Feature Generation String
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarks/StringContains_fit_transform.jpg
+.. image:: ../../_static/benchmarks/Contains_fit_transform.jpg
    :width: 400px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarks/StringLength_fit_transform.jpg
+.. image:: ../../_static/benchmarks/Length_fit_transform.jpg
    :width: 400px
    :alt: alternate text
    :align: left

@@ -11,8 +11,8 @@ MinMaxScaler,108.0,126.0,12200.0
 StandardScaler,155.0,213.0,12600.0
 SplitExtract,8870.0,4890.0,79.3
 Extract,3170.0,2020.0,47.3
-StringContains,2110.0,1240.0,35.0
-StringLength,3600.0,2330.0,102.0
+Contains,2110.0,1240.0,35.0
+Length,3600.0,2330.0,102.0
 LowerCase,2950.0,1950.0,71.6
 UpperCase,3730.0,2390.0,86.9
 PlaneRotation,249.0,137.0,79.7

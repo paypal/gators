@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.feature_generation_str import StringLength
+from gators.feature_generation_str import Length
 
 
 @pytest.fixture
@@ -18,7 +18,7 @@ def data():
             "F": ["nan", "", ""],
         }
     )
-    obj = StringLength(columns=list("DEF")).fit(X)
+    obj = Length(columns=list("DEF")).fit(X)
     columns_expected = [
         "A",
         "B",
@@ -56,4 +56,4 @@ def test_pd_np(data):
 
 def test_init():
     with pytest.raises(TypeError):
-        _ = StringLength(columns="x")
+        _ = Length(columns="x")

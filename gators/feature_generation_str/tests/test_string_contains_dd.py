@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from gators.feature_generation_str import StringContains
+from gators.feature_generation_str import Contains
 
 
 @pytest.fixture
@@ -22,7 +22,7 @@ def data():
         ),
         npartitions=1,
     )
-    obj = StringContains(columns=list("DEF"), contains_vec=["1", "2", "0"]).fit(X)
+    obj = Contains(columns=list("DEF"), contains_vec=["1", "2", "0"]).fit(X)
     columns_expected = [
         "A",
         "B",
@@ -60,7 +60,7 @@ def data_with_names():
         ),
         npartitions=1,
     )
-    obj = StringContains(
+    obj = Contains(
         columns=list("DEF"),
         contains_vec=["1", "2", "0"],
         column_names=["D_with_1", "E_with_2", "F_with_0"],

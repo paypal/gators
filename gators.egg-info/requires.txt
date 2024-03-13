@@ -1,9 +1,8 @@
-scikit-learn
+scikit-learn>=1.0.1
 pandas
+pyarrow
 lightgbm
 xgboost
-treelite
-treelite-runtime
 dill
 
 [dask]
@@ -30,7 +29,7 @@ isort
 pyspark
 distributed
 dask
-numpy
+numpy<=1.24.6
 
 [pyspark]
 pyspark

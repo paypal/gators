@@ -11,12 +11,11 @@ Classifier: Operating System :: OS Independent
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: scikit-learn
+Requires-Dist: scikit-learn>=1.0.1
 Requires-Dist: pandas
+Requires-Dist: pyarrow
 Requires-Dist: lightgbm
 Requires-Dist: xgboost
-Requires-Dist: treelite
-Requires-Dist: treelite-runtime
 Requires-Dist: dill
 Provides-Extra: dev
 Requires-Dist: docutils; extra == "dev"
@@ -35,10 +34,9 @@ Requires-Dist: tox-wheel; extra == "dev"
 Requires-Dist: black; extra == "dev"
 Requires-Dist: isort; extra == "dev"
 Requires-Dist: pyspark; extra == "dev"
-Requires-Dist: pyspark; extra == "dev"
 Requires-Dist: distributed; extra == "dev"
 Requires-Dist: dask; extra == "dev"
-Requires-Dist: numpy; extra == "dev"
+Requires-Dist: numpy<=1.24.6; extra == "dev"
 Provides-Extra: pyspark
 Requires-Dist: pyspark; extra == "pyspark"
 Provides-Extra: dask
