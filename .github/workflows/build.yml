@@ -90,13 +90,13 @@ jobs:
       - name: Install python depencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install certifi cibuildwheel==2.2.2
+          python -m pip install certifi cibuildwheel
           python -m pip install -r requirements.txt
 
       - name: Build MacOS wheel
         if: matrix.os == 'macos-latest'
         env:
-          CIBW_BUILD: "cp36-macosx_x86_64 cp37-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64 cp310-macosx_x86_64 cp311-macosx_x86_64 cp312-macosx_x86_64"
+          CIBW_BUILD: "cp311-macosx_x86_64 cp312-macosx_x86_64"
           CIBW_BEFORE_ALL: brew install libomp
           CIBW_BEFORE_BUILD_MACOS: >
             python -m pip install pip -U &&
@@ -108,7 +108,7 @@ jobs:
       - name: Build linux wheels
         if: matrix.os == 'ubuntu-latest'
         env:
-          CIBW_BUILD: "cp36-manylinux_x86_64 cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64 cp310-manylinux_x86_64 cp311-manylinux_x86_64 cp312-manylinux_x86_64"
+          CIBW_BUILD: "cp311-manylinux_x86_64 cp312-manylinux_x86_64"
           CIBW_BEFORE_BUILD_LINUX: >
             python -m pip install pip -U &&
             python -m pip install setuptools &&
