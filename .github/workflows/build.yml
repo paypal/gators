@@ -112,6 +112,7 @@ jobs:
           CIBW_BEFORE_BUILD_LINUX: >
             python -m pip install pip -U &&
             python -m pip install setuptools &&
+            python -m pip install setuptools -U &&
             python -m pip install install "numpy<1.25" &&
             python -m pip install cython
 
