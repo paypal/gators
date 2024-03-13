@@ -1,0 +1,242 @@
+# License: Apache-2.0
+import warnings
+from typing import Dict, List, Union
+
+import numpy as np
+
+from binning import bin_rare_events
+
+from ..transformers.transformer import Transformer
+from ..util import util
+
+from gators import DataFrame, Series
+
+
+class BinRareCategories(Transformer):
+    """Replace low occurence categories by the value "OTHERS".
+
+    Use `BinRareCategories` to reduce the cardinality
+    of high cardinal columns. This transformer is also useful
+    to replace unseen categories by a value which is already
+    taken it account by the encoders.
+
+    Parameters
+    ----------
+    min_ratio : float
+        Min occurence ratio per category.
+    inplace : bool, default False
+        If False, return the dataframe with the new binned columns
+        with the names "column_name__bin_rare"). Otherwise, return
+        the dataframe with the existing binned columns.
+
+    Examples
+    ---------
+
+    Imports and initialization:
+
+    >>> from gators.binning import BinRareCategories
+    >>> obj = BinRareCategories(min_ratio=0.5)
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']})
+
+    * and `pandas` dataframes:
+
+    >>> import pandas as pd
+    >>> X = pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['a', 'b', 'c']})
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
+    >>> obj.fit_transform(X)
+            A       B
+    0       a  OTHERS
+    1       a  OTHERS
+    2  OTHERS  OTHERS
+
+    Independly of the dataframe library used to fit the transformer,
+    the `tranform_numpy` method only accepts NumPy arrays
+    and returns a transformed NumPy array.
+    Note that this transformer should **only** be used
+    when the number of rows is small *e.g.* in real-time environment.
+
+    >>> obj.transform_numpy(X.to_numpy())
+    array([['a', 'OTHERS'],
+           ['a', 'OTHERS'],
+           ['OTHERS', 'OTHERS']], dtype=object)
+    """
+
+    def __init__(self, min_ratio: float, inplace: bool = True):
+        if not isinstance(min_ratio, (int, float)) or min_ratio < 0 or min_ratio > 1:
+            raise TypeError(
+                """`min_ratio` should be a positive float betwwen 0.0 and 1.0."""
+            )
+        Transformer.__init__(self)
+        self.min_ratio = min_ratio
+        self.inplace = inplace
+        self.columns = []
+        self.idx_columns: np.ndarray = np.array([])
+        self.categories_to_keep_np: np.ndarray = None
+        self.n_categories_to_keep_np: np.ndarray = None
+        self.categories_to_keep_dict: Dict[str, np.ndarray] = {}
+        self.categories_to_bin_dict: Dict[str, np.ndarray] = {}
+
+    def fit(self, X: DataFrame, y: Series = None) -> "BinRareCategories":
+        """Fit the transformer on the dataframe `X`.
+
+        Parameters
+        ----------
+        X : DataFrame.
+            Input dataframe.
+        y : Series, default None.
+            Target values.
+
+        Returns
+        -------
+        BinRareCategories
+            Instance of itself.
+        """
+        self.check_dataframe(X)
+        self.base_columns = list(X.columns)
+        self.columns = util.get_datatype_columns(X, datatype=object)
+        if not self.columns:
+            return self
+        self.column_names = self.get_column_names(
+            self.inplace, self.columns, "bin_rare"
+        )
+        (
+            self.categories_to_keep_dict,
+            self.categories_to_bin_dict,
+        ) = self.compute_mappings(
+            X=X[self.columns],
+            min_ratio=self.min_ratio,
+        )
+        self.categories_to_keep_np = self.get_categories_to_keep_np(
+            categories_to_keep_dict=self.categories_to_keep_dict,
+        )
+        self.n_categories_to_keep_np = self.categories_to_keep_np.shape[0] - (
+            self.categories_to_keep_np == None
+        ).sum(0)
+        self.idx_columns = util.get_idx_columns(
+            columns=X.columns, selected_columns=self.columns
+        )
+        return self
+
+    def transform(self, X: DataFrame) -> DataFrame:
+        """Transform the dataframe `X`.
+
+        Parameters
+        ----------
+        X : DataFrame.
+            Input dataframe.
+
+        Returns
+        -------
+        X : DataFrame
+            Transformed dataframe.
+        """
+        self.check_dataframe(X)
+        if not self.columns:
+            return X
+        for name, col in zip(self.column_names, self.columns):
+            X[name] = X[col].mask(
+                ~X[col].isin(self.categories_to_keep_dict[col]), "OTHERS"
+            )
+        return X
+
+    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
+        """Transform the array `X`.
+
+        Parameters
+        ----------
+        X : np.ndarray
+             Array.
+
+        Returns
+        -------
+        X : np.ndarray
+            Transformed array.
+        """
+        self.check_array(X)
+        if self.idx_columns.size == 0:
+            return X
+        X_rare = bin_rare_events(
+            X[:, self.idx_columns],
+            self.categories_to_keep_np,
+            self.n_categories_to_keep_np,
+        )
+        if self.inplace:
+            X[:, self.idx_columns] = X_rare
+            return X
+        return np.concatenate((X, X_rare), axis=1)
+
+    @staticmethod
+    def compute_mappings(
+        X: DataFrame, min_ratio: float
+    ) -> Union[Dict[str, List[str]], Dict[str, List[str]]]:
+        """Compute the category frequency.
+
+        Parameters
+        ----------
+        X : DataFrame.
+            Input dataframe.
+        min_ratio : float
+            Min occurence per category.
+
+        Returns
+        -------
+        mapping : Dict[str, List[str]]
+            Categories to keep.
+        """
+        freq = (
+            util.get_function(X).to_pandas(
+                util.get_function(X).melt(X).groupby(["variable", "value"]).size()
+                / len(X)
+            )
+        ).sort_values()
+
+        cats_to_keep_dict = {}
+        cats_to_bin_dict = {}
+        for col in X.columns:
+            freq_column = freq.loc[col]
+            mask = freq_column >= min_ratio
+            cats_to_bin = list(mask[~mask].index)
+            cats_to_keep = list(mask[mask].index)
+            if (freq_column[cats_to_bin].sum() < min_ratio) and cats_to_bin:
+                cats_to_bin.append(cats_to_keep[0])
+                cats_to_keep = cats_to_keep[1:]
+            cats_to_keep_dict[col] = cats_to_keep
+            cats_to_bin_dict[col] = cats_to_bin
+        return cats_to_keep_dict, cats_to_bin_dict
+
+    @staticmethod
+    def get_categories_to_keep_np(
+        categories_to_keep_dict: Dict[str, np.ndarray]
+    ) -> np.ndarray:
+        """Get the categories to keep.
+
+        Parameters
+        ----------
+        categories_to_keep_dict : Dict[str, np.ndarray])
+            Categories to keep.
+
+        Returns
+        -------
+        categories_to_keep_np : np.ndarray
+            Categories to keep.
+        """
+        max_category = max([len(val) for val in categories_to_keep_dict.values()])
+        n_columns = len(categories_to_keep_dict)
+        categories_to_keep_np = np.empty((max_category, n_columns), dtype="object")
+        for i, val in enumerate(categories_to_keep_dict.values()):
+            categories_to_keep_np[: len(val), i] = val
+        return categories_to_keep_np

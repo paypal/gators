@@ -1,17 +1,14 @@
 # License: Apache-2.0
-from typing import Any, Collection, Dict, List, Tuple, Union
-
-import databricks.koalas as ks
+from typing import List, Dict
 import numpy as np
-import pandas as pd
 
-from encoder import encoder
 
-from ..transformers.transformer import (
-    NUMERICS_DTYPES,
-    PRINT_NUMERICS_DTYPES,
-    Transformer,
-)
+from gators import DataFrame, Series
+from encoder import encoder_new
+from ..util import util
+from ..transformers.transformer import Transformer
+
+from gators import DataFrame
 
 
 class _BaseEncoder(Transformer):
@@ -19,41 +16,82 @@ class _BaseEncoder(Transformer):
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
-        Numerical datatype of the output data.
+    inplace : bool.
+        If True, perform the encoding inplace.
     """
 
-    def __init__(self, dtype=np.float64):
-        if dtype not in NUMERICS_DTYPES:
-            raise TypeError(f"`dtype` should be a dtype from {PRINT_NUMERICS_DTYPES}.")
+    def __init__(self, columns: List[str], inplace: bool):
+        if not isinstance(inplace, bool):
+            raise TypeError("`inplace` should be a bool.")
         Transformer.__init__(self)
-        self.dtype = dtype
-        self.columns = []
+        self.inplace = inplace
+        self.columns = columns
         self.idx_columns: np.ndarray = np.array([])
         self.num_categories_vec = np.array([])
         self.values_vec = np.array([])
         self.encoded_values_vec = np.array([])
         self.mapping: Dict[str, Dict[str, float]] = {}
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def fit(self, X: DataFrame, y: Series = None) -> "_BaseEncoder":
+        """Fit the encoder.
+
+        Parameters
+        ----------
+        X : DataFrame:
+            Input dataframe.
+        y : Series, default None.
+            Target values.
+
+        Returns
+        -------
+        WOEEncoder:
+            Instance of itself.
+        """
+        self.check_dataframe(X)
+        self.set_columns(
+            X=X, include=[bool, object, "string[pyarrow]"], suffix=self.suffix
+        )
+        if not self.columns:
+            return self
+        self.mapping = self.generate_mapping(X[self.columns], y)
+        self.mapping = {
+            k: {k: str(round(v, 4)) for k, v in v.items()}
+            for k, v in self.mapping.items()
+        }
+        self.set_num_categories_vec()
+        self.decompose_mapping()
+        return self
+
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        return X.replace(self.mapping).astype(self.dtype)
+
+        if self.inplace:
+            X = util.get_function(X).replace(X, self.mapping)
+            X = util.get_function(X).to_numeric(X, columns=self.columns)
+            X[self.columns] = X[self.columns]
+            return X
+        X_encoded = util.get_function(X).replace(X.copy(), self.mapping)[self.columns]
+        X_encoded = X_encoded.rename(columns=dict(zip(self.columns, self.column_names)))
+        X_encoded = util.get_function(X).to_numeric(
+            X_encoded, columns=self.column_names
+        )
+        X = util.get_function(X).join(X, X_encoded)
+
+        return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the input array.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -61,42 +99,53 @@ class _BaseEncoder(Transformer):
             Input array.
         Returns
         -------
-        np.ndarray: Encoded array.
+        X : np.ndarray
+            Encoded array.
         """
         self.check_array(X)
-        if len(self.idx_columns) == 0:
-            return X.astype(self.dtype)
-        return encoder(
-            X,
+        if self.idx_columns.size == 0:
+            return X
+
+        X_encoded = encoder_new(
+            X[:, self.idx_columns],
             self.num_categories_vec,
             self.values_vec,
             self.encoded_values_vec,
-            self.idx_columns,
-        ).astype(self.dtype)
+        )
+        if self.inplace:
+            X[:, self.idx_columns] = X_encoded
+            return X.astype(float)
+        return np.concatenate((X, X_encoded), axis=1)
 
-    @staticmethod
-    def decompose_mapping(
-        mapping: List[Dict[str, Collection[Any]]],
-    ) -> Tuple[List[str], np.ndarray, np.ndarray]:
+    def set_num_categories_vec(self):
+        self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
+
+    def decompose_mapping(self):
         """Decompose the mapping.
 
         Parameters
         ----------
-        mapping List[Dict[str, Collection[Any]]]:
-            Mapping obtained from the categorical encoder package.
+        mapping : Dict[str, Dict[str, float]]
+            The dictionary keys are the categorical columns,
+            the keys are the mapping itself for the assocaited column.
+
         Returns
         -------
-        Tuple[List[str], np.ndarray, np.ndarray]
-            Decomposed mapping.
+        columns : List[float]
+            List of columns.
+
+        values_vec : np.ndarray
+            Values to encode.
+
+        encoded_values_vec : np.ndarray
+            Values used to encode.
         """
-        columns = list(mapping.keys())
-        n_columns = len(columns)
-        max_categories = max([len(m) for m in mapping.values()])
-        encoded_values_vec = np.zeros((n_columns, max_categories))
-        values_vec = np.zeros((n_columns, max_categories), dtype=object)
-        for i, c in enumerate(columns):
-            mapping_col = mapping[c]
+        n_columns = len(self.columns)
+        max_categories = max(len(m) for m in self.mapping.values())
+        self.encoded_values_vec = np.zeros((n_columns, max_categories))
+        self.values_vec = np.zeros((n_columns, max_categories), dtype=object)
+        for i, c in enumerate(self.columns):
+            mapping_col = self.mapping[c]
             n_values = len(mapping_col)
-            encoded_values_vec[i, :n_values] = np.array(list(mapping_col.values()))
-            values_vec[i, :n_values] = np.array(list(mapping_col.keys()))
-        return columns, values_vec, encoded_values_vec
+            self.encoded_values_vec[i, :n_values] = np.array(list(mapping_col.values()))
+            self.values_vec[i, :n_values] = np.array(list(mapping_col.keys()))

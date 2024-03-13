@@ -1,11 +1,10 @@
 # License: Apache-2.0
-from typing import List, Union
-
-import databricks.koalas as ks
-import pandas as pd
+from typing import List
 
 from ..util import util
 from ._base_data_cleaning import _BaseDataCleaning
+
+from gators import DataFrame, Series
 
 
 class DropHighCardinality(_BaseDataCleaning):
@@ -18,54 +17,43 @@ class DropHighCardinality(_BaseDataCleaning):
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.data_cleaning import DropHighCardinality
+    >>> obj = DropHighCardinality(max_categories=2)
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'e']}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'e']})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.data_cleaning import DropHighCardinality
     >>> X = pd.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'e']})
-    >>> obj = DropHighCardinality(max_categories=2)
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
        B
     0  d
     1  d
     2  e
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropHighCardinality
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'e']})
-    >>> obj = DropHighCardinality(max_categories=2)
-    >>> obj.fit_transform(X)
-       B
-    0  d
-    1  d
-    2  e
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import DropHighCardinality
     >>> X = pd.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'e']})
-    >>> obj = DropHighCardinality(max_categories=2)
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([['d'],
            ['d'],
            ['e']], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropHighCardinality
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'e']})
-    >>> obj = DropHighCardinality(max_categories=2)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['d'],
-           ['d'],
-           ['e']], dtype=object)
-
     """
 
     def __init__(self, max_categories: int):
@@ -74,11 +62,7 @@ class DropHighCardinality(_BaseDataCleaning):
         _BaseDataCleaning.__init__(self)
         self.max_categories = max_categories
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "DropHighCardinality":
+    def fit(self, X: DataFrame, y: Series = None) -> "DropHighCardinality":
         """Fit the transformer on the dataframe `X`.
 
         Get the list of column names to remove and the array of
@@ -86,14 +70,15 @@ class DropHighCardinality(_BaseDataCleaning):
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Input dataframe.
-        y : None
-           None
+        y : Series, default None.
+           Target values.
 
         Returns
         -------
-            DropHighCardinality: Instance of itself.
+        self : DropHighCardinality
+            Instance of itself.
         """
         self.check_dataframe(X)
         object_columns = util.get_datatype_columns(X, object)
@@ -111,30 +96,30 @@ class DropHighCardinality(_BaseDataCleaning):
         return self
 
     @staticmethod
-    def get_columns_to_drop(
-        X: Union[pd.DataFrame, ks.DataFrame], max_categories: int
-    ) -> List[str]:
-        """Get the column names to drop.
+    def get_columns_to_drop(X: DataFrame, max_categories: int) -> List[str]:
+        """Get the names of the columns to drop.
 
         Parameters
         ----------
-        X_nunique : pd.DataFrame
-            Input dataframe.
+        X : pd.DataFrame
+            Dataframe.
         max_categories : int
             Maximum number of categories allowed.
 
         Returns
         -------
         List[str]
-            List of column names to drop.
+            List of the column names to drop.
         """
         object_columns = util.get_datatype_columns(X, object)
         if not object_columns:
             return []
-        if isinstance(X, pd.DataFrame):
-            X_nunique = X[object_columns].nunique()
-        else:
-            X_nunique = X[object_columns].nunique(approx=True)
+        X_nunique = util.get_function(X).to_pandas(
+            util.get_function(X)
+            .melt(X[object_columns])
+            .groupby("variable")["value"]
+            .nunique()
+        )
         mask_columns = X_nunique > max_categories
         columns_to_drop = X_nunique[mask_columns].index
         return list(columns_to_drop.to_numpy())

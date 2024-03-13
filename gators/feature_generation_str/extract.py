@@ -1,15 +1,14 @@
 # License: Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
-import pandas as pd
 
 from feature_gen_str import extract_str
 
 from ..util import util
-
 from ._base_string_feature import _BaseStringFeature
+
+from gators import DataFrame, Series
 
 
 class Extract(_BaseStringFeature):
@@ -17,7 +16,7 @@ class Extract(_BaseStringFeature):
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns.
     i_min_vec : List[int]
         List of indices.
@@ -28,55 +27,43 @@ class Extract(_BaseStringFeature):
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.feature_generation_str import Extract
+    >>> obj = Extract(columns=['A', 'A'], i_min_vec=[0, 2], i_max_vec=[1, 3])
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation_str import Extract
     >>> X = pd.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
-    >>> obj = Extract(columns=['A','A'], i_min_vec=[0, 2], i_max_vec=[1, 3])
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
          A  B A__substring_0_to_1 A__substring_2_to_3
     0  qwe  1                   q                   e
     1  asd  2                   a                   d
     2  zxc  3                   z                   c
 
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_str import Extract
-    >>> X = ks.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
-    >>> obj = Extract(columns=['A','A'], i_min_vec=[0, 2], i_max_vec=[1, 3])
-    >>> obj.fit_transform(X)
-         A  B A__substring_0_to_1 A__substring_2_to_3
-    0  qwe  1                   q                   e
-    1  asd  2                   a                   d
-    2  zxc  3                   z                   c
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation_str import Extract
     >>> X = pd.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
-    >>> obj = Extract(columns=['A','A'], i_min_vec=[0, 2], i_max_vec=[1, 3])
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([['qwe', 1, 'q', 'e'],
            ['asd', 2, 'a', 'd'],
            ['zxc', 3, 'z', 'c']], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_str import Extract
-    >>> X = ks.DataFrame({'A': ['qwe', 'asd', 'zxc'], 'B': [1, 2, 3]})
-    >>> obj = Extract(columns=['A','A'], i_min_vec=[0, 2], i_max_vec=[1, 3])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['qwe', 1, 'q', 'e'],
-           ['asd', 2, 'a', 'd'],
-           ['zxc', 3, 'z', 'c']], dtype=object)
-
-
     """
 
     def __init__(
@@ -86,13 +73,13 @@ class Extract(_BaseStringFeature):
         i_max_vec: List[int],
         column_names: List[int] = None,
     ):
-        if not isinstance(columns, list):
+        if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
-        if not isinstance(i_min_vec, list):
+        if not isinstance(i_min_vec, (list, np.ndarray)):
             raise TypeError("`i_min_vec` should be a list.")
         if len(columns) != len(i_min_vec):
             raise ValueError("Length of `columns` and `i_min_vec` should match.")
-        if not isinstance(i_max_vec, list):
+        if not isinstance(i_max_vec, (list, np.ndarray)):
             raise TypeError("`i_max_vec` should be a list.")
         if len(columns) != len(i_max_vec):
             raise ValueError("Length of `columns` and `i_max_vec` should match.")
@@ -105,44 +92,17 @@ class Extract(_BaseStringFeature):
         self.i_min_vec = np.array(i_min_vec, int)
         self.i_max_vec = np.array(i_max_vec, int)
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "Extract":
-        """Fit the transformer on the dataframe `X`.
-
-        Parameters
-        ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
-        y : None
-            None.
-
-        Returns
-        -------
-        Extract
-            Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns
-        )
-        return self
-
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
@@ -150,13 +110,14 @@ class Extract(_BaseStringFeature):
         for col, i_min, i_max, name in zip(
             self.columns, self.i_min_vec, self.i_max_vec, self.column_names
         ):
-            X.loc[:, name] = (
-                X[col].str.slice(start=i_min, stop=i_max).replace({"": "MISSING"})
-            )
+            X[name] = X[col].str.slice(
+                start=i_min, stop=i_max
+            )  # .replace({"": "MISSING"})
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -165,7 +126,7 @@ class Extract(_BaseStringFeature):
 
         Returns
         -------
-        np.ndarray
+        X : np.ndarray
             Transformed array.
         """
         self.check_array(X)

@@ -1,11 +1,7 @@
 # Licence Apache-2.0
-import databricks.koalas as ks
-import pandas as pd
 import pytest
-
+import pandas as pd
 from gators.feature_generation_dt.ordinal_day_of_month import OrdinalDayOfMonth
-
-ks.set_option("compute.default_index_type", "distributed-sequence")
 
 
 def test_init_pd():
@@ -15,9 +11,10 @@ def test_init_pd():
         _ = obj.fit(X)
 
 
-@pytest.mark.koalas
-def test_init_ks():
-    X = ks.DataFrame({"A": [0], "B": [0]})
-    obj = OrdinalDayOfMonth(columns=["A", "B"])
+@pytest.mark.pyspark
+def test_dateformat():
+    obj = OrdinalDayOfMonth(columns=["A"])
     with pytest.raises(TypeError):
-        _ = obj.fit(X)
+        OrdinalDayOfMonth(columns=["A"], date_format=0)
+    with pytest.raises(ValueError):
+        OrdinalDayOfMonth(columns=["A"], date_format="abc")

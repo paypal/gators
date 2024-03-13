@@ -17,36 +17,36 @@ ctypedef fused num_t:
 def bin_rare_events(
         np.ndarray[object, ndim=2] X,
         np.ndarray[object, ndim=2] categories_to_keep_np,
-        np.ndarray[np.int_t, ndim=1] n_categories_to_keep,
-        np.ndarray[np.int_t, ndim=1] idx_columns):
+        np.ndarray[np.int_t, ndim=1] n_categories_to_keep):
     cdef np.int_t l
     cdef np.int_t j_col
     cdef np.int_t l_max
     cdef np.int_t n_rows = X.shape[0]
-    cdef np.int_t n_cols = idx_columns.shape[0]
+    cdef np.int_t n_cols = X.shape[1]
     cdef object val = 'OTHERS'
     cdef np.int_t is_rare = 1
+    cdef np.ndarray[object, ndim=2] X_rare = np.empty((n_rows, n_cols), X.dtype)
     for j in range(n_cols):
-        j_col = idx_columns[j]
         l_max = n_categories_to_keep[j]
         if l_max == 0:
             for k in range(n_rows):
-                X[k, j_col] = val
+                X_rare[k, j] = val
         else:
             for k in range(n_rows):
+                X_rare[k, j] = X[k, j]
                 is_rare = 1
                 for l in range(l_max):
-                    if X[k, j_col] == categories_to_keep_np[l, j]:
+                    if X[k, j] == categories_to_keep_np[l, j]:
                         is_rare = 0
                         break
                 if is_rare:
-                    X[k, j_col] = val
-    return X
+                    X_rare[k, j] = val
+    return X_rare
 
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef np.ndarray[num_t, ndim = 2] bin_numerics(
+cpdef np.ndarray[num_t, ndim = 2] bin_Numeric(
         np.ndarray[num_t, ndim=2] X,
         np.ndarray[num_t, ndim=2] bin_limits,
         np.ndarray[num_t, ndim=2] bins,
@@ -65,7 +65,7 @@ cpdef np.ndarray[num_t, ndim = 2] bin_numerics(
             j_col = idx_columns[j]
             val = X[i, j_col]
             for k in range(1, n_bins):
-                if val <= bin_limits[k, j]:
+                if val < bin_limits[k, j]:
                     X_bin[i, j] = bins[k-1, j]
                     break
     return np.concatenate((X, X_bin), axis=1)
@@ -73,7 +73,7 @@ cpdef np.ndarray[num_t, ndim = 2] bin_numerics(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef np.ndarray[object, ndim = 2] discretizer_inplace(
+cpdef np.ndarray[object, ndim = 2] binning_inplace(
         np.ndarray[object, ndim=2] X,
         np.ndarray[num_t, ndim=2] bins_np,
         np.ndarray[np.int64_t, ndim=1] idx_columns):
@@ -88,15 +88,15 @@ cpdef np.ndarray[object, ndim = 2] discretizer_inplace(
         for j in range(n_cols):
             j_col = idx_columns[j]
             for k in range(1, n_bins):
-                if X[i, j_col] <= bins_np[k, j]:
-                    X[i, j_col] = str(float(k - 1))
+                if X[i, j_col] < bins_np[k, j]:
+                    X[i, j_col] = '_' + str(k - 1)
                     break
     return X
 
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef np.ndarray[object, ndim = 2] discretizer(
+cpdef np.ndarray[object, ndim = 2] binning(
         np.ndarray[object, ndim=2] X,
         np.ndarray[num_t, ndim=2] bins_np,
         np.ndarray[np.int64_t, ndim=1] idx_columns):
@@ -112,7 +112,31 @@ cpdef np.ndarray[object, ndim = 2] discretizer(
         for j in range(n_cols):
             j_col = idx_columns[j]
             for k in range(1, n_bins):
-                if float(X[i, j_col]) <= bins_np[k, j]:
-                    X_bin[i, j] = str(float(k - 1))
+                if float(X[i, j_col]) < bins_np[k, j]:
+                    X_bin[i, j] = '_' + str(k - 1)
                     break
     return np.concatenate((X, X_bin), axis=1)
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef np.ndarray[object, ndim = 2] binning_new(
+        np.ndarray[num_t, ndim=2] X,
+        np.ndarray[num_t, ndim=2] bins_np,
+        np.ndarray[object, ndim=2] labels_np,
+        ):
+    cdef int i
+    cdef int j
+    cdef int k
+    cdef int j_col
+    cdef int n_rows = X.shape[0]
+    cdef int n_cols = X.shape[1]
+    cdef int n_bins = bins_np.shape[0]
+    cdef np.ndarray[object, ndim=2] X_bin = np.empty((n_rows, n_cols), object)
+    for i in range(n_rows):
+        for j in range(n_cols):
+            for k in range(1, n_bins):
+                if float(X[i, j]) < bins_np[k, j]:
+                    X_bin[i, j] = labels_np[k-1, j]
+                    break
+    return X_bin

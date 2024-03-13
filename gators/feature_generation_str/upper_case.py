@@ -1,15 +1,14 @@
 # License: Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
-import pandas as pd
 
 from feature_gen_str import upper_case
 
 from ..util import util
-
 from ._base_string_feature import _BaseStringFeature
+
+from gators import DataFrame, Series
 
 
 class UpperCase(_BaseStringFeature):
@@ -17,121 +16,108 @@ class UpperCase(_BaseStringFeature):
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns.
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.feature_generation_str import UpperCase
+    >>> obj = UpperCase(columns=['A', 'B'])
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(
+    ... pd.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation_str import UpperCase
     >>> X = pd.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
-    >>> obj = UpperCase(columns=['A','B'])
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
          A     B
     0  ABC   ABC
     1   AB    AB
     2       None
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_str import UpperCase
-    >>> X = ks.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
-    >>> obj = UpperCase(columns=['A','B'])
-    >>> obj.fit_transform(X)
-         A     B
-    0  ABC   ABC
-    1   AB    AB
-    2       None
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation_str import UpperCase
     >>> X = pd.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
-    >>> obj = UpperCase(columns=['A','B'])
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([['ABC', 'ABC'],
            ['AB', 'AB'],
            ['', None]], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_str import UpperCase
-    >>> X = ks.DataFrame({'A': ['abC', 'Ab', ''], 'B': ['ABc', 'aB', None]})
-    >>> obj = UpperCase(columns=['A','B'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['ABC', 'ABC'],
-           ['AB', 'AB'],
-           ['', None]], dtype=object)
-
 
     """
 
-    def __init__(self, columns: List[str], column_names: List[str] = None):
-        if not isinstance(columns, list):
-            raise TypeError("`columns` should be a list.")
-        if not columns:
-            raise ValueError("`columns` should not be empty.")
+    def __init__(self, columns: List[str] = None, inplace: bool = True):
+        if not isinstance(columns, (list, np.ndarray)) and columns is not None:
+            raise TypeError("`columns` should be a list or None.")
+        if not isinstance(inplace, bool):
+            raise TypeError("`inplace` should be a bool.")
         self.columns = columns
+        self.inplace = inplace
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "StringLength":
+    def fit(self, X: DataFrame, y: Series = None) -> "UpperCase":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : pd.DataFrame
             Input dataframe.
-        y : None
-            None.
+        y : Series, default None.
+            Target values.
 
         Returns
         -------
-        StringLength
+        UpperCase
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
+        if not self.columns:
+            self.columns = util.get_datatype_columns(X, object)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "upper")
         self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns
+            columns=X.columns,
+            selected_columns=self.columns,
         )
         return self
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
 
-        def f(x):  # -> ks.Series[str]:
-            if x.name in self.columns:
-                return x.astype(str).str.upper().replace({"NAN": "nan", "NONE": None})
-            return x
+        for col, name in zip(self.columns, self.column_names):
+            X[name] = X[col].astype(str).str.upper()
 
-        # X[self.columns] = X[self.columns]
-        return X.apply(f)
+        return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -140,8 +126,13 @@ class UpperCase(_BaseStringFeature):
 
         Returns
         -------
-        np.ndarray
+        X : np.ndarray
             Transformed array.
         """
         self.check_array(X)
-        return upper_case(X, self.idx_columns)
+        if self.inplace:
+            X[:, self.idx_columns] = upper_case(X[:, self.idx_columns])
+            return X
+        else:
+            X_upper = upper_case(X[:, self.idx_columns].copy())
+            return np.concatenate((X, X_upper), axis=1)

@@ -1,21 +1,19 @@
-name: build and test
+name: Build and Test
 
 on:
   push:
     branches:
-      - master
-      - develop
-  pull_request:
-    branches:
-      - master
-      - develop
+      - main
+      - v[0-9]+.[0-9]+.x
+    tags:
+      - v*
 
 jobs:
-  build:
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.9]
+        python-version: [3.8]
         os: [ubuntu-latest] #ubuntu-latest [macos-latest, ]   # 
 
     env:
@@ -51,9 +49,12 @@ jobs:
         pip install --upgrade pip
         pip install certifi
         pip install tox tox-wheel tox-gh-actions
-        pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements_tox.txt
-        python setup_build.py build_ext --inplace
-        python setup_build.py install
+        # pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements_tox.txt
+        # python setup.py build_ext --inplace
+        # python setup.py install
+        pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
+        pip install -e ."[dev]"
+  
     - name: tests
       run: |
         coverage run --omit gators/*/test*.py -m pytest gators && coverage report && coverage xml
@@ -63,22 +64,63 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: coverage.xml
 
-# run: |
-# - name: Test with tox
-#   run: tox
-# with:
-#   token: {{ secrets.CODECOV_TOKEN }}
+  build_wheels:
+    runs-on: ${{ matrix.os }}
+    needs: [test]
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
 
-# - run: coverage run -m pytest gators && coverage report && coverage xml
-  
-  # token: 'ce68bafd-388e-42e8-abf8-b5ea3b328037'
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/checkout@v2
+        name: Install java
+        with:
+          java-version: 1.8
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.8'
 
 
-    # - name: Install dependencies
-    #   run: |
-    #     python -m pip install --upgrade pip
-    #     pip install tox tox-wheel tox-gh-actions
-    #     pip install numpy<1.20.0
-    #     pip install Cython
-    # - name: Test with tox
-    #   run: tox
+      - name: Install python depencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install certifi cibuildwheel
+          python -m pip install -r requirements.txt
+
+      # - name: Build MacOS wheel
+      #   if: matrix.os == 'macos-latest'
+      #   env:
+      #     CIBW_BUILD: "cp311-macosx_x86_64 cp312-macosx_x86_64"
+      #     CIBW_BEFORE_ALL: brew install libomp
+      #     CIBW_BEFORE_BUILD_MACOS: >
+      #       python -m pip install pip -U &&
+      #       python -m pip install setuptools &&
+      #       python -m pip install numpy &&
+      #       python -m pip install cython
+      #   run: python -m cibuildwheel --platform macos --output-dir dist
+
+      - name: Build linux wheels
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          CIBW_BUILD: "cp312-manylinux_x86_64"
+          CIBW_BEFORE_BUILD_LINUX: >
+            python -m pip install pip -U &&
+            python -m pip install setuptools &&
+            python -m pip install setuptools -U &&
+            python -m pip install install "numpy<1.25" &&
+            python -m pip install cython
+
+
+        run: python -m cibuildwheel --platform linux --output-dir dist
+
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: wheels
+          path: ./dist/*.whl
