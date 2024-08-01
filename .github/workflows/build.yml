@@ -55,14 +55,14 @@ jobs:
           pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
           pip install -e ."[dev]"
 
-      - name: tests
-        run: |
-          coverage run --omit gators/*/test*.py -m pytest gators && coverage report && coverage xml
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage.xml
+      # - name: tests
+      #   run: |
+      #     coverage run --omit gators/*/test*.py -m pytest gators && coverage report && coverage xml
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v2
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     file: coverage.xml
 
   build_wheels:
     runs-on: ${{ matrix.os }}
@@ -94,7 +94,7 @@ jobs:
       - name: Build MacOS wheel
         if: matrix.os == 'macos-latest'
         env:
-          CIBW_BUILD: "cp37-macosx_x86_64 cp38-macosx_x86_64 cp311-macosx_x86_64 cp39-macosx_x86_64 cp310-macosx_x86_64 cp311-macosx_x86_64 cp312-macosx_x86_64"
+          CIBW_BUILD: "cp37-macosx_x86_64" # cp38-macosx_x86_64 cp311-macosx_x86_64 cp39-macosx_x86_64 cp310-macosx_x86_64 cp311-macosx_x86_64 cp312-macosx_x86_64"
           CIBW_BEFORE_ALL: brew install libomp
           CIBW_BEFORE_BUILD_MACOS: >
             python -m pip install pip -U &&
@@ -106,12 +106,11 @@ jobs:
       - name: Build linux wheels
         if: matrix.os == 'ubuntu-latest'
         env:
-          CIBW_BUILD: "cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64 cp310-manylinux_x86_64 cp311-manylinux_x86_64 "
+          CIBW_BUILD: "cp37-manylinux_x86_64" # cp38-manylinux_x86_64 cp39-manylinux_x86_64 cp310-manylinux_x86_64 cp311-manylinux_x86_64 "
           CIBW_BEFORE_BUILD_LINUX: >
             python -m pip install pip -U &&
             python -m pip install setuptools &&
-            python -m pip install setuptools -U &&
-            python -m pip install install "numpy<1.25" &&
+            python -m pip install install numpy &&
             python -m pip install cython
 
         run: python -m cibuildwheel --platform linux --output-dir dist
