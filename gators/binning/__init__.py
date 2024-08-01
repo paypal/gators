@@ -1,13 +1,17 @@
-from ._base_discretizer import _BaseDiscretizer
-from .bin_rare_events import BinRareEvents
-from .custom_discretizer import CustomDiscretizer
-from .discretizer import Discretizer
-from .quantile_discretizer import QuantileDiscretizer
+from ._base_binning import _BaseBinning
+from .bin_rare_categories import BinRareCategories
+from .bin_single_target_class_categories import BinSingleTargetClassCategories
+from .custom_binning import CustomBinning
+from .binning import Binning
+from .quantile_binning import QuantileBinning
+from .tree_binning import TreeBinning
 
 __all__ = [
-    "_BaseDiscretizer",
-    "Discretizer",
-    "CustomDiscretizer",
-    "QuantileDiscretizer",
-    "BinRareEvents",
+    "_BaseBinning",
+    "BinSingleTargetClassCategories",
+    "BinRareCategories",
+    "Binning",
+    "CustomBinning",
+    "QuantileBinning",
+    "TreeBinning",
 ]

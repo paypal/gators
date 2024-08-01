@@ -1,13 +1,13 @@
 # Licence Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
-import pandas as pd
 
 import feature_gen_dt
 
 from ._base_datetime_feature import _BaseDatetimeFeature
+
+from gators import DataFrame
 
 
 class OrdinalMonthOfYear(_BaseDatetimeFeature):
@@ -15,102 +15,84 @@ class OrdinalMonthOfYear(_BaseDatetimeFeature):
 
     Parameters
     ----------
-    columns : List[str]
+    theta_vec : List[float]
         List of columns.
 
     Examples
     ---------
+    Imports and initialization:
 
-    * fit & transform with `pandas`
+    >>> from gators.feature_generation_dt import OrdinalMonthOfYear
+    >>> obj = OrdinalMonthOfYear(columns=['A'])
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]}), npartitions=1)
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation_dt import OrdinalMonthOfYear
-    >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = OrdinalMonthOfYear(columns=['A'])
+    >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
-                        A  B A__month_of_year
-    0 2020-01-01 23:00:00  0              1.0
-    1 2020-12-15 18:00:00  1             12.0
-    2                 NaT  0              nan
+                        A  B  A__month_of_year
+    0 2020-01-01 23:00:00  0               1.0
+    1 2020-12-15 18:00:00  1              12.0
+    2                 NaT  0               NaN
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_dt import OrdinalMonthOfYear
-    >>> X = ks.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = OrdinalMonthOfYear(columns=['A'])
-    >>> obj.fit_transform(X)
-                        A  B A__month_of_year
-    0 2020-01-01 23:00:00  0              1.0
-    1 2020-12-15 18:00:00  1             12.0
-    2                 NaT  0              nan
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation_dt import OrdinalMonthOfYear
-    >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = OrdinalMonthOfYear(columns=['A'])
+    >>> X = pd.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18',  None], 'B': [0, 1, 0]})
+    >>> X['A'] = X['A'].astype('datetime64[ns]')
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
-    array([[Timestamp('2020-01-01 23:00:00'), 0, '1.0'],
-           [Timestamp('2020-12-15 18:00:00'), 1, '12.0'],
-           [NaT, 0, 'nan']], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation_dt import OrdinalMonthOfYear
-    >>> X = ks.DataFrame({'A': ['2020-01-01T23', '2020-12-15T18', pd.NaT], 'B': [0, 1, 0]})
-    >>> obj = OrdinalMonthOfYear(columns=['A'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[Timestamp('2020-01-01 23:00:00'), 0, '1.0'],
-           [Timestamp('2020-12-15 18:00:00'), 1, '12.0'],
-           [NaT, 0, 'nan']], dtype=object)
-
-
+    array([[Timestamp('2020-01-01 23:00:00'), 0, 1.0],
+           [Timestamp('2020-12-15 18:00:00'), 1, 12.0],
+           [NaT, 0, nan]], dtype=object)
     """
 
-    def __init__(self, columns: List[str]):
-        if not isinstance(columns, list):
+    def __init__(self, columns: List[str], date_format: str = "ymd"):
+        if not isinstance(columns, (list, np.ndarray)):
             raise TypeError("`columns` should be a list.")
         if not columns:
             raise ValueError("`columns` should not be empty.")
         column_names = [f"{c}__month_of_year" for c in columns]
-        column_mapping = dict(zip(column_names, columns))
-        _BaseDatetimeFeature.__init__(self, columns, column_names, column_mapping)
+        _BaseDatetimeFeature.__init__(self, columns, date_format, column_names)
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
-        if isinstance(X, pd.DataFrame):
-            X_ordinal = X[self.columns].apply(
-                lambda x: x.dt.month.astype(np.float64).astype(str)
-            )
-            X_ordinal.columns = self.column_names
-            return X.join(X_ordinal)
+        self.check_dataframe(X)
 
-        for col, name in zip(self.columns, self.column_names):
-            X = X.assign(dummy=X[col].dt.month.astype(np.float64).astype(str)).rename(
-                columns={"dummy": name}
-            )
+        for name, col in zip(self.column_names, self.columns):
+            X[name] = X[col].dt.month
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the array X.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -119,7 +101,11 @@ class OrdinalMonthOfYear(_BaseDatetimeFeature):
 
         Returns
         -------
-            np.ndarray: Dataset with the Tree features.
+        X : np.ndarray
+            Transformed array.
         """
         self.check_array(X)
-        return feature_gen_dt.ordinal_month_of_year(X, self.idx_columns)
+        X_new = feature_gen_dt.ordinal_datetime(
+            X[:, self.idx_columns], self.idx_month_bounds
+        )
+        return np.concatenate([X, X_new], axis=1)

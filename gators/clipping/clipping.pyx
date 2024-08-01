@@ -36,3 +36,30 @@ cpdef np.ndarray[num_t, ndim=2] clipping(
                     X[i, j] = clip_np[j, 1]
                     continue
     return X
+
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef np.ndarray[num_t, ndim=2] _clipping(
+        np.ndarray[num_t, ndim=2] X,
+        np.ndarray[num_t, ndim=2] clip_np,
+):
+    cdef int i
+    cdef int j
+    cdef int k
+    cdef int n_rows = X.shape[0]
+    cdef int n_cols = X.shape[1]
+    cdef num_t val
+
+    with nogil:
+        for j in range(n_cols):
+            for i in range(n_rows):
+                val = X[i, j]
+                if val < clip_np[j, 0]:
+                    X[i, j] = clip_np[j, 0]
+                    continue
+                if val > clip_np[j, 1]:
+                    X[i, j] = clip_np[j, 1]
+                    continue
+    return X

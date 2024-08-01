@@ -1,12 +1,11 @@
 # License: Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
-import pandas as pd
 
 from feature_gen import elementary_arithmetics
 from gators.feature_generation._base_feature_generation import _BaseFeatureGeneration
+from gators import DataFrame, Series
 
 EPSILON = 1e-10
 
@@ -31,99 +30,56 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         * '*' for multiplication
         * '/' for division
 
-    column_names : List[str], default to None.
+    column_names : List[str], default None.
         List of new column names.
-    coef : float, default to 1.
+    coef : float, default 1.
         Coefficient value for the addition.
 
             X[new] = X[column_a] + coef * X[column_b]
 
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
 
-        - addition
-
-            >>> import pandas as pd
-            >>> from gators.feature_generation import ElementaryArithmetics
-            >>> X = pd.DataFrame({'A': [1, 1., 1.], 'B': [1., 2., 3.]})
-            >>> obj = ElementaryArithmetics(
-            ... columns_a=['A'], columns_b=['B'], operator='+', coef=0.1)
-            >>> obj.fit_transform(X)
-                 A    B  A__+__B
-            0  1.0  1.0      1.1
-            1  1.0  2.0      1.2
-            2  1.0  3.0      1.3
-
-        - division
-
-            >>> import pandas as pd
-            >>> from gators.feature_generation import ElementaryArithmetics
-            >>> X = pd.DataFrame({'A': [1., 1., 1.], 'B': [1., 2., 3.]})
-            >>> obj = ElementaryArithmetics(
-            ... columns_a=['A'], columns_b=['B'], operator='/')
-            >>> obj.fit_transform(X)
-                 A    B   A__/__B
-            0  1.0  1.0  1.000000
-            1  1.0  2.0  0.500000
-            2  1.0  3.0  0.333333
-
-        - multiplication & setting new column name
-
-            >>> import pandas as pd
-            >>> from gators.feature_generation import ElementaryArithmetics
-            >>> X = pd.DataFrame({'A': [1., 2., 3.], 'B': [1., 4., 9.]})
-            >>> obj = ElementaryArithmetics(
-            ... columns_a=['A'], columns_b=['B'],
-            ... operator='*', column_names=['mult'])
-            >>> obj.fit_transform(X)
-                 A    B  mult
-            0  1.0  1.0   1.0
-            1  2.0  4.0   8.0
-            2  3.0  9.0  27.0
-
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import ElementaryArithmetics
-    >>> X = ks.DataFrame({'A': [1., 1., 1.], 'B': [1., 2., 3.]})
+    >>> from gators.feature_generation import ClusterStatistics
     >>> obj = ElementaryArithmetics(
-    ... columns_a=['A'], columns_b=['B'], operator='/')
-    >>> obj.fit_transform(X)
-         A    B   A__/__B
-    0  1.0  1.0  1.000000
-    1  1.0  2.0  0.500000
-    2  1.0  3.0  0.333333
+    ... columns_a=['A'], columns_b=['B'], operator='+', coef=0.1)
 
-    * fit with `pandas` & transform with `NumPy`
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': [1, 1., 1.], 'B': [1., 2., 3.]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [1, 1., 1.], 'B': [1., 2., 3.]})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation import ElementaryArithmetics
-    >>> X = pd.DataFrame({'A': [1., 1., 1.], 'B': [1., 2., 3.]})
-    >>> obj = ElementaryArithmetics(
-    ... columns_a=['A'], columns_b=['B'], operator='/')
+    >>> X = pd.DataFrame({'A': [1, 1., 1.], 'B': [1., 2., 3.]})
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
+    >>> obj.fit_transform(X)
+         A    B  A+0.1xB
+    0  1.0  1.0      1.1
+    1  1.0  2.0      1.2
+    2  1.0  3.0      1.3
+
+    >>> X = pd.DataFrame({'A': [1, 1., 1.], 'B': [1., 2., 3.]})
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
-    array([[1.        , 1.        , 1.        ],
-           [1.        , 2.        , 0.5       ],
-           [1.        , 3.        , 0.33333333]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import ElementaryArithmetics
-    >>> X = ks.DataFrame({'A': [1., 1., 1.], 'B': [1., 2., 3.]})
-    >>> obj = ElementaryArithmetics(
-    ... columns_a=['A'], columns_b=['B'], operator='/')
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1.        , 1.        , 1.        ],
-           [1.        , 2.        , 0.5       ],
-           [1.        , 3.        , 0.33333333]])
-
+    array([[1. , 1. , 1.1],
+           [1. , 2. , 1.2],
+           [1. , 3. , 1.3]])
     """
 
     def __init__(
@@ -133,75 +89,56 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
         operator: str,
         column_names: List[str] = None,
         coef: float = 1.0,
-        dtype: type = np.float64,
     ):
-        if not isinstance(columns_a, list):
+        if not isinstance(columns_a, (list, np.ndarray)):
             raise TypeError("`columns_a` should be a list.")
-        if not isinstance(columns_b, list):
+        if not isinstance(columns_b, (list, np.ndarray)):
             raise TypeError("`columns_b` should be a list.")
         if len(columns_a) == 0:
             raise ValueError("`columns_a` should not be empty.")
         if not isinstance(operator, str):
             raise TypeError("`operator` should be a str.")
-        if not isinstance(coef, float):
-            raise TypeError("`coef` should be a float.")
-        if column_names and not isinstance(column_names, list):
+        if not isinstance(coef, (int, float)):
+            raise TypeError("`coef` should be an int or a float.")
+        if column_names and not isinstance(column_names, (list, np.ndarray)):
             raise TypeError("`column_names` should be a list.")
         if len(columns_a) != len(columns_b):
             raise ValueError("Length of `columns_a` and `columns_a` should match.")
         if operator not in ["+", "*", "/"]:
             raise ValueError('`operator` should be "+", "*", or "/".')
         if not column_names:
-            str_operator = operator
-            if coef < 0:
-                str_operator = "-"
+            str_operator = self.get_str_operator(operator, coef)
             column_names = [
-                f"{c_a}__{str_operator}__{c_b}"
-                for c_a, c_b in zip(columns_a, columns_b)
+                f"{c_a}{str_operator}{c_b}" for c_a, c_b in zip(columns_a, columns_b)
             ]
-            column_mapping = {
-                f"{c_a}__{str_operator}__{c_b}": [c_a, c_b]
-                for c_a, c_b in zip(columns_a, columns_b)
-            }
-        else:
-            column_mapping = {
-                c: [c_a, c_b] for c, c_a, c_b in zip(column_names, columns_a, columns_b)
-            }
         if len(column_names) != len(columns_a):
             raise ValueError(
                 """Length of `columns_a`, `columns_b`,
                 and `column_names` should match."""
             )
-        self.check_datatype(dtype, [np.float32, np.float64])
         columns = list(set(columns_a + columns_b))
         _BaseFeatureGeneration.__init__(
             self,
             columns=columns,
             column_names=column_names,
-            column_mapping=column_mapping,
-            dtype=dtype,
         )
-        self.columns = list(set(columns_a + columns_b))
         self.columns_a = columns_a
         self.columns_b = columns_b
-        self.idx_columns_a: np.ndarray = np.array([])
-        self.idx_columns_b: np.ndarray = np.array([])
+        self.idx_columns_a = np.array([])
+        self.idx_columns_b = np.array([])
+        self.idx_subarray = np.array([])
         self.operator = operator
         self.coef = coef
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "ElementaryArithmetics":
+    def fit(self, X: DataFrame, y: Series = None) -> "ElementaryArithmetics":
         """Fit the transformer on the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
-        y : None
-            None.
+        y : Series, default None.
+            Target values.
 
         Returns
         -------
@@ -209,32 +146,38 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
             Instance of itself.
         """
         self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
+        self.columns = [
+            c for c in X.columns if c in list(set(self.columns_a + self.columns_b))
+        ]
+        self.base_columns = list(X.columns)
+
+        self.idx_subarray = self.get_idx_columns(
+            columns=X.columns,
+            selected_columns=self.columns,
+        )
         self.idx_columns_a = self.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns_a
+            columns=self.columns, selected_columns=self.columns_a
         )
         self.idx_columns_b = self.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns_b
+            columns=self.columns, selected_columns=self.columns_b
         )
+
         return self
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
         for c_a, c_b, c in zip(self.columns_a, self.columns_b, self.column_names):
             if self.operator == "+":
                 X[c] = X[c_a] + self.coef * X[c_b]
@@ -243,11 +186,11 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
             else:
                 X[c] = X[c_a] / (X[c_b] + EPSILON)
             X[c] = X[c]
-        X = X.astype(self.dtype)
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -256,19 +199,19 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
 
         Returns
         -------
-        np.ndarray
+        X : np.ndarray
             Transformed array.
         """
         self.check_array(X)
-        return elementary_arithmetics(
-            X.astype(self.dtype),
+        X_new = elementary_arithmetics(
+            X[:, self.idx_subarray].astype(np.float64),
             self.idx_columns_a,
             self.idx_columns_b,
             self.operator,
             self.coef,
             EPSILON,
-            self.dtype,
         )
+        return np.concatenate((X, X_new), axis=1)
 
     @staticmethod
     def get_idx_columns(columns: List[str], selected_columns: List[str]) -> np.ndarray:
@@ -276,9 +219,9 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
 
         Parameters
         ----------
-        columns : List[str]
+        theta_vec : List[float]
             List of columns.
-        selected_columns : List[str]
+        selected_theta_vec : List[float]
             List of columns.
 
         Returns:
@@ -292,3 +235,14 @@ class ElementaryArithmetics(_BaseFeatureGeneration):
                     idx.append(i)
                     break
         return np.array(idx)
+
+    @staticmethod
+    def get_str_operator(operator, coef):
+        coef = coef if int(coef) != coef else int(coef)
+        if operator != "+":
+            return f"{operator}"
+        if coef == 1:
+            return f"{operator}"
+        if coef < 0:
+            return f"{coef}x"
+        return f"{operator}{coef}x"

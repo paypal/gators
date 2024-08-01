@@ -7,18 +7,19 @@ rm gators*rst
 
 
 mkdir _static/css
+mkdir _static/benchmarks
 cp ../doc_data/gators.css _static/css/
 cp ../doc_data/GATORS_LOGO.png _static/css/
 cp ../doc_data/pandas_logo.png _static/
 cp ../doc_data/koalas_logo.png _static/
+cp ../doc_data/dask_logo.png _static/
 cp ../doc_data/cython_logo.jpeg _static/
 cp ../doc_data/numpy_logo.png _static/
 cp ../doc_data/sklearn_logo.png _static/
-cp ../doc_data/hyperopt_logo.png _static/
 cp ../doc_data/xgboost_logo.png _static/
 cp ../doc_data/lightgbm_logo.png _static/
 cp ../doc_data/treelite_logo.png _static/
-cp -R ../doc_data/benchmarking_pandas_numpy _static/
+cp -R ../benchmarks/figs/ _static/benchmarks
 rm conf.py
 cat > conf.py <<EOL
 import os
@@ -27,7 +28,9 @@ import gators
 
 sys.path.insert(0, '..')
 project = 'gators'
-copyright = '2021, the gators development team.'
+copyright = '2021, Gators development team (Apache-2.0 License).'
+# copyright = f"2021 - {datetime.now().year}, scikit-learn developers (BSD License)"
+
 author = 'The gators team'
 version = gators.__version__
 
@@ -42,8 +45,10 @@ extensions = [
     'sphinx.ext.autosummary',
     ]
 
-autoclass_content = "class"
+# autoclass_content = "class"
 autodoc_member_order = "bysource"
+autodoc_default_options = {"members": True, "inherited-members": True}
+
 templates_path = ['_templates']
 language = 'en'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -67,6 +72,7 @@ man_pages = [
     ('index', 'gators', u'gators Documentation',
      [u'the gators team'], 1)
 ]
+# html_theme_options = {"google_analytics": True}
 EOL
 
 rm index.rst
@@ -77,11 +83,11 @@ cat > index.rst <<EOL
 Gators
 ******
 
-**Gators** is a machine learning library initially developed by the Simility a PayPal service Data Team. While data pre-processing and machine learning models are usually developed in Python, the pre-processing aspect is usually replaced by faster compiled programming languages in the production environment. This change of programming language is an added complexity to the model deployment process but is usually required to cope with the large number of queries per second that can be observed.
+**Gators** is a machine learning library initially developed by the **PayPal Risk as a Service** Data Team. While data pre-processing and machine learning models are usually developed in Python, the pre-processing aspect is usually replaced by faster compiled programming languages in the production environment. This change of programming language is an added complexity to the model deployment process but is usually required to cope with the large number of queries per second that can be observed.
 
-The goal of **Gators** is to be able to manage both model building and model serving using only Python, a language that data scientists are generally familiar with. **Gators** is built on top of Pandas, Koalas, NumPy and Cython. Pandas and Koalas are used for model building, while NumPy and Cython are used to speed up the model predictions in real-time. **Gators** was originally built for fraud modelling but can be generalized to many other modelling domains other than binary classification problems.
+The goal of **Gators** is to be able to manage both model building and model serving using only Python, a language that data scientists are generally familiar with. **Gators** is built on top of Pandas, Dask, Koalas, NumPy and Cython. Pandas, Dask, and Koalas are used for model building, while NumPy and Cython are used to speed up the model predictions in real-time. **Gators** was originally built for fraud modelling but can be generalized to many other modelling domains other than binary classification problems.
 
-**Gators** helps to streamline the model building and productionization processes. The model building part can be done using the Pandas library for datasets held in memory, or Koalas for big data. On the model serving side, the pre-processing is carried out directly with Python, using NumPy and Cython. As a result, the speed-up using both NumPy and Cython for pre-processing is around 100 compared to standard Python code. Additionally, the per-sample response time becomes similar to other compiled languages (microsecond scale).
+**Gators** helps to streamline the model building and productionization processes. The model building part can be done using the Pandas library for datasets held in memory, or Dask and Koalas for big data. On the model serving side, the pre-processing is carried out directly with Python, using NumPy and Cython. As a result, the speed-up using both NumPy and Cython for pre-processing is around 100 compared to standard Python code. Additionally, the per-sample response time becomes similar to other compiled languages (microsecond scale).
 
 In summary, **Gators** is a package for handling model building, model deployment, and fast real-time pre-processing for a large number of QPS using only Python.
 
@@ -91,6 +97,7 @@ In summary, **Gators** is a package for handling model building, model deploymen
     about_gators/index
     getting_started/index
     user_guide/index
+    examples/index
     reference/index
     benchmarking/index
 
@@ -111,21 +118,21 @@ About Gators
 History of development
 ######################
 
-In 2018, **Gators** development began at Simility and had been open sourced in 2021,
+In 2018, **Gators** development began at **Simility** and had been open sourced in 2021,
 
 ========
 Timeline
 ========
 * **2018**: Development of **Gators** started.
-* **2020**: Koalas and Cython packages are added to tackle out-of-core memory datasets and fast real-time pre-processing. 
-* **2021**: **Gators** becomes open source.
+* **2020**: Dask, Koalas and Cython packages are added to tackle out-of-core memory datasets and fast real-time pre-processing. 
+* **2021**: **Gators** becomes open-sourced.
 
 ##################
 Library Highlights
 ##################
 
 * Data pre-processing can be done for both in-memory and out-of-memory datasets using the same interface.
-* Using Cython, the real-time data pre-processing is carried out on NumPy arrays with compiled C-code leading to fast response times, similar to compiled languages.
+* Using Cython, the real-time data pre-processing is carried out on NumPy arrays with compiled C-code leading to fast response times, similar to compiled-languages.
 
 ##########
 Our Vision
@@ -137,7 +144,7 @@ A world where data scientists can develop and push their models in production us
 Python packages leveraged in gators
 ###################################
 
-.. centered:: "If I have seen further it is by standing on the shoulders of Giants."
+.. centered:: "If I have seen further it is by standing on the shoulders of giants."
 
 .. centered:: Sir Isaac Newton
 
@@ -153,13 +160,19 @@ Data pre-processing
     :width: 170 px
     :target: https://pandas.pydata.org/docs/
 
-The most well known package for data analysis is used for data pre-processing during the model building phase. This package should be used as long as the data can fit in memory.
+The well-known package for data analysis is used for data pre-processing during the model building phase. This package should be used as long as the data can fit in memory.
 
 .. image:: ../_static/koalas_logo.png
     :width: 170 px
     :target: https://koalas.readthedocs.io/en/latest/
 
-koalas has been chosen to replace pandas if the data does not fit in memory. The main advantage of koalas compared to other big data packages such as PySpark and Dask, is the fact that the syntax is close to pandas.
+Koalas is one of the two libraries chosen to handle the preprocessing when the data does not fit in memory. 
+
+.. image:: ../_static/dask_logo.png
+    :width: 170 px
+    :target: https://docs.dask.org/en/latest/
+
+Dask can also be used to handle the preprocessing when the data does not fit in memory. 
 
 .. image:: ../_static/numpy_logo.png
     :width: 170 px
@@ -171,7 +184,7 @@ NumPy is used in the production environment when the pre-processing needs to be 
     :width: 170 px
     :target: https://cython.readthedocs.io/en/latest/
 
-In the production environment, the pre-processing with be done by pre-compile Cython code on NumPy arrays.
+In the production environment, the pre-processing with be done by pre-compiled Cython code on NumPy arrays.
 
 ==============
 Model building
@@ -182,16 +195,6 @@ Model building
     :target: https://scikit-learn.org/stable/
 
 The most well known package for model building is used for cross-validation and model evaluation.
-
-.. image:: ../_static/hyperopt_logo.png
-    :width: 170 px
-    :target: http://hyperopt.github.io/hyperopt/
-
-This package is used for hyperparameter tuning. The three algorithms currently available to perform hyperparameter tuning are:
-
-* Random Search
-* Tree of Parzen Estimators (TPE)
-* Adaptative TPE
 
 .. image:: ../_static/xgboost_logo.png
     :width: 170 px
@@ -223,9 +226,6 @@ User Guide
     :maxdepth: 2
 
     best_practices
-    titanic
-    sf_crime
-    house_price
 EOL
 
 cat > user_guide/best_practices.rst <<EOL
@@ -233,59 +233,50 @@ cat > user_guide/best_practices.rst <<EOL
 Best Practices
 **************
 
-Pandas or Koalas?
-#################
+Pandas, Dask or Koalas?
+#######################
 
-The choice of using \`Pandas <https://pandas.pydata.org/>\`__ or \`Koalas <https://koalas.readthedocs.io/en/latest/>\`__ will be dictated by your data set.
-For in-memory datasets it is recommended to use pandas, koalas otherwise.
+The choice of using \`Pandas <https://pandas.pydata.org/>\`__, \`Dask <https://docs.dask.org/en/latest/>\`__,  or \`Koalas <https://koalas.readthedocs.io/en/latest/>\`__ will be dictated by your dataset size.
+For in-memory datasets it is recommended to use Pandas, Dask or Koalas otherwise.
 
 Does the transformation order matter?
 #####################################
 
-Absolutely! While Pandas and Koalas dataframes hold the datatype of each column,
-Numpy does not.
-
-It is then important to group the transformations according to the datatype of the columns
-they consider.
-
-    1. datetime column transformations
-    2. object column transformations
-    3. encoding transformation
-    4. numerical transformations
+The datetime feature generation steps should be done before the encoding.
 
 .. Note::
 
-     After an encoding transformation, all the column datatypes with be set to *np.float32* or *np.float64*,
+     After an encoding transformation, the data will be only composed of numerical columns,
      any datetime columns should then be removed before this step.
 
 What are the models currently supported by gators?
 ##################################################
 
-**Gators** mainly focuses on data pre-processing in both offline and in real-time but
-a submodule uses the package \`treelite <https://treelite.readthedocs.io/en/latest/>\`__ which compiles in C tree-based
+**Gators** mainly focuses on data pre-processing in both offline and in real-time, and model deployment
+with the package \`treelite <https://treelite.readthedocs.io/en/latest/>\`__ which compiles in C tree-based
 models. Only this type of models is currently supported. Note that for deep learning
 models, the \`tvm package <https://tvm.apache.org/>\`__ could be interesting to consider.
  
-When using NumPy?
-##################
+When using the method \`transform_numpy()\`?
+######################################################
 
-In **gators**, NumPy, by means of the method \`transform_numpy()\` , should only be used in the production environment where the response time of the data pre-processing is critical.
+The method \`transform_numpy()\`, have been designed to speed-up the pre-processing in a production-like environment, where the response time of the data pre-processing is critical.
+It is recommended to use \`transform_numpy()\` off-line to validate the prouction pipeline.
+
+
 
 Why the method \`fit_numpy()\` is not defined?
 ##############################################
 
-The offline model building steps are only done with pandas or koalas dataframes.
-First, the excellent \`Sklearn  <https://scikit#learn.org/stable/>\`__ package already handle NumPy arrays, second,
+The offline model building steps are only done with Pandas, Dask, or Koalas dataframes.
+First, the excellent \`Sklearn <https://scikit#learn.org/stable/>\`__ package already handle NumPy arrays, second,
 NumPy is not suitable for large-scale data.
 
 
 EOL
 
 mkdir getting_started
-ln ../examples/titanic.ipynb user_guide/
-ln ../examples/sf_crime.ipynb user_guide/
-ln ../examples/house_price.ipynb user_guide/
-ln ../examples/10min.ipynb getting_started/
+cp ../examples/10min.ipynb getting_started/
 
 cat > getting_started/index.rst <<EOL
 
@@ -312,7 +303,7 @@ Prerequisites
 **Gators** requires the following dependencies:
 
 * python >=3.6
-* numpy == 1.19.5
+* numpy
 * cython
 * sklearn
 * pandas
@@ -326,10 +317,20 @@ Prerequisites
 Install
 =======
 
-From PyPi or conda-forge repositories
-#####################################
+From PyPi or conda-forge 
+########################
 
-Not yet available
+
+The default installation (in-memory data only):
+
+>>> pip install gators
+>>> conda install gators
+
+To handle out-of-core data, you can choose to install Dask, Koalas, or both: 
+
+>>> pip install gators"[dask, koalas]"
+>>> conda install gators"[dask, koalas]"
+
 
 From source available on GitHub
 ###############################
@@ -337,21 +338,21 @@ From source available on GitHub
 If you prefer, you can clone it and run the setup.py file. Use the following
 commands to get a copy from Github and install all dependencies:
 
-  >>> git clone git@github.paypal.com:Simility-R/gators.git
-  >>> cd gators
-  >>> pip3 install  -r requirements.txt 
-  >>> python3 setup.py build_ext --inplace
-  >>> pip3 install .
+>>> git clone git@github.paypal.com:Simility-R/gators.git
+>>> cd gators
+>>> pip install -r requirements.txt 
+>>> python setup.py build_ext --inplace
+>>> pip install .
 
 To install the dev gators enironment:
 Extra packages
-  >>> git clone git@github.paypal.com:Simility-R/gators.git
-  >>> cd gators
-  >>> pip3 install  -r requirements.txt 
-  >>> python3 setup.py build_ext --inplace
-  >>> brew install libomp
-  >>> brew install pandoc
-  >>> pip3 install .[dev]
+
+>>> git clone git@github.paypal.com:Simility-R/gators.git
+>>> cd gators
+>>> pip install -r requirements.txt 
+>>> python setup.py build_ext --inplace
+>>> brew install libomp
+>>> pip install .[dev]
 
 Test and coverage
 #################
@@ -363,7 +364,9 @@ Test
 
 Test coverage
 =============
-  >>> coverage run -m pytest gators -v
+
+  >>> pip install pytest-cov
+  >>> pytest -v --cov-report html:cov_html --cov=gators gators
 
 Contribute
 ##########
@@ -374,6 +377,28 @@ continuous integration in the API.
 
 .. _GitHub: https://github.paypal.com/Simility-R/gators/pulls
 
+EOL
+
+mkdir examples
+cp ../examples/titanic.ipynb examples/
+cp ../examples/sf_crime.ipynb examples/
+cp ../examples/house_price.ipynb examples/
+cp ../examples/templates.ipynb examples/
+cp ../examples/libraries.ipynb examples/
+
+cat > examples/index.rst <<EOL
+********
+Examples
+********
+
+.. toctree::
+    :maxdepth: 2
+
+    titanic
+    sf_crime
+    house_price
+    templates
+    libraries
 EOL
 
 mkdir reference
@@ -420,7 +445,9 @@ Base data_cleaning transformer
 ##############################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
    
     _BaseDataCleaning 
 
@@ -428,7 +455,9 @@ Off-line data cleaning
 ###################### 
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     DropHighCardinality    
     DropHighNaNRatio     
@@ -438,8 +467,11 @@ Realtime data cleaning
 ###################### 
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
+    ConvertColumnDatatype
     DropColumns 
     DropDatatypeColumns     
     KeepColumns
@@ -458,28 +490,36 @@ Binning
 Categorical variable binning
 ############################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-    BinRareEvents
+    BinRareCategories
+    BinSingleTargetClassCategories
 
 Numerical variable binning
 ##########################
 
-Base discretizer
+Base binning
 ----------------
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-    _BaseDiscretizer
+    _BaseBinning
 
-Discretizers
+Binnings
 ------------
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-    Discretizer
-    QuantileDiscretizer
-    CustomDiscretizer
+    Binning
+    QuantileBinning
+    TreeBinning
+    CustomBinning
 
 EOL
 
@@ -493,7 +533,9 @@ Clipping
 .. currentmodule:: gators.clipping
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     Clipping
 EOL
@@ -506,31 +548,18 @@ cat > reference/imputers.rst <<EOL
 Imputers
 ********
 
-Four different types of imputers are available depending on the variable datatype,
-namely: numerical, integer, float, and categorical (string or object).
+Two different types of imputers are available depending on the variable datatype,
+namely, numerical and categorical (string or object).
  
-
-.. note::
-
-    * *NumericsImputer* imputes numerical variables.
-
-    * *FloatImputer* imputes only numerical variables satisfying the condition:
-      
-         x != x.round().
-
-    * *IntImputer* imputes only numerical variables satisfying the condition:
-    
-         x == x.round()
-
-    * *ObjectImputer* imputes only categorical variables.
-
 
 Base Imputer
 ############
 .. currentmodule:: gators.imputers
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    _BaseImputer
 
@@ -539,18 +568,11 @@ Numerical Imputers
 .. currentmodule:: gators.imputers
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-   NumericsImputer
-   IntImputer
-   FloatImputer
-
-Categorical Imputer
-###################
-
-.. autosummary::
-   :toctree: api/
-
+   NumericImputer
    ObjectImputer
 
 EOL
@@ -571,13 +593,17 @@ The Encoders transform the categorical columns into numerical columns.
 .. currentmodule:: gators.encoders
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
 BaseEncoder
 ###########
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    _BaseEncoder
 
@@ -585,46 +611,30 @@ Unsupervised Encoders
 #####################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    OrdinalEncoder
+   FrequencyEncoder
    OneHotEncoder
+   BinnedColumnsEncoder
 
-Binary Encoders
-###############
+Supervised Encoders
+###################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     WOEEncoder
     TargetEncoder
 
-Multi-Class Encoder
-###################
+.. Note::
 
-.. note::
-    The *MultiClassEncoder* takes as input a binary encoder and apply it
-    to each class. For example, if a n-class classification is composed of
-    *c* categorical columns, the number encoded columns with be *n x c*.
-
-.. autosummary::
-   :toctree: api/
-
-   MultiClassEncoder
-
-Regression Encoder
-##################
-
-.. note::
-
-    The *RegressionEncoder* takes as input a binary encoder and a discretizer.
-    First, the discretizer transform the continuous target values into categorical values.
-    Second, the MultiClassEncoder is applied to the data using the transformed target values.
-
-.. autosummary::
-   :toctree: api/
-
-   RegressionEncoder
+   **WOEEncoder** is only valid for binary classification problems, **TargetEncoder** works for binary and regression problems.
+   In the case of a multiclass classification problem, it is recommended to use a one-versus-all approach in order to use the supervised encoders. 
 
 EOL
 
@@ -641,7 +651,9 @@ Base Feature Generation Transformer
 ###################################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     _BaseFeatureGeneration
 
@@ -650,25 +662,32 @@ Numerical Feature Generation
 ############################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     ClusterStatistics
     ElementaryArithmetics
-    PlaneRotation
+    PlanRotation
     PolynomialFeatures
 
 Categorical Feature Generation
 ##############################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     OneHot
+    PolynomialObjectFeatures
 
 Feature Generation
 ##################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     IsEqual
     IsNull
@@ -686,14 +705,18 @@ Feature Generation DateTime
 Base Datetime Feature Generation
 ################################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
   
     _BaseDatetimeFeature
 
 Ordinal Datetime Features
 #########################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
   
     OrdinalMinuteOfHour
     OrdinalHourOfDay
@@ -705,7 +728,9 @@ Cyclic Datetime Features
 ########################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     CyclicMinuteOfHour
     CyclicHourOfDay
@@ -717,7 +742,9 @@ Delta Time Features
 ###################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     DeltaTime
 
@@ -734,17 +761,21 @@ Feature Generation String
 Base String Feature Generation
 ##############################
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
   
     _BaseStringFeature
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     SplitExtract
     Extract
-    StringContains
-    StringLength
+    Contains
+    Length
     LowerCase
     UpperCase
 EOL
@@ -762,7 +793,9 @@ Base Feature Selection Transformer
 ##################################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     _BaseFeatureSelection
 
@@ -771,7 +804,9 @@ Unsupervised Feature Selection
 ##############################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     VarianceFilter
     CorrelationFilter
@@ -781,11 +816,12 @@ Supervised Feature Selection
 ############################
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
+    SupervizedCorrelationFilter
     InformationValue
-    MultiClassInformationValue
-    RegressionInformationValue
     SelectFromModel
     SelectFromModels
 
@@ -800,10 +836,11 @@ Converter
 .. currentmodule:: gators.converter
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
-    ConvertColumnDatatype
-    KoalasToPandas
+    ToPandas
     ToNumpy
 EOL
 
@@ -817,7 +854,9 @@ Pipeline
 .. currentmodule:: gators.pipeline
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     Pipeline
 EOL
@@ -832,7 +871,9 @@ Transformers
 .. currentmodule:: gators.transformers
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    Transformer
    TransformerXY
@@ -848,10 +889,13 @@ Scalers
 .. currentmodule:: gators.scalers
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    MinMaxScaler
    StandardScaler
+   YeoJohnson
 
 EOL
 
@@ -867,10 +911,12 @@ Sampling
 .. note::
 
     **UnsupevisedSampling** should be used for regression problems, and
-    *SupervisedSampling* should be used for classification problems.
+    *SupervisedSampling* can be used for classification problems.
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    UnsupervisedSampling
    SupervisedSampling
@@ -886,10 +932,11 @@ Model Building
 .. currentmodule:: gators.model_building
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
     TrainTestSplit
-    HyperOpt
     XGBBoosterBuilder
     XGBTreeliteDumper
     LGBMTreeliteDumper
@@ -906,10 +953,26 @@ Transformers
 .. currentmodule:: gators.transformers
 
 .. autosummary::
+   :nosignatures:
    :toctree: api/
+   :template: class.rst
 
    Transformer
    TransformerXY
+EOL
+
+mkdir _templates
+cat > _templates/class.rst <<EOL
+
+{% extends "!autosummary/class.rst" %}
+
+{% block methods %} {% if methods %}
+
+{% endif %} {% endblock %}
+
+{% block attributes %} {% if attributes %}
+
+{% endif %} {% endblock %}
 EOL
 
 mkdir benchmarking
@@ -921,28 +984,39 @@ Benchmarking
 Per-sample *transform* benchmarking
 ===================================
 
-Benchmarking done using the jupyter notebook *%timeit* magic command.
+The benchmarking is done using the jupyter notebook *%timeit* magic command.
 
+.. toctree::
+    :maxdepth: 2
+
+    transform_numpy
+    fit_transform
+EOL
+
+cat > benchmarking/transform_numpy.rst <<EOL
+
+Per-sample *transform* benchmarking
+====================================
 
 Data Cleaning
 -------------
 
-.. image:: ../../_static/benchmarking_pandas_numpy/DropColumns.jpg
+.. image:: ../../_static/benchmarks/DropColumns_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/DropDatatypeColumns.jpg
+.. image:: ../../_static/benchmarks/DropDatatypeColumns_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/KeepColumns.jpg
+.. image:: ../../_static/benchmarks/KeepColumns_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/Replace.jpg
+.. image:: ../../_static/benchmarks/Replace_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
@@ -950,22 +1024,22 @@ Data Cleaning
 Binning
 -------
 
-.. image:: ../../_static/benchmarking_pandas_numpy/BinRareEvents.jpg
+.. image:: ../../_static/benchmarks/BinRareCategories_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/CustomDiscretizer.jpg
+.. image:: ../../_static/benchmarks/CustomBinning_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/Discretizer.jpg
+.. image:: ../../_static/benchmarks/Binning_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/QuantileDiscretizer.jpg
+.. image:: ../../_static/benchmarks/QuantileBinning_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
@@ -973,7 +1047,7 @@ Binning
 Clipping
 --------
 
-.. image:: ../../_static/benchmarking_pandas_numpy/Clipping.jpg
+.. image:: ../../_static/benchmarks/Clipping_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
@@ -981,34 +1055,34 @@ Clipping
 Scalers
 -------
 
-.. image:: ../../_static/benchmarking_pandas_numpy/MinMaxScaler.jpg
+.. image:: ../../_static/benchmarks/MinMaxScaler_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/StandardScaler.jpg
+.. image:: ../../_static/benchmarks/StandardScaler_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
 Imputers
 --------
-.. image:: ../../_static/benchmarking_pandas_numpy/NumericsImputer.jpg
+.. image:: ../../_static/benchmarks/NumericImputer_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/IntImputer.jpg
+.. image:: ../../_static/benchmarks/IntImputer_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/FloatImputer.jpg
+.. image:: ../../_static/benchmarks/FloatImputer_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/ObjectImputer.jpg
+.. image:: ../../_static/benchmarks/ObjectImputer_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
@@ -1016,32 +1090,22 @@ Imputers
 Encoders
 --------
 
-.. image:: ../../_static/benchmarking_pandas_numpy/OneHotEncoder.jpg
+.. image:: ../../_static/benchmarks/OneHotEncoder_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/OrdinalEncoder.jpg
+.. image:: ../../_static/benchmarks/OrdinalEncoder_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/TargetEncoder.jpg
+.. image:: ../../_static/benchmarks/TargetEncoder_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/WOEEncoder.jpg
-   :width: 800px
-   :alt: alternate text
-   :align: left
-
-.. image:: ../../_static/benchmarking_pandas_numpy/MultiClassEncoder.jpg
-   :width: 800px
-   :alt: alternate text
-   :align: left
-
-.. image:: ../../_static/benchmarking_pandas_numpy/RegressionEncoder.jpg
+.. image:: ../../_static/benchmarks/WOEEncoder_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
@@ -1049,70 +1113,70 @@ Encoders
 Feature Generation
 ------------------
 
-.. image:: ../../_static/benchmarking_pandas_numpy/ElementaryArithmetics.jpg
+.. image:: ../../_static/benchmarks/ElementaryArithmetics_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/IsEqual.jpg
+.. image:: ../../_static/benchmarks/IsEqual_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/IsNull.jpg
+.. image:: ../../_static/benchmarks/IsNull_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/ClusterStatistics.jpg
+.. image:: ../../_static/benchmarks/ClusterStatistics_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/OneHot.jpg
+.. image:: ../../_static/benchmarks/OneHot_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
 
-.. image:: ../../_static/benchmarking_pandas_numpy/PlaneRotation.jpg
+.. image:: ../../_static/benchmarks/PlaneRotation_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/PolynomialFeatures.jpg
+.. image:: ../../_static/benchmarks/PolynomialFeatures_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
 Feature Generation String
 -------------------------
-.. image:: ../../_static/benchmarking_pandas_numpy/LowerCase.jpg
+.. image:: ../../_static/benchmarks/LowerCase_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/UpperCase.jpg
+.. image:: ../../_static/benchmarks/UpperCase_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/Extract.jpg
+.. image:: ../../_static/benchmarks/Extract_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/StringContains.jpg
+.. image:: ../../_static/benchmarks/Contains_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/StringLength.jpg
+.. image:: ../../_static/benchmarks/Length_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/SplitExtract.jpg
+.. image:: ../../_static/benchmarks/SplitExtract_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
@@ -1120,61 +1184,313 @@ Feature Generation String
 Feature Generation DateTime
 ---------------------------
 
-.. image:: ../../_static/benchmarking_pandas_numpy/OrdinalMinuteOfHour.jpg
+.. image:: ../../_static/benchmarks/OrdinalMinuteOfHour_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/OrdinalHourOfDay.jpg
+.. image:: ../../_static/benchmarks/OrdinalHourOfDay_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/OrdinalDayOfWeek.jpg
+.. image:: ../../_static/benchmarks/OrdinalDayOfWeek_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/OrdinalDayOfMonth.jpg
+.. image:: ../../_static/benchmarks/OrdinalDayOfMonth_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/OrdinalMonthOfYear.jpg
+.. image:: ../../_static/benchmarks/OrdinalMonthOfYear_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/CyclicMinuteOfHour.jpg
+.. image:: ../../_static/benchmarks/CyclicMinuteOfHour_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/CyclicHourOfDay.jpg
+.. image:: ../../_static/benchmarks/CyclicHourOfDay_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/CyclicDayOfWeek.jpg
+.. image:: ../../_static/benchmarks/CyclicDayOfWeek_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/CyclicDayOfMonth.jpg
+.. image:: ../../_static/benchmarks/CyclicDayOfMonth_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/CyclicMonthOfYear.jpg
+.. image:: ../../_static/benchmarks/CyclicMonthOfYear_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 
-.. image:: ../../_static/benchmarking_pandas_numpy/DeltaTime.jpg
+.. image:: ../../_static/benchmarks/DeltaTime_transform_numpy.jpg
    :width: 800px
    :alt: alternate text
    :align: left
 EOL
+
+
+
+cat > benchmarking/fit_transform.rst <<EOL
+
+*fit_transform* benchmarking
+=============================
+
+
+
+Data Cleaning
+-------------
+
+.. image:: ../../_static/benchmarks/DropColumns_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/DropDatatypeColumns_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/KeepColumns_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Replace_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Binning
+-------
+
+.. image:: ../../_static/benchmarks/BinRareCategories_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CustomBinning_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Binning_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/QuantileBinning_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Clipping
+--------
+
+.. image:: ../../_static/benchmarks/Clipping_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Scalers
+-------
+
+.. image:: ../../_static/benchmarks/MinMaxScaler_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/StandardScaler_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Imputers
+--------
+.. image:: ../../_static/benchmarks/NumericImputer_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IntImputer_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/FloatImputer_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/ObjectImputer_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Encoders
+--------
+
+.. image:: ../../_static/benchmarks/OneHotEncoder_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalEncoder_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/TargetEncoder_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/WOEEncoder_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Feature Generation
+------------------
+
+.. image:: ../../_static/benchmarks/ElementaryArithmetics_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IsEqual_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/IsNull_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/ClusterStatistics_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OneHot_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+
+.. image:: ../../_static/benchmarks/PlaneRotation_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/PolynomialFeatures_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Feature Generation String
+-------------------------
+.. image:: ../../_static/benchmarks/LowerCase_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/UpperCase_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Extract_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Contains_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/Length_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/SplitExtract_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+Feature Generation DateTime
+---------------------------
+
+.. image:: ../../_static/benchmarks/OrdinalMinuteOfHour_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalHourOfDay_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalDayOfWeek_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalDayOfMonth_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/OrdinalMonthOfYear_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicMinuteOfHour_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicHourOfDay_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicDayOfWeek_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicDayOfMonth_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/CyclicMonthOfYear_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+
+.. image:: ../../_static/benchmarks/DeltaTime_fit_transform.jpg
+   :width: 400px
+   :alt: alternate text
+   :align: left
+EOL
+
 
 make clean
 make html

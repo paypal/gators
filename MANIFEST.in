@@ -1,6 +1,4 @@
 global-include *.pyx
-global-include *.pxd
 global-exclude *.c
-global-exclude .tox
 include requirements.txt
 global-include test_*.py

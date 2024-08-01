@@ -1,11 +1,13 @@
 # License: Apache-2.0
 from typing import Dict, List, Union
 
-import databricks.koalas as ks
 import numpy as np
 import pandas as pd
 
 from ..transformers.transformer import Transformer
+from ..util import util
+
+from gators import DataFrame, Series
 
 
 class _BaseImputer(Transformer):
@@ -21,15 +23,21 @@ class _BaseImputer(Transformer):
         * mean (only for the FloatImputer class)
         * median (only for the FloatImputer class)
 
-    value (Union[float, str, None]): Imputation value, default to None.
+    value (Union[float, str, None]) : Imputation value, default None.
         used for `strategy=constant`.
-    columns: List[str], default to None.
+    columns : List[float], default None.
         List of columns.
-
+    inplace : bool, default True.
+        If True, impute in-place.
+        If False, create new imputed columns.
     """
 
     def __init__(
-        self, strategy: str, value: Union[float, str, None], columns: List[str]
+        self,
+        strategy: str,
+        value: Union[float, str, None],
+        columns: List[str],
+        inplace: bool = True,
     ):
         if not isinstance(strategy, str):
             raise TypeError("`strategy` should be a string.")
@@ -39,79 +47,76 @@ class _BaseImputer(Transformer):
             raise ValueError("Imputation `strategy` not implemented.")
         if not isinstance(columns, list) and columns is not None:
             raise TypeError("`columns` should be a list or None.")
-
+        if not isinstance(inplace, bool):
+            raise TypeError("`inplace` should be a bool.")
         Transformer.__init__(self)
         self.strategy = strategy
         self.value = value
         self.columns = columns
+        self.inplace = inplace
+        self.column_names = []
         self.statistics: Dict = {}
-        self.statistics_values: np.ndarray = None
+        self.statistics_np: np.ndarray = None
         self.idx_columns: np.ndarray = None
-        self.X_dtypes: Union[pd.Series, ks.Series] = None
+        self.X_dtypes: Series = None
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        if isinstance(X, pd.DataFrame):
-            return X.fillna(self.statistics)
-        for col, val in self.statistics.items():
-            X[col] = X[col].fillna(val)
-        return X
+        self.column_names = self.get_column_names(self.inplace, self.columns, "impute")
+        X_impute = util.get_function(X).fillna(X, value=self.statistics)
+        if self.inplace:
+            return X_impute
+        X_impute = X_impute[self.columns].rename(
+            columns=dict(zip(self.columns, self.column_names))
+        )
+        return X.join(X_impute)
 
-    @staticmethod
     def compute_statistics(
-        X: Union[pd.DataFrame, ks.DataFrame],
-        columns: List[str],
-        strategy: str,
-        value: Union[float, int, str, None],
+        self, X: DataFrame, value: Union[float, int, str, None]
     ) -> Dict[str, Union[float, int, str]]:
         """Compute the imputation values.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
-            Dataframe used to compute the imputation values.
-        columns : List[str]
-            Columns to consider.
-        strategy : str
-            Imputation strategy.
+        X : DataFrame
+            Dataframe. used to compute the imputation values.
         value : Union[float, int, str, None]
             Value used for imputation.
 
         Returns
         -------
-        Dict[str, Union[float, int, str]]
+        statistics : Dict[str, Union[float, int, str]]
             Imputation value mapping.
         """
-        if strategy == "mean":
-            statistics = X[columns].astype(np.float64).mean().to_dict()
-        elif strategy == "median":
-            statistics = X[columns].astype(np.float64).median().to_dict()
-        elif strategy == "most_frequent":
-            values = [X[c].value_counts().index.to_numpy()[0] for c in columns]
-            statistics = dict(zip(columns, values))
-        else:  # strategy == 'constant'
-            values = len(columns) * [value]
-            statistics = dict(zip(columns, values))
+
+        if self.strategy == "mean":
+            statistics = util.get_function(X).to_dict(X[self.columns].mean())
+        elif self.strategy == "median":
+            statistics = util.get_function(X).to_dict(X[self.columns].median())
+        elif self.strategy == "most_frequent":
+            statistics = util.get_function(X).most_frequent(X[self.columns])
+        elif self.strategy == "constant":
+            statistics = dict(zip(self.columns, len(self.columns) * [value]))
+
         if pd.Series(statistics).isnull().sum():
             raise ValueError(
                 """Some columns contains only NaN values and the
                 imputation values cannot be calculated.
                 Remove these columns
                 before performing the imputation
-                (e.g. with `gators.data_cleaning.drop_high_nan_ratio()`)."""
+                (e.g. with `gators.data_cleaning.drop_high_nan_ratio(max_ratio=0.99)`)."""
             )
+
         return statistics

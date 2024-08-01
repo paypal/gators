@@ -1,8 +1,0 @@
-action: py36, msg: packaging
-cwd: /Users/cpoli/opensource/gators/.tox
-cmd: /Users/cpoli/gators38/bin/python -m virtualenv --no-download --python /Library/Frameworks/Python.framework/Versions/3.6/bin/python3.6 py36
-created virtual environment CPython3.6.8.final.0-64 in 707ms
-  creator CPython3Posix(dest=/Users/cpoli/opensource/gators/.tox/py36, clear=False, no_vcs_ignore=False, global=False)
-  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/Users/cpoli/Library/Application Support/virtualenv)
-    added seed packages: pip==21.2.4, setuptools==58.1.0, wheel==0.37.0
-  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator

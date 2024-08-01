@@ -3,10 +3,13 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.DS_Store
+dist
 
 # C extensions
 *.so
-.DS_Store
+*.pyc
+
 
 # Distribution / packaging
 .Python
@@ -73,7 +76,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-doc
+doc/
 
 # PyBuilder
 target/
@@ -131,3 +134,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#dask
+dask-worker-space

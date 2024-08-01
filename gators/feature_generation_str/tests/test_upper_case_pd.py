@@ -1,0 +1,139 @@
+# License: Apache-2.0
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
+from gators.feature_generation_str import UpperCase
+
+
+@pytest.fixture
+def data():
+    X = pd.DataFrame(
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["q", "qq", "QQq"],
+            "E": ["w", "WW", "WWw"],
+            "F": ["abc", "", ""],
+        }
+    )
+
+    obj = UpperCase(columns=list("DEF"), inplace=False).fit(X)
+    X_expected = pd.DataFrame(
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["q", "qq", "QQq"],
+            "E": ["w", "WW", "WWw"],
+            "F": ["abc", "", ""],
+            "D__upper": ["Q", "QQ", "QQQ"],
+            "E__upper": ["W", "WW", "WWW"],
+            "F__upper": ["ABC", "", ""],
+        }
+    )
+    return obj, X, X_expected
+
+
+@pytest.fixture
+def data_no_columns():
+    X = pd.DataFrame(
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["q", "qq", "QQq"],
+            "E": ["w", "WW", "WWw"],
+            "F": ["abc", "", ""],
+        }
+    )
+
+    obj = UpperCase(inplace=False).fit(X)
+    X_expected = pd.DataFrame(
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["q", "qq", "QQq"],
+            "E": ["w", "WW", "WWw"],
+            "F": ["abc", "", ""],
+            "D__upper": ["Q", "QQ", "QQQ"],
+            "E__upper": ["W", "WW", "WWW"],
+            "F__upper": ["ABC", "", ""],
+        }
+    )
+    return obj, X, X_expected
+
+
+@pytest.fixture
+def data_inplace():
+    X = pd.DataFrame(
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["q", "qq", "QQq"],
+            "E": ["w", "WW", "WWw"],
+            "F": ["abc", "", ""],
+        }
+    )
+
+    obj = UpperCase(columns=list("DEF")).fit(X)
+    X_expected = pd.DataFrame(
+        {
+            "A": [0.0, 0.0, 0.0],
+            "B": [0.0, 0.0, 0.0],
+            "C": [0.0, 0.0, 0.0],
+            "D": ["Q", "QQ", "QQQ"],
+            "E": ["W", "WW", "WWW"],
+            "F": ["ABC", "", ""],
+        }
+    )
+    return obj, X, X_expected
+
+
+def test_pd(data):
+    obj, X, X_expected = data
+    X_new = obj.transform(X)
+    assert_frame_equal(X_new, X_expected)
+
+
+def test_pd_np(data):
+    obj, X, X_expected = data
+    X_numpy_new = obj.transform_numpy(X.to_numpy())
+    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
+    assert_frame_equal(X_new, X_expected.astype(object))
+
+
+def test_no_columns_pd(data_no_columns):
+    obj, X, X_expected = data_no_columns
+    X_new = obj.transform(X)
+    assert_frame_equal(X_new, X_expected)
+
+
+def test_pd_no_columns_np(data_no_columns):
+    obj, X, X_expected = data_no_columns
+    X_numpy_new = obj.transform_numpy(X.to_numpy())
+    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
+    assert_frame_equal(X_new, X_expected.astype(object))
+
+
+def test_inplace_pd(data_inplace):
+    obj, X, X_expected = data_inplace
+    X_new = obj.transform(X)
+    assert_frame_equal(X_new, X_expected)
+
+
+def test_inplace_pd_np(data_inplace):
+    obj, X, X_expected = data_inplace
+    X_numpy_new = obj.transform_numpy(X.to_numpy())
+    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
+    assert_frame_equal(X_new, X_expected.astype(object))
+
+
+def test_init():
+    with pytest.raises(TypeError):
+        _ = UpperCase(columns="x")
+    with pytest.raises(TypeError):
+        _ = UpperCase(columns=["x"], inplace="x")

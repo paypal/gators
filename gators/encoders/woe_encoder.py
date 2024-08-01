@@ -1,174 +1,103 @@
 # License: Apache-2.0
-import warnings
-from typing import Dict, List, Union
+from typing import List, Dict
 
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
 
-from ..util import util
 from ._base_encoder import _BaseEncoder
+from ..util.iv import compute_iv
 
-
-def clean_mapping(
-    mapping: Dict[str, Dict[str, List[float]]]
-) -> Dict[str, Dict[str, List[float]]]:
-    mapping = {
-        col: {k: v for k, v in mapping[col].items() if v == v} for col in mapping.keys()
-    }
-    for m in mapping.values():
-        if "OTHERS" not in m:
-            m["OTHERS"] = 0.0
-        if "MISSING" not in m:
-            m["MISSING"] = 0.0
-    return mapping
+from gators import DataFrame, Series
 
 
 class WOEEncoder(_BaseEncoder):
-    """Encode all categorical variable using the weight of evidence technique.
+    """Encode all categorical variables using the weight of evidence technique.
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
-        Numerical datatype of the output data.
+    regularization : float, default 0.5.
+        Insure that the weights of evidence are finite.
+
+    inplace : bool, default to True.
+        If True, replace in-place the categorical values by numerical ones.
+        If False, keep the categorical columns and create new encoded columns.
+
 
     Examples
     --------
 
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.encoders import WOEEncoder
+    >>> obj = WOEEncoder()
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']}), npartitions=1)
+    >>> y = dd.from_pandas(pd.Series([1, 1, 0], name='TARGET'), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
+    >>> y = ps.Series([1, 1, 0], name='TARGET')
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.encoders import WOEEncoder
     >>> X = pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
     >>> y = pd.Series([1, 1, 0], name='TARGET')
-    >>> obj = WOEEncoder()
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X, y)
-         A         B
-    0  0.0  0.000000
-    1  0.0 -0.693147
-    2  0.0 -0.693147
+              A         B
+    0  1.203973  0.693147
+    1  1.203973 -0.405465
+    2 -1.504077 -0.405465
 
-    * fit & transform with `koalas`
+    Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
+    and returns a transformed NumPy array. Note that this transformer should **only** be used
+    when the number of rows is small *e.g.* in real-time environment.
 
-    >>> import databricks.koalas as ks
-    >>> from gators.encoders import WOEEncoder
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> y = ks.Series([1, 1, 0], name='TARGET')
-    >>> obj = WOEEncoder()
-    >>> obj.fit_transform(X, y)
-         A         B
-    0  0.0  0.000000
-    1  0.0 -0.693147
-    2  0.0 -0.693147
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.encoders import WOEEncoder
-    >>> X = pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> y = pd.Series([1, 1, 0], name='TARGET')
-    >>> obj = WOEEncoder()
-    >>> _ = obj.fit(X, y)
     >>> obj.transform_numpy(X.to_numpy())
-    array([[ 0.        ,  0.        ],
-           [ 0.        , -0.69314718],
-           [ 0.        , -0.69314718]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.encoders import WOEEncoder
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> y = ks.Series([1, 1, 0], name='TARGET')
-    >>> obj = WOEEncoder()
-    >>> _ = obj.fit(X, y)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[ 0.        ,  0.        ],
-           [ 0.        , -0.69314718],
-           [ 0.        , -0.69314718]])
+    array([[ 1.2039728 ,  0.69314718],
+           [ 1.2039728 , -0.40546511],
+           [-1.5040774 , -0.40546511]])
     """
 
-    def __init__(self, dtype: type = np.float64):
-        _BaseEncoder.__init__(self, dtype=dtype)
+    def __init__(
+        self,
+        columns: List[str] = None,
+        regularization: float = 0.5,
+        inplace: bool = True,
+    ):
+        if not isinstance(regularization, (int, float)):
+            raise TypeError("""`regularization` should be a float.""")
+        if regularization < 0:
+            raise ValueError("""`regularization` should be a positive float.""")
+        self.regularization = regularization
+        _BaseEncoder.__init__(self, columns=columns, inplace=inplace)
+        self.suffix = "woe"
 
-    def fit(
-        self, X: Union[pd.DataFrame, ks.DataFrame], y: Union[pd.Series, ks.Series]
-    ) -> "WOEEncoder":
-        """Fit the encoder.
-
-        Parameters
-        ----------
-        X : Union[pd.DataFrame, ks.DataFrame]:
-            Input dataframe.
-        y : Union[pd.Series, ks.Series], default to None.
-            Labels.
-
-        Returns
-        -------
-        WOEEncoder:
-            Instance of itself.
-        """
-        self.check_dataframe(X)
-        self.check_y(X, y)
-        self.check_binary_target(y)
-        self.columns = util.get_datatype_columns(X, object)
-        if not self.columns:
-            warnings.warn(
-                f"""`X` does not contain object columns:
-                `{self.__class__.__name__}` is not needed"""
-            )
-            return self
-        self.check_binary_target(y)
-        self.check_nans(X, self.columns)
-        self.mapping = self.generate_mapping(X[self.columns], y)
-        self.num_categories_vec = np.array([len(m) for m in self.mapping.values()])
-        columns, self.values_vec, self.encoded_values_vec = self.decompose_mapping(
-            mapping=self.mapping
-        )
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=columns
-        )
-        return self
-
-    @staticmethod
-    def generate_mapping(
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series],
-    ) -> Dict[str, Dict[str, float]]:
+    def generate_mapping(self, X: DataFrame, y: Series) -> Dict[str, Dict[str, float]]:
         """Generate the mapping to perform the encoding.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Input dataframe.
-        y : Union[pd.Series, ks.Series]:
-             Labels.
+        y : Series:
+             Target values.
 
         Returns
         -------
         Dict[str, Dict[str, float]]
             Mapping.
         """
-        mapping_list = []
-        y_name = y.name
-        X = X.join(y)
-        for col in X.columns:
-            if isinstance(X, pd.DataFrame):
-                tab = X.groupby([col, y_name])[y_name].count().unstack().fillna(0)
-            else:
-                tab = (
-                    X.groupby([col, y_name])[y_name]
-                    .count()
-                    .unstack()
-                    .to_pandas()
-                    .fillna(0)
-                )
-            tab /= tab.sum()
-            tab.columns = [int(c) for c in tab.columns]
-            with np.errstate(divide="ignore"):
-                woe = pd.Series(np.log(tab[1] / tab[0]))
-            woe[(woe == np.inf) | (woe == -np.inf)] = 0.0
-            mapping_list.append(pd.Series(woe, name=col))
-        mapping = pd.concat(mapping_list, axis=1).to_dict()
-        X = X.drop(y_name, axis=1)
-        return clean_mapping(mapping)
+        _, stats = compute_iv(X, y, regularization=self.regularization)
+        stats_woe = stats[["woe"]]
+        grouped_stats = stats_woe.groupby(level=0)
+        return {name: group.xs(name)["woe"].to_dict() for name, group in grouped_stats}

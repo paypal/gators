@@ -1,14 +1,15 @@
 # License: Apache-2.0
-from typing import Dict, List, Union
+from typing import Dict, List
 
-import databricks.koalas as ks
 import numpy as np
-import pandas as pd
 
 from clipping import clipping
+from clipping import _clipping
 
 from ..transformers.transformer import Transformer
 from ..util import util
+
+from gators import DataFrame, Series
 
 
 class Clipping(Transformer):
@@ -26,21 +27,46 @@ class Clipping(Transformer):
         * the first element is the lower limit
         * the second element is the upper limit
 
-    dtype : type, default to np.float64.
+    dtype : type, default np.float64.
         Numerical datatype of the output data.
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.clipping import Clipping
+    >>> clip_dict = {'A':[-0.5, 0.5], 'B':[-0.5, 0.5], 'C':[-0., 1.]}
+    >>> obj = Clipping(clip_dict=clip_dict)
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame(
+    ... {'A': [1.8, 2.2, 1.0, 0.4, 0.8],
+    ... 'B': [0.4, 1.9, -0.2, 0.1, 0.1],
+    ... 'C': [1.0, -1.0, -0.1, 1.5, 0.4]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame(
+    ... {'A': [1.8, 2.2, 1.0, 0.4, 0.8],
+    ... 'B': [0.4, 1.9, -0.2, 0.1, 0.1],
+    ... 'C': [1.0, -1.0, -0.1, 1.5, 0.4]})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.clipping import Clipping
     >>> X = pd.DataFrame(
     ... {'A': [1.8, 2.2, 1.0, 0.4, 0.8],
     ... 'B': [0.4, 1.9, -0.2, 0.1, 0.1],
     ... 'C': [1.0, -1.0, -0.1, 1.5, 0.4]})
-    >>> clip_dict = {'A':[-0.5, 0.5], 'B':[-0.5, 0.5], 'C':[-0., 1.]}
-    >>> obj = Clipping(clip_dict=clip_dict)
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
          A    B    C
     0  0.5  0.4  1.0
@@ -49,94 +75,49 @@ class Clipping(Transformer):
     3  0.4  0.1  1.0
     4  0.5  0.1  0.4
 
-    * fit & transform with `koalas`
+    Independly of the dataframe library used to fit the transformer, the `tranform_numpy` method only accepts NumPy arrays
+    and returns a transformed NumPy array. Note that this transformer should **only** be used
+    when the number of rows is small *e.g.* in real-time environment.
 
-    >>> import databricks.koalas as ks
-    >>> from gators.clipping import Clipping
-    >>> X = ks.DataFrame(
-    ... {'A': [1.8, 2.2, 1.0, 0.4, 0.8],
-    ... 'B': [0.4, 1.9, -0.2, 0.1, 0.1],
-    ... 'C': [1.0, -1.0, -0.1, 1.5, 0.4]})
-    >>> clip_dict = {'A':[-0.5, 0.5], 'B':[-0.5, 0.5], 'C':[-0., 1.]}
-    >>> obj = Clipping(clip_dict=clip_dict)
-    >>> obj.fit_transform(X)
-         A    B    C
-    0  0.5  0.4  1.0
-    1  0.5  0.5 -0.0
-    2  0.5 -0.2 -0.0
-    3  0.4  0.1  1.0
-    4  0.5  0.1  0.4
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.clipping import Clipping
-    >>> X = pd.DataFrame(
-    ... {'A': [1.8, 2.2, 1.0, 0.4, 0.8],
-    ... 'B': [0.4, 1.9, -0.2, 0.1, 0.1],
-    ... 'C': [1.0, -1.0, -0.1, 1.5, 0.4]})
-    >>> clip_dict = {'A':[-0.5, 0.5], 'B':[-0.5, 0.5], 'C':[-0., 1.]}
-    >>> obj = Clipping(clip_dict=clip_dict)
-    >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([[ 0.5,  0.4,  1. ],
            [ 0.5,  0.5, -0. ],
            [ 0.5, -0.2, -0. ],
            [ 0.4,  0.1,  1. ],
            [ 0.5,  0.1,  0.4]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.clipping import Clipping
-    >>> X = ks.DataFrame(
-    ... {'A': [1.8, 2.2, 1.0, 0.4, 0.8],
-    ... 'B': [0.4, 1.9, -0.2, 0.1, 0.1],
-    ... 'C': [1.0, -1.0, -0.1, 1.5, 0.4]})
-    >>> clip_dict = {'A':[-0.5, 0.5], 'B':[-0.5, 0.5], 'C':[-0., 1.]}
-    >>> obj = Clipping(clip_dict=clip_dict)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[ 0.5,  0.4,  1. ],
-           [ 0.5,  0.5, -0. ],
-           [ 0.5, -0.2, -0. ],
-           [ 0.4,  0.1,  1. ],
-           [ 0.5,  0.1,  0.4]])
-
     """
 
-    def __init__(self, clip_dict: Dict[str, List[float]], dtype: type = np.float64):
+    def __init__(self, clip_dict: Dict[str, List[float]], inplace: bool = True):
         if not isinstance(clip_dict, dict):
             raise TypeError("`clip_dict` should be a dictionary.")
         if len(clip_dict) == 0:
             raise ValueError("Length of `clip_dict` should be not zero.")
+        if not isinstance(inplace, bool):
+            raise TypeError("`inplace` should be a bool.")
         self.clip_dict = clip_dict
-        self.dtype = dtype
+        self.inplace = inplace
         self.clip_np = np.array(list(clip_dict.values()))
         self.columns = list(clip_dict.keys())
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "Clipping":
-        """Fit the transformer on the pandas/koalas dataframe X.
+    def fit(self, X: DataFrame, y: Series = None) -> "Clipping":
+        """Fit the transformer on the dataframe X.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Input dataframe.
-        y : Union[pd.Series, ks.Series], default to None.
-            Labels.
+        y : Series, default None.
+            Target values.
 
         Returns
         -------
-            'Clipping': Instance of itself.
+        self : 'Clipping'
+            Instance of itself.
         """
         self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
+        self.base_columns = list(X.columns)
         self.idx_columns = util.get_idx_columns(X, self.clip_dict.keys())
-        self.clip_np = self.clip_np.astype(self.dtype)
+        self.column_names = self.get_column_names(self.inplace, self.columns, "clip")
         return self
 
     def transform(self, X):
@@ -144,35 +125,39 @@ class Clipping(Transformer):
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
+        for col, name in zip(self.columns, self.column_names):
+            X[name] = X[col].clip(self.clip_dict[col][0], self.clip_dict[col][1])
 
-        def clipping(x: ks.Series[self.dtype]) -> ks.Series[self.dtype]:
-            c = x.name
-            if c not in self.columns:
-                return x
-            return x.clip(self.clip_dict[c][0], self.clip_dict[c][1])
-
-        return X.apply(clipping)
+        return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the array X.
+        """Transform the array `X`.
 
         Parameters
         ----------
-        X (np.ndarray): Input ndarray.
+        X :np.ndarray:
+            Input array.
 
         Returns
         -------
-            np.ndarray: Imputed ndarray.
+        X : np.ndarray
+            Transformed array.
         """
         self.check_array(X)
-        return clipping(X, self.idx_columns, self.clip_np)
+        if self.inplace:
+            X[:, self.idx_columns] = _clipping(
+                X[:, self.idx_columns].astype(float), self.clip_np
+            )
+            return X
+        else:
+            X_clip = _clipping(X[:, self.idx_columns].astype(float), self.clip_np)
+            return np.concatenate((X, X_clip), axis=1)

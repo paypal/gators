@@ -1,14 +1,14 @@
 # License: Apache-2.0
-from typing import List, Union
+from typing import List
 
-import databricks.koalas as ks
 import numpy as np
-import pandas as pd
 
 from feature_gen import is_equal, is_equal_object
 
 from ..util import util
 from ._base_feature_generation import _BaseFeatureGeneration
+
+from gators import DataFrame, Series
 
 
 class IsEqual(_BaseFeatureGeneration):
@@ -23,68 +23,57 @@ class IsEqual(_BaseFeatureGeneration):
 
     Examples
     ---------
-    * fit & transform with `pandas`
+    Imports and initialization:
+
+    >>> from gators.feature_generation import IsEqual
+    >>> obj = IsEqual(columns_a=['A'],columns_b=['B'])
+
+    The `fit`, `transform`, and `fit_transform` methods accept:
+
+    * `dask` dataframes:
+
+    >>> import dask.dataframe as dd
+    >>> import pandas as pd
+    >>> X = dd.from_pandas(pd.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]}), npartitions=1)
+
+    * `koalas` dataframes:
+
+    >>> import pyspark.pandas as ps
+    >>> X = ps.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
+
+    * and `pandas` dataframes:
 
     >>> import pandas as pd
-    >>> from gators.feature_generation import IsEqual
     >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = IsEqual(columns_a=['A'],columns_b=['B'])
+
+    The result is a transformed dataframe belonging to the same dataframe library.
+
     >>> obj.fit_transform(X)
        A  B  A__is__B
-    0  1  1         1
-    1  2  1         0
-    2  3  1         0
+    0  1  1       1.0
+    1  2  1       0.0
+    2  3  1       0.0
 
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import IsEqual
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = IsEqual(columns_a=['A'],columns_b=['B'])
-    >>> obj.fit_transform(X)
-       A  B  A__is__B
-    0  1  1         1
-    1  2  1         0
-    2  3  1         0
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation import IsEqual
     >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = IsEqual(columns_a=['A'],columns_b=['B'])
     >>> _ = obj.fit(X)
     >>> obj.transform_numpy(X.to_numpy())
     array([[1, 1, 1],
            [2, 1, 0],
            [3, 1, 0]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import IsEqual
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = IsEqual(columns_a=['A'],columns_b=['B'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1, 1, 1],
-           [2, 1, 0],
-           [3, 1, 0]])
-
     """
 
     def __init__(
         self, columns_a: List[str], columns_b: List[str], column_names: List[str] = None
     ):
-        if not isinstance(columns_a, list):
+        if not isinstance(columns_a, (list, np.ndarray)):
             raise TypeError("`columns_a` should be a list.")
-        if not isinstance(columns_b, list):
+        if not isinstance(columns_b, (list, np.ndarray)):
             raise TypeError("`columns_b` should be a list.")
         if column_names is not None and not isinstance(column_names, list):
             raise TypeError("`columns_a` should be a list.")
         if len(columns_a) != len(columns_b):
             raise ValueError("Length of `columns_a` and `columns_b` should match.")
-        if len(columns_a) == 0:
+        if not columns_a:
             raise ValueError("`columns_a` and `columns_b` should not be empty.")
         if not column_names:
             column_names = [
@@ -95,36 +84,26 @@ class IsEqual(_BaseFeatureGeneration):
                 """Length of `columns_a`, `columns_b` and `column_names`
                 should match."""
             )
-        column_mapping = {
-            name: [c_a, c_b]
-            for name, c_a, c_b in zip(column_names, columns_a, columns_b)
-        }
         columns = list(set(columns_a + columns_b))
         _BaseFeatureGeneration.__init__(
             self,
             columns=columns,
             column_names=column_names,
-            column_mapping=column_mapping,
-            dtype=None,
         )
         self.columns_a = columns_a
         self.columns_b = columns_b
         self.idx_columns_a: List[int] = []
         self.idx_columns_b: List[int] = []
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ):
+    def fit(self, X: DataFrame, y: Series = None):
         """Fit the transformer on the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
-        y : None
-            None.
+        y : Series, default None.
+            Target values.
 
         Returns
         -------
@@ -132,6 +111,7 @@ class IsEqual(_BaseFeatureGeneration):
             Instance of itself.
         """
         self.check_dataframe(X)
+        self.base_columns = list(X.columns)
         self.idx_columns_a = util.get_idx_columns(
             columns=X.columns, selected_columns=self.columns_a
         )
@@ -140,43 +120,27 @@ class IsEqual(_BaseFeatureGeneration):
         )
         return self
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
+    def transform(self, X: DataFrame) -> DataFrame:
         """Transform the dataframe `X`.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
+        X : DataFrame.
             Input dataframe.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
+        X : DataFrame
             Transformed dataframe.
         """
         self.check_dataframe(X)
-        if isinstance(X, pd.DataFrame):
-            for a, b, name in zip(self.columns_a, self.columns_b, self.column_names):
-                x_dtype = X[a].dtype
-                x_dtype = (
-                    x_dtype if (x_dtype != object) and (x_dtype != bool) else np.float64
-                )
-                X.loc[:, name] = (X[a] == X[b]).astype(x_dtype)
-            return X
-
         for a, b, name in zip(self.columns_a, self.columns_b, self.column_names):
-            x_dtype = X[a].dtype
-            x_dtype = (
-                x_dtype if (x_dtype != object) and (x_dtype != bool) else np.float64
-            )
-            X = X.assign(dummy=(X[a] == X[b]).astype(x_dtype)).rename(
-                columns={"dummy": name}
-            )
+            X[name] = (X[a] == X[b]).astype(float)
+
         return X
 
     def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        """Transform the array `X`.
 
         Parameters
         ----------
@@ -185,7 +149,7 @@ class IsEqual(_BaseFeatureGeneration):
 
         Returns
         -------
-        np.ndarray
+        X : np.ndarray
             Transformed array.
         """
         self.check_array(X)
