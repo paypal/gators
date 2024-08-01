@@ -113,7 +113,7 @@ setuptools.setup(
             "pyspark",
             "distributed",
             "dask",
-            "numpy<=1.24.6",
+            "numpy<2",
         ],
         "pyspark": [
             "pyspark",
