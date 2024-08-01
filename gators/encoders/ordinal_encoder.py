@@ -84,11 +84,20 @@ class OrdinalEncoder(_BaseEncoder):
             Mapping.
         """
         values = np.arange(len(X), dtype=float)
+        print(
+            [
+                util.get_function(X).to_pandas(X[c].value_counts()).keys()
+                for c in X.columns
+            ]
+        )
         return {
             c: (
                 dict(
                     zip(
-                        util.get_function(X).to_pandas(X[c].value_counts()).keys(),
+                        util.get_function(X)
+                        .to_pandas(X[c].value_counts())
+                        .sort_values(ascending=False)
+                        .index.to_list(),
                         values,
                     )
                 )

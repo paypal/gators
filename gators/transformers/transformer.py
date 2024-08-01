@@ -181,7 +181,7 @@ class Transformer(ABC, BaseEstimator, TransformerMixin):
         Parameters
         ----------
         X : np.ndarray
-             Array.
+            Array.
         """
         if not isinstance(X, np.ndarray):
             raise TypeError("`X` should be a NumPy array.")

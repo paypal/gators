@@ -21,6 +21,7 @@ def data():
         ),
         npartitions=2,
     )
+
     X_expected = pd.DataFrame(
         {
             "A": [0.0, 0.0, 1.0],
@@ -49,6 +50,7 @@ def data_no_cat():
 def test_dd(data):
     obj, X, X_expected = data
     X_new = obj.transform(X).compute().astype(float)
+    print(obj.mapping)
     assert_frame_equal(X_new, X_expected)
 
 

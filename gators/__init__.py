@@ -2,7 +2,7 @@ import contextlib
 import os
 from typing import TypeVar
 
-__version__ = "0.3.4"
+__version__ = "0.3.5"
 os.environ["PYARROW_IGNORE_TIMEZONE"] = "1"
 
 DataFrame = TypeVar("Union[pd.DataFrame, ps.DataFrame, dd.DataFrame]")

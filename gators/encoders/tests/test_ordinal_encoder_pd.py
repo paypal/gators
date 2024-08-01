@@ -67,6 +67,7 @@ def data_not_inplace():
 def test_pd(data):
     obj, X, X_expected = data
     X_new = obj.transform(X)
+    print(obj.mapping)
     assert_frame_equal(X_new, X_expected)
 
 

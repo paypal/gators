@@ -346,7 +346,9 @@ class FunctionDask(FunctionFactory):
 
     def most_frequent(self, X):
         columns = list(X.columns)
-        values = [X[c].value_counts().compute().index[0] for c in columns]
+        values = [
+            X[c].value_counts().compute().sort_values().index[-1] for c in columns
+        ]
         return dict(zip(columns, values))
 
     def fillna(self, X, **kwargs):
@@ -391,10 +393,12 @@ def get_function(X):
         "<class 'pyspark.pandas.frame.DataFrame'>": FunctionPySpark(),
         "pyspark.pandas.frame.DataFrame": FunctionPySpark(),  # needed for python3.6
         "<class 'dask.dataframe.core.DataFrame'>": FunctionDask(),
+        "<class 'dask_expr._collection.DataFrame'>": FunctionDask(),
         "<class 'pandas.core.series.Series'>": FunctionPandas(),
         "<class 'pyspark.pandas.series.Series'>": FunctionPySpark(),
         "pyspark.pandas.series.Series": FunctionPySpark(),  # needed for python3.6
         "<class 'dask.dataframe.core.Series'>": FunctionDask(),
+        "<class 'dask_expr._collection.Series'>": FunctionDask(),
     }
     if str(type(X)) not in factories:
         raise TypeError(

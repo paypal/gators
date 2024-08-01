@@ -120,13 +120,13 @@ class QuantileBinning(_BaseBinning):
         bins_np : np.ndarray
             Bin splits definition for NumPy.
         """
-        q = np.linspace(0.0, 1.0, self.n_bins + 1).tolist()
+        q = np.linspace(0.0, 1.0, self.n_bins + 1).tolist()[1:-1]
         bins = X.quantile(q=q)
         bins = util.get_function(bins).to_pandas(bins)
         bins_dict = {
-            c: [-np.inf] + list(bins[c].unique())[1:-1] + [np.inf] for c in X.columns
+            c: [-np.inf] + list(bins[c].unique()) + [np.inf] for c in X.columns
         }
-        # bins_np = bins.to_numpy()
+
         pretty_bins_dict = {
             k: [util.prettify_number(x, precision=2) for x in v]
             for k, v in bins_dict.items()
