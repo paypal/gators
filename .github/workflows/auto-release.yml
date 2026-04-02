@@ -1,0 +1,90 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  auto-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to create tags and releases
+      id-token: write  # Required for trusted publishing to PyPI
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for tag detection
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.14'
+
+    - name: Get latest tag
+      id: get_version
+      run: |
+        # Get the latest tag matching v1.0.*
+        LATEST_TAG=$(git tag -l "v1.0.*" | sort -V | tail -1)
+        
+        if [ -z "$LATEST_TAG" ]; then
+          # No tags exist, start with v1.0.0
+          NEW_VERSION="v1.0.0"
+        else
+          # Extract patch number and increment
+          PATCH=$(echo $LATEST_TAG | sed 's/v1.0.//')
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="v1.0.$NEW_PATCH"
+        fi
+        
+        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "Next version: $NEW_VERSION"
+
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+
+    - name: Update version in code
+      run: |
+        VERSION="${{ steps.get_version.outputs.new_version }}"
+        # Remove 'v' prefix for Python version
+        PYTHON_VERSION="${VERSION#v}"
+        
+        # Update __init__.py
+        sed -i.bak "s/__version__ = .*/__version__ = \"$PYTHON_VERSION\"/" gators/__init__.py
+        rm gators/__init__.py.bak || true
+
+    - name: Build package
+      run: python -m build
+
+    - name: Check package
+      run: twine check dist/*
+
+    - name: Create and push tag
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git tag ${{ steps.get_version.outputs.new_version }}
+        git push origin ${{ steps.get_version.outputs.new_version }}
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.get_version.outputs.new_version }}
+        name: Release ${{ steps.get_version.outputs.new_version }}
+        draft: false
+        prerelease: false
+        files: dist/*
+        generate_release_notes: true
+
+    # Uncomment to auto-publish to PyPI
+    # - name: Publish to PyPI
+    #   uses: pypa/gh-action-pypi-publish@release/v1
+    #   with:
+    #     skip-existing: true
+    #     # Use trusted publishing or add:
+    #     # password: ${{ secrets.PYPI_API_TOKEN }}
