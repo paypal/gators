@@ -1,133 +1,148 @@
-# License: Apache-2.0
-from typing import List, Union
+from typing import Annotated, Dict, List, Optional
 
-import databricks.koalas as ks
-import pandas as pd
-
-from ..util import util
-from ._base_data_cleaning import _BaseDataCleaning
+import polars as pl
+from pydantic import BaseModel, Field, PrivateAttr
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class DropLowCardinality(_BaseDataCleaning):
-    """Drop the catgorical columns having a low cardinality.
+class DropLowCardinality(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    Drops columns with low cardinality.
 
     Parameters
     ----------
-    min_categories : int
-        Min categories allowed.
+    min_count : int
+        Minimum number of unique values for a column to be retained. Must be >= 1.
+        Columns with unique count < min_count will be dropped.
+    subset : Optional[List[str]], default=None
+        List of columns to check for low cardinality. If None, all string, boolean, and categorical columns are checked.
 
     Examples
-    ---------
+    --------
+    Initializing and using `DropLowCardinality` transformer.
 
-    * fit & transform with `pandas`
+    Example when `drop_columns` is True and `columns` is None:
 
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import DropLowCardinality
-    >>> X = pd.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'd']})
-    >>> obj = DropLowCardinality(min_categories=2)
-    >>> obj.fit_transform(X)
-       A
-    0  a
-    1  b
-    2  c
+    >>> X = pl.DataFrame({
+    ...     "col1": ["a", "a", "b", "c"],
+    ...     "col2": ["x", "x", "x", "y"],
+    ...     "col3": [1, 2, 3, 4]
+    ... })
+    >>> transformer = DropLowCardinality(min_count=2, columns=None, drop_columns=True)
+    >>> transformer.fit(X)
+    ...
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 1)
+    ┌─────┐
+    │ col3│
+    │ i64 │
+    ├─────┤
+    │  1  │
+    │  2  │
+    │  3  │
+    │  4  │
+    └─────┘
 
-    * fit & transform with `koalas`
+    Example when `drop_columns` is True and `columns` is a subset:
 
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropLowCardinality
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'd']})
-    >>> obj = DropLowCardinality(min_categories=2)
-    >>> obj.fit_transform(X)
-       A
-    0  a
-    1  b
-    2  c
+    >>> transformer = DropLowCardinality(min_count=2, subset=['col1'], drop_columns=True)
+    >>> transformer.fit(X)
+    ...
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 2)
+    ┌─────┬─────┐
+    │ col2│ col3│
+    │ str │ i64 │
+    ├─────┼─────┤
+    │  x  │  1  │
+    │  x  │  2  │
+    │  x  │  3  │
+    │  y  │  4  │
+    └─────┴─────┘
 
-    * fit with `pandas` & transform with `NumPy`
+    Example when `drop_columns` is False and `columns` is None:
 
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import DropLowCardinality
-    >>> X = pd.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'd']})
-    >>> obj = DropLowCardinality(min_categories=2)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['a'],
-           ['b'],
-           ['c']], dtype=object)
+    >>> transformer = DropLowCardinality(min_count=2, columns=None, drop_columns=False)
+    >>> transformer.fit(X)
+    ...
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 3)
+    ┌─────┬─────┬─────┐
+    │ col1│ col2│ col3│
+    │ str │ str │ i64 │
+    ├─────┼─────┼─────┤
+    │  a  │  x  │  1  │
+    │  a  │  x  │  2  │
+    │  b  │  x  │  3  │
+    │  c  │  y  │  4  │
+    └─────┴─────┴─────┘
 
-    * fit with `koalas` & transform with `NumPy`
+    Example when `drop_columns` is False and `columns` is a subset:
 
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropLowCardinality
-    >>> X = ks.DataFrame({'A': ['a', 'b', 'c'], 'B': ['d', 'd', 'd']})
-    >>> obj = DropLowCardinality(min_categories=2)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['a'],
-           ['b'],
-           ['c']], dtype=object)
-
+    >>> transformer = DropLowCardinality(min_count=2, subset=['col1'], drop_columns=False)
+    >>> transformer.fit(X)
+    ...
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 3)
+    ┌─────┬─────┬─────┐
+    │ col1│ col2│ col3│
+    │ str │ str │ i64 │
+    ├─────┼─────┼─────┤
+    │  a  │  x  │  1  │
+    │  a  │  x  │  2  │
+    │  b  │  x  │  3  │
+    │  c  │  y  │  4  │
+    └─────┴─────┴─────┘
     """
 
-    def __init__(self, min_categories: int):
-        if not isinstance(min_categories, int):
-            raise TypeError("`min_categories` should be an int.")
-        _BaseDataCleaning.__init__(self)
-        self.min_categories: int = min_categories
+    min_count: Annotated[int, Field(ge=1)]
+    subset: Optional[List[str]] = None
+    _to_drop: List[str] = PrivateAttr()
+    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "DropLowCardinality":
-        """Fit the transformer on the dataframe X.
-
-        Get the list of column names to remove and the array of
-           indices to be kept.
+    def fit(
+        self, X: pl.DataFrame, y: Optional[pl.Series] = None
+    ) -> "DropLowCardinality":
+        """Fit the transformer by identifying columns with low cardinality.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
-            Input dataframe.
-        y : None
-           None
+        X : pl.DataFrame
+            Input DataFrame.
+        y : Optional[pl.Series], default=None
+            Target series (not used, present for sklearn compatibility).
+
         Returns
         -------
-        DropLowCardinality: Instance of itself.
+        DropLowCardinality
+            The fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.columns = self.get_columns_to_drop(X=X, min_categories=self.min_categories)
-        self.columns_to_keep = util.exclude_columns(
-            columns=X.columns,
-            excluded_columns=self.columns,
-        )
-        self.idx_columns_to_keep = self.get_idx_columns_to_keep(
-            columns=X.columns, columns_to_drop=self.columns
-        )
+        if not self.subset:
+            self.subset = [
+                col
+                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
+                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+            ]
+
+        counts = X[self.subset].with_columns(pl.all().n_unique()).row(0, named=True)
+        self._to_drop = [col for col, val in counts.items() if val < self.min_count]
         return self
 
-    @staticmethod
-    def get_columns_to_drop(
-        X: Union[pd.DataFrame, ks.DataFrame], min_categories: float
-    ) -> List[str]:
-        """Get the list of column names to remove.
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the DataFrame by dropping low cardinality columns.
 
         Parameters
         ----------
-        X : pd.DataFrame
-            Input dataset.
-        min_categories : int
-            Min categories allowed.
+        X : pl.DataFrame
+            Input DataFrame to transform.
 
         Returns
         -------
-        List[str]
-            List of column names to drop.
+        pl.DataFrame
+            DataFrame with low-cardinality columns removed.
         """
-        object_columns = util.get_datatype_columns(X, "object")
-        if not object_columns:
-            return []
-        if isinstance(X, pd.DataFrame):
-            X_nunique = X[object_columns].nunique()
-        else:
-            X_nunique = X[object_columns].nunique().to_pandas()
-            X_nunique = X[object_columns].nunique(approx=True).to_pandas()
-        mask_columns = X_nunique < min_categories
-        columns_to_drop = mask_columns[mask_columns].index
-        return list(columns_to_drop.to_numpy())
+        return X.drop(self._to_drop)

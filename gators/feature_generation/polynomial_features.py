@@ -1,224 +1,129 @@
-from itertools import chain, combinations, combinations_with_replacement
-from typing import List, Union
+from itertools import combinations_with_replacement
+from typing import List, Optional
 
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
-
-from feature_gen import polynomial
-from gators.transformers import Transformer
-
-from ..util import util
-from ._base_feature_generation import _BaseFeatureGeneration
+import polars as pl
+from pydantic import BaseModel, conint
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class PolynomialFeatures(Transformer):
-    """Create new columns based on columns multiplication.
-
-    The data should be composed of numerical columns only.
-    Use `gators.encoders` to replace the categorical columns by
-    numerical ones before using `PolynomialFeatures`.
+class PolynomialFeatures(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    Generates polynomial and interaction features.
 
     Parameters
     ----------
-    columns : List[str]
-        List of columns.
-    degree : int, default = 2
-        The degree of polynomial. The default of degree of 2
-        will produce A * A, B * B, and A  * B from features A and B.
-    interaction_only : bool, default = False
-        Allows to keep only interaction terms.
-        If true, only A * B will be produced from features A and B.
-    dtype : type, default to np.float64
-        Numpy dtype of the output data.
+    subset : Optional[List[str]], default=None
+        Subset of columns to transform. If None, all columns
+        except strings and booleans.
+    degree : int, default=2
+        The degree of the polynomial features.
+    interaction_only : bool, default=False
+        If True, only interaction features are produced.
+    include_bias : bool, default=True
+        If True, include a bias column (column of ones).
 
     Examples
-    ---------
+    --------
+    **Example 1: Degree 2 polynomial with bias term**
 
-    * fit & transform with `pandas`
+    >>> from gators.discretizers import PolynomialFeatures
+    >>> import polars as pl
+    >>> X = pl.DataFrame({'A': [1, 2], 'B': [3, 4]})
+    >>> transformer = PolynomialFeatures(degree=2, include_bias=True)
+    >>> transformer.fit(X)
+    >>> transformer.transform(X)
+    shape: (2, 5)
+    ┌─────┬─────┬─────┬─────┬─────┐─────┐
+    │ A   │ B   │ A__A│ A__B│ B__B│ bias|
+    ├─────┼─────┼─────┼─────┼─────┤─────┤
+    │ 1   │ 3   │ 1   │ 3   │ 9   │ 1   │
+    │ 2   │ 4   │ 4   │ 8   │ 16  │ 1   │
+    └─────┴─────┴─────┴─────┴─────┴─────┘
 
-    >>> import pandas as pd
-    >>> from gators.feature_generation import PolynomialFeatures
-    >>> X = pd.DataFrame(
-    ... {'A': [0.0, 3.0, 6.0], 'B': [1.0, 4.0, 7.0], 'C': [2.0, 5.0, 8.0]})
-    >>> obj = PolynomialFeatures(columns=['A', 'B'])
-    >>> obj.fit_transform(X)
-         A    B    C  A__x__A  A__x__B  B__x__B
-    0  0.0  1.0  2.0      0.0      0.0      1.0
-    1  3.0  4.0  5.0      9.0     12.0     16.0
-    2  6.0  7.0  8.0     36.0     42.0     49.0
+    **Example 2: Polynomial on subset of columns**
 
-    * fit & transform with `koalas`
+    >>> transformer = PolynomialFeatures(subset=['A'], degree=2)
+    >>> transformer.fit(X)
+    >>> transformer.transform(X)
+    shape: (2, 3)
+    ┌─────┬─────┬─────┐
+    │ A   │ B   │ A__A│
+    ├─────┼─────┼─────┤
+    │ 1   │ 3   │ 1   │
+    │ 2   │ 4   │ 4   │
+    └─────┴─────┴─────┘
 
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import PolynomialFeatures
-    >>> X = ks.DataFrame(
-    ... {'A': [0.0, 3.0, 6.0], 'B': [1.0, 4.0, 7.0], 'C': [2.0, 5.0, 8.0]})
-    >>> obj = PolynomialFeatures(
-    ... columns=['A', 'B', 'C'], degree=3, interaction_only=True)
-    >>> obj.fit_transform(X)
-         A    B    C  A__x__B  A__x__C  B__x__C  A__x__B__x__C
-    0  0.0  1.0  2.0      0.0      0.0      2.0            0.0
-    1  3.0  4.0  5.0     12.0     15.0     20.0           60.0
-    2  6.0  7.0  8.0     42.0     48.0     56.0          336.0
+    **Example 3: Interaction features only**
 
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation import PolynomialFeatures
-    >>> X = pd.DataFrame(
-    ... {'A': [0.0, 3.0, 6.0], 'B': [1.0, 4.0, 7.0], 'C': [2.0, 5.0, 8.0]})
-    >>> obj = PolynomialFeatures(
-    ... columns=['A', 'B', 'C'], degree=2, interaction_only=True)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[ 0.,  1.,  2.,  0.,  0.,  2.],
-           [ 3.,  4.,  5., 12., 15., 20.],
-           [ 6.,  7.,  8., 42., 48., 56.]])
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import PolynomialFeatures
-    >>> X = ks.DataFrame(
-    ... {'A': [0.0, 3.0, 6.0], 'B': [1.0, 4.0, 7.0], 'C': [2.0, 5.0, 8.0]})
-    >>> obj = PolynomialFeatures(
-    ... columns=['A', 'B', 'C'], degree=2, interaction_only=True)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[ 0.,  1.,  2.,  0.,  0.,  2.],
-           [ 3.,  4.,  5., 12., 15., 20.],
-           [ 6.,  7.,  8., 42., 48., 56.]])
-
+    >>> transformer = PolynomialFeatures(degree=2, interaction_only=True)
+    >>> transformer.fit(X)
+    >>> transformer.transform(X)
+    shape: (2, 4)
+    ┌─────┬─────┬─────┐
+    │ A   │ B   │ A__B│
+    ├─────┼─────┼─────┼
+    │ 1   │ 3   │ 3   │
+    │ 2   │ 4   │ 8   │
+    └─────┴─────┴─────┴
     """
 
-    def __init__(
-        self,
-        columns: List[str],
-        degree=2,
-        interaction_only=False,
-        dtype: type = np.float64,
-    ):
-        if not isinstance(columns, list):
-            raise TypeError("`columns` should be a list.")
-        if not columns:
-            raise ValueError("`columns` should not be empty.")
-        if not isinstance(degree, int):
-            raise TypeError("`degree` should be an int.")
-        if degree < 2:
-            raise ValueError("`degree` should be at least 2.")
-        if not isinstance(interaction_only, bool):
-            raise TypeError("`interaction_only` should be a bool.")
-        if interaction_only == True and len(columns) == 1:
-            raise ValueError(
-                "Cannot create interaction only terms from single feature."
-            )
-        self.check_datatype(dtype, [np.float32, np.float64])
-
-        self.degree = degree
-        self.method = (
-            combinations if interaction_only else combinations_with_replacement
-        )
-        self.combinations = list(
-            map(
-                list,
-                chain.from_iterable(
-                    self.method(columns, self.degree)
-                    for self.degree in range(self.degree + 1)
-                ),
-            )
-        )
-        self.combinations = [c for c in self.combinations if len(c) >= 2]
-        column_names = [
-            "__x__".join(map(str, combination)) for combination in self.combinations
-        ]
-        column_mapping = dict(zip(column_names, map(list, self.combinations)))
-        _BaseFeatureGeneration.__init__(
-            self,
-            columns=columns,
-            column_names=column_names,
-            column_mapping=column_mapping,
-            dtype=dtype,
-        )
+    subset: Optional[List[str]] = None
+    degree: conint(gt=1) = 2
+    interaction_only: bool = False
+    include_bias: bool = False
 
     def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
+        self, X: pl.DataFrame, y: Optional[pl.Series] = None
     ) -> "PolynomialFeatures":
-        """
-        Fit the dataframe X.
+        """Fit the transformer by identifying columns to transform.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
-            y (np.ndarray, optional): labels. Defaults to None.
+        X : pl.DataFrame
+            Input DataFrame.
+        y : Optional[pl.Series], default=None
+            Target variable. Not used, present here for compatibility.
 
         Returns
         -------
-            PolynomialFeatures: Instance of itself.
+        PolynomialFeatures
+            Fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
-        self.dtype = X[self.columns].dtypes.unique()[0]
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns
-        )
-        self.n_rows = X[self.columns].shape[0]
-        self.n_cols = X[self.columns].shape[1]
-        self.combinations_np = list(
-            map(
-                list,
-                chain.from_iterable(
-                    self.method(self.idx_columns, self.degree)
-                    for self.degree in range(self.degree + 1)
-                ),
-            )
-        )
-        self.combinations_np = [c for c in self.combinations_np if len(c) >= 2]
-        for combo in self.combinations_np:
-            combo.extend([-1 for _ in range(self.degree - len(combo))])
-        self.combinations_np = np.array(self.combinations_np)
+        if not self.subset:
+            self.subset = [
+                col
+                for col, dtype in zip(X.columns, X.dtypes)
+                if dtype not in [pl.String, pl.Boolean]
+            ]
         return self
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
-        """Transform the dataframe `X`.
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by extracting specified components.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
+        X : pl.DataFrame
+            Input DataFrame to transform.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
-            Transformed dataframe.
+        pl.DataFrame
+            Transformed DataFrame.
         """
-        self.check_dataframe(X)
-        if isinstance(X, pd.DataFrame):
-            for combi, name in zip(self.combinations, self.column_names):
-                X[name] = X[combi].prod(axis=1)
-            X[self.column_names] = X[self.column_names].astype(self.dtype)
-            return X
-        for combi, name in zip(self.combinations, self.column_names):
-            dummy = X[combi[0]] * X["__x__".join(combi[1:])]
-            X = X.assign(dummy=dummy).rename(columns={"dummy": name})
-        X[self.column_names] = X[self.column_names].astype(self.dtype)
-        return X
+        transformations = []
 
-    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
+        if self.include_bias:
+            transformations.append(pl.lit(1).alias("bias"))
 
-        Parameters
-        ----------
-        X  : np.ndarray
-            Input array.
+        for i in range(2, self.degree + 1):
+            for combination in combinations_with_replacement(self.subset, i):
+                if self.interaction_only and len(set(combination)) != i:
+                    continue
+                new_col_name = "__".join(combination)
+                # Multiply columns directly to preserve dtype
+                new_col_expr = pl.col(combination[0])
+                for col in combination[1:]:
+                    new_col_expr = new_col_expr * pl.col(col)
+                transformations.append(new_col_expr.alias(new_col_name))
 
-        Returns
-        -------
-        np.ndarray
-            Transformed array.
-        """
-        self.check_array(X)
-        return polynomial(X, self.combinations_np, self.degree, self.dtype)
+        return X.with_columns(transformations)

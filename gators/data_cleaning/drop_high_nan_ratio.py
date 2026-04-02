@@ -1,135 +1,146 @@
-# License: Apache-2.0
-from typing import List, Union
+from typing import Annotated, Dict, List, Optional
 
-import databricks.koalas as ks
-import pandas as pd
-
-from ..util import util
-from ._base_data_cleaning import _BaseDataCleaning
+import polars as pl
+from pydantic import BaseModel, Field
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class DropHighNaNRatio(_BaseDataCleaning):
-    """Drop the columns having a large NaN values ratio.
+class DropHighNaNRatio(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    Drops columns with a high ratio of NaN values.
 
     Parameters
     ----------
     max_ratio : float
-        Max nan ratio allowed.
+        Maximum allowed ratio of NaN values (0.0-1.0). Columns with NaN ratio >= max_ratio will be dropped.
+    subset : Optional[List[str]], default=None
+        List of columns to check for high NaN ratio. If None, all columns are checked.
 
     Examples
-    ---------
+    --------
+    Initializing and using `DropHighNaNRatio` transformer.
 
-    * fit & transform with `pandas`
+    Example when `drop_columns` is True and `columns` is None:
 
-    >>> import numpy as np
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from gators.data_cleaning import DropHighNaNRatio
-    >>> X = pd.DataFrame(
-    ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
-    >>> obj = DropHighNaNRatio(max_ratio=0.5)
-    >>> obj.fit_transform(X)
-       A
-    0  1
-    1  2
-    2  3
+    >>> X = pl.DataFrame({
+    ...     "col1": ["a", None, "b", "c"],
+    ...     "col2": ["x", "x", "x", None],
+    ...     "col3": [1, 2, None, None]
+    ... })
+    >>> transformer = DropHighNaNRatio(max_ratio=0.5)
+    >>> transformer.fit(X)
+    ...
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 1)
+    ┌─────┐
+    │ col1│
+    │ str │
+    ├─────┤
+    │  a  │
+    │ None│
+    │  b  │
+    │  c  │
+    └─────┘
 
-    * fit & transform with `koalas`
+    Example when `drop_columns` is True and `columns` is a subset:
 
-    >>> import numpy as np
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropHighNaNRatio
-    >>> X = ks.DataFrame(
-    ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
-    >>> obj = DropHighNaNRatio(max_ratio=0.5)
-    >>> obj.fit_transform(X)
-       A
-    0  1
-    1  2
-    2  3
+    >>> transformer = DropHighNaNRatio(max_ratio=0.5, subset=['col2', 'col3'])
+    >>> transformer.fit(X)
+    ...
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 2)
+    ┌─────┬─────┐
+    │ col1│ col2│
+    │ str │ str │
+    ├─────┼─────┤
+    │  a  │  x  │
+    │ None│  x  │
+    │  b  │  x  │
+    │  c  │ None│
+    └─────┴─────┘
 
-    * fit with `pandas` & transform with `NumPy`
+    Example when `drop_columns` is False and `columns` is None:
 
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import DropHighNaNRatio
-    >>> X = pd.DataFrame(
-    ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
-    >>> obj = DropHighNaNRatio(max_ratio=0.5)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1],
-           [2],
-           [3]], dtype=object)
+    >>> transformer = DropHighNaNRatio(max_ratio=0.5)
+    >>> transformer.fit(X)
+    ...
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 3)
+    ┌─────┬─────┬──────┐
+    │ col1│ col2│ col3 │
+    │ str │ str │ i64  │
+    ├─────┼─────┼──────┤
+    │  a  │  x  │   1  │
+    │ None│  x  │   2  │
+    │  b  │  x  │ None │
+    │  c  │ None│ None │
+    └─────┴─────┴──────┘
 
-    * fit with `koalas` & transform with `NumPy`
+    Example when `drop_columns` is False and `columns` is a subset:
 
-    >>> import numpy as np
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropHighNaNRatio
-    >>> X = ks.DataFrame(
-    ... {'A': [1, 2, 3], 'B': ['1', None, None], 'C': [1., np.nan, np.nan]})
-    >>> obj = DropHighNaNRatio(max_ratio=0.5)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1],
-           [2],
-           [3]], dtype=object)
-
+    >>> transformer = DropHighNaNRatio(max_ratio=0.5, subset=['col2', 'col3'])
+    >>> transformer.fit(X)
+    ...
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 3)
+    ┌─────┬─────┬──────┐
+    │ col1│ col2│ col3 │
+    │ str │ str │ i64  │
+    ├─────┼─────┼──────┤
+    │  a  │  x  │   1  │
+    │ None│  x  │   2  │
+    │  b  │  x  │ None │
+    │  c  │ None│ None │
+    └─────┴─────┴──────┘
     """
 
-    def __init__(self, max_ratio: float):
-        if not isinstance(max_ratio, float):
-            raise TypeError("`max_ratio` should be a float.")
-        _BaseDataCleaning.__init__(self)
-        self.max_ratio = max_ratio
+    max_ratio: Annotated[float, Field(ge=0.0, le=1.0)]
+    subset: Optional[List[str]] = None
+    _to_drop: List[str]
+    _column_mapping = Dict[str, str]
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "DropHighNaNRatio":
-        """Fit the transformer on the dataframe X.
-
-        Get the list of column names to remove and the array of
-           indices to be kept.
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropHighNaNRatio":
+        """Fit the transformer by identifying columns with high NaN ratios.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
-            Input dataframe.
-        y : None
-           None
+        X : pl.DataFrame
+            Input DataFrame.
+        y : Optional[pl.Series], default=None
+            Target series (not used, present for sklearn compatibility).
 
         Returns
         -------
-        DropHighNaNRatio: Instance of itself.
+        DropHighNaNRatio
+            The fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.columns = self.get_columns_to_drop(X=X, max_ratio=self.max_ratio)
-        self.columns_to_keep = util.exclude_columns(
-            columns=list(X.columns), excluded_columns=self.columns
+        if not self.subset:
+            self.subset = list(X.columns)
+        ratios = (
+            X[self.subset].with_columns(pl.all().is_null()).mean().row(0, named=True)
         )
-        self.idx_columns_to_keep = self.get_idx_columns_to_keep(
-            columns=X.columns, columns_to_drop=self.columns
-        )
+        self._to_drop = [
+            col for col, ratio in ratios.items() if ratio >= self.max_ratio
+        ]
         return self
 
-    @staticmethod
-    def get_columns_to_drop(
-        X: Union[pd.DataFrame, ks.DataFrame], max_ratio: float
-    ) -> List[str]:
-        """Get  the list of column names to drop.
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the DataFrame by dropping columns with high NaN ratios.
 
         Parameters
         ----------
-        X : pd.DataFrame
-            Input dataset.
-        max_ratio : float
-            Max nan ratio allowed.
+        X : pl.DataFrame
+            Input DataFrame to transform.
 
         Returns
         -------
-        List[str]
-            List of column names to drop.
+        pl.DataFrame
+            DataFrame with high-NaN columns removed.
         """
-        mask_columns = X.isnull().mean() > max_ratio
-        columns_to_drop = mask_columns[mask_columns].index
-        if isinstance(columns_to_drop, ks.indexes.Index):
-            columns_to_drop = columns_to_drop.to_pandas()
-        return columns_to_drop
+        return X.drop(self._to_drop)

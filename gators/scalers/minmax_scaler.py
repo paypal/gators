@@ -1,140 +1,114 @@
-# License: Apache-2.0
-from typing import Union
+from typing import Dict, List, Optional
 
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
-from scaler import minmax_scaler
-
-from ..transformers.transformer import Transformer
+import polars as pl
+from pydantic import BaseModel
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class MinMaxScaler(Transformer):
-    """Scale each column to the [0, 1] range.
+class MinmaxScaler(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    Scales numeric features to a [0, 1] range using min-max normalization.
+
+    Transforms features by scaling each feature to the range [0, 1] based on 
+    the minimum and maximum values observed during fitting. The transformation
+    is given by: X_scaled = (X - X_min) / (X_max - X_min).
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
-        Numerical datatype of the output data.
+    subset : Optional[List[str]], default=None
+        List of numeric column names to scale. If None, all numeric columns 
+        (Float64, Int64, Float32, Int32) are automatically selected.
+    drop_columns : bool, default=True
+        If True, drop the original columns after scaling.
+        If False, keep both original and scaled columns.
 
     Examples
-    ---------
+    --------
+    Create an instance of the MinmaxScaler class:
 
-    * fit & transform with `pandas`
+    >>> import polars as pl
+    >>> from gators.scalers import MinmaxScaler
+    >>> scaler = MinmaxScaler(subset=["age", "income"])
 
-    >>> import pandas as pd
-    >>> from gators.scalers import MinMaxScaler
-    >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
-    >>> obj = MinMaxScaler()
-    >>> obj.fit_transform(X)
-         A     B
-    0  0.0  0.00
-    1  0.5  0.75
-    2  1.0  1.00
+    Fit the transformer:
 
-    * fit & transform with `koalas`
+    >>> X = pl.DataFrame({"age": [20, 30, 40, 50],
+    ...                    "income": [20000, 40000, 60000, 80000]})
+    >>> scaler.fit(X)
 
-    >>> import databricks.koalas as ks
-    >>> from gators.scalers import MinMaxScaler
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
-    >>> obj = MinMaxScaler()
-    >>> obj.fit_transform(X)
-         A     B
-    0  0.0  0.00
-    1  0.5  0.75
-    2  1.0  1.00
+    Transform the DataFrame:
 
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.scalers import MinMaxScaler
-    >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
-    >>> obj = MinMaxScaler()
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[0.  , 0.  ],
-           [0.5 , 0.75],
-           [1.  , 1.  ]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.scalers import MinMaxScaler
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
-    >>> obj = MinMaxScaler()
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[0.  , 0.  ],
-           [0.5 , 0.75],
-           [1.  , 1.  ]])
+    >>> transformed_X = scaler.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 2)
+    ┌───────────────────┬─────────────────────┐
+    │ age__minmax_scale ┆ income__minmax_scale│
+    │ ---               ┆ ---                 │
+    │ f64               ┆ f64                 │
+    ├───────────────────┼─────────────────────┤
+    │ 0.0               ┆ 0.0                 │
+    │ 0.333             ┆ 0.333               │
+    │ 0.667             ┆ 0.667               │
+    │ 1.0               ┆ 1.0                 │
+    └───────────────────┴─────────────────────┘
 
     """
 
-    def __init__(self, dtype: type = np.float64):
-        self.dtype = dtype
-        self.X_min: Union[pd.DataFrame, ks.DataFrame] = None
-        self.X_max: Union[pd.DataFrame, ks.DataFrame] = None
-        self.X_min_np = np.array([])
-        self.X_max_np = np.array([])
+    subset: Optional[List[str]] = None
+    _offset: Dict[str, float]
+    _scale: Dict[str, float]
+    _column_mapping: Dict[str, str]
+    drop_columns: bool = True
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "MinMaxScaler":
-        """Fit the transformer on the pandas/koalas dataframe X.
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "MinmaxScaler":
+        """Fit the transformer by computing min and max values.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
-            Input dataframe.
-        y : Union[pd.Series, ks.Series], default to None.
-            Labels.
+        X : pl.DataFrame
+            Input DataFrame to fit.
+        y : Optional[pl.Series], default=None
+            Target series (not used, present for sklearn compatibility).
 
         Returns
         -------
-            'MinMaxScaler': Instance of itself.
+        MinmaxScaler
+            The fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
-        self.X_min = X.min().astype(self.dtype)
-        self.X_max = X.max().astype(self.dtype)
-        self.X_min_np = self.X_min.to_numpy().astype(self.dtype)
-        self.X_max_np = self.X_max.to_numpy().astype(self.dtype)
+        if not self.subset:
+            self.subset = [
+                col
+                for col, dtype in zip(X.columns, X.dtypes)
+                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+            ]
+        self._column_mapping = {col: f"{col}__minmax_scale" for col in self.subset}
+
+        X_min = X[self.subset].min().to_dict(as_series=False)
+        X_max = X[self.subset].max().to_dict(as_series=False)
+        self._offset = {col: val[0] for col, val in X_min.items()}
+        self._scale = {
+            col: 1.0 / (X_max[col][0] - X_min[col][0]) for col in self.subset
+        }
         return self
 
-    def transform(self, X):
-        """Transform the dataframe `X`.
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by applying min-max scaling.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
+        X : pl.DataFrame
+            Input DataFrame to transform.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
-            Transformed dataframe.
+        pl.DataFrame
+            Transformed DataFrame with scaled columns.
         """
-        self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
+        transformations = [
+            (self._scale[col] * (pl.col(col) - self._offset[col])).alias(new)
+            for col, new in self._column_mapping.items()
+        ]
 
-        def f(x: ks.Series[self.dtype]):
-            c = x.name
-            return (x - self.X_min.loc[c]) / (self.X_max[c] - self.X_min[c])
+        X = X.with_columns(transformations)
 
-        return X.astype(self.dtype).apply(f)
-
-    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the array X.
-
-        Parameters
-        ----------
-        X (np.ndarray): Input ndarray.
-
-        Returns
-        -------
-            np.ndarray: Imputed ndarray.
-        """
-        self.check_array(X)
-        return minmax_scaler(X.astype(self.dtype), self.X_min_np, self.X_max_np)
+        return X.drop(self.subset) if self.drop_columns else X

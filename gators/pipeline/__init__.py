@@ -1,3 +1,3 @@
-from .pipeline import Pipeline
+from gators.pipeline.pipeline import Pipeline
 
-__init__ = ["Pipeline"]
+__all__ = ["Pipeline"]

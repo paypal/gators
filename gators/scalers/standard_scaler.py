@@ -1,143 +1,111 @@
-# License: Apache-2.0
-from typing import Union
+from typing import Dict, List, Optional
 
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
-from scaler import standard_scaler
-
-from ..transformers.transformer import Transformer
+import polars as pl
+from pydantic import BaseModel
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class StandardScaler(Transformer):
-    """Scale each column by setting the mean to 0 and the standard deviation to 1.
+class StandardScaler(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    Standardizes numeric features by removing the mean and scaling to unit variance.
 
-
+    Transforms features by centering them around zero and scaling by the standard
+    deviation. The transformation is given by: X_scaled = (X - mean) / std.
+    This is also known as z-score normalization.
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
-        Numerical datatype of the output data.
+    subset : Optional[List[str]], default=None
+        List of numeric column names to standardize. If None, all numeric columns
+        (Float64, Int64, Float32, Int32) are automatically selected.
+    drop_columns : bool, default=True
+        If True, drop the original columns after scaling.
+        If False, keep both original and scaled columns.
 
     Examples
     --------
+    Create an instance of the StandardScaler class:
 
-    * fit & transform with `pandas`
-
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from gators.scalers import StandardScaler
-    >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
-    >>> obj = StandardScaler()
-    >>> obj.fit_transform(X)
-         A         B
-    0 -1.0 -1.120897
-    1  0.0  0.320256
-    2  1.0  0.800641
+    >>> scaler = StandardScaler(subset=["age", "income"])
 
-    * fit & transform with `koalas`
+    Fit the transformer:
 
-    >>> import databricks.koalas as ks
-    >>> from gators.scalers import StandardScaler
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
-    >>> obj = StandardScaler()
-    >>> obj.fit_transform(X)
-         A         B
-    0 -1.0 -1.120897
-    1  0.0  0.320256
-    2  1.0  0.800641
+    >>> X = pl.DataFrame({"age": [20, 30, 40, 50],
+    ...                    "income": [20000, 40000, 60000, 80000]})
+    >>> scaler.fit(X)
 
-    * fit with `pandas` & transform with `NumPy`
+    Transform the DataFrame:
 
-    >>> import pandas as pd
-    >>> from gators.scalers import StandardScaler
-    >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
-    >>> obj = StandardScaler()
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[-1.        , -1.12089708],
-           [ 0.        ,  0.32025631],
-           [ 1.        ,  0.80064077]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.scalers import StandardScaler
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [-0.1, 0.2, 0.3]})
-    >>> obj = StandardScaler()
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[-1.        , -1.12089708],
-           [ 0.        ,  0.32025631],
-           [ 1.        ,  0.80064077]])
+    >>> transformed_X = scaler.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 2)
+    ┌────────────────────┬──────────────────────┐
+    │ age__standard_scale ┆ income__standard_scale│
+    │ ---                 ┆ ---                   │
+    │ f64                 ┆ f64                   │
+    ├────────────────────┼──────────────────────┤
+    │ -1.161              ┆ -1.161                │
+    │ -0.387              ┆ -0.387                │
+    │ 0.387               ┆ 0.387                 │
+    │ 1.161               ┆ 1.161                 │
+    └────────────────────┴──────────────────────┘
 
     """
 
-    def __init__(self, dtype: type = np.float64):
-        self.dtype = dtype
-        self.X_mean: Union[pd.DataFrame, ks.DataFrame] = None
-        self.X_std: Union[pd.DataFrame, ks.DataFrame] = None
-        self.X_mean_np = np.array([])
-        self.X_std_np = np.array([])
+    subset: Optional[List[str]] = None
+    _offset: Dict[str, float]
+    _scale: Dict[str, float]
+    _column_mapping: Dict[str, str]
+    drop_columns: bool = True
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "StandardScaler":
-        """Fit the transformer on the pandas/koalas dataframe X.
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "StandardScaler":
+        """Fit the transformer by computing mean and standard deviation.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
-        y : None
-            None.
+        X : pl.DataFrame
+            Input DataFrame to fit.
+        y : Optional[pl.Series], default=None
+            Target series (not used, present for sklearn compatibility).
 
         Returns
         -------
-            'StandardScaler': Instance of itself.
+        StandardScaler
+            The fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
-        self.X_std = X.std().astype(self.dtype)
-        self.X_mean = X.mean().astype(self.dtype)
-        self.X_mean_np = self.X_mean.to_numpy().astype(self.dtype)
-        self.X_std_np = self.X_std.to_numpy().astype(self.dtype)
+        if not self.subset:
+            self.subset = [
+                col
+                for col, dtype in zip(X.columns, X.dtypes)
+                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+            ]
+        self._column_mapping = {col: f"{col}__standard_scale" for col in self.subset}
+        means = X[self.subset].mean().to_dict(as_series=False)
+        self._offset = {col: val[0] for col, val in means.items()}
+        stds = X[self.subset].std().to_dict(as_series=False)
+        self._scale = {col: 1.0 / val[0] for col, val in stds.items()}
         return self
 
-    def transform(self, X):
-        """Transform the dataframe `X`.
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by applying standard scaling.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
+        X : pl.DataFrame
+            Input DataFrame to transform.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
-            Transformed dataframe.
+        pl.DataFrame
+            Transformed DataFrame with standardized columns.
         """
-        self.check_dataframe(X)
-        self.check_dataframe_is_numerics(X)
+        transformations = [
+            (self._scale[col] * (pl.col(col) - self._offset[col])).alias(new)
+            for col, new in self._column_mapping.items()
+        ]
 
-        def f(x: ks.Series[self.dtype]):
-            c = x.name
-            return (x - self.X_mean[c]) / self.X_std[c]
+        X = X.with_columns(transformations)
 
-        return X.astype(self.dtype).apply(f)
-
-    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the numpy ndarray X.
-
-        Parameters
-        ----------
-        X (np.ndarray): Input ndarray.
-
-        Returns
-        -------
-            np.ndarray: Imputed ndarray.
-        """
-        self.check_array(X)
-        self.check_array_is_numerics(X)
-        return standard_scaler(X.astype(self.dtype), self.X_mean_np, self.X_std_np)
+        return X.drop(self.subset) if self.drop_columns else X

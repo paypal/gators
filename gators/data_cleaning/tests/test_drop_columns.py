@@ -1,55 +1,42 @@
-import databricks.koalas as ks
-import pandas as pd
+import polars as pl
 import pytest
-from pandas.testing import assert_frame_equal
+from polars.testing import assert_frame_equal
 
-from gators.data_cleaning.drop_columns import DropColumns
-
-
-@pytest.fixture
-def data():
-    X = pd.DataFrame({"A": [1, 2], "B": [1.0, 2.0], "C": ["q", "w"]})
-    obj = DropColumns(["A"]).fit(X)
-    X_expected = pd.DataFrame({"B": [1.0, 2.0], "C": ["q", "w"]})
-    return obj, X, X_expected
+from gators.data_cleaning import DropColumns
 
 
 @pytest.fixture
-def data_ks():
-    X = ks.DataFrame({"A": [1, 2], "B": [1.0, 2.0], "C": ["q", "w"]})
-    obj = DropColumns(["A"]).fit(X)
-    X_expected = pd.DataFrame({"B": [1.0, 2.0], "C": ["q", "w"]})
-    return obj, X, X_expected
+def sample_data() -> pl.DataFrame:
+    X ={
+        "column1": [1, 2, 3],
+        "column2": ["A", "B", "C"],
+        "column3": [True, False, True],
+    }
+    return pl.DataFrame(X)
 
 
-def test_pd(data):
-    obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new, X_expected)
+@pytest.fixture
+def expected_X() -> pl.DataFrame:
+    X ={
+        "column3": [True, False, True],
+    }
+    return pl.DataFrame(X)
 
 
-@pytest.mark.koalas
-def test_ks(data_ks):
-    obj, X, X_expected = data_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
+def test_drop_columns_transform(
+    sample_data,
+    expected_X,
+):
+    drop_columns = DropColumns(subset=["column1", "column2"])
+    drop_columns.fit(sample_data)
+    transformed_X = drop_columns.transform(sample_data)
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)
 
 
-def test_pd_np(data):
-    obj, X, X_expected = data
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected.astype(object))
-
-
-@pytest.mark.koalas
-def test_ks_np(data_ks):
-    obj, X, X_expected = data_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected.astype(object))
-
-
-def test_drop_columns_init(data):
-    with pytest.raises(TypeError):
-        _ = DropColumns(columns="q")
+def test_drop_columns_transform_no_columns(
+    sample_data,
+):
+    drop_columns = DropColumns(subset=[])
+    drop_columns.fit(sample_data)
+    transformed_X = drop_columns.transform(sample_data)
+    assert_frame_equal(transformed_X, sample_data, check_column_order=False)

@@ -1,102 +1,82 @@
-# License: Apache-2.0
-from typing import Union
+from typing import Dict, List, Optional
 
-import databricks.koalas as ks
-import pandas as pd
-
-from ..util import util
-from ._base_data_cleaning import _BaseDataCleaning
+import polars as pl
+from pydantic import BaseModel
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class DropColumns(_BaseDataCleaning):
-    """Drop the columns given by the user.
+class DropColumns(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    Drops specified columns from a DataFrame.
 
     Parameters
     ----------
-    columns : List[str]
-        List of columns to drop.
+    subset : List[str]
+        List of column names to drop.
 
     Examples
-    ---------
-    * fit & transform with `pandas`
+    --------
+    Create an instance of the DropColumns class:
 
-    >>> import pandas as pd
+    >>> import polars as pl
     >>> from gators.data_cleaning import DropColumns
-    >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = DropColumns(['B'])
-    >>> obj.fit_transform(X)
-       A
-    0  1
-    1  2
-    2  3
+    >>> drop_columns = DropColumns(subset=["col1", "col2"])
 
-    * fit & transform with `koalas`
+    Fit the transformer:
 
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropColumns
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = DropColumns(['B'])
-    >>> obj.fit_transform(X)
-       A
-    0  1
-    1  2
-    2  3
+    >>> drop_columns.fit(X)
 
-    * fit with `pandas` & transform with `NumPy`
+    Transform the DataFrame:
 
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import DropColumns
-    >>> X = pd.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = DropColumns(['B'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1],
-           [2],
-           [3]])
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import DropColumns
-    >>> X = ks.DataFrame({'A': [1, 2, 3], 'B': [1, 1, 1]})
-    >>> obj = DropColumns(['B'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[1],
-           [2],
-           [3]])
+    >>> X = pl.DataFrame({"col1": [1, 2, 3],
+    ...                    "col2": ["A", "B", "C"],
+    ...                    "col3": [True, False, True]})
+    >>> transformed_X = drop_columns.transform(X)
+    >>> print(transformed_X)
+    shape: (3, 1)
+    ┌───────┐
+    │ col3  │
+    ├───────┤
+    │ True  │
+    ├───────┤
+    │ False │
+    ├───────┤
+    │ True  │
+    └───────┘
 
     """
 
-    def __init__(self, columns):
-        if not isinstance(columns, list):
-            raise TypeError("`columns` should be a list.")
+    subset: List[str]
+    _column_mapping = Dict[str, str]
 
-        _BaseDataCleaning.__init__(self)
-        self.columns = columns
-
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "DropColumns":
-        """Fit the transformer on the dataframe X.
-
-        Get the list of column names to remove and the array of
-          indices to be kept.
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropColumns":
+        """Fit the transformer (no-op for DropColumns).
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
-            Input dataframe.
-        y : Union[pd.Series, ks.Series], default to None.
-            Labels.
+        X : pl.DataFrame
+            Input DataFrame.
+        y : Optional[pl.Series], default=None
+            Target series (not used, present for sklearn compatibility).
 
         Returns
         -------
-        DropColumns: Instance of itself.
+        DropColumns
+            The fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.columns_to_keep = util.exclude_columns(
-            columns=X.columns, excluded_columns=self.columns
-        )
-        self.idx_columns_to_keep = util.exclude_idx_columns(
-            columns=X.columns, excluded_columns=self.columns
-        )
         return self
+
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by extracting specified components.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            Input DataFrame to transform.
+
+        Returns
+        -------
+        pl.DataFrame
+            Transformed DataFrame.
+        """
+        return X.drop(self.subset)

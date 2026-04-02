@@ -1,3 +1,2 @@
-# pytest -v --doctest-modules --cov-report html:cov_html --cov=gators gators
-pytest -v --cov-report html:cov_html --cov=gators gators
-open cov_html/index.html
+python3.14 -m pytest  # Run all tests with coverage
+python3.14 -m coverage_badge -o docs/coverage.svg -f  # Then regenerate the badge
