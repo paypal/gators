@@ -7,7 +7,7 @@ from gators.data_cleaning import DropHighNaNRatio
 
 @pytest.fixture
 def sample_data() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": [None, 2, 3],
         "column2": ["A", None, None],
         "column3": [1, 2, 3],
@@ -17,7 +17,7 @@ def sample_data() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_data1() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": [None, 2, 3],
         "column3": [1, 2, 3],
     }
@@ -26,7 +26,7 @@ def expected_data1() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_data2() -> pl.DataFrame:
-    X ={
+    X = {
         "column3": [1, 2, 3],
     }
     return pl.DataFrame(X)

@@ -39,9 +39,7 @@ def test_transform_basic_single_group_single_agg():
 
 def test_transform_multiple_scaling_functions():
     """Test with multiple scaling functions."""
-    X = pl.DataFrame(
-        {"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -122,9 +120,7 @@ def test_transform_multi_column_groupby():
 
 def test_transform_zscore():
     """Test z-score scaling."""
-    X = pl.DataFrame(
-        {"value": [10, 20, 30, 40, 50, 60], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 40, 50, 60], "group": ["A", "A", "A", "B", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -148,16 +144,14 @@ def test_transform_zscore():
     assert result["value__zscore_group"][3] == pytest.approx(-1.0)
     assert result["value__zscore_group"][4] == pytest.approx(0.0)
     assert result["value__zscore_group"][5] == pytest.approx(1.0)
-    
-    
-def test_transform_minmax():    
+
+
+def test_transform_minmax():
     """Test min-max scaling."""
-    X = pl.DataFrame(
-            {"value": [10, 20, 30, 40, 50, 60], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 40, 50, 60], "group": ["A", "A", "A", "B", "B", "B"]})
 
     transformer = GroupScalingFeatures(
-            subset=["value"],
+        subset=["value"],
         by=["group"],
         func=["minmax"],
     )
@@ -182,11 +176,9 @@ def test_transform_minmax():
 
 def test_transform_minmax_with_negative_values():
     """Test min-max scaling with negative values."""
-    X = pl.DataFrame(
-            {"value": [-20, -10, 0, 10, 20], "group": ["A", "A", "A", "A", "A"]}
-    )
+    X = pl.DataFrame({"value": [-20, -10, 0, 10, 20], "group": ["A", "A", "A", "A", "A"]})
     transformer = GroupScalingFeatures(
-            subset=["value"],
+        subset=["value"],
         by=["group"],
         func=["minmax"],
     )
@@ -203,12 +195,10 @@ def test_transform_minmax_with_negative_values():
 
 def test_transform_all_scaling_functions():
     """Test all supported scaling functions."""
-    X = pl.DataFrame(
-            {"value": [10, 20, 30, 40, 50, 60], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 40, 50, 60], "group": ["A", "A", "A", "B", "B", "B"]})
 
     transformer = GroupScalingFeatures(
-            subset=["value"],
+        subset=["value"],
         by=["group"],
         func=["mean", "median", "zscore", "minmax"],
     )
@@ -231,12 +221,10 @@ def test_transform_all_scaling_functions():
 
 def test_transform_with_zero_denominator_mean():
     """Test handling of division by zero with fill_value for mean."""
-    X = pl.DataFrame(
-            {"value": [0, 0, 20, 20], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [0, 0, 20, 20], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
-            subset=["value"],
+        subset=["value"],
         by=["group"],
         func=["mean"],
         fill_value=999.0,
@@ -252,11 +240,9 @@ def test_transform_with_zero_denominator_mean():
 
 def test_transform_with_zero_std_zscore():
     """Test z-score when std is zero (all values identical)."""
-    X = pl.DataFrame(
-            {"value": [10, 10, 10, 20, 20, 20], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 10, 10, 20, 20, 20], "group": ["A", "A", "A", "B", "B", "B"]})
     transformer = GroupScalingFeatures(
-            subset=["value"],
+        subset=["value"],
         by=["group"],
         func=["zscore"],
         fill_value=0.0,
@@ -271,11 +257,9 @@ def test_transform_with_zero_std_zscore():
 
 def test_transform_with_zero_range_minmax():
     """Test min-max when all values are identical (range=0)."""
-    X = pl.DataFrame(
-            {"value": [10, 10, 10, 20, 20, 20], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 10, 10, 20, 20, 20], "group": ["A", "A", "A", "B", "B", "B"]})
     transformer = GroupScalingFeatures(
-            subset=["value"],
+        subset=["value"],
         by=["group"],
         func=["minmax"],
         fill_value=0.5,
@@ -290,9 +274,7 @@ def test_transform_with_zero_range_minmax():
 def test_transform_with_explicit_zero_in_median():
     """Test division by zero when median results in zero."""
     # Create a case where median could be zero
-    X = pl.DataFrame(
-        {"value": [-10, 0, 10, 20], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [-10, 0, 10, 20], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -310,9 +292,7 @@ def test_transform_with_explicit_zero_in_median():
 
 def test_transform_with_null_values():
     """Test handling of null values in data."""
-    X = pl.DataFrame(
-        {"value": [10, None, 30, 40, None], "group": ["A", "A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, None, 30, 40, None], "group": ["A", "A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -325,14 +305,15 @@ def test_transform_with_null_values():
     # When numerator is null, result should be null (not fill_value)
     # Group A mean: (10 + 30) / 2 = 20 (nulls excluded from mean)
     assert result["value__mean_group"][0] == pytest.approx(10 / 20)
-    assert result["value__mean_group"][1] is None or pl.Series([result["value__mean_group"][1]]).is_null()[0]
+    assert (
+        result["value__mean_group"][1] is None
+        or pl.Series([result["value__mean_group"][1]]).is_null()[0]
+    )
 
 
 def test_transform_with_null_values_zscore():
     """Test z-score with null values."""
-    X = pl.DataFrame(
-        {"value": [10, None, 30, 40, None], "group": ["A", "A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, None, 30, 40, None], "group": ["A", "A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -348,9 +329,7 @@ def test_transform_with_null_values_zscore():
 
 def test_transform_with_drop_columns():
     """Test dropping original numerical columns."""
-    X = pl.DataFrame(
-        {"value": [10, 20, 30], "other": [1, 2, 3], "group": ["A", "A", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30], "other": [1, 2, 3], "group": ["A", "A", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -370,9 +349,7 @@ def test_transform_with_drop_columns():
 
 def test_transform_with_custom_column_names():
     """Test using custom column names."""
-    X = pl.DataFrame(
-        {"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -452,9 +429,7 @@ def test_column_mapping_generation():
 
 def test_median_scaling():
     """Test median scaling specifically."""
-    X = pl.DataFrame(
-        {"value": [10, 20, 30, 15, 25, 35], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 15, 25, 35], "group": ["A", "A", "A", "B", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -539,9 +514,7 @@ def test_single_value_per_group_minmax():
 
 def test_negative_values():
     """Test with negative values."""
-    X = pl.DataFrame(
-        {"value": [-10, -20, 30, 40], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [-10, -20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -556,9 +529,7 @@ def test_negative_values():
 
 def test_negative_values_zscore():
     """Test z-score with negative values."""
-    X = pl.DataFrame(
-        {"value": [-10, -20, 30, 40], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [-10, -20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],
@@ -574,9 +545,7 @@ def test_negative_values_zscore():
 
 def test_float_values():
     """Test with float values."""
-    X = pl.DataFrame(
-        {"value": [10.5, 20.7, 30.2, 40.8], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10.5, 20.7, 30.2, 40.8], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupScalingFeatures(
         subset=["value"],

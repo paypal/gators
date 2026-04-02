@@ -39,7 +39,7 @@ def test_basic_is_holiday(sample_holiday_data):
 
 def test_us_federal_holidays():
     """Test US federal holidays detection."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 1, 1),  # New Year's Day
@@ -51,9 +51,7 @@ def test_us_federal_holidays():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["date"], country="US", features=["is_holiday"]
-    )
+    transformer = HolidayFeatures(subset=["date"], country="US", features=["is_holiday"])
     result = transformer.fit_transform(X)
 
     assert all(result["date__is_holiday"].to_list())
@@ -61,7 +59,7 @@ def test_us_federal_holidays():
 
 def test_uk_holidays():
     """Test UK holidays detection."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 1, 1),  # New Year's Day
@@ -73,9 +71,7 @@ def test_uk_holidays():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["date"], country="UK", features=["is_holiday"]
-    )
+    transformer = HolidayFeatures(subset=["date"], country="UK", features=["is_holiday"])
     result = transformer.fit_transform(X)
 
     holiday_flags = result["date__is_holiday"].to_list()
@@ -87,7 +83,7 @@ def test_uk_holidays():
 
 def test_canadian_holidays():
     """Test Canadian holidays detection."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 1, 1),  # New Year's Day
@@ -99,9 +95,7 @@ def test_canadian_holidays():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["date"], country="CA", features=["is_holiday"]
-    )
+    transformer = HolidayFeatures(subset=["date"], country="CA", features=["is_holiday"])
     result = transformer.fit_transform(X)
 
     holiday_flags = result["date__is_holiday"].to_list()
@@ -113,7 +107,7 @@ def test_canadian_holidays():
 
 def test_non_holiday_dates():
     """Test that regular dates are not flagged as holidays."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 3, 15),
@@ -132,9 +126,7 @@ def test_non_holiday_dates():
 
 def test_drop_columns_false(sample_holiday_data):
     """Test keeping original columns when drop_columns=False."""
-    transformer = HolidayFeatures(
-        subset=["date"], features=["is_holiday"], drop_columns=False
-    )
+    transformer = HolidayFeatures(subset=["date"], features=["is_holiday"], drop_columns=False)
     result = transformer.fit_transform(sample_holiday_data)
 
     assert "date" in result.columns
@@ -143,9 +135,7 @@ def test_drop_columns_false(sample_holiday_data):
 
 def test_drop_columns_true(sample_holiday_data):
     """Test dropping original columns when drop_columns=True."""
-    transformer = HolidayFeatures(
-        subset=["date"], features=["is_holiday"], drop_columns=True
-    )
+    transformer = HolidayFeatures(subset=["date"], features=["is_holiday"], drop_columns=True)
     result = transformer.fit_transform(sample_holiday_data)
 
     assert "date" not in result.columns
@@ -154,9 +144,7 @@ def test_drop_columns_true(sample_holiday_data):
 
 def test_auto_detect_datetime_columns():
     """Test automatic detection of datetime columns."""
-    X =pl.DataFrame(
-        {"dt1": [datetime(2024, 1, 1)], "dt2": [datetime(2024, 7, 4)], "value": [100]}
-    )
+    X = pl.DataFrame({"dt1": [datetime(2024, 1, 1)], "dt2": [datetime(2024, 7, 4)], "value": [100]})
 
     transformer = HolidayFeatures(features=["is_holiday"])
     result = transformer.fit_transform(X)
@@ -186,7 +174,7 @@ def test_sklearn_compatibility(sample_holiday_data):
 
 def test_multiple_datetime_columns():
     """Test with multiple datetime columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "created_at": [datetime(2024, 1, 1), datetime(2024, 6, 15)],
             "updated_at": [datetime(2024, 7, 4), datetime(2024, 3, 10)],
@@ -194,9 +182,7 @@ def test_multiple_datetime_columns():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["created_at", "updated_at"], features=["is_holiday"]
-    )
+    transformer = HolidayFeatures(subset=["created_at", "updated_at"], features=["is_holiday"])
     result = transformer.fit_transform(X)
 
     assert "created_at__is_holiday" in result.columns
@@ -205,7 +191,7 @@ def test_multiple_datetime_columns():
 
 def test_mlk_day():
     """Test MLK Day detection (3rd Monday of January - Jan 15, 2024)."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 1, 15),  # MLK Day 2024
@@ -216,9 +202,7 @@ def test_mlk_day():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["date"], country="US", features=["is_holiday"]
-    )
+    transformer = HolidayFeatures(subset=["date"], country="US", features=["is_holiday"])
     result = transformer.fit_transform(X)
 
     holiday_flags = result["date__is_holiday"].to_list()
@@ -229,7 +213,7 @@ def test_mlk_day():
 
 def test_thanksgiving():
     """Test Thanksgiving detection (4th Thursday of November - Nov 28, 2024)."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 11, 28),  # Thanksgiving 2024
@@ -240,9 +224,7 @@ def test_thanksgiving():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["date"], country="US", features=["is_holiday"]
-    )
+    transformer = HolidayFeatures(subset=["date"], country="US", features=["is_holiday"])
     result = transformer.fit_transform(X)
 
     holiday_flags = result["date__is_holiday"].to_list()
@@ -253,13 +235,9 @@ def test_thanksgiving():
 
 def test_nearest_holiday_distance():
     """Test nearest holiday distance feature."""
-    X =pl.DataFrame(
-        {"date": [datetime(2024, 1, 1), datetime(2024, 6, 15)], "value": [1, 2]}
-    )
+    X = pl.DataFrame({"date": [datetime(2024, 1, 1), datetime(2024, 6, 15)], "value": [1, 2]})
 
-    transformer = HolidayFeatures(
-        subset=["date"], features=["nearest_holiday_distance"]
-    )
+    transformer = HolidayFeatures(subset=["date"], features=["nearest_holiday_distance"])
     result = transformer.fit_transform(X)
 
     assert "date__nearest_holiday_distance" in result.columns
@@ -267,7 +245,7 @@ def test_nearest_holiday_distance():
 
 def test_multiple_years():
     """Test holiday detection across multiple years."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2023, 1, 1),  # New Year 2023
@@ -278,9 +256,7 @@ def test_multiple_years():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["date"], country="US", features=["is_holiday"]
-    )
+    transformer = HolidayFeatures(subset=["date"], country="US", features=["is_holiday"])
     result = transformer.fit_transform(X)
 
     # All should be New Year's Day
@@ -289,11 +265,9 @@ def test_multiple_years():
 
 def test_invalid_country_code():
     """Test error handling for invalid country code."""
-    X =pl.DataFrame({"date": [datetime(2024, 1, 1)], "value": [1]})
+    X = pl.DataFrame({"date": [datetime(2024, 1, 1)], "value": [1]})
 
-    transformer = HolidayFeatures(
-        subset=["date"], country="INVALID", features=["is_holiday"]
-    )
+    transformer = HolidayFeatures(subset=["date"], country="INVALID", features=["is_holiday"])
 
     with pytest.raises(ValueError, match="is not supported by the holidays library"):
         transformer.fit_transform(X)
@@ -301,7 +275,7 @@ def test_invalid_country_code():
 
 def test_custom_years_parameter():
     """Test explicit years parameter."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 1, 1),  # New Year
@@ -321,7 +295,7 @@ def test_custom_years_parameter():
 
 def test_single_row():
     """Test with single row dataframe."""
-    X =pl.DataFrame({"date": [datetime(2024, 12, 25)], "value": [1]})
+    X = pl.DataFrame({"date": [datetime(2024, 12, 25)], "value": [1]})
 
     transformer = HolidayFeatures(subset=["date"], features=["is_holiday"])
     result = transformer.fit_transform(X)
@@ -331,7 +305,7 @@ def test_single_row():
 
 def test_days_to_holiday():
     """Test days_to_holiday feature calculation."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 6, 30),  # 4 days before July 4th
@@ -348,7 +322,7 @@ def test_days_to_holiday():
 
     assert "date__days_to_holiday" in result.columns
     days_to = result["date__days_to_holiday"].to_list()
-    
+
     # June 30 should be 4 days to July 4
     assert days_to[0] == 4
     # July 3 should be 1 day to July 4
@@ -359,7 +333,7 @@ def test_days_to_holiday():
 
 def test_days_from_holiday():
     """Test days_from_holiday feature calculation."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 7, 3),  # Before July 4th
@@ -376,7 +350,7 @@ def test_days_from_holiday():
 
     assert "date__days_from_holiday" in result.columns
     days_from = result["date__days_from_holiday"].to_list()
-    
+
     # July 4 should be 0 (on the holiday)
     assert days_from[1] == 0
     # July 5 should be 1 day from July 4
@@ -387,7 +361,7 @@ def test_days_from_holiday():
 
 def test_all_distance_features_combined():
     """Test all distance features together."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 7, 4),  # July 4th (holiday)
@@ -410,7 +384,7 @@ def test_all_distance_features_combined():
 
 def test_all_features_combined():
     """Test all available features together."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 1, 1),  # New Year's Day
@@ -439,7 +413,7 @@ def test_all_features_combined():
 
 def test_days_to_holiday_before_all_holidays():
     """Test days_to_holiday when date is before first holiday of year."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 12, 20),  # Before Christmas
@@ -450,9 +424,7 @@ def test_days_to_holiday_before_all_holidays():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["date"], features=["days_to_holiday"], years=[2024]
-    )
+    transformer = HolidayFeatures(subset=["date"], features=["days_to_holiday"], years=[2024])
     result = transformer.fit_transform(X)
 
     days_to = result["date__days_to_holiday"].to_list()
@@ -463,7 +435,7 @@ def test_days_to_holiday_before_all_holidays():
 
 def test_days_from_holiday_after_all_holidays():
     """Test days_from_holiday when date is after last holiday of year."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "date": [
                 datetime(2024, 12, 25),  # Christmas
@@ -474,9 +446,7 @@ def test_days_from_holiday_after_all_holidays():
         }
     )
 
-    transformer = HolidayFeatures(
-        subset=["date"], features=["days_from_holiday"], years=[2024]
-    )
+    transformer = HolidayFeatures(subset=["date"], features=["days_from_holiday"], years=[2024])
     result = transformer.fit_transform(X)
 
     days_from = result["date__days_from_holiday"].to_list()

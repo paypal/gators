@@ -53,16 +53,12 @@ class TestLeaveOneOutEncoder:
         target = pl.Series("target", [1, 0, 1, 0])
 
         # With low smoothing
-        encoder_low = LeaveOneOutEncoder(
-            subset=["category"], smoothing=0.1, inplace=False
-        )
+        encoder_low = LeaveOneOutEncoder(subset=["category"], smoothing=0.1, inplace=False)
         encoder_low.fit(X, y=target)
         result_low = encoder_low.transform(X)
 
         # With high smoothing (should be closer to global mean)
-        encoder_high = LeaveOneOutEncoder(
-            subset=["category"], smoothing=100.0, inplace=False
-        )
+        encoder_high = LeaveOneOutEncoder(subset=["category"], smoothing=100.0, inplace=False)
         encoder_high.fit(X, y=target)
         result_high = encoder_high.transform(X)
 
@@ -171,9 +167,7 @@ class TestLeaveOneOutEncoder:
         """Test that original columns are kept when drop_columns=False."""
         X = pl.DataFrame({"category": ["A", "B", "A"]})
         target = pl.Series("target", [1, 0, 1])
-        encoder = LeaveOneOutEncoder(
-            subset=["category"], drop_columns=False, inplace=False
-        )
+        encoder = LeaveOneOutEncoder(subset=["category"], drop_columns=False, inplace=False)
         encoder.fit(X, y=target)
         result = encoder.transform(X)
 
@@ -186,9 +180,7 @@ class TestLeaveOneOutEncoder:
         target_train = pl.Series("target", [1, 0, 1, 0])
         X_test = pl.DataFrame({"category": ["A", "C", "D"]})  # C and D are unseen
 
-        encoder = LeaveOneOutEncoder(
-            subset=["category"], drop_columns=False, inplace=False
-        )
+        encoder = LeaveOneOutEncoder(subset=["category"], drop_columns=False, inplace=False)
         encoder.fit(X_train, y=target_train)
         result = encoder.transform(X_test)
 
@@ -224,9 +216,7 @@ class TestLeaveOneOutEncoder:
         """Test handling of empty DataFrame."""
         X_train = pl.DataFrame({"category": ["A", "B"]})
         target_train = pl.Series("target", [1, 0])
-        X_test = pl.DataFrame({"category": []}).with_columns(
-            [pl.col("category").cast(pl.String)]
-        )
+        X_test = pl.DataFrame({"category": []}).with_columns([pl.col("category").cast(pl.String)])
 
         encoder = LeaveOneOutEncoder(subset=["category"], inplace=False)
         encoder.fit(X_train, y=target_train)
@@ -320,9 +310,7 @@ class TestLeaveOneOutEncoder:
 
     def test_all_same_target_values(self):
         """Test encoding when all target values are the same."""
-        X = pl.DataFrame(
-            {"category": ["A", "A", "B", "B"]}  # Use pairs so leave-one-out works
-        )
+        X = pl.DataFrame({"category": ["A", "A", "B", "B"]})  # Use pairs so leave-one-out works
         target = pl.Series("target", [1, 1, 1, 1])
         encoder = LeaveOneOutEncoder(subset=["category"], inplace=False)
         encoder.fit(X, y=target)
@@ -382,20 +370,18 @@ class TestLeaveOneOutEncoder:
 
     def test_all_categories_filtered_by_min_count(self):
         """Test when all categories are filtered out by min_count threshold."""
-        X = pl.DataFrame({
-            "category": ["A", "B", "C"],  # Each appears only once
-            "value": [1, 2, 3]
-        })
+        X = pl.DataFrame(
+            {"category": ["A", "B", "C"], "value": [1, 2, 3]}  # Each appears only once
+        )
         target = pl.Series("target", [1, 0, 1])
-        
+
         # Set min_count so high that no category meets the threshold
         encoder = LeaveOneOutEncoder(subset=["category"], min_count=5, inplace=False)
         encoder.fit(X, y=target)
-        
+
         # No categories should be valid, mapping should be empty for this column
         assert "category" not in encoder.mapping_ or encoder.mapping_["category"] == {}
-        
+
         result = encoder.transform(X)
         # Original column should be dropped
         assert "category" not in result.columns
-

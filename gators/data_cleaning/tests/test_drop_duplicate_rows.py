@@ -56,9 +56,7 @@ class TestDropDuplicateRows:
         remover = DropDuplicateRows(keep="none")
         result = remover.fit_transform(X)
 
-        expected = pl.DataFrame(
-            {"user_id": [1, 3, 5], "action": ["login", "click", "logout"]}
-        )
+        expected = pl.DataFrame({"user_id": [1, 3, 5], "action": ["login", "click", "logout"]})
 
         assert_frame_equal(result, expected)
 
@@ -75,9 +73,7 @@ class TestDropDuplicateRows:
         remover = DropDuplicateRows(subset=["name"], keep="first")
         result = remover.fit_transform(X)
 
-        expected = pl.DataFrame(
-            {"id": [1, 2], "name": ["Alice", "Bob"], "score": [85, 90]}
-        )
+        expected = pl.DataFrame({"id": [1, 2], "name": ["Alice", "Bob"], "score": [85, 90]})
 
         assert_frame_equal(result, expected)
 
@@ -94,9 +90,7 @@ class TestDropDuplicateRows:
         remover = DropDuplicateRows(subset=["name"], keep="last")
         result = remover.fit_transform(X)
 
-        expected = pl.DataFrame(
-            {"id": [3, 4], "name": ["Alice", "Bob"], "score": [88, 92]}
-        )
+        expected = pl.DataFrame({"id": [3, 4], "name": ["Alice", "Bob"], "score": [88, 92]})
 
         assert_frame_equal(result, expected)
 
@@ -180,9 +174,7 @@ class TestDropDuplicateRows:
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
-        X = pl.DataFrame({"col1": [], "col2": []}).cast(
-            {"col1": pl.Int64, "col2": pl.String}
-        )
+        X = pl.DataFrame({"col1": [], "col2": []}).cast({"col1": pl.Int64, "col2": pl.String})
 
         remover = DropDuplicateRows()
         result = remover.fit_transform(X)
@@ -200,9 +192,7 @@ class TestDropDuplicateRows:
 
     def test_maintain_order(self):
         """Test that row order is maintained."""
-        X = pl.DataFrame(
-            {"id": [5, 1, 1, 3, 2, 2], "value": ["E", "A", "A", "C", "B", "B"]}
-        )
+        X = pl.DataFrame({"id": [5, 1, 1, 3, 2, 2], "value": ["E", "A", "A", "C", "B", "B"]})
 
         remover = DropDuplicateRows(keep="first")
         result = remover.fit_transform(X)
@@ -239,9 +229,7 @@ class TestDropDuplicateRows:
 
     def test_null_values_in_data(self):
         """Test handling of NULL values."""
-        X = pl.DataFrame(
-            {"id": [1, 2, None, None, 3], "value": ["A", None, "B", "B", "C"]}
-        )
+        X = pl.DataFrame({"id": [1, 2, None, None, 3], "value": ["A", None, "B", "B", "C"]})
 
         remover = DropDuplicateRows(keep="first")
         result = remover.fit_transform(X)
@@ -309,24 +297,18 @@ class TestDropDuplicateRows:
 
     def test_subset_single_column(self):
         """Test with single column in subset."""
-        X = pl.DataFrame(
-            {"id": [1, 2, 3], "category": ["A", "A", "B"], "value": [10, 20, 30]}
-        )
+        X = pl.DataFrame({"id": [1, 2, 3], "category": ["A", "A", "B"], "value": [10, 20, 30]})
 
         remover = DropDuplicateRows(subset=["category"], keep="first")
         result = remover.fit_transform(X)
 
-        expected = pl.DataFrame(
-            {"id": [1, 3], "category": ["A", "B"], "value": [10, 30]}
-        )
+        expected = pl.DataFrame({"id": [1, 3], "category": ["A", "B"], "value": [10, 30]})
 
         assert_frame_equal(result, expected)
 
     def test_consecutive_duplicates(self):
         """Test with consecutive duplicate rows."""
-        X = pl.DataFrame(
-            {"id": [1, 1, 1, 2, 2, 3], "value": ["A", "A", "A", "B", "B", "C"]}
-        )
+        X = pl.DataFrame({"id": [1, 1, 1, 2, 2, 3], "value": ["A", "A", "A", "B", "B", "C"]})
 
         remover = DropDuplicateRows(keep="first")
         result = remover.fit_transform(X)
@@ -337,9 +319,7 @@ class TestDropDuplicateRows:
 
     def test_non_consecutive_duplicates(self):
         """Test with non-consecutive duplicate rows."""
-        X = pl.DataFrame(
-            {"id": [1, 2, 1, 3, 2, 1], "value": ["A", "B", "A", "C", "B", "A"]}
-        )
+        X = pl.DataFrame({"id": [1, 2, 1, 3, 2, 1], "value": ["A", "B", "A", "C", "B", "A"]})
 
         remover = DropDuplicateRows(keep="first")
         result = remover.fit_transform(X)
@@ -362,8 +342,6 @@ class TestDropDuplicateRows:
         result = remover.fit_transform(X)
 
         # Category A appears in rows 0 and 1, keep last (row 1)
-        expected = pl.DataFrame(
-            {"id": [2, 3], "category": ["A", "B"], "value": [20, 30]}
-        )
+        expected = pl.DataFrame({"id": [2, 3], "category": ["A", "B"], "value": [20, 30]})
 
         assert_frame_equal(result, expected)

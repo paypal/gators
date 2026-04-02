@@ -9,7 +9,7 @@ class TestPatternDetector:
 
     def test_email_detection(self):
         """Test email pattern detection."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "contact": [
                     "user@test.com",
@@ -36,7 +36,7 @@ class TestPatternDetector:
 
     def test_url_detection(self):
         """Test URL pattern detection."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "link": [
                     "https://site.com",
@@ -61,7 +61,7 @@ class TestPatternDetector:
 
     def test_phone_detection(self):
         """Test phone number pattern detection."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "phone": [
                     "555-1234",
@@ -86,9 +86,7 @@ class TestPatternDetector:
 
     def test_numeric_detection(self):
         """Test numeric pattern detection."""
-        X =pl.DataFrame(
-            {"value": ["123", "45.67", "-89", "1.2.3", "abc", "12a", "", None]}
-        )
+        X = pl.DataFrame({"value": ["123", "45.67", "-89", "1.2.3", "abc", "12a", "", None]})
 
         transformer = PatternDetector(subset=["value"], patterns=["is_numeric"])
         result = transformer.fit_transform(X)
@@ -104,11 +102,9 @@ class TestPatternDetector:
 
     def test_alphanumeric_and_alpha_detection(self):
         """Test alphanumeric and alpha-only detection."""
-        X =pl.DataFrame({"code": ["ABC123", "XYZ", "123", "ABC-123", "", None]})
+        X = pl.DataFrame({"code": ["ABC123", "XYZ", "123", "ABC-123", "", None]})
 
-        transformer = PatternDetector(
-            subset=["code"], patterns=["is_alphanumeric", "is_alpha"]
-        )
+        transformer = PatternDetector(subset=["code"], patterns=["is_alphanumeric", "is_alpha"])
         result = transformer.fit_transform(X)
 
         # ABC123
@@ -137,7 +133,7 @@ class TestPatternDetector:
 
     def test_url_component_detection(self):
         """Test URL component detection (has_http, has_www, has_at)."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "text": [
                     "https://www.example.com",
@@ -150,9 +146,7 @@ class TestPatternDetector:
             }
         )
 
-        transformer = PatternDetector(
-            subset=["text"], patterns=["has_http", "has_www", "has_at"]
-        )
+        transformer = PatternDetector(subset=["text"], patterns=["has_http", "has_www", "has_at"])
         result = transformer.fit_transform(X)
 
         # https://www.example.com
@@ -187,16 +181,14 @@ class TestPatternDetector:
 
     def test_multiple_columns(self):
         """Test transformation on multiple columns."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "col1": ["user@test.com", "not-email"],
                 "col2": ["https://site.com", "no-url"],
             }
         )
 
-        transformer = PatternDetector(
-            subset=["col1", "col2"], patterns=["is_email", "is_url"]
-        )
+        transformer = PatternDetector(subset=["col1", "col2"], patterns=["is_email", "is_url"])
         result = transformer.fit_transform(X)
 
         assert "col1__is_email" in result.columns
@@ -206,9 +198,7 @@ class TestPatternDetector:
 
     def test_auto_detect_string_columns(self):
         """Test automatic detection of string columns."""
-        X =pl.DataFrame(
-            {"text": ["user@test.com", "test"], "num": [1, 2], "float": [1.5, 2.5]}
-        )
+        X = pl.DataFrame({"text": ["user@test.com", "test"], "num": [1, 2], "float": [1.5, 2.5]})
 
         transformer = PatternDetector(patterns=["is_email"])
         result = transformer.fit_transform(X)
@@ -220,13 +210,9 @@ class TestPatternDetector:
 
     def test_drop_columns(self):
         """Test drop_columns parameter."""
-        X =pl.DataFrame(
-            {"email": ["user@test.com", "admin@site.org"], "name": ["Alice", "Bob"]}
-        )
+        X = pl.DataFrame({"email": ["user@test.com", "admin@site.org"], "name": ["Alice", "Bob"]})
 
-        transformer = PatternDetector(
-            subset=["email"], patterns=["is_email"], drop_columns=True
-        )
+        transformer = PatternDetector(subset=["email"], patterns=["is_email"], drop_columns=True)
         result = transformer.fit_transform(X)
 
         assert "email" not in result.columns
@@ -235,7 +221,7 @@ class TestPatternDetector:
 
     def test_all_patterns(self):
         """Test using all available patterns."""
-        X =pl.DataFrame({"text": ["test@email.com", "https://site.com"]})
+        X = pl.DataFrame({"text": ["test@email.com", "https://site.com"]})
 
         transformer = PatternDetector(
             subset=["text"],
@@ -264,7 +250,7 @@ class TestPatternDetector:
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
-        X =pl.DataFrame({"text": []}, schema={"text": pl.String})
+        X = pl.DataFrame({"text": []}, schema={"text": pl.String})
 
         transformer = PatternDetector(subset=["text"], patterns=["is_email"])
         result = transformer.fit_transform(X)
@@ -274,7 +260,7 @@ class TestPatternDetector:
 
     def test_sklearn_compatibility(self):
         """Test sklearn-compatible API."""
-        X =pl.DataFrame({"email": ["user@test.com", "test"]})
+        X = pl.DataFrame({"email": ["user@test.com", "test"]})
 
         transformer = PatternDetector(subset=["email"], patterns=["is_email"])
 

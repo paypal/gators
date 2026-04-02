@@ -8,7 +8,7 @@ from gators.feature_generation_str import CombineFeatures
 
 def test_transform_basic_single_combination():
     """Test basic transformation with single column combination."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "A", "B", "B", "A"],
             "cat2": ["X", "Y", "X", "Y", "X"],
@@ -27,7 +27,7 @@ def test_transform_basic_single_combination():
 
 def test_transform_multiple_combinations():
     """Test with multiple column combinations."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "A", "B", "B"],
             "cat2": ["X", "Y", "X", "Y"],
@@ -35,9 +35,7 @@ def test_transform_multiple_combinations():
         }
     )
 
-    transformer = CombineFeatures(
-        column_groups=[["cat1", "cat2"], ["cat1", "addr1"]]
-    )
+    transformer = CombineFeatures(column_groups=[["cat1", "cat2"], ["cat1", "addr1"]])
     result = transformer.fit_transform(X)
 
     assert "cat1__cat2" in result.columns
@@ -48,7 +46,7 @@ def test_transform_multiple_combinations():
 
 def test_transform_three_columns():
     """Test combining three columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "A", "B"],
             "cat2": ["X", "Y", "X"],
@@ -66,16 +64,14 @@ def test_transform_three_columns():
 
 def test_transform_with_custom_separator():
     """Test using custom separator."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B"],
             "cat2": ["X", "Y"],
         }
     )
 
-    transformer = CombineFeatures(
-        column_groups=[["cat1", "cat2"]], separator="|"
-    )
+    transformer = CombineFeatures(column_groups=[["cat1", "cat2"]], separator="|")
     result = transformer.fit_transform(X)
 
     assert result["cat1__cat2"][0] == "A|X"
@@ -84,7 +80,7 @@ def test_transform_with_custom_separator():
 
 def test_transform_with_custom_column_names():
     """Test using custom column names."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B"],
             "cat2": ["X", "Y"],
@@ -105,7 +101,7 @@ def test_transform_with_custom_column_names():
 
 def test_transform_with_drop_columns():
     """Test dropping original columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B"],
             "cat2": ["X", "Y"],
@@ -113,9 +109,7 @@ def test_transform_with_drop_columns():
         }
     )
 
-    transformer = CombineFeatures(
-        column_groups=[["cat1", "cat2"]], drop_columns=True
-    )
+    transformer = CombineFeatures(column_groups=[["cat1", "cat2"]], drop_columns=True)
     result = transformer.fit_transform(X)
 
     assert "cat1" not in result.columns
@@ -126,7 +120,7 @@ def test_transform_with_drop_columns():
 
 def test_transform_with_null_values():
     """Test handling of null values."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", None, "B"],
             "cat2": ["X", "Y", None],
@@ -143,7 +137,7 @@ def test_transform_with_null_values():
 
 def test_transform_numeric_columns():
     """Test combining numeric columns (cast to string)."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B"],
             "card_num": [123, 456],
@@ -159,7 +153,7 @@ def test_transform_numeric_columns():
 
 def test_transform_mixed_types():
     """Test combining columns with mixed types."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "card": ["A", "B"],
             "number": [1, 2],
@@ -187,7 +181,7 @@ def test_validation_mismatched_new_column_names_length():
 
 def test_fit_return_self():
     """Test that fit returns self."""
-    X =pl.DataFrame({"col1": ["A", "B"], "col2": ["X", "Y"]})
+    X = pl.DataFrame({"col1": ["A", "B"], "col2": ["X", "Y"]})
 
     transformer = CombineFeatures(column_groups=[["col1", "col2"]])
     result = transformer.fit(X)
@@ -197,7 +191,7 @@ def test_fit_return_self():
 
 def test_column_mapping_generation():
     """Test that column mapping is correctly generated during fit."""
-    X =pl.DataFrame({"col1": ["A", "B"], "col2": ["X", "Y"]})
+    X = pl.DataFrame({"col1": ["A", "B"], "col2": ["X", "Y"]})
 
     transformer = CombineFeatures(
         column_groups=[["col1", "col2"]], new_column_names=["custom_name"]
@@ -211,9 +205,7 @@ def test_column_mapping_generation():
 
 def test_empty_dataframe():
     """Test behavior with empty dataframe."""
-    X =pl.DataFrame(
-        {"col1": [], "col2": []}, schema={"col1": pl.Utf8, "col2": pl.Utf8}
-    )
+    X = pl.DataFrame({"col1": [], "col2": []}, schema={"col1": pl.Utf8, "col2": pl.Utf8})
 
     transformer = CombineFeatures(column_groups=[["col1", "col2"]])
     result = transformer.fit_transform(X)
@@ -224,7 +216,7 @@ def test_empty_dataframe():
 
 def test_single_row_dataframe():
     """Test behavior with single row dataframe."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A"],
             "cat2": ["X"],
@@ -239,7 +231,7 @@ def test_single_row_dataframe():
 
 def test_uid_generation_pattern():
     """Test typical UID generation use case."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "A", "B", "B", "A"],
             "cat2": ["X", "Y", "X", "X", "X"],
@@ -266,7 +258,7 @@ def test_uid_generation_pattern():
 
 def test_duplicate_values_create_same_uid():
     """Test that duplicate combinations create the same UID."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B", "A", "B"],
             "cat2": ["X", "Y", "X", "Y"],
@@ -284,7 +276,7 @@ def test_duplicate_values_create_same_uid():
 
 def test_special_characters_in_values():
     """Test handling of special characters in values."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": ["A@B", "C-D"],
             "col2": ["X#Y", "Z$W"],
@@ -300,16 +292,14 @@ def test_special_characters_in_values():
 
 def test_long_separator():
     """Test with multi-character separator."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": ["A", "B"],
             "col2": ["X", "Y"],
         }
     )
 
-    transformer = CombineFeatures(
-        column_groups=[["col1", "col2"]], separator="||"
-    )
+    transformer = CombineFeatures(column_groups=[["col1", "col2"]], separator="||")
     result = transformer.fit_transform(X)
 
     assert result["col1__col2"][0] == "A||X"
@@ -318,7 +308,7 @@ def test_long_separator():
 
 def test_empty_string_separator():
     """Test with empty string separator."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": ["A", "B"],
             "col2": ["X", "Y"],
@@ -334,7 +324,7 @@ def test_empty_string_separator():
 
 def test_combining_single_column():
     """Test 'combining' just one column (edge case)."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B", "C"],
             "other": [1, 2, 3],
@@ -351,7 +341,7 @@ def test_combining_single_column():
 
 def test_many_columns_combination():
     """Test combining many columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": ["A"],
             "col2": ["B"],
@@ -361,9 +351,7 @@ def test_many_columns_combination():
         }
     )
 
-    transformer = CombineFeatures(
-        column_groups=[["col1", "col2", "col3", "col4", "col5"]]
-    )
+    transformer = CombineFeatures(column_groups=[["col1", "col2", "col3", "col4", "col5"]])
     result = transformer.fit_transform(X)
 
     assert result["col1__col2__col3__col4__col5"][0] == "A_B_C_D_E"
@@ -371,7 +359,7 @@ def test_many_columns_combination():
 
 def test_overlapping_column_groups_no_drop():
     """Test overlapping column groups without dropping columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B"],
             "cat2": ["X", "Y"],
@@ -395,7 +383,7 @@ def test_overlapping_column_groups_no_drop():
 
 def test_overlapping_column_groups_with_drop():
     """Test overlapping column groups with drop_columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B"],
             "cat2": ["X", "Y"],
@@ -419,7 +407,7 @@ def test_overlapping_column_groups_with_drop():
 
 def test_whitespace_in_values():
     """Test handling of whitespace in values."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": ["A ", " B", "C"],
             "col2": ["X", "Y ", " Z"],
@@ -436,7 +424,7 @@ def test_whitespace_in_values():
 
 def test_boolean_columns():
     """Test combining boolean columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "flag1": [True, False, True],
             "flag2": [False, False, True],
@@ -453,7 +441,7 @@ def test_boolean_columns():
 
 def test_all_null_column():
     """Test combining with a column that's all nulls."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": ["A", "B", "C"],
             "col2": [None, None, None],

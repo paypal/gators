@@ -6,7 +6,7 @@ from gators.scalers import YeoJonhson
 
 
 def test_transform_default():
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "A": [1, 2, 3, 4, 5],
             "B": [10, 20, 30, 40, 50],
@@ -35,7 +35,7 @@ def test_transform_default():
 
 
 def test_transform_subset_columns():
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "A": [1, 2, 3, 4, 5],
             "B": [10, 20, 30, 40, 50],
@@ -60,7 +60,7 @@ def test_transform_subset_columns():
 
 
 def test_transform_drop_columns_false():
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "A": [1, 2, 3, 4, 5],
             "B": [10, 20, 30, 40, 50],
@@ -96,8 +96,8 @@ def sample_data():
 def test_transform_lambda_zero(sample_data):
     transformer = YeoJonhson(lambdas={"A": 0}, drop_columns=False)
     transformer.fit(sample_data)
-    transformed_X =transformer.transform(sample_data)
-    expected_X =sample_data.with_columns(
+    transformed_X = transformer.transform(sample_data)
+    expected_X = sample_data.with_columns(
         [
             pl.when(pl.col("A") < 0)
             .then(pl.col("A").log1p())
@@ -111,8 +111,8 @@ def test_transform_lambda_zero(sample_data):
 def test_transform_lambda_two(sample_data):
     transformer = YeoJonhson(lambdas={"A": 2}, drop_columns=False)
     transformer.fit(sample_data)
-    transformed_X =transformer.transform(sample_data)
-    expected_X =sample_data.with_columns(
+    transformed_X = transformer.transform(sample_data)
+    expected_X = sample_data.with_columns(
         [
             pl.when(pl.col("A") < 0)
             .then(((pl.col("A") + 1) ** 2 - 1) / 2)
@@ -126,8 +126,8 @@ def test_transform_lambda_two(sample_data):
 def test_transform_lambda_non_zero_non_two(sample_data):
     transformer = YeoJonhson(lambdas={"A": 1.5}, drop_columns=False)
     transformer.fit(sample_data)
-    transformed_X =transformer.transform(sample_data)
-    expected_X =sample_data.with_columns(
+    transformed_X = transformer.transform(sample_data)
+    expected_X = sample_data.with_columns(
         [
             pl.when(pl.col("A") < 0)
             .then(((pl.col("A") + 1) ** 1.5 - 1) / 1.5)

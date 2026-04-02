@@ -68,17 +68,13 @@ def test_lats_too_short():
 
 def test_longs_length_mismatch():
     """Test that longs must have same length as lats."""
-    with pytest.raises(
-        ValueError, match="longs must have same length as lats"
-    ):
+    with pytest.raises(ValueError, match="longs must have same length as lats"):
         DistanceFeatures(lats=["lat1", "lat2"], longs=["long1"])
 
 
 def test_new_column_names_wrong_length():
     """Test that new_column_names must match number of distance pairs."""
-    with pytest.raises(
-        ValueError, match="Length of new_column_names .* must match"
-    ):
+    with pytest.raises(ValueError, match="Length of new_column_names .* must match"):
         DistanceFeatures(
             lats=["lat1", "lat2", "lat3"],
             longs=["long1", "long2", "long3"],

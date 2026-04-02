@@ -117,9 +117,7 @@ class TestTreeBasedDiscretizer:
 
     def test_drop_columns_false(self):
         """Test keeping original columns."""
-        X = pl.DataFrame(
-            {"feature": [1, 2, 3, 4, 5, 6, 7, 8], "target": [0, 0, 0, 0, 1, 1, 1, 1]}
-        )
+        X = pl.DataFrame({"feature": [1, 2, 3, 4, 5, 6, 7, 8], "target": [0, 0, 0, 0, 1, 1, 1, 1]})
         y = pl.Series("target", [0, 0, 0, 0, 1, 1, 1, 1])
 
         discretizer = TreeBasedDiscretizer(
@@ -164,14 +162,13 @@ class TestTreeBasedDiscretizer:
     def test_invalid_min_samples_leaf(self):
         """Test validation of min_samples_leaf parameter."""
         from pydantic import ValidationError
-        
+
         with pytest.raises(ValidationError, match="greater than 0"):
             TreeBasedDiscretizer(min_samples_leaf=0)
-        
+
         # Also test with negative value
         with pytest.raises(ValidationError, match="greater than 0"):
             TreeBasedDiscretizer(min_samples_leaf=-1)
-
 
     def test_constant_feature(self):
         """Test handling of constant features."""

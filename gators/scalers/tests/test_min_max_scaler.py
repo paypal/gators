@@ -6,7 +6,7 @@ from gators.scalers import MinmaxScaler
 
 
 def test_transform_default():
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "A": [1, 2, 3, 4, 5],
             "B": [10, 20, 30, 40, 50],
@@ -29,7 +29,7 @@ def test_transform_default():
 
 
 def test_transform_subset_columns():
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "A": [1, 2, 3, 4, 5],
             "B": [10, 20, 30, 40, 50],
@@ -52,7 +52,7 @@ def test_transform_subset_columns():
 
 
 def test_transform_drop_columns_false():
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "A": [1, 2, 3, 4, 5],
             "B": [10, 20, 30, 40, 50],

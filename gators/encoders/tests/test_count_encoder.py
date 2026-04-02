@@ -46,9 +46,7 @@ def test_min_count(sample_X):
 
 
 def test_columns_subset_drop_columns_false(sample_X):
-    encoder = CountEncoder(
-        subset=["category"], min_count=1, drop_columns=False, inplace=False
-    )
+    encoder = CountEncoder(subset=["category"], min_count=1, drop_columns=False, inplace=False)
     encoder.fit(sample_X)
     transformed_X = encoder.transform(sample_X)
 

@@ -9,7 +9,7 @@ from gators.feature_generation_str import Lower
 
 @pytest.fixture
 def sample_data() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["Hello", None, "WORLD"],
         "column2": [True, False, None],
         "column3": [1, 2, 3],
@@ -19,7 +19,7 @@ def sample_data() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_X() -> pl.DataFrame:
-    X ={
+    X = {
         "column1__lower": ["hello", None, "world"],
         "column2__lower": ["true", "false", None],
         "column3": [1, 2, 3],
@@ -29,7 +29,7 @@ def expected_X() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_data_no_drop() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["Hello", None, "WORLD"],
         "column2": [True, False, None],
         "column3": [1, 2, 3],
@@ -57,7 +57,7 @@ def test_lower_transform_inplace_true(sample_data):
     lower = Lower(subset=["column1"], inplace=True)
     lower.fit(sample_data)
     transformed_X = lower.transform(sample_data)
-    
+
     # Original column should be modified in place
     assert "column1" in transformed_X.columns
     assert "column1__lower" not in transformed_X.columns
@@ -70,7 +70,7 @@ def test_lower_transform_inplace_false_with_drop(sample_data):
     lower = Lower(subset=["column1", "column2"], drop_columns=True, inplace=False)
     lower.fit(sample_data)
     transformed_X = lower.transform(sample_data)
-    
+
     # Original columns should be dropped
     assert "column1" not in transformed_X.columns
     assert "column2" not in transformed_X.columns

@@ -33,9 +33,7 @@ def test_transform_all_columns(sample_dataframe):
 
 
 def test_transform_subset_columns(sample_dataframe):
-    rename_columns = RenameColumns(
-        column_mapping={"col1": "column1", "col3": "column3"}
-    )
+    rename_columns = RenameColumns(column_mapping={"col1": "column1", "col3": "column3"})
     expected_X = pl.DataFrame(
         {
             "column1": ["a", "a", "b", "c"],

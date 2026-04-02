@@ -12,14 +12,10 @@ def test_transform_default():
     expected_X = X.with_columns(
         [
             (pl.col("col1") + pl.col("col2")).alias("col1_col2_sum"),
-            (pl.col("col1") + pl.col("col2") + pl.col("col3")).alias(
-                "col1_col2_col3_sum"
-            ),
+            (pl.col("col1") + pl.col("col2") + pl.col("col3")).alias("col1_col2_col3_sum"),
             ((pl.col("col1") + pl.col("col2")) / 2.0).alias("col1_col2_mean"),
             pl.min_horizontal(pl.col("col1"), pl.col("col2")).alias("col1_col2_min"),
-            ((pl.col("col1") + pl.col("col2") + pl.col("col3")) / 3.0).alias(
-                "col1_col2_col3_mean"
-            ),
+            ((pl.col("col1") + pl.col("col2") + pl.col("col3")) / 3.0).alias("col1_col2_col3_mean"),
             pl.min_horizontal(pl.col("col1"), pl.col("col2"), pl.col("col3")).alias(
                 "col1_col2_col3_min"
             ),
@@ -44,12 +40,8 @@ def test_transform_with_new_column_names():
             (pl.col("col1") + pl.col("col2") + pl.col("col3")).alias("123_sum"),
             ((pl.col("col1") + pl.col("col2")) / 2.0).alias("12_mean"),
             pl.min_horizontal(pl.col("col1"), pl.col("col2")).alias("12_min"),
-            ((pl.col("col1") + pl.col("col2") + pl.col("col3")) / 3.0).alias(
-                "123_mean"
-            ),
-            pl.min_horizontal(pl.col("col1"), pl.col("col2"), pl.col("col3")).alias(
-                "123_min"
-            ),
+            ((pl.col("col1") + pl.col("col2") + pl.col("col3")) / 3.0).alias("123_mean"),
+            pl.min_horizontal(pl.col("col1"), pl.col("col2"), pl.col("col3")).alias("123_min"),
         ]
     )
 
@@ -70,14 +62,10 @@ def test_transform_with_drop_columns():
     expected_X = X.with_columns(
         [
             (pl.col("col1") + pl.col("col2")).alias("col1_col2_sum"),
-            (pl.col("col1") + pl.col("col2") + pl.col("col3")).alias(
-                "col1_col2_col3_sum"
-            ),
+            (pl.col("col1") + pl.col("col2") + pl.col("col3")).alias("col1_col2_col3_sum"),
             ((pl.col("col1") + pl.col("col2")) / 2.0).alias("col1_col2_mean"),
             pl.min_horizontal(pl.col("col1"), pl.col("col2")).alias("col1_col2_min"),
-            ((pl.col("col1") + pl.col("col2") + pl.col("col3")) / 3.0).alias(
-                "col1_col2_col3_mean"
-            ),
+            ((pl.col("col1") + pl.col("col2") + pl.col("col3")) / 3.0).alias("col1_col2_col3_mean"),
             pl.min_horizontal(pl.col("col1"), pl.col("col2"), pl.col("col3")).alias(
                 "col1_col2_col3_min"
             ),

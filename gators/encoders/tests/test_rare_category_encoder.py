@@ -7,7 +7,7 @@ from gators.encoders import RareCategoryEncoder
 
 @pytest.fixture
 def sample_data():
-    X ={
+    X = {
         "A": ["cat", "dog", "cat", "mouse", "dog", "cat", "rabbit"],
         "B": ["red", "blue", "red", "green", "blue", "red", "blue"],
         "C": [1, 2, 3, 4, 5, 6, 7],
@@ -18,8 +18,8 @@ def sample_data():
 def test_defaults(sample_data):
     encoder = RareCategoryEncoder(inplace=False)
     encoder.fit(sample_data)
-    transformed_X =encoder.transform(sample_data)
-    expected_X ={
+    transformed_X = encoder.transform(sample_data)
+    expected_X = {
         "C": [1, 2, 3, 4, 5, 6, 7],
         "A__encode_rare": ["cat", "dog", "cat", "RARE", "dog", "cat", "RARE"],
         "B__encode_rare": ["red", "blue", "red", "RARE", "blue", "red", "blue"],
@@ -30,13 +30,11 @@ def test_defaults(sample_data):
 
 
 def test_columns_subset(sample_data):
-    encoder = RareCategoryEncoder(
-        subset=["A"], min_count=3, drop_columns=False, inplace=False
-    )
+    encoder = RareCategoryEncoder(subset=["A"], min_count=3, drop_columns=False, inplace=False)
     encoder.fit(sample_data)
-    transformed_X =encoder.transform(sample_data)
+    transformed_X = encoder.transform(sample_data)
 
-    expected_X ={
+    expected_X = {
         "A": ["cat", "dog", "cat", "mouse", "dog", "cat", "rabbit"],
         "B": ["red", "blue", "red", "green", "blue", "red", "blue"],
         "C": [1, 2, 3, 4, 5, 6, 7],
@@ -50,10 +48,10 @@ def test_inplace_true(sample_data):
     """Test with inplace=True to modify columns in place."""
     encoder = RareCategoryEncoder(subset=["A"], min_count=3, inplace=True)
     encoder.fit(sample_data)
-    transformed_X =encoder.transform(sample_data)
-    
+    transformed_X = encoder.transform(sample_data)
+
     # With inplace=True, original columns should be modified
-    expected_X ={
+    expected_X = {
         "A": ["cat", "RARE", "cat", "RARE", "RARE", "cat", "RARE"],
         "B": ["red", "blue", "red", "green", "blue", "red", "blue"],
         "C": [1, 2, 3, 4, 5, 6, 7],

@@ -8,16 +8,9 @@ from gators.feature_generation import RowStatisticsFeatures
 
 def test_transform_basic_single_group_single_func():
     """Test basic transformation with single column group and single aggregation."""
-    X = pl.DataFrame({
-        "A": [9, 9, 7],
-        "B": [3, 4, 5],
-        "C": [6, 7, 8]
-    })
+    X = pl.DataFrame({"A": [9, 9, 7], "B": [3, 4, 5], "C": [6, 7, 8]})
 
-    transformer = RowStatisticsFeatures(
-        column_groups={"cluster_1": ["A", "B"]},
-        func=["mean"]
-    )
+    transformer = RowStatisticsFeatures(column_groups={"cluster_1": ["A", "B"]}, func=["mean"])
     result = transformer.fit_transform(X)
 
     # Row 0: mean([9, 3]) = 6.0
@@ -31,15 +24,10 @@ def test_transform_basic_single_group_single_func():
 
 def test_transform_single_group_multiple_func():
     """Test single column group with multiple aggregation functions."""
-    X = pl.DataFrame({
-        "A": [9, 9, 7],
-        "B": [3, 4, 5],
-        "C": [6, 7, 8]
-    })
+    X = pl.DataFrame({"A": [9, 9, 7], "B": [3, 4, 5], "C": [6, 7, 8]})
 
     transformer = RowStatisticsFeatures(
-        column_groups={"cluster_1": ["A", "B"]},
-        func=["mean", "std"]
+        column_groups={"cluster_1": ["A", "B"]}, func=["mean", "std"]
     )
     result = transformer.fit_transform(X)
 
@@ -52,19 +40,10 @@ def test_transform_single_group_multiple_func():
 
 def test_transform_multiple_groups():
     """Test with multiple column groups."""
-    X = pl.DataFrame({
-        "A": [9, 9, 7],
-        "B": [3, 4, 5],
-        "C": [6, 7, 8],
-        "D": [1, 2, 3]
-    })
+    X = pl.DataFrame({"A": [9, 9, 7], "B": [3, 4, 5], "C": [6, 7, 8], "D": [1, 2, 3]})
 
     transformer = RowStatisticsFeatures(
-        column_groups={
-            "cluster_1": ["A", "B"],
-            "cluster_2": ["C", "D"]
-        },
-        func=["min", "max"]
+        column_groups={"cluster_1": ["A", "B"], "cluster_2": ["C", "D"]}, func=["min", "max"]
     )
     result = transformer.fit_transform(X)
 
@@ -83,15 +62,11 @@ def test_transform_multiple_groups():
 
 def test_transform_all_aggregation_functions():
     """Test all supported aggregation functions."""
-    X = pl.DataFrame({
-        "A": [10, 20, 30],
-        "B": [5, 10, 15],
-        "C": [2, 4, 6]
-    })
+    X = pl.DataFrame({"A": [10, 20, 30], "B": [5, 10, 15], "C": [2, 4, 6]})
 
     transformer = RowStatisticsFeatures(
         column_groups={"group": ["A", "B", "C"]},
-        func=["min", "max", "mean", "median", "std", "range", "sum"]
+        func=["min", "max", "mean", "median", "std", "range", "sum"],
     )
     result = transformer.fit_transform(X)
 
@@ -115,15 +90,10 @@ def test_transform_all_aggregation_functions():
 
 def test_transform_range_aggregation():
     """Test range aggregation specifically (max - min)."""
-    X = pl.DataFrame({
-        "col1": [100, 50, 80],
-        "col2": [90, 70, 60],
-        "col3": [110, 55, 90]
-    })
+    X = pl.DataFrame({"col1": [100, 50, 80], "col2": [90, 70, 60], "col3": [110, 55, 90]})
 
     transformer = RowStatisticsFeatures(
-        column_groups={"values": ["col1", "col2", "col3"]},
-        func=["range"]
+        column_groups={"values": ["col1", "col2", "col3"]}, func=["range"]
     )
     result = transformer.fit_transform(X)
 
@@ -137,15 +107,10 @@ def test_transform_range_aggregation():
 
 def test_transform_with_three_columns():
     """Test with three columns in a group."""
-    X = pl.DataFrame({
-        "A": [100, 200, 150],
-        "B": [50, 100, 75],
-        "C": [25, 50, 30]
-    })
+    X = pl.DataFrame({"A": [100, 200, 150], "B": [50, 100, 75], "C": [25, 50, 30]})
 
     transformer = RowStatisticsFeatures(
-        column_groups={"amounts": ["A", "B", "C"]},
-        func=["mean", "std"]
+        column_groups={"amounts": ["A", "B", "C"]}, func=["mean", "std"]
     )
     result = transformer.fit_transform(X)
 
@@ -156,16 +121,12 @@ def test_transform_with_three_columns():
 
 def test_transform_with_custom_column_names():
     """Test using custom column names."""
-    X = pl.DataFrame({
-        "A": [10, 20, 30],
-        "B": [5, 10, 15],
-        "C": [2, 4, 6]
-    })
+    X = pl.DataFrame({"A": [10, 20, 30], "B": [5, 10, 15], "C": [2, 4, 6]})
 
     transformer = RowStatisticsFeatures(
         column_groups={"group": ["A", "B"]},
         func=["mean", "std"],
-        new_column_names=["avg_value", "std_value"]
+        new_column_names=["avg_value", "std_value"],
     )
     result = transformer.fit_transform(X)
 
@@ -180,16 +141,10 @@ def test_transform_with_custom_column_names():
 
 def test_transform_with_drop_columns_false():
     """Test that original columns are kept when drop_columns=False."""
-    X = pl.DataFrame({
-        "A": [10, 20],
-        "B": [5, 10],
-        "C": [100, 200]
-    })
+    X = pl.DataFrame({"A": [10, 20], "B": [5, 10], "C": [100, 200]})
 
     transformer = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B"]},
-        func=["mean"],
-        drop_columns=False
+        column_groups={"group": ["A", "B"]}, func=["mean"], drop_columns=False
     )
     result = transformer.fit_transform(X)
 
@@ -202,16 +157,10 @@ def test_transform_with_drop_columns_false():
 
 def test_transform_with_drop_columns_true():
     """Test dropping original columns when drop_columns=True."""
-    X = pl.DataFrame({
-        "A": [10, 20],
-        "B": [5, 10],
-        "C": [100, 200]
-    })
+    X = pl.DataFrame({"A": [10, 20], "B": [5, 10], "C": [100, 200]})
 
     transformer = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B"]},
-        func=["mean"],
-        drop_columns=True
+        column_groups={"group": ["A", "B"]}, func=["mean"], drop_columns=True
     )
     result = transformer.fit_transform(X)
 
@@ -225,36 +174,26 @@ def test_transform_with_drop_columns_true():
 
 def test_transform_drop_columns_multiple_groups():
     """Test drop_columns with multiple groups - validation should catch invalid group."""
-    X = pl.DataFrame({
-        "A": [10, 20],
-        "B": [5, 10],
-        "C": [100, 200],
-        "D": [50, 100]
-    })
+    X = pl.DataFrame({"A": [10, 20], "B": [5, 10], "C": [100, 200], "D": [50, 100]})
 
     # This should raise validation error because group2 has only 1 column
     with pytest.raises(ValidationError, match="must contain at least 2 columns"):
         RowStatisticsFeatures(
             column_groups={
                 "group1": ["A", "B"],
-                "group2": ["C"]  # This fails validation - need at least 2 cols
+                "group2": ["C"],  # This fails validation - need at least 2 cols
             },
             func=["mean"],
-            drop_columns=True
+            drop_columns=True,
         )
 
 
 def test_transform_with_nulls():
     """Test handling of null values."""
-    X = pl.DataFrame({
-        "A": [10, None, 30],
-        "B": [5, 10, None],
-        "C": [2, 4, 6]
-    })
+    X = pl.DataFrame({"A": [10, None, 30], "B": [5, 10, None], "C": [2, 4, 6]})
 
     transformer = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B", "C"]},
-        func=["mean", "min", "max"]
+        column_groups={"group": ["A", "B", "C"]}, func=["mean", "min", "max"]
     )
     result = transformer.fit_transform(X)
 
@@ -269,17 +208,9 @@ def test_transform_with_nulls():
 
 def test_transform_preserves_column_order():
     """Test that new columns are added at the end."""
-    X = pl.DataFrame({
-        "A": [10, 20, 30],
-        "B": [5, 10, 15],
-        "C": [2, 4, 6],
-        "D": [1, 2, 3]
-    })
+    X = pl.DataFrame({"A": [10, 20, 30], "B": [5, 10, 15], "C": [2, 4, 6], "D": [1, 2, 3]})
 
-    transformer = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B"]},
-        func=["mean"]
-    )
+    transformer = RowStatisticsFeatures(column_groups={"group": ["A", "B"]}, func=["mean"])
     result = transformer.fit_transform(X)
 
     # Original columns should come first
@@ -289,76 +220,52 @@ def test_transform_preserves_column_order():
 def test_validation_empty_column_groups():
     """Test validation error with empty column_groups."""
     with pytest.raises(ValueError, match="column_groups cannot be empty"):
-        RowStatisticsFeatures(
-            column_groups={},
-            func=["mean"]
-        )
+        RowStatisticsFeatures(column_groups={}, func=["mean"])
 
 
 def test_validation_single_column_in_group():
     """Test validation error when group has only 1 column."""
     with pytest.raises(
-        ValueError,
-        match="must contain at least 2 columns for row-level aggregation"
+        ValueError, match="must contain at least 2 columns for row-level aggregation"
     ):
-        RowStatisticsFeatures(
-            column_groups={"group": ["A"]},
-            func=["mean"]
-        )
+        RowStatisticsFeatures(column_groups={"group": ["A"]}, func=["mean"])
 
 
 def test_validation_invalid_aggregation_function():
     """Test validation error with invalid aggregation function."""
     with pytest.raises(
-        ValidationError,
-        match="invalid_func is not in the predefined list of aggregation functions"
+        ValidationError, match="invalid_func is not in the predefined list of aggregation functions"
     ):
-        RowStatisticsFeatures(
-            column_groups={"group": ["A", "B"]},
-            func=["mean", "invalid_func"]
-        )
+        RowStatisticsFeatures(column_groups={"group": ["A", "B"]}, func=["mean", "invalid_func"])
 
 
 def test_validation_mismatched_new_column_names_length():
     """Test validation error when new_column_names length doesn't match."""
     with pytest.raises(
         ValueError,
-        match="Length of new_column_names .* must match the total number of features created"
+        match="Length of new_column_names .* must match the total number of features created",
     ):
         RowStatisticsFeatures(
             column_groups={"group1": ["A", "B"], "group2": ["C", "D"]},
             func=["mean", "std"],  # 2 groups × 2 func = 4 features
-            new_column_names=["name1", "name2"]  # Only 2 names provided
+            new_column_names=["name1", "name2"],  # Only 2 names provided
         )
 
 
 def test_validation_column_groups_not_list():
     """Test validation error when column_groups value is not a list."""
     with pytest.raises(ValidationError, match="Input should be a valid list"):
-        RowStatisticsFeatures(
-            column_groups={"group": "A"},  # String instead of list
-            func=["mean"]
-        )
+        RowStatisticsFeatures(column_groups={"group": "A"}, func=["mean"])  # String instead of list
 
 
 def test_fit_transform_equivalence():
     """Test that fit().transform() equals fit_transform()."""
-    X = pl.DataFrame({
-        "A": [10, 20, 30],
-        "B": [5, 10, 15],
-        "C": [2, 4, 6]
-    })
+    X = pl.DataFrame({"A": [10, 20, 30], "B": [5, 10, 15], "C": [2, 4, 6]})
 
-    transformer1 = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B"]},
-        func=["mean", "std"]
-    )
+    transformer1 = RowStatisticsFeatures(column_groups={"group": ["A", "B"]}, func=["mean", "std"])
     result1 = transformer1.fit_transform(X)
 
-    transformer2 = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B"]},
-        func=["mean", "std"]
-    )
+    transformer2 = RowStatisticsFeatures(column_groups={"group": ["A", "B"]}, func=["mean", "std"])
     transformer2.fit(X)
     result2 = transformer2.transform(X)
 
@@ -367,20 +274,22 @@ def test_fit_transform_equivalence():
 
 def test_multiple_groups_different_columns():
     """Test multiple groups with completely different columns."""
-    X = pl.DataFrame({
-        "A": [10, 20, 30],
-        "B": [5, 10, 15],
-        "C": [100, 200, 300],
-        "D": [50, 100, 150],
-        "E": [1, 2, 3]
-    })
+    X = pl.DataFrame(
+        {
+            "A": [10, 20, 30],
+            "B": [5, 10, 15],
+            "C": [100, 200, 300],
+            "D": [50, 100, 150],
+            "E": [1, 2, 3],
+        }
+    )
 
     transformer = RowStatisticsFeatures(
         column_groups={
             "group1": ["A", "B"],
             "group2": ["C", "D"],
         },
-        func=["mean", "range"]
+        func=["mean", "range"],
     )
     result = transformer.fit_transform(X)
 
@@ -400,16 +309,9 @@ def test_multiple_groups_different_columns():
 
 def test_median_aggregation():
     """Test median aggregation specifically."""
-    X = pl.DataFrame({
-        "A": [1, 10, 100],
-        "B": [2, 20, 200],
-        "C": [3, 30, 300]
-    })
+    X = pl.DataFrame({"A": [1, 10, 100], "B": [2, 20, 200], "C": [3, 30, 300]})
 
-    transformer = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B", "C"]},
-        func=["median"]
-    )
+    transformer = RowStatisticsFeatures(column_groups={"group": ["A", "B", "C"]}, func=["median"])
     result = transformer.fit_transform(X)
 
     # Row 0: median([1, 2, 3]) = 2
@@ -422,16 +324,9 @@ def test_median_aggregation():
 
 def test_sum_aggregation():
     """Test sum aggregation specifically."""
-    X = pl.DataFrame({
-        "A": [10, 20, 30],
-        "B": [5, 10, 15],
-        "C": [2, 4, 6]
-    })
+    X = pl.DataFrame({"A": [10, 20, 30], "B": [5, 10, 15], "C": [2, 4, 6]})
 
-    transformer = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B", "C"]},
-        func=["sum"]
-    )
+    transformer = RowStatisticsFeatures(column_groups={"group": ["A", "B", "C"]}, func=["sum"])
     result = transformer.fit_transform(X)
 
     # Row 0: sum([10, 5, 2]) = 17
@@ -444,17 +339,19 @@ def test_sum_aggregation():
 
 def test_fraud_detection_use_case():
     """Test realistic fraud detection scenario with verification fields."""
-    X = pl.DataFrame({
-        "card_cvv_match": [1, 0, 1, 1],
-        "card_addr_match": [1, 1, 0, 1],
-        "card_zip_match": [1, 1, 1, 0],
-        "transaction_id": [101, 102, 103, 104]
-    })
+    X = pl.DataFrame(
+        {
+            "card_cvv_match": [1, 0, 1, 1],
+            "card_addr_match": [1, 1, 0, 1],
+            "card_zip_match": [1, 1, 1, 0],
+            "transaction_id": [101, 102, 103, 104],
+        }
+    )
 
     transformer = RowStatisticsFeatures(
         column_groups={"verification": ["card_cvv_match", "card_addr_match", "card_zip_match"]},
         func=["mean", "std", "min"],
-        drop_columns=False
+        drop_columns=False,
     )
     result = transformer.fit_transform(X)
 
@@ -470,16 +367,9 @@ def test_fraud_detection_use_case():
 
 def test_works_with_float_columns():
     """Test that it works with float columns."""
-    X = pl.DataFrame({
-        "A": [10.5, 20.3, 30.7],
-        "B": [5.2, 10.8, 15.1],
-        "C": [2.1, 4.9, 6.3]
-    })
+    X = pl.DataFrame({"A": [10.5, 20.3, 30.7], "B": [5.2, 10.8, 15.1], "C": [2.1, 4.9, 6.3]})
 
-    transformer = RowStatisticsFeatures(
-        column_groups={"group": ["A", "B"]},
-        func=["mean", "std"]
-    )
+    transformer = RowStatisticsFeatures(column_groups={"group": ["A", "B"]}, func=["mean", "std"])
     result = transformer.fit_transform(X)
 
     assert "group__mean" in result.columns

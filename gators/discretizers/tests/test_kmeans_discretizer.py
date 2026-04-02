@@ -181,9 +181,7 @@ class TestKMeansDiscretizer:
         """Test sklearn-compatible API."""
         X = pl.DataFrame({"feature": [1, 5, 10, 15, 20, 25, 30, 35]})
 
-        discretizer = KMeansDiscretizer(
-            subset=["feature"], num_bins=3, random_state=42
-        )
+        discretizer = KMeansDiscretizer(subset=["feature"], num_bins=3, random_state=42)
 
         # Test fit returns self
         assert discretizer.fit(X) is discretizer
@@ -193,9 +191,7 @@ class TestKMeansDiscretizer:
         assert isinstance(result, pl.DataFrame)
 
         # Test separate fit and transform
-        discretizer2 = KMeansDiscretizer(
-            subset=["feature"], num_bins=3, random_state=42
-        )
+        discretizer2 = KMeansDiscretizer(subset=["feature"], num_bins=3, random_state=42)
         discretizer2.fit(X)
         result2 = discretizer2.transform(X)
         assert result.equals(result2)
@@ -204,14 +200,10 @@ class TestKMeansDiscretizer:
         """Test that random_state ensures reproducibility."""
         X = pl.DataFrame({"feature": list(range(20))})
 
-        discretizer1 = KMeansDiscretizer(
-            subset=["feature"], num_bins=3, random_state=42
-        )
+        discretizer1 = KMeansDiscretizer(subset=["feature"], num_bins=3, random_state=42)
         result1 = discretizer1.fit_transform(X)
 
-        discretizer2 = KMeansDiscretizer(
-            subset=["feature"], num_bins=3, random_state=42
-        )
+        discretizer2 = KMeansDiscretizer(subset=["feature"], num_bins=3, random_state=42)
         result2 = discretizer2.fit_transform(X)
 
         assert result1.equals(result2)

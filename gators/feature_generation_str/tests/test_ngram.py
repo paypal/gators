@@ -9,11 +9,9 @@ class TestNGram:
 
     def test_character_bigrams(self):
         """Test character-level bigram extraction."""
-        X =pl.DataFrame({"text": ["hello", "hello", "world", None, ""]})
+        X = pl.DataFrame({"text": ["hello", "hello", "world", None, ""]})
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=5)
         result = transformer.fit_transform(X)
 
         # Should have features for common bigrams: 'he', 'el', 'll', 'lo'
@@ -27,11 +25,9 @@ class TestNGram:
 
     def test_character_trigrams(self):
         """Test character-level trigram extraction."""
-        X =pl.DataFrame({"text": ["hello", "hello", "world", "test"]})
+        X = pl.DataFrame({"text": ["hello", "hello", "world", "test"]})
 
-        transformer = NGram(
-            subset=["text"], n=3, ngram_type="char", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=3, ngram_type="char", max_features=5)
         result = transformer.fit_transform(X)
 
         new_features = [col for col in result.columns if col.startswith("text__ng_")]
@@ -44,13 +40,11 @@ class TestNGram:
 
     def test_word_bigrams(self):
         """Test word-level bigram extraction."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {"text": ["hello world", "hello there", "hello world", "world peace", None]}
         )
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="word", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="word", max_features=5)
         result = transformer.fit_transform(X)
 
         new_features = [col for col in result.columns if col.startswith("text__ng_")]
@@ -62,7 +56,7 @@ class TestNGram:
 
     def test_word_trigrams(self):
         """Test word-level trigram extraction."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "text": [
                     "the quick brown fox",
@@ -73,9 +67,7 @@ class TestNGram:
             }
         )
 
-        transformer = NGram(
-            subset=["text"], n=3, ngram_type="word", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=3, ngram_type="word", max_features=5)
         result = transformer.fit_transform(X)
 
         new_features = [col for col in result.columns if col.startswith("text__ng_")]
@@ -85,11 +77,9 @@ class TestNGram:
 
     def test_max_features(self):
         """Test that max_features limits the number of n-grams."""
-        X =pl.DataFrame({"text": ["abcdefghij"] * 5})  # Many possible bigrams
+        X = pl.DataFrame({"text": ["abcdefghij"] * 5})  # Many possible bigrams
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=3
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=3)
         result = transformer.fit_transform(X)
 
         new_features = [col for col in result.columns if col.startswith("text__ng_")]
@@ -97,7 +87,7 @@ class TestNGram:
 
     def test_min_count(self):
         """Test that min_count filters out rare n-grams."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "text": [
                     "aaa",
@@ -108,9 +98,7 @@ class TestNGram:
             }
         )
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=10, min_count=3
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=10, min_count=3)
         result = transformer.fit_transform(X)
 
         new_features = [col for col in result.columns if col.startswith("text__ng_")]
@@ -119,11 +107,9 @@ class TestNGram:
 
     def test_ngram_counts(self):
         """Test that n-gram counts are correct."""
-        X =pl.DataFrame({"text": ["aaa", "aa", "a"]})
+        X = pl.DataFrame({"text": ["aaa", "aa", "a"]})
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=5)
         result = transformer.fit_transform(X)
 
         # 'aaa' contains 'aa' twice
@@ -136,11 +122,9 @@ class TestNGram:
 
     def test_multiple_columns(self):
         """Test transformation on multiple columns."""
-        X =pl.DataFrame({"col1": ["hello", "world"], "col2": ["test", "data"]})
+        X = pl.DataFrame({"col1": ["hello", "world"], "col2": ["test", "data"]})
 
-        transformer = NGram(
-            subset=["col1", "col2"], n=2, ngram_type="char", max_features=5
-        )
+        transformer = NGram(subset=["col1", "col2"], n=2, ngram_type="char", max_features=5)
         result = transformer.fit_transform(X)
 
         col1_features = [col for col in result.columns if col.startswith("col1__ng_")]
@@ -151,9 +135,7 @@ class TestNGram:
 
     def test_auto_detect_string_columns(self):
         """Test automatic detection of string columns."""
-        X =pl.DataFrame(
-            {"text": ["hello", "world"], "num": [1, 2], "float": [1.5, 2.5]}
-        )
+        X = pl.DataFrame({"text": ["hello", "world"], "num": [1, 2], "float": [1.5, 2.5]})
 
         transformer = NGram(n=2, ngram_type="char", max_features=5)
         result = transformer.fit_transform(X)
@@ -169,7 +151,7 @@ class TestNGram:
 
     def test_drop_columns(self):
         """Test drop_columns parameter."""
-        X =pl.DataFrame({"text": ["hello", "world"], "name": ["Alice", "Bob"]})
+        X = pl.DataFrame({"text": ["hello", "world"], "name": ["Alice", "Bob"]})
 
         transformer = NGram(
             subset=["text"], n=2, ngram_type="char", max_features=5, drop_columns=True
@@ -183,11 +165,9 @@ class TestNGram:
 
     def test_special_characters_in_ngrams(self):
         """Test handling of special characters in n-grams."""
-        X =pl.DataFrame({"text": ["user@test.com", "admin@site.org", "test@email"]})
+        X = pl.DataFrame({"text": ["user@test.com", "admin@site.org", "test@email"]})
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=10
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=10)
         result = transformer.fit_transform(X)
 
         # Should handle @ and . in n-grams
@@ -199,11 +179,9 @@ class TestNGram:
 
     def test_word_ngrams_with_special_chars(self):
         """Test word n-grams with punctuation."""
-        X =pl.DataFrame({"text": ["hello, world!", "hello, there", "world! peace"]})
+        X = pl.DataFrame({"text": ["hello, world!", "hello, there", "world! peace"]})
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="word", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="word", max_features=5)
         result = transformer.fit_transform(X)
 
         # Word splitting should handle punctuation
@@ -212,11 +190,9 @@ class TestNGram:
 
     def test_empty_strings_and_nulls(self):
         """Test handling of empty strings and nulls."""
-        X =pl.DataFrame({"text": ["hello", "", None, "world", ""]})
+        X = pl.DataFrame({"text": ["hello", "", None, "world", ""]})
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=5)
         result = transformer.fit_transform(X)
 
         # Should not crash on empty/null values
@@ -253,22 +229,18 @@ class TestNGram:
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
-        X =pl.DataFrame({"text": []}, schema={"text": pl.String})
+        X = pl.DataFrame({"text": []}, schema={"text": pl.String})
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=5)
         result = transformer.fit_transform(X)
 
         assert len(result) == 0
 
     def test_sklearn_compatibility(self):
         """Test sklearn-compatible API."""
-        X =pl.DataFrame({"text": ["hello world", "test data"]})
+        X = pl.DataFrame({"text": ["hello world", "test data"]})
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=5)
 
         # Test fit returns self
         assert transformer.fit(X) is transformer
@@ -278,20 +250,16 @@ class TestNGram:
         assert isinstance(result, pl.DataFrame)
 
         # Test separate fit and transform
-        transformer2 = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=5
-        )
+        transformer2 = NGram(subset=["text"], n=2, ngram_type="char", max_features=5)
         transformer2.fit(X)
         result2 = transformer2.transform(X)
         assert result.equals(result2)
 
     def test_single_character_strings(self):
         """Test with strings shorter than n."""
-        X =pl.DataFrame({"text": ["a", "b", "c", "ab"]})
+        X = pl.DataFrame({"text": ["a", "b", "c", "ab"]})
 
-        transformer = NGram(
-            subset=["text"], n=3, ngram_type="char", max_features=5
-        )
+        transformer = NGram(subset=["text"], n=3, ngram_type="char", max_features=5)
         result = transformer.fit_transform(X)
 
         # Strings 'a', 'b', 'c' are too short for trigrams
@@ -302,17 +270,13 @@ class TestNGram:
 
     def test_consistent_ordering(self):
         """Test that top n-grams are selected consistently."""
-        X =pl.DataFrame({"text": ["hello"] * 10 + ["world"] * 5})
+        X = pl.DataFrame({"text": ["hello"] * 10 + ["world"] * 5})
 
-        transformer = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=3
-        )
+        transformer = NGram(subset=["text"], n=2, ngram_type="char", max_features=3)
         result1 = transformer.fit_transform(X)
 
         # Fit again with same data
-        transformer2 = NGram(
-            subset=["text"], n=2, ngram_type="char", max_features=3
-        )
+        transformer2 = NGram(subset=["text"], n=2, ngram_type="char", max_features=3)
         result2 = transformer2.fit_transform(X)
 
         # Should produce same features

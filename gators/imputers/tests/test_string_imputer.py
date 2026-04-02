@@ -80,9 +80,7 @@ def sample_X_drop():
 
 
 def test_drop_columns(sample_X_drop):
-    imputer = StringImputer(
-        strategy="constant", value="missing", drop_columns=False, inplace=False
-    )
+    imputer = StringImputer(strategy="constant", value="missing", drop_columns=False, inplace=False)
     imputer.fit(sample_X_drop)
     transformed = imputer.transform(sample_X_drop)
     expected = pl.DataFrame(

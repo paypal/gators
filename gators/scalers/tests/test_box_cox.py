@@ -93,9 +93,7 @@ def test_transform_lambda_one(sample_data):
     transformer = BoxCox(lambdas={"A": 1}, drop_columns=False)
     transformer.fit(sample_data)
     transformed_X = transformer.transform(sample_data)
-    expected_X = sample_data.with_columns(
-        [((pl.col("A") ** 1 - 1) / 1).alias("A__boxcox")]
-    )
+    expected_X = sample_data.with_columns([((pl.col("A") ** 1 - 1) / 1).alias("A__boxcox")])
     assert_frame_equal(transformed_X, expected_X)
 
 
@@ -150,7 +148,9 @@ def test_transform_fit_transform():
     scaler = BoxCox(lambdas={"A": 0})
     transformed_X = scaler.fit_transform(X)
 
-    expected_X = pl.DataFrame({"A__boxcox": [math.log(1.0), math.log(2.0), math.log(3.0), math.log(4.0)]})
+    expected_X = pl.DataFrame(
+        {"A__boxcox": [math.log(1.0), math.log(2.0), math.log(3.0), math.log(4.0)]}
+    )
 
     assert_frame_equal(transformed_X, expected_X)
 
@@ -158,18 +158,22 @@ def test_transform_fit_transform():
 def test_boxcox_values():
     """Test that Box-Cox transformation produces expected numerical values."""
     X = pl.DataFrame({"A": [1.0, 2.0, 4.0, 8.0]})
-    
+
     # Lambda = 0 (log transformation)
     scaler_log = BoxCox(lambdas={"A": 0})
     result_log = scaler_log.fit_transform(X)
     expected_log = [math.log(1.0), math.log(2.0), math.log(4.0), math.log(8.0)]
     assert result_log["A__boxcox"].to_list() == pytest.approx(expected_log)
-    
+
     # Lambda = 0.5
     scaler_sqrt = BoxCox(lambdas={"A": 0.5})
     result_sqrt = scaler_sqrt.fit_transform(X)
-    expected_sqrt = [(1.0**0.5 - 1) / 0.5, (2.0**0.5 - 1) / 0.5, 
-                     (4.0**0.5 - 1) / 0.5, (8.0**0.5 - 1) / 0.5]
+    expected_sqrt = [
+        (1.0**0.5 - 1) / 0.5,
+        (2.0**0.5 - 1) / 0.5,
+        (4.0**0.5 - 1) / 0.5,
+        (8.0**0.5 - 1) / 0.5,
+    ]
     assert result_sqrt["A__boxcox"].to_list() == pytest.approx(expected_sqrt)
 
 

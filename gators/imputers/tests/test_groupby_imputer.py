@@ -20,9 +20,7 @@ def sample_dataframe():
 
 def test_groupby_imputer_median(sample_dataframe):
     """Test GroupByImputer with median strategy."""
-    imputer = GroupByImputer(
-        group_by_column="district", strategy="median", inplace=False
-    )
+    imputer = GroupByImputer(group_by_column="district", strategy="median", inplace=False)
     imputer.fit(sample_dataframe)
     transformed = imputer.transform(sample_dataframe)
 
@@ -84,9 +82,7 @@ def test_groupby_imputer_mean(sample_dataframe):
 
 def test_groupby_imputer_inplace(sample_dataframe):
     """Test GroupByImputer with inplace=True."""
-    imputer = GroupByImputer(
-        group_by_column="district", strategy="median", inplace=True
-    )
+    imputer = GroupByImputer(group_by_column="district", strategy="median", inplace=True)
     imputer.fit(sample_dataframe)
     transformed = imputer.transform(sample_dataframe)
 
@@ -135,7 +131,7 @@ def test_groupby_imputer_specific_columns(sample_dataframe):
 
 def test_groupby_imputer_auto_detect_numeric():
     """Test that GroupByImputer auto-detects numeric columns."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "group": ["A", "A", "B", "B"],
             "num1": [1.0, None, 3.0, 4.0],
@@ -153,7 +149,7 @@ def test_groupby_imputer_auto_detect_numeric():
 
 def test_groupby_imputer_single_value_per_group():
     """Test GroupByImputer when there's only one value per group."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "group": ["A", "A", "B", "B"],
             "value": [1.0, 1.0, None, None],
@@ -177,7 +173,7 @@ def test_groupby_imputer_single_value_per_group():
 
 def test_groupby_imputer_fit_transform():
     """Test fit_transform method."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "group": ["A", "A", "B", "B"],
             "value": [1.0, None, 3.0, None],

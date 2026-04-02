@@ -41,9 +41,7 @@ def imbalanced_X():
 
 def test_iqr_remove(sample_X):
     """Test IQR method with row removal."""
-    transformer = OutlierFilter(
-        subset=["age"], method="iqr", threshold=1.5, action="remove"
-    )
+    transformer = OutlierFilter(subset=["age"], method="iqr", threshold=1.5, action="remove")
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
 
@@ -54,9 +52,7 @@ def test_iqr_remove(sample_X):
 
 def test_iqr_cap(sample_X):
     """Test IQR method with value capping."""
-    transformer = OutlierFilter(
-        subset=["age"], method="iqr", threshold=1.5, action="cap"
-    )
+    transformer = OutlierFilter(subset=["age"], method="iqr", threshold=1.5, action="cap")
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
 
@@ -67,9 +63,7 @@ def test_iqr_cap(sample_X):
 
 def test_zscore_remove(sample_X):
     """Test Z-score method with row removal."""
-    transformer = OutlierFilter(
-        subset=["age"], method="zscore", threshold=2.0, action="remove"
-    )
+    transformer = OutlierFilter(subset=["age"], method="zscore", threshold=2.0, action="remove")
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
 
@@ -80,9 +74,7 @@ def test_zscore_remove(sample_X):
 
 def test_zscore_cap(sample_X):
     """Test Z-score method with value capping."""
-    transformer = OutlierFilter(
-        subset=["age"], method="zscore", threshold=2.0, action="cap"
-    )
+    transformer = OutlierFilter(subset=["age"], method="zscore", threshold=2.0, action="cap")
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
 
@@ -247,7 +239,7 @@ def test_class_aware_percentile(imbalanced_X):
 
 def test_class_aware_requires_target():
     """Test that class_aware=True requires target column."""
-    X =  pl.DataFrame({"x": [1, 2, 3], "y": [0, 1, 0]})
+    X = pl.DataFrame({"x": [1, 2, 3], "y": [0, 1, 0]})
     transformer = OutlierFilter(class_aware=True)
 
     with pytest.raises(ValueError, match="Target column name 'y' must be provided"):
@@ -256,7 +248,7 @@ def test_class_aware_requires_target():
 
 def test_class_aware_target_not_in_columns():
     """Test error when target column not found."""
-    X =  pl.DataFrame({"x": [1, 2, 3], "y": [0, 1, 0]})
+    X = pl.DataFrame({"x": [1, 2, 3], "y": [0, 1, 0]})
     transformer = OutlierFilter(class_aware=True)
 
     with pytest.raises(ValueError, match="Target column 'z' not found"):
@@ -265,7 +257,7 @@ def test_class_aware_target_not_in_columns():
 
 def test_empty_columns_list():
     """Test with empty columns after filtering."""
-    X =  pl.DataFrame({"cat": ["a", "b", "c"]})
+    X = pl.DataFrame({"cat": ["a", "b", "c"]})
     transformer = OutlierFilter(method="iqr", action="remove")
     transformer.fit(X)
     transformed_X = transformer.transform(X)
@@ -276,9 +268,7 @@ def test_empty_columns_list():
 
 def test_fit_transform(sample_X):
     """Test fit_transform method."""
-    transformer = OutlierFilter(
-        subset=["age"], method="iqr", threshold=1.5, action="remove"
-    )
+    transformer = OutlierFilter(subset=["age"], method="iqr", threshold=1.5, action="remove")
     transformed_X = transformer.fit_transform(sample_X)
 
     assert len(transformed_X) == 9
@@ -287,7 +277,7 @@ def test_fit_transform(sample_X):
 
 def test_class_aware_with_numeric_target():
     """Test that numeric target column is excluded from outlier detection."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "feature1": [1, 2, 3, 4, 5, 100],  # Has outlier
             "target": [0, 0, 0, 1, 1, 1],  # Numeric target
@@ -297,10 +287,10 @@ def test_class_aware_with_numeric_target():
     # Don't specify columns - let it auto-detect numeric columns
     transformer = OutlierFilter(method="iqr", threshold=1.5, action="remove", class_aware=True)
     transformer.fit(X, y="target")
-    
+
     # Target should not be in columns being checked for outliers
     assert "target" not in transformer.subset
-    
+
     transformed_X = transformer.transform(X)
     # Should still have data
     assert len(transformed_X) > 0
@@ -308,7 +298,7 @@ def test_class_aware_with_numeric_target():
 
 def test_zscore_with_null_values_class_aware():
     """Test z-score method with null values in class_aware mode."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "feature": [None, None, None, 1.0, 2.0, 3.0],
             "target": [0, 0, 0, 1, 1, 1],
@@ -329,7 +319,7 @@ def test_zscore_with_null_values_class_aware():
 
 def test_zscore_with_null_values_global():
     """Test z-score method with null values in global mode to hit else branch."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "feature": [None, None, None],
             "other": [1, 2, 3],
@@ -346,7 +336,7 @@ def test_zscore_with_null_values_global():
     # Bounds should be None since all values are None
     assert transformer._bounds["feature"]["lower"] is None
     assert transformer._bounds["feature"]["upper"] is None
-    
+
     transformed_X = transformer.transform(X)
     assert len(transformed_X) == 3
 
@@ -362,7 +352,7 @@ def test_percentile_global_mode(sample_X):
     )
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
-    
+
     # All rows should be preserved with capping
     assert len(transformed_X) == 10
     # Extreme values should be capped
@@ -371,7 +361,7 @@ def test_percentile_global_mode(sample_X):
 
 def test_cap_with_none_bounds_global():
     """Test cap action when bounds are None in global mode."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "feature1": [None, None, None],
             "feature2": [1, 2, 3],
@@ -386,7 +376,7 @@ def test_cap_with_none_bounds_global():
     )
     transformer.fit(X)
     transformed_X = transformer.transform(X)
-    
+
     # Should keep all columns including the one with None bounds
     assert "feature1" in transformed_X.columns
     assert "feature2" in transformed_X.columns
@@ -395,7 +385,7 @@ def test_cap_with_none_bounds_global():
 
 def test_cap_with_none_bounds_class_aware():
     """Test cap action when bounds are None in class_aware mode."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "feature": [None, None, 1.0, 2.0],
             "target": [0, 0, 1, 1],
@@ -411,7 +401,7 @@ def test_cap_with_none_bounds_class_aware():
     )
     transformer.fit(X, y="target")
     transformed_X = transformer.transform(X)
-    
+
     # Should keep all columns
     assert "feature" in transformed_X.columns
     assert "other" in transformed_X.columns

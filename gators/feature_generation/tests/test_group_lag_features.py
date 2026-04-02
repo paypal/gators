@@ -16,17 +16,16 @@ def test_transform_basic_single_lag():
         }
     ).sort(["cat1", "time"])
 
-    transformer = GroupLagFeatures(
-        subset=["amount"], by=["cat1"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["amount"], by=["cat1"], lags=[1])
     result = transformer.fit_transform(X)
 
     assert "amount_lag1_cat1" in result.columns
 
     # First row in group A should be null
-    assert result["amount_lag1_cat1"][0] is None or result.select(
-        pl.col("amount_lag1_cat1").is_null()
-    )[0, 0]
+    assert (
+        result["amount_lag1_cat1"][0] is None
+        or result.select(pl.col("amount_lag1_cat1").is_null())[0, 0]
+    )
     # Second row in group A should be 100
     assert result["amount_lag1_cat1"][1] == 100
     # Third row in group A should be 200
@@ -42,18 +41,17 @@ def test_transform_multiple_lags():
         }
     )
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1, 2]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1, 2])
     result = transformer.fit_transform(X)
 
     assert "value_lag1_group" in result.columns
     assert "value_lag2_group" in result.columns
 
     # Group A
-    assert result["value_lag1_group"][0] is None or result.select(
-        pl.col("value_lag1_group").is_null()
-    )[0, 0]
+    assert (
+        result["value_lag1_group"][0] is None
+        or result.select(pl.col("value_lag1_group").is_null())[0, 0]
+    )
     assert result["value_lag1_group"][1] == 10
     assert result["value_lag2_group"][2] == 10
 
@@ -67,9 +65,7 @@ def test_transform_with_leads():
         }
     )
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1], leads=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1], leads=[1])
     result = transformer.fit_transform(X)
 
     assert "value_lag1_group" in result.columns
@@ -89,18 +85,17 @@ def test_transform_multiple_leads():
         }
     )
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[], leads=[1, 2]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[], leads=[1, 2])
     result = transformer.fit_transform(X)
 
     assert "value_lead1_group" in result.columns
     assert "value_lead2_group" in result.columns
 
     # Last row should have null leads
-    assert result["value_lead1_group"][2] is None or result.select(
-        pl.col("value_lead1_group").is_null()
-    )[2, 0]
+    assert (
+        result["value_lead1_group"][2] is None
+        or result.select(pl.col("value_lead1_group").is_null())[2, 0]
+    )
 
 
 def test_transform_multiple_subset():
@@ -113,9 +108,7 @@ def test_transform_multiple_subset():
         }
     )
 
-    transformer = GroupLagFeatures(
-        subset=["col1", "col2"], by=["group"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["col1", "col2"], by=["group"], lags=[1])
     result = transformer.fit_transform(X)
 
     assert "col1_lag1_group" in result.columns
@@ -135,9 +128,7 @@ def test_transform_multiple_by():
         }
     ).sort(["cat1", "cat2"])
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["cat1", "cat2"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["cat1", "cat2"], lags=[1])
     result = transformer.fit_transform(X)
 
     assert "value_lag1_cat1_cat2" in result.columns
@@ -188,9 +179,7 @@ def test_transform_with_fill_value_leads():
 
 def test_transform_with_drop_columns():
     """Test dropping original numerical columns."""
-    X = pl.DataFrame(
-        {"value": [10, 20, 30], "other": [1, 2, 3], "group": ["A", "A", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30], "other": [1, 2, 3], "group": ["A", "A", "B"]})
 
     transformer = GroupLagFeatures(
         subset=["value"],
@@ -208,9 +197,7 @@ def test_transform_with_drop_columns():
 
 def test_transform_with_custom_column_names():
     """Test using custom column names."""
-    X = pl.DataFrame(
-        {"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupLagFeatures(
         subset=["value"],
@@ -284,9 +271,7 @@ def test_validation_empty_lags():
     with pytest.raises(
         ValidationError, match="At least one of 'lags' or 'leads' must be non-empty"
     ):
-        GroupLagFeatures(
-            subset=["value"], by=["group"], lags=[]
-        )
+        GroupLagFeatures(subset=["value"], by=["group"], lags=[])
 
 
 def test_validation_invalid_lead():
@@ -319,9 +304,7 @@ def test_fit_return_self():
     """Test that fit returns self."""
     X = pl.DataFrame({"value": [10, 20], "group": ["A", "B"]})
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1])
 
     result = transformer.fit(X)
     assert result is transformer
@@ -346,13 +329,9 @@ def test_column_mapping_generation():
 
 def test_empty_dataframe():
     """Test behavior with empty dataframe."""
-    X = pl.DataFrame(
-        {"value": [], "group": []}, schema={"value": pl.Int64, "group": pl.Utf8}
-    )
+    X = pl.DataFrame({"value": [], "group": []}, schema={"value": pl.Int64, "group": pl.Utf8})
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1])
     result = transformer.fit_transform(X)
 
     assert result.shape[0] == 0
@@ -363,26 +342,21 @@ def test_single_row_dataframe():
     """Test behavior with single row dataframe."""
     X = pl.DataFrame({"value": [100], "group": ["A"]})
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1])
     result = transformer.fit_transform(X)
 
     # Only one row, so lag should be null
-    assert result["value_lag1_group"][0] is None or result.select(
-        pl.col("value_lag1_group").is_null()
-    )[0, 0]
+    assert (
+        result["value_lag1_group"][0] is None
+        or result.select(pl.col("value_lag1_group").is_null())[0, 0]
+    )
 
 
 def test_with_null_values():
     """Test handling of null values in X."""
-    X = pl.DataFrame(
-        {"value": [10, None, 30, 40, None], "group": ["A", "A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, None, 30, 40, None], "group": ["A", "A", "A", "B", "B"]})
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1])
     result = transformer.fit_transform(X)
 
     # Lag of null is still null
@@ -391,13 +365,9 @@ def test_with_null_values():
 
 def test_negative_values():
     """Test with negative values."""
-    X = pl.DataFrame(
-        {"value": [-10, -20, 30, 40], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [-10, -20, 30, 40], "group": ["A", "A", "B", "B"]})
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1])
     result = transformer.fit_transform(X)
 
     assert result["value_lag1_group"][1] == -10
@@ -405,13 +375,9 @@ def test_negative_values():
 
 def test_float_values():
     """Test with float values."""
-    X = pl.DataFrame(
-        {"value": [10.5, 20.7, 30.2, 40.8], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10.5, 20.7, 30.2, 40.8], "group": ["A", "A", "B", "B"]})
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1])
     result = transformer.fit_transform(X)
 
     assert result["value_lag1_group"][1] == pytest.approx(10.5)
@@ -426,9 +392,7 @@ def test_large_lag_value():
         }
     )
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[5]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[5])
     result = transformer.fit_transform(X)
 
     # All rows should have null since lag is larger than group size
@@ -488,15 +452,14 @@ def test_multiple_groups_independence():
         }
     )
 
-    transformer = GroupLagFeatures(
-        subset=["value"], by=["group"], lags=[1]
-    )
+    transformer = GroupLagFeatures(subset=["value"], by=["group"], lags=[1])
     result = transformer.fit_transform(X)
 
     # First row of group B should not have lag from group A
-    assert result["value_lag1_group"][3] is None or result.select(
-        pl.col("value_lag1_group").is_null()
-    )[3, 0]
+    assert (
+        result["value_lag1_group"][3] is None
+        or result.select(pl.col("value_lag1_group").is_null())[3, 0]
+    )
 
 
 if __name__ == "__main__":

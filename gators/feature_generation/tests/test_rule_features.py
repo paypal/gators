@@ -345,9 +345,7 @@ class TestRuleFeatures:
 
     def test_validation_missing_value_and_other_column(self):
         """Test that condition without value or other_column raises ValueError."""
-        with pytest.raises(
-            ValueError, match="must specify either 'value' or 'other_column'"
-        ):
+        with pytest.raises(ValueError, match="must specify either 'value' or 'other_column'"):
             RuleFeatures(
                 rules=[[{"column": "amount", "op": ">"}]],
                 rule_logic="and",
@@ -356,9 +354,7 @@ class TestRuleFeatures:
 
     def test_validation_both_value_and_other_column(self):
         """Test that condition with both value and other_column raises ValueError."""
-        with pytest.raises(
-            ValueError, match="cannot specify both 'value' and 'other_column'"
-        ):
+        with pytest.raises(ValueError, match="cannot specify both 'value' and 'other_column'"):
             RuleFeatures(
                 rules=[
                     [
@@ -402,9 +398,7 @@ class TestRuleFeatures:
 
     def test_validation_empty_column_names(self):
         """Test that empty column names list raises ValueError."""
-        with pytest.raises(
-            ValueError, match="At least one column name must be specified"
-        ):
+        with pytest.raises(ValueError, match="At least one column name must be specified"):
             RuleFeatures(
                 rules=[[{"column": "amount", "op": ">", "value": 100}]],
                 rule_logic="and",
@@ -459,7 +453,7 @@ class TestStaticMethods:
                 "amount": [100, 1500, 500, 200, 2000],
             }
         )
-        
+
         # Test all operators: >, <, >=, <=, ==, !=
         transformer = RuleFeatures(
             rules=[
@@ -471,10 +465,17 @@ class TestStaticMethods:
                 [{"column": "age", "op": "!=", "other_column": "amount"}],
             ],
             rule_logic="and",
-            new_column_names=["age_gt_amount", "age_lt_amount", "age_gte_amount", "age_lte_amount", "age_eq_amount", "age_neq_amount"],
+            new_column_names=[
+                "age_gt_amount",
+                "age_lt_amount",
+                "age_gte_amount",
+                "age_lte_amount",
+                "age_eq_amount",
+                "age_neq_amount",
+            ],
         )
         result = transformer.fit_transform(sample_data)
-        
+
         # Verify all columns were created
         assert "age_gt_amount" in result.columns
         assert "age_lt_amount" in result.columns
@@ -491,7 +492,7 @@ class TestStaticMethods:
                 "limit": [20, 20, 20],
             }
         )
-        
+
         # Directly test < operator
         transformer = RuleFeatures(
             rules=[[{"column": "age", "op": "<", "other_column": "limit"}]],
@@ -499,7 +500,7 @@ class TestStaticMethods:
             new_column_names=["age_below_limit"],
         )
         result = transformer.fit_transform(sample_data)
-        
+
         assert "age_below_limit" in result.columns
         # First row: 15 < 20 = True (1)
         assert result["age_below_limit"][0] == 1

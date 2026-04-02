@@ -7,7 +7,7 @@ from gators.scalers import PowerScaler
 
 def test_power_scaler_default():
     """Test PowerScaler with default parameters (power=0.5, all columns)."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [1.0, 4.0, 9.0, 16.0, 25.0],
             "col2": [100.0, 400.0, 900.0, 1600.0, 2500.0],
@@ -17,20 +17,20 @@ def test_power_scaler_default():
     scaler = PowerScaler()
     scaler.fit(X)
     result = scaler.transform(X)
-    
+
     expected = X.with_columns(
         [
             (pl.col("col1") ** 0.5).alias("col1__power_0_5"),
             (pl.col("col2") ** 0.5).alias("col2__power_0_5"),
         ]
     ).drop(["col1", "col2"])
-    
+
     assert_frame_equal(result, expected)
 
 
 def test_power_scaler_subset_columns():
     """Test PowerScaler with subset of columns."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [1.0, 4.0, 9.0, 16.0],
             "col2": [2.0, 8.0, 18.0, 32.0],
@@ -54,7 +54,7 @@ def test_power_scaler_subset_columns():
 
 def test_power_scaler_square():
     """Test PowerScaler with power=2 (squaring)."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [1.0, 2.0, 3.0, 4.0],
             "col2": [10.0, 20.0, 30.0, 40.0],
@@ -77,23 +77,25 @@ def test_power_scaler_square():
 
 def test_power_scaler_cube_root():
     """Test PowerScaler with power=1/3 (cube root)."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [1.0, 8.0, 27.0, 64.0, 125.0],
         }
     )
 
-    scaler = PowerScaler(power=1/3)
+    scaler = PowerScaler(power=1 / 3)
     scaler.fit(X)
     result = scaler.transform(X)
 
     expected_values = [1.0, 2.0, 3.0, 4.0, 5.0]
-    assert result["col1__power_0_3333333333333333"].to_list() == pytest.approx(expected_values, rel=1e-5)
+    assert result["col1__power_0_3333333333333333"].to_list() == pytest.approx(
+        expected_values, rel=1e-5
+    )
 
 
 def test_power_scaler_fit_transform():
     """Test PowerScaler fit_transform method."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [1.0, 4.0, 9.0, 16.0],
         }
@@ -113,7 +115,7 @@ def test_power_scaler_fit_transform():
 
 def test_power_scaler_drop_columns_false():
     """Test PowerScaler with drop_columns=False."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [1.0, 4.0, 9.0],
         }

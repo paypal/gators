@@ -7,9 +7,7 @@ from gators.imputers.boolean_imputer import BooleanImputer
 
 @pytest.fixture
 def sample_X():
-    return pl.DataFrame(
-        {"A": [True, False, None, True], "B": [None, True, False, False]}
-    )
+    return pl.DataFrame({"A": [True, False, None, True], "B": [None, True, False, False]})
 
 
 def test_fit_constant_strategy(sample_X):
@@ -77,9 +75,7 @@ def test_subset_columns(sample_X):
 
 
 def test_transform_no_drop(sample_X):
-    imputer = BooleanImputer(
-        strategy="most_frequent", drop_columns=False, inplace=False
-    )
+    imputer = BooleanImputer(strategy="most_frequent", drop_columns=False, inplace=False)
     imputer.fit(sample_X)
 
     transformed_X = imputer.transform(sample_X)

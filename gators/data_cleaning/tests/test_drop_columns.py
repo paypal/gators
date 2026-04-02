@@ -7,7 +7,7 @@ from gators.data_cleaning import DropColumns
 
 @pytest.fixture
 def sample_data() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": [1, 2, 3],
         "column2": ["A", "B", "C"],
         "column3": [True, False, True],
@@ -17,7 +17,7 @@ def sample_data() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_X() -> pl.DataFrame:
-    X ={
+    X = {
         "column3": [True, False, True],
     }
     return pl.DataFrame(X)

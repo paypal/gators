@@ -111,9 +111,7 @@ def test_transform_custom_column_names():
 
 def test_transform_with_drop_columns():
     # Test dropping original columns
-    X = pl.DataFrame(
-        {"A": [10, 20, 30], "B": [2, 4, 5], "C": [100, 200, 300]}
-    )
+    X = pl.DataFrame({"A": [10, 20, 30], "B": [2, 4, 5], "C": [100, 200, 300]})
 
     transformer = RatioFeatures(
         numerator_columns=["A"], denominator_columns=["B"], drop_columns=True
@@ -163,7 +161,11 @@ def test_transform_drop_columns_with_overlap():
     result = transformer.fit_transform(X)
 
     expected = pl.DataFrame(
-        {"C": [100, 200, 300], "A__div__B": [5.0, 5.0, 6.0], "B__div__A": [0.2, 0.2, 0.16666666666666666]}
+        {
+            "C": [100, 200, 300],
+            "A__div__B": [5.0, 5.0, 6.0],
+            "B__div__A": [0.2, 0.2, 0.16666666666666666],
+        }
     )
 
     assert_frame_equal(result, expected)
@@ -176,9 +178,7 @@ def test_fit_transform():
     transformer = RatioFeatures(numerator_columns=["A"], denominator_columns=["B"])
     result = transformer.fit_transform(X)
 
-    expected = pl.DataFrame(
-        {"A": [10, 20, 30], "B": [2, 4, 5], "A__div__B": [5.0, 5.0, 6.0]}
-    )
+    expected = pl.DataFrame({"A": [10, 20, 30], "B": [2, 4, 5], "A__div__B": [5.0, 5.0, 6.0]})
 
     assert_frame_equal(result, expected)
 
@@ -186,9 +186,7 @@ def test_fit_transform():
 def test_length_mismatch_columns():
     # Test that mismatched lengths raise an error
     with pytest.raises(ValidationError):
-        RatioFeatures(
-            numerator_columns=["A", "B"], denominator_columns=["C"]
-        )
+        RatioFeatures(numerator_columns=["A", "B"], denominator_columns=["C"])
 
 
 def test_length_mismatch_new_column_names():
@@ -240,8 +238,6 @@ def test_zero_numerator():
     transformer = RatioFeatures(numerator_columns=["A"], denominator_columns=["B"])
     result = transformer.fit_transform(X)
 
-    expected = pl.DataFrame(
-        {"A": [0, 0, 10], "B": [2, 5, 10], "A__div__B": [0.0, 0.0, 1.0]}
-    )
+    expected = pl.DataFrame({"A": [0, 0, 10], "B": [2, 5, 10], "A__div__B": [0.0, 0.0, 1.0]})
 
     assert_frame_equal(result, expected)

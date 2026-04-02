@@ -7,7 +7,7 @@ from gators.feature_generation.is_null import IsNull
 
 def test_transform_no_nulls():
     """Test transformation when no null values are present."""
-    X =  pl.DataFrame({"col1": [1, 2, 3], "col2": [4, 5, 6], "col3": [7, 8, 9]})
+    X = pl.DataFrame({"col1": [1, 2, 3], "col2": [4, 5, 6], "col3": [7, 8, 9]})
     expected_X = X.with_columns(
         [
             pl.col("col1").is_null().alias("col1__is_null"),
@@ -23,9 +23,7 @@ def test_transform_no_nulls():
 
 def test_transform_with_nulls():
     """Test transformation when null values are present."""
-    X =  pl.DataFrame(
-        {"col1": [1, None, 3, None], "col2": [4, 5, None, 7], "col3": [7, 8, 9, 10]}
-    )
+    X = pl.DataFrame({"col1": [1, None, 3, None], "col2": [4, 5, None, 7], "col3": [7, 8, 9, 10]})
     expected_X = X.with_columns(
         [
             pl.col("col1").is_null().alias("col1__is_null"),
@@ -41,7 +39,7 @@ def test_transform_with_nulls():
 
 def test_transform_single_column():
     """Test transformation with a single column."""
-    X =  pl.DataFrame({"col1": [1, None, 3], "col2": [4, 5, 6]})
+    X = pl.DataFrame({"col1": [1, None, 3], "col2": [4, 5, 6]})
     expected_X = X.with_columns([pl.col("col1").is_null().alias("col1__is_null")])
 
     transformer = IsNull(subset=["col1"])
@@ -52,7 +50,7 @@ def test_transform_single_column():
 
 def test_transform_all_nulls():
     """Test transformation when all values are null."""
-    X =  pl.DataFrame({"col1": [None, None, None], "col2": [4, 5, 6]})
+    X = pl.DataFrame({"col1": [None, None, None], "col2": [4, 5, 6]})
     expected_X = X.with_columns([pl.col("col1").is_null().alias("col1__is_null")])
 
     transformer = IsNull(subset=["col1"])
@@ -63,7 +61,7 @@ def test_transform_all_nulls():
 
 def test_column_mapping():
     """Test that _column_mapping is correctly populated."""
-    X =  pl.DataFrame({"col1": [1, 2, 3], "col2": [4, 5, 6]})
+    X = pl.DataFrame({"col1": [1, 2, 3], "col2": [4, 5, 6]})
 
     transformer = IsNull(subset=["col1", "col2"])
     _ = transformer.fit(X)
@@ -74,7 +72,7 @@ def test_column_mapping():
 
 def test_transform_preserves_original_columns():
     """Test that original columns are preserved after transformation."""
-    X =  pl.DataFrame({"col1": [1, None, 3], "col2": [4, 5, None]})
+    X = pl.DataFrame({"col1": [1, None, 3], "col2": [4, 5, None]})
 
     transformer = IsNull(subset=["col1", "col2"])
     _ = transformer.fit(X)
@@ -90,7 +88,7 @@ def test_transform_preserves_original_columns():
 
 def test_transform_multiple_columns():
     """Test transformation with multiple columns."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "A": [1, None, 3, 4],
             "B": [None, 2, 3, 4],

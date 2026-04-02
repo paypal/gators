@@ -6,7 +6,7 @@ from gators.scalers import StandardScaler
 
 
 def test_standard_scaler_default():
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": [10, 20, 30, 40, 50],
@@ -19,22 +19,16 @@ def test_standard_scaler_default():
     result = scaler.transform(X)
     expected = X.with_columns(
         [
-            ((pl.col("col1") - X["col1"].mean()) / X["col1"].std()).alias(
-                "col1__standard_scale"
-            ),
-            ((pl.col("col2") - X["col2"].mean()) / X["col2"].std()).alias(
-                "col2__standard_scale"
-            ),
-            ((pl.col("col3") - X["col3"].mean()) / X["col3"].std()).alias(
-                "col3__standard_scale"
-            ),
+            ((pl.col("col1") - X["col1"].mean()) / X["col1"].std()).alias("col1__standard_scale"),
+            ((pl.col("col2") - X["col2"].mean()) / X["col2"].std()).alias("col2__standard_scale"),
+            ((pl.col("col3") - X["col3"].mean()) / X["col3"].std()).alias("col3__standard_scale"),
         ]
     ).drop(["col1", "col2", "col3"])
     assert_frame_equal(result, expected)
 
 
 def test_standard_scaler_subset_columns():
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [1, 2, 3, 4, 5],
             "col2": [10, 20, 30, 40, 50],
@@ -48,12 +42,8 @@ def test_standard_scaler_subset_columns():
 
     expected = X.with_columns(
         [
-            ((pl.col("col1") - X["col1"].mean()) / X["col1"].std()).alias(
-                "col1__standard_scale"
-            ),
-            ((pl.col("col2") - X["col2"].mean()) / X["col2"].std()).alias(
-                "col2__standard_scale"
-            ),
+            ((pl.col("col1") - X["col1"].mean()) / X["col1"].std()).alias("col1__standard_scale"),
+            ((pl.col("col2") - X["col2"].mean()) / X["col2"].std()).alias("col2__standard_scale"),
         ]
     )
 

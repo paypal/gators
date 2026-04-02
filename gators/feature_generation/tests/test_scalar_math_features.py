@@ -308,9 +308,7 @@ def test_transform_all_operators(sample_X):
 
 def test_transform_preserves_original_columns(sample_X):
     """Test that original columns are preserved."""
-    transformer = ScalarMathFeatures(
-        operations=[{"column": "Age", "op": "+", "scalar": 10}]
-    )
+    transformer = ScalarMathFeatures(operations=[{"column": "Age", "op": "+", "scalar": 10}])
     result = transformer.fit_transform(sample_X)
 
     # All original columns should still be present
@@ -353,12 +351,12 @@ def test_operator_name_mapping():
 
 def test_empty_new_column_names_raises_error():
     """Test that empty new_column_names list raises ValueError."""
-    X =pl.DataFrame({"A": [10, 20, 30]})
-    
+    X = pl.DataFrame({"A": [10, 20, 30]})
+
     with pytest.raises(ValueError, match="Column names list cannot be empty"):
         ScalarMathFeatures(
             subset=["A"],
             scalars=[5],
             operators=["+"],
-            new_column_names=[]  # Empty list should raise error
+            new_column_names=[],  # Empty list should raise error
         )

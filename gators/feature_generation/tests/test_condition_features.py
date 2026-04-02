@@ -57,9 +57,7 @@ class TestConditionFeatures:
     def test_column_to_column_comparison(self, sample_data):
         """Test column-to-column comparison."""
         transformer = ConditionFeatures(
-            conditions=[
-                {"column": "velocity_24h", "op": ">", "other_column": "velocity_7d"}
-            ],
+            conditions=[{"column": "velocity_24h", "op": ">", "other_column": "velocity_7d"}],
             new_column_names=["is_24h_greater_than_7d"],
         )
         result = transformer.fit_transform(sample_data)
@@ -185,17 +183,13 @@ class TestConditionFeaturesValidation:
 
     def test_empty_conditions_raises_error(self):
         """Test that empty conditions list raises error."""
-        with pytest.raises(
-            ValueError, match="At least one condition must be specified"
-        ):
+        with pytest.raises(ValueError, match="At least one condition must be specified"):
             ConditionFeatures(conditions=[], new_column_names=[])
 
     def test_missing_column_key_raises_error(self):
         """Test that missing 'column' key raises error."""
         with pytest.raises(ValueError, match="'column' key is required"):
-            ConditionFeatures(
-                conditions=[{"op": ">", "value": 10}], new_column_names=["test"]
-            )
+            ConditionFeatures(conditions=[{"op": ">", "value": 10}], new_column_names=["test"])
 
     def test_missing_op_key_raises_error(self):
         """Test that missing 'op' key raises error."""
@@ -214,22 +208,14 @@ class TestConditionFeaturesValidation:
 
     def test_missing_value_and_other_column_raises_error(self):
         """Test that missing both value and other_column raises error."""
-        with pytest.raises(
-            ValueError, match="must specify either 'value' or 'other_column'"
-        ):
-            ConditionFeatures(
-                conditions=[{"column": "age", "op": ">"}], new_column_names=["test"]
-            )
+        with pytest.raises(ValueError, match="must specify either 'value' or 'other_column'"):
+            ConditionFeatures(conditions=[{"column": "age", "op": ">"}], new_column_names=["test"])
 
     def test_both_value_and_other_column_raises_error(self):
         """Test that specifying both value and other_column raises error."""
-        with pytest.raises(
-            ValueError, match="cannot specify both 'value' and 'other_column'"
-        ):
+        with pytest.raises(ValueError, match="cannot specify both 'value' and 'other_column'"):
             ConditionFeatures(
-                conditions=[
-                    {"column": "age", "op": ">", "value": 10, "other_column": "income"}
-                ],
+                conditions=[{"column": "age", "op": ">", "value": 10, "other_column": "income"}],
                 new_column_names=["test"],
             )
 
@@ -272,9 +258,7 @@ class TestConditionFeaturesEdgeCases:
 
     def test_with_null_values(self):
         """Test behavior with null values."""
-        X =pl.DataFrame(
-            {"age": [25, None, 30, None, 45], "amount": [100, 500, None, 200, 2000]}
-        )
+        X = pl.DataFrame({"age": [25, None, 30, None, 45], "amount": [100, 500, None, 200, 2000]})
 
         transformer = ConditionFeatures(
             conditions=[
@@ -292,7 +276,7 @@ class TestConditionFeaturesEdgeCases:
 
     def test_boolean_column_comparison(self):
         """Test comparison with boolean columns."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "is_active": [True, False, True, False],
                 "is_verified": [True, True, False, False],
@@ -309,7 +293,7 @@ class TestConditionFeaturesEdgeCases:
 
     def test_string_column_comparison(self):
         """Test comparison with string columns."""
-        X =pl.DataFrame({"category": ["A", "B", "A", "C", "B"]})
+        X = pl.DataFrame({"category": ["A", "B", "A", "C", "B"]})
 
         transformer = ConditionFeatures(
             conditions=[
@@ -352,9 +336,7 @@ class TestConditionFeaturesAutoNaming:
     def test_auto_naming_column_comparison(self, sample_data):
         """Test auto-generated names for column-to-column comparisons."""
         transformer = ConditionFeatures(
-            conditions=[
-                {"column": "velocity_24h", "op": "<", "other_column": "velocity_7d"}
-            ]
+            conditions=[{"column": "velocity_24h", "op": "<", "other_column": "velocity_7d"}]
         )
         result = transformer.fit_transform(sample_data)
 
@@ -390,7 +372,7 @@ class TestConditionFeaturesAutoNaming:
 
     def test_auto_naming_with_float_values(self):
         """Test auto-naming handles float values correctly."""
-        X =pl.DataFrame({"score": [0.5, 1.2, 2.0, 3.5, 4.0]})
+        X = pl.DataFrame({"score": [0.5, 1.2, 2.0, 3.5, 4.0]})
 
         transformer = ConditionFeatures(
             conditions=[
@@ -422,9 +404,7 @@ class TestConditionFeaturesAutoNaming:
 
     def test_is_null_operator(self):
         """Test is_null unary operator."""
-        X =pl.DataFrame(
-            {"age": [25, None, 30, None, 45], "amount": [100, 500, None, 200, 2000]}
-        )
+        X = pl.DataFrame({"age": [25, None, 30, None, 45], "amount": [100, 500, None, 200, 2000]})
 
         transformer = ConditionFeatures(
             conditions=[
@@ -442,7 +422,7 @@ class TestConditionFeaturesAutoNaming:
 
     def test_is_not_null_operator(self):
         """Test is_not_null unary operator."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "email": ["a@test.com", None, "c@test.com", None, "e@test.com"],
                 "phone": [None, "123", None, "456", "789"],
@@ -465,9 +445,7 @@ class TestConditionFeaturesAutoNaming:
 
     def test_null_operators_auto_naming(self):
         """Test auto-naming for null check operators."""
-        X =pl.DataFrame(
-            {"age": [25, None, 30], "email": ["a@test.com", None, "c@test.com"]}
-        )
+        X = pl.DataFrame({"age": [25, None, 30], "email": ["a@test.com", None, "c@test.com"]})
 
         transformer = ConditionFeatures(
             conditions=[
@@ -484,7 +462,7 @@ class TestConditionFeaturesAutoNaming:
 
     def test_mixed_conditions_with_null_checks(self):
         """Test mixing null checks with regular comparisons."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "age": [15, 25, None, 17, 45],
                 "amount": [100, 1500, 500, None, 2000],
@@ -518,9 +496,7 @@ class TestConditionFeaturesAutoNaming:
             ValueError,
             match="unary operator 'is_null' should not have 'value' or 'other_column'",
         ):
-            ConditionFeatures(
-                conditions=[{"column": "age", "op": "is_null", "value": 18}]
-            )
+            ConditionFeatures(conditions=[{"column": "age", "op": "is_null", "value": 18}])
 
     def test_null_operator_validation_error_with_other_column(self):
         """Test that is_not_null operator rejects 'other_column' parameter."""
@@ -529,9 +505,7 @@ class TestConditionFeaturesAutoNaming:
             match="unary operator 'is_not_null' should not have 'value' or 'other_column'",
         ):
             ConditionFeatures(
-                conditions=[
-                    {"column": "age", "op": "is_not_null", "other_column": "amount"}
-                ]
+                conditions=[{"column": "age", "op": "is_not_null", "other_column": "amount"}]
             )
 
 
@@ -561,7 +535,7 @@ class TestStaticMethods:
                 "amount": [100, 1500, 500, 200, 2000],
             }
         )
-        
+
         # Test all operators: <, >=, <=, ==, != (> is already tested elsewhere)
         transformer = ConditionFeatures(
             conditions=[
@@ -571,10 +545,16 @@ class TestStaticMethods:
                 {"column": "age", "op": "==", "other_column": "amount"},
                 {"column": "age", "op": "!=", "other_column": "amount"},
             ],
-            new_column_names=["age_lt_amount", "age_gte_amount", "age_lte_amount", "age_eq_amount", "age_neq_amount"],
+            new_column_names=[
+                "age_lt_amount",
+                "age_gte_amount",
+                "age_lte_amount",
+                "age_eq_amount",
+                "age_neq_amount",
+            ],
         )
         result = transformer.fit_transform(sample_data)
-        
+
         # Verify all columns were created
         assert "age_lt_amount" in result.columns
         assert "age_gte_amount" in result.columns
@@ -600,7 +580,7 @@ class TestStaticMethods:
                 "age": [15, 25, 30],
             }
         )
-        
+
         # Using None should trigger auto-naming
         transformer = ConditionFeatures(
             conditions=[
@@ -610,7 +590,7 @@ class TestStaticMethods:
             new_column_names=None,  # Auto-naming
         )
         result = transformer.fit_transform(sample_data)
-        
+
         # verify auto-generated column names exist
         assert len(result.columns) == 3  # Original 1 + 2 new ones
 

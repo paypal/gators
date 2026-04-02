@@ -61,7 +61,7 @@ def test_columns_subset_drop_columns_false(sample_X):
 
 def test_inplace_true():
     """Test inplace encoding (replaces original columns)."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "cat1": ["A", "B", "A", "C"],
             "cat2": ["X", "Y", "X", "Z"],
@@ -90,15 +90,13 @@ def test_inplace_true():
 
 def test_boolean_column_encoding():
     """Test encoding boolean columns."""
-    X =  pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
+    X = pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
 
     encoder = ExampleEncoder(
         subset=["bool_col"],
         drop_columns=False,
         inplace=False,
-        mapping_={
-            "bool_col": {"true": 1.0, "false": 0.0}
-        },  # Boolean keys as lowercase strings
+        mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
         column_mapping_={"bool_col": "bool_col_encoded"},
     )
     result = encoder.transform(X)
@@ -110,14 +108,12 @@ def test_boolean_column_encoding():
 
 def test_boolean_column_inplace():
     """Test encoding boolean columns with inplace=True."""
-    X =  pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
+    X = pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
 
     encoder = ExampleEncoder(
         subset=["bool_col"],
         inplace=True,
-        mapping_={
-            "bool_col": {"true": 1.0, "false": 0.0}
-        },  # Boolean keys as lowercase strings
+        mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
     )
     result = encoder.transform(X)
 
@@ -128,7 +124,7 @@ def test_boolean_column_inplace():
 
 def test_missing_category_default_value():
     """Test that missing categories get default value 0.0."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {"category": ["A", "B", "D", "C"], "value": [1, 2, 3, 4]}  # D is not in mapping
     )
 

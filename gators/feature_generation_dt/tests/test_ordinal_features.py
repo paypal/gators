@@ -27,9 +27,7 @@ def sample_ordinal_data():
 
 def test_basic_year_month(sample_ordinal_data):
     """Test basic year and month extraction."""
-    transformer = OrdinalFeatures(
-        subset=["timestamp"], components=["year", "month"]
-    )
+    transformer = OrdinalFeatures(subset=["timestamp"], components=["year", "month"])
     result = transformer.fit_transform(sample_ordinal_data)
 
     assert "timestamp__year" in result.columns
@@ -49,9 +47,7 @@ def test_quarter_component(sample_ordinal_data):
 
 def test_semester_component(sample_ordinal_data):
     """Test semester extraction (H1/H2)."""
-    transformer = OrdinalFeatures(
-        subset=["timestamp"], components=["semester"]
-    )
+    transformer = OrdinalFeatures(subset=["timestamp"], components=["semester"])
     result = transformer.fit_transform(sample_ordinal_data)
 
     assert "timestamp__semester" in result.columns
@@ -68,7 +64,7 @@ def test_week_component(sample_ordinal_data):
 
 def test_day_components():
     """Test day-related components."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 1),  # Monday, day 1 of month, day 1 of year
@@ -92,9 +88,7 @@ def test_day_components():
 
 def test_time_components(sample_ordinal_data):
     """Test time components (hour, minute, second)."""
-    transformer = OrdinalFeatures(
-        subset=["timestamp"], components=["hour", "minute", "second"]
-    )
+    transformer = OrdinalFeatures(subset=["timestamp"], components=["hour", "minute", "second"])
     result = transformer.fit_transform(sample_ordinal_data)
 
     assert "timestamp__hour" in result.columns
@@ -107,7 +101,7 @@ def test_time_components(sample_ordinal_data):
 
 def test_weekend_component():
     """Test weekend indicator component."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 1),  # Monday (1)
@@ -127,7 +121,7 @@ def test_weekend_component():
 
 def test_leap_year_component():
     """Test leap year indicator component."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2023, 1, 1),  # Not a leap year
@@ -137,9 +131,7 @@ def test_leap_year_component():
         }
     )
 
-    transformer = OrdinalFeatures(
-        subset=["timestamp"], components=["leap_year"]
-    )
+    transformer = OrdinalFeatures(subset=["timestamp"], components=["leap_year"])
     result = transformer.fit_transform(X)
 
     assert "timestamp__leap_year" in result.columns
@@ -148,7 +140,7 @@ def test_leap_year_component():
 
 def test_century_component():
     """Test century extraction."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(1999, 12, 31),
@@ -167,9 +159,7 @@ def test_century_component():
 
 def test_all_components():
     """Test all valid ordinal components."""
-    X =pl.DataFrame(
-        {"timestamp": [datetime(2024, 6, 15, 12, 30, 45)], "value": [1]}
-    )
+    X = pl.DataFrame({"timestamp": [datetime(2024, 6, 15, 12, 30, 45)], "value": [1]})
 
     components = list(COMPONENT_FUNCTIONS.keys())
 
@@ -204,9 +194,7 @@ def test_drop_columns_false(sample_ordinal_data):
 
 def test_auto_detect_datetime_columns():
     """Test automatic detection of datetime columns."""
-    X =pl.DataFrame(
-        {"dt1": [datetime(2024, 1, 1)], "dt2": [datetime(2024, 6, 1)], "value": [100]}
-    )
+    X = pl.DataFrame({"dt1": [datetime(2024, 1, 1)], "dt2": [datetime(2024, 6, 1)], "value": [100]})
 
     transformer = OrdinalFeatures(components=["month"])
     result = transformer.fit_transform(X)
@@ -225,9 +213,7 @@ def test_validation_invalid_component():
 
 def test_sklearn_compatibility(sample_ordinal_data):
     """Test sklearn pipeline compatibility."""
-    transformer = OrdinalFeatures(
-        subset=["timestamp"], components=["year", "month"]
-    )
+    transformer = OrdinalFeatures(subset=["timestamp"], components=["year", "month"])
 
     # Test fit returns self
     result = transformer.fit(sample_ordinal_data)
@@ -240,7 +226,7 @@ def test_sklearn_compatibility(sample_ordinal_data):
 
 def test_multiple_datetime_columns():
     """Test with multiple datetime columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "created_at": [datetime(2024, 1, 1), datetime(2024, 6, 1)],
             "updated_at": [datetime(2024, 3, 1), datetime(2024, 9, 1)],
@@ -261,16 +247,14 @@ def test_multiple_datetime_columns():
 
 def test_day_of_week_values():
     """Test day of week values (0=Monday to 6=Sunday)."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [datetime(2024, 1, i) for i in range(1, 8)],  # Jan 1-7, 2024
             "value": list(range(7)),
         }
     )
 
-    transformer = OrdinalFeatures(
-        subset=["timestamp"], components=["day_of_week"]
-    )
+    transformer = OrdinalFeatures(subset=["timestamp"], components=["day_of_week"])
     result = transformer.fit_transform(X)
 
     # Jan 1, 2024 is Monday (0), so should be [0, 1, 2, 3, 4, 5, 6]
@@ -279,9 +263,7 @@ def test_day_of_week_values():
 
 def test_single_row():
     """Test with single row dataframe."""
-    X =pl.DataFrame(
-        {"timestamp": [datetime(2024, 6, 15, 12, 30, 45)], "value": [1]}
-    )
+    X = pl.DataFrame({"timestamp": [datetime(2024, 6, 15, 12, 30, 45)], "value": [1]})
 
     transformer = OrdinalFeatures(
         subset=["timestamp"], components=["year", "month", "day_of_month", "hour"]
@@ -296,7 +278,7 @@ def test_single_row():
 
 def test_year_boundaries():
     """Test year boundary dates."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2023, 12, 31, 23, 59, 59),
@@ -306,9 +288,7 @@ def test_year_boundaries():
         }
     )
 
-    transformer = OrdinalFeatures(
-        subset=["timestamp"], components=["year", "month", "day_of_year"]
-    )
+    transformer = OrdinalFeatures(subset=["timestamp"], components=["year", "month", "day_of_year"])
     result = transformer.fit_transform(X)
 
     assert result["timestamp__year"].to_list() == [2023, 2024]
@@ -317,7 +297,7 @@ def test_year_boundaries():
 
 def test_february_leap_year():
     """Test February in leap year vs non-leap year."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2023, 2, 28),  # Not leap year
@@ -345,12 +325,10 @@ def test_date_type_conversion():
             "value": [1, 2],
         }
     )
-    
-    transformer = OrdinalFeatures(
-        subset=["date_col"], components=["year", "month"]
-    )
+
+    transformer = OrdinalFeatures(subset=["date_col"], components=["year", "month"])
     result = transformer.fit_transform(X)
-    
+
     assert "date_col__year" in result.columns
     assert "date_col__month" in result.columns
     assert result["date_col__year"].to_list() == [2024, 2024]

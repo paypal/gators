@@ -48,16 +48,12 @@ class TestCatBoostEncoder:
         target = pl.Series("target", [1, 0, 1])
 
         # With low smoothing
-        encoder_low = CatBoostEncoder(
-            subset=["category"], smoothing=0.1, inplace=False
-        )
+        encoder_low = CatBoostEncoder(subset=["category"], smoothing=0.1, inplace=False)
         encoder_low.fit(X, y=target)
         result_low = encoder_low.transform(X)
 
         # With high smoothing (should be closer to global mean)
-        encoder_high = CatBoostEncoder(
-            subset=["category"], smoothing=10.0, inplace=False
-        )
+        encoder_high = CatBoostEncoder(subset=["category"], smoothing=10.0, inplace=False)
         encoder_high.fit(X, y=target)
         result_high = encoder_high.transform(X)
 
@@ -147,9 +143,7 @@ class TestCatBoostEncoder:
         """Test that original columns are kept when drop_columns=False."""
         X = pl.DataFrame({"category": ["A", "B", "A"]})
         target = pl.Series("target", [1, 0, 1])
-        encoder = CatBoostEncoder(
-            subset=["category"], drop_columns=False, inplace=False
-        )
+        encoder = CatBoostEncoder(subset=["category"], drop_columns=False, inplace=False)
         encoder.fit(X, y=target)
         result = encoder.transform(X)
 
@@ -162,9 +156,7 @@ class TestCatBoostEncoder:
         target_train = pl.Series("target", [1, 0, 1, 0])
         X_test = pl.DataFrame({"category": ["A", "C", "D"]})  # C and D are unseen
 
-        encoder = CatBoostEncoder(
-            subset=["category"], drop_columns=False, inplace=False
-        )
+        encoder = CatBoostEncoder(subset=["category"], drop_columns=False, inplace=False)
         encoder.fit(X_train, y=target_train)
         result = encoder.transform(X_test)
 
@@ -200,9 +192,7 @@ class TestCatBoostEncoder:
         """Test handling of empty DataFrame."""
         X_train = pl.DataFrame({"category": ["A", "B"]})
         target_train = pl.Series("target", [1, 0])
-        X_test = pl.DataFrame({"category": []}).with_columns(
-            [pl.col("category").cast(pl.String)]
-        )
+        X_test = pl.DataFrame({"category": []}).with_columns([pl.col("category").cast(pl.String)])
 
         encoder = CatBoostEncoder(subset=["category"], inplace=False)
         encoder.fit(X_train, y=target_train)

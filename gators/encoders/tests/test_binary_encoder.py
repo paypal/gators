@@ -12,9 +12,7 @@ class TestBinaryEncoder:
 
     def test_basic_encoding(self):
         """Test basic binary encoding with 4 categories."""
-        X = pl.DataFrame(
-            {"category": ["A", "B", "C", "D", "A", "B"], "value": [1, 2, 3, 4, 5, 6]}
-        )
+        X = pl.DataFrame({"category": ["A", "B", "C", "D", "A", "B"], "value": [1, 2, 3, 4, 5, 6]})
 
         encoder = BinaryEncoder(subset=["category"], inplace=False)
         result = encoder.fit_transform(X)
@@ -68,9 +66,7 @@ class TestBinaryEncoder:
 
     def test_min_count_absolute(self):
         """Test min_count with absolute threshold."""
-        X = pl.DataFrame(
-            {"category": ["A"] * 5 + ["B"] * 3 + ["C"] * 1, "value": range(9)}
-        )
+        X = pl.DataFrame({"category": ["A"] * 5 + ["B"] * 3 + ["C"] * 1, "value": range(9)})
 
         encoder = BinaryEncoder(subset=["category"], min_count=3, inplace=False)
         encoder.fit(X)
@@ -85,9 +81,7 @@ class TestBinaryEncoder:
 
     def test_min_count_ratio(self):
         """Test min_count with ratio threshold."""
-        X = pl.DataFrame(
-            {"category": ["A"] * 50 + ["B"] * 30 + ["C"] * 20, "value": range(100)}
-        )
+        X = pl.DataFrame({"category": ["A"] * 50 + ["B"] * 30 + ["C"] * 20, "value": range(100)})
 
         # Only categories with >=35% frequency (35 occurrences)
         encoder = BinaryEncoder(subset=["category"], min_count=0.35, inplace=False)
@@ -132,12 +126,10 @@ class TestBinaryEncoder:
 
         # Both string columns should be encoded
         assert (
-            "cat_col__binary_enc_0" in result.columns
-            or "cat_col__binary_enc_1" in result.columns
+            "cat_col__binary_enc_0" in result.columns or "cat_col__binary_enc_1" in result.columns
         )
         assert (
-            "str_col__binary_enc_0" in result.columns
-            or "str_col__binary_enc_1" in result.columns
+            "str_col__binary_enc_0" in result.columns or "str_col__binary_enc_1" in result.columns
         )
         assert "numeric_col" in result.columns  # not encoded
 
@@ -177,9 +169,7 @@ class TestBinaryEncoder:
 
     def test_boolean_column(self):
         """Test encoding boolean column."""
-        X = pl.DataFrame(
-            {"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]}
-        )
+        X = pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
 
         encoder = BinaryEncoder(subset=["bool_col"], inplace=False)
         result = encoder.fit_transform(X)
@@ -216,9 +206,7 @@ class TestBinaryEncoder:
 
     def test_fit_and_transform_separately(self):
         """Test sklearn-style separate fit and transform."""
-        train_X = pl.DataFrame(
-            {"category": ["A", "B", "C", "D"], "value": [1, 2, 3, 4]}
-        )
+        train_X = pl.DataFrame({"category": ["A", "B", "C", "D"], "value": [1, 2, 3, 4]})
 
         test_X = pl.DataFrame({"category": ["A", "B", "C"], "value": [5, 6, 7]})
 
@@ -310,20 +298,12 @@ class TestBinaryEncoder:
         result2 = encoder.transform(X2)
 
         # First two rows (both A) should have identical encoding
-        assert (
-            result2["category__binary_enc_0"][0] == result2["category__binary_enc_0"][1]
-        )
-        assert (
-            result2["category__binary_enc_1"][0] == result2["category__binary_enc_1"][1]
-        )
+        assert result2["category__binary_enc_0"][0] == result2["category__binary_enc_0"][1]
+        assert result2["category__binary_enc_1"][0] == result2["category__binary_enc_1"][1]
 
         # Next two rows (both B) should have identical encoding
-        assert (
-            result2["category__binary_enc_0"][2] == result2["category__binary_enc_0"][3]
-        )
-        assert (
-            result2["category__binary_enc_1"][2] == result2["category__binary_enc_1"][3]
-        )
+        assert result2["category__binary_enc_0"][2] == result2["category__binary_enc_0"][3]
+        assert result2["category__binary_enc_1"][2] == result2["category__binary_enc_1"][3]
 
     def test_mixed_string_and_numeric(self):
         """Test with mixed column types."""
@@ -340,8 +320,7 @@ class TestBinaryEncoder:
 
         # Only str_col should be encoded
         assert (
-            "str_col__binary_enc_0" in result.columns
-            or "str_col__binary_enc_1" in result.columns
+            "str_col__binary_enc_0" in result.columns or "str_col__binary_enc_1" in result.columns
         )
         assert "int_col" in result.columns
         assert "float_col" in result.columns
@@ -359,8 +338,7 @@ class TestBinaryEncoder:
         # Should encode non-null categories
         assert result.shape[0] == 6
         assert (
-            "category__binary_enc_0" in result.columns
-            or "category__binary_enc_1" in result.columns
+            "category__binary_enc_0" in result.columns or "category__binary_enc_1" in result.columns
         )
 
     def test_preserve_other_columns(self):
@@ -376,24 +354,20 @@ class TestBinaryEncoder:
         assert "keep2" in result.columns
         assert result["keep1"].to_list() == [1, 2, 3]
         assert result["keep2"].to_list() == ["X", "Y", "Z"]
-        
+
     def test_all_categories_filtered_by_min_count(self):
         """Test when all categories are filtered out by min_count threshold."""
         X = pl.DataFrame(
-            {
-                "category": ["A", "B", "C"],  # Each appears only once
-                "value": [1, 2, 3]
-            }
+            {"category": ["A", "B", "C"], "value": [1, 2, 3]}  # Each appears only once
         )
 
         # Set min_count so high that no category meets the threshold
         encoder = BinaryEncoder(subset=["category"], min_count=5, inplace=False)
         encoder.fit(X)
-        
+
         # No categories should be valid, so encoding should be skipped
         assert "category" not in encoder.n_bits_
-        
+
         result = encoder.transform(X)
         # Original column should be dropped but no encoded columns added
         assert "category" not in result.columns
-

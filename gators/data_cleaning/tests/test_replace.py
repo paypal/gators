@@ -27,9 +27,7 @@ def test_default_parameters(sample_X):
             pl.col("first_name")
             .replace({"Alice": "Alicia", "Bob": "Robert"})
             .alias("first_name__replace"),
-            pl.col("city")
-            .replace({"NYC": "New York", "LA": "Los Angeles"})
-            .alias("city__replace"),
+            pl.col("city").replace({"NYC": "New York", "LA": "Los Angeles"}).alias("city__replace"),
         ]
     ).drop("first_name", "city")
     transformer = Replace(to_replace=to_replace, inplace=False)
@@ -48,9 +46,7 @@ def test_replace_transformer_drop_columns_false(sample_X):
             pl.col("first_name")
             .replace({"Alice": "Alicia", "Bob": "Robert"})
             .alias("first_name__replace"),
-            pl.col("city")
-            .replace({"NYC": "New York", "LA": "Los Angeles"})
-            .alias("city__replace"),
+            pl.col("city").replace({"NYC": "New York", "LA": "Los Angeles"}).alias("city__replace"),
         ]
     )
     transformer = Replace(to_replace=to_replace, drop_columns=False, inplace=False)

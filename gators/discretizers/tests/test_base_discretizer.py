@@ -94,23 +94,21 @@ def test_default_parameters(sample_data):
     assert set(discretizer.subset) == {"A", "B"}
     assert len(discretizer._bins) == 2
     assert len(discretizer._labels) == 2
-    transformed_X =discretizer.transform(sample_data)
-    transformed_X =transformed_X.with_columns(
+    transformed_X = discretizer.transform(sample_data)
+    transformed_X = transformed_X.with_columns(
         [pl.col(col).cast(pl.String) for col in discretizer._column_mapping.values()]
     )
     assert_frame_equal(transformed_X, expected_data_default_parameters())
 
 
 def test_subset_columns(sample_data):
-    discretizer = ExampleDiscretizer(
-        subset=["A", "B"], drop_columns=False, inplace=False
-    )
+    discretizer = ExampleDiscretizer(subset=["A", "B"], drop_columns=False, inplace=False)
     discretizer.fit(sample_data)
     assert set(discretizer.subset) == {"A", "B"}
     assert len(discretizer._bins) == 2
     assert len(discretizer._labels) == 2
-    transformed_X =discretizer.transform(sample_data)
-    transformed_X =transformed_X.with_columns(
+    transformed_X = discretizer.transform(sample_data)
+    transformed_X = transformed_X.with_columns(
         [pl.col(col).cast(pl.String) for col in discretizer._column_mapping.values()]
     )
     assert_frame_equal(transformed_X, expected_data_drop_columns_false())
@@ -118,7 +116,7 @@ def test_subset_columns(sample_data):
 
 def test_inplace_true():
     """Test inplace discretization (replaces original columns)."""
-    X =pl.DataFrame({"A": [0.1, 0.2, 0.8, 0.9], "B": [5, 15, 25, 35]})
+    X = pl.DataFrame({"A": [0.1, 0.2, 0.8, 0.9], "B": [5, 15, 25, 35]})
 
     discretizer = ExampleDiscretizer(subset=["A", "B"], inplace=True)
     discretizer._bins = {"A": [0.5], "B": [20]}
@@ -138,7 +136,7 @@ def test_inplace_true():
 
 def test_as_numerics_true():
     """Test discretization with numeric output."""
-    X =pl.DataFrame({"A": [0.1, 0.2, 0.8, 0.9], "B": [5, 15, 25, 35]})
+    X = pl.DataFrame({"A": [0.1, 0.2, 0.8, 0.9], "B": [5, 15, 25, 35]})
 
     discretizer = ExampleDiscretizer(
         subset=["A", "B"], as_numerics=True, drop_columns=True, inplace=False
@@ -161,7 +159,7 @@ def test_as_numerics_true():
 
 def test_inplace_with_as_numerics():
     """Test inplace discretization with numeric output."""
-    X =pl.DataFrame({"A": [0.1, 0.2, 0.8, 0.9], "value": [10, 20, 30, 40]})
+    X = pl.DataFrame({"A": [0.1, 0.2, 0.8, 0.9], "value": [10, 20, 30, 40]})
 
     discretizer = ExampleDiscretizer(subset=["A"], inplace=True, as_numerics=True)
     discretizer._bins = {"A": [0.5]}

@@ -91,7 +91,7 @@ def test_transform_columns_none(sample_dataframe: pl.DataFrame):
     _ = custom_discretizer.fit(sample_dataframe)
     # Columns should be derived from bins
     assert custom_discretizer.subset == ["feature1"]
-    
+
     transformed_X = custom_discretizer.transform(sample_dataframe)
     expected_X = pl.DataFrame(
         {

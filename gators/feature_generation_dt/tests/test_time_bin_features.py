@@ -59,7 +59,7 @@ def test_part_of_day_evening(sample_timebin_data):
 
 def test_part_of_day_all_categories():
     """Test all part of day categories."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 1, 3, 0),  # Night (< 6)
@@ -80,7 +80,7 @@ def test_part_of_day_all_categories():
 
 def test_season_northern_hemisphere():
     """Test season binning for northern hemisphere."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 15),  # Winter
@@ -92,9 +92,7 @@ def test_season_northern_hemisphere():
         }
     )
 
-    transformer = TimeBinFeatures(
-        subset=["timestamp"], bin_types=["season"], hemisphere="northern"
-    )
+    transformer = TimeBinFeatures(subset=["timestamp"], bin_types=["season"], hemisphere="northern")
     result = transformer.fit_transform(X)
 
     expected = ["winter", "spring", "summer", "fall"]
@@ -103,7 +101,7 @@ def test_season_northern_hemisphere():
 
 def test_season_southern_hemisphere():
     """Test season binning for southern hemisphere."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 15),  # Summer (southern)
@@ -115,9 +113,7 @@ def test_season_southern_hemisphere():
         }
     )
 
-    transformer = TimeBinFeatures(
-        subset=["timestamp"], bin_types=["season"], hemisphere="southern"
-    )
+    transformer = TimeBinFeatures(subset=["timestamp"], bin_types=["season"], hemisphere="southern")
     result = transformer.fit_transform(X)
 
     expected = ["summer", "fall", "winter", "spring"]
@@ -126,7 +122,7 @@ def test_season_southern_hemisphere():
 
 def test_time_of_month():
     """Test time of month binning."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 5),  # Beginning (<= 10)
@@ -146,7 +142,7 @@ def test_time_of_month():
 
 def test_time_of_year():
     """Test time of year binning."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 2, 15),  # Early (<= 4)
@@ -166,7 +162,7 @@ def test_time_of_year():
 
 def test_rush_hour():
     """Test rush hour binning."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 1, 7, 30),  # Morning rush (7-9)
@@ -198,7 +194,7 @@ def test_multiple_bin_types(sample_timebin_data):
 
 def test_all_bin_types():
     """Test all bin types together."""
-    X =pl.DataFrame({"timestamp": [datetime(2024, 6, 15, 14, 0)], "value": [1]})
+    X = pl.DataFrame({"timestamp": [datetime(2024, 6, 15, 14, 0)], "value": [1]})
 
     transformer = TimeBinFeatures(
         subset=["timestamp"],
@@ -243,7 +239,7 @@ def test_drop_columns_true(sample_timebin_data):
 
 def test_auto_detect_datetime_columns():
     """Test automatic detection of datetime columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "dt1": [datetime(2024, 1, 1, 10, 0)],
             "dt2": [datetime(2024, 6, 1, 15, 0)],
@@ -279,7 +275,7 @@ def test_sklearn_compatibility(sample_timebin_data):
 
 def test_multiple_datetime_columns():
     """Test with multiple datetime columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "created_at": [datetime(2024, 1, 15, 10, 0), datetime(2024, 7, 15, 15, 0)],
             "updated_at": [datetime(2024, 3, 10, 8, 0), datetime(2024, 9, 20, 20, 0)],
@@ -300,7 +296,7 @@ def test_multiple_datetime_columns():
 
 def test_edge_case_hour_boundaries():
     """Test exact hour boundaries for part of day."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 1, 6, 0),  # Exactly 6am (morning)
@@ -320,7 +316,7 @@ def test_edge_case_hour_boundaries():
 
 def test_edge_case_day_boundaries():
     """Test exact day boundaries for time of month."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 10),  # Exactly day 10 (beginning)
@@ -340,7 +336,7 @@ def test_edge_case_day_boundaries():
 
 def test_edge_case_month_boundaries():
     """Test exact month boundaries for seasons."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 2, 28),  # End of winter month
@@ -352,9 +348,7 @@ def test_edge_case_month_boundaries():
         }
     )
 
-    transformer = TimeBinFeatures(
-        subset=["timestamp"], bin_types=["season"], hemisphere="northern"
-    )
+    transformer = TimeBinFeatures(subset=["timestamp"], bin_types=["season"], hemisphere="northern")
     result = transformer.fit_transform(X)
 
     expected = ["winter", "spring", "spring", "summer"]
@@ -363,7 +357,7 @@ def test_edge_case_month_boundaries():
 
 def test_rush_hour_boundaries():
     """Test rush hour exact boundaries."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 1, 6, 59),  # Just before morning rush
@@ -385,7 +379,7 @@ def test_rush_hour_boundaries():
 
 def test_winter_months_all():
     """Test all winter months in northern hemisphere."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 12, 15),
@@ -396,9 +390,7 @@ def test_winter_months_all():
         }
     )
 
-    transformer = TimeBinFeatures(
-        subset=["timestamp"], bin_types=["season"], hemisphere="northern"
-    )
+    transformer = TimeBinFeatures(subset=["timestamp"], bin_types=["season"], hemisphere="northern")
     result = transformer.fit_transform(X)
 
     assert all(s == "winter" for s in result["timestamp__season"].to_list())
@@ -406,11 +398,9 @@ def test_winter_months_all():
 
 def test_single_row():
     """Test with single row dataframe."""
-    X =pl.DataFrame({"timestamp": [datetime(2024, 6, 15, 14, 30)], "value": [1]})
+    X = pl.DataFrame({"timestamp": [datetime(2024, 6, 15, 14, 30)], "value": [1]})
 
-    transformer = TimeBinFeatures(
-        subset=["timestamp"], bin_types=["part_of_day", "season"]
-    )
+    transformer = TimeBinFeatures(subset=["timestamp"], bin_types=["part_of_day", "season"])
     result = transformer.fit_transform(X)
 
     assert result["timestamp__part_of_day"].to_list() == ["afternoon"]

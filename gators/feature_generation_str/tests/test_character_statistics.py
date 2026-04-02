@@ -9,7 +9,7 @@ class TestCharacterStatistics:
 
     def test_basic_character_counts(self):
         """Test basic character counting features."""
-        X =pl.DataFrame(
+        X = pl.DataFrame(
             {
                 "text": ["Hello123", "WORLD!!!", "Test 99", "", None],
                 "name": ["John Doe", "MARY", "alice", "X", ""],
@@ -63,7 +63,7 @@ class TestCharacterStatistics:
 
     def test_ratio_features(self):
         """Test ratio-based features."""
-        X =pl.DataFrame({"text": ["ABC123", "abcdef", "!!!###", "A", ""]})
+        X = pl.DataFrame({"text": ["ABC123", "abcdef", "!!!###", "A", ""]})
 
         transformer = CharacterStatistics(
             subset=["text"],
@@ -98,7 +98,7 @@ class TestCharacterStatistics:
 
     def test_multiple_columns(self):
         """Test transformation on multiple columns."""
-        X =pl.DataFrame({"col1": ["A1", "B2"], "col2": ["!!", "XY"]})
+        X = pl.DataFrame({"col1": ["A1", "B2"], "col2": ["!!", "XY"]})
 
         transformer = CharacterStatistics(
             subset=["col1", "col2"], features=["n_digits", "n_letters"]
@@ -117,9 +117,7 @@ class TestCharacterStatistics:
 
     def test_auto_detect_string_columns(self):
         """Test automatic detection of string columns."""
-        X =pl.DataFrame(
-            {"text": ["Hello", "World"], "num": [1, 2], "float": [1.5, 2.5]}
-        )
+        X = pl.DataFrame({"text": ["Hello", "World"], "num": [1, 2], "float": [1.5, 2.5]})
 
         transformer = CharacterStatistics(features=["n_digits", "n_letters"])
         result = transformer.fit_transform(X)
@@ -132,11 +130,9 @@ class TestCharacterStatistics:
 
     def test_drop_columns(self):
         """Test drop_columns parameter."""
-        X =pl.DataFrame({"text": ["Hello", "World"], "name": ["Alice", "Bob"]})
+        X = pl.DataFrame({"text": ["Hello", "World"], "name": ["Alice", "Bob"]})
 
-        transformer = CharacterStatistics(
-            subset=["text"], features=["n_digits"], drop_columns=True
-        )
+        transformer = CharacterStatistics(subset=["text"], features=["n_digits"], drop_columns=True)
         result = transformer.fit_transform(X)
 
         assert "text" not in result.columns
@@ -145,7 +141,7 @@ class TestCharacterStatistics:
 
     def test_all_features(self):
         """Test using all available features."""
-        X =pl.DataFrame({"text": ["Hello123!", "Test"]})
+        X = pl.DataFrame({"text": ["Hello123!", "Test"]})
 
         transformer = CharacterStatistics(
             subset=["text"],
@@ -175,11 +171,9 @@ class TestCharacterStatistics:
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
-        X =pl.DataFrame({"text": []}, schema={"text": pl.String})
+        X = pl.DataFrame({"text": []}, schema={"text": pl.String})
 
-        transformer = CharacterStatistics(
-            subset=["text"], features=["n_digits", "n_letters"]
-        )
+        transformer = CharacterStatistics(subset=["text"], features=["n_digits", "n_letters"])
         result = transformer.fit_transform(X)
 
         assert len(result) == 0
@@ -188,7 +182,7 @@ class TestCharacterStatistics:
 
     def test_sklearn_compatibility(self):
         """Test sklearn-compatible API."""
-        X =pl.DataFrame({"text": ["Hello", "World"]})
+        X = pl.DataFrame({"text": ["Hello", "World"]})
 
         transformer = CharacterStatistics(subset=["text"], features=["n_digits"])
 

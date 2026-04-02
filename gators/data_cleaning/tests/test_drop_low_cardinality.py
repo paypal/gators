@@ -33,9 +33,7 @@ def test_default_parameters(sample_X):
 
 
 def test_columns_subset_drop_columns_false(sample_X):
-    transformer = DropLowCardinality(
-        min_count=2, subset=["last_name", "age"], drop_columns=False
-    )
+    transformer = DropLowCardinality(min_count=2, subset=["last_name", "age"], drop_columns=False)
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
 

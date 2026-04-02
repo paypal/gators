@@ -8,7 +8,7 @@ from gators.scalers import ArcSinhScaler
 
 def test_arcsinh_scaler_default():
     """Test ArcSinhScaler with default parameters (all columns)."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [-10.0, -5.0, 0.0, 5.0, 10.0],
             "col2": [-100.0, -50.0, 0.0, 50.0, 100.0],
@@ -18,20 +18,20 @@ def test_arcsinh_scaler_default():
     scaler = ArcSinhScaler()
     scaler.fit(X)
     result = scaler.transform(X)
-    
+
     expected = X.with_columns(
         [
             pl.col("col1").arcsinh().alias("col1__arcsinh"),
             pl.col("col2").arcsinh().alias("col2__arcsinh"),
         ]
     ).drop(["col1", "col2"])
-    
+
     assert_frame_equal(result, expected)
 
 
 def test_arcsinh_scaler_subset_columns():
     """Test ArcSinhScaler with subset of columns."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [-10.0, -5.0, 0.0, 5.0],
             "col2": [-20.0, -10.0, 0.0, 10.0],
@@ -55,7 +55,7 @@ def test_arcsinh_scaler_subset_columns():
 
 def test_arcsinh_scaler_symmetry():
     """Test that ArcSinhScaler preserves symmetry: asinh(-x) = -asinh(x)."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [-10.0, -5.0, -1.0, 1.0, 5.0, 10.0],
         }
@@ -66,7 +66,7 @@ def test_arcsinh_scaler_symmetry():
     result = scaler.transform(X)
 
     values = result["col1__arcsinh"].to_list()
-    
+
     # Check symmetry
     assert values[0] == pytest.approx(-values[5], rel=1e-10)  # -10 vs 10
     assert values[1] == pytest.approx(-values[4], rel=1e-10)  # -5 vs 5
@@ -75,7 +75,7 @@ def test_arcsinh_scaler_symmetry():
 
 def test_arcsinh_scaler_zero():
     """Test that ArcSinhScaler maps 0 to 0."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [-1.0, 0.0, 1.0],
         }
@@ -90,7 +90,7 @@ def test_arcsinh_scaler_zero():
 
 def test_arcsinh_scaler_large_values():
     """Test ArcSinhScaler behaves like log for large values."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [100.0, 1000.0, 10000.0],
         }
@@ -107,13 +107,13 @@ def test_arcsinh_scaler_large_values():
         math.log(2 * 1000),
         math.log(2 * 10000),
     ]
-    
+
     assert values == pytest.approx(expected_approx, rel=0.01)  # Within 1%
 
 
 def test_arcsinh_scaler_negative_values():
     """Test ArcSinhScaler handles negative values correctly."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "returns": [-100.0, -10.0, 0.0, 10.0, 100.0],
         }
@@ -129,7 +129,7 @@ def test_arcsinh_scaler_negative_values():
 
 def test_arcsinh_scaler_fit_transform():
     """Test ArcSinhScaler fit_transform method."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [-5.0, 0.0, 5.0],
         }
@@ -138,16 +138,14 @@ def test_arcsinh_scaler_fit_transform():
     scaler = ArcSinhScaler()
     result = scaler.fit_transform(X)
 
-    expected = X.with_columns(
-        pl.col("col1").arcsinh().alias("col1__arcsinh")
-    ).drop("col1")
+    expected = X.with_columns(pl.col("col1").arcsinh().alias("col1__arcsinh")).drop("col1")
 
     assert_frame_equal(result, expected)
 
 
 def test_arcsinh_scaler_drop_columns_false():
     """Test ArcSinhScaler with drop_columns=False."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [-10.0, 0.0, 10.0],
         }
@@ -165,7 +163,7 @@ def test_arcsinh_scaler_drop_columns_false():
 
 def test_arcsinh_scaler_near_zero():
     """Test ArcSinhScaler behaves linearly near zero."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [-0.01, -0.001, 0.0, 0.001, 0.01],
         }
@@ -177,7 +175,7 @@ def test_arcsinh_scaler_near_zero():
     # For small x, asinh(x) ≈ x
     values = result["col1__arcsinh"].to_list()
     original = X["col1"].to_list()
-    
+
     for v, o in zip(values, original):
         # Should be very close to original value for small values
         assert abs(v - o) < 0.0001

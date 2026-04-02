@@ -35,9 +35,7 @@ def test_imputer_constant(sample_dataframe):
 
 # Test case when drop_columns is False
 def test_imputer_constant_no_drop_columns(sample_dataframe):
-    imputer = NumericImputer(
-        strategy="constant", value=0, drop_columns=False, inplace=False
-    )
+    imputer = NumericImputer(strategy="constant", value=0, drop_columns=False, inplace=False)
     imputer.fit(sample_dataframe)
     transformed = imputer.transform(sample_dataframe)
 
@@ -90,15 +88,9 @@ def test_imputer_median(sample_dataframe):
 
     expected = sample_dataframe.with_columns(
         [
-            pl.col("A")
-            .fill_null(sample_dataframe["A"].median())
-            .alias("A__impute_median"),
-            pl.col("B")
-            .fill_null(sample_dataframe["B"].median())
-            .alias("B__impute_median"),
-            pl.col("D")
-            .fill_null(sample_dataframe["D"].median())
-            .alias("D__impute_median"),
+            pl.col("A").fill_null(sample_dataframe["A"].median()).alias("A__impute_median"),
+            pl.col("B").fill_null(sample_dataframe["B"].median()).alias("B__impute_median"),
+            pl.col("D").fill_null(sample_dataframe["D"].median()).alias("D__impute_median"),
         ]
     ).drop(["A", "B", "D"])
 

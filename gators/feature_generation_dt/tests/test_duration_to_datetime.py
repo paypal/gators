@@ -29,7 +29,7 @@ def test_basic_seconds_to_datetime(sample_offset_data):
 
     assert "TransactionDT__datetime" in result.columns
     assert "TransactionDT" in result.columns  # Original column preserved
-    
+
     expected_dates = [
         datetime(2017, 12, 1, 0, 0, 0),
         datetime(2017, 12, 2, 0, 0, 0),
@@ -47,7 +47,7 @@ def test_days_to_datetime(sample_offset_data):
     result = transformer.fit_transform(sample_offset_data)
 
     assert "offset_days__datetime" in result.columns
-    
+
     expected_dates = [
         datetime(2024, 1, 2, 0, 0, 0),
         datetime(2024, 1, 3, 0, 0, 0),
@@ -64,7 +64,7 @@ def test_hours_to_datetime():
             "value": [1, 2, 3],
         }
     )
-    
+
     ref_date = datetime(2024, 1, 1, 0, 0, 0)
     transformer = DurationToDatetime(
         subset=["offset_hours"], reference_date=ref_date, unit="h", drop_columns=False
@@ -87,7 +87,7 @@ def test_minutes_to_datetime():
             "value": [1, 2, 3],
         }
     )
-    
+
     ref_date = datetime(2024, 1, 1, 10, 0, 0)
     transformer = DurationToDatetime(
         subset=["offset_minutes"], reference_date=ref_date, unit="m", drop_columns=False
@@ -110,7 +110,7 @@ def test_milliseconds_to_datetime():
             "value": [1, 2, 3],
         }
     )
-    
+
     ref_date = datetime(2024, 1, 1, 0, 0, 0)
     transformer = DurationToDatetime(
         subset=["offset_ms"], reference_date=ref_date, unit="ms", drop_columns=False
@@ -133,7 +133,7 @@ def test_microseconds_to_datetime():
             "value": [1, 2, 3],
         }
     )
-    
+
     ref_date = datetime(2024, 1, 1, 0, 0, 0)
     transformer = DurationToDatetime(
         subset=["offset_us"], reference_date=ref_date, unit="us", drop_columns=False
@@ -161,7 +161,7 @@ def test_reference_date_as_column():
             "value": [100, 200, 300],
         }
     )
-    
+
     transformer = DurationToDatetime(
         subset=["offset_days"], reference_date="BaseDate", unit="d", drop_columns=False
     )
@@ -169,7 +169,7 @@ def test_reference_date_as_column():
 
     assert "offset_days__datetime" in result.columns
     assert "BaseDate" in result.columns
-    
+
     expected_dates = [
         datetime(2024, 1, 8, 0, 0, 0),
         datetime(2024, 2, 15, 0, 0, 0),
@@ -186,12 +186,9 @@ def test_reference_date_as_iso_string():
             "value": [100, 200, 300],
         }
     )
-    
+
     transformer = DurationToDatetime(
-        subset=["offset_days"], 
-        reference_date="2024-01-01", 
-        unit="d", 
-        drop_columns=False
+        subset=["offset_days"], reference_date="2024-01-01", unit="d", drop_columns=False
     )
     result = transformer.fit_transform(X)
 
@@ -212,13 +209,10 @@ def test_multiple_columns():
             "value": [100, 200, 300],
         }
     )
-    
+
     ref_date = datetime(2024, 1, 1)
     transformer = DurationToDatetime(
-        subset=["offset1", "offset2"], 
-        reference_date=ref_date, 
-        unit="d", 
-        drop_columns=False
+        subset=["offset1", "offset2"], reference_date=ref_date, unit="d", drop_columns=False
     )
     result = transformer.fit_transform(X)
 
@@ -257,19 +251,17 @@ def test_drop_columns_false(sample_offset_data):
 def test_invalid_unit():
     """Test that invalid units raise ValidationError from Pydantic."""
     from pydantic import ValidationError
-    
+
     with pytest.raises(ValidationError, match="Input should be"):
-        DurationToDatetime(
-            subset=["col"], reference_date=datetime(2024, 1, 1), unit="invalid"
-        )
+        DurationToDatetime(subset=["col"], reference_date=datetime(2024, 1, 1), unit="invalid")
 
 
 def test_invalid_reference_date_type():
     """Test that invalid reference_date types raise ValidationError from Pydantic."""
     from pydantic import ValidationError
-    
+
     X = pl.DataFrame({"offset": [1, 2, 3]})
-    
+
     with pytest.raises(ValidationError):
         DurationToDatetime(
             subset=["offset"], reference_date=[1, 2, 3], unit="d"  # Invalid type (list)
@@ -279,13 +271,11 @@ def test_invalid_reference_date_type():
 def test_invalid_column_reference():
     """Test that non-existent column reference raises ValueError."""
     X = pl.DataFrame({"offset": [1, 2, 3]})
-    
+
     transformer = DurationToDatetime(
-        subset=["offset"], 
-        reference_date="NonExistentColumn",  # Column doesn't exist
-        unit="d"
+        subset=["offset"], reference_date="NonExistentColumn", unit="d"  # Column doesn't exist
     )
-    
+
     with pytest.raises(ValueError, match="neither a column .* nor a valid ISO format"):
         transformer.fit(X)
 
@@ -298,7 +288,7 @@ def test_negative_offsets():
             "value": [1, 2, 3],
         }
     )
-    
+
     ref_date = datetime(2024, 1, 15)
     transformer = DurationToDatetime(
         subset=["offset_days"], reference_date=ref_date, unit="d", drop_columns=False
@@ -321,16 +311,12 @@ def test_fit_transform_consistency():
             "value": [100, 200, 300],
         }
     )
-    
+
     ref_date = datetime(2024, 1, 1)
-    transformer1 = DurationToDatetime(
-        subset=["offset_days"], reference_date=ref_date, unit="d"
-    )
-    transformer2 = DurationToDatetime(
-        subset=["offset_days"], reference_date=ref_date, unit="d"
-    )
-    
+    transformer1 = DurationToDatetime(subset=["offset_days"], reference_date=ref_date, unit="d")
+    transformer2 = DurationToDatetime(subset=["offset_days"], reference_date=ref_date, unit="d")
+
     result1 = transformer1.fit_transform(X)
     result2 = transformer2.fit(X).transform(X)
-    
+
     assert_frame_equal(result1, result2)

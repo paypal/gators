@@ -111,8 +111,8 @@ def test_default_parameters(sample_data):
     assert set(discretizer.subset) == {"A", "B", "C", "D"}
     assert len(discretizer._bins) == 4
     assert len(discretizer._labels) == 4
-    transformed_X =discretizer.transform(sample_data)
-    transformed_X =transformed_X.with_columns(
+    transformed_X = discretizer.transform(sample_data)
+    transformed_X = transformed_X.with_columns(
         [pl.col(col).cast(pl.String) for col in discretizer._column_mapping.values()]
     )
     assert_frame_equal(transformed_X, expected_data_default_parameters())
@@ -124,8 +124,8 @@ def test_subset_columns(sample_data):
     assert set(discretizer.subset) == {"A", "B"}
     assert len(discretizer._bins) == 2
     assert len(discretizer._labels) == 2
-    transformed_X =discretizer.transform(sample_data)
-    transformed_X =transformed_X.with_columns(
+    transformed_X = discretizer.transform(sample_data)
+    transformed_X = transformed_X.with_columns(
         [pl.col(col).cast(pl.String) for col in discretizer._column_mapping.values()]
     )
     assert_frame_equal(transformed_X, expected_data_subset_columns())
@@ -133,17 +133,11 @@ def test_subset_columns(sample_data):
 
 def test_as_numerics(sample_data):
     """Test with as_numerics=True, should generate numeric labels."""
-    discretizer = EqualLengthDiscretizer(
-        num_bins=3, 
-        subset=["A"], 
-        inplace=False,
-        as_numerics=True
-    )
+    discretizer = EqualLengthDiscretizer(num_bins=3, subset=["A"], inplace=False, as_numerics=True)
     discretizer.fit(sample_data)
-    transformed_X =discretizer.transform(sample_data)
-    
+    transformed_X = discretizer.transform(sample_data)
+
     # Labels should be numeric integers 0, 1, 2
     unique_labels = transformed_X["A__dicretize_length"].unique().sort().to_list()
     # Should have numeric labels
     assert all(label in [0, 1, 2] for label in unique_labels)
-

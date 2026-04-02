@@ -104,9 +104,7 @@ class TestHighCardinalityFilter:
 
     def test_subset_columns(self):
         """Test filtering only specified columns."""
-        X = pl.DataFrame(
-            {"id1": range(100), "id2": range(100), "feature": ["A", "B"] * 50}
-        )
+        X = pl.DataFrame({"id1": range(100), "id2": range(100), "feature": ["A", "B"] * 50})
 
         # Only check id1 and id2
         filter = HighCardinalityFilter(subset=["id1", "id2"], max_unique=50)
@@ -135,9 +133,7 @@ class TestHighCardinalityFilter:
 
     def test_all_columns_removed(self):
         """Test when all columns exceed thresholds."""
-        X = pl.DataFrame(
-            {"col1": range(100), "col2": range(100, 200), "col3": range(200, 300)}
-        )
+        X = pl.DataFrame({"col1": range(100), "col2": range(100, 200), "col3": range(200, 300)})
 
         filter = HighCardinalityFilter(max_unique=50)
         result = filter.fit_transform(X)
@@ -148,9 +144,7 @@ class TestHighCardinalityFilter:
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
-        X = pl.DataFrame({"col1": [], "col2": []}).cast(
-            {"col1": pl.Int64, "col2": pl.String}
-        )
+        X = pl.DataFrame({"col1": [], "col2": []}).cast({"col1": pl.Int64, "col2": pl.String})
 
         filter = HighCardinalityFilter(max_unique=10)
         result = filter.fit_transform(X)
@@ -170,9 +164,7 @@ class TestHighCardinalityFilter:
 
     def test_all_same_value(self):
         """Test columns with all same value (1 unique)."""
-        X = pl.DataFrame(
-            {"col1": [1] * 100, "col2": ["A"] * 100, "col3": [True] * 100}
-        )
+        X = pl.DataFrame({"col1": [1] * 100, "col2": ["A"] * 100, "col3": [True] * 100})
 
         filter = HighCardinalityFilter(max_unique=10)
         result = filter.fit_transform(X)
@@ -204,12 +196,9 @@ class TestHighCardinalityFilter:
         """Test ratio at exact boundary."""
         X = pl.DataFrame(
             {
-                "col1": list(range(80))
-                + [0] * 20,  # 80 unique in 100 rows, ratio = 0.8
-                "col2": list(range(81))
-                + [0] * 19,  # 81 unique in 100 rows, ratio = 0.81
-                "col3": list(range(79))
-                + [0] * 21,  # 79 unique in 100 rows, ratio = 0.79
+                "col1": list(range(80)) + [0] * 20,  # 80 unique in 100 rows, ratio = 0.8
+                "col2": list(range(81)) + [0] * 19,  # 81 unique in 100 rows, ratio = 0.81
+                "col3": list(range(79)) + [0] * 21,  # 79 unique in 100 rows, ratio = 0.79
             }
         )
 
@@ -301,9 +290,7 @@ class TestHighCardinalityFilter:
 
     def test_to_drop_attribute(self):
         """Test that _to_drop attribute is correctly populated."""
-        X = pl.DataFrame(
-            {"col1": range(100), "col2": range(100, 200), "col3": ["A", "B"] * 50}
-        )
+        X = pl.DataFrame({"col1": range(100), "col2": range(100, 200), "col3": ["A", "B"] * 50})
 
         filter = HighCardinalityFilter(max_unique=50)
         filter.fit(X)
@@ -343,10 +330,8 @@ class TestHighCardinalityFilter:
         """Test using only max_ratio threshold."""
         X = pl.DataFrame(
             {
-                "col1": list(range(90))
-                + [0] * 10,  # 90 unique in 100 rows, ratio = 0.9
-                "col2": list(range(60))
-                + [0] * 40,  # 60 unique in 100 rows, ratio = 0.6
+                "col1": list(range(90)) + [0] * 10,  # 90 unique in 100 rows, ratio = 0.9
+                "col2": list(range(60)) + [0] * 40,  # 60 unique in 100 rows, ratio = 0.6
             }
         )
 
@@ -388,9 +373,7 @@ class TestHighCardinalityFilter:
 
     def test_large_cardinality(self):
         """Test with very high cardinality."""
-        X = pl.DataFrame(
-            {"id": range(10000), "category": ["A", "B", "C", "D", "E"] * 2000}
-        )
+        X = pl.DataFrame({"id": range(10000), "category": ["A", "B", "C", "D", "E"] * 2000})
 
         filter = HighCardinalityFilter(max_unique=1000)
         result = filter.fit_transform(X)

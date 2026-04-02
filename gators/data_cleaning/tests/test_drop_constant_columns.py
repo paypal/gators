@@ -23,9 +23,7 @@ class TestDropConstantColumns:
         remover = DropConstantColumns()
         result = remover.fit_transform(X)
 
-        expected = pl.DataFrame(
-            {"id": [1, 2, 3, 4, 5], "varying": [10, 20, 30, 40, 50]}
-        )
+        expected = pl.DataFrame({"id": [1, 2, 3, 4, 5], "varying": [10, 20, 30, 40, 50]})
 
         assert_frame_equal(result, expected)
         assert remover._to_drop == ["constant_num"]
@@ -69,9 +67,7 @@ class TestDropConstantColumns:
 
     def test_no_constant_columns(self):
         """Test behavior when no constant columns exist."""
-        X = pl.DataFrame(
-            {"col1": [1, 2, 3], "col2": ["A", "B", "C"], "col3": [True, False, True]}
-        )
+        X = pl.DataFrame({"col1": [1, 2, 3], "col2": ["A", "B", "C"], "col3": [True, False, True]})
 
         remover = DropConstantColumns()
         result = remover.fit_transform(X)
@@ -172,9 +168,7 @@ class TestDropConstantColumns:
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
-        X = pl.DataFrame({"col1": [], "col2": []}).cast(
-            {"col1": pl.Int64, "col2": pl.String}
-        )
+        X = pl.DataFrame({"col1": [], "col2": []}).cast({"col1": pl.Int64, "col2": pl.String})
 
         remover = DropConstantColumns()
         result = remover.fit_transform(X)
@@ -201,9 +195,7 @@ class TestDropConstantColumns:
         train_X = pl.DataFrame({"const": [1, 1, 1], "varying": [10, 20, 30]})
 
         # Test data where 'const' is NOT constant anymore
-        test_X = pl.DataFrame(
-            {"const": [1, 2, 3], "varying": [40, 50, 60]}  # Now varying!
-        )
+        test_X = pl.DataFrame({"const": [1, 2, 3], "varying": [40, 50, 60]})  # Now varying!
 
         remover = DropConstantColumns()
         remover.fit(train_X)
@@ -234,9 +226,7 @@ class TestDropConstantColumns:
 
     def test_float_constant_column(self):
         """Test removing constant float column."""
-        X = pl.DataFrame(
-            {"const_float": [3.14, 3.14, 3.14], "varying_float": [1.1, 2.2, 3.3]}
-        )
+        X = pl.DataFrame({"const_float": [3.14, 3.14, 3.14], "varying_float": [1.1, 2.2, 3.3]})
 
         remover = DropConstantColumns()
         result = remover.fit_transform(X)

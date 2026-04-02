@@ -14,8 +14,8 @@ def test_default_parameters(sample_data):
     transformer = PolynomialFeatures(include_bias=True)
     transformer.fit(sample_data)
 
-    transformed_X =transformer.transform(sample_data)
-    expected_X =sample_data.with_columns(
+    transformed_X = transformer.transform(sample_data)
+    expected_X = sample_data.with_columns(
         [
             pl.lit(1).alias("bias"),
             (sample_data["A"] * sample_data["A"]).alias("A__A"),
@@ -32,9 +32,9 @@ def test_default_parameters(sample_data):
 def test_columns_as_subset(sample_data):
     transformer = PolynomialFeatures(subset=["A", "B"], include_bias=True)
     transformer.fit(sample_data)
-    transformed_X =transformer.transform(sample_data)
+    transformed_X = transformer.transform(sample_data)
 
-    expected_X =sample_data.with_columns(
+    expected_X = sample_data.with_columns(
         [
             pl.lit(1).alias("bias"),
             (sample_data["A"] * sample_data["A"]).alias("A__A"),
@@ -49,9 +49,9 @@ def test_columns_as_subset(sample_data):
 def test_interaction_only(sample_data):
     transformer = PolynomialFeatures(interaction_only=True, include_bias=False)
     transformer.fit(sample_data)
-    transformed_X =transformer.transform(sample_data)
+    transformed_X = transformer.transform(sample_data)
 
-    expected_X =sample_data.with_columns(
+    expected_X = sample_data.with_columns(
         [
             (sample_data["A"] * sample_data["B"]).alias("A__B"),
             (sample_data["A"] * sample_data["C"]).alias("A__C"),

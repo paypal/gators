@@ -9,7 +9,7 @@ from gators.feature_generation_str import Contains
 
 @pytest.fixture
 def sample_data() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["substring1 is here", None, "substring2 is also here"],
         "column2": [None, "contains substring3", "another no match"],
     }
@@ -18,7 +18,7 @@ def sample_data() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_X() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["substring1 is here", None, "substring2 is also here"],
         "column2": [None, "contains substring3", "another no match"],
         "column1__contains_substring1": [True, None, False],

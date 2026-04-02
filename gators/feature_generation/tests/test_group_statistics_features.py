@@ -8,7 +8,7 @@ from gators.feature_generation import GroupStatisticsFeatures
 
 def test_transform_basic_single_group_single_agg():
     """Test basic transformation with single groupby column and single aggregation."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "amount": [100, 200, 150, 300, 250],
             "cat1": ["A", "A", "B", "B", "A"],
@@ -33,7 +33,7 @@ def test_transform_basic_single_group_single_agg():
 
 def test_transform_multiple_aggregations():
     """Test with multiple aggregation functions."""
-    X =pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
+    X = pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -57,7 +57,7 @@ def test_transform_multiple_aggregations():
 
 def test_transform_multiple_numerical_columns():
     """Test with multiple numerical columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "col1": [100, 200, 150, 300],
             "col2": [50, 100, 75, 150],
@@ -80,11 +80,9 @@ def test_transform_multiple_numerical_columns():
     assert result["mean_col2__per_group"][0] == pytest.approx(75.0)
 
 
-
-
 def test_transform_multi_column_groupby():
     """Test with multiple separate groupby columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "value": [100, 200, 150, 300, 250, 175],
             "amount": [50, 100, 75, 150, 125, 88],
@@ -116,9 +114,7 @@ def test_transform_multi_column_groupby():
 
 def test_transform_all_aggregations():
     """Test all supported aggregation functions."""
-    X =pl.DataFrame(
-        {"value": [10, 20, 30, 40, 50, 60], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 40, 50, 60], "group": ["A", "A", "A", "B", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -146,9 +142,7 @@ def test_transform_all_aggregations():
 
 def test_transform_with_drop_columns():
     """Test dropping original numerical columns."""
-    X =pl.DataFrame(
-        {"value": [10, 20, 30], "other": [1, 2, 3], "group": ["A", "A", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30], "other": [1, 2, 3], "group": ["A", "A", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -168,7 +162,7 @@ def test_transform_with_drop_columns():
 
 def test_transform_with_custom_column_names():
     """Test using custom column names."""
-    X =pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
+    X = pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -199,7 +193,7 @@ def test_validation_invalid_aggregation():
 
 def test_validation_mismatched_new_column_names_length():
     """Test validation error when new_column_names length doesn't match."""
-    X =pl.DataFrame({"value": [10, 20], "group": ["A", "B"]})
+    X = pl.DataFrame({"value": [10, 20], "group": ["A", "B"]})
 
     # Should create 1 num_col × 2 func = 2 features
     # But only providing 1 name
@@ -217,7 +211,7 @@ def test_validation_mismatched_new_column_names_length():
 
 def test_fit_return_self():
     """Test that fit returns self."""
-    X =pl.DataFrame({"value": [10, 20], "group": ["A", "B"]})
+    X = pl.DataFrame({"value": [10, 20], "group": ["A", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -231,7 +225,7 @@ def test_fit_return_self():
 
 def test_column_mapping_generation():
     """Test that column mapping is correctly generated during fit."""
-    X =pl.DataFrame({"value": [10, 20], "group": ["A", "B"]})
+    X = pl.DataFrame({"value": [10, 20], "group": ["A", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -248,9 +242,7 @@ def test_column_mapping_generation():
 
 def test_std_aggregation():
     """Test standard deviation aggregation."""
-    X =pl.DataFrame(
-        {"value": [10, 20, 30, 15, 25, 35], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 15, 25, 35], "group": ["A", "A", "A", "B", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -265,9 +257,7 @@ def test_std_aggregation():
 
 def test_median_aggregation():
     """Test median aggregation specifically."""
-    X =pl.DataFrame(
-        {"value": [10, 20, 30, 15, 25, 35], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 15, 25, 35], "group": ["A", "A", "A", "B", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -284,9 +274,7 @@ def test_median_aggregation():
 
 def test_empty_dataframe():
     """Test behavior with empty dataframe."""
-    X =pl.DataFrame(
-        {"value": [], "group": []}, schema={"value": pl.Int64, "group": pl.Utf8}
-    )
+    X = pl.DataFrame({"value": [], "group": []}, schema={"value": pl.Int64, "group": pl.Utf8})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -301,7 +289,7 @@ def test_empty_dataframe():
 
 def test_single_row_dataframe():
     """Test behavior with single row dataframe."""
-    X =pl.DataFrame({"value": [100], "group": ["A"]})
+    X = pl.DataFrame({"value": [100], "group": ["A"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -318,9 +306,7 @@ def test_single_row_dataframe():
 
 def test_with_null_values():
     """Test handling of null values in data."""
-    X =pl.DataFrame(
-        {"value": [10, None, 30, 40, None], "group": ["A", "A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, None, 30, 40, None], "group": ["A", "A", "A", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -337,7 +323,7 @@ def test_with_null_values():
 
 def test_negative_values():
     """Test with negative values."""
-    X =pl.DataFrame({"value": [-10, -20, 30, 40], "group": ["A", "A", "B", "B"]})
+    X = pl.DataFrame({"value": [-10, -20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -353,9 +339,7 @@ def test_negative_values():
 
 def test_float_values():
     """Test with float values."""
-    X =pl.DataFrame(
-        {"value": [10.5, 20.7, 30.2, 40.8], "group": ["A", "A", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10.5, 20.7, 30.2, 40.8], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -370,7 +354,7 @@ def test_float_values():
 
 def test_count_aggregation():
     """Test count aggregation returns correct counts."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "value": [10, 20, 30, 40, 50],
             "group": ["A", "A", "A", "B", "B"],
@@ -391,7 +375,7 @@ def test_count_aggregation():
 
 def test_sum_aggregation():
     """Test sum aggregation."""
-    X =pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
+    X = pl.DataFrame({"value": [10, 20, 30, 40], "group": ["A", "A", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],
@@ -408,9 +392,7 @@ def test_sum_aggregation():
 
 def test_min_max_aggregation():
     """Test min and max func."""
-    X =pl.DataFrame(
-        {"value": [10, 20, 30, 15, 25, 35], "group": ["A", "A", "A", "B", "B", "B"]}
-    )
+    X = pl.DataFrame({"value": [10, 20, 30, 15, 25, 35], "group": ["A", "A", "A", "B", "B", "B"]})
 
     transformer = GroupStatisticsFeatures(
         subset=["value"],

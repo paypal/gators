@@ -26,9 +26,7 @@ def sample_business_data():
 
 def test_basic_is_business_hour(sample_business_data):
     """Test basic business hour detection."""
-    transformer = BusinessTimeFeatures(
-        subset=["timestamp"], features=["is_business_hour"]
-    )
+    transformer = BusinessTimeFeatures(subset=["timestamp"], features=["is_business_hour"])
     result = transformer.fit_transform(sample_business_data)
 
     assert "timestamp__is_business_hour" in result.columns
@@ -43,9 +41,7 @@ def test_basic_is_business_hour(sample_business_data):
 
 def test_basic_is_business_day(sample_business_data):
     """Test basic business day detection."""
-    transformer = BusinessTimeFeatures(
-        subset=["timestamp"], features=["is_business_day"]
-    )
+    transformer = BusinessTimeFeatures(subset=["timestamp"], features=["is_business_day"])
     result = transformer.fit_transform(sample_business_data)
 
     assert "timestamp__is_business_day" in result.columns
@@ -60,9 +56,7 @@ def test_basic_is_business_day(sample_business_data):
 
 def test_time_of_business_day(sample_business_data):
     """Test time of business day categorization."""
-    transformer = BusinessTimeFeatures(
-        subset=["timestamp"], features=["time_of_business_day"]
-    )
+    transformer = BusinessTimeFeatures(subset=["timestamp"], features=["time_of_business_day"])
     result = transformer.fit_transform(sample_business_data)
 
     assert "timestamp__time_of_business_day" in result.columns
@@ -78,9 +72,7 @@ def test_time_of_business_day(sample_business_data):
 
 def test_hour_of_business_day(sample_business_data):
     """Test hour of business day calculation."""
-    transformer = BusinessTimeFeatures(
-        subset=["timestamp"], features=["hour_of_business_day"]
-    )
+    transformer = BusinessTimeFeatures(subset=["timestamp"], features=["hour_of_business_day"])
     result = transformer.fit_transform(sample_business_data)
 
     assert "timestamp__hour_of_business_day" in result.columns
@@ -110,7 +102,7 @@ def test_all_features_together(sample_business_data):
 
 def test_custom_business_hours():
     """Test with custom business hours."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 15, 6, 0),  # Before custom hours
@@ -134,7 +126,7 @@ def test_custom_business_hours():
 
 def test_custom_weekend_days():
     """Test with custom weekend days (e.g., Friday-Saturday)."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 15, 10, 0),  # Monday (1)
@@ -180,7 +172,7 @@ def test_drop_columns_false(sample_business_data):
 
 def test_auto_detect_datetime_columns():
     """Test automatic detection of datetime columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp1": [datetime(2024, 1, 15, 10, 0)],
             "timestamp2": [datetime(2024, 1, 15, 18, 0)],
@@ -221,9 +213,7 @@ def test_validation_invalid_feature():
 
 def test_sklearn_compatibility(sample_business_data):
     """Test sklearn pipeline compatibility."""
-    transformer = BusinessTimeFeatures(
-        subset=["timestamp"], features=["is_business_hour"]
-    )
+    transformer = BusinessTimeFeatures(subset=["timestamp"], features=["is_business_hour"])
 
     # Test fit returns self
     result = transformer.fit(sample_business_data)
@@ -236,7 +226,7 @@ def test_sklearn_compatibility(sample_business_data):
 
 def test_multiple_datetime_columns():
     """Test with multiple datetime columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "created_at": [datetime(2024, 1, 15, 10, 0), datetime(2024, 1, 15, 18, 0)],
             "updated_at": [datetime(2024, 1, 15, 11, 0), datetime(2024, 1, 15, 19, 0)],
@@ -257,7 +247,7 @@ def test_multiple_datetime_columns():
 
 def test_edge_case_exact_business_hour_boundaries():
     """Test exact boundary conditions for business hours."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 15, 9, 0),  # Exactly start time
@@ -268,9 +258,7 @@ def test_edge_case_exact_business_hour_boundaries():
         }
     )
 
-    transformer = BusinessTimeFeatures(
-        subset=["timestamp"], features=["is_business_hour"]
-    )
+    transformer = BusinessTimeFeatures(subset=["timestamp"], features=["is_business_hour"])
     result = transformer.fit_transform(X)
 
     # 9:00 is in, 17:00 is out (< not <=), 16:59 is in

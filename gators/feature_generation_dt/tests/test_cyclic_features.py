@@ -36,9 +36,7 @@ def test_basic_month_cyclic(sample_datetime_data):
 
 def test_multiple_angles(sample_datetime_data):
     """Test cyclic features with multiple phase angles."""
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["month"], angles=[0, 90, 180]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["month"], angles=[0, 90, 180])
     result = transformer.fit_transform(sample_datetime_data)
 
     assert "timestamp__month__sin0" in result.columns
@@ -60,9 +58,7 @@ def test_multiple_components(sample_datetime_data):
 
 def test_day_of_month_special_handling(sample_datetime_data):
     """Test day_of_month which requires days_in_month calculation."""
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["day_of_month"], angles=[0]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["day_of_month"], angles=[0])
     result = transformer.fit_transform(sample_datetime_data)
 
     assert "timestamp__day_of_month__sin0" in result.columns
@@ -72,9 +68,7 @@ def test_day_of_month_special_handling(sample_datetime_data):
 
 def test_all_cyclic_components():
     """Test all valid cyclic components."""
-    X =pl.DataFrame(
-        {"timestamp": [datetime(2024, 6, 15, 12, 30, 45)], "value": [1]}
-    )
+    X = pl.DataFrame({"timestamp": [datetime(2024, 6, 15, 12, 30, 45)], "value": [1]})
 
     components = [
         "month",
@@ -89,9 +83,7 @@ def test_all_cyclic_components():
         "second",
     ]
 
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=components, angles=[0]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=components, angles=[0])
     result = transformer.fit_transform(X)
 
     for comp in components:
@@ -111,9 +103,7 @@ def test_drop_columns_false(sample_datetime_data):
 
 def test_auto_detect_datetime_columns():
     """Test automatic detection of datetime columns."""
-    X =pl.DataFrame(
-        {"dt1": [datetime(2024, 1, 1)], "dt2": [datetime(2024, 6, 1)], "value": [100]}
-    )
+    X = pl.DataFrame({"dt1": [datetime(2024, 1, 1)], "dt2": [datetime(2024, 6, 1)], "value": [100]})
 
     transformer = CyclicFeatures(components=["month"], angles=[0])
     result = transformer.fit_transform(X)
@@ -124,11 +114,9 @@ def test_auto_detect_datetime_columns():
 
 def test_fractional_angle():
     """Test with fractional angle values."""
-    X =pl.DataFrame({"timestamp": [datetime(2024, 1, 1)], "value": [1]})
+    X = pl.DataFrame({"timestamp": [datetime(2024, 1, 1)], "value": [1]})
 
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["month"], angles=[45.5, 90.25]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["month"], angles=[45.5, 90.25])
     result = transformer.fit_transform(X)
 
     assert "timestamp__month__sin45.5" in result.columns
@@ -143,9 +131,7 @@ def test_validation_invalid_component():
 
 def test_sklearn_compatibility(sample_datetime_data):
     """Test sklearn pipeline compatibility."""
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["month"], angles=[0]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["month"], angles=[0])
 
     # Test fit returns self
     result = transformer.fit(sample_datetime_data)
@@ -158,7 +144,7 @@ def test_sklearn_compatibility(sample_datetime_data):
 
 def test_semester_cyclic():
     """Test semester component (H1/H2)."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 1),  # Q1 -> Semester 1
@@ -170,9 +156,7 @@ def test_semester_cyclic():
         }
     )
 
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["semester"], angles=[0]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["semester"], angles=[0])
     result = transformer.fit_transform(X)
 
     assert "timestamp__semester__sin0" in result.columns
@@ -180,9 +164,7 @@ def test_semester_cyclic():
 
 def test_week_of_year_cyclic(sample_datetime_data):
     """Test week of year cyclic features."""
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["week"], angles=[0]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["week"], angles=[0])
     result = transformer.fit_transform(sample_datetime_data)
 
     assert "timestamp__week__sin0" in result.columns
@@ -190,7 +172,7 @@ def test_week_of_year_cyclic(sample_datetime_data):
 
 def test_time_components_cyclic():
     """Test time-based cyclic features (hour, minute, second)."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [
                 datetime(2024, 1, 1, 0, 0, 0),
@@ -214,7 +196,7 @@ def test_time_components_cyclic():
 
 def test_multiple_datetime_columns():
     """Test with multiple datetime columns."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "created_at": [datetime(2024, 1, 1), datetime(2024, 6, 1)],
             "updated_at": [datetime(2024, 3, 1), datetime(2024, 9, 1)],
@@ -233,16 +215,14 @@ def test_multiple_datetime_columns():
 
 def test_cyclic_values_are_bounded():
     """Test that cyclic sine values are between -1 and 1."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [datetime(2024, i, 1) for i in range(1, 13)],
             "value": list(range(12)),
         }
     )
 
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["month"], angles=[0]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["month"], angles=[0])
     result = transformer.fit_transform(X)
 
     sin_values = result["timestamp__month__sin0"].to_list()
@@ -251,16 +231,14 @@ def test_cyclic_values_are_bounded():
 
 def test_day_of_week_cyclic():
     """Test day of week cyclic features."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp": [datetime(2024, 1, i) for i in range(1, 8)],  # Mon-Sun
             "value": list(range(7)),
         }
     )
 
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["day_of_week"], angles=[0]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["day_of_week"], angles=[0])
     result = transformer.fit_transform(X)
 
     assert "timestamp__day_of_week__sin0" in result.columns
@@ -268,13 +246,9 @@ def test_day_of_week_cyclic():
 
 def test_day_of_year_cyclic():
     """Test day of year cyclic features."""
-    X =pl.DataFrame(
-        {"timestamp": [datetime(2024, 1, 1), datetime(2024, 12, 31)], "value": [1, 2]}
-    )
+    X = pl.DataFrame({"timestamp": [datetime(2024, 1, 1), datetime(2024, 12, 31)], "value": [1, 2]})
 
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["day_of_year"], angles=[0]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["day_of_year"], angles=[0])
     result = transformer.fit_transform(X)
 
     assert "timestamp__day_of_year__sin0" in result.columns
@@ -282,9 +256,7 @@ def test_day_of_year_cyclic():
 
 def test_quarter_cyclic(sample_datetime_data):
     """Test quarter cyclic features."""
-    transformer = CyclicFeatures(
-        subset=["timestamp"], components=["quarter"], angles=[0, 90]
-    )
+    transformer = CyclicFeatures(subset=["timestamp"], components=["quarter"], angles=[0, 90])
     result = transformer.fit_transform(sample_datetime_data)
 
     assert "timestamp__quarter__sin0" in result.columns
@@ -293,7 +265,7 @@ def test_quarter_cyclic(sample_datetime_data):
 
 def test_string_datetime_conversion():
     """Test that string datetime columns are converted to Datetime during transform."""
-    X =pl.DataFrame(
+    X = pl.DataFrame(
         {
             "timestamp_str": [
                 "2024-01-15 10:30:00",
@@ -303,14 +275,10 @@ def test_string_datetime_conversion():
             "value": [1, 2, 3],
         }
     )
-    
-    transformer = CyclicFeatures(
-        subset=["timestamp_str"], 
-        components=["month", "hour"], 
-        angles=[0]
-    )
+
+    transformer = CyclicFeatures(subset=["timestamp_str"], components=["month", "hour"], angles=[0])
     result = transformer.fit_transform(X)
-    
+
     # Check that cyclic features were created from string datetime
     assert "timestamp_str__month__sin0" in result.columns
     assert "timestamp_str__hour__sin0" in result.columns

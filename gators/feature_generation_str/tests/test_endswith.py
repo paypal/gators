@@ -9,7 +9,7 @@ from gators.feature_generation_str import Endswith
 
 @pytest.fixture
 def sample_data() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["ends_with1", None, "also_ends_with2"],
         "column2": [None, "does_end_with3", "another_no_match"],
     }
@@ -18,7 +18,7 @@ def sample_data() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_X() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["ends_with1", None, "also_ends_with2"],
         "column2": [None, "does_end_with3", "another_no_match"],
         "column1__endswith_with1": [True, None, False],

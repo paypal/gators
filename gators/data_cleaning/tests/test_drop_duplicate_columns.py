@@ -105,7 +105,7 @@ def test_fit_transform(sample_data_with_duplicates, expected_keep_first):
 
 def test_single_column():
     """Test with single column DataFrame."""
-    X =  pl.DataFrame({"A": [1, 2, 3]})
+    X = pl.DataFrame({"A": [1, 2, 3]})
     remover = DropDuplicateColumns()
     remover.fit(X)
     result = remover.transform(X)
@@ -116,7 +116,7 @@ def test_single_column():
 
 def test_all_columns_identical():
     """Test when all columns are identical."""
-    X =  pl.DataFrame({"col1": [1, 2, 3], "col2": [1, 2, 3], "col3": [1, 2, 3]})
+    X = pl.DataFrame({"col1": [1, 2, 3], "col2": [1, 2, 3], "col3": [1, 2, 3]})
     remover = DropDuplicateColumns(keep="first")
     remover.fit(X)
     result = remover.transform(X)
@@ -127,7 +127,7 @@ def test_all_columns_identical():
 
 def test_mixed_dtypes():
     """Test that columns with different dtypes are not considered duplicates."""
-    X =  pl.DataFrame(
+    X = pl.DataFrame(
         {
             "int_col": [1, 2, 3],
             "float_col": [1.0, 2.0, 3.0],  # Same values but different dtype
@@ -144,7 +144,7 @@ def test_mixed_dtypes():
 
 def test_invalid_keep_parameter():
     """Test that invalid keep parameter raises ValueError."""
-    X =  pl.DataFrame({"A": [1, 2, 3]})
+    X = pl.DataFrame({"A": [1, 2, 3]})
     remover = DropDuplicateColumns(keep="invalid")
 
     with pytest.raises(ValueError, match="keep must be 'first' or 'last'"):
@@ -153,7 +153,7 @@ def test_invalid_keep_parameter():
 
 def test_column_groups_tracking():
     """Test that column_groups_ correctly tracks duplicate relationships."""
-    X =  pl.DataFrame({"a": [1, 2, 3], "b": [1, 2, 3], "c": [1, 2, 3], "d": [4, 5, 6]})
+    X = pl.DataFrame({"a": [1, 2, 3], "b": [1, 2, 3], "c": [1, 2, 3], "d": [4, 5, 6]})
     remover = DropDuplicateColumns(keep="first")
     remover.fit(X)
 
@@ -164,7 +164,7 @@ def test_column_groups_tracking():
 
 def test_empty_dataframe():
     """Test with empty DataFrame."""
-    X =  pl.DataFrame()
+    X = pl.DataFrame()
     remover = DropDuplicateColumns()
     remover.fit(X)
     result = remover.transform(X)
@@ -176,16 +176,17 @@ def test_empty_dataframe():
 def test_different_length_columns():
     """Test with columns of different lengths (edge case for coverage)."""
     # Create DataFrame where comparison would fail if lengths weren't checked
-    X1 = pl.DataFrame({
-        "col1": [1, 2, 3],
-        "col2": [1, 2, 3],
-    })
-    
+    X1 = pl.DataFrame(
+        {
+            "col1": [1, 2, 3],
+            "col2": [1, 2, 3],
+        }
+    )
+
     # Both columns are identical, so one should be removed
     remover = DropDuplicateColumns()
     remover.fit(X1)
     result = remover.transform(X1)
-    
+
     # Only one column should remain after removing duplicates
     assert result.shape[1] == 1
-

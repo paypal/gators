@@ -142,9 +142,7 @@ class TestQuantileDiscretizer:
         """Test handling of duplicate quantile values with raise strategy."""
         X = pl.DataFrame({"feature": [1, 1, 1, 2, 2, 2]})
 
-        discretizer = QuantileDiscretizer(
-            subset=["feature"], num_bins=5, handle_duplicates="raise"
-        )
+        discretizer = QuantileDiscretizer(subset=["feature"], num_bins=5, handle_duplicates="raise")
 
         with pytest.raises(ValueError, match="duplicate quantile values"):
             discretizer.fit_transform(X)
@@ -179,9 +177,7 @@ class TestQuantileDiscretizer:
         """Test handling of null values."""
         X = pl.DataFrame({"feature": [1.0, 2.0, None, 4.0, 5.0, None, 7.0, 8.0]})
 
-        discretizer = QuantileDiscretizer(
-            subset=["feature"], num_bins=3, inplace=False
-        )
+        discretizer = QuantileDiscretizer(subset=["feature"], num_bins=3, inplace=False)
         result = discretizer.fit_transform(X)
 
         # Should handle nulls
@@ -267,9 +263,7 @@ class TestQuantileDiscretizer:
         """Test median split (2 bins)."""
         X = pl.DataFrame({"value": list(range(20))})
 
-        discretizer = QuantileDiscretizer(
-            subset=["value"], quantiles=[0.5], inplace=False
-        )
+        discretizer = QuantileDiscretizer(subset=["value"], quantiles=[0.5], inplace=False)
         result = discretizer.fit_transform(X)
 
         assert "value__dic_quantile" in result.columns
@@ -325,9 +319,7 @@ class TestQuantileDiscretizer:
         """Test with empty DataFrame."""
         X = pl.DataFrame({"feature": []}, schema={"feature": pl.Float64})
 
-        discretizer = QuantileDiscretizer(
-            subset=["feature"], num_bins=3, inplace=False
-        )
+        discretizer = QuantileDiscretizer(subset=["feature"], num_bins=3, inplace=False)
         result = discretizer.fit_transform(X)
 
         assert len(result) == 0

@@ -9,7 +9,7 @@ from gators.feature_generation_str import Length
 
 @pytest.fixture
 def sample_data() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["short", None, "much longer string"],
         "column2": ["tiny", "bit lengthy", "even longer string"],
         "column3": [1, 2, 3],
@@ -19,7 +19,7 @@ def sample_data() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_X() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["short", None, "much longer string"],
         "column2": ["tiny", "bit lengthy", "even longer string"],
         "column3": [1, 2, 3],
@@ -33,7 +33,7 @@ def test_length_transform_with_columns(sample_data):
     length = Length(subset=["column1"])
     length.fit(sample_data)
     transformed_X = length.transform(sample_data)
-    expected_X =pl.DataFrame(
+    expected_X = pl.DataFrame(
         {
             "column1": ["short", None, "much longer string"],
             "column2": ["tiny", "bit lengthy", "even longer string"],
@@ -48,7 +48,7 @@ def test_length_transform(sample_data):
     length = Length()
     length.fit(sample_data)
     transformed_X = length.transform(sample_data)
-    expected_X =pl.DataFrame(
+    expected_X = pl.DataFrame(
         {
             "column1": ["short", None, "much longer string"],
             "column2": ["tiny", "bit lengthy", "even longer string"],

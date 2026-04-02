@@ -21,7 +21,7 @@ def sample_target():
 
 
 def test_woe_encoder_transform_defaults(sample_data, sample_target):
-    expected_X =pl.DataFrame(
+    expected_X = pl.DataFrame(
         {
             "A__encode_woe": [0.286025, -0.402159, 0.286025, -0.402159, 0.286025],
             "B__encode_woe": [-1.090344, -1.090344, 4.901146, 4.901146, -1.090344],
@@ -34,7 +34,7 @@ def test_woe_encoder_transform_defaults(sample_data, sample_target):
 
 
 def test_woe_encoder_transform_no_drop_columns(sample_data, sample_target):
-    expected_X =pl.DataFrame(
+    expected_X = pl.DataFrame(
         {
             "A": ["cat", "dog", "cat", "dog", "cat"],
             "B": ["x", "x", "y", "y", "x"],
@@ -59,7 +59,7 @@ def test_woe_unseen_categories(sample_data, sample_target):
         }
     )
     woe_encoder.fit(sample_data, y=sample_target)
-    expected_X =pl.DataFrame(
+    expected_X = pl.DataFrame(
         {
             "A__encode_woe": [0.0, 0.0, 0.286025, -0.402159, 0.286025],
             "B__encode_woe": [0.0, 0.0, 4.901146, 4.901146, -1.090344],

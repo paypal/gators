@@ -9,7 +9,7 @@ from gators.feature_generation_str import Startswith
 
 @pytest.fixture
 def sample_data() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["prefix1_sample", None, "prefix2_sample"],
         "column2": [None, "prefix3_sample", "no_match"],
     }
@@ -18,7 +18,7 @@ def sample_data() -> pl.DataFrame:
 
 @pytest.fixture
 def expected_X() -> pl.DataFrame:
-    X ={
+    X = {
         "column1": ["prefix1_sample", None, "prefix2_sample"],
         "column2": [None, "prefix3_sample", "no_match"],
         "column1__startswith_prefix1": [True, None, False],

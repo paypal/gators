@@ -126,26 +126,30 @@ def test_transform_with_categories(sample_X):
 
 def test_transform_with_missing_categories_at_test_time():
     """Test handling of categories present in fit but missing in transform."""
-    train_X = pl.DataFrame({
-        "A": ["foo", "bar", "baz"],
-        "B": ["one", "two", "three"],
-    })
-    
-    test_X = pl.DataFrame({
-        "A": ["foo", "bar"],  # Missing "baz"
-        "B": ["one", "two"],  # Missing "three"
-    })
-    
+    train_X = pl.DataFrame(
+        {
+            "A": ["foo", "bar", "baz"],
+            "B": ["one", "two", "three"],
+        }
+    )
+
+    test_X = pl.DataFrame(
+        {
+            "A": ["foo", "bar"],  # Missing "baz"
+            "B": ["one", "two"],  # Missing "three"
+        }
+    )
+
     encoder = OneHotEncoder()
     encoder.fit(train_X)
     transformed_X = encoder.transform(test_X)
-    
+
     # Should have columns for all categories from fit, missing ones filled with 0
     assert "A__foo" in transformed_X.columns
     assert "A__bar" in transformed_X.columns
     assert "A__baz" in transformed_X.columns  # Should exist with zeros
     assert "B__three" in transformed_X.columns  # Should exist with zeros
-    
+
     # Check that missing categories are filled with zeros
     assert all(transformed_X["A__baz"] == 0)
     assert all(transformed_X["B__three"] == 0)
