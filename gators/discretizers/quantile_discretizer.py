@@ -39,7 +39,7 @@ class QuantileDiscretizer(_BaseDiscretizer):
         If True, create numeric labels (0, 1, 2, ...) instead of interval strings.
     handle_duplicates : str, default='drop'
         How to handle duplicate quantile values:
-        
+
         - 'drop': Remove duplicate bin edges (recommended for low variance data)
         - 'raise': Raise error if duplicates are found
 
@@ -124,9 +124,7 @@ class QuantileDiscretizer(_BaseDiscretizer):
             raise ValueError("handle_duplicates must be 'drop' or 'raise'")
         return handle_duplicates
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "QuantileDiscretizer":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "QuantileDiscretizer":
         """Fit the discretizer by computing quantile-based bin boundaries.
 
         Parameters
@@ -146,8 +144,7 @@ class QuantileDiscretizer(_BaseDiscretizer):
             self.subset = [
                 col
                 for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype
-                in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
+                if dtype in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
             ]
 
         # Determine quantiles to use

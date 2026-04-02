@@ -9,14 +9,14 @@ class MinmaxScaler(BaseModel, BaseEstimator, TransformerMixin):
     """
     Scales numeric features to a [0, 1] range using min-max normalization.
 
-    Transforms features by scaling each feature to the range [0, 1] based on 
+    Transforms features by scaling each feature to the range [0, 1] based on
     the minimum and maximum values observed during fitting. The transformation
     is given by: X_scaled = (X - X_min) / (X_max - X_min).
 
     Parameters
     ----------
     subset : Optional[List[str]], default=None
-        List of numeric column names to scale. If None, all numeric columns 
+        List of numeric column names to scale. If None, all numeric columns
         (Float64, Int64, Float32, Int32) are automatically selected.
     drop_columns : bool, default=True
         If True, drop the original columns after scaling.
@@ -86,9 +86,7 @@ class MinmaxScaler(BaseModel, BaseEstimator, TransformerMixin):
         X_min = X[self.subset].min().to_dict(as_series=False)
         X_max = X[self.subset].max().to_dict(as_series=False)
         self._offset = {col: val[0] for col, val in X_min.items()}
-        self._scale = {
-            col: 1.0 / (X_max[col][0] - X_min[col][0]) for col in self.subset
-        }
+        self._scale = {col: 1.0 / (X_max[col][0] - X_min[col][0]) for col in self.subset}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

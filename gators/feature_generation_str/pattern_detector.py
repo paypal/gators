@@ -19,7 +19,7 @@ class PatternDetector(BaseModel, BaseEstimator, TransformerMixin):
         will be used.
     patterns : List[str], default=["is_numeric", "is_email", "is_url", "is_phone"]
         Patterns to detect. Options:
-    
+
         - "is_numeric": Contains only digits (possibly with decimal/negative)
         - "is_email": Matches email pattern (basic check)
         - "is_url": Matches URL pattern (http/https)
@@ -159,9 +159,7 @@ class PatternDetector(BaseModel, BaseEstimator, TransformerMixin):
             if "is_email" in self.patterns:
                 # Basic email pattern: something@something.something
                 is_email = (
-                    col_expr.str.contains(
-                        r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
-                    )
+                    col_expr.str.contains(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
                     .fill_null(False)
                     .alias(f"{col}__is_email")
                 )
@@ -197,35 +195,25 @@ class PatternDetector(BaseModel, BaseEstimator, TransformerMixin):
             if "is_alpha" in self.patterns:
                 # Only letters
                 is_alpha = (
-                    col_expr.str.contains(r"^[a-zA-Z]+$")
-                    .fill_null(False)
-                    .alias(f"{col}__is_alpha")
+                    col_expr.str.contains(r"^[a-zA-Z]+$").fill_null(False).alias(f"{col}__is_alpha")
                 )
                 new_columns.append(is_alpha)
 
             if "has_http" in self.patterns:
                 # Contains http:// or https://
                 has_http = (
-                    col_expr.str.contains(r"https?://")
-                    .fill_null(False)
-                    .alias(f"{col}__has_http")
+                    col_expr.str.contains(r"https?://").fill_null(False).alias(f"{col}__has_http")
                 )
                 new_columns.append(has_http)
 
             if "has_www" in self.patterns:
                 # Contains www.
-                has_www = (
-                    col_expr.str.contains(r"www\.")
-                    .fill_null(False)
-                    .alias(f"{col}__has_www")
-                )
+                has_www = col_expr.str.contains(r"www\.").fill_null(False).alias(f"{col}__has_www")
                 new_columns.append(has_www)
 
             if "has_at" in self.patterns:
                 # Contains @ symbol
-                has_at = (
-                    col_expr.str.contains(r"@").fill_null(False).alias(f"{col}__has_at")
-                )
+                has_at = col_expr.str.contains(r"@").fill_null(False).alias(f"{col}__has_at")
                 new_columns.append(has_at)
 
         X = X.with_columns(new_columns)

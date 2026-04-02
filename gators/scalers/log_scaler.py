@@ -133,7 +133,7 @@ class LogScaler(BaseModel, BaseEstimator, TransformerMixin):
                 for col, dtype in zip(X.columns, X.dtypes)
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
-        
+
         # Create suffix based on base
         if self.base == "e":
             suffix = "log_ln"
@@ -141,7 +141,7 @@ class LogScaler(BaseModel, BaseEstimator, TransformerMixin):
             suffix = "log_10"
         else:  # '2'
             suffix = "log_2"
-        
+
         self._column_mapping = {col: f"{col}__{suffix}" for col in self.subset}
         return self
 
@@ -157,7 +157,7 @@ class LogScaler(BaseModel, BaseEstimator, TransformerMixin):
         -------
         pl.DataFrame
             Transformed DataFrame with log-transformed columns.
-        
+
         Notes
         -----
         Zero and negative values will result in null or -inf values.
@@ -171,7 +171,7 @@ class LogScaler(BaseModel, BaseEstimator, TransformerMixin):
                 expr = pl.col(col).log10()
             else:  # '2'
                 expr = pl.col(col).log(base=2)
-            
+
             transformations.append(expr.alias(new))
 
         X = X.with_columns(transformations)

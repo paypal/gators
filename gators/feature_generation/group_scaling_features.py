@@ -12,7 +12,7 @@ class GroupScalingFeatures(BaseModel, BaseEstimator, TransformerMixin):
     Generates group-based scaling features for numerical columns.
 
     This transformer creates features like:
-    
+
     - value / group_mean (most common: relative position vs average)
     - value / group_median (robust to outliers)
     - (value - group_mean) / group_std (z-score: standardized deviation)
@@ -23,11 +23,11 @@ class GroupScalingFeatures(BaseModel, BaseEstimator, TransformerMixin):
     Group scaling features are particularly valuable in fraud detection because they capture
     relative deviations from group-level behavior patterns. Fraudulent transactions often
     exhibit unusual characteristics compared to the typical behavior within their segments.
-    
+
     - **mean/median ratios**: Show multiplicative deviation (e.g., 10x the group average)
     - **zscore**: Quantifies how many standard deviations away from group mean (e.g., 3σ anomaly)
     - **minmax**: Shows relative position within observed range (0=min, 1=max, handles negatives)
-    
+
     These features are especially powerful when combined with various grouping dimensions
     (e.g., by merchant, customer segment, time of day, or geographic location) to capture
     different aspects of abnormal behavior.
@@ -168,9 +168,7 @@ class GroupScalingFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return new_column_names
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "GroupScalingFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GroupScalingFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters

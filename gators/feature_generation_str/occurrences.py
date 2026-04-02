@@ -89,14 +89,10 @@ class Occurrences(BaseModel, BaseEstimator, TransformerMixin):
             raise ValueError("substrings dictionary cannot be empty")
         for col, substrs in substrings.items():
             if not isinstance(substrs, list) or len(substrs) == 0:
-                raise ValueError(
-                    f"Column '{col}' must have a non-empty list of substrings"
-                )
+                raise ValueError(f"Column '{col}' must have a non-empty list of substrings")
         return substrings
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "Occurrences":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Occurrences":
         """Fit the transformer by identifying string columns if not specified.
 
         Parameters
@@ -172,9 +168,7 @@ class Occurrences(BaseModel, BaseEstimator, TransformerMixin):
                     # Sum counts for all substrings mapping to this safe name
                     count_exprs = []
                     for substring in substrings:
-                        count_exprs.append(
-                            col_expr.str.count_matches(substring, literal=True)
-                        )
+                        count_exprs.append(col_expr.str.count_matches(substring, literal=True))
                     # Sum all the counts
                     if len(count_exprs) == 1:
                         count_expr = count_exprs[0].alias(f"{col}__{safe_substring}")

@@ -103,9 +103,7 @@ class OrdinalFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return components
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "OrdinalFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "OrdinalFeatures":
         """Fit the transformer.
 
         Parameters

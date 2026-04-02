@@ -45,17 +45,17 @@ def compute_geometric_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[flo
         [pl.col(col_name).min().alias(f"{col_name}_min") for col_name in X.columns]
         + [pl.col(col_name).max().alias(f"{col_name}_max") for col_name in X.columns]
     ).to_dict(as_series=False)
-    
+
     bins = {}
     for col in X.columns:
         col_min = min_max[f"{col}_min"][0]
         col_max = min_max[f"{col}_max"][0]
-        
+
         # Handle constant features
         if col_min == col_max:
             bins[col] = []
             continue
-        
+
         # Handle zero or negative values by shifting
         shift = 0
         if col_min <= 0:
@@ -65,21 +65,21 @@ def compute_geometric_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[flo
         else:
             col_min_shifted = col_min
             col_max_shifted = col_max
-        
+
         # Calculate geometric progression
         # r = (max/min)^(1/num_bins)
         # bins: min, min*r, min*r^2, ..., min*r^num_bins = max
         ratio = (col_max_shifted / col_min_shifted) ** (1 / num_bins)
-        
+
         # Generate bin edges (exclude first and last which are min and max)
-        bin_edges = [col_min_shifted * (ratio ** i) for i in range(1, num_bins)]
-        
+        bin_edges = [col_min_shifted * (ratio**i) for i in range(1, num_bins)]
+
         # Shift back to original scale if we shifted earlier
         if shift > 0:
             bin_edges = [edge - shift for edge in bin_edges]
-        
+
         bins[col] = bin_edges
-    
+
     return bins
 
 
@@ -174,9 +174,7 @@ class GeometricDiscretizer(_BaseDiscretizer):
     └─────────────┘
     """
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "GeometricDiscretizer":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GeometricDiscretizer":
         """Fit the discretizer by computing geometric progression bin boundaries.
 
         Parameters
@@ -200,16 +198,13 @@ class GeometricDiscretizer(_BaseDiscretizer):
 
         self._bins = compute_geometric_bins(X[self.subset], self.num_bins)
         self._labels = generate_labels(self._bins, rounding=self.rounding)
-        
+
         if self.as_numerics:
             self._labels = {
-                col: [str(i) for i in range(len(vals) + 1)]
-                for col, vals in self._bins.items()
+                col: [str(i) for i in range(len(vals) + 1)] for col, vals in self._bins.items()
             }
-        
+
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__discretize_geom" for col in self.subset
-            }
-        
+            self._column_mapping = {col: f"{col}__discretize_geom" for col in self.subset}
+
         return self

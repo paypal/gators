@@ -48,14 +48,14 @@ def map_substring_replacements(X: pl.DataFrame, old: str, new: str) -> dict:
     mapping = {}
     # Escape special regex characters in the old substring
     escaped_old = re.escape(old)
-    
+
     for column in X.columns:
         if X[column].dtype not in [pl.String, pl.Categorical]:
             continue
-        
+
         # Cast categorical to string for str operations
         col_expr = X[column].cast(pl.String) if X[column].dtype == pl.Categorical else X[column]
-        
+
         filtered_series = col_expr.filter(col_expr.str.contains(escaped_old))
         categories = filtered_series.unique()
         if categories.is_empty():

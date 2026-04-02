@@ -5,7 +5,7 @@ import polars as pl
 from pydantic import BaseModel, PositiveInt
 from sklearn.base import BaseEstimator, TransformerMixin
 
-__all__ = ['_BaseDiscretizer', 'generate_labels']
+__all__ = ["_BaseDiscretizer", "generate_labels"]
 
 
 def generate_labels(bins: Dict[str, List[float]], rounding=3) -> Dict[str, List[str]]:
@@ -48,8 +48,7 @@ def generate_labels(bins: Dict[str, List[float]], rounding=3) -> Dict[str, List[
             arr = arr + [float("inf")]
 
         labels[col] = [
-            f"({round(a, rounding)},{round(b, rounding)}]"
-            for a, b in zip(arr[:-1], arr[1:])
+            f"({round(a, rounding)},{round(b, rounding)}]" for a, b in zip(arr[:-1], arr[1:])
         ]
         if labels[col][-1].endswith("inf]"):
             labels[col][-1] = labels[col][-1].replace("]", ")")

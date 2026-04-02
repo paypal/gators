@@ -10,34 +10,34 @@ AGGREGATION_FUNCTIONS = ["mean", "std", "median", "min", "max", "sum", "count"]
 def validate_and_convert_window(window_str: str) -> str:
     """
     Validate window string and convert to polars-compatible format.
-    
+
     Supported input formats:
-    
+
     - '30m' -> '30m' (30 minutes)
     - '1h' -> '1h' (1 hour)
     - '24h' -> '24h' (24 hours)
     - '7d' -> '7d' (7 days)
     - '1M' -> '30d' (1 month approximated as 30 days)
     - '1Y' -> '365d' (1 year approximated as 365 days)
-    
+
     Returns polars-compatible window string.
     """
     import re
-    
-    match = re.match(r'^(\d+)([mhdMY])$', window_str)
+
+    match = re.match(r"^(\d+)([mhdMY])$", window_str)
     if not match:
         raise ValueError(
             f"Invalid window format: {window_str}. "
             f"Expected format: number followed by m/h/d/M/Y (e.g., '1h', '24h', '7d')"
         )
-    
+
     value = int(match.group(1))
     unit = match.group(2)
-    
+
     # Convert custom units to polars-compatible format
-    if unit == 'M':
+    if unit == "M":
         return f"{value * 30}d"  # Convert months to days
-    elif unit == 'Y':
+    elif unit == "Y":
         return f"{value * 365}d"  # Convert years to days
     else:
         # m, h, d are already compatible
@@ -62,7 +62,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
         Name of the datetime column to use for time-based windowing.
     windows : List[str]
         List of time window strings. Supported formats:
-       
+
         - '30m' = 30 minutes
         - '1h' = 1 hour
         - '24h' = 24 hours
@@ -74,7 +74,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
         Example: ['card1'] computes "transactions in last 24h for this card"
     func : List[str], default=['count', 'mean']
         List of aggregation functions to apply. Available options:
-        
+
         - 'count': Count of rows in window
         - 'mean': Mean of values in window
         - 'sum': Sum of values in window
@@ -146,7 +146,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
     Notes
     -----
-    
+
     - Data should be sorted by time_column for correct window calculations
     - Current row is EXCLUDED from window calculations
     - First rows (no history) have null values
@@ -196,9 +196,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return new_column_names
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "TimeWindowFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "TimeWindowFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
@@ -219,7 +217,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
         # Generate default column names
         default_names = []
         group_suffix = f"_{'_'.join(self.by)}" if self.by else ""
-        
+
         for num_col in self.subset:
             for window in self.windows:
                 for fun in self.func:
@@ -256,7 +254,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                     # Use rolling with group_by for time-based windows
                     # rolling_* excludes current row by default
                     over_cols = self.by if self.by else []
-                    
+
                     if fun == "count":
                         # For count, use any column (time column is guaranteed to exist)
                         if over_cols:
@@ -266,7 +264,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"  # Exclude current row
+                                    closed="left",  # Exclude current row
                                 )
                                 .over(over_cols)
                             )
@@ -277,7 +275,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                             )
                     elif fun == "mean":
@@ -288,7 +286,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                                 .over(over_cols)
                             )
@@ -299,7 +297,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                             )
                     elif fun == "sum":
@@ -310,7 +308,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                                 .over(over_cols)
                             )
@@ -321,7 +319,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                             )
                     elif fun == "std":
@@ -332,7 +330,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                                 .over(over_cols)
                             )
@@ -343,7 +341,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                             )
                     elif fun == "median":
@@ -354,7 +352,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                                 .over(over_cols)
                             )
@@ -365,7 +363,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                             )
                     elif fun == "min":
@@ -376,7 +374,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                                 .over(over_cols)
                             )
@@ -387,7 +385,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                             )
                     elif fun == "max":
@@ -398,7 +396,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                                 .over(over_cols)
                             )
@@ -409,7 +407,7 @@ class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
                                 .rolling(
                                     index_column=self.time_column,
                                     period=window_polars,
-                                    closed="left"
+                                    closed="left",
                                 )
                             )
 

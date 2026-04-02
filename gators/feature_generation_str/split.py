@@ -9,7 +9,7 @@ class Split(BaseModel, BaseEstimator, TransformerMixin):
     """
     Generates features by splitting columns into multiple columns based on a delimiter.
 
-    The number of split columns is specified by the max_splits parameter to ensure 
+    The number of split columns is specified by the max_splits parameter to ensure
     consistent column structure between training and new data.
 
     Parameters
@@ -19,7 +19,7 @@ class Split(BaseModel, BaseEstimator, TransformerMixin):
     by : str
         Delimiter to split the columns by.
     max_splits : PositiveInt
-        Maximum number of split columns to create. If a value has more splits, 
+        Maximum number of split columns to create. If a value has more splits,
         extra splits are truncated. If fewer, remaining columns are filled with empty strings.
     drop_columns : bool, optional
         Whether to drop the original columns after splitting, by default True.
@@ -103,7 +103,7 @@ class Split(BaseModel, BaseEstimator, TransformerMixin):
             Transformed DataFrame.
         """
         by_clean = self.by.replace(" ", "_")
-        
+
         # Collect all column expressions
         new_columns = []
         for col in self.subset:
@@ -116,7 +116,7 @@ class Split(BaseModel, BaseEstimator, TransformerMixin):
                     .fill_null("")
                     .alias(new_col_name)
                 )
-        
+
         # Apply all columns at once
         X = X.with_columns(new_columns)
 

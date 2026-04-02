@@ -122,12 +122,8 @@ class DropHighNaNRatio(BaseModel, BaseEstimator, TransformerMixin):
         """
         if not self.subset:
             self.subset = list(X.columns)
-        ratios = (
-            X[self.subset].with_columns(pl.all().is_null()).mean().row(0, named=True)
-        )
-        self._to_drop = [
-            col for col, ratio in ratios.items() if ratio >= self.max_ratio
-        ]
+        ratios = X[self.subset].with_columns(pl.all().is_null()).mean().row(0, named=True)
+        self._to_drop = [col for col, ratio in ratios.items() if ratio >= self.max_ratio]
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

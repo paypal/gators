@@ -25,7 +25,7 @@ class BusinessTimeFeatures(BaseModel, BaseEstimator, TransformerMixin):
         Days of week considered weekend (0=Monday, 6=Sunday). Default is Saturday and Sunday.
     features : List[str], default=["is_business_hour", "is_business_day", "time_of_business_day"]
         List of features to generate. Options:
-        
+
         - "is_business_hour": Boolean for whether time is during business hours
         - "is_business_day": Boolean for whether day is a business day (not weekend)
         - "time_of_business_day": Category (before_hours, during_hours, after_hours)
@@ -144,9 +144,7 @@ class BusinessTimeFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return features
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "BusinessTimeFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "BusinessTimeFeatures":
         """Fit the transformer by identifying datetime columns if not specified.
 
         Parameters
@@ -191,8 +189,7 @@ class BusinessTimeFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
             if "is_business_hour" in self.features:
                 is_business_hour = (
-                    (hour >= self.business_hours_start)
-                    & (hour < self.business_hours_end)
+                    (hour >= self.business_hours_start) & (hour < self.business_hours_end)
                 ).alias(f"{col}__is_business_hour")
                 new_columns.append(is_business_hour)
 
@@ -216,10 +213,7 @@ class BusinessTimeFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
             if "hour_of_business_day" in self.features:
                 hour_of_biz_day = (
-                    pl.when(
-                        (hour >= self.business_hours_start)
-                        & (hour < self.business_hours_end)
-                    )
+                    pl.when((hour >= self.business_hours_start) & (hour < self.business_hours_end))
                     .then(hour - self.business_hours_start)
                     .otherwise(None)
                 ).alias(f"{col}__hour_of_business_day")

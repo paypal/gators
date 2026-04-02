@@ -106,9 +106,7 @@ class BinaryEncoder(_BaseEncoder):
                 if dtype in [pl.String, pl.Boolean, pl.Categorical]
             ]
 
-        min_threshold_count = (
-            self.min_count if self.min_count >= 1 else self.min_count * len(X)
-        )
+        min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
 
         self.n_bits_ = {}
         self.mapping_ = {}
@@ -121,9 +119,7 @@ class BinaryEncoder(_BaseEncoder):
 
             valid_categories = [
                 cat
-                for cat, count in zip(
-                    value_counts[col].to_list(), value_counts["count"].to_list()
-                )
+                for cat, count in zip(value_counts[col].to_list(), value_counts["count"].to_list())
                 if count >= min_threshold_count
             ]
 

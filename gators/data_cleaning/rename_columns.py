@@ -60,9 +60,7 @@ class RenameColumns(BaseModel, BaseEstimator, TransformerMixin):
         RenameColumns
             The fitted transformer instance.
         """
-        self._column_mapping = {
-            col: new_col for col, new_col in self.column_mapping.items()
-        }
+        self._column_mapping = {col: new_col for col, new_col in self.column_mapping.items()}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

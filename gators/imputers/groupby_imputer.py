@@ -16,7 +16,7 @@ class GroupByImputer(BaseModel, BaseEstimator, TransformerMixin):
         The categorical column to group by for computing group-wise statistics.
     strategy : Literal['median', 'mean']
         Strategy to use for imputing missing values within each group.
-    
+
         - 'median': Fill with the median of each group
         - 'mean': Fill with the mean of each group
     subset : Optional[List[str]], default=None
@@ -126,9 +126,7 @@ class GroupByImputer(BaseModel, BaseEstimator, TransformerMixin):
                     pl.col(col).median().alias("stat")
                 )
             else:  # mean
-                group_stats = X.group_by(self.group_by_column).agg(
-                    pl.col(col).mean().alias("stat")
-                )
+                group_stats = X.group_by(self.group_by_column).agg(pl.col(col).mean().alias("stat"))
 
             # Convert to dictionary for fast lookup
             self._statistics[col] = dict(
@@ -179,14 +177,10 @@ class GroupByImputer(BaseModel, BaseEstimator, TransformerMixin):
 
             # Fill nulls in the original column with group statistics
             if self.inplace:
-                transformations.append(
-                    pl.col(col).fill_null(pl.col(temp_col)).alias(col)
-                )
+                transformations.append(pl.col(col).fill_null(pl.col(temp_col)).alias(col))
             else:
                 new_col = self._column_mapping[col]
-                transformations.append(
-                    pl.col(col).fill_null(pl.col(temp_col)).alias(new_col)
-                )
+                transformations.append(pl.col(col).fill_null(pl.col(temp_col)).alias(new_col))
 
         # Apply all transformations at once
         X = X.with_columns(transformations)

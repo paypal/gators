@@ -113,9 +113,7 @@ class OneHotEncoder(BaseModel, BaseEstimator, TransformerMixin):
 
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype in [pl.String]
+                col for col, dtype in dict(zip(X.columns, X.dtypes)).items() if dtype in [pl.String]
             ]
         X = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
         self.categories = {}
@@ -149,9 +147,7 @@ class OneHotEncoder(BaseModel, BaseEstimator, TransformerMixin):
 
         # Build list of expected columns from fit
         expected_cols = [
-            f"{col}__{cat}"
-            for col, cat_list in self.categories.items()
-            for cat in cat_list
+            f"{col}__{cat}" for col, cat_list in self.categories.items() for cat in cat_list
         ]
 
         # Keep only columns that exist and were learned during fit

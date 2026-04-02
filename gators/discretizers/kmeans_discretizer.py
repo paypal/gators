@@ -104,9 +104,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
             raise ValueError("n_init must be at least 1")
         return n_init
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "KMeansDiscretizer":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "KMeansDiscretizer":
         """Fit the discretizer by learning cluster boundaries using k-means.
 
         Parameters
@@ -126,8 +124,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
             self.subset = [
                 col
                 for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype
-                in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
+                if dtype in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
             ]
 
         # Learn bins for each column using k-means
@@ -136,11 +133,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
 
         for col in self.subset:
             # Get column data and handle nulls
-            X_col = (
-                X.select(pl.col(col).fill_null(pl.col(col).median()))
-                .to_numpy()
-                .reshape(-1, 1)
-            )
+            X_col = X.select(pl.col(col).fill_null(pl.col(col).median())).to_numpy().reshape(-1, 1)
 
             # Check if we have enough unique values for the requested number of bins
             unique_values = np.unique(X_col)

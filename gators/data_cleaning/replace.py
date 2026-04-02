@@ -144,9 +144,7 @@ class Replace(BaseModel, BaseEstimator, TransformerMixin):
             Transformed DataFrame.
         """
         if self.inplace:
-            transformations = [
-                pl.col(col).replace(self.to_replace[col]) for col in self._columns
-            ]
+            transformations = [pl.col(col).replace(self.to_replace[col]) for col in self._columns]
             return X.with_columns(transformations)
 
         transformations = [

@@ -14,7 +14,7 @@ class StringImputer(BaseModel, BaseEstimator, TransformerMixin):
     ----------
     strategy : Literal['constant', 'most_frequent']
         Strategy to use for imputing missing values.
-    
+
         - "constant": Fill with a constant value specified by `value`
         - "most_frequent": Fill with the mode (most frequent value)
     subset : Optional[List[str]], default=None
@@ -95,21 +95,15 @@ class StringImputer(BaseModel, BaseEstimator, TransformerMixin):
             The fitted transformer instance.
         """
         if not self.subset:
-            self.subset = [
-                col for col, dtype in zip(X.columns, X.dtypes) if dtype == pl.String
-            ]
+            self.subset = [col for col, dtype in zip(X.columns, X.dtypes) if dtype == pl.String]
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__impute_{self.strategy}" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__impute_{self.strategy}" for col in self.subset}
 
         if self.strategy == "constant":
             self._statistics = {col: self.value for col in self.subset}
         else:  # most_frequent
             # Compute all modes in single pass, handle ties by taking smallest value (alphabetically)
-            self._statistics = {
-                col: X[col].drop_nulls().mode().sort()[0] for col in self.subset
-            }
+            self._statistics = {col: X[col].drop_nulls().mode().sort()[0] for col in self.subset}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -127,11 +121,9 @@ class StringImputer(BaseModel, BaseEstimator, TransformerMixin):
         """
         # Ensure columns is set (should be set during fit)
         columns = cast(List[str], self.subset)
-        
+
         if self.inplace:
-            transformations = [
-                pl.col(col).fill_null(self._statistics[col]) for col in columns
-            ]
+            transformations = [pl.col(col).fill_null(self._statistics[col]) for col in columns]
             return X.with_columns(transformations)
 
         transformations = [

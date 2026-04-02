@@ -135,9 +135,7 @@ class CountEncoder(_BaseEncoder):
             for col in self.subset
             if not (d := X[col].value_counts()).is_empty()
         }
-        min_threshold_count = (
-            self.min_count if self.min_count >= 1 else self.min_count * len(X)
-        )
+        min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
         self.mapping_ = {
             col: {k: v for k, v in counts.items() if v >= min_threshold_count}
             for col, counts in self.mapping_.items()

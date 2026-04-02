@@ -5,7 +5,7 @@ import polars as pl
 from pydantic import BaseModel, ConfigDict, Field, PositiveFloat, PositiveInt
 from sklearn.base import BaseEstimator, TransformerMixin
 
-__all__ = ['_BaseEncoder']
+__all__ = ["_BaseEncoder"]
 
 
 class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta):
@@ -59,9 +59,7 @@ class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta
                 # Cast boolean columns to string for replacement
                 if X[col].dtype == pl.Boolean:
                     # Convert boolean keys to lowercase string format used by Polars
-                    string_mapping = {
-                        str(k).lower(): v for k, v in self.mapping_[col].items()
-                    }
+                    string_mapping = {str(k).lower(): v for k, v in self.mapping_[col].items()}
                     expr = (
                         pl.col(col)
                         .cast(pl.String)
@@ -89,17 +87,13 @@ class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta
                 expr = (
                     pl.col(col)
                     .cast(pl.String)
-                    .replace_strict(
-                        string_mapping, default=default_value, return_dtype=pl.Float64
-                    )
+                    .replace_strict(string_mapping, default=default_value, return_dtype=pl.Float64)
                     .alias(self.column_mapping_[col])
                 )
             else:
                 expr = (
                     pl.col(col)
-                    .replace_strict(
-                        mapping, default=default_value, return_dtype=pl.Float64
-                    )
+                    .replace_strict(mapping, default=default_value, return_dtype=pl.Float64)
                     .alias(self.column_mapping_[col])
                 )
             expressions.append(expr)

@@ -78,7 +78,7 @@ class CatBoostEncoder(_BaseEncoder):
         -------
         CatBoostEncoder
             The fitted transformer instance.
-        
+
         Raises
         ------
         ValueError
@@ -97,9 +97,7 @@ class CatBoostEncoder(_BaseEncoder):
         # Calculate global mean
         self.global_mean_ = y.mean()
 
-        min_threshold_count = (
-            self.min_count if self.min_count >= 1 else self.min_count * len(X)
-        )
+        min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
 
         self.mapping_ = {}
 
@@ -121,9 +119,7 @@ class CatBoostEncoder(_BaseEncoder):
                 .explode(["cumsum", "cumcount"])
             )
 
-            X_with_stats = X_indexed.join(cumsum_expr, on=col, how="left").sort(
-                "__row_idx"
-            )
+            X_with_stats = X_indexed.join(cumsum_expr, on=col, how="left").sort("__row_idx")
 
             # Calculate encoding: (cumsum - current_value + smoothing * global_mean) / (cumcount - 1 + smoothing)
             # This excludes the current row (ordered target statistic)
@@ -141,17 +137,13 @@ class CatBoostEncoder(_BaseEncoder):
             )
 
             # Get mean encoding per category for transform
-            category_means = X_encoded.group_by(col).agg(
-                pl.col(f"{col}__encode_catboost").mean()
-            )
+            category_means = X_encoded.group_by(col).agg(pl.col(f"{col}__encode_catboost").mean())
 
             # Filter by min_count
             value_counts = X[col].value_counts()
             valid_categories = set(
                 cat
-                for cat, count in zip(
-                    value_counts[col].to_list(), value_counts["count"].to_list()
-                )
+                for cat, count in zip(value_counts[col].to_list(), value_counts["count"].to_list())
                 if count >= min_threshold_count
             )
 
@@ -168,9 +160,7 @@ class CatBoostEncoder(_BaseEncoder):
             if mapping_dict:
                 self.mapping_[col] = mapping_dict
 
-        self.column_mapping_ = {
-            col: f"{col}__catboost_enc" for col in self.mapping_.keys()
-        }
+        self.column_mapping_ = {col: f"{col}__catboost_enc" for col in self.mapping_.keys()}
 
         return self
 

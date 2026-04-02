@@ -135,9 +135,7 @@ class GroupStatisticsFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return new_column_names
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "GroupStatisticsFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GroupStatisticsFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
@@ -194,9 +192,12 @@ class GroupStatisticsFeatures(BaseModel, BaseEstimator, TransformerMixin):
                         "max": pl.col(num_col).max().over(groupby_col),
                         "sum": pl.col(num_col).sum().over(groupby_col),
                         "count": pl.col(num_col).count().over(groupby_col),
-                        "range": (pl.col(num_col).max().over(groupby_col) - pl.col(num_col).min().over(groupby_col)),
+                        "range": (
+                            pl.col(num_col).max().over(groupby_col)
+                            - pl.col(num_col).min().over(groupby_col)
+                        ),
                     }
-                    
+
                     new_columns.append(agg_functions[fun].alias(new_col_name))
 
         X = X.with_columns(new_columns)

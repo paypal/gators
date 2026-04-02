@@ -109,9 +109,7 @@ class LeaveOneOutEncoder(_BaseEncoder):
             If y is None.
         """
         if y is None:
-            raise ValueError(
-                "LeaveOneOutEncoder requires a target variable (y) for fitting."
-            )
+            raise ValueError("LeaveOneOutEncoder requires a target variable (y) for fitting.")
 
         if not self.subset:
             self.subset = [
@@ -123,9 +121,7 @@ class LeaveOneOutEncoder(_BaseEncoder):
         # Calculate global mean
         self.global_mean_ = y.mean()
 
-        min_threshold_count = (
-            self.min_count if self.min_count >= 1 else self.min_count * len(X)
-        )
+        min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
 
         self.mapping_ = {}
 
@@ -142,9 +138,7 @@ class LeaveOneOutEncoder(_BaseEncoder):
             )
 
             # Filter by min_count
-            category_stats = category_stats.filter(
-                pl.col("target_count") >= min_threshold_count
-            )
+            category_stats = category_stats.filter(pl.col("target_count") >= min_threshold_count)
 
             if category_stats.is_empty():
                 continue
@@ -186,9 +180,7 @@ class LeaveOneOutEncoder(_BaseEncoder):
                 X_encoded.group_by(col)
                 .agg(pl.col(f"{col}__loo_enc").mean())
                 .filter(pl.col(col).is_not_null())
-                .filter(
-                    pl.col(f"{col}__loo_enc").is_not_null()
-                )  # Filter out None/NaN means
+                .filter(pl.col(f"{col}__loo_enc").is_not_null())  # Filter out None/NaN means
             )
 
             # Create mapping

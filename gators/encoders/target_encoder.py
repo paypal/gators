@@ -112,7 +112,7 @@ class TargetEncoder(_BaseEncoder):
                 "Please provide y when calling fit() or fit_transform(), e.g., "
                 "encoder.fit(X, y=y_train) or pipeline.fit_transform(X, y=y_train)"
             )
-        
+
         if not self.subset:
             self.subset = [
                 col
@@ -129,9 +129,7 @@ class TargetEncoder(_BaseEncoder):
             ]
         )
         self.mapping_ = {}
-        min_count_threshold = (
-            self.min_count if self.min_count >= 1 else len(X) * self.min_count
-        )
+        min_count_threshold = self.min_count if self.min_count >= 1 else len(X) * self.min_count
         for col in set(stats["variable"]):
             stats_col = stats.filter(stats["variable"] == col)
             self.mapping_[col] = {

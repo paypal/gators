@@ -20,7 +20,7 @@ class DistanceFeatures(BaseModel, BaseEstimator, TransformerMixin):
     using different distance metrics (euclidean, manhattan, haversine) and units (km, miles, meters, feet).
 
     For fraud detection, distance features are valuable for:
-    
+
     - Detecting location anomalies (billing vs shipping address distance)
     - Identifying suspicious IP geolocation patterns
     - Flagging transactions far from customer's typical location
@@ -146,9 +146,7 @@ class DistanceFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return new_column_names
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "DistanceFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DistanceFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
@@ -167,9 +165,7 @@ class DistanceFeatures(BaseModel, BaseEstimator, TransformerMixin):
         default_names = []
         for i in range(len(self.lats) - 1):
             lat1, lat2 = self.lats[i], self.lats[i + 1]
-            default_names.append(
-                f"distance__{lat1}_to_{lat2}__{self.method}_{self.unit}"
-            )
+            default_names.append(f"distance__{lat1}_to_{lat2}__{self.method}_{self.unit}")
 
         if not self.new_column_names:
             self.new_column_names = default_names
@@ -234,10 +230,9 @@ class DistanceFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 dlong = long2_rad - long1_rad
 
                 # Haversine formula: a = sin²(Δlat/2) + cos(lat1) * cos(lat2) * sin²(Δlong/2)
-                a = (
-                    (dlat / 2.0).sin().pow(2)
-                    + lat1_rad.cos() * lat2_rad.cos() * (dlong / 2.0).sin().pow(2)
-                )
+                a = (dlat / 2.0).sin().pow(2) + lat1_rad.cos() * lat2_rad.cos() * (
+                    dlong / 2.0
+                ).sin().pow(2)
 
                 # c = 2 * asin(√a)
                 c = 2.0 * a.sqrt().arcsin()

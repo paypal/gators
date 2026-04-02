@@ -73,9 +73,7 @@ class Startswith(BaseModel, BaseEstimator, TransformerMixin):
             Transformed DataFrame.
         """
         transformations = [
-            pl.col(col)
-            .str.starts_with(substring)
-            .alias(f"{col}__startswith_{substring}")
+            pl.col(col).str.starts_with(substring).alias(f"{col}__startswith_{substring}")
             for col, substrings in self.startswith_dict.items()
             for substring in substrings
         ]

@@ -12,26 +12,14 @@ OPERATION_FUNCTIONS = {
     "div": lambda cols: pl.reduce(lambda x, y: x / y, cols),
     "min": lambda cols: pl.min_horizontal(*cols),
     "max": lambda cols: pl.max_horizontal(*cols),
-    "std": lambda cols: pl.concat_list(*cols)
-    .list.eval(pl.element().std())
-    .list.first(),
-    "var": lambda cols: pl.concat_list(*cols)
-    .list.eval(pl.element().var())
-    .list.first(),
-    "median": lambda cols: pl.concat_list(*cols)
-    .list.eval(pl.element().median())
-    .list.first(),
+    "std": lambda cols: pl.concat_list(*cols).list.eval(pl.element().std()).list.first(),
+    "var": lambda cols: pl.concat_list(*cols).list.eval(pl.element().var()).list.first(),
+    "median": lambda cols: pl.concat_list(*cols).list.eval(pl.element().median()).list.first(),
     "range": lambda cols: pl.max_horizontal(*cols) - pl.min_horizontal(*cols),
     "abs_diff": lambda cols: pl.reduce(lambda x, y: (x - y).abs(), cols),
-    "count_null": lambda cols: pl.concat_list(*cols).list.eval(
-        pl.element().is_null().sum()
-    ),
-    "count_zero": lambda cols: pl.concat_list(*cols).list.eval(
-        (pl.element() == 0).sum()
-    ),
-    "count_nonzero": lambda cols: pl.concat_list(*cols).list.eval(
-        (pl.element() != 0).sum()
-    ),
+    "count_null": lambda cols: pl.concat_list(*cols).list.eval(pl.element().is_null().sum()),
+    "count_zero": lambda cols: pl.concat_list(*cols).list.eval((pl.element() == 0).sum()),
+    "count_nonzero": lambda cols: pl.concat_list(*cols).list.eval((pl.element() != 0).sum()),
 }
 
 
@@ -45,7 +33,7 @@ class MathFeatures(BaseModel, BaseEstimator, TransformerMixin):
         List of groups of column names to apply operations on.
     operations : List[str]
         List of operations to apply to each group of columns. Available operations:
-        
+
         - 'sum': Sum of all columns
         - 'mean': Mean of all columns
         - 'minus': Subtraction (reduces columns left to right)

@@ -117,25 +117,23 @@ class RareCategoryEncoder(BaseModel, BaseEstimator, TransformerMixin):
                 for col, dtype in zip(X.columns, X.dtypes)
                 if dtype in [pl.String, pl.Categorical]
             ]
-        
+
         self.mapping_ = {
             col: dict(zip(d[col].to_list(), d["count"].to_list()))
             for col in self.subset
             if not (d := X[col].value_counts()).is_empty()
         }
-        
-        min_threshold_count = (
-            self.min_count if self.min_count >= 1 else self.min_count * len(X)
-        )
-        
+
+        min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
+
         self.mapping_ = {
             col: {k: self.default for k, v in counts.items() if v < min_threshold_count}
             for col, counts in self.mapping_.items()
         }
-        
+
         if not self.inplace:
             self.column_mapping_ = {col: f"{col}__encode_rare" for col in self.subset}
-        
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

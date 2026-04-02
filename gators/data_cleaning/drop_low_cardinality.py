@@ -104,9 +104,7 @@ class DropLowCardinality(BaseModel, BaseEstimator, TransformerMixin):
     _to_drop: List[str] = PrivateAttr()
     _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "DropLowCardinality":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropLowCardinality":
         """Fit the transformer by identifying columns with low cardinality.
 
         Parameters

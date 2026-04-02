@@ -75,9 +75,7 @@ class PlanRotationFeatures(BaseModel, BaseEstimator, TransformerMixin):
         self.column_names = [c for cols in column_names for c in cols]
         return self
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "PlanRotationFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "PlanRotationFeatures":
         """Fit the transformer by identifying columns to flatten.
 
         Parameters

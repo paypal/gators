@@ -25,21 +25,21 @@ class ScalarMathFeatures(BaseModel, BaseEstimator, TransformerMixin):
     use MathFeatures instead.
 
     **Use Cases:**
-    
+
     - Unit conversions (days to years, meters to feet, Celsius to Fahrenheit)
     - Normalization (divide by constant, multiply by scaling factor)
     - Feature scaling (percentage calculation, ratio computation)
     - Offset adjustments (add/subtract baseline values)
 
     **When to Use:**
-    
+
     - Need to apply arithmetic operations with fixed scalar values
     - Creating interpretable transformations (e.g., Age/365 for age_in_years)
     - Scaling features by known constants
     - Building feature sets for downstream models
 
     **When NOT to Use:**
-    
+
     - Operations between multiple columns (use MathFeatures)
     - Need learned scaling (use StandardScaler, MinMaxScaler)
     - Complex mathematical functions (use DataFrame.with_columns directly)
@@ -50,14 +50,14 @@ class ScalarMathFeatures(BaseModel, BaseEstimator, TransformerMixin):
         List of operation dictionaries. Each operation creates one new feature column.
 
         Each operation dictionary must contain:
-        
-    
+
+
         - 'column': str - Name of the column to operate on
         - 'op': str - Mathematical operator. Supported: '+', '-', '*', '/', '**', '//', '%'
         - 'scalar': float or int - Scalar value to use in the operation
 
         Examples::
-        
+
             [
                 {'column': 'Age', 'op': '/', 'scalar': 365},
                 {'column': 'Price', 'op': '*', 'scalar': 1.1},
@@ -245,9 +245,7 @@ class ScalarMathFeatures(BaseModel, BaseEstimator, TransformerMixin):
             return new_column_names
 
         if not new_column_names:
-            raise ValueError(
-                "Column names list cannot be empty (use None for auto-naming)"
-            )
+            raise ValueError("Column names list cannot be empty (use None for auto-naming)")
 
         # Check for duplicates
         if len(new_column_names) != len(set(new_column_names)):
@@ -317,9 +315,7 @@ class ScalarMathFeatures(BaseModel, BaseEstimator, TransformerMixin):
         new_columns = []
 
         # Process each operation
-        for op_dict, output_col_name in zip(
-            self.operations, self._generated_column_names
-        ):
+        for op_dict, output_col_name in zip(self.operations, self._generated_column_names):
             column = op_dict["column"]
             op = op_dict["op"]
             scalar = op_dict["scalar"]

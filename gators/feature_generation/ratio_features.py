@@ -194,9 +194,7 @@ class RatioFeatures(BaseModel, BaseEstimator, TransformerMixin):
         """
         new_columns = []
 
-        for num_col, denom_col in zip(
-            self.numerator_columns, self.denominator_columns
-        ):
+        for num_col, denom_col in zip(self.numerator_columns, self.denominator_columns):
             default_name = f"{num_col}__div__{denom_col}"
             new_col_name = self._column_mapping[default_name]
 

@@ -19,7 +19,7 @@ class DropDuplicateRows(BaseModel, BaseEstimator, TransformerMixin):
         columns are used.
     keep : str, default='first'
         Strategy for keeping duplicates:
-        
+
         - 'first': Keep first occurrence, drop subsequent duplicates
         - 'last': Keep last occurrence, drop previous duplicates
         - 'none': Drop all duplicates (keep no occurrences)
@@ -114,9 +114,7 @@ class DropDuplicateRows(BaseModel, BaseEstimator, TransformerMixin):
     subset: Optional[List[str]] = None
     keep: Literal["first", "last", "none"] = "first"
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "DropDuplicateRows":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropDuplicateRows":
         """Fit the transformer by validating parameters.
 
         Parameters
@@ -140,9 +138,7 @@ class DropDuplicateRows(BaseModel, BaseEstimator, TransformerMixin):
         if self.subset is not None:
             missing_cols = set(self.subset) - set(X.columns)
             if missing_cols:
-                raise ValueError(
-                    f"Subset columns {missing_cols} not found in DataFrame"
-                )
+                raise ValueError(f"Subset columns {missing_cols} not found in DataFrame")
 
         return self
 
@@ -174,6 +170,4 @@ class DropDuplicateRows(BaseModel, BaseEstimator, TransformerMixin):
             if self.subset is None:
                 return X.unique(maintain_order=True, keep=keep_strategy)
             else:
-                return X.unique(
-                    subset=self.subset, maintain_order=True, keep=keep_strategy
-                )
+                return X.unique(subset=self.subset, maintain_order=True, keep=keep_strategy)

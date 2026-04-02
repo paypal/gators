@@ -100,14 +100,11 @@ class DiffFeatures(BaseModel, BaseEstimator, TransformerMixin):
         for unit in units:
             if unit not in valid_units:
                 raise ValueError(
-                    f"Unit '{unit}' is not supported. "
-                    f"Supported units: {valid_units}"
+                    f"Unit '{unit}' is not supported. " f"Supported units: {valid_units}"
                 )
         return units
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "DiffFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DiffFeatures":
         """Fit the transformer by parsing reference dates.
 
         Parameters
@@ -131,9 +128,7 @@ class DiffFeatures(BaseModel, BaseEstimator, TransformerMixin):
                         datetime.fromisoformat(ref_date)
                     ).cast(pl.Datetime)
                 elif isinstance(ref_date, datetime):
-                    self._parsed_reference_dates[col] = pl.lit(ref_date).cast(
-                        pl.Datetime
-                    )
+                    self._parsed_reference_dates[col] = pl.lit(ref_date).cast(pl.Datetime)
                 else:
                     raise ValueError(
                         f"Reference date for '{col}' must be string or datetime, "
@@ -164,7 +159,7 @@ class DiffFeatures(BaseModel, BaseEstimator, TransformerMixin):
             "m": lambda diff: diff.dt.total_minutes(),
             "s": lambda diff: diff.dt.total_seconds(),
         }
-        
+
         # Unit names for column suffixes
         unit_names = {
             "d": "days",
@@ -180,9 +175,7 @@ class DiffFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
                 for unit in self.units:
                     col_name = f"{col_a}_minus_{col_b}__{unit_names[unit]}"
-                    new_columns.append(
-                        unit_conversions[unit](diff).cast(pl.Int64).alias(col_name)
-                    )
+                    new_columns.append(unit_conversions[unit](diff).cast(pl.Int64).alias(col_name))
 
                 if self.drop_columns:
                     columns_to_drop.add(col_a)
@@ -195,9 +188,7 @@ class DiffFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
                 for unit in self.units:
                     col_name = f"{col}_since_ref__{unit_names[unit]}"
-                    new_columns.append(
-                        unit_conversions[unit](diff).cast(pl.Int64).alias(col_name)
-                    )
+                    new_columns.append(unit_conversions[unit](diff).cast(pl.Int64).alias(col_name))
 
                 if self.drop_columns:
                     columns_to_drop.add(col)

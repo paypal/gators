@@ -98,7 +98,7 @@ class CastColumns(BaseModel, BaseEstimator, TransformerMixin):
 
     Notes
     -----
-    
+
     - When casting to Datetime or Date from String, the transformer handles format parsing automatically
     - If subset=None, all columns in the DataFrame will be cast to the specified dtype
     - When inplace=True, the drop_columns parameter is ignored as original columns are replaced
@@ -153,22 +153,18 @@ class CastColumns(BaseModel, BaseEstimator, TransformerMixin):
         """
         # Ensure columns is set (should be set during fit)
         columns = cast(List[str], self.subset)
-        
+
         if self.inplace:
             transformations = []
             for col in columns:
                 if self.dtype == pl.Datetime and X[col].dtype == pl.String:
                     # Handle string to datetime conversion
                     transformations.append(
-                        pl.col(col)
-                        .str.strptime(pl.Datetime, "%Y-%m-%d %H:%M:%S")
-                        .alias(col)
+                        pl.col(col).str.strptime(pl.Datetime, "%Y-%m-%d %H:%M:%S").alias(col)
                     )
                 elif self.dtype == pl.Date and X[col].dtype == pl.String:
                     # Handle string to date conversion
-                    transformations.append(
-                        pl.col(col).str.strptime(pl.Date, "%Y-%m-%d").alias(col)
-                    )
+                    transformations.append(pl.col(col).str.strptime(pl.Date, "%Y-%m-%d").alias(col))
                 else:
                     transformations.append(pl.col(col).cast(self.dtype, strict=False))
             return X.with_columns(transformations)
@@ -178,15 +174,11 @@ class CastColumns(BaseModel, BaseEstimator, TransformerMixin):
             if self.dtype == pl.Datetime and X[col].dtype == pl.String:
                 # Handle string to datetime conversion
                 transformations.append(
-                    pl.col(col)
-                    .str.strptime(pl.Datetime, "%Y-%m-%d %H:%M:%S")
-                    .alias(new)
+                    pl.col(col).str.strptime(pl.Datetime, "%Y-%m-%d %H:%M:%S").alias(new)
                 )
             elif self.dtype == pl.Date and X[col].dtype == pl.String:
                 # Handle string to date conversion
-                transformations.append(
-                    pl.col(col).str.strptime(pl.Date, "%Y-%m-%d").alias(new)
-                )
+                transformations.append(pl.col(col).str.strptime(pl.Date, "%Y-%m-%d").alias(new))
             else:
                 transformations.append(X[col].cast(self.dtype).alias(new))
 

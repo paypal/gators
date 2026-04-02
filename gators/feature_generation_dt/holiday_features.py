@@ -28,7 +28,7 @@ class HolidayFeatures(BaseModel, BaseEstimator, TransformerMixin):
         Years to include holidays for. If None, will automatically detect years from data.
     features : List[str], default=["is_holiday", "days_to_holiday", "days_from_holiday"]
         Features to generate. Options:
-       
+
         - "is_holiday": Boolean for whether date is a holiday
         - "days_to_holiday": Days until next holiday (negative if past)
         - "days_from_holiday": Days since last holiday (negative if future)
@@ -145,17 +145,13 @@ class HolidayFeatures(BaseModel, BaseEstimator, TransformerMixin):
             # Extract years from datetime columns
             years_set = set()
             for col in self.subset:
-                col_years = (
-                    X.select(pl.col(col).dt.year().unique()).to_series().to_list()
-                )
+                col_years = X.select(pl.col(col).dt.year().unique()).to_series().to_list()
                 years_set.update(col_years)
             self._years = sorted(list(years_set))
 
         # Build holiday dictionary using holidays library
         try:
-            country_holidays = holidays.country_holidays(
-                self.country, years=self._years
-            )
+            country_holidays = holidays.country_holidays(self.country, years=self._years)
             self._holidays = {date: name for date, name in country_holidays.items()}
         except (AttributeError, KeyError, NotImplementedError, Exception) as e:
             raise ValueError(
@@ -206,10 +202,7 @@ class HolidayFeatures(BaseModel, BaseEstimator, TransformerMixin):
                     if "nearest_holiday_distance" in self.features:
                         # Calculate distance to each holiday and find minimum
                         distance_exprs = [
-                            (date_col - pl.lit(hdate))
-                            .dt.total_days()
-                            .abs()
-                            .cast(pl.Int32)
+                            (date_col - pl.lit(hdate)).dt.total_days().abs().cast(pl.Int32)
                             for hdate in holiday_dates_sorted
                         ]
                         if distance_exprs:
@@ -222,41 +215,25 @@ class HolidayFeatures(BaseModel, BaseEstimator, TransformerMixin):
                         # Days to next holiday (positive values only for future dates)
                         future_distance_exprs = [
                             pl.when((date_col - pl.lit(hdate)).dt.total_days() <= 0)
-                            .then(
-                                (pl.lit(hdate) - date_col)
-                                .dt.total_days()
-                                .cast(pl.Int32)
-                            )
+                            .then((pl.lit(hdate) - date_col).dt.total_days().cast(pl.Int32))
                             .otherwise(None)
                             for hdate in holiday_dates_sorted
                         ]
                         if future_distance_exprs:
-                            days_to_expr = pl.min_horizontal(
-                                *future_distance_exprs
-                            ).fill_null(-1)
-                            new_columns.append(
-                                days_to_expr.alias(f"{col}__days_to_holiday")
-                            )
+                            days_to_expr = pl.min_horizontal(*future_distance_exprs).fill_null(-1)
+                            new_columns.append(days_to_expr.alias(f"{col}__days_to_holiday"))
 
                     if "days_from_holiday" in self.features:
                         # Days from last holiday (positive values only for past dates)
                         past_distance_exprs = [
                             pl.when((date_col - pl.lit(hdate)).dt.total_days() >= 0)
-                            .then(
-                                (date_col - pl.lit(hdate))
-                                .dt.total_days()
-                                .cast(pl.Int32)
-                            )
+                            .then((date_col - pl.lit(hdate)).dt.total_days().cast(pl.Int32))
                             .otherwise(None)
                             for hdate in holiday_dates_sorted
                         ]
                         if past_distance_exprs:
-                            days_from_expr = pl.min_horizontal(
-                                *past_distance_exprs
-                            ).fill_null(-1)
-                            new_columns.append(
-                                days_from_expr.alias(f"{col}__days_from_holiday")
-                            )
+                            days_from_expr = pl.min_horizontal(*past_distance_exprs).fill_null(-1)
+                            new_columns.append(days_from_expr.alias(f"{col}__days_from_holiday"))
 
         X = X.with_columns(new_columns)
 

@@ -41,9 +41,9 @@ def compute_equal_length_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[
     ).to_dict(as_series=False)
     bins = {}
     for col in X.columns:
-        bins[col] = np.linspace(
-            min_max[f"{col}_min"][0], min_max[f"{col}_max"][0], num_bins + 1
-        )[1:-1].tolist()
+        bins[col] = np.linspace(min_max[f"{col}_min"][0], min_max[f"{col}_max"][0], num_bins + 1)[
+            1:-1
+        ].tolist()
     return bins
 
 
@@ -142,9 +142,7 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
     └─────┴─────┴───────────────┘
     """
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "EqualLengthDiscretizer":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "EqualLengthDiscretizer":
         """Fit the discretizer by computing equal-length bin boundaries.
 
         Parameters
@@ -170,11 +168,8 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
         self._labels = generate_labels(self._bins)
         if self.as_numerics:
             self._labels = {
-                col: np.arange(len(vals)).astype(str)
-                for col, vals in self._labels.items()
+                col: np.arange(len(vals)).astype(str) for col, vals in self._labels.items()
             }
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__dicretize_length" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__dicretize_length" for col in self.subset}
         return self

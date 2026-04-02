@@ -106,9 +106,7 @@ class BoxCox(BaseModel, BaseEstimator, TransformerMixin):
                 X = X.with_columns(pl.col(col).log().alias(new))
             else:
                 # (x^lambda - 1) / lambda
-                X = X.with_columns(
-                    ((pl.col(col) ** lmbda - 1) / lmbda).alias(new)
-                )
+                X = X.with_columns(((pl.col(col) ** lmbda - 1) / lmbda).alias(new))
 
         if self.drop_columns:
             return X.drop(self._columns)

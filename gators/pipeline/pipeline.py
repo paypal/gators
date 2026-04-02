@@ -47,9 +47,9 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
 
     steps: List[Tuple[str, Any]]
     verbose: bool = False
-    
+
     model_config = ConfigDict(arbitrary_types_allowed=True)
-    
+
     def model_post_init(self, __context: Any) -> None:
         """Called after Pydantic model initialization to validate steps."""
         super().model_post_init(__context)
@@ -57,7 +57,7 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
 
     def _validate_steps(self):
         """Validate that all steps have fit and transform methods.
-        
+
         Raises
         ------
         TypeError
@@ -78,7 +78,7 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
     @property
     def named_steps(self):
         """Access steps by name.
-        
+
         Returns
         -------
         dict
@@ -88,7 +88,7 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
 
     def __len__(self):
         """Return the length of the Pipeline.
-        
+
         Returns
         -------
         int
@@ -98,12 +98,12 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
 
     def __getitem__(self, ind):
         """Return a step by index or slice.
-        
+
         Parameters
         ----------
         ind : int or slice
             Index or slice to access steps.
-        
+
         Returns
         -------
         TransformerMixin or Pipeline
@@ -138,9 +138,7 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
 
         for step_idx, (name, transformer) in enumerate(self.steps):
             if self.verbose:
-                print(
-                    f"[Pipeline] Fitting step {step_idx + 1}/{len(self.steps)}: {name}"
-                )
+                print(f"[Pipeline] Fitting step {step_idx + 1}/{len(self.steps)}: {name}")
 
             # Fit the transformer
             transformer.fit(X_transformed, y=y)
@@ -168,17 +166,13 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
 
         for step_idx, (name, transformer) in enumerate(self.steps):
             if self.verbose:
-                print(
-                    f"[Pipeline] Transforming step {step_idx + 1}/{len(self.steps)}: {name}"
-                )
+                print(f"[Pipeline] Transforming step {step_idx + 1}/{len(self.steps)}: {name}")
 
             X_transformed = transformer.transform(X_transformed)
 
         return X_transformed
 
-    def fit_transform(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> pl.DataFrame:
+    def fit_transform(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> pl.DataFrame:
         """Fit all transformers and transform the data.
 
         Fits and transforms each transformer sequentially. This is more
@@ -248,9 +242,7 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
                         pass
 
             # If get_params didn't return anything useful, try Pydantic
-            if not transformer_params and hasattr(
-                transformer.__class__, "model_fields"
-            ):
+            if not transformer_params and hasattr(transformer.__class__, "model_fields"):
                 # Pydantic-based transformer (gators transformers)
                 for key in transformer.__class__.model_fields.keys():
                     value = getattr(transformer, key)
@@ -275,7 +267,7 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
         -------
         Pipeline
             The pipeline instance.
-            
+
         Raises
         ------
         ValueError
@@ -325,14 +317,13 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
 
     def __repr__(self):
         """String representation of the pipeline.
-        
+
         Returns
         -------
         str
             Human-readable string representation showing all steps.
         """
         steps_str = "\n".join(
-            f"    {name}: {transformer.__class__.__name__}"
-            for name, transformer in self.steps
+            f"    {name}: {transformer.__class__.__name__}" for name, transformer in self.steps
         )
         return f"Pipeline(\n{steps_str}\n)"

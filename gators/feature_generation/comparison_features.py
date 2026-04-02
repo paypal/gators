@@ -169,9 +169,7 @@ class ComparisonFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
         return operators
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "ComparisonFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "ComparisonFeatures":
         """Fit the transformer (no-op, but required for sklearn compatibility).
 
         Parameters
@@ -225,9 +223,9 @@ class ComparisonFeatures(BaseModel, BaseEstimator, TransformerMixin):
             else:
                 new_col_name = f"{col_a}_{op_name}_{col_b}"
 
-            comparison_expr = COMPARISON_OPERATORS[op](
-                pl.col(col_a), pl.col(col_b)
-            ).alias(new_col_name)
+            comparison_expr = COMPARISON_OPERATORS[op](pl.col(col_a), pl.col(col_b)).alias(
+                new_col_name
+            )
             new_columns.append(comparison_expr)
 
             if self.drop_columns:

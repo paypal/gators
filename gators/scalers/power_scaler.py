@@ -100,12 +100,10 @@ class PowerScaler(BaseModel, BaseEstimator, TransformerMixin):
                 for col, dtype in zip(X.columns, X.dtypes)
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
-        
+
         # Format power value for column naming
         power_str = str(self.power).replace(".", "_")
-        self._column_mapping = {
-            col: f"{col}__power_{power_str}" for col in self.subset
-        }
+        self._column_mapping = {col: f"{col}__power_{power_str}" for col in self.subset}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -122,8 +120,7 @@ class PowerScaler(BaseModel, BaseEstimator, TransformerMixin):
             Transformed DataFrame with power-transformed columns.
         """
         transformations = [
-            (pl.col(col) ** self.power).alias(new)
-            for col, new in self._column_mapping.items()
+            (pl.col(col) ** self.power).alias(new) for col, new in self._column_mapping.items()
         ]
 
         X = X.with_columns(transformations)

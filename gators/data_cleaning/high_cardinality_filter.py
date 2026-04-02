@@ -132,9 +132,7 @@ class HighCardinalityFilter(BaseModel, BaseEstimator, TransformerMixin):
         if self.max_unique is None and self.max_ratio is None:
             raise ValueError("At least one of max_unique or max_ratio must be provided")
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "HighCardinalityFilter":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "HighCardinalityFilter":
         """Fit the transformer by identifying high-cardinality columns.
 
         Parameters

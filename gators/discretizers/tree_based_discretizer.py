@@ -136,14 +136,12 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
             self.subset = [
                 col
                 for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype
-                in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
+                if dtype in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
             ]
 
         # Learn bins for each column using decision tree
         self._bins = {}
         for col in self.subset:
-
             # Create LightGBM model
             if self.task == "classification":
                 tree = LGBMClassifier(
@@ -164,18 +162,18 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
 
             # Fit tree on single column
             X_col = X.select(pl.col(col)).to_numpy()
-            tree.fit(X_col, y.to_numpy() if hasattr(y, 'to_numpy') else y)
+            tree.fit(X_col, y.to_numpy() if hasattr(y, "to_numpy") else y)
 
             # Extract split thresholds from LightGBM tree
             thresholds = []
             tree_X = tree.booster_.trees_to_dataframe()
-            
+
             # Get all split nodes (not leaf nodes)
-            split_nodes = tree_X[tree_X['split_gain'].notna()]
-            
+            split_nodes = tree_X[tree_X["split_gain"].notna()]
+
             # Extract threshold values from split nodes
             if not split_nodes.empty:
-                thresholds = split_nodes['threshold'].dropna().tolist()
+                thresholds = split_nodes["threshold"].dropna().tolist()
 
             # Sort and deduplicate thresholds
             if thresholds:

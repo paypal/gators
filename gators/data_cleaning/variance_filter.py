@@ -99,9 +99,7 @@ class VarianceFilter(BaseModel, BaseEstimator, TransformerMixin):
             ]
 
         self._std_devs = X.select(self.subset).std().row(0, named=True)
-        self._to_drop = [
-            col for col, ratio in self._std_devs.items() if ratio <= self.min_var
-        ]
+        self._to_drop = [col for col, ratio in self._std_devs.items() if ratio <= self.min_var]
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

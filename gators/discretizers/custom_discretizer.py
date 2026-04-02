@@ -107,6 +107,7 @@ class CustomDiscretizer(_BaseDiscretizer):
     │ 0.4 │ 40  │ (0.3,inf)     │
     └─────┴─────┴───────────────┘
     """
+
     subset: Optional[List[str]] = None
     # num_bins: PositiveInt = 5
     # rounding: PositiveInt = 3
@@ -115,9 +116,7 @@ class CustomDiscretizer(_BaseDiscretizer):
     _labels: Dict[str, List[str]]
     _column_mapping: Dict[str, str]
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "CustomDiscretizer":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CustomDiscretizer":
         """Fit the discretizer using predefined custom bins.
 
         Parameters
@@ -139,11 +138,8 @@ class CustomDiscretizer(_BaseDiscretizer):
         self._labels = generate_labels(bins=self.bins)
         if self.as_numerics:
             self._labels = {
-                col: np.arange(len(vals)).astype(str)
-                for col, vals in self._labels.items()
+                col: np.arange(len(vals)).astype(str) for col, vals in self._labels.items()
             }
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__discretize_custom" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__discretize_custom" for col in self.subset}
         return self

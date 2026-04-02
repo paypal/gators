@@ -88,9 +88,7 @@ class InteractionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     subset: Optional[List[str]] = None
     degree: conint(gt=1) = 2
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "InteractionFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "InteractionFeatures":
         """Fit the transformer by identifying categorical columns if not specified.
 
         Parameters

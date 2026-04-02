@@ -28,21 +28,21 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     conditions with AND/OR logic, use RuleFeatures instead.
 
     **Use Cases:**
-    
+
     - Create simple boolean flags (is_adult, is_weekend, is_premium, etc.)
     - Materialize threshold-based features (is_high_value, is_frequent_user)
     - Feature engineering: Generate independent indicator variables
     - Fraud detection: Create simple risk flags before combining them
 
     **When to Use:**
-    
+
     - Need multiple independent boolean columns
     - Each condition stands alone (no AND/OR combination needed)
     - Want cleaner API than RuleFeatures for simple cases
     - Building feature sets for downstream transformers
 
     **When NOT to Use:**
-    
+
     - Need to combine conditions with AND/OR (use RuleFeatures)
     - One-off exploratory analysis (use Polars native expressions)
     - Very simple cases with 1-2 conditions (just use .with_columns())
@@ -53,13 +53,13 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
         List of condition dictionaries. Each condition creates one boolean output column.
 
         Each condition dictionary must contain:
-        
+
         - 'column': str - Name of the column to evaluate
         - 'op': str - Comparison operator. Supported:
-        
+
           * Binary: '>', '<', '>=', '<=', '==', '!=' (require 'value' or 'other_column')
           * Unary: 'is_null', 'is_not_null' (no 'value' or 'other_column' needed)
-          
+
         - 'value': Any (optional) - Scalar value to compare the column against
         - 'other_column': str (optional) - Name of another column to compare against
 
@@ -67,18 +67,18 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
         For unary operators: Neither 'value' nor 'other_column' should be specified.
 
         Examples::
-        
+
             # Simple conditions:
             [
                 {'column': 'age', 'op': '>=', 'value': 18},
                 {'column': 'amount', 'op': '>', 'value': 1000}
             ]
-            
+
             # Column comparison:
             [
                 {'column': 'velocity_24h', 'op': '>', 'other_column': 'velocity_7d'}
             ]
-            
+
             # Null checks:
             [
                 {'column': 'age', 'op': 'is_null'},
@@ -88,13 +88,13 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     new_column_names : Optional[List[str]], default=None
         Names for the resulting boolean feature columns. If provided, must have the same
         length as ``conditions``. If None, column names are auto-generated in the format:
-        
+
         - Scalar comparison: ``{column}_{op_name}_{value}`` (e.g., 'age_gte_18')
         - Column comparison: ``{column}_{op_name}_{other_column}`` (e.g., 'velocity_24h_gt_velocity_7d')
         - Unary operation: ``{column}__{op_name}`` (e.g., 'age__is_null')
 
-        Operator name mapping: 
-        
+        Operator name mapping:
+
         - '>' -> 'gt'
         - '<' -> 'lt'
         - '>=' -> 'gte'
@@ -342,9 +342,7 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
             return new_column_names
 
         if not new_column_names:
-            raise ValueError(
-                "Column names list cannot be empty (use None for auto-naming)"
-            )
+            raise ValueError("Column names list cannot be empty (use None for auto-naming)")
 
         # Check for duplicates
         if len(new_column_names) != len(set(new_column_names)):

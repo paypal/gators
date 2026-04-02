@@ -102,7 +102,7 @@ class ArcSinhScaler(BaseModel, BaseEstimator, TransformerMixin):
                 for col, dtype in zip(X.columns, X.dtypes)
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
-        
+
         self._column_mapping = {col: f"{col}__arcsinh" for col in self.subset}
         return self
 
@@ -120,8 +120,7 @@ class ArcSinhScaler(BaseModel, BaseEstimator, TransformerMixin):
             Transformed DataFrame with arcsinh-transformed columns.
         """
         transformations = [
-            pl.col(col).arcsinh().alias(new)
-            for col, new in self._column_mapping.items()
+            pl.col(col).arcsinh().alias(new) for col, new in self._column_mapping.items()
         ]
 
         X = X.with_columns(transformations)

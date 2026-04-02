@@ -62,7 +62,7 @@ class IsNull(BaseModel, BaseEstimator, TransformerMixin):
         """
         if self.subset is None:
             self.subset = X.columns
-        
+
         self._column_mapping = {col: f"{col}__is_null" for col in self.subset}
         return self
 
@@ -80,7 +80,6 @@ class IsNull(BaseModel, BaseEstimator, TransformerMixin):
             Transformed DataFrame with additional is_null columns.
         """
         new_columns = [
-            pl.col(col).is_null().alias(self._column_mapping[col])
-            for col in self.subset
+            pl.col(col).is_null().alias(self._column_mapping[col]) for col in self.subset
         ]
         return X.with_columns(new_columns)

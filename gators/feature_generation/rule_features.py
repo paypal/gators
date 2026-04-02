@@ -14,14 +14,14 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
     Each rule group produces its own boolean output column.
 
     **Use Cases:**
-    
+
     - Fraud detection: Create multiple risk indicators (velocity spike, amount anomaly, etc.)
     - Business rules: Generate several eligibility/qualification flags at once
     - Feature engineering: Build a family of related boolean features
     - Production pipelines: Encapsulate multiple rule definitions in one transformer
 
     **When to Use:**
-    
+
     - Building production ML pipelines that need serialization
     - Creating reusable feature engineering templates
     - Working with sklearn-based systems that expect transformers
@@ -29,7 +29,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
     - Want to create multiple related boolean features efficiently
 
     **When NOT to Use:**
-    
+
     - One-off exploratory analysis (use Polars native expressions)
     - Very complex nested logic within a single rule (consider Polars native)
     - Performance-critical scenarios where every microsecond counts
@@ -41,7 +41,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
         be combined to create one boolean output column.
 
         Each condition dictionary must contain:
-        
+
         - 'column': str - Name of the column to evaluate
         - 'op': str - Comparison operator. Supported: '>', '<', '>=', '<=', '==', '!='
         - 'value': Any (optional) - Scalar value to compare the column against
@@ -50,13 +50,13 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
         Either 'value' or 'other_column' must be specified, but not both.
 
         Examples::
-        
+
             # Two rules:
             [
                 [{'column': 'age', 'op': '>', 'value': 18}],
                 [{'column': 'amount', 'op': '>', 'value': 1000}]
             ]
-            
+
             # Rule with multiple conditions:
             [
                 [{'column': 'age', 'op': '>', 'value': 18},
@@ -65,7 +65,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
     rule_logic : Literal['and', 'or'], default='and'
         How to combine conditions within each rule group:
-        
+
         - 'and': All conditions in a group must be True
         - 'or': At least one condition in a group must be True
 
@@ -213,9 +213,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
         for rule_idx, rule in enumerate(rules):
             if not rule:
-                raise ValueError(
-                    f"Rule {rule_idx}: must contain at least one condition"
-                )
+                raise ValueError(f"Rule {rule_idx}: must contain at least one condition")
 
             for cond_idx, cond in enumerate(rule):
                 # Check required keys
@@ -224,9 +222,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
                         f"Rule {rule_idx}, Condition {cond_idx}: 'column' key is required"
                     )
                 if "op" not in cond:
-                    raise ValueError(
-                        f"Rule {rule_idx}, Condition {cond_idx}: 'op' key is required"
-                    )
+                    raise ValueError(f"Rule {rule_idx}, Condition {cond_idx}: 'op' key is required")
 
                 # Validate operator
                 if cond["op"] not in supported_ops:
@@ -304,9 +300,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
         all_condition_cols = []
 
         # Process each rule group
-        for rule_idx, (rule, output_col_name) in enumerate(
-            zip(self.rules, self.new_column_names)
-        ):
+        for rule_idx, (rule, output_col_name) in enumerate(zip(self.rules, self.new_column_names)):
             condition_cols = []
 
             # Create intermediate boolean column for each condition in this rule

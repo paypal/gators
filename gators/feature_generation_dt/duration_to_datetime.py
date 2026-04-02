@@ -10,8 +10,8 @@ class DurationToDatetime(BaseModel, BaseEstimator, TransformerMixin):
     """
     Converts numeric time offset columns to datetime by adding durations to a reference date.
 
-    This transformer is useful when you have numeric time offsets (e.g., seconds, days) that 
-    need to be converted to actual datetime values by adding them to a reference date. The 
+    This transformer is useful when you have numeric time offsets (e.g., seconds, days) that
+    need to be converted to actual datetime values by adding them to a reference date. The
     reference date can be a fixed datetime literal or a column containing dates.
 
     Parameters
@@ -20,12 +20,12 @@ class DurationToDatetime(BaseModel, BaseEstimator, TransformerMixin):
         List of column names containing numeric time offsets to convert.
     reference_date : Union[datetime, str]
         Reference date to add offsets to. Can be:
-        
+
         - A datetime object: Same reference date for all rows
         - A string (column name): Different reference date per row from that column
     unit : Literal["s", "m", "h", "d", "ms", "us"], default="s"
         Time unit of the numeric offset columns:
-        
+
         - "s": seconds
         - "m": minutes
         - "h": hours
@@ -125,10 +125,7 @@ class DurationToDatetime(BaseModel, BaseEstimator, TransformerMixin):
     def check_unit(cls, unit):
         valid_units = ["s", "m", "h", "d", "ms", "us"]
         if unit not in valid_units:
-            raise ValueError(
-                f"Unit '{unit}' is not supported. "
-                f"Supported units: {valid_units}"
-            )
+            raise ValueError(f"Unit '{unit}' is not supported. " f"Supported units: {valid_units}")
         return unit
 
     @field_validator("reference_date")
@@ -223,7 +220,7 @@ class DurationToDatetime(BaseModel, BaseEstimator, TransformerMixin):
             param_name = param_names[self.unit]
             duration_expr = duration_functions[self.unit](**{param_name: pl.col(col)})
             datetime_expr = self._reference_expr + duration_expr
-            
+
             new_col_name = f"{col}__datetime"
             new_columns.append(datetime_expr.alias(new_col_name))
 

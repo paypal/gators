@@ -35,7 +35,7 @@ def feature_stability_index(
     -------
     pl.DataFrame
         DataFrame with columns:
-    
+
         - feature: Feature name
         - fsi: Feature Stability Index (0 to 1, higher is more stable)
         - importance: Average importance across all runs
@@ -61,8 +61,8 @@ def feature_stability_index(
 
     fsi_scores = selection_matrix.mean(axis=0)
     importances = importance_matrix.mean(axis=0)
-    X =  pl.DataFrame(
-        {"feature": X.columns, "fsi": fsi_scores, "importance": importances}
-    ).sort(by=["fsi", "importance"], descending=True)
-    X =  X.filter(pl.col("fsi") > 0)
+    X = pl.DataFrame({"feature": X.columns, "fsi": fsi_scores, "importance": importances}).sort(
+        by=["fsi", "importance"], descending=True
+    )
+    X = X.filter(pl.col("fsi") > 0)
     return X.sort(by=["fsi", "importance"], descending=True)

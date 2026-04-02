@@ -143,9 +143,7 @@ class CombineFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return new_column_names
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "CombineFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CombineFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters

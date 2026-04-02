@@ -21,7 +21,7 @@ class NGram(BaseModel, BaseEstimator, TransformerMixin):
         Size of n-grams to extract (e.g., 2 for bigrams, 3 for trigrams).
     ngram_type : str, default="char"
         Type of n-grams to extract:
-    
+
         - "char": Character-level n-grams (e.g., "ab", "bc" from "abc")
         - "word": Word-level n-grams (e.g., "hello world" as bigram)
     max_features : int, default=10
@@ -152,7 +152,7 @@ class NGram(BaseModel, BaseEstimator, TransformerMixin):
 
         for col in self.subset:
             # Get non-null values
-            col_data =X.select(pl.col(col).fill_null("")).to_series()
+            col_data = X.select(pl.col(col).fill_null("")).to_series()
 
             # Extract n-grams
             ngrams_list = []

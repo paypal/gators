@@ -22,15 +22,15 @@ class OutlierFilter(BaseModel, BaseEstimator, TransformerMixin):
         List of numeric columns to check for outliers. If None, all numeric
         columns are checked.
     method : str, default='iqr'
-    
+
         Method for outlier detection:
-        
+
         - 'iqr': Interquartile Range method (values outside Q1-k*IQR, Q3+k*IQR)
         - 'zscore': Z-score method (values with absolute z-score > threshold)
         - 'percentile': Percentile method (values outside specified percentiles)
     threshold : float, default=1.5
         Threshold parameter for outlier detection:
-        
+
         - For 'iqr': multiplier for IQR (typically 1.5 or 3.0)
         - For 'zscore': z-score threshold (typically 3.0)
         - Not used for 'percentile' method
@@ -168,9 +168,7 @@ class OutlierFilter(BaseModel, BaseEstimator, TransformerMixin):
         # Validate class_aware requirements
         if self.class_aware:
             if y is None:
-                raise ValueError(
-                    "Target column name 'y' must be provided when class_aware=True"
-                )
+                raise ValueError("Target column name 'y' must be provided when class_aware=True")
             if y not in X.columns:
                 raise ValueError(f"Target column '{y}' not found in DataFrame")
             self._target_col = y
@@ -180,8 +178,7 @@ class OutlierFilter(BaseModel, BaseEstimator, TransformerMixin):
             self.subset = [
                 col
                 for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype
-                in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
+                if dtype in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
             ]
             # Exclude target column from outlier detection
             if self.class_aware and self._target_col in self.subset:
@@ -198,18 +195,14 @@ class OutlierFilter(BaseModel, BaseEstimator, TransformerMixin):
 
                 for class_val in classes:
                     # Filter data for this class
-                    class_data =X.filter(pl.col(self._target_col) == class_val)[col]
+                    class_data = X.filter(pl.col(self._target_col) == class_val)[col]
 
                     if self.method == "iqr":
                         q1 = class_data.quantile(0.25)
                         q3 = class_data.quantile(0.75)
                         iqr = q3 - q1 if q1 is not None and q3 is not None else 0
-                        lower_bound = (
-                            q1 - self.threshold * iqr if q1 is not None else None
-                        )
-                        upper_bound = (
-                            q3 + self.threshold * iqr if q3 is not None else None
-                        )
+                        lower_bound = q1 - self.threshold * iqr if q1 is not None else None
+                        upper_bound = q3 + self.threshold * iqr if q3 is not None else None
 
                     elif self.method == "zscore":
                         mean = class_data.mean()
@@ -274,9 +267,7 @@ class OutlierFilter(BaseModel, BaseEstimator, TransformerMixin):
         if self.class_aware:
             # Class-aware mode: check outliers per class
             if self._target_col not in X.columns:
-                raise ValueError(
-                    f"Target column '{self._target_col}' not found in transform data"
-                )
+                raise ValueError(f"Target column '{self._target_col}' not found in transform data")
 
             if self.action == "remove":
                 # Build filter condition per class
@@ -291,8 +282,7 @@ class OutlierFilter(BaseModel, BaseEstimator, TransformerMixin):
                         bounds = self._bounds[col][class_val]
                         if bounds["lower"] is not None and bounds["upper"] is not None:
                             class_filter = class_filter & (
-                                (pl.col(col) >= bounds["lower"])
-                                & (pl.col(col) <= bounds["upper"])
+                                (pl.col(col) >= bounds["lower"]) & (pl.col(col) <= bounds["upper"])
                             )
 
                     filter_condition = filter_condition | class_filter
@@ -307,9 +297,7 @@ class OutlierFilter(BaseModel, BaseEstimator, TransformerMixin):
                     capped_expr = None
 
                     for class_val, bounds in self._bounds[col].items():
-                        class_val_typed = (
-                            int(class_val) if class_val.isdigit() else class_val
-                        )
+                        class_val_typed = int(class_val) if class_val.isdigit() else class_val
 
                         if bounds["lower"] is not None and bounds["upper"] is not None:
                             class_capped = (
@@ -351,8 +339,7 @@ class OutlierFilter(BaseModel, BaseEstimator, TransformerMixin):
                     bounds = self._bounds[col]
                     if bounds["lower"] is not None and bounds["upper"] is not None:
                         filter_condition = filter_condition & (
-                            (pl.col(col) >= bounds["lower"])
-                            & (pl.col(col) <= bounds["upper"])
+                            (pl.col(col) >= bounds["lower"]) & (pl.col(col) <= bounds["upper"])
                         )
 
                 return X.filter(filter_condition)

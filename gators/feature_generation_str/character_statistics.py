@@ -19,7 +19,7 @@ class CharacterStatistics(BaseModel, BaseEstimator, TransformerMixin):
         will be used.
     features : List[str], default=["n_digits", "n_letters", "n_uppercase", "n_lowercase", "n_spaces", "n_special"]
         Character statistics to generate. Options:
-    
+
         - "n_digits": Count of digit characters (0-9)
         - "n_letters": Count of alphabetic characters (a-z, A-Z)
         - "n_uppercase": Count of uppercase letters
@@ -115,9 +115,7 @@ class CharacterStatistics(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return features
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "CharacterStatistics":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CharacterStatistics":
         """Fit the transformer by identifying string columns if not specified.
 
         Parameters
@@ -164,21 +162,15 @@ class CharacterStatistics(BaseModel, BaseEstimator, TransformerMixin):
                 new_columns.append(n_digits)
 
             if "n_letters" in self.features:
-                n_letters = col_expr.str.count_matches(r"[a-zA-Z]").alias(
-                    f"{col}__n_letters"
-                )
+                n_letters = col_expr.str.count_matches(r"[a-zA-Z]").alias(f"{col}__n_letters")
                 new_columns.append(n_letters)
 
             if "n_uppercase" in self.features:
-                n_uppercase = col_expr.str.count_matches(r"[A-Z]").alias(
-                    f"{col}__n_uppercase"
-                )
+                n_uppercase = col_expr.str.count_matches(r"[A-Z]").alias(f"{col}__n_uppercase")
                 new_columns.append(n_uppercase)
 
             if "n_lowercase" in self.features:
-                n_lowercase = col_expr.str.count_matches(r"[a-z]").alias(
-                    f"{col}__n_lowercase"
-                )
+                n_lowercase = col_expr.str.count_matches(r"[a-z]").alias(f"{col}__n_lowercase")
                 new_columns.append(n_lowercase)
 
             if "n_spaces" in self.features:
@@ -187,9 +179,7 @@ class CharacterStatistics(BaseModel, BaseEstimator, TransformerMixin):
 
             if "n_special" in self.features:
                 # Special chars: not letters, digits, or spaces
-                n_special = col_expr.str.count_matches(r"[^a-zA-Z0-9\s]").alias(
-                    f"{col}__n_special"
-                )
+                n_special = col_expr.str.count_matches(r"[^a-zA-Z0-9\s]").alias(f"{col}__n_special")
                 new_columns.append(n_special)
 
             if "n_unique_chars" in self.features:
@@ -205,27 +195,21 @@ class CharacterStatistics(BaseModel, BaseEstimator, TransformerMixin):
             if "ratio_uppercase" in self.features:
                 n_upper = col_expr.str.count_matches(r"[A-Z]")
                 ratio_upper = (
-                    pl.when(str_len > 0)
-                    .then(n_upper.cast(pl.Float64) / str_len)
-                    .otherwise(0.0)
+                    pl.when(str_len > 0).then(n_upper.cast(pl.Float64) / str_len).otherwise(0.0)
                 ).alias(f"{col}__ratio_uppercase")
                 new_columns.append(ratio_upper)
 
             if "ratio_digits" in self.features:
                 n_dig = col_expr.str.count_matches(r"\d")
                 ratio_dig = (
-                    pl.when(str_len > 0)
-                    .then(n_dig.cast(pl.Float64) / str_len)
-                    .otherwise(0.0)
+                    pl.when(str_len > 0).then(n_dig.cast(pl.Float64) / str_len).otherwise(0.0)
                 ).alias(f"{col}__ratio_digits")
                 new_columns.append(ratio_dig)
 
             if "ratio_special" in self.features:
                 n_spec = col_expr.str.count_matches(r"[^a-zA-Z0-9\s]")
                 ratio_spec = (
-                    pl.when(str_len > 0)
-                    .then(n_spec.cast(pl.Float64) / str_len)
-                    .otherwise(0.0)
+                    pl.when(str_len > 0).then(n_spec.cast(pl.Float64) / str_len).otherwise(0.0)
                 ).alias(f"{col}__ratio_special")
                 new_columns.append(ratio_spec)
 

@@ -20,7 +20,7 @@ class TimeBinFeatures(BaseModel, BaseEstimator, TransformerMixin):
         will be used.
     bin_types : List[Literal["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]], default=["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
         Types of time bins to generate. Options:
-        
+
         - "part_of_day": night, morning, afternoon, evening
         - "season": spring, summer, fall, winter
         - "time_of_month": beginning, middle, end
@@ -119,8 +119,7 @@ class TimeBinFeatures(BaseModel, BaseEstimator, TransformerMixin):
         for bin_type in bin_types:
             if bin_type not in valid_types:
                 raise ValueError(
-                    f"Bin type '{bin_type}' is not supported. "
-                    f"Supported types: {valid_types}"
+                    f"Bin type '{bin_type}' is not supported. " f"Supported types: {valid_types}"
                 )
         return bin_types
 

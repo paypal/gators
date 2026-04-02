@@ -10,11 +10,11 @@ class GroupLagFeatures(BaseModel, BaseEstimator, TransformerMixin):
     Generates lag (previous values) and lead (next values) features within groups.
 
     This transformer creates features like:
-    
+
     - Previous transaction amount for this card
     - Next transaction amount for this card
     - Value N periods ago within group
-    
+
     Useful for time-series analysis and detecting changes in behavior patterns.
 
     Parameters
@@ -141,7 +141,7 @@ class GroupLagFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 raise ValueError(f"All lead values must be positive, got {lead}")
         return leads
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def check_lags_or_leads(self):
         if not self.lags and not self.leads:
             raise ValueError("At least one of 'lags' or 'leads' must be non-empty")
@@ -161,9 +161,7 @@ class GroupLagFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return new_column_names
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "GroupLagFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GroupLagFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
@@ -180,7 +178,7 @@ class GroupLagFeatures(BaseModel, BaseEstimator, TransformerMixin):
         """
         default_names = []
         group_name = "_".join(self.by)
-        
+
         for num_col in self.subset:
             for lag in self.lags:
                 default_names.append(f"{num_col}_lag{lag}_{group_name}")
@@ -214,24 +212,24 @@ class GroupLagFeatures(BaseModel, BaseEstimator, TransformerMixin):
             for lag in self.lags:
                 default_name = f"{num_col}_lag{lag}_{group_name}"
                 new_col_name = self._column_mapping[default_name]
-                
+
                 lag_expr = pl.col(num_col).shift(lag).over(self.by)
-                
+
                 if self.fill_value is not None:
                     lag_expr = lag_expr.fill_null(self.fill_value)
-                
+
                 new_columns.append(lag_expr.alias(new_col_name))
-            
+
             # Create lead features
             for lead in self.leads:
                 default_name = f"{num_col}_lead{lead}_{group_name}"
                 new_col_name = self._column_mapping[default_name]
-                
+
                 lead_expr = pl.col(num_col).shift(-lead).over(self.by)
-                
+
                 if self.fill_value is not None:
                     lead_expr = lead_expr.fill_null(self.fill_value)
-                
+
                 new_columns.append(lead_expr.alias(new_col_name))
 
         X = X.with_columns(new_columns)

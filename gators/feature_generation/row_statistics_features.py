@@ -11,36 +11,36 @@ class RowStatisticsFeatures(BaseModel, BaseEstimator, TransformerMixin):
     """
     Generates row-level aggregation features across groups of columns.
 
-    This transformer computes statistics (min, max, mean, median, std, range) 
-    horizontally across specified column groups for each row. Unlike 
-    GroupRatioFeatures which aggregates vertically (across rows within groups), 
+    This transformer computes statistics (min, max, mean, median, std, range)
+    horizontally across specified column groups for each row. Unlike
+    GroupRatioFeatures which aggregates vertically (across rows within groups),
     this computes statistics across columns within each row.
 
     Importance for Fraud Detection
     -------------------------------
-    Row-level aggregation features are valuable in fraud detection because they 
-    capture relationships and patterns across related features within individual 
+    Row-level aggregation features are valuable in fraud detection because they
+    capture relationships and patterns across related features within individual
     transactions. For example:
-    
-    - Computing statistics across multiple transaction amounts can reveal unusual 
+
+    - Computing statistics across multiple transaction amounts can reveal unusual
       patterns (e.g., all amounts being identical might indicate scripted fraud)
     - Aggregating across card verification fields can identify inconsistencies
     - Statistics across temporal features can detect velocity anomalies
     - Range calculations can flag suspiciously uniform or extreme value spreads
-    
-    These features help models identify transactions where the distribution of 
-    values across related fields deviates from normal patterns, which is often 
+
+    These features help models identify transactions where the distribution of
+    values across related fields deviates from normal patterns, which is often
     indicative of fraudulent behavior.
 
     Parameters
     ----------
     column_groups : Dict[str, List[str]]
-        Dictionary mapping group names to lists of column names. Each group defines 
+        Dictionary mapping group names to lists of column names. Each group defines
         a set of columns over which to compute row-level statistics.
         Example: {'card_fields': ['card1', 'card2', 'card3']}
     func : List[str]
         List of aggregation functions to apply. Available options:
-    
+
         - 'min': Row-wise minimum value
         - 'max': Row-wise maximum value
         - 'mean': Row-wise mean (average)
@@ -51,8 +51,8 @@ class RowStatisticsFeatures(BaseModel, BaseEstimator, TransformerMixin):
     drop_columns : bool, default=False
         Whether to drop the original columns after creating aggregation features.
     new_column_names : Optional[List[str]], default=None
-        List of custom names for the aggregation columns. If None, uses default 
-        naming pattern '{group_name}__{func}'. Must have same length as the total 
+        List of custom names for the aggregation columns. If None, uses default
+        naming pattern '{group_name}__{func}'. Must have same length as the total
         number of features created (len(column_groups) × len(func)).
 
     Examples
@@ -209,9 +209,7 @@ class RowStatisticsFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return new_column_names
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "RowStatisticsFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "RowStatisticsFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
@@ -271,8 +269,7 @@ class RowStatisticsFeatures(BaseModel, BaseEstimator, TransformerMixin):
                     expr = pl.concat_list(cols).list.max().alias(new_col_name)
                 elif f == "range":
                     expr = (
-                        pl.concat_list(cols).list.max()
-                        - pl.concat_list(cols).list.min()
+                        pl.concat_list(cols).list.max() - pl.concat_list(cols).list.min()
                     ).alias(new_col_name)
                 elif f == "sum":
                     expr = pl.concat_list(cols).list.sum().alias(new_col_name)

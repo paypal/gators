@@ -102,9 +102,7 @@ class CyclicFeatures(BaseModel, BaseEstimator, TransformerMixin):
                 )
         return components
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "CyclicFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CyclicFeatures":
         """Fit the transformer.
 
         Parameters
@@ -182,9 +180,7 @@ class CyclicFeatures(BaseModel, BaseEstimator, TransformerMixin):
             for comp in cyclic_comps:
                 for angle_deg, angle_rad in zip(self.angles, angles_rad):
                     angle_int = (
-                        int(angle_deg)
-                        if angle_deg == int(angle_deg)
-                        else round(angle_deg, 2)
+                        int(angle_deg) if angle_deg == int(angle_deg) else round(angle_deg, 2)
                     )
                     cyclic_features.append(
                         (CYCLIC_FACTORS[comp] * pl.col(f"{col}__{comp}") + angle_rad)
@@ -200,15 +196,11 @@ class CyclicFeatures(BaseModel, BaseEstimator, TransformerMixin):
             for col in self.subset:
                 for angle_deg, angle_rad in zip(self.angles, angles_rad):
                     angle_int = (
-                        int(angle_deg)
-                        if angle_deg == int(angle_deg)
-                        else round(angle_deg, 2)
+                        int(angle_deg) if angle_deg == int(angle_deg) else round(angle_deg, 2)
                     )
                     cyclic_features.append(
                         (
-                            factor
-                            * pl.col(f"{col}__{comp}")
-                            / pl.col(f"{col}__days_in_month")
+                            factor * pl.col(f"{col}__{comp}") / pl.col(f"{col}__days_in_month")
                             + angle_rad
                         )
                         .sin()
@@ -218,9 +210,7 @@ class CyclicFeatures(BaseModel, BaseEstimator, TransformerMixin):
         X = X.with_columns(cyclic_features)
 
         # Drop base ordinal columns
-        columns_to_drop = [
-            f"{col}__{comp}" for col in self.subset for comp in self.components
-        ]
+        columns_to_drop = [f"{col}__{comp}" for col in self.subset for comp in self.components]
 
         # Drop temporary days_in_month columns
         if "day_of_month" in self.components:

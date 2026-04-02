@@ -116,9 +116,7 @@ class CorrelationFilter(BaseModel, BaseEstimator, TransformerMixin):
     max_corr: Annotated[float, Field(gt=0.0, le=1.0)]
     _to_drop: List[str] = PrivateAttr(default_factory=list)
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "CorrelationFilter":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CorrelationFilter":
         """Fit the transformer by identifying highly correlated columns to drop.
 
         Parameters
@@ -135,18 +133,15 @@ class CorrelationFilter(BaseModel, BaseEstimator, TransformerMixin):
         """
         if not self.subset:
             self.subset = [col for col in X.columns if X[col].dtype.is_numeric()]
-        
+
         # Filter out constant columns (zero variance) to avoid division by zero warning
-        non_constant_cols = [
-            col for col in self.subset 
-            if X[col].std() != 0
-        ]
-        
+        non_constant_cols = [col for col in self.subset if X[col].std() != 0]
+
         # If no non-constant columns or only one, nothing to filter
         if len(non_constant_cols) <= 1:
             self._to_drop = []
             return self
-        
+
         _X_corr_np = np.abs(X[non_constant_cols].corr().to_numpy())
         n = _X_corr_np.shape[0]
         mask = np.triu(np.ones((n, n)), k=1).astype(bool)

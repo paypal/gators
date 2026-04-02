@@ -72,9 +72,7 @@ class PolynomialFeatures(BaseModel, BaseEstimator, TransformerMixin):
     interaction_only: bool = False
     include_bias: bool = False
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "PolynomialFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "PolynomialFeatures":
         """Fit the transformer by identifying columns to transform.
 
         Parameters

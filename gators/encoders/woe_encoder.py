@@ -24,21 +24,21 @@ def compute_woe_iv(
         X.with_columns(y.alias("__target__"))
         .unpivot(index="__target__")
         .group_by(["variable", "value"])
-        .agg([
-            pl.col("__target__").sum().alias("1"),
-            pl.col("__target__").count().alias("N"),
-        ])
-        .with_columns([
-            (pl.col("N") - pl.col("1")).alias("0"),
-            ((pl.col("1") + reg) / denom_1).alias("distrib_1"),
-            ((pl.col("N") - pl.col("1") + reg) / denom_0).alias("distrib_0"),
-        ])
-        .with_columns(
-            (pl.col("distrib_1") / pl.col("distrib_0")).log().alias("woe")
+        .agg(
+            [
+                pl.col("__target__").sum().alias("1"),
+                pl.col("__target__").count().alias("N"),
+            ]
         )
         .with_columns(
-            ((pl.col("distrib_1") - pl.col("distrib_0")) * pl.col("woe")).alias("iv")
+            [
+                (pl.col("N") - pl.col("1")).alias("0"),
+                ((pl.col("1") + reg) / denom_1).alias("distrib_1"),
+                ((pl.col("N") - pl.col("1") + reg) / denom_0).alias("distrib_0"),
+            ]
         )
+        .with_columns((pl.col("distrib_1") / pl.col("distrib_0")).log().alias("woe"))
+        .with_columns(((pl.col("distrib_1") - pl.col("distrib_0")) * pl.col("woe")).alias("iv"))
         .sort("woe", descending=True)
     )
     return stats
@@ -159,7 +159,7 @@ class WOEEncoder(_BaseEncoder):
                 "Please provide y when calling fit() or fit_transform(), e.g., "
                 "encoder.fit(X, y=y_train) or pipeline.fit_transform(X, y=y_train)"
             )
-        
+
         if not self.subset:
             self.subset = [
                 col
@@ -173,9 +173,7 @@ class WOEEncoder(_BaseEncoder):
             regularization=self.regularization,
         )
         self.mapping_ = {}
-        min_count_threshold = (
-            self.min_count if self.min_count >= 1 else len(X) * self.min_count
-        )
+        min_count_threshold = self.min_count if self.min_count >= 1 else len(X) * self.min_count
         for key, group_df in stats.group_by("variable"):
             col = key[0] if isinstance(key, tuple) else key
             self.mapping_[col] = {

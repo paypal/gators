@@ -13,7 +13,7 @@ class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
     ----------
     strategy : Literal['constant', 'most_frequent', 'median', 'mean', 'min', 'max', 'forward', 'backward', 'zero', 'one']
         Strategy to use for imputing missing values.
-    
+
         - 'constant': Fill missing values with `value`
         - 'most_frequent': Fill with the most frequent value in each column
         - 'median': Fill with the median of each column
@@ -161,9 +161,7 @@ class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
                 if dtype not in [pl.String, pl.Boolean]
             ]
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__impute_{self.strategy}" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__impute_{self.strategy}" for col in self.subset}
 
         # Only compute statistics for strategies that need them
         if self.strategy == "constant":
@@ -179,8 +177,7 @@ class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
         elif self.strategy == "most_frequent":
             # Compute all modes in single pass, handle ties by taking smallest value
             self._statistics = {
-                col: X[col].drop_nulls().drop_nans().mode().sort()[0]
-                for col in self.subset
+                col: X[col].drop_nulls().drop_nans().mode().sort()[0] for col in self.subset
             }
         # No statistics needed for mean, min, max, forward, backward, zero, one
 
@@ -212,8 +209,7 @@ class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
             # Use Polars built-in strategies
             if self.inplace:
                 transformations = [
-                    pl.col(col).fill_null(strategy=self.strategy)
-                    for col in self.subset
+                    pl.col(col).fill_null(strategy=self.strategy) for col in self.subset
                 ]
             else:
                 transformations = [

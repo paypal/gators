@@ -135,9 +135,7 @@ class DropConstantColumns(BaseModel, BaseEstimator, TransformerMixin):
     include_na: bool = True
     _to_drop: List[str] = PrivateAttr(default_factory=list)
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "DropConstantColumns":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropConstantColumns":
         """Fit the transformer by identifying constant columns.
 
         Parameters

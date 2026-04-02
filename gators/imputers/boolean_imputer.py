@@ -14,7 +14,7 @@ class BooleanImputer(BaseModel, BaseEstimator, TransformerMixin):
     ----------
     strategy : Literal["constant", "most_frequent"]
         Strategy to use for imputing missing values.
-    
+
         - "constant": Fill with a constant value specified by `value`
         - "most_frequent": Fill with the mode (most frequent value)
     subset : Optional[List[str]], default=None
@@ -121,13 +121,9 @@ class BooleanImputer(BaseModel, BaseEstimator, TransformerMixin):
             The fitted transformer instance.
         """
         if not self.subset:
-            self.subset = [
-                col for col, dtype in zip(X.columns, X.dtypes) if dtype in [pl.Boolean]
-            ]
+            self.subset = [col for col, dtype in zip(X.columns, X.dtypes) if dtype in [pl.Boolean]]
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__impute_{self.strategy}" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__impute_{self.strategy}" for col in self.subset}
         strategies = {
             "most_frequent": lambda col: bool(X[col].drop_nulls().mode()[0]),
             "constant": lambda col: bool(self.value),
@@ -150,11 +146,9 @@ class BooleanImputer(BaseModel, BaseEstimator, TransformerMixin):
         """
         # Ensure columns is set (should be set during fit)
         columns = cast(List[str], self.subset)
-        
+
         if self.inplace:
-            transformations = [
-                pl.col(col).fill_null(self._statistics[col]) for col in columns
-            ]
+            transformations = [pl.col(col).fill_null(self._statistics[col]) for col in columns]
             return X.with_columns(transformations)
 
         transformations = [

@@ -17,7 +17,7 @@ class DropDuplicateColumns(BaseModel, BaseEstimator, TransformerMixin):
     ----------
     keep : str, default='first'
         Strategy for keeping duplicate columns:
-        
+
         - 'first': Keep first occurrence of duplicate columns
         - 'last': Keep last occurrence of duplicate columns
 
@@ -113,9 +113,7 @@ class DropDuplicateColumns(BaseModel, BaseEstimator, TransformerMixin):
     columns_to_drop_: List[str] = []
     column_groups_: Dict[str, List[str]] = {}
 
-    def fit(
-        self, X: pl.DataFrame, y: Optional[pl.Series] = None
-    ) -> "DropDuplicateColumns":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropDuplicateColumns":
         """Fit the transformer by identifying duplicate columns.
 
         Parameters
