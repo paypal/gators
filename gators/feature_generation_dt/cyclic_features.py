@@ -1,11 +1,11 @@
 from math import pi
-from typing import Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 import polars as pl
 from pydantic import BaseModel, ValidationInfo, field_validator
 from sklearn.base import BaseEstimator, TransformerMixin
 
-COMPONENT_FUNCTIONS: Dict[str, pl.Expr] = {
+COMPONENT_FUNCTIONS: Dict[str, Callable[[Any], Any]] = {
     "semester": lambda x: pl.when(x.dt.quarter() <= 2).then(1).otherwise(2),
     "quarter": lambda x: x.dt.quarter(),
     "month": lambda x: x.dt.month(),

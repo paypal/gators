@@ -8,7 +8,7 @@ from gators.discretizers._base_discretizer import _BaseDiscretizer
 
 class ExampleDiscretizer(_BaseDiscretizer):
     def fit(self, X):
-        self._column_mapping = {"A": "A__dicretize", "B": "B__dicretize"}
+        self._column_mapping = {"A": "A__discretize", "B": "B__discretize"}
         self._bins = {"A": [0.5], "B": [5]}
         self._labels = {"A": ["a1", "a2"], "B": ["b1", "b2"]}
         return self
@@ -27,7 +27,7 @@ def sample_data():
 def expected_data_default_parameters():
     return pl.DataFrame(
         {
-            "A__dicretize": [
+            "A__discretize": [
                 "a2",
                 "a2",
                 "a2",
@@ -39,7 +39,7 @@ def expected_data_default_parameters():
                 "a2",
                 "a2",
             ],
-            "B__dicretize": [
+            "B__discretize": [
                 "b1",
                 "b2",
                 "b2",
@@ -60,7 +60,7 @@ def expected_data_drop_columns_false():
         {
             "A": [0.92, 0.8, 0.62, 0.53, 0.21, 0.69, 0.63, 0.21, 0.6, 0.91],
             "B": [2, 35, 11, 42, 70, 97, 70, 99, 51, 62],
-            "A__dicretize": [
+            "A__discretize": [
                 "a2",
                 "a2",
                 "a2",
@@ -72,7 +72,7 @@ def expected_data_drop_columns_false():
                 "a2",
                 "a2",
             ],
-            "B__dicretize": [
+            "B__discretize": [
                 "b1",
                 "b2",
                 "b2",

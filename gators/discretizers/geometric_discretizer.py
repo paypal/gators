@@ -1,6 +1,5 @@
-from typing import Optional
+from typing import Dict, List, Optional
 
-import numpy as np
 import polars as pl
 
 from ._base_discretizer import _BaseDiscretizer, generate_labels
@@ -46,7 +45,7 @@ def compute_geometric_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[flo
         + [pl.col(col_name).max().alias(f"{col_name}_max") for col_name in X.columns]
     ).to_dict(as_series=False)
 
-    bins = {}
+    bins: Dict[str, List[float]] = {}
     for col in X.columns:
         col_min = min_max[f"{col}_min"][0]
         col_max = min_max[f"{col}_max"][0]
@@ -201,7 +200,7 @@ class GeometricDiscretizer(_BaseDiscretizer):
 
         if self.as_numerics:
             self._labels = {
-                col: [str(i) for i in range(len(vals) + 1)] for col, vals in self._bins.items()
+                col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
 
         if not self.inplace:

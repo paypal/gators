@@ -20,7 +20,7 @@ def sample_data():
 def expected_data_default_parameters():
     return pl.DataFrame(
         {
-            "A__dicretize_size": [
+            "A__discretize_size": [
                 "(0.69,inf)",
                 "(0.69,inf)",
                 "(0.6,0.69]",
@@ -32,7 +32,7 @@ def expected_data_default_parameters():
                 "(-inf,0.6]",
                 "(0.69,inf)",
             ],
-            "B__dicretize_size": [
+            "B__discretize_size": [
                 "(-inf,42.0]",
                 "(-inf,42.0]",
                 "(-inf,42.0]",
@@ -44,7 +44,7 @@ def expected_data_default_parameters():
                 "(42.0,70.0]",
                 "(42.0,70.0]",
             ],
-            "C__dicretize_size": [
+            "C__discretize_size": [
                 "(0.8,inf)",
                 "(-inf,0.36]",
                 "(0.8,inf)",
@@ -56,7 +56,7 @@ def expected_data_default_parameters():
                 "(0.36,0.8]",
                 "(-inf,0.36]",
             ],
-            "D__dicretize_size": [
+            "D__discretize_size": [
                 "(62.0,inf)",
                 "(-inf,39.0]",
                 "(62.0,inf)",
@@ -77,7 +77,7 @@ def expected_data_subset_columns():
         {
             "C": [0.99, 0.28, 0.85, 0.36, 0.87, 0.36, 0.7, 0.46, 0.8, 0.29],
             "D": [73, 17, 77, 29, 28, 51, 39, 62, 61, 89],
-            "A__dicretize_size": [
+            "A__discretize_size": [
                 "(0.69,inf)",
                 "(0.69,inf)",
                 "(0.6,0.69]",
@@ -89,7 +89,7 @@ def expected_data_subset_columns():
                 "(-inf,0.6]",
                 "(0.69,inf)",
             ],
-            "B__dicretize_size": [
+            "B__discretize_size": [
                 "(-inf,42.0]",
                 "(-inf,42.0]",
                 "(-inf,42.0]",
@@ -138,6 +138,6 @@ def test_as_numerics(sample_data):
     transformed_X = discretizer.transform(sample_data)
 
     # Labels should be numeric integers 0, 1, 2
-    unique_labels = transformed_X["A__dicretize_size"].unique().sort().to_list()
+    unique_labels = transformed_X["A__discretize_size"].unique().sort().to_list()
     # Should have numeric labels
     assert all(label in [0, 1, 2] for label in unique_labels)

@@ -2,7 +2,6 @@ from typing import Dict, List, Optional
 
 import numpy as np
 import polars as pl
-from pydantic import PositiveInt
 
 from gators.discretizers._base_discretizer import _BaseDiscretizer, generate_labels
 
@@ -109,8 +108,6 @@ class CustomDiscretizer(_BaseDiscretizer):
     """
 
     subset: Optional[List[str]] = None
-    # num_bins: PositiveInt = 5
-    # rounding: PositiveInt = 3
     drop_columns: bool = True
     bins: Dict[str, List[float]]
     _labels: Dict[str, List[str]]
@@ -138,7 +135,7 @@ class CustomDiscretizer(_BaseDiscretizer):
         self._labels = generate_labels(bins=self.bins)
         if self.as_numerics:
             self._labels = {
-                col: np.arange(len(vals)).astype(str) for col, vals in self._labels.items()
+                col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
         if not self.inplace:
             self._column_mapping = {col: f"{col}__discretize_custom" for col in self.subset}

@@ -118,6 +118,6 @@ class ArcSinSquareRootScaler(BaseModel, BaseEstimator, TransformerMixin):
 
         X = X.with_columns(transformations)
 
-        if self.drop_columns:
+        if self.drop_columns and self.subset is not None:
             return X.drop(self.subset)
         return X

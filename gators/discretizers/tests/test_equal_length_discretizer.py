@@ -20,7 +20,7 @@ def sample_data():
 def expected_data_default_parameters():
     return pl.DataFrame(
         {
-            "A__dicretize_length": [
+            "A__discretize_length": [
                 "(0.683,inf)",
                 "(0.683,inf)",
                 "(0.447,0.683]",
@@ -32,7 +32,7 @@ def expected_data_default_parameters():
                 "(0.447,0.683]",
                 "(0.683,inf)",
             ],
-            "B__dicretize_length": [
+            "B__discretize_length": [
                 "(-inf,34.333]",
                 "(34.333,66.667]",
                 "(-inf,34.333]",
@@ -44,7 +44,7 @@ def expected_data_default_parameters():
                 "(34.333,66.667]",
                 "(34.333,66.667]",
             ],
-            "C__dicretize_length": [
+            "C__discretize_length": [
                 "(0.753,inf)",
                 "(-inf,0.517]",
                 "(0.753,inf)",
@@ -56,7 +56,7 @@ def expected_data_default_parameters():
                 "(0.753,inf)",
                 "(-inf,0.517]",
             ],
-            "D__dicretize_length": [
+            "D__discretize_length": [
                 "(65.0,inf)",
                 "(-inf,41.0]",
                 "(65.0,inf)",
@@ -77,7 +77,7 @@ def expected_data_subset_columns():
         {
             "C": [0.99, 0.28, 0.85, 0.36, 0.87, 0.36, 0.7, 0.46, 0.8, 0.29],
             "D": [73, 17, 77, 29, 28, 51, 39, 62, 61, 89],
-            "A__dicretize_length": [
+            "A__discretize_length": [
                 "(0.683,inf)",
                 "(0.683,inf)",
                 "(0.447,0.683]",
@@ -89,7 +89,7 @@ def expected_data_subset_columns():
                 "(0.447,0.683]",
                 "(0.683,inf)",
             ],
-            "B__dicretize_length": [
+            "B__discretize_length": [
                 "(-inf,34.333]",
                 "(34.333,66.667]",
                 "(-inf,34.333]",
@@ -138,6 +138,6 @@ def test_as_numerics(sample_data):
     transformed_X = discretizer.transform(sample_data)
 
     # Labels should be numeric integers 0, 1, 2
-    unique_labels = transformed_X["A__dicretize_length"].unique().sort().to_list()
+    unique_labels = transformed_X["A__discretize_length"].unique().sort().to_list()
     # Should have numeric labels
     assert all(label in [0, 1, 2] for label in unique_labels)

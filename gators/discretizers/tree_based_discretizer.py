@@ -181,8 +181,8 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
                 self._bins[col] = thresholds
             else:
                 # If no splits found, use min/max
-                min_val = float(X[col].min())
-                max_val = float(X[col].max())
+                min_val = float(X[col].cast(pl.Float64).min())
+                max_val = float(X[col].cast(pl.Float64).max())
                 if min_val != max_val:
                     self._bins[col] = [(min_val + max_val) / 2]
                 else:

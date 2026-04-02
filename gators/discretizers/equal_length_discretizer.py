@@ -64,7 +64,7 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
         Decimal places to round bin edges for labels.
     inplace : bool, default=True
         If True, replace original columns with discretized values.
-        If False, create new columns with suffix '__dicretize_length'.
+        If False, create new columns with suffix '__discretize_length'.
     drop_columns : bool, default=True
         If inplace=False, whether to drop the original columns after discretizing.
         Ignored when inplace=True.
@@ -168,8 +168,8 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
         self._labels = generate_labels(self._bins)
         if self.as_numerics:
             self._labels = {
-                col: np.arange(len(vals)).astype(str) for col, vals in self._labels.items()
+                col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__dicretize_length" for col in self.subset}
+            self._column_mapping = {col: f"{col}__discretize_length" for col in self.subset}
         return self

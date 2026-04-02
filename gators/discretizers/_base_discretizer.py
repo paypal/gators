@@ -2,7 +2,7 @@ from abc import ABCMeta
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PositiveInt
+from pydantic import BaseModel, PositiveInt, PrivateAttr
 from sklearn.base import BaseEstimator, TransformerMixin
 
 __all__ = ["_BaseDiscretizer", "generate_labels"]
@@ -147,9 +147,9 @@ class _BaseDiscretizer(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABC
     as_numerics: bool = False
     drop_columns: bool = True
     inplace: bool = True
-    _bins: Dict[str, List[float]] = {}
-    _labels: Dict[str, List[str]] = {}
-    _column_mapping: Dict[str, str] = {}
+    _bins: Dict[str, List[float]] = PrivateAttr(default_factory=dict)
+    _labels: Dict[str, List[str]] = PrivateAttr(default_factory=dict)
+    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting specified components.
@@ -180,6 +180,6 @@ class _BaseDiscretizer(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABC
         if self.as_numerics:
             transformations = [t.cast(pl.Int32) for t in transformations]
         X = X.with_columns(transformations)
-        if self.drop_columns:
+        if self.drop_columns and self.subset is not None:
             return X.drop(self.subset)
         return X
