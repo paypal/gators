@@ -1,0 +1,158 @@
+API Reference
+=============
+
+Complete reference for all Gators transformers, organized by functionality.
+
+Data Cleaning
+-------------
+
+**Column Operations**
+
+* :class:`~gators.data_cleaning.cast_columns.CastColumns` - Cast columns to different data types
+* :class:`~gators.data_cleaning.drop_columns.DropColumns` - Drop specified columns
+* :class:`~gators.data_cleaning.rename_columns.RenameColumns` - Rename columns
+
+**Quality Filters**
+
+* :class:`~gators.data_cleaning.correlation_filter.CorrelationFilter` - Remove highly correlated features
+* :class:`~gators.data_cleaning.drop_constant_columns.DropConstantColumns` - Remove constant columns
+* :class:`~gators.data_cleaning.drop_duplicate_columns.DropDuplicateColumns` - Remove duplicate columns
+* :class:`~gators.data_cleaning.drop_duplicate_rows.DropDuplicateRows` - Remove duplicate rows
+* :class:`~gators.data_cleaning.drop_high_nan_ratio.DropHighNaNRatio` - Drop columns with high missing ratio
+* :class:`~gators.data_cleaning.drop_low_cardinality.DropLowCardinality` - Drop low cardinality columns
+* :class:`~gators.data_cleaning.high_cardinality_filter.HighCardinalityFilter` - Filter high cardinality features
+* :class:`~gators.data_cleaning.replace.Replace` - Replace values in columns
+* :class:`~gators.data_cleaning.variance_filter.VarianceFilter` - Remove low variance features
+
+
+Encoders
+--------
+
+**Categorical Encoding**
+
+* :class:`~gators.encoders.binary_encoder.BinaryEncoder` - Binary encoding for categorical features
+* :class:`~gators.encoders.catboost_encoder.CatBoostEncoder` - CatBoost-style encoding
+* :class:`~gators.encoders.count_encoder.CountEncoder` - Frequency-based encoding
+* :class:`~gators.encoders.leave_one_out_encoder.LeaveOneOutEncoder` - Leave-one-out encoding
+* :class:`~gators.encoders.onehot_encoder.OneHotEncoder` - One-hot encoding
+* :class:`~gators.encoders.ordinal_encoder.OrdinalEncoder` - Ordinal encoding for ordered categories
+* :class:`~gators.encoders.rare_category_encoder.RareCategoryEncoder` - Handle rare categories
+* :class:`~gators.encoders.target_encoder.TargetEncoder` - Target mean encoding
+* :class:`~gators.encoders.woe_encoder.WOEEncoder` - Weight of Evidence encoding
+
+Feature Generation - Numeric
+-----------------------------
+
+**Mathematical Operations**
+
+* :class:`~gators.feature_generation.comparison_features.ComparisonFeatures` - Compare columns
+* :class:`~gators.feature_generation.distance_features.DistanceFeatures` - Calculate distance between columns
+* :class:`~gators.feature_generation.math_features.MathFeatures` - Mathematical operations between columns
+* :class:`~gators.feature_generation.ratio_features.RatioFeatures` - Calculate ratio between columns
+* :class:`~gators.feature_generation.plan_rotation_features.PlanRotationFeatures` - Rotate features in space
+* :class:`~gators.feature_generation.polynomial_features.PolynomialFeatures` - Generate polynomial features
+* :class:`~gators.feature_generation.scalar_math_features.ScalarMathFeatures` - Scalar mathematical operations
+
+**Conditions and Rules**
+
+* :class:`~gators.feature_generation.condition_features.ConditionFeatures` - Condition-based features
+* :class:`~gators.feature_generation.is_null.IsNull` - Generate null indicator features
+* :class:`~gators.feature_generation.rule_features.RuleFeatures` - Apply business rules
+
+**Group Features**
+
+* :class:`~gators.feature_generation.group_statistics_features.GroupStatisticsFeatures` - Generate group-based statistics
+* :class:`~gators.feature_generation.group_scaling_features.GroupScalingFeatures` - Generate group-based scaling features
+* :class:`~gators.feature_generation.group_lag_features.GroupLagFeatures` - Generate group-based lag features
+* :class:`~gators.feature_generation.row_group_features.RowStatisticsFeatures` - Generate group-based statistics per row
+
+Feature Generation - String
+----------------------------
+
+**Text Properties**
+
+* :class:`~gators.feature_generation_str.character_statistics.CharacterStatistics` - Character-level statistics
+* :class:`~gators.feature_generation_str.length.Length` - String length
+* :class:`~gators.feature_generation_str.occurrences.Occurrences` - Count substring occurrences
+
+**Text Patterns**
+
+* :class:`~gators.feature_generation_str.contains.Contains` - Check if string contains substring
+* :class:`~gators.feature_generation_str.endswith.Endswith` - Check if string ends with pattern
+* :class:`~gators.feature_generation_str.pattern_detector.PatternDetector` - Detect regex patterns
+* :class:`~gators.feature_generation_str.startswith.Startswith` - Check if string starts with pattern
+
+**Text Transformation**
+
+* :class:`~gators.feature_generation_str.extract_substring.ExtractSubstring` - Extract substring
+* :class:`~gators.feature_generation_str.lower.Lower` - Convert to lowercase
+* :class:`~gators.feature_generation_str.ngram.NGram` - Generate n-gram
+* :class:`~gators.feature_generation_str.split.Split` - Split based on a delimiter
+* :class:`~gators.feature_generation_str.split_extract.SplitExtract` - Split based on a delimiter and extract
+* :class:`~gators.feature_generation_str.upper.Upper` - Convert to uppercase
+
+**Text Interaction**
+
+* :class:`~gators.feature_generation_str.interaction_features.InteractionFeatures` - Exhaustive string interactions
+* :class:`~gators.feature_generation_str.combine_features.CombineFeatures` - Selected string interactions
+* 
+Feature Generation - DateTime
+------------------------------
+
+**Temporal Features**
+
+* :class:`~gators.feature_generation_dt.business_time_features.BusinessTimeFeatures` - Business hours/days
+* :class:`~gators.feature_generation_dt.cyclic_features.CyclicFeatures` - Cyclical time encoding
+* :class:`~gators.feature_generation_dt.diff_features.DiffFeatures` - Time differences
+* :class:`~gators.feature_generation_dt.duration_to_datetime.DurationToDatetime` - Convert duration to datetime
+* :class:`~gators.feature_generation_dt.ordinal_features.OrdinalFeatures` - Extract time components
+* :class:`~gators.feature_generation_dt.holiday_features.HolidayFeatures` - Holiday indicators
+* :class:`~gators.feature_generation_dt.time_bin_features.TimeBinFeatures` - Time binning
+* :class:`~gators.feature_generation_dt.time_window_features.TimeWindowFeatures` - Time-based window aggregation features
+
+Imputers
+--------
+
+**Missing Value Imputation**
+
+* :class:`~gators.imputers.boolean_imputer.BooleanImputer` - Impute boolean columns
+* :class:`~gators.imputers.groupby_imputer.GroupByImputer` - Group-based imputation
+* :class:`~gators.imputers.numeric_imputer.NumericImputer` - Impute numeric columns
+* :class:`~gators.imputers.string_imputer.StringImputer` - Impute string columns
+
+Discretizers
+------------
+
+**Binning Methods**
+
+* :class:`~gators.discretizers.custom_discretizer.CustomDiscretizer` - Custom bin edges
+* :class:`~gators.discretizers.equal_length_discretizer.EqualLengthDiscretizer` - Equal-width binning
+* :class:`~gators.discretizers.equal_size_discretizer.EqualSizeDiscretizer` - Equal-frequency binning
+* :class:`~gators.discretizers.geometric_discretizer.GeometricDiscretizer` - Geometric progression bins
+* :class:`~gators.discretizers.quantile_discretizer.QuantileDiscretizer` - Quantile-based binning
+* :class:`~gators.discretizers.tree_based_discretizer.TreeBasedDiscretizer` - Decision tree bins
+
+Scalers
+-------
+
+**Feature Scaling**
+
+* :class:`~gators.scalers.arcsin_squareroot_scaler.ArcSinSquareRootScaler` - Arcsinh square root transformation
+* :class:`~gators.scalers.arcsinh_scaler.ArcSinhScaler` - Arcsinh transformation
+* :class:`~gators.scalers.box_cox.BoxCox` - Box-Cox power transformation
+* :class:`~gators.scalers.log_scaler.LogScaler` - Log transformation
+* :class:`~gators.scalers.minmax_scaler.MinmaxScaler` - Min-max normalization
+* :class:`~gators.scalers.power_scaler.PowerScaler` - Power transformation
+* :class:`~gators.scalers.standard_scaler.StandardScaler` - Z-score standardization
+* :class:`~gators.scalers.yeo_jonhson.YeoJonhson` - Yeo-Johnson power transformation
+
+Pipeline
+--------
+
+* :class:`~gators.pipeline.pipeline.Pipeline` - Chain multiple transformers
+
+Feature Selection
+-----------------
+
+* :func:`~gators.feature_selection.information_value.compute_iv` - Compute Information Value (IV) for features
+* :func:`~gators.feature_selection.feature_stability_index.feature_stability_index` - Measure feature importance stability

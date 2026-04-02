@@ -1,0 +1,497 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "94446b22",
+   "metadata": {},
+   "source": [
+    "# Titanic Survival Prediction with Gators\n",
+    "\n",
+    "This notebook demonstrates how to use the **gators** library for advanced feature engineering in a binary classification problem. We'll predict passenger survival on the Titanic using comprehensive feature transformations.\n",
+    "\n",
+    "## Table of Contents\n",
+    "1. [Import Libraries](#1.-Import-Libraries)\n",
+    "2. [Load Data](#2.-Load-Data)\n",
+    "3. [Build Feature Engineering Pipeline](#3.-Build-Feature-Engineering-Pipeline)\n",
+    "4. [Train Model](#4.-Train-Model)\n",
+    "5. [Analyze Feature Importance](#5.-Analyze-Feature-Importance)\n",
+    "6. [Generate Predictions](#6.-Generate-Predictions)\n",
+    "7. [Summary](#Summary)\n",
+    "\n",
+    "## Key Features Demonstrated:\n",
+    "- Null indicator features\n",
+    "- String parsing and extraction (names, titles)\n",
+    "- Mathematical feature engineering\n",
+    "- Conditional features\n",
+    "- Custom discretization (age binning)\n",
+    "- Rare category encoding\n",
+    "- Weight of Evidence (WOE) encoding\n",
+    "- Feature interactions\n",
+    "\n",
+    "**Dataset:** [Kaggle Titanic - Machine Learning from Disaster](https://www.kaggle.com/competitions/titanic)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ebeb40d5",
+   "metadata": {},
+   "source": [
+    "## 1. Import Libraries\n",
+    "\n",
+    "Import the necessary libraries including gators transformers for comprehensive feature engineering."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "c75ae074",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import polars as pl\n",
+    "from IPython.display import display\n",
+    "\n",
+    "from gators.pipeline import Pipeline\n",
+    "from gators.encoders import RareCategoryEncoder, WOEEncoder\n",
+    "from gators.discretizers import CustomDiscretizer\n",
+    "from gators.data_cleaning import DropColumns, CastColumns, RenameColumns\n",
+    "from gators.feature_generation import (\n",
+    "    IsNull, \n",
+    "    MathFeatures, \n",
+    "    ConditionFeatures, \n",
+    "    ScalarMathFeatures\n",
+    ")\n",
+    "from gators.imputers import StringImputer, NumericImputer\n",
+    "from gators.feature_generation_str import (\n",
+    "    Length,\n",
+    "    SplitExtract,\n",
+    "    ExtractSubstring,\n",
+    "    InteractionFeatures,\n",
+    ")\n",
+    "\n",
+    "from xgboost import XGBClassifier"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "acfc6359",
+   "metadata": {},
+   "source": [
+    "## 2. Load Data\n",
+    "\n",
+    "Load the Titanic dataset and prepare training and test sets."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "74e790f2",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Training samples: 891\n",
+      "Test samples: 418\n",
+      "\n",
+      "Features: ['Pclass', 'Name', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Load train and test data\n",
+    "train = pl.read_csv('../../../kaggle/titanic/train.csv', null_values='NA')\n",
+    "test = pl.read_csv('../../../kaggle/titanic/test.csv', null_values='NA')\n",
+    "\n",
+    "# Prepare training data\n",
+    "train = train.drop(\"PassengerId\")\n",
+    "y_train = train['Survived']\n",
+    "X_train = train.drop('Survived')\n",
+    "\n",
+    "print(f\"Training samples: {len(X_train)}\")\n",
+    "print(f\"Test samples: {len(test)}\")\n",
+    "print(f\"\\nFeatures: {X_train.columns}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fb10800a",
+   "metadata": {},
+   "source": [
+    "## 3. Build Feature Engineering Pipeline\n",
+    "\n",
+    "Create a comprehensive pipeline that demonstrates the power of gators transformers:\n",
+    "\n",
+    "### Missing Value Indicators:\n",
+    "- **IsNull**: Create binary indicators for missing Age and Cabin values\n",
+    "\n",
+    "### String Feature Engineering:\n",
+    "- **Length**: Calculate ticket string length\n",
+    "- **SplitExtract**: Extract passenger title from name (e.g., 'Mr.', 'Mrs.', 'Miss.')\n",
+    "- **ExtractSubstring**: Extract cabin deck letter from cabin number\n",
+    "\n",
+    "### Mathematical Features:\n",
+    "- **MathFeatures**: Sum SibSp and Parch to get family size components\n",
+    "- **ScalarMathFeatures**: Add 1 to include the passenger (FamilySize = SibSp + Parch + 1)\n",
+    "- **MathFeatures**: Calculate fare per person (Fare / FamilySize)\n",
+    "\n",
+    "### Conditional Features:\n",
+    "- **ConditionFeatures**: Create 'IsAlone' indicator for passengers traveling solo\n",
+    "\n",
+    "### Data Cleaning:\n",
+    "- **RenameColumns**: Give intuitive names to extracted features\n",
+    "- **DropColumns**: Remove raw columns after feature extraction\n",
+    "- **NumericImputer**: Fill missing numeric values with mean\n",
+    "- **StringImputer**: Fill missing categorical values with 'MISSING'\n",
+    "\n",
+    "### Discretization:\n",
+    "- **CustomDiscretizer**: Bin ages into meaningful groups (child, teen, adult, senior)\n",
+    "\n",
+    "### Encoding:\n",
+    "- **RareCategoryEncoder**: Group infrequent categories to reduce noise\n",
+    "- **CastColumns**: Convert Pclass to string for categorical treatment\n",
+    "- **InteractionFeatures**: Create feature interactions (e.g., Pclass × Age group)\n",
+    "- **WOEEncoder**: Apply Weight of Evidence encoding for all categorical features"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "534991bd",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[Pipeline] Fitting and transforming step 1/18: IsNull\n",
+      "[Pipeline] Fitting and transforming step 2/18: Length\n",
+      "[Pipeline] Fitting and transforming step 3/18: SplitExtractName\n",
+      "[Pipeline] Fitting and transforming step 4/18: SplitExtractTitle\n",
+      "[Pipeline] Fitting and transforming step 5/18: MathFeatures\n",
+      "[Pipeline] Fitting and transforming step 6/18: ScalarMathFeatures\n",
+      "[Pipeline] Fitting and transforming step 7/18: ExtractSubstring\n",
+      "[Pipeline] Fitting and transforming step 8/18: RenameColumns\n",
+      "[Pipeline] Fitting and transforming step 9/18: RareCategoryEncoder\n",
+      "[Pipeline] Fitting and transforming step 10/18: MathFeatures2\n",
+      "[Pipeline] Fitting and transforming step 11/18: ConditionFeatures\n",
+      "[Pipeline] Fitting and transforming step 12/18: DropColumns\n",
+      "[Pipeline] Fitting and transforming step 13/18: NumericImputer\n",
+      "[Pipeline] Fitting and transforming step 14/18: StringImputer\n",
+      "[Pipeline] Fitting and transforming step 15/18: CustomDiscretizer\n",
+      "[Pipeline] Fitting and transforming step 16/18: CastColumns\n",
+      "[Pipeline] Fitting and transforming step 17/18: InteractionFeatures\n",
+      "[Pipeline] Fitting and transforming step 18/18: WOEEncoder\n",
+      "[Pipeline] Transforming step 1/18: IsNull\n",
+      "[Pipeline] Transforming step 2/18: Length\n",
+      "[Pipeline] Transforming step 3/18: SplitExtractName\n",
+      "[Pipeline] Transforming step 4/18: SplitExtractTitle\n",
+      "[Pipeline] Transforming step 5/18: MathFeatures\n",
+      "[Pipeline] Transforming step 6/18: ScalarMathFeatures\n",
+      "[Pipeline] Transforming step 7/18: ExtractSubstring\n",
+      "[Pipeline] Transforming step 8/18: RenameColumns\n",
+      "[Pipeline] Transforming step 9/18: RareCategoryEncoder\n",
+      "[Pipeline] Transforming step 10/18: MathFeatures2\n",
+      "[Pipeline] Transforming step 11/18: ConditionFeatures\n",
+      "[Pipeline] Transforming step 12/18: DropColumns\n",
+      "[Pipeline] Transforming step 13/18: NumericImputer\n",
+      "[Pipeline] Transforming step 14/18: StringImputer\n",
+      "[Pipeline] Transforming step 15/18: CustomDiscretizer\n",
+      "[Pipeline] Transforming step 16/18: CastColumns\n",
+      "[Pipeline] Transforming step 17/18: InteractionFeatures\n",
+      "[Pipeline] Transforming step 18/18: WOEEncoder\n",
+      "\n",
+      "Original features: 10\n",
+      "Engineered features: 21\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Define the feature engineering pipeline\n",
+    "steps = [\n",
+    "    # Create missing value indicators\n",
+    "    ('IsNull', IsNull(subset=['Age', 'Cabin'])),\n",
+    "    \n",
+    "    # String feature engineering\n",
+    "    ('Length', Length(subset=['Ticket'])),\n",
+    "    ('SplitExtractName', SplitExtract(subset=['Name'], by=', ', n=1)),\n",
+    "    ('SplitExtractTitle', SplitExtract(subset=['Name__split_,__1'], by='.', n=0)),\n",
+    "    \n",
+    "    # Calculate family size\n",
+    "    ('MathFeatures', MathFeatures(\n",
+    "        groups=[['SibSp', 'Parch']],\n",
+    "        operations=['sum'],\n",
+    "        new_column_names=['Dummy']\n",
+    "    )),\n",
+    "    ('ScalarMathFeatures', ScalarMathFeatures(\n",
+    "        operations=[{'column': 'Dummy_sum', 'op': '+', 'scalar': 1}],\n",
+    "        new_column_names=[\"FamilySize\"]\n",
+    "    )),\n",
+    "    \n",
+    "    # Extract cabin deck\n",
+    "    ('ExtractSubstring', ExtractSubstring(subset=['Cabin'], start=0, end=1)),\n",
+    "    \n",
+    "    # Rename for clarity\n",
+    "    ('RenameColumns', RenameColumns(column_mapping={\n",
+    "        'Name__split_,__1__split_._0': 'Title',\n",
+    "        'Cabin__start0_end1': 'CabinDeck'\n",
+    "    })),\n",
+    "    \n",
+    "    # Handle rare categories\n",
+    "    ('RareCategoryEncoder', RareCategoryEncoder()),\n",
+    "    \n",
+    "    # Calculate fare per person\n",
+    "    ('MathFeatures2', MathFeatures(\n",
+    "        groups=[['Fare', 'FamilySize']],\n",
+    "        operations=['div'],\n",
+    "        new_column_names=['FarePerPerson']\n",
+    "    )),\n",
+    "    \n",
+    "    # Create 'traveling alone' indicator\n",
+    "    ('ConditionFeatures', ConditionFeatures(\n",
+    "        conditions=[{\"column\": \"FamilySize\", \"op\": \">\", \"value\": 1}],\n",
+    "        new_column_names=['IsAlone']\n",
+    "    )),\n",
+    "    \n",
+    "    # Drop raw columns\n",
+    "    ('DropColumns', DropColumns(subset=['Cabin', 'Ticket', 'Dummy_sum'])),\n",
+    "    \n",
+    "    # Impute missing values\n",
+    "    ('NumericImputer', NumericImputer(strategy='mean')),\n",
+    "    ('StringImputer', StringImputer(strategy='constant', value='MISSING')),\n",
+    "    \n",
+    "    # Discretize age into bins\n",
+    "    ('CustomDiscretizer', CustomDiscretizer(\n",
+    "        bins={'Age': [0, 12, 18, 35, 60, 100]},\n",
+    "        inplace=True\n",
+    "    )),\n",
+    "    \n",
+    "    # Convert passenger class to categorical\n",
+    "    ('CastColumns', CastColumns(subset=[\"Pclass\"], dtype=pl.String)),\n",
+    "    \n",
+    "    # Create feature interactions\n",
+    "    ('InteractionFeatures', InteractionFeatures(\n",
+    "        subset=['Pclass', 'Age', 'CabinDeck', 'Embarked']\n",
+    "    )),\n",
+    "    \n",
+    "    # Apply Weight of Evidence encoding\n",
+    "    ('WOEEncoder', WOEEncoder()),\n",
+    "]\n",
+    "\n",
+    "# Build and apply the pipeline\n",
+    "pipe = Pipeline(steps=steps, verbose=True)\n",
+    "X_train_transformed = pipe.fit_transform(X_train, y_train)\n",
+    "X_test_transformed = pipe.transform(test)\n",
+    "\n",
+    "print(f\"\\nOriginal features: {X_train.shape[1]}\")\n",
+    "print(f\"Engineered features: {X_train_transformed.shape[1]}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f0a53bX",
+   "metadata": {},
+   "source": [
+    "## 4. Train Model\n",
+    "\n",
+    "Train an XGBoost classifier with parameters tuned for the Titanic dataset."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "cdd831f1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Model training completed successfully!\n",
+      "Accuracy on training set: 0.880\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Define model parameters\n",
+    "imbalance_ratio = round((y_train == 0).sum() / (y_train == 1).sum(), 3)\n",
+    "params = {\n",
+    "    'n_estimators': 150,\n",
+    "    'max_depth': 4,\n",
+    "    'learning_rate': 0.03,\n",
+    "    'subsample': 0.85,\n",
+    "    'colsample_bytree': 0.85,\n",
+    "    'min_child_weight': 1,\n",
+    "    'gamma': 0.05,\n",
+    "    'reg_alpha': 0.5,\n",
+    "    'reg_lambda': 1.5,\n",
+    "    'objective': 'binary:logistic',\n",
+    "    'eval_metric': 'logloss',\n",
+    "    'scale_pos_weight': imbalance_ratio,\n",
+    "    'random_state': 42\n",
+    "}\n",
+    "\n",
+    "# Train the model\n",
+    "estimator = XGBClassifier(**params)\n",
+    "estimator.fit(X_train_transformed, y_train)\n",
+    "\n",
+    "\n",
+    "print(\"Model training completed successfully!\")\n",
+    "print(\"Accuracy on training set: {:.3f}\".format(estimator.score(X_train_transformed, y_train)))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "14af8390",
+   "metadata": {},
+   "source": [
+    "## 5. Analyze Feature Importance\n",
+    "\n",
+    "Examine which engineered features contribute most to survival predictions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "9ba23a73",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Top 10 Most Important Features:\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div><style>\n",
+       ".dataframe > thead > tr,\n",
+       ".dataframe > tbody > tr {\n",
+       "  text-align: right;\n",
+       "  white-space: pre-wrap;\n",
+       "}\n",
+       "</style>\n",
+       "<small>shape: (10, 2)</small><table border=\"1\" class=\"dataframe\"><thead><tr><th>feature</th><th>importance</th></tr><tr><td>str</td><td>f32</td></tr></thead><tbody><tr><td>&quot;Sex&quot;</td><td>0.252712</td></tr><tr><td>&quot;Title&quot;</td><td>0.2188</td></tr><tr><td>&quot;Pclass__Embarked&quot;</td><td>0.096314</td></tr><tr><td>&quot;FamilySize&quot;</td><td>0.053011</td></tr><tr><td>&quot;Pclass&quot;</td><td>0.047811</td></tr><tr><td>&quot;Age__CabinDeck&quot;</td><td>0.045299</td></tr><tr><td>&quot;Cabin__is_null&quot;</td><td>0.04449</td></tr><tr><td>&quot;Pclass__CabinDeck&quot;</td><td>0.038667</td></tr><tr><td>&quot;Pclass__Age&quot;</td><td>0.025938</td></tr><tr><td>&quot;FarePerPerson_div&quot;</td><td>0.020867</td></tr></tbody></table></div>"
+      ],
+      "text/plain": [
+       "shape: (10, 2)\n",
+       "┌───────────────────┬────────────┐\n",
+       "│ feature           ┆ importance │\n",
+       "│ ---               ┆ ---        │\n",
+       "│ str               ┆ f32        │\n",
+       "╞═══════════════════╪════════════╡\n",
+       "│ Sex               ┆ 0.252712   │\n",
+       "│ Title             ┆ 0.2188     │\n",
+       "│ Pclass__Embarked  ┆ 0.096314   │\n",
+       "│ FamilySize        ┆ 0.053011   │\n",
+       "│ Pclass            ┆ 0.047811   │\n",
+       "│ Age__CabinDeck    ┆ 0.045299   │\n",
+       "│ Cabin__is_null    ┆ 0.04449    │\n",
+       "│ Pclass__CabinDeck ┆ 0.038667   │\n",
+       "│ Pclass__Age       ┆ 0.025938   │\n",
+       "│ FarePerPerson_div ┆ 0.020867   │\n",
+       "└───────────────────┴────────────┘"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# Extract and display feature importances\n",
+    "feature_importance = pl.DataFrame({\n",
+    "    \"feature\": estimator.feature_names_in_,\n",
+    "    \"importance\": estimator.feature_importances_\n",
+    "}).sort(\"importance\", descending=True)\n",
+    "\n",
+    "print(\"Top 10 Most Important Features:\")\n",
+    "display(feature_importance.head(10))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c525bff6",
+   "metadata": {},
+   "source": [
+    "## 6. Generate Predictions\n",
+    "\n",
+    "Generate survival predictions for the test set and create a submission file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "e0a3a924",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Submission file created successfully!\n",
+      "Predicted survival rate: 40.91%\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Generate predictions\n",
+    "y_pred = estimator.predict(X_test_transformed.drop(\"PassengerId\"))\n",
+    "\n",
+    "# Create submission file\n",
+    "submission = pl.DataFrame({\n",
+    "    \"PassengerId\": test[\"PassengerId\"],\n",
+    "    \"Survived\": y_pred\n",
+    "})\n",
+    "submission.write_csv(\"titanic_submission.csv\")\n",
+    "\n",
+    "print(\"Submission file created successfully!\")\n",
+    "print(f\"Predicted survival rate: {y_pred.mean():.2%}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a89c6d04",
+   "metadata": {},
+   "source": [
+    "## Summary\n",
+    "\n",
+    "This notebook showcases the **gators** library's extensive capabilities for feature engineering in binary classification:\n",
+    "\n",
+    "### Key Accomplishments:\n",
+    "1. **String Processing**: Extracted titles from names and cabin decks from cabin numbers\n",
+    "2. **Domain Knowledge Features**: Created FamilySize, IsAlone, and FarePerPerson features\n",
+    "3. **Missing Value Intelligence**: Created IsNull indicators before imputation to preserve information\n",
+    "4. **Smart Discretization**: Binned ages into meaningful life stage categories\n",
+    "5. **Advanced Encoding**: Applied WOE encoding for optimal categorical variable handling\n",
+    "6. **Feature Interactions**: Generated interaction terms between key categorical features\n",
+    "7. **Rare Category Handling**: Automatically grouped infrequent categories to reduce noise\n",
+    "\n",
+    "The gators library enabled creation of 20+ engineered features from just 11 original features, demonstrating how domain knowledge can be efficiently encoded through a declarative pipeline approach. The **WOEEncoder** is particularly powerful for binary classification, automatically calculating optimal encodings based on target distribution."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.14.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

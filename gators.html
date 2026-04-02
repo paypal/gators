@@ -1,0 +1,921 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>gators package &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'gators';</script>
+    <link rel="icon" href="_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.rules.html">gators.rules package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
+</ul>
+</div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators package</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="gators-package">
+<h1>gators package<a class="headerlink" href="#gators-package" title="Link to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.data_cleaning.html#module-gators.data_cleaning">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.RenameColumns"><code class="docutils literal notranslate"><span class="pre">RenameColumns</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.RenameColumns.fit"><code class="docutils literal notranslate"><span class="pre">RenameColumns.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.RenameColumns.transform"><code class="docutils literal notranslate"><span class="pre">RenameColumns.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.CastColumns"><code class="docutils literal notranslate"><span class="pre">CastColumns</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.CastColumns.fit"><code class="docutils literal notranslate"><span class="pre">CastColumns.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.CastColumns.transform"><code class="docutils literal notranslate"><span class="pre">CastColumns.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropColumns"><code class="docutils literal notranslate"><span class="pre">DropColumns</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropColumns.fit"><code class="docutils literal notranslate"><span class="pre">DropColumns.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropColumns.transform"><code class="docutils literal notranslate"><span class="pre">DropColumns.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropHighNaNRatio"><code class="docutils literal notranslate"><span class="pre">DropHighNaNRatio</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropHighNaNRatio.fit"><code class="docutils literal notranslate"><span class="pre">DropHighNaNRatio.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropHighNaNRatio.transform"><code class="docutils literal notranslate"><span class="pre">DropHighNaNRatio.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropLowCardinality"><code class="docutils literal notranslate"><span class="pre">DropLowCardinality</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropLowCardinality.fit"><code class="docutils literal notranslate"><span class="pre">DropLowCardinality.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropLowCardinality.transform"><code class="docutils literal notranslate"><span class="pre">DropLowCardinality.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.VarianceFilter"><code class="docutils literal notranslate"><span class="pre">VarianceFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.VarianceFilter.fit"><code class="docutils literal notranslate"><span class="pre">VarianceFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.VarianceFilter.transform"><code class="docutils literal notranslate"><span class="pre">VarianceFilter.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.Replace"><code class="docutils literal notranslate"><span class="pre">Replace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.Replace.fit"><code class="docutils literal notranslate"><span class="pre">Replace.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.Replace.transform"><code class="docutils literal notranslate"><span class="pre">Replace.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.CorrelationFilter"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.CorrelationFilter.fit"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.CorrelationFilter.transform"><code class="docutils literal notranslate"><span class="pre">CorrelationFilter.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.OutlierFilter"><code class="docutils literal notranslate"><span class="pre">OutlierFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.OutlierFilter.fit"><code class="docutils literal notranslate"><span class="pre">OutlierFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.OutlierFilter.transform"><code class="docutils literal notranslate"><span class="pre">OutlierFilter.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateColumns"><code class="docutils literal notranslate"><span class="pre">DropDuplicateColumns</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateColumns.fit"><code class="docutils literal notranslate"><span class="pre">DropDuplicateColumns.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateColumns.transform"><code class="docutils literal notranslate"><span class="pre">DropDuplicateColumns.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateRows"><code class="docutils literal notranslate"><span class="pre">DropDuplicateRows</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateRows.fit"><code class="docutils literal notranslate"><span class="pre">DropDuplicateRows.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateRows.transform"><code class="docutils literal notranslate"><span class="pre">DropDuplicateRows.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropConstantColumns"><code class="docutils literal notranslate"><span class="pre">DropConstantColumns</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropConstantColumns.fit"><code class="docutils literal notranslate"><span class="pre">DropConstantColumns.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropConstantColumns.transform"><code class="docutils literal notranslate"><span class="pre">DropConstantColumns.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter.fit"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter.transform"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.discretizers.html#module-gators.discretizers">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.CustomDiscretizer"><code class="docutils literal notranslate"><span class="pre">CustomDiscretizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.CustomDiscretizer.fit"><code class="docutils literal notranslate"><span class="pre">CustomDiscretizer.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.EqualLengthDiscretizer"><code class="docutils literal notranslate"><span class="pre">EqualLengthDiscretizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.EqualLengthDiscretizer.fit"><code class="docutils literal notranslate"><span class="pre">EqualLengthDiscretizer.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.EqualSizeDiscretizer"><code class="docutils literal notranslate"><span class="pre">EqualSizeDiscretizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.EqualSizeDiscretizer.fit"><code class="docutils literal notranslate"><span class="pre">EqualSizeDiscretizer.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.GeometricDiscretizer"><code class="docutils literal notranslate"><span class="pre">GeometricDiscretizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.GeometricDiscretizer.fit"><code class="docutils literal notranslate"><span class="pre">GeometricDiscretizer.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.KMeansDiscretizer"><code class="docutils literal notranslate"><span class="pre">KMeansDiscretizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.KMeansDiscretizer.fit"><code class="docutils literal notranslate"><span class="pre">KMeansDiscretizer.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.QuantileDiscretizer"><code class="docutils literal notranslate"><span class="pre">QuantileDiscretizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.QuantileDiscretizer.fit"><code class="docutils literal notranslate"><span class="pre">QuantileDiscretizer.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.TreeBasedDiscretizer"><code class="docutils literal notranslate"><span class="pre">TreeBasedDiscretizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.TreeBasedDiscretizer.fit"><code class="docutils literal notranslate"><span class="pre">TreeBasedDiscretizer.fit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.encoders.html#module-gators.encoders">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.BinaryEncoder"><code class="docutils literal notranslate"><span class="pre">BinaryEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.BinaryEncoder.fit"><code class="docutils literal notranslate"><span class="pre">BinaryEncoder.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.BinaryEncoder.transform"><code class="docutils literal notranslate"><span class="pre">BinaryEncoder.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.CatBoostEncoder"><code class="docutils literal notranslate"><span class="pre">CatBoostEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.CatBoostEncoder.fit"><code class="docutils literal notranslate"><span class="pre">CatBoostEncoder.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.CatBoostEncoder.transform"><code class="docutils literal notranslate"><span class="pre">CatBoostEncoder.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.CountEncoder"><code class="docutils literal notranslate"><span class="pre">CountEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.CountEncoder.fit"><code class="docutils literal notranslate"><span class="pre">CountEncoder.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.LeaveOneOutEncoder"><code class="docutils literal notranslate"><span class="pre">LeaveOneOutEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.LeaveOneOutEncoder.fit"><code class="docutils literal notranslate"><span class="pre">LeaveOneOutEncoder.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.LeaveOneOutEncoder.transform"><code class="docutils literal notranslate"><span class="pre">LeaveOneOutEncoder.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.OneHotEncoder"><code class="docutils literal notranslate"><span class="pre">OneHotEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.OneHotEncoder.fit"><code class="docutils literal notranslate"><span class="pre">OneHotEncoder.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.OneHotEncoder.transform"><code class="docutils literal notranslate"><span class="pre">OneHotEncoder.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.OrdinalEncoder"><code class="docutils literal notranslate"><span class="pre">OrdinalEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.OrdinalEncoder.fit"><code class="docutils literal notranslate"><span class="pre">OrdinalEncoder.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.RareCategoryEncoder"><code class="docutils literal notranslate"><span class="pre">RareCategoryEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.RareCategoryEncoder.fit"><code class="docutils literal notranslate"><span class="pre">RareCategoryEncoder.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.RareCategoryEncoder.transform"><code class="docutils literal notranslate"><span class="pre">RareCategoryEncoder.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.TargetEncoder"><code class="docutils literal notranslate"><span class="pre">TargetEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.TargetEncoder.fit"><code class="docutils literal notranslate"><span class="pre">TargetEncoder.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.WOEEncoder"><code class="docutils literal notranslate"><span class="pre">WOEEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.WOEEncoder.fit"><code class="docutils literal notranslate"><span class="pre">WOEEncoder.fit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.feature_generation.html#module-gators.feature_generation">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.IsNull"><code class="docutils literal notranslate"><span class="pre">IsNull</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.IsNull.fit"><code class="docutils literal notranslate"><span class="pre">IsNull.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.IsNull.transform"><code class="docutils literal notranslate"><span class="pre">IsNull.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PolynomialFeatures"><code class="docutils literal notranslate"><span class="pre">PolynomialFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PolynomialFeatures.fit"><code class="docutils literal notranslate"><span class="pre">PolynomialFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PolynomialFeatures.transform"><code class="docutils literal notranslate"><span class="pre">PolynomialFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures"><code class="docutils literal notranslate"><span class="pre">PlanRotationFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.compute_column_names"><code class="docutils literal notranslate"><span class="pre">PlanRotationFeatures.compute_column_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.fit"><code class="docutils literal notranslate"><span class="pre">PlanRotationFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.transform"><code class="docutils literal notranslate"><span class="pre">PlanRotationFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.MathFeatures"><code class="docutils literal notranslate"><span class="pre">MathFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.MathFeatures.fit"><code class="docutils literal notranslate"><span class="pre">MathFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.MathFeatures.transform"><code class="docutils literal notranslate"><span class="pre">MathFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RatioFeatures"><code class="docutils literal notranslate"><span class="pre">RatioFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RatioFeatures.fit"><code class="docutils literal notranslate"><span class="pre">RatioFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RatioFeatures.transform"><code class="docutils literal notranslate"><span class="pre">RatioFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupScalingFeatures"><code class="docutils literal notranslate"><span class="pre">GroupScalingFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupScalingFeatures.fit"><code class="docutils literal notranslate"><span class="pre">GroupScalingFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupScalingFeatures.transform"><code class="docutils literal notranslate"><span class="pre">GroupScalingFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures"><code class="docutils literal notranslate"><span class="pre">GroupStatisticsFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures.fit"><code class="docutils literal notranslate"><span class="pre">GroupStatisticsFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures.transform"><code class="docutils literal notranslate"><span class="pre">GroupStatisticsFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupLagFeatures"><code class="docutils literal notranslate"><span class="pre">GroupLagFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupLagFeatures.fit"><code class="docutils literal notranslate"><span class="pre">GroupLagFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupLagFeatures.transform"><code class="docutils literal notranslate"><span class="pre">GroupLagFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures"><code class="docutils literal notranslate"><span class="pre">ComparisonFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures.fit"><code class="docutils literal notranslate"><span class="pre">ComparisonFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures.transform"><code class="docutils literal notranslate"><span class="pre">ComparisonFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ConditionFeatures"><code class="docutils literal notranslate"><span class="pre">ConditionFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ConditionFeatures.fit"><code class="docutils literal notranslate"><span class="pre">ConditionFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ConditionFeatures.transform"><code class="docutils literal notranslate"><span class="pre">ConditionFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.DistanceFeatures"><code class="docutils literal notranslate"><span class="pre">DistanceFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.DistanceFeatures.fit"><code class="docutils literal notranslate"><span class="pre">DistanceFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.DistanceFeatures.transform"><code class="docutils literal notranslate"><span class="pre">DistanceFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures"><code class="docutils literal notranslate"><span class="pre">ScalarMathFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures.fit"><code class="docutils literal notranslate"><span class="pre">ScalarMathFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures.transform"><code class="docutils literal notranslate"><span class="pre">ScalarMathFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RuleFeatures"><code class="docutils literal notranslate"><span class="pre">RuleFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RuleFeatures.fit"><code class="docutils literal notranslate"><span class="pre">RuleFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RuleFeatures.transform"><code class="docutils literal notranslate"><span class="pre">RuleFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RowStatisticsFeatures"><code class="docutils literal notranslate"><span class="pre">RowStatisticsFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RowStatisticsFeatures.fit"><code class="docutils literal notranslate"><span class="pre">RowStatisticsFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RowStatisticsFeatures.transform"><code class="docutils literal notranslate"><span class="pre">RowStatisticsFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.feature_generation_dt.html#module-gators.feature_generation_dt">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.CyclicFeatures"><code class="docutils literal notranslate"><span class="pre">CyclicFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.CyclicFeatures.fit"><code class="docutils literal notranslate"><span class="pre">CyclicFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.CyclicFeatures.transform"><code class="docutils literal notranslate"><span class="pre">CyclicFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.OrdinalFeatures"><code class="docutils literal notranslate"><span class="pre">OrdinalFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.OrdinalFeatures.fit"><code class="docutils literal notranslate"><span class="pre">OrdinalFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.OrdinalFeatures.transform"><code class="docutils literal notranslate"><span class="pre">OrdinalFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.DiffFeatures"><code class="docutils literal notranslate"><span class="pre">DiffFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.DiffFeatures.fit"><code class="docutils literal notranslate"><span class="pre">DiffFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.DiffFeatures.transform"><code class="docutils literal notranslate"><span class="pre">DiffFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.DurationToDatetime"><code class="docutils literal notranslate"><span class="pre">DurationToDatetime</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.DurationToDatetime.fit"><code class="docutils literal notranslate"><span class="pre">DurationToDatetime.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.DurationToDatetime.transform"><code class="docutils literal notranslate"><span class="pre">DurationToDatetime.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.BusinessTimeFeatures"><code class="docutils literal notranslate"><span class="pre">BusinessTimeFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.BusinessTimeFeatures.fit"><code class="docutils literal notranslate"><span class="pre">BusinessTimeFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.BusinessTimeFeatures.transform"><code class="docutils literal notranslate"><span class="pre">BusinessTimeFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures"><code class="docutils literal notranslate"><span class="pre">TimeBinFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures.fit"><code class="docutils literal notranslate"><span class="pre">TimeBinFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures.transform"><code class="docutils literal notranslate"><span class="pre">TimeBinFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeWindowFeatures"><code class="docutils literal notranslate"><span class="pre">TimeWindowFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeWindowFeatures.fit"><code class="docutils literal notranslate"><span class="pre">TimeWindowFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeWindowFeatures.transform"><code class="docutils literal notranslate"><span class="pre">TimeWindowFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.HolidayFeatures"><code class="docutils literal notranslate"><span class="pre">HolidayFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.HolidayFeatures.fit"><code class="docutils literal notranslate"><span class="pre">HolidayFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.HolidayFeatures.transform"><code class="docutils literal notranslate"><span class="pre">HolidayFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.feature_generation_str.html#module-gators.feature_generation_str">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.CharacterStatistics"><code class="docutils literal notranslate"><span class="pre">CharacterStatistics</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.CharacterStatistics.fit"><code class="docutils literal notranslate"><span class="pre">CharacterStatistics.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.CharacterStatistics.transform"><code class="docutils literal notranslate"><span class="pre">CharacterStatistics.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.CombineFeatures"><code class="docutils literal notranslate"><span class="pre">CombineFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.CombineFeatures.fit"><code class="docutils literal notranslate"><span class="pre">CombineFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.CombineFeatures.transform"><code class="docutils literal notranslate"><span class="pre">CombineFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Contains"><code class="docutils literal notranslate"><span class="pre">Contains</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Contains.fit"><code class="docutils literal notranslate"><span class="pre">Contains.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Contains.transform"><code class="docutils literal notranslate"><span class="pre">Contains.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Endswith"><code class="docutils literal notranslate"><span class="pre">Endswith</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Endswith.fit"><code class="docutils literal notranslate"><span class="pre">Endswith.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Endswith.transform"><code class="docutils literal notranslate"><span class="pre">Endswith.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.ExtractSubstring"><code class="docutils literal notranslate"><span class="pre">ExtractSubstring</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.ExtractSubstring.fit"><code class="docutils literal notranslate"><span class="pre">ExtractSubstring.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.ExtractSubstring.transform"><code class="docutils literal notranslate"><span class="pre">ExtractSubstring.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.InteractionFeatures"><code class="docutils literal notranslate"><span class="pre">InteractionFeatures</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.InteractionFeatures.fit"><code class="docutils literal notranslate"><span class="pre">InteractionFeatures.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.InteractionFeatures.transform"><code class="docutils literal notranslate"><span class="pre">InteractionFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Length"><code class="docutils literal notranslate"><span class="pre">Length</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Length.fit"><code class="docutils literal notranslate"><span class="pre">Length.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Length.transform"><code class="docutils literal notranslate"><span class="pre">Length.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Lower"><code class="docutils literal notranslate"><span class="pre">Lower</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Lower.fit"><code class="docutils literal notranslate"><span class="pre">Lower.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Lower.transform"><code class="docutils literal notranslate"><span class="pre">Lower.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.NGram"><code class="docutils literal notranslate"><span class="pre">NGram</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.NGram.fit"><code class="docutils literal notranslate"><span class="pre">NGram.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.NGram.transform"><code class="docutils literal notranslate"><span class="pre">NGram.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Occurrences"><code class="docutils literal notranslate"><span class="pre">Occurrences</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Occurrences.fit"><code class="docutils literal notranslate"><span class="pre">Occurrences.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Occurrences.transform"><code class="docutils literal notranslate"><span class="pre">Occurrences.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.PatternDetector"><code class="docutils literal notranslate"><span class="pre">PatternDetector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.PatternDetector.fit"><code class="docutils literal notranslate"><span class="pre">PatternDetector.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.PatternDetector.transform"><code class="docutils literal notranslate"><span class="pre">PatternDetector.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Split"><code class="docutils literal notranslate"><span class="pre">Split</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Split.fit"><code class="docutils literal notranslate"><span class="pre">Split.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Split.transform"><code class="docutils literal notranslate"><span class="pre">Split.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.SplitExtract"><code class="docutils literal notranslate"><span class="pre">SplitExtract</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.SplitExtract.fit"><code class="docutils literal notranslate"><span class="pre">SplitExtract.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.SplitExtract.transform"><code class="docutils literal notranslate"><span class="pre">SplitExtract.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Startswith"><code class="docutils literal notranslate"><span class="pre">Startswith</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Startswith.fit"><code class="docutils literal notranslate"><span class="pre">Startswith.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Startswith.transform"><code class="docutils literal notranslate"><span class="pre">Startswith.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Upper"><code class="docutils literal notranslate"><span class="pre">Upper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Upper.fit"><code class="docutils literal notranslate"><span class="pre">Upper.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Upper.transform"><code class="docutils literal notranslate"><span class="pre">Upper.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.feature_selection.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gators.feature_selection.html#module-gators.feature_selection.information_value">gators.feature_selection.information_value module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_selection.html#gators.feature_selection.information_value.compute_iv"><code class="docutils literal notranslate"><span class="pre">compute_iv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gators.feature_selection.html#module-gators.feature_selection.feature_stability_index">gators.feature_selection.feature_stability_index module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_selection.html#gators.feature_selection.feature_stability_index.feature_stability_index"><code class="docutils literal notranslate"><span class="pre">feature_stability_index()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gators.feature_selection.html#module-gators.feature_selection">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_selection.html#gators.feature_selection.compute_iv"><code class="docutils literal notranslate"><span class="pre">compute_iv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="gators.feature_selection.html#gators.feature_selection.feature_stability_index"><code class="docutils literal notranslate"><span class="pre">feature_stability_index()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.imputers.html#module-gators.imputers">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.imputers.html#gators.imputers.BooleanImputer"><code class="docutils literal notranslate"><span class="pre">BooleanImputer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.BooleanImputer.fit"><code class="docutils literal notranslate"><span class="pre">BooleanImputer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.BooleanImputer.transform"><code class="docutils literal notranslate"><span class="pre">BooleanImputer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.imputers.html#gators.imputers.GroupByImputer"><code class="docutils literal notranslate"><span class="pre">GroupByImputer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.GroupByImputer.fit"><code class="docutils literal notranslate"><span class="pre">GroupByImputer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.GroupByImputer.transform"><code class="docutils literal notranslate"><span class="pre">GroupByImputer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.imputers.html#gators.imputers.NumericImputer"><code class="docutils literal notranslate"><span class="pre">NumericImputer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.NumericImputer.fit"><code class="docutils literal notranslate"><span class="pre">NumericImputer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.NumericImputer.transform"><code class="docutils literal notranslate"><span class="pre">NumericImputer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.imputers.html#gators.imputers.StringImputer"><code class="docutils literal notranslate"><span class="pre">StringImputer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.StringImputer.fit"><code class="docutils literal notranslate"><span class="pre">StringImputer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.StringImputer.transform"><code class="docutils literal notranslate"><span class="pre">StringImputer.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.pipeline.html#module-contents">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.fit"><code class="docutils literal notranslate"><span class="pre">Pipeline.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.transform"><code class="docutils literal notranslate"><span class="pre">Pipeline.transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.fit_transform"><code class="docutils literal notranslate"><span class="pre">Pipeline.fit_transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.get_params"><code class="docutils literal notranslate"><span class="pre">Pipeline.get_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.set_params"><code class="docutils literal notranslate"><span class="pre">Pipeline.set_params()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.rules.html">gators.rules package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.rules.html#module-gators.rules">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.scalers.html#module-gators.scalers">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.ArcSinSquareRootScaler"><code class="docutils literal notranslate"><span class="pre">ArcSinSquareRootScaler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.ArcSinSquareRootScaler.fit"><code class="docutils literal notranslate"><span class="pre">ArcSinSquareRootScaler.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.ArcSinSquareRootScaler.transform"><code class="docutils literal notranslate"><span class="pre">ArcSinSquareRootScaler.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.ArcSinhScaler"><code class="docutils literal notranslate"><span class="pre">ArcSinhScaler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.ArcSinhScaler.fit"><code class="docutils literal notranslate"><span class="pre">ArcSinhScaler.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.ArcSinhScaler.transform"><code class="docutils literal notranslate"><span class="pre">ArcSinhScaler.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.BoxCox"><code class="docutils literal notranslate"><span class="pre">BoxCox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.BoxCox.fit"><code class="docutils literal notranslate"><span class="pre">BoxCox.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.BoxCox.transform"><code class="docutils literal notranslate"><span class="pre">BoxCox.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.LogScaler"><code class="docutils literal notranslate"><span class="pre">LogScaler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.LogScaler.fit"><code class="docutils literal notranslate"><span class="pre">LogScaler.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.LogScaler.transform"><code class="docutils literal notranslate"><span class="pre">LogScaler.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.MinmaxScaler"><code class="docutils literal notranslate"><span class="pre">MinmaxScaler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.MinmaxScaler.fit"><code class="docutils literal notranslate"><span class="pre">MinmaxScaler.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.MinmaxScaler.transform"><code class="docutils literal notranslate"><span class="pre">MinmaxScaler.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.PowerScaler"><code class="docutils literal notranslate"><span class="pre">PowerScaler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.PowerScaler.fit"><code class="docutils literal notranslate"><span class="pre">PowerScaler.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.PowerScaler.transform"><code class="docutils literal notranslate"><span class="pre">PowerScaler.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.StandardScaler"><code class="docutils literal notranslate"><span class="pre">StandardScaler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.StandardScaler.fit"><code class="docutils literal notranslate"><span class="pre">StandardScaler.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.StandardScaler.transform"><code class="docutils literal notranslate"><span class="pre">StandardScaler.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.YeoJonhson"><code class="docutils literal notranslate"><span class="pre">YeoJonhson</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.YeoJonhson.fit"><code class="docutils literal notranslate"><span class="pre">YeoJonhson.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.YeoJonhson.transform"><code class="docutils literal notranslate"><span class="pre">YeoJonhson.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-gators">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gators" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-gators">Module contents</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

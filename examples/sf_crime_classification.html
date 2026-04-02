@@ -1,0 +1,909 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>San Francisco Crime Classification with Gators &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/sf_crime_classification';</script>
+    <link rel="icon" href="../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IEEE-CIS Fraud Detection with Gators" href="fraud_detection.html" />
+    <link rel="prev" title="House Price Prediction with Gators" href="house_price_prediction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="titanic_survival_prediction.html">Titanic Survival Prediction with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="house_price_prediction.html">House Price Prediction with Gators</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">San Francisco Crime Classification with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fraud_detection.html">IEEE-CIS Fraud Detection with Gators</a></li>
+</ul>
+</div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">San Francisco Crime Classification with Gators</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="San-Francisco-Crime-Classification-with-Gators">
+<h1>San Francisco Crime Classification with Gators<a class="headerlink" href="#San-Francisco-Crime-Classification-with-Gators" title="Link to this heading">#</a></h1>
+<p>This notebook demonstrates how to use the <strong>gators</strong> library for feature engineering in a multiclass classification problem. We’ll predict crime categories from the San Francisco Crime dataset using various gators transformers.</p>
+<section id="Key-Features-Demonstrated:">
+<h2>Key Features Demonstrated:<a class="headerlink" href="#Key-Features-Demonstrated:" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Data preprocessing and cleaning</p></li>
+<li><p>DateTime feature engineering (cyclic, ordinal, business time, holidays)</p></li>
+<li><p>String feature engineering (pattern detection)</p></li>
+<li><p>Spatial feature engineering (coordinate rotation)</p></li>
+<li><p>Group-based imputation</p></li>
+<li><p>Feature encoding and interaction</p></li>
+</ul>
+</section>
+<section id="1.-Import-Libraries">
+<h2>1. Import Libraries<a class="headerlink" href="#1.-Import-Libraries" title="Link to this heading">#</a></h2>
+<p>Import the necessary libraries including gators transformers for feature engineering.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">CountEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropColumns</span><span class="p">,</span> <span class="n">CastColumns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlanRotationFeatures</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">GroupByImputer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_dt</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DatetimeCyclicFeatures</span><span class="p">,</span>
+    <span class="n">DatetimeOrdinalFeatures</span><span class="p">,</span>
+    <span class="n">BusinessTimeFeatures</span><span class="p">,</span>
+    <span class="n">TimeBinFeatures</span><span class="p">,</span>
+    <span class="n">HolidayFeatures</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_str</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Contains</span><span class="p">,</span>
+    <span class="n">InteractionFeatures</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">xgboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">XGBClassifier</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Load-and-Preprocess-Data">
+<h2>2. Load and Preprocess Data<a class="headerlink" href="#2.-Load-and-Preprocess-Data" title="Link to this heading">#</a></h2>
+<p>Load the San Francisco Crime dataset and perform initial preprocessing:</p>
+<ul class="simple">
+<li><p>Remove redundant columns</p></li>
+<li><p>Handle outlier coordinate values (replace invalid coordinates with null)</p></li>
+<li><p>Create a distance-to-center feature using San Francisco’s geographic center</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/sf/train.parquet&#39;</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/sf/test.parquet&#39;</span><span class="p">)</span>
+
+<span class="c1"># Drop unnecessary columns</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Descript&quot;</span><span class="p">,</span> <span class="s2">&quot;Resolution&quot;</span><span class="p">,</span> <span class="s2">&quot;DayOfWeek&quot;</span><span class="p">])</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;DayOfWeek&quot;</span><span class="p">])</span>
+
+<span class="c1"># Extract target variable</span>
+<span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;Category&#39;</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+<span class="c1"># Replace invalid coordinate values with null</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mf">120.5</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">),</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mf">90.0</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="p">])</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mf">120.5</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">),</span>
+    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mf">90.0</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="p">])</span>
+
+<span class="c1"># Create distance to San Francisco center feature</span>
+<span class="n">sf_center_x</span><span class="p">,</span> <span class="n">sf_center_y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">122.4194</span><span class="p">,</span> <span class="mf">37.7749</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span>
+    <span class="p">(((</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">sf_center_x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">sf_center_y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;distance_to_center&#39;</span><span class="p">)</span>
+<span class="p">])</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span>
+    <span class="p">(((</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">sf_center_x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">sf_center_y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;distance_to_center&#39;</span><span class="p">)</span>
+<span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training data shape: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test data shape: </span><span class="si">{</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training data shape: (878049, 6)
+Test data shape: (884262, 7)
+</pre></div></div>
+</div>
+</section>
+<section id="3.-Prepare-Target-Variable">
+<h2>3. Prepare Target Variable<a class="headerlink" href="#3.-Prepare-Target-Variable" title="Link to this heading">#</a></h2>
+<p>Convert crime category labels to numeric format for model training.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define all crime categories</span>
+<span class="n">crime_categories</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;ARSON&quot;</span><span class="p">,</span> <span class="s2">&quot;ASSAULT&quot;</span><span class="p">,</span> <span class="s2">&quot;BAD CHECKS&quot;</span><span class="p">,</span> <span class="s2">&quot;BRIBERY&quot;</span><span class="p">,</span> <span class="s2">&quot;BURGLARY&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DISORDERLY CONDUCT&quot;</span><span class="p">,</span> <span class="s2">&quot;DRIVING UNDER THE INFLUENCE&quot;</span><span class="p">,</span> <span class="s2">&quot;DRUG/NARCOTIC&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DRUNKENNESS&quot;</span><span class="p">,</span> <span class="s2">&quot;EMBEZZLEMENT&quot;</span><span class="p">,</span> <span class="s2">&quot;EXTORTION&quot;</span><span class="p">,</span> <span class="s2">&quot;FAMILY OFFENSES&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FORGERY/COUNTERFEITING&quot;</span><span class="p">,</span> <span class="s2">&quot;FRAUD&quot;</span><span class="p">,</span> <span class="s2">&quot;GAMBLING&quot;</span><span class="p">,</span> <span class="s2">&quot;KIDNAPPING&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LARCENY/THEFT&quot;</span><span class="p">,</span> <span class="s2">&quot;LIQUOR LAWS&quot;</span><span class="p">,</span> <span class="s2">&quot;LOITERING&quot;</span><span class="p">,</span> <span class="s2">&quot;MISSING PERSON&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NON-CRIMINAL&quot;</span><span class="p">,</span> <span class="s2">&quot;OTHER OFFENSES&quot;</span><span class="p">,</span> <span class="s2">&quot;PORNOGRAPHY/OBSCENE MAT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PROSTITUTION&quot;</span><span class="p">,</span> <span class="s2">&quot;RECOVERED VEHICLE&quot;</span><span class="p">,</span> <span class="s2">&quot;ROBBERY&quot;</span><span class="p">,</span> <span class="s2">&quot;RUNAWAY&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SECONDARY CODES&quot;</span><span class="p">,</span> <span class="s2">&quot;SEX OFFENSES FORCIBLE&quot;</span><span class="p">,</span> <span class="s2">&quot;SEX OFFENSES NON FORCIBLE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;STOLEN PROPERTY&quot;</span><span class="p">,</span> <span class="s2">&quot;SUICIDE&quot;</span><span class="p">,</span> <span class="s2">&quot;SUSPICIOUS OCC&quot;</span><span class="p">,</span> <span class="s2">&quot;TREA&quot;</span><span class="p">,</span> <span class="s2">&quot;TRESPASS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;VANDALISM&quot;</span><span class="p">,</span> <span class="s2">&quot;VEHICLE THEFT&quot;</span><span class="p">,</span> <span class="s2">&quot;WARRANTS&quot;</span><span class="p">,</span> <span class="s2">&quot;WEAPON LAWS&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># Convert target to numeric labels</span>
+<span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">cat</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">crime_categories</span><span class="p">)}</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">mapping</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Int64</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of classes: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">crime_categories</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target shape: </span><span class="si">{</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of classes: 39
+Target shape: (878049,)
+</pre></div></div>
+</div>
+</section>
+<section id="4.-Build-Feature-Engineering-Pipeline">
+<h2>4. Build Feature Engineering Pipeline<a class="headerlink" href="#4.-Build-Feature-Engineering-Pipeline" title="Link to this heading">#</a></h2>
+<p>The gators Pipeline orchestrates multiple feature transformers:</p>
+<section id="Data-Cleaning-&amp;-Casting:">
+<h3>Data Cleaning &amp; Casting:<a class="headerlink" href="#Data-Cleaning-&-Casting:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>GroupByImputer</strong>: Fill missing X/Y coordinates using mean values grouped by police district</p></li>
+<li><p><strong>CastColumns</strong>: Convert date strings to datetime type</p></li>
+</ul>
+</section>
+<section id="Datetime-Features:">
+<h3>Datetime Features:<a class="headerlink" href="#Datetime-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>TimeBinFeatures</strong>: Create time-of-day bins (morning, afternoon, evening, night)</p></li>
+<li><p><strong>DatetimeCyclicFeatures</strong>: Generate cyclic features for temporal patterns (sin/cos transformations)</p></li>
+<li><p><strong>BusinessTimeFeatures</strong>: Extract business-related time features (weekday vs weekend)</p></li>
+<li><p><strong>HolidayFeatures</strong>: Identify whether crimes occurred on holidays</p></li>
+<li><p><strong>DatetimeOrdinalFeatures</strong>: Create ordinal features (month, day, hour, etc.)</p></li>
+</ul>
+</section>
+<section id="String-Features:">
+<h3>String Features:<a class="headerlink" href="#String-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Contains</strong>: Detect patterns in address strings (e.g., contains ‘Block’, ‘AV’, ‘ST’)</p></li>
+<li><p><strong>InteractionFeatures</strong>: Create interactions between categorical features (e.g., day_of_week × part_of_day)</p></li>
+</ul>
+</section>
+<section id="Spatial-Features:">
+<h3>Spatial Features:<a class="headerlink" href="#Spatial-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>PlanRotationFeatures</strong>: Rotate X/Y coordinates at multiple angles to capture spatial patterns</p></li>
+</ul>
+</section>
+<section id="Encoding:">
+<h3>Encoding:<a class="headerlink" href="#Encoding:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>OneHotEncoder</strong>: Encode categorical variables as binary features</p></li>
+<li><p><strong>CountEncoder</strong>: Encode categories by their frequency</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define datetime components to extract</span>
+<span class="n">ordinal_components</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;month&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">,</span> <span class="s2">&quot;day_of_week&quot;</span><span class="p">,</span> <span class="s2">&quot;day_of_month&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;day_of_year&quot;</span><span class="p">,</span> <span class="s2">&quot;hour&quot;</span><span class="p">,</span> <span class="s2">&quot;minute&quot;</span><span class="p">,</span> <span class="s2">&quot;weekend&quot;</span>
+<span class="p">]</span>
+
+<span class="n">cyclic_components</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;month&quot;</span><span class="p">,</span> <span class="s2">&quot;week&quot;</span><span class="p">,</span> <span class="s2">&quot;day_of_week&quot;</span><span class="p">,</span> <span class="s2">&quot;day_of_month&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;day_of_year&quot;</span><span class="p">,</span> <span class="s2">&quot;hour&quot;</span><span class="p">,</span> <span class="s2">&quot;minute&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># Build the pipeline with gators transformers</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Impute missing coordinates using group averages</span>
+    <span class="p">(</span><span class="s2">&quot;group_imputer&quot;</span><span class="p">,</span> <span class="n">GroupByImputer</span><span class="p">(</span>
+        <span class="n">group_by_column</span><span class="o">=</span><span class="s1">&#39;PdDistrict&#39;</span><span class="p">,</span>
+        <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Convert dates to datetime type</span>
+    <span class="p">(</span><span class="s2">&quot;cast&quot;</span><span class="p">,</span> <span class="n">CastColumns</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">Datetime</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+
+    <span class="c1"># Extract time-of-day bins</span>
+    <span class="p">(</span><span class="s2">&quot;dt_timebin&quot;</span><span class="p">,</span> <span class="n">TimeBinFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">])),</span>
+
+    <span class="c1"># Create cyclic datetime features (captures cyclical nature of time)</span>
+    <span class="p">(</span><span class="s2">&quot;dt_cyclic&quot;</span><span class="p">,</span> <span class="n">DatetimeCyclicFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span>
+        <span class="n">angles</span><span class="o">=</span><span class="p">[</span><span class="mi">180</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">4</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)],</span>
+        <span class="n">components</span><span class="o">=</span><span class="n">cyclic_components</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Extract business time features</span>
+    <span class="p">(</span><span class="s2">&quot;dt_business&quot;</span><span class="p">,</span> <span class="n">BusinessTimeFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">])),</span>
+
+    <span class="c1"># Add holiday indicator</span>
+    <span class="p">(</span><span class="s2">&quot;dt_holiday&quot;</span><span class="p">,</span> <span class="n">HolidayFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;is_holiday&#39;</span><span class="p">])),</span>
+
+    <span class="c1"># Extract ordinal datetime components</span>
+    <span class="p">(</span><span class="s2">&quot;dt_ordinal&quot;</span><span class="p">,</span> <span class="n">DatetimeOrdinalFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span> <span class="n">components</span><span class="o">=</span><span class="n">ordinal_components</span><span class="p">)),</span>
+
+    <span class="c1"># Extract patterns from address strings</span>
+    <span class="p">(</span><span class="s2">&quot;contains&quot;</span><span class="p">,</span> <span class="n">Contains</span><span class="p">(</span><span class="n">contains_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Address&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;Block&#39;</span><span class="p">,</span> <span class="s1">&#39;AV&#39;</span><span class="p">,</span> <span class="s1">&#39;ST&#39;</span><span class="p">]})),</span>
+
+    <span class="c1"># Drop original columns after feature extraction</span>
+    <span class="p">(</span><span class="s2">&quot;drop&quot;</span><span class="p">,</span> <span class="n">DropColumns</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Address&quot;</span><span class="p">,</span> <span class="s2">&quot;Dates&quot;</span><span class="p">])),</span>
+
+    <span class="c1"># Create interaction features</span>
+    <span class="p">(</span><span class="s2">&quot;interaction_time&quot;</span><span class="p">,</span> <span class="n">InteractionFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates__day_of_week&#39;</span><span class="p">,</span> <span class="s1">&#39;Dates__part_of_day&#39;</span><span class="p">])),</span>
+    <span class="p">(</span><span class="s2">&quot;interaction_district&quot;</span><span class="p">,</span> <span class="n">InteractionFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PdDistrict&#39;</span><span class="p">,</span> <span class="s1">&#39;Dates__part_of_day&#39;</span><span class="p">])),</span>
+
+    <span class="c1"># Rotate coordinates to capture spatial patterns</span>
+    <span class="p">(</span><span class="s2">&quot;plan_rotation&quot;</span><span class="p">,</span> <span class="n">PlanRotationFeatures</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">]],</span>
+        <span class="n">angles</span><span class="o">=</span><span class="p">[</span><span class="mi">180</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">4</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Encode categorical variables</span>
+    <span class="p">(</span><span class="s2">&quot;onehot_encoder&quot;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s2">&quot;count_encoder&quot;</span><span class="p">,</span> <span class="n">CountEncoder</span><span class="p">()),</span>
+<span class="p">]</span>
+
+<span class="c1"># Create and fit the pipeline</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X_train_transformed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">X_test_transformed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Original features: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engineered features: </span><span class="si">{</span><span class="n">X_train_transformed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[Pipeline] Fitting and transforming step 1/14: group_imputer
+[Pipeline] Fitting and transforming step 2/14: cast
+[Pipeline] Fitting and transforming step 3/14: dt_timebin
+[Pipeline] Fitting and transforming step 4/14: dt_cyclic
+[Pipeline] Fitting and transforming step 5/14: dt_business
+[Pipeline] Fitting and transforming step 6/14: dt_holiday
+[Pipeline] Fitting and transforming step 7/14: dt_ordinal
+[Pipeline] Fitting and transforming step 8/14: contains
+[Pipeline] Fitting and transforming step 9/14: drop
+[Pipeline] Fitting and transforming step 10/14: interaction_time
+[Pipeline] Fitting and transforming step 11/14: interaction_district
+[Pipeline] Fitting and transforming step 12/14: plan_rotation
+[Pipeline] Fitting and transforming step 13/14: onehot_encoder
+[Pipeline] Fitting and transforming step 14/14: count_encoder
+[Pipeline] Transforming step 1/14: group_imputer
+[Pipeline] Transforming step 2/14: cast
+[Pipeline] Transforming step 3/14: dt_timebin
+[Pipeline] Transforming step 4/14: dt_cyclic
+[Pipeline] Transforming step 5/14: dt_business
+[Pipeline] Transforming step 6/14: dt_holiday
+[Pipeline] Transforming step 7/14: dt_ordinal
+[Pipeline] Transforming step 8/14: contains
+[Pipeline] Transforming step 9/14: drop
+[Pipeline] Transforming step 10/14: interaction_time
+[Pipeline] Transforming step 11/14: interaction_district
+[Pipeline] Transforming step 12/14: plan_rotation
+[Pipeline] Transforming step 13/14: onehot_encoder
+[Pipeline] Transforming step 14/14: count_encoder
+
+Original features: 6
+Engineered features: 189
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="5.-Train-Model-and-Generate-Predictions">
+<h2>5. Train Model and Generate Predictions<a class="headerlink" href="#5.-Train-Model-and-Generate-Predictions" title="Link to this heading">#</a></h2>
+<p>Train an XGBoost classifier with the engineered features and generate predictions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">X_test_transformed</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">X_train_transformed</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Id&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define model parameters</span>
+<span class="n">xgb_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s1">&#39;min_child_weight&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;subsample&#39;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span>
+    <span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span>
+    <span class="s1">&#39;max_delta_step&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;tree_method&#39;</span><span class="p">:</span> <span class="s1">&#39;hist&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span> <span class="s1">&#39;mlogloss&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s1">&#39;n_jobs&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+
+<span class="c1"># Train the model</span>
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">xgb_params</span><span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model training completed!&quot;</span><span class="p">)</span>
+
+<span class="c1"># Generate predictions</span>
+<span class="n">submission</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test_transformed</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Id&quot;</span><span class="p">)),</span>
+    <span class="n">index</span><span class="o">=</span><span class="n">X_test</span><span class="p">[</span><span class="s2">&quot;Id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(),</span>
+    <span class="n">columns</span><span class="o">=</span><span class="n">crime_categories</span>
+<span class="p">)</span>
+<span class="n">submission</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;submission.csv.zip&quot;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;zip&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submission file created successfully!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Model training completed!
+Submission file created successfully!
+</pre></div></div>
+</div>
+</section>
+<section id="6.-Feature-Importance-Analysis">
+<h2>6. Feature Importance Analysis<a class="headerlink" href="#6.-Feature-Importance-Analysis" title="Link to this heading">#</a></h2>
+<p>Analyze which features contribute most to the model’s predictions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract feature importances</span>
+<span class="n">feat_imp</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">estimator</span><span class="o">.</span><span class="n">feature_names_in_</span><span class="p">,</span>
+    <span class="s2">&quot;importance&quot;</span><span class="p">:</span> <span class="n">estimator</span><span class="o">.</span><span class="n">feature_importances_</span>
+<span class="p">})</span>
+<span class="n">feat_imp</span> <span class="o">=</span> <span class="n">feat_imp</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;importance&quot;</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Display top 20 most important features</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Top 20 Most Important Features:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">feat_imp</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Top 20 Most Important Features:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (20, 2)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>importance</th></tr><tr><td>str</td><td>f32</td></tr></thead><tbody><tr><td>&quot;Address__contains_Block&quot;</td><td>0.047442</td></tr><tr><td>&quot;Address__contains_/&quot;</td><td>0.042024</td></tr><tr><td>&quot;Dates__minute__sin90&quot;</td><td>0.039019</td></tr><tr><td>&quot;XY_x315&quot;</td><td>0.033719</td></tr><tr><td>&quot;Dates__minute__sin270&quot;</td><td>0.032337</td></tr><tr><td>&hellip;</td><td>&hellip;</td></tr><tr><td>&quot;PdDistrict__PARK&quot;</td><td>0.012953</td></tr><tr><td>&quot;XY_y90&quot;</td><td>0.012377</td></tr><tr><td>&quot;Dates__hour__sin90&quot;</td><td>0.012303</td></tr><tr><td>&quot;PdDistrict__NORTHERN&quot;</td><td>0.011099</td></tr><tr><td>&quot;XY_x90&quot;</td><td>0.011072</td></tr></tbody></table></div></div>
+</div>
+</section>
+<section id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Link to this heading">#</a></h2>
+<p>This notebook demonstrates the power of the <strong>gators</strong> library for feature engineering in machine learning pipelines:</p>
+<section id="Key-Takeaways:">
+<h3>Key Takeaways:<a class="headerlink" href="#Key-Takeaways:" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Modular Pipeline</strong>: Easily compose complex feature engineering workflows using gators transformers</p></li>
+<li><p><strong>Datetime Engineering</strong>: Rich set of temporal features (cyclic, ordinal, business time, holidays)</p></li>
+<li><p><strong>Spatial Features</strong>: Coordinate rotation and distance-based features for geographic data</p></li>
+<li><p><strong>String Processing</strong>: Pattern extraction from text fields</p></li>
+<li><p><strong>Smart Imputation</strong>: Group-based imputation leveraging categorical relationships</p></li>
+<li><p><strong>Seamless Integration</strong>: Works with Polars DataFrames and scikit-learn/XGBoost models</p></li>
+</ol>
+<p>The gators library significantly reduced feature engineering complexity while creating a comprehensive feature set for multiclass classification.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="house_price_prediction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">House Price Prediction with Gators</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="fraud_detection.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">IEEE-CIS Fraud Detection with Gators</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Features-Demonstrated:">Key Features Demonstrated:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Import-Libraries">1. Import Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2.-Load-and-Preprocess-Data">2. Load and Preprocess Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Prepare-Target-Variable">3. Prepare Target Variable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4.-Build-Feature-Engineering-Pipeline">4. Build Feature Engineering Pipeline</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Data-Cleaning-&amp;-Casting:">Data Cleaning &amp; Casting:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Datetime-Features:">Datetime Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#String-Features:">String Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Spatial-Features:">Spatial Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Encoding:">Encoding:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5.-Train-Model-and-Generate-Predictions">5. Train Model and Generate Predictions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#6.-Feature-Importance-Analysis">6. Feature Importance Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Takeaways:">Key Takeaways:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

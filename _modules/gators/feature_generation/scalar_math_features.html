@@ -1,0 +1,771 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gators.feature_generation.scalar_math_features &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/feature_generation/scalar_math_features';</script>
+    <link rel="icon" href="../../../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.feature_generation.scalar_math_features</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gators.feature_generation.scalar_math_features</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+
+<span class="c1"># Operator symbol to name mapping for auto-generated column names</span>
+<span class="n">OPERATOR_NAMES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;+&quot;</span><span class="p">:</span> <span class="s2">&quot;plus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;-&quot;</span><span class="p">:</span> <span class="s2">&quot;minus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;*&quot;</span><span class="p">:</span> <span class="s2">&quot;mul&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;/&quot;</span><span class="p">:</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;**&quot;</span><span class="p">:</span> <span class="s2">&quot;pow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;//&quot;</span><span class="p">:</span> <span class="s2">&quot;floordiv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;%&quot;</span><span class="p">:</span> <span class="s2">&quot;mod&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="ScalarMathFeatures">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScalarMathFeatures</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates new features by applying mathematical operations between columns and scalar values.</span>
+
+<span class="sd">    This transformer performs element-wise operations between a column and a scalar constant.</span>
+<span class="sd">    Each operation creates one new feature column. For operations between multiple columns,</span>
+<span class="sd">    use MathFeatures instead.</span>
+
+<span class="sd">    **Use Cases:**</span>
+<span class="sd">    </span>
+<span class="sd">    - Unit conversions (days to years, meters to feet, Celsius to Fahrenheit)</span>
+<span class="sd">    - Normalization (divide by constant, multiply by scaling factor)</span>
+<span class="sd">    - Feature scaling (percentage calculation, ratio computation)</span>
+<span class="sd">    - Offset adjustments (add/subtract baseline values)</span>
+
+<span class="sd">    **When to Use:**</span>
+<span class="sd">    </span>
+<span class="sd">    - Need to apply arithmetic operations with fixed scalar values</span>
+<span class="sd">    - Creating interpretable transformations (e.g., Age/365 for age_in_years)</span>
+<span class="sd">    - Scaling features by known constants</span>
+<span class="sd">    - Building feature sets for downstream models</span>
+
+<span class="sd">    **When NOT to Use:**</span>
+<span class="sd">    </span>
+<span class="sd">    - Operations between multiple columns (use MathFeatures)</span>
+<span class="sd">    - Need learned scaling (use StandardScaler, MinMaxScaler)</span>
+<span class="sd">    - Complex mathematical functions (use DataFrame.with_columns directly)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    operations : List[Dict[str, Any]]</span>
+<span class="sd">        List of operation dictionaries. Each operation creates one new feature column.</span>
+
+<span class="sd">        Each operation dictionary must contain:</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">        - &#39;column&#39;: str - Name of the column to operate on</span>
+<span class="sd">        - &#39;op&#39;: str - Mathematical operator. Supported: &#39;+&#39;, &#39;-&#39;, &#39;*&#39;, &#39;/&#39;, &#39;**&#39;, &#39;//&#39;, &#39;%&#39;</span>
+<span class="sd">        - &#39;scalar&#39;: float or int - Scalar value to use in the operation</span>
+
+<span class="sd">        Examples::</span>
+<span class="sd">        </span>
+<span class="sd">            [</span>
+<span class="sd">                {&#39;column&#39;: &#39;Age&#39;, &#39;op&#39;: &#39;/&#39;, &#39;scalar&#39;: 365},</span>
+<span class="sd">                {&#39;column&#39;: &#39;Price&#39;, &#39;op&#39;: &#39;*&#39;, &#39;scalar&#39;: 1.1},</span>
+<span class="sd">                {&#39;column&#39;: &#39;Temperature&#39;, &#39;op&#39;: &#39;+&#39;, &#39;scalar&#39;: 273.15}</span>
+<span class="sd">            ]</span>
+
+<span class="sd">    new_column_names : Optional[List[str]], default=None</span>
+<span class="sd">        Names for the resulting feature columns. If provided, must have the same</span>
+<span class="sd">        length as ``operations``. If None, column names are auto-generated in the format:</span>
+<span class="sd">        ``{column}_{op_name}_{scalar}`` (e.g., &#39;Age_div_365&#39;, &#39;Price_mul_1.1&#39;)</span>
+
+<span class="sd">        Operator name mapping: &#39;+&#39; -&gt; &#39;plus&#39;, &#39;-&#39; -&gt; &#39;minus&#39;, &#39;*&#39; -&gt; &#39;mul&#39;,</span>
+<span class="sd">        &#39;/&#39; -&gt; &#39;div&#39;, &#39;**&#39; -&gt; &#39;pow&#39;, &#39;//&#39; -&gt; &#39;floordiv&#39;, &#39;%&#39; -&gt; &#39;mod&#39;</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">    &gt;&gt;&gt; from gators.feature_generation import ScalarMathFeatures</span>
+
+<span class="sd">    &gt;&gt;&gt; X ={</span>
+<span class="sd">    ...     &#39;Age&#39;: [25, 30, 45, 12, 65],</span>
+<span class="sd">    ...     &#39;Price&#39;: [100.0, 150.0, 200.0, 75.0, 300.0],</span>
+<span class="sd">    ...     &#39;Temperature&#39;: [20.0, 25.0, 15.0, 30.0, 22.0]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame(X)</span>
+
+<span class="sd">    **Example 1: Unit conversions with custom names**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = ScalarMathFeatures(</span>
+<span class="sd">    ...     operations=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Age&#39;, &#39;op&#39;: &#39;/&#39;, &#39;scalar&#39;: 365},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Temperature&#39;, &#39;op&#39;: &#39;+&#39;, &#39;scalar&#39;: 273.15}</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     new_column_names=[&#39;Age_years&#39;, &#39;Temperature_kelvin&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.select([&#39;Age&#39;, &#39;Age_years&#39;, &#39;Temperature&#39;, &#39;Temperature_kelvin&#39;])</span>
+<span class="sd">    shape: (5, 4)</span>
+<span class="sd">    ┌─────┬───────────┬─────────────┬───────────────────┐</span>
+<span class="sd">    │ Age ┆ Age_years ┆ Temperature ┆ Temperature_kelvin│</span>
+<span class="sd">    │ --- ┆ ---       ┆ ---         ┆ ---               │</span>
+<span class="sd">    │ i64 ┆ f64       ┆ f64         ┆ f64               │</span>
+<span class="sd">    ╞═════╪═══════════╪═════════════╪═══════════════════╡</span>
+<span class="sd">    │ 25  ┆ 0.068493  ┆ 20.0        ┆ 293.15            │</span>
+<span class="sd">    │ 30  ┆ 0.082192  ┆ 25.0        ┆ 298.15            │</span>
+<span class="sd">    │ 45  ┆ 0.123288  ┆ 15.0        ┆ 288.15            │</span>
+<span class="sd">    │ 12  ┆ 0.032877  ┆ 30.0        ┆ 303.15            │</span>
+<span class="sd">    │ 65  ┆ 0.178082  ┆ 22.0        ┆ 295.15            │</span>
+<span class="sd">    └─────┴───────────┴─────────────┴───────────────────┘</span>
+
+<span class="sd">    **Example 2: Auto-generated column names**</span>
+
+<span class="sd">    &gt;&gt;&gt; auto_transformer = ScalarMathFeatures(</span>
+<span class="sd">    ...     operations=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Price&#39;, &#39;op&#39;: &#39;*&#39;, &#39;scalar&#39;: 1.1},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Price&#39;, &#39;op&#39;: &#39;/&#39;, &#39;scalar&#39;: 100}</span>
+<span class="sd">    ...     ]</span>
+<span class="sd">    ...     # new_column_names not specified - will be auto-generated</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = auto_transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.select([&#39;Price&#39;, &#39;Price_mul_1.1&#39;, &#39;Price_div_100&#39;])</span>
+<span class="sd">    shape: (5, 3)</span>
+<span class="sd">    ┌───────┬──────────────┬───────────────┐</span>
+<span class="sd">    │ Price ┆ Price_mul_1.1┆ Price_div_100 │</span>
+<span class="sd">    │ ---   ┆ ---          ┆ ---           │</span>
+<span class="sd">    │ f64   ┆ f64          ┆ f64           │</span>
+<span class="sd">    ╞═══════╪══════════════╪═══════════════╡</span>
+<span class="sd">    │ 100.0 ┆ 110.0        ┆ 1.0           │</span>
+<span class="sd">    │ 150.0 ┆ 165.0        ┆ 1.5           │</span>
+<span class="sd">    │ 200.0 ┆ 220.0        ┆ 2.0           │</span>
+<span class="sd">    │ 75.0  ┆ 82.5         ┆ 0.75          │</span>
+<span class="sd">    │ 300.0 ┆ 330.0        ┆ 3.0           │</span>
+<span class="sd">    └───────┴──────────────┴───────────────┘</span>
+
+<span class="sd">    **Example 3: Multiple operations (scaling, percentage, tax)**</span>
+
+<span class="sd">    &gt;&gt;&gt; multi_ops = ScalarMathFeatures(</span>
+<span class="sd">    ...     operations=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Price&#39;, &#39;op&#39;: &#39;*&#39;, &#39;scalar&#39;: 1.2},  # 20% markup</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Price&#39;, &#39;op&#39;: &#39;/&#39;, &#39;scalar&#39;: 100},  # as percentage of 100</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Age&#39;, &#39;op&#39;: &#39;%&#39;, &#39;scalar&#39;: 10}      # age modulo 10</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     new_column_names=[&#39;Price_with_tax&#39;, &#39;Price_pct&#39;, &#39;Age_decade_offset&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = multi_ops.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.select([&#39;Price&#39;, &#39;Price_with_tax&#39;, &#39;Price_pct&#39;, &#39;Age&#39;, &#39;Age_decade_offset&#39;])</span>
+<span class="sd">    shape: (5, 5)</span>
+<span class="sd">    ┌───────┬────────────────┬───────────┬─────┬───────────────────┐</span>
+<span class="sd">    │ Price ┆ Price_with_tax ┆ Price_pct ┆ Age ┆ Age_decade_offset │</span>
+<span class="sd">    │ ---   ┆ ---            ┆ ---       ┆ --- ┆ ---               │</span>
+<span class="sd">    │ f64   ┆ f64            ┆ f64       ┆ i64 ┆ i64               │</span>
+<span class="sd">    ╞═══════╪════════════════╪═══════════╪═════╪═══════════════════╡</span>
+<span class="sd">    │ 100.0 ┆ 120.0          ┆ 1.0       ┆ 25  ┆ 5                 │</span>
+<span class="sd">    │ 150.0 ┆ 180.0          ┆ 1.5       ┆ 30  ┆ 0                 │</span>
+<span class="sd">    │ 200.0 ┆ 240.0          ┆ 2.0       ┆ 45  ┆ 5                 │</span>
+<span class="sd">    │ 75.0  ┆ 90.0           ┆ 0.75      ┆ 12  ┆ 2                 │</span>
+<span class="sd">    │ 300.0 ┆ 360.0          ┆ 3.0       ┆ 65  ┆ 5                 │</span>
+<span class="sd">    └───────┴────────────────┴───────────┴─────┴───────────────────┘</span>
+
+<span class="sd">    **Example 4: Power and floor division**</span>
+
+<span class="sd">    &gt;&gt;&gt; power_ops = ScalarMathFeatures(</span>
+<span class="sd">    ...     operations=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Age&#39;, &#39;op&#39;: &#39;**&#39;, &#39;scalar&#39;: 2},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Age&#39;, &#39;op&#39;: &#39;//&#39;, &#39;scalar&#39;: 10}</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     new_column_names=[&#39;Age_squared&#39;, &#39;Age_decade&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = power_ops.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.select([&#39;Age&#39;, &#39;Age_squared&#39;, &#39;Age_decade&#39;])</span>
+<span class="sd">    shape: (5, 3)</span>
+<span class="sd">    ┌─────┬─────────────┬────────────┐</span>
+<span class="sd">    │ Age ┆ Age_squared ┆ Age_decade │</span>
+<span class="sd">    │ --- ┆ ---         ┆ ---        │</span>
+<span class="sd">    │ i64 ┆ i64         ┆ i64        │</span>
+<span class="sd">    ╞═════╪═════════════╪════════════╡</span>
+<span class="sd">    │ 25  ┆ 625         ┆ 2          │</span>
+<span class="sd">    │ 30  ┆ 900         ┆ 3          │</span>
+<span class="sd">    │ 45  ┆ 2025        ┆ 4          │</span>
+<span class="sd">    │ 12  ┆ 144         ┆ 1          │</span>
+<span class="sd">    │ 65  ┆ 4225        ┆ 6          │</span>
+<span class="sd">    └─────┴─────────────┴────────────┘</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Each operation produces exactly one new feature column</span>
+<span class="sd">    - Auto-naming: If new_column_names is None, names are auto-generated as:</span>
+<span class="sd">      `{column}_{op_name}_{scalar}` (e.g., &#39;Age_div_365&#39;)</span>
+<span class="sd">    - Operations are applied element-wise to each row</span>
+<span class="sd">    - Division by zero will result in inf or null values (Polars default behavior)</span>
+<span class="sd">    - Can chain multiple ScalarMathFeatures transformers in a pipeline</span>
+<span class="sd">    - For learned transformations, consider sklearn scalers instead</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    MathFeatures : For operations between multiple columns</span>
+<span class="sd">    ConditionFeatures : For creating boolean features from conditions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">operations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">new_column_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_generated_column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">arbitrary_types_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;operations&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_operations</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">operations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate operations structure.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">operations</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one operation must be specified&quot;</span><span class="p">)</span>
+
+        <span class="n">supported_ops</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="s2">&quot;//&quot;</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">op_dict</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">operations</span><span class="p">):</span>
+            <span class="c1"># Check required keys</span>
+            <span class="k">if</span> <span class="s2">&quot;column&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">op_dict</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operation </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: &#39;column&#39; key is required&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;op&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">op_dict</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operation </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: &#39;op&#39; key is required&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;scalar&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">op_dict</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operation </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: &#39;scalar&#39; key is required&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Validate operator</span>
+            <span class="k">if</span> <span class="n">op_dict</span><span class="p">[</span><span class="s2">&quot;op&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_ops</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Operation </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: operator &#39;</span><span class="si">{</span><span class="n">op_dict</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; not supported. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Supported operators: </span><span class="si">{</span><span class="n">supported_ops</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Validate scalar is numeric</span>
+            <span class="n">scalar</span> <span class="o">=</span> <span class="n">op_dict</span><span class="p">[</span><span class="s2">&quot;scalar&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scalar</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Operation </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: &#39;scalar&#39; must be numeric (int or float), &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">operations</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;new_column_names&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_new_column_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_column_names</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that new_column_names length matches operations length.&quot;&quot;&quot;</span>
+        <span class="c1"># If None, auto-naming will be used</span>
+        <span class="k">if</span> <span class="n">new_column_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_column_names</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">new_column_names</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Column names list cannot be empty (use None for auto-naming)&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Check for duplicates</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Column names must be unique&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If operations are available in context, check length matches</span>
+        <span class="k">if</span> <span class="s2">&quot;operations&quot;</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">operations</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;operations&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">operations</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Number of column names (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span><span class="si">}</span><span class="s2">) must match &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;number of operations (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">operations</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">new_column_names</span>
+
+<div class="viewcode-block" id="ScalarMathFeatures.fit">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ScalarMathFeatures&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by generating column names if not provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame.</span>
+<span class="sd">        y : Optional[Any], default=None</span>
+<span class="sd">            Target variable. Not used, present here for compatibility.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ScalarMathFeatures</span>
+<span class="sd">            Fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Generate column names if not provided</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generated_column_names</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">op_dict</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">operations</span><span class="p">:</span>
+                <span class="n">column</span> <span class="o">=</span> <span class="n">op_dict</span><span class="p">[</span><span class="s2">&quot;column&quot;</span><span class="p">]</span>
+                <span class="n">op</span> <span class="o">=</span> <span class="n">op_dict</span><span class="p">[</span><span class="s2">&quot;op&quot;</span><span class="p">]</span>
+                <span class="n">scalar</span> <span class="o">=</span> <span class="n">op_dict</span><span class="p">[</span><span class="s2">&quot;scalar&quot;</span><span class="p">]</span>
+                <span class="n">op_name</span> <span class="o">=</span> <span class="n">OPERATOR_NAMES</span><span class="p">[</span><span class="n">op</span><span class="p">]</span>
+
+                <span class="c1"># Format scalar to avoid unnecessary decimals</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scalar</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">scalar</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">scalar</span><span class="p">):</span>
+                    <span class="n">formatted_scalar</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">scalar</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">formatted_scalar</span> <span class="o">=</span> <span class="n">scalar</span>
+
+                <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">op_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">formatted_scalar</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_generated_column_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generated_column_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="ScalarMathFeatures.transform">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the input DataFrame by creating new features from scalar operations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame to transform.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pl.DataFrame</span>
+<span class="sd">            Transformed DataFrame with new computed features (one per operation).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_columns</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Process each operation</span>
+        <span class="k">for</span> <span class="n">op_dict</span><span class="p">,</span> <span class="n">output_col_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generated_column_names</span>
+        <span class="p">):</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="n">op_dict</span><span class="p">[</span><span class="s2">&quot;column&quot;</span><span class="p">]</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">op_dict</span><span class="p">[</span><span class="s2">&quot;op&quot;</span><span class="p">]</span>
+            <span class="n">scalar</span> <span class="o">=</span> <span class="n">op_dict</span><span class="p">[</span><span class="s2">&quot;scalar&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Build operation expression</span>
+            <span class="n">expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_operation</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span>
+            <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">output_col_name</span><span class="p">))</span>
+
+        <span class="c1"># Add all new columns at once</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">new_columns</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">X</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_operation</span><span class="p">(</span><span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">scalar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a Polars expression for column-scalar operation.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;+&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">+</span> <span class="n">scalar</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">-</span> <span class="n">scalar</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">*</span> <span class="n">scalar</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">/</span> <span class="n">scalar</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;**&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">**</span> <span class="n">scalar</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;//&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">//</span> <span class="n">scalar</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;%&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">%</span> <span class="n">scalar</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported operator: </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

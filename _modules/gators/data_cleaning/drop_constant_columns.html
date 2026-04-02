@@ -1,0 +1,606 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gators.data_cleaning.drop_constant_columns &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/data_cleaning/drop_constant_columns';</script>
+    <link rel="icon" href="../../../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.data_cleaning.drop_constant_columns</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gators.data_cleaning.drop_constant_columns</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">PrivateAttr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+
+
+<div class="viewcode-block" id="DropConstantColumns">
+<a class="viewcode-back" href="../../../gators.data_cleaning.html#gators.data_cleaning.DropConstantColumns">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DropConstantColumns</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes columns that have only a single unique value (constant columns).</span>
+
+<span class="sd">    Identifies and removes columns with zero information content. More specific</span>
+<span class="sd">    than VarianceFilter (which only works on numerics) and faster than variance</span>
+<span class="sd">    calculation. Handles both numeric and categorical constant columns.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subset : Optional[List[str]], default=None</span>
+<span class="sd">        List of columns to check for constant values. If None, all columns</span>
+<span class="sd">        are checked.</span>
+<span class="sd">    include_na : bool, default=True</span>
+<span class="sd">        Whether to count NaN/null as a unique value. If True, a column with</span>
+<span class="sd">        all NaN is considered constant. If False, NaN values are ignored</span>
+<span class="sd">        when counting unique values.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    **Example 1: Remove constant numeric column**</span>
+
+<span class="sd">    &gt;&gt;&gt; from gators.data_cleaning import DropConstantColumns</span>
+<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
+<span class="sd">    ...     &#39;id&#39;: [1, 2, 3, 4, 5],</span>
+<span class="sd">    ...     &#39;constant_num&#39;: [42, 42, 42, 42, 42],</span>
+<span class="sd">    ...     &#39;varying&#39;: [10, 20, 30, 40, 50]</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; remover = DropConstantColumns()</span>
+<span class="sd">    &gt;&gt;&gt; result = remover.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (5, 2)</span>
+<span class="sd">    ┌─────┬─────────┐</span>
+<span class="sd">    │ id  ┆ varying │</span>
+<span class="sd">    │ --- ┆ ---     │</span>
+<span class="sd">    │ i64 ┆ i64     │</span>
+<span class="sd">    ├─────┼─────────┤</span>
+<span class="sd">    │ 1   ┆ 10      │</span>
+<span class="sd">    │ 2   ┆ 20      │</span>
+<span class="sd">    │ 3   ┆ 30      │</span>
+<span class="sd">    │ 4   ┆ 40      │</span>
+<span class="sd">    │ 5   ┆ 50      │</span>
+<span class="sd">    └─────┴─────────┘</span>
+
+<span class="sd">    **Example 2: Remove constant categorical column**</span>
+
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
+<span class="sd">    ...     &#39;country&#39;: [&#39;USA&#39;, &#39;USA&#39;, &#39;USA&#39;, &#39;USA&#39;],</span>
+<span class="sd">    ...     &#39;city&#39;: [&#39;NYC&#39;, &#39;LA&#39;, &#39;Chicago&#39;, &#39;Boston&#39;],</span>
+<span class="sd">    ...     &#39;status&#39;: [&#39;active&#39;, &#39;active&#39;, &#39;active&#39;, &#39;active&#39;]</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; remover = DropConstantColumns()</span>
+<span class="sd">    &gt;&gt;&gt; result = remover.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (4, 1)</span>
+<span class="sd">    ┌─────────┐</span>
+<span class="sd">    │ city    │</span>
+<span class="sd">    │ ---     │</span>
+<span class="sd">    │ str     │</span>
+<span class="sd">    ├─────────┤</span>
+<span class="sd">    │ NYC     │</span>
+<span class="sd">    │ LA      │</span>
+<span class="sd">    │ Chicago │</span>
+<span class="sd">    │ Boston  │</span>
+<span class="sd">    └─────────┘</span>
+
+<span class="sd">    **Example 3: Handle NaN values (with include_na=True)**</span>
+
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
+<span class="sd">    ...     &#39;all_null&#39;: [None, None, None],</span>
+<span class="sd">    ...     &#39;mixed&#39;: [1, None, 1],</span>
+<span class="sd">    ...     &#39;varying&#39;: [1, 2, 3]</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; remover = DropConstantColumns(include_na=True)</span>
+<span class="sd">    &gt;&gt;&gt; result = remover.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (3, 2)</span>
+<span class="sd">    ┌───────┬─────────┐</span>
+<span class="sd">    │ mixed ┆ varying │</span>
+<span class="sd">    │ ---   ┆ ---     │</span>
+<span class="sd">    │ i64   ┆ i64     │</span>
+<span class="sd">    ├───────┼─────────┤</span>
+<span class="sd">    │ 1     ┆ 1       │</span>
+<span class="sd">    │ null  ┆ 2       │</span>
+<span class="sd">    │ 1     ┆ 3       │</span>
+<span class="sd">    └───────┴─────────┘</span>
+
+<span class="sd">    **Example 4: Handle NaN values (with include_na=False)**</span>
+
+<span class="sd">    &gt;&gt;&gt; remover = DropConstantColumns(include_na=False)</span>
+<span class="sd">    &gt;&gt;&gt; result = remover.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (3, 1)</span>
+<span class="sd">    ┌─────────┐</span>
+<span class="sd">    │ varying │</span>
+<span class="sd">    │ ---     │</span>
+<span class="sd">    │ i64     │</span>
+<span class="sd">    ├─────────┤</span>
+<span class="sd">    │ 1       │</span>
+<span class="sd">    │ 2       │</span>
+<span class="sd">    │ 3       │</span>
+<span class="sd">    └─────────┘</span>
+
+<span class="sd">    **Example 5: Subset of columns**</span>
+
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
+<span class="sd">    ...     &#39;col1&#39;: [1, 1, 1],</span>
+<span class="sd">    ...     &#39;col2&#39;: [5, 5, 5],</span>
+<span class="sd">    ...     &#39;col3&#39;: [10, 20, 30]</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; remover = DropConstantColumns(subset=[&#39;col1&#39;, &#39;col2&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; result = remover.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (3, 1)</span>
+<span class="sd">    ┌──────┐</span>
+<span class="sd">    │ col3 │</span>
+<span class="sd">    │ ---  │</span>
+<span class="sd">    │ i64  │</span>
+<span class="sd">    ├──────┤</span>
+<span class="sd">    │ 10   │</span>
+<span class="sd">    │ 20   │</span>
+<span class="sd">    │ 30   │</span>
+<span class="sd">    └──────┘</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">subset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">include_na</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_to_drop</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DropConstantColumns.fit">
+<a class="viewcode-back" href="../../../gators.data_cleaning.html#gators.data_cleaning.DropConstantColumns.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DropConstantColumns&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by identifying constant columns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame.</span>
+<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">            Target variable. Not used, present here for compatibility.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DropConstantColumns</span>
+<span class="sd">            Fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Use all columns if not specified</span>
+        <span class="n">columns_to_check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_to_drop</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns_to_check</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_na</span><span class="p">:</span>
+                <span class="c1"># Count all unique values including NaN</span>
+                <span class="n">n_unique</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">n_unique</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Count unique values excluding NaN</span>
+                <span class="n">n_unique</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">drop_nulls</span><span class="p">()</span><span class="o">.</span><span class="n">n_unique</span><span class="p">()</span>
+
+            <span class="c1"># If only 1 unique value (or 0 when excluding NaN), it&#39;s constant</span>
+            <span class="k">if</span> <span class="n">n_unique</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_to_drop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="DropConstantColumns.transform">
+<a class="viewcode-back" href="../../../gators.data_cleaning.html#gators.data_cleaning.DropConstantColumns.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the DataFrame by removing constant columns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame to transform.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pl.DataFrame</span>
+<span class="sd">            Transformed DataFrame with constant columns removed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_drop</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_drop</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">X</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,911 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gators.feature_generation.condition_features &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/feature_generation/condition_features';</script>
+    <link rel="icon" href="../../../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.feature_generation.condition_features</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gators.feature_generation.condition_features</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+
+<span class="n">OPERATOR_NAMES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;gt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span> <span class="s2">&quot;lt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;&gt;=&quot;</span><span class="p">:</span> <span class="s2">&quot;gte&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;&lt;=&quot;</span><span class="p">:</span> <span class="s2">&quot;lte&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;==&quot;</span><span class="p">:</span> <span class="s2">&quot;eq&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;!=&quot;</span><span class="p">:</span> <span class="s2">&quot;ne&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;is_null&quot;</span><span class="p">:</span> <span class="s2">&quot;is_null&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;is_not_null&quot;</span><span class="p">:</span> <span class="s2">&quot;is_not_null&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Unary operators that only use the column (no value or other_column needed)</span>
+<span class="n">UNARY_OPERATORS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;is_null&quot;</span><span class="p">,</span> <span class="s2">&quot;is_not_null&quot;</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="ConditionFeatures">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.ConditionFeatures">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConditionFeatures</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates multiple independent boolean features, one for each condition.</span>
+
+<span class="sd">    This transformer is designed for creating simple boolean flags without combination logic.</span>
+<span class="sd">    Each condition produces exactly one boolean output column. For combining multiple</span>
+<span class="sd">    conditions with AND/OR logic, use RuleFeatures instead.</span>
+
+<span class="sd">    **Use Cases:**</span>
+<span class="sd">    </span>
+<span class="sd">    - Create simple boolean flags (is_adult, is_weekend, is_premium, etc.)</span>
+<span class="sd">    - Materialize threshold-based features (is_high_value, is_frequent_user)</span>
+<span class="sd">    - Feature engineering: Generate independent indicator variables</span>
+<span class="sd">    - Fraud detection: Create simple risk flags before combining them</span>
+
+<span class="sd">    **When to Use:**</span>
+<span class="sd">    </span>
+<span class="sd">    - Need multiple independent boolean columns</span>
+<span class="sd">    - Each condition stands alone (no AND/OR combination needed)</span>
+<span class="sd">    - Want cleaner API than RuleFeatures for simple cases</span>
+<span class="sd">    - Building feature sets for downstream transformers</span>
+
+<span class="sd">    **When NOT to Use:**</span>
+<span class="sd">    </span>
+<span class="sd">    - Need to combine conditions with AND/OR (use RuleFeatures)</span>
+<span class="sd">    - One-off exploratory analysis (use Polars native expressions)</span>
+<span class="sd">    - Very simple cases with 1-2 conditions (just use .with_columns())</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    conditions : List[Dict[str, Any]]</span>
+<span class="sd">        List of condition dictionaries. Each condition creates one boolean output column.</span>
+
+<span class="sd">        Each condition dictionary must contain:</span>
+<span class="sd">        </span>
+<span class="sd">        - &#39;column&#39;: str - Name of the column to evaluate</span>
+<span class="sd">        - &#39;op&#39;: str - Comparison operator. Supported:</span>
+<span class="sd">        </span>
+<span class="sd">          * Binary: &#39;&gt;&#39;, &#39;&lt;&#39;, &#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;==&#39;, &#39;!=&#39; (require &#39;value&#39; or &#39;other_column&#39;)</span>
+<span class="sd">          * Unary: &#39;is_null&#39;, &#39;is_not_null&#39; (no &#39;value&#39; or &#39;other_column&#39; needed)</span>
+<span class="sd">          </span>
+<span class="sd">        - &#39;value&#39;: Any (optional) - Scalar value to compare the column against</span>
+<span class="sd">        - &#39;other_column&#39;: str (optional) - Name of another column to compare against</span>
+
+<span class="sd">        For binary operators: Either &#39;value&#39; or &#39;other_column&#39; must be specified, but not both.</span>
+<span class="sd">        For unary operators: Neither &#39;value&#39; nor &#39;other_column&#39; should be specified.</span>
+
+<span class="sd">        Examples::</span>
+<span class="sd">        </span>
+<span class="sd">            # Simple conditions:</span>
+<span class="sd">            [</span>
+<span class="sd">                {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;&gt;=&#39;, &#39;value&#39;: 18},</span>
+<span class="sd">                {&#39;column&#39;: &#39;amount&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;value&#39;: 1000}</span>
+<span class="sd">            ]</span>
+<span class="sd">            </span>
+<span class="sd">            # Column comparison:</span>
+<span class="sd">            [</span>
+<span class="sd">                {&#39;column&#39;: &#39;velocity_24h&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;other_column&#39;: &#39;velocity_7d&#39;}</span>
+<span class="sd">            ]</span>
+<span class="sd">            </span>
+<span class="sd">            # Null checks:</span>
+<span class="sd">            [</span>
+<span class="sd">                {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;is_null&#39;},</span>
+<span class="sd">                {&#39;column&#39;: &#39;email&#39;, &#39;op&#39;: &#39;is_not_null&#39;}</span>
+<span class="sd">            ]</span>
+
+<span class="sd">    new_column_names : Optional[List[str]], default=None</span>
+<span class="sd">        Names for the resulting boolean feature columns. If provided, must have the same</span>
+<span class="sd">        length as ``conditions``. If None, column names are auto-generated in the format:</span>
+<span class="sd">        </span>
+<span class="sd">        - Scalar comparison: ``{column}_{op_name}_{value}`` (e.g., &#39;age_gte_18&#39;)</span>
+<span class="sd">        - Column comparison: ``{column}_{op_name}_{other_column}`` (e.g., &#39;velocity_24h_gt_velocity_7d&#39;)</span>
+<span class="sd">        - Unary operation: ``{column}__{op_name}`` (e.g., &#39;age__is_null&#39;)</span>
+
+<span class="sd">        Operator name mapping: </span>
+<span class="sd">        </span>
+<span class="sd">        - &#39;&gt;&#39; -&gt; &#39;gt&#39;</span>
+<span class="sd">        - &#39;&lt;&#39; -&gt; &#39;lt&#39;</span>
+<span class="sd">        - &#39;&gt;=&#39; -&gt; &#39;gte&#39;</span>
+<span class="sd">        - &#39;&lt;=&#39; -&gt; &#39;lte&#39;</span>
+<span class="sd">        - &#39;==&#39; -&gt; &#39;eq&#39;</span>
+<span class="sd">        - &#39;!=&#39; -&gt; &#39;ne&#39;</span>
+<span class="sd">        - &#39;is_null&#39; -&gt; &#39;is_null&#39;</span>
+<span class="sd">        - &#39;is_not_null&#39; -&gt; &#39;is_not_null&#39;</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">    &gt;&gt;&gt; from gators.feature_generation import ConditionFeatures</span>
+
+<span class="sd">    &gt;&gt;&gt; X ={</span>
+<span class="sd">    ...     &#39;age&#39;: [15, 25, 30, 17, 45],</span>
+<span class="sd">    ...     &#39;amount&#39;: [100, 1500, 500, 200, 2000],</span>
+<span class="sd">    ...     &#39;family_size&#39;: [1, 3, 1, 4, 2],</span>
+<span class="sd">    ...     &#39;fare&#39;: [50, 75, 30, 100, 80]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame(X)</span>
+
+<span class="sd">    **Example 1: Create simple boolean flags**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = ConditionFeatures(</span>
+<span class="sd">    ...     conditions=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;&gt;=&#39;, &#39;value&#39;: 18},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;amount&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;value&#39;: 1000},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;family_size&#39;, &#39;op&#39;: &#39;==&#39;, &#39;value&#39;: 1}</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     new_column_names=[&#39;is_adult&#39;, &#39;is_high_amount&#39;, &#39;is_alone&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.select([&#39;age&#39;, &#39;amount&#39;, &#39;family_size&#39;, &#39;is_adult&#39;, &#39;is_high_amount&#39;, &#39;is_alone&#39;])</span>
+<span class="sd">    shape: (5, 6)</span>
+<span class="sd">    ┌─────┬────────┬─────────────┬──────────┬─────────────────┬──────────┐</span>
+<span class="sd">    │ age ┆ amount ┆ family_size ┆ is_adult ┆ is_high_amount  ┆ is_alone │</span>
+<span class="sd">    │ --- ┆ ---    ┆ ---         ┆ ---      ┆ ---             ┆ ---      │</span>
+<span class="sd">    │ i64 ┆ i64    ┆ i64         ┆ bool     ┆ bool            ┆ bool     │</span>
+<span class="sd">    ╞═════╪════════╪═════════════╪══════════╪═════════════════╪══════════╡</span>
+<span class="sd">    │ 15  ┆ 100    ┆ 1           ┆ false    ┆ false           ┆ true     │</span>
+<span class="sd">    │ 25  ┆ 1500   ┆ 3           ┆ true     ┆ true            ┆ false    │</span>
+<span class="sd">    │ 30  ┆ 500    ┆ 1           ┆ true     ┆ false           ┆ true     │</span>
+<span class="sd">    │ 17  ┆ 200    ┆ 4           ┆ false    ┆ false           ┆ false    │</span>
+<span class="sd">    │ 45  ┆ 2000   ┆ 2           ┆ true     ┆ true            ┆ false    │</span>
+<span class="sd">    └─────┴────────┴─────────────┴──────────┴─────────────────┴──────────┘</span>
+
+<span class="sd">    **Example 2: Column-to-column comparison**</span>
+
+<span class="sd">    &gt;&gt;&gt; fare_X ={</span>
+<span class="sd">    ...     &#39;fare&#39;: [50.0, 100.0, 30.0, 200.0, 80.0],</span>
+<span class="sd">    ...     &#39;fare_per_person&#39;: [50.0, 33.3, 30.0, 50.0, 40.0]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; fare_X = pl.DataFrame(fare_data)</span>
+<span class="sd">    &gt;&gt;&gt; fare_transformer = ConditionFeatures(</span>
+<span class="sd">    ...     conditions=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;fare&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;value&#39;: 100},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;fare_per_person&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;other_column&#39;: &#39;fare&#39;}</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     new_column_names=[&#39;is_expensive&#39;, &#39;paid_more_per_person&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = fare_transformer.fit_transform(fare_X)</span>
+<span class="sd">    &gt;&gt;&gt; result</span>
+<span class="sd">    shape: (5, 4)</span>
+<span class="sd">    ┌───────┬──────────────────┬──────────────┬──────────────────────┐</span>
+<span class="sd">    │ fare  ┆ fare_per_person  ┆ is_expensive ┆ paid_more_per_person │</span>
+<span class="sd">    │ ---   ┆ ---              ┆ ---          ┆ ---                  │</span>
+<span class="sd">    │ f64   ┆ f64              ┆ bool         ┆ bool                 │</span>
+<span class="sd">    ╞═══════╪══════════════════╪══════════════╪══════════════════════╡</span>
+<span class="sd">    │ 50.0  ┆ 50.0             ┆ false        ┆ false                │</span>
+<span class="sd">    │ 100.0 ┆ 33.3             ┆ false        ┆ false                │</span>
+<span class="sd">    │ 30.0  ┆ 30.0             ┆ false        ┆ false                │</span>
+<span class="sd">    │ 200.0 ┆ 50.0             ┆ true         ┆ false                │</span>
+<span class="sd">    │ 80.0  ┆ 40.0             ┆ false        ┆ false                │</span>
+<span class="sd">    └───────┴──────────────────┴──────────────┴──────────────────────┘</span>
+
+<span class="sd">    **Example 3: Titanic-style feature engineering**</span>
+
+<span class="sd">    &gt;&gt;&gt; titanic_X ={</span>
+<span class="sd">    ...     &#39;Age&#39;: [22.0, 38.0, 26.0, 35.0, 12.0],</span>
+<span class="sd">    ...     &#39;Pclass&#39;: [3, 1, 3, 1, 3],</span>
+<span class="sd">    ...     &#39;SibSp&#39;: [1, 1, 0, 1, 0],</span>
+<span class="sd">    ...     &#39;Parch&#39;: [0, 0, 0, 0, 1]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; titanic_X = pl.DataFrame(titanic_data)</span>
+<span class="sd">    &gt;&gt;&gt; # First add family_size</span>
+<span class="sd">    &gt;&gt;&gt; titanic_X = titanic_X.with_columns(</span>
+<span class="sd">    ...     (pl.col(&#39;SibSp&#39;) + pl.col(&#39;Parch&#39;)).alias(&#39;family_size&#39;)</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; titanic_transformer = ConditionFeatures(</span>
+<span class="sd">    ...     conditions=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Age&#39;, &#39;op&#39;: &#39;&lt;&#39;, &#39;value&#39;: 18},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;Pclass&#39;, &#39;op&#39;: &#39;==&#39;, &#39;value&#39;: 1},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;family_size&#39;, &#39;op&#39;: &#39;==&#39;, &#39;value&#39;: 0}</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     new_column_names=[&#39;is_child&#39;, &#39;is_first_class&#39;, &#39;is_alone&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = titanic_transformer.fit_transform(titanic_X)</span>
+<span class="sd">    &gt;&gt;&gt; result.select([&#39;Age&#39;, &#39;Pclass&#39;, &#39;family_size&#39;, &#39;is_child&#39;, &#39;is_first_class&#39;, &#39;is_alone&#39;])</span>
+<span class="sd">    shape: (5, 6)</span>
+<span class="sd">    ┌──────┬────────┬─────────────┬──────────┬────────────────┬──────────┐</span>
+<span class="sd">    │ Age  ┆ Pclass ┆ family_size ┆ is_child ┆ is_first_class ┆ is_alone │</span>
+<span class="sd">    │ ---  ┆ ---    ┆ ---         ┆ ---      ┆ ---            ┆ ---      │</span>
+<span class="sd">    │ f64  ┆ i64    ┆ i64         ┆ bool     ┆ bool           ┆ bool     │</span>
+<span class="sd">    ╞══════╪════════╪═════════════╪══════════╪════════════════╪══════════╡</span>
+<span class="sd">    │ 22.0 ┆ 3      ┆ 1           ┆ false    ┆ false          ┆ false    │</span>
+<span class="sd">    │ 38.0 ┆ 1      ┆ 1           ┆ false    ┆ true           ┆ false    │</span>
+<span class="sd">    │ 26.0 ┆ 3      ┆ 0           ┆ false    ┆ false          ┆ true     │</span>
+<span class="sd">    │ 35.0 ┆ 1      ┆ 1           ┆ false    ┆ true           ┆ false    │</span>
+<span class="sd">    │ 12.0 ┆ 3      ┆ 1           ┆ true     ┆ false          ┆ false    │</span>
+<span class="sd">    └──────┴────────┴─────────────┴──────────┴────────────────┴──────────┘</span>
+
+<span class="sd">    **Example 4: Auto-generated column names**</span>
+
+<span class="sd">    &gt;&gt;&gt; auto_transformer = ConditionFeatures(</span>
+<span class="sd">    ...     conditions=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;&gt;=&#39;, &#39;value&#39;: 18},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;amount&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;value&#39;: 1000},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;family_size&#39;, &#39;op&#39;: &#39;==&#39;, &#39;value&#39;: 1}</span>
+<span class="sd">    ...     ]</span>
+<span class="sd">    ...     # new_column_names not specified - will be auto-generated</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = auto_transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.select([&#39;age&#39;, &#39;amount&#39;, &#39;family_size&#39;, &#39;age_gte_18&#39;, &#39;amount_gt_1000&#39;, &#39;family_size_eq_1&#39;])</span>
+<span class="sd">    shape: (5, 6)</span>
+<span class="sd">    ┌─────┬────────┬─────────────┬────────────┬────────────────┬──────────────────┐</span>
+<span class="sd">    │ age ┆ amount ┆ family_size ┆ age_gte_18 ┆ amount_gt_1000 ┆ family_size_eq_1 │</span>
+<span class="sd">    │ --- ┆ ---    ┆ ---         ┆ ---        ┆ ---            ┆ ---              │</span>
+<span class="sd">    │ i64 ┆ i64    ┆ i64         ┆ bool       ┆ bool           ┆ bool             │</span>
+<span class="sd">    ╞═════╪════════╪═════════════╪════════════╪════════════════╪══════════════════╡</span>
+<span class="sd">    │ 15  ┆ 100    ┆ 1           ┆ false      ┆ false          ┆ true             │</span>
+<span class="sd">    │ 25  ┆ 1500   ┆ 3           ┆ true       ┆ true           ┆ false            │</span>
+<span class="sd">    │ 30  ┆ 500    ┆ 1           ┆ true       ┆ false          ┆ true             │</span>
+<span class="sd">    │ 17  ┆ 200    ┆ 4           ┆ false      ┆ false          ┆ false            │</span>
+<span class="sd">    │ 45  ┆ 2000   ┆ 2           ┆ true       ┆ true           ┆ false            │</span>
+<span class="sd">    └─────┴────────┴─────────────┴────────────┴────────────────┴──────────────────┘</span>
+
+<span class="sd">    **Example 5: Null checks (unary operators)**</span>
+
+<span class="sd">    &gt;&gt;&gt; data_with_nulls = {</span>
+<span class="sd">    ...     &#39;age&#39;: [25, None, 30, 17, None],</span>
+<span class="sd">    ...     &#39;email&#39;: [&#39;a@test.com&#39;, &#39;b@test.com&#39;, None, &#39;d@test.com&#39;, None],</span>
+<span class="sd">    ...     &#39;amount&#39;: [100, 1500, 500, 200, 2000]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; X_nulls = pl.DataFrame(data_with_nulls)</span>
+<span class="sd">    &gt;&gt;&gt; null_transformer = ConditionFeatures(</span>
+<span class="sd">    ...     conditions=[</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;is_null&#39;},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;email&#39;, &#39;op&#39;: &#39;is_not_null&#39;},</span>
+<span class="sd">    ...         {&#39;column&#39;: &#39;amount&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;value&#39;: 1000}</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     new_column_names=[&#39;age_missing&#39;, &#39;has_email&#39;, &#39;is_high_amount&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = null_transformer.fit_transform(X_nulls)</span>
+<span class="sd">    &gt;&gt;&gt; result</span>
+<span class="sd">    shape: (5, 6)</span>
+<span class="sd">    ┌──────┬─────────────┬────────┬─────────────┬───────────┬─────────────────┐</span>
+<span class="sd">    │ age  ┆ email       ┆ amount ┆ age_missing ┆ has_email ┆ is_high_amount  │</span>
+<span class="sd">    │ ---  ┆ ---         ┆ ---    ┆ ---         ┆ ---       ┆ ---             │</span>
+<span class="sd">    │ i64  ┆ str         ┆ i64    ┆ bool        ┆ bool      ┆ bool            │</span>
+<span class="sd">    ╞══════╪═════════════╪════════╪═════════════╪═══════════╪═════════════════╡</span>
+<span class="sd">    │ 25   ┆ a@test.com  ┆ 100    ┆ false       ┆ true      ┆ false           │</span>
+<span class="sd">    │ null ┆ b@test.com  ┆ 1500   ┆ true        ┆ true      ┆ true            │</span>
+<span class="sd">    │ 30   ┆ null        ┆ 500    ┆ false       ┆ false     ┆ false           │</span>
+<span class="sd">    │ 17   ┆ d@test.com  ┆ 200    ┆ false       ┆ true      ┆ false           │</span>
+<span class="sd">    │ null ┆ null        ┆ 2000   ┆ true        ┆ false     ┆ true            │</span>
+<span class="sd">    └──────┴─────────────┴────────┴─────────────┴───────────┴─────────────────┘</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Each condition produces exactly one independent boolean column</span>
+<span class="sd">    - Auto-naming: If new_column_names is None, names are auto-generated as:</span>
+<span class="sd">      * Scalar: `{column}_{op_name}_{value}` (e.g., &#39;age_gte_18&#39;)</span>
+<span class="sd">      * Column-to-column: `{column}_{op_name}_{other_column}` (e.g., &#39;velocity_24h_gt_velocity_7d&#39;)</span>
+<span class="sd">      * Unary: `{column}__{op_name}` (e.g., &#39;age__is_null&#39;)</span>
+<span class="sd">    - No combination logic - use RuleFeatures if you need AND/OR</span>
+<span class="sd">    - Simpler API than RuleFeatures for common use cases</span>
+<span class="sd">    - Missing values (null) in comparisons typically result in null/false</span>
+<span class="sd">    - Unary operators &#39;is_null&#39; and &#39;is_not_null&#39; explicitly check for null values</span>
+<span class="sd">    - Can be used as preprocessing step before RuleFeatures for complex logic</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    RuleFeatures : For combining multiple conditions with AND/OR logic</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">new_column_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_generated_column_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">arbitrary_types_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;conditions&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_conditions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">conditions</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate conditions structure.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conditions</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one condition must be specified&quot;</span><span class="p">)</span>
+
+        <span class="n">supported_ops</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="s2">&quot;!=&quot;</span><span class="p">,</span> <span class="s2">&quot;is_null&quot;</span><span class="p">,</span> <span class="s2">&quot;is_not_null&quot;</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cond</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">conditions</span><span class="p">):</span>
+            <span class="c1"># Check required keys</span>
+            <span class="k">if</span> <span class="s2">&quot;column&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Condition </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: &#39;column&#39; key is required&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;op&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Condition </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: &#39;op&#39; key is required&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Validate operator</span>
+            <span class="k">if</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;op&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_ops</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Condition </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: operator &#39;</span><span class="si">{</span><span class="n">cond</span><span class="p">[</span><span class="s1">&#39;op&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; not supported. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Supported operators: </span><span class="si">{</span><span class="n">supported_ops</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Check value/other_column requirements based on operator type</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;op&quot;</span><span class="p">]</span>
+            <span class="n">has_value</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span> <span class="ow">in</span> <span class="n">cond</span>
+            <span class="n">has_other_column</span> <span class="o">=</span> <span class="s2">&quot;other_column&quot;</span> <span class="ow">in</span> <span class="n">cond</span>
+
+            <span class="k">if</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">UNARY_OPERATORS</span><span class="p">:</span>
+                <span class="c1"># Unary operators should not have value or other_column</span>
+                <span class="k">if</span> <span class="n">has_value</span> <span class="ow">or</span> <span class="n">has_other_column</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Condition </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: unary operator &#39;</span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&#39; should not have &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;&#39;value&#39; or &#39;other_column&#39; specified&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Binary operators need exactly one of value or other_column</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">has_value</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">has_other_column</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Condition </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: must specify either &#39;value&#39; or &#39;other_column&#39;&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">has_value</span> <span class="ow">and</span> <span class="n">has_other_column</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Condition </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">: cannot specify both &#39;value&#39; and &#39;other_column&#39;&quot;</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">conditions</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;new_column_names&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_new_column_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_column_names</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that new_column_names length matches conditions length.&quot;&quot;&quot;</span>
+        <span class="c1"># If None, auto-naming will be used</span>
+        <span class="k">if</span> <span class="n">new_column_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_column_names</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">new_column_names</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Column names list cannot be empty (use None for auto-naming)&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Check for duplicates</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Column names must be unique&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If conditions are available in context, check length matches</span>
+        <span class="k">if</span> <span class="s2">&quot;conditions&quot;</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">conditions</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">conditions</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Number of column names (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span><span class="si">}</span><span class="s2">) must match &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;number of conditions (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">new_column_names</span>
+
+<div class="viewcode-block" id="ConditionFeatures.fit">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.ConditionFeatures.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ConditionFeatures&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by generating column names if not provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame.</span>
+<span class="sd">        y : Optional[Any], default=None</span>
+<span class="sd">            Target variable. Not used, present here for compatibility.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ConditionFeatures</span>
+<span class="sd">            Fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Generate column names if not provided</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generated_column_names</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">cond</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditions</span><span class="p">:</span>
+                <span class="n">column</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;column&quot;</span><span class="p">]</span>
+                <span class="n">op</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;op&quot;</span><span class="p">]</span>
+                <span class="n">op_name</span> <span class="o">=</span> <span class="n">OPERATOR_NAMES</span><span class="p">[</span><span class="n">op</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">UNARY_OPERATORS</span><span class="p">:</span>
+                    <span class="c1"># Unary operators: just column and operator</span>
+                    <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">op_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">elif</span> <span class="s2">&quot;other_column&quot;</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">:</span>
+                    <span class="c1"># Column-to-column comparison</span>
+                    <span class="n">other_col</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;other_column&quot;</span><span class="p">]</span>
+                    <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">op_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">other_col</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Scalar comparison</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+                    <span class="c1"># Format value to avoid unnecessary decimals</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                        <span class="n">formatted_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">formatted_value</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">op_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">formatted_value</span><span class="si">}</span><span class="s2">&quot;</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_generated_column_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_generated_column_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="ConditionFeatures.transform">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.ConditionFeatures.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the input DataFrame by creating boolean features for each condition.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame to transform.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pl.DataFrame</span>
+<span class="sd">            Transformed DataFrame with new boolean features (one per condition).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_columns</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Process each condition</span>
+        <span class="k">for</span> <span class="n">cond</span><span class="p">,</span> <span class="n">output_col_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conditions</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generated_column_names</span><span class="p">):</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;column&quot;</span><span class="p">]</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;op&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Build condition expression</span>
+            <span class="k">if</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">UNARY_OPERATORS</span><span class="p">:</span>
+                <span class="c1"># Unary operation (is_null, is_not_null)</span>
+                <span class="n">expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_unary_operation</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;other_column&quot;</span> <span class="ow">in</span> <span class="n">cond</span><span class="p">:</span>
+                <span class="c1"># Column to column comparison</span>
+                <span class="n">other_col</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;other_column&quot;</span><span class="p">]</span>
+                <span class="n">expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_column_comparison</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">other_col</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Column to scalar comparison</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">cond</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+                <span class="n">expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_scalar_comparison</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+            <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">output_col_name</span><span class="p">))</span>
+
+        <span class="c1"># Add all new columns at once</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">new_columns</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">X</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_column_comparison</span><span class="p">(</span><span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">other_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a Polars expression for column-to-column comparison.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">other_column</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">other_column</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">other_column</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">other_column</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;==&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">other_column</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;!=&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">!=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">other_column</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported operator: </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_unary_operation</span><span class="p">(</span><span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a Polars expression for unary operations (is_null, is_not_null).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;is_null&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span><span class="o">.</span><span class="n">is_null</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;is_not_null&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span><span class="o">.</span><span class="n">is_not_null</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported unary operator: </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_scalar_comparison</span><span class="p">(</span><span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a Polars expression for column-to-scalar comparison.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;==&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;!=&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported operator: </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

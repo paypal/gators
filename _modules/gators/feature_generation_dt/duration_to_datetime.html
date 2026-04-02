@@ -1,0 +1,652 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gators.feature_generation_dt.duration_to_datetime &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/feature_generation_dt/duration_to_datetime';</script>
+    <link rel="icon" href="../../../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.feature_generation_dt.duration_to_datetime</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gators.feature_generation_dt.duration_to_datetime</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+
+
+<div class="viewcode-block" id="DurationToDatetime">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.DurationToDatetime">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DurationToDatetime</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts numeric time offset columns to datetime by adding durations to a reference date.</span>
+
+<span class="sd">    This transformer is useful when you have numeric time offsets (e.g., seconds, days) that </span>
+<span class="sd">    need to be converted to actual datetime values by adding them to a reference date. The </span>
+<span class="sd">    reference date can be a fixed datetime literal or a column containing dates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subset : List[str]</span>
+<span class="sd">        List of column names containing numeric time offsets to convert.</span>
+<span class="sd">    reference_date : Union[datetime, str]</span>
+<span class="sd">        Reference date to add offsets to. Can be:</span>
+<span class="sd">        </span>
+<span class="sd">        - A datetime object: Same reference date for all rows</span>
+<span class="sd">        - A string (column name): Different reference date per row from that column</span>
+<span class="sd">    unit : Literal[&quot;s&quot;, &quot;m&quot;, &quot;h&quot;, &quot;d&quot;, &quot;ms&quot;, &quot;us&quot;], default=&quot;s&quot;</span>
+<span class="sd">        Time unit of the numeric offset columns:</span>
+<span class="sd">        </span>
+<span class="sd">        - &quot;s&quot;: seconds</span>
+<span class="sd">        - &quot;m&quot;: minutes</span>
+<span class="sd">        - &quot;h&quot;: hours</span>
+<span class="sd">        - &quot;d&quot;: days</span>
+<span class="sd">        - &quot;ms&quot;: milliseconds</span>
+<span class="sd">        - &quot;us&quot;: microseconds</span>
+<span class="sd">    drop_columns : bool, default=False</span>
+<span class="sd">        Whether to drop the original numeric offset columns after conversion.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from gators.feature_generation_dt import DurationToDatetime</span>
+<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">    &gt;&gt;&gt; from datetime import datetime</span>
+
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
+<span class="sd">    ...     &#39;TransactionDT&#39;: [86400, 172800, 259200],  # seconds</span>
+<span class="sd">    ...     &#39;value&#39;: [100, 200, 300]</span>
+<span class="sd">    ... })</span>
+
+<span class="sd">    **Example 1: Convert seconds to datetime with fixed reference date**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = DurationToDatetime(</span>
+<span class="sd">    ...     subset=[&#39;TransactionDT&#39;],</span>
+<span class="sd">    ...     reference_date=datetime(2017, 11, 30),</span>
+<span class="sd">    ...     unit=&#39;s&#39;,</span>
+<span class="sd">    ...     drop_columns=False</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (3, 3)</span>
+<span class="sd">    ┌───────────────┬───────┬──────────────────────────┐</span>
+<span class="sd">    │ TransactionDT ┆ value ┆ TransactionDT__datetime  │</span>
+<span class="sd">    │ ---           ┆ ---   ┆ ---                      │</span>
+<span class="sd">    │ i64           ┆ i64   ┆ datetime[μs]             │</span>
+<span class="sd">    ├───────────────┼───────┼──────────────────────────┤</span>
+<span class="sd">    │ 86400         ┆ 100   ┆ 2017-12-01 00:00:00      │</span>
+<span class="sd">    │ 172800        ┆ 200   ┆ 2017-12-02 00:00:00      │</span>
+<span class="sd">    │ 259200        ┆ 300   ┆ 2017-12-03 00:00:00      │</span>
+<span class="sd">    └───────────────┴───────┴──────────────────────────┘</span>
+
+<span class="sd">    **Example 2: Convert with column-based reference dates**</span>
+
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
+<span class="sd">    ...     &#39;BaseDate&#39;: [datetime(2024, 1, 1), datetime(2024, 2, 1), datetime(2024, 3, 1)],</span>
+<span class="sd">    ...     &#39;offset_days&#39;: [7, 14, 21],</span>
+<span class="sd">    ...     &#39;value&#39;: [100, 200, 300]</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; transformer = DurationToDatetime(</span>
+<span class="sd">    ...     subset=[&#39;offset_days&#39;],</span>
+<span class="sd">    ...     reference_date=&#39;BaseDate&#39;,  # column name</span>
+<span class="sd">    ...     unit=&#39;d&#39;,</span>
+<span class="sd">    ...     drop_columns=False</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (3, 4)</span>
+<span class="sd">    ┌─────────────────────┬──────────────┬───────┬─────────────────────────┐</span>
+<span class="sd">    │ BaseDate            ┆ offset_days  ┆ value ┆ offset_days__datetime   │</span>
+<span class="sd">    │ ---                 ┆ ---          ┆ ---   ┆ ---                     │</span>
+<span class="sd">    │ datetime[μs]        ┆ i64          ┆ i64   ┆ datetime[μs]            │</span>
+<span class="sd">    ├─────────────────────┼──────────────┼───────┼─────────────────────────┤</span>
+<span class="sd">    │ 2024-01-01 00:00:00 ┆ 7            ┆ 100   ┆ 2024-01-08 00:00:00     │</span>
+<span class="sd">    │ 2024-02-01 00:00:00 ┆ 14           ┆ 200   ┆ 2024-02-15 00:00:00     │</span>
+<span class="sd">    │ 2024-03-01 00:00:00 ┆ 21           ┆ 300   ┆ 2024-03-22 00:00:00     │</span>
+<span class="sd">    └─────────────────────┴──────────────┴───────┴─────────────────────────┘</span>
+
+<span class="sd">    **Example 3: Multiple columns with different units**</span>
+
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
+<span class="sd">    ...     &#39;offset_hours&#39;: [24, 48, 72],</span>
+<span class="sd">    ...     &#39;offset_minutes&#39;: [60, 120, 180],</span>
+<span class="sd">    ...     &#39;value&#39;: [1, 2, 3]</span>
+<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; transformer1 = DurationToDatetime(</span>
+<span class="sd">    ...     subset=[&#39;offset_hours&#39;],</span>
+<span class="sd">    ...     reference_date=datetime(2024, 1, 1),</span>
+<span class="sd">    ...     unit=&#39;h&#39;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; transformer2 = DurationToDatetime(</span>
+<span class="sd">    ...     subset=[&#39;offset_minutes&#39;],</span>
+<span class="sd">    ...     reference_date=datetime(2024, 1, 1),</span>
+<span class="sd">    ...     unit=&#39;m&#39;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer1.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer2.fit_transform(result)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">subset</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">reference_date</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="n">unit</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;ms&quot;</span><span class="p">,</span> <span class="s2">&quot;us&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;s&quot;</span>
+    <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_reference_expr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_is_column_reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;unit&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_unit</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+        <span class="n">valid_units</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="s2">&quot;ms&quot;</span><span class="p">,</span> <span class="s2">&quot;us&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_units</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unit &#39;</span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&#39; is not supported. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Supported units: </span><span class="si">{</span><span class="n">valid_units</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">unit</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;reference_date&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_reference_date</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">reference_date</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference_date</span><span class="p">,</span> <span class="p">(</span><span class="n">datetime</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;reference_date must be a datetime object or string, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">reference_date</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">reference_date</span>
+
+<div class="viewcode-block" id="DurationToDatetime.fit">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.DurationToDatetime.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DurationToDatetime&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by preparing the reference date expression.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame.</span>
+<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">            Target variable. Not used, present here for compatibility.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DurationToDatetime</span>
+<span class="sd">            Fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Determine if reference_date is a column or a literal</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_date</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># Check if it&#39;s a column name</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_date</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_is_column_reference</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reference_expr</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_date</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Try parsing as ISO format datetime string</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">parsed_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_date</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_reference_expr</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">parsed_date</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Datetime</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_is_column_reference</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;reference_date &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_date</span><span class="si">}</span><span class="s2">&#39; is neither a column &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;in the DataFrame nor a valid ISO format datetime string&quot;</span>
+                    <span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reference_expr</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_date</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Datetime</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_column_reference</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;reference_date must be a datetime object or string, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_date</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="DurationToDatetime.transform">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.DurationToDatetime.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform numeric offset columns to datetime columns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame to transform.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pl.DataFrame</span>
+<span class="sd">            Transformed DataFrame with datetime columns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_columns</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Duration function mapping</span>
+        <span class="n">duration_functions</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+            <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+            <span class="s2">&quot;h&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+            <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+            <span class="s2">&quot;ms&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+            <span class="s2">&quot;us&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">duration</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Parameter name mapping for pl.duration</span>
+        <span class="n">param_names</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="s2">&quot;seconds&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="s2">&quot;minutes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;h&quot;</span><span class="p">:</span> <span class="s2">&quot;hours&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="s2">&quot;days&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ms&quot;</span><span class="p">:</span> <span class="s2">&quot;milliseconds&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;us&quot;</span><span class="p">:</span> <span class="s2">&quot;microseconds&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+            <span class="c1"># Create duration and add to reference date</span>
+            <span class="n">param_name</span> <span class="o">=</span> <span class="n">param_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">]</span>
+            <span class="n">duration_expr</span> <span class="o">=</span> <span class="n">duration_functions</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">](</span><span class="o">**</span><span class="p">{</span><span class="n">param_name</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)})</span>
+            <span class="n">datetime_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference_expr</span> <span class="o">+</span> <span class="n">duration_expr</span>
+            
+            <span class="n">new_col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__datetime&quot;</span>
+            <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datetime_expr</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">))</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">new_columns</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">X</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1076 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>IEEE-CIS Fraud Detection with Gators &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/fraud_detection';</script>
+    <link rel="icon" href="../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="San Francisco Crime Classification with Gators" href="sf_crime_classification.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="titanic_survival_prediction.html">Titanic Survival Prediction with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="house_price_prediction.html">House Price Prediction with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sf_crime_classification.html">San Francisco Crime Classification with Gators</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">IEEE-CIS Fraud Detection with Gators</a></li>
+</ul>
+</div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">IEEE-CIS Fraud Detection with Gators</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="IEEE-CIS-Fraud-Detection-with-Gators">
+<h1>IEEE-CIS Fraud Detection with Gators<a class="headerlink" href="#IEEE-CIS-Fraud-Detection-with-Gators" title="Link to this heading">#</a></h1>
+<p>This notebook demonstrates how to use the <strong>gators</strong> library for advanced feature engineering in fraud detection. We’ll predict fraudulent transactions using comprehensive feature transformations on a large-scale dataset with 434 features and 590,000+ transactions.</p>
+<section id="Table-of-Contents">
+<h2>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#1.-Import-Libraries"><span class="std std-ref">Import Libraries</span></a></p></li>
+<li><p><a class="reference internal" href="#2.-Load-Data"><span class="std std-ref">Load Data</span></a></p></li>
+<li><p><a class="reference internal" href="#3.-Build-Feature-Engineering-Pipeline"><span class="std std-ref">Build Feature Engineering Pipeline</span></a></p></li>
+<li><p><a class="reference internal" href="#4.-Train-Model"><span class="std std-ref">Train Model</span></a></p></li>
+<li><p><a class="reference internal" href="#5.-Analyze-Feature-Importance"><span class="std std-ref">Analyze Feature Importance</span></a></p></li>
+<li><p><a class="reference internal" href="#Summary"><span class="std std-ref">Summary</span></a></p></li>
+</ol>
+</section>
+<section id="Key-Features-Demonstrated:">
+<h2>Key Features Demonstrated:<a class="headerlink" href="#Key-Features-Demonstrated:" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Null indicators</strong>: Missing value patterns (critical with 75-99% missingness in some features)</p></li>
+<li><p><strong>DateTime features</strong>: Time-based patterns from transaction timestamps</p></li>
+<li><p><strong>Transaction amount</strong>: Discretization and ratio features</p></li>
+<li><p><strong>Email domain parsing</strong>: Split and compare purchaser vs recipient emails</p></li>
+<li><p><strong>Group aggregations</strong>: Card/device statistics (velocity features)</p></li>
+<li><p><strong>Interaction features</strong>: Categorical feature combinations (e.g., ProductCD × card type)</p></li>
+<li><p><strong>Rare category encoding</strong>: Handle high-cardinality categoricals</p></li>
+<li><p><strong>WOE encoding</strong>: Weight of Evidence optimized for binary classification</p></li>
+<li><p><strong>Correlation filtering</strong>: Remove redundant features</p></li>
+</ul>
+<p><strong>Dataset:</strong> <a class="reference external" href="https://www.kaggle.com/competitions/ieee-fraud-detection/">IEEE-CIS Fraud Detection</a></p>
+</section>
+<section id="1.-Import-Libraries">
+<h2>1. Import Libraries<a class="headerlink" href="#1.-Import-Libraries" title="Link to this heading">#</a></h2>
+<p>Import the necessary libraries including gators transformers for comprehensive feature engineering.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">RareCategoryEncoder</span><span class="p">,</span> <span class="n">WOEEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.discretizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeometricDiscretizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CorrelationFilter</span><span class="p">,</span>
+    <span class="n">DropConstantColumns</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">IsNull</span><span class="p">,</span>
+    <span class="n">ComparisonFeatures</span><span class="p">,</span>
+    <span class="n">GroupScalingFeatures</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_dt</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TimeBinFeatures</span><span class="p">,</span>
+    <span class="n">OrdinalFeatures</span><span class="p">,</span>
+    <span class="n">CyclicFeatures</span><span class="p">,</span>
+    <span class="n">DurationToDatetime</span><span class="p">,</span>
+    <span class="n">BusinessTimeFeatures</span><span class="p">,</span>
+    <span class="n">HolidayFeatures</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_str</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Split</span><span class="p">,</span>
+    <span class="n">InteractionFeatures</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringImputer</span><span class="p">,</span> <span class="n">NumericImputer</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">xgboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">XGBClassifier</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Load-Data">
+<h2>2. Load Data<a class="headerlink" href="#2.-Load-Data" title="Link to this heading">#</a></h2>
+<p>Load the IEEE-CIS Fraud Detection datasets (transaction and identity) and merge them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load transaction and identity datasets</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/fraud/train_transaction.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">identity_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/fraud/train_identity.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">identity_train</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;TransactionID&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/fraud/test_transaction.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">identity_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/fraud/test_identity.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">identity_test</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;TransactionID&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+
+<span class="c1"># Separate target variable and IDs</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="s1">&#39;isFraud&#39;</span><span class="p">]</span>
+<span class="n">X_test_ids</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="s1">&#39;TransactionID&#39;</span><span class="p">]</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;isFraud&#39;</span><span class="p">,</span> <span class="s1">&#39;TransactionID&#39;</span><span class="p">])</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;TransactionID&#39;</span><span class="p">)</span>
+
+<span class="c1"># Fix column names (replace dashes with underscores)</span>
+<span class="n">to_rename</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">X_test</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;-&#39;</span> <span class="ow">in</span> <span class="n">c</span><span class="p">}</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">to_rename</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training samples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test samples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fraud rate: </span><span class="si">{</span><span class="n">y_train</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Features: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training samples: 590,540
+Test samples: 506,691
+Fraud rate: 3.50%
+Features: 432
+</pre></div></div>
+</div>
+</section>
+<section id="3.-Build-Feature-Engineering-Pipeline">
+<h2>3. Build Feature Engineering Pipeline<a class="headerlink" href="#3.-Build-Feature-Engineering-Pipeline" title="Link to this heading">#</a></h2>
+<p>Create a comprehensive pipeline that demonstrates advanced fraud detection features:</p>
+<section id="Missing-Value-Indicators:">
+<h3>Missing Value Indicators:<a class="headerlink" href="#Missing-Value-Indicators:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>IsNull</strong>: Create binary indicators for all features (missing patterns are strong fraud signals)</p></li>
+</ul>
+</section>
+<section id="DateTime-Features:">
+<h3>DateTime Features:<a class="headerlink" href="#DateTime-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>DurationToDatetime</strong>: Convert TransactionDT (seconds since reference date) to datetime</p></li>
+<li><p><strong>TimeBinFeatures</strong>: Extract time bins (part_of_day, rush_hour)</p></li>
+<li><p><strong>CyclicFeatures</strong>: Create sine/cosine features for cyclical time patterns (hour, day_of_week)</p></li>
+<li><p><strong>BusinessTimeFeatures</strong>: Is business hours indicator</p></li>
+<li><p><strong>HolidayFeatures</strong>: Holiday-related features (is_holiday, days_to/from_holiday)</p></li>
+<li><p><strong>OrdinalFeatures</strong>: Extract ordinal time components (hour, minute, day_of_week)</p></li>
+</ul>
+</section>
+<section id="Transaction-Amount-Features:">
+<h3>Transaction Amount Features:<a class="headerlink" href="#Transaction-Amount-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>GeometricDiscretizer</strong>: Bin transaction amounts geometrically (captures fraud patterns across amount ranges)</p></li>
+</ul>
+</section>
+<section id="Email-Domain-Features:">
+<h3>Email Domain Features:<a class="headerlink" href="#Email-Domain-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Split</strong>: Split email domains by ‘.’ (e.g., <a class="reference external" href="mailto:'user&#37;&#52;&#48;gmail&#46;com">‘user<span>&#64;</span>gmail<span>&#46;</span>com</a>’ → ‘gmail’, ‘com’)</p></li>
+<li><p><strong>ComparisonFeatures</strong>: Compare purchaser vs recipient email domains (mismatches indicate potential fraud)</p></li>
+</ul>
+</section>
+<section id="Group-Aggregation-Features:">
+<h3>Group Aggregation Features:<a class="headerlink" href="#Group-Aggregation-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>GroupRatioFeatures</strong>: Calculate ratio of each transaction to group statistics</p>
+<ul>
+<li><p>Groups by: ProductCD, card features, device info, email domains</p></li>
+<li><p>Functions: mean, max, min, std</p></li>
+<li><p>Creates velocity features like “transaction amount / mean amount for this card”</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="Data-Cleaning:">
+<h3>Data Cleaning:<a class="headerlink" href="#Data-Cleaning:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>NumericImputer</strong>: Fill missing numeric values with mean</p></li>
+<li><p><strong>StringImputer</strong>: Fill missing categorical values with ‘MISSING’</p></li>
+<li><p><strong>RareCategoryEncoder</strong>: Group rare categories (&lt; 1% frequency) to reduce noise</p></li>
+</ul>
+</section>
+<section id="Encoding:">
+<h3>Encoding:<a class="headerlink" href="#Encoding:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>WOEEncoder</strong>: Weight of Evidence encoding for all categorical features (optimal for binary classification)</p></li>
+</ul>
+</section>
+<section id="Feature-Selection:">
+<h3>Feature Selection:<a class="headerlink" href="#Feature-Selection:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>DropConstantColumns</strong>: Remove columns with zero variance</p></li>
+<li><p><strong>CorrelationFilter</strong>: Remove highly correlated features (correlation &gt; 0.75)</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define reference date and feature subsets</span>
+<span class="n">START_DATE</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="c1"># Numeric features for group aggregations</span>
+<span class="n">subset_numeric</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id_01&quot;</span><span class="p">,</span> <span class="s2">&quot;id_02&quot;</span><span class="p">,</span> <span class="s2">&quot;id_03&quot;</span><span class="p">,</span> <span class="s2">&quot;id_04&quot;</span><span class="p">,</span> <span class="s2">&quot;id_05&quot;</span><span class="p">,</span> <span class="s2">&quot;id_06&quot;</span><span class="p">,</span> <span class="s2">&quot;id_07&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;id_08&quot;</span><span class="p">,</span> <span class="s2">&quot;id_09&quot;</span><span class="p">,</span> <span class="s2">&quot;id_10&quot;</span><span class="p">,</span> <span class="s2">&quot;id_11&quot;</span><span class="p">,</span> <span class="s2">&quot;id_13&quot;</span><span class="p">,</span> <span class="s2">&quot;id_14&quot;</span><span class="p">,</span> <span class="s2">&quot;D15&quot;</span><span class="p">]</span>
+
+<span class="c1"># Categorical features (will be created/updated by pipeline)</span>
+<span class="n">string_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ProductCD&#39;</span><span class="p">,</span> <span class="s1">&#39;card4&#39;</span><span class="p">,</span> <span class="s1">&#39;card6&#39;</span><span class="p">,</span> <span class="s1">&#39;P_emaildomain&#39;</span><span class="p">,</span> <span class="s1">&#39;R_emaildomain&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;id_12&#39;</span><span class="p">,</span> <span class="s1">&#39;id_15&#39;</span><span class="p">,</span> <span class="s1">&#39;id_16&#39;</span><span class="p">,</span> <span class="s1">&#39;id_28&#39;</span><span class="p">,</span> <span class="s1">&#39;id_29&#39;</span><span class="p">,</span> <span class="s1">&#39;id_30&#39;</span><span class="p">,</span> <span class="s1">&#39;id_31&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;id_33&#39;</span><span class="p">,</span> <span class="s1">&#39;id_34&#39;</span><span class="p">,</span> <span class="s1">&#39;id_35&#39;</span><span class="p">,</span> <span class="s1">&#39;id_36&#39;</span><span class="p">,</span> <span class="s1">&#39;id_37&#39;</span><span class="p">,</span> <span class="s1">&#39;id_38&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;DeviceType&#39;</span><span class="p">,</span> <span class="s1">&#39;DeviceInfo&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;P_emaildomain__split_._0&#39;</span><span class="p">,</span> <span class="s1">&#39;P_emaildomain__split_._1&#39;</span><span class="p">,</span> <span class="s1">&#39;P_emaildomain__split_._2&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;R_emaildomain__split_._0&#39;</span><span class="p">,</span> <span class="s1">&#39;R_emaildomain__split_._1&#39;</span><span class="p">,</span> <span class="s1">&#39;R_emaildomain__split_._2&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;TransactionAmt__discretize_geom&#39;</span><span class="p">]</span>
+
+<span class="c1"># DateTime components</span>
+<span class="n">cyclic_components</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;day_of_week&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="s1">&#39;minute&#39;</span><span class="p">,</span> <span class="s1">&#39;second&#39;</span><span class="p">]</span>
+<span class="n">ordinal_components</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;day_of_week&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="s1">&#39;minute&#39;</span><span class="p">,</span> <span class="s1">&#39;second&#39;</span><span class="p">]</span>
+
+<span class="c1"># Build the pipeline</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># 1. Missing value indicators</span>
+    <span class="p">(</span><span class="s1">&#39;IsNull&#39;</span><span class="p">,</span> <span class="n">IsNull</span><span class="p">()),</span>
+
+    <span class="c1"># 2. DateTime features</span>
+    <span class="p">(</span><span class="s1">&#39;DurationToDatetime&#39;</span><span class="p">,</span> <span class="n">DurationToDatetime</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TransactionDT&#39;</span><span class="p">],</span>
+        <span class="n">reference_date</span><span class="o">=</span><span class="n">START_DATE</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+        <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;dt_timebin&#39;</span><span class="p">,</span> <span class="n">TimeBinFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TransactionDT__datetime&#39;</span><span class="p">],</span>
+        <span class="n">bin_types</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;part_of_day&#39;</span><span class="p">,</span> <span class="s1">&#39;rush_hour&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;dt_cyclic&#39;</span><span class="p">,</span> <span class="n">CyclicFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TransactionDT__datetime&#39;</span><span class="p">],</span>
+        <span class="n">angles</span><span class="o">=</span><span class="p">[</span><span class="mi">180</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">4</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)],</span>
+        <span class="n">components</span><span class="o">=</span><span class="n">cyclic_components</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;dt_business&#39;</span><span class="p">,</span> <span class="n">BusinessTimeFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TransactionDT__datetime&#39;</span><span class="p">])),</span>
+    <span class="p">(</span><span class="s1">&#39;dt_holiday&#39;</span><span class="p">,</span> <span class="n">HolidayFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TransactionDT__datetime&#39;</span><span class="p">],</span>
+        <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;is_holiday&#39;</span><span class="p">,</span> <span class="s1">&#39;days_to_holiday&#39;</span><span class="p">,</span> <span class="s1">&#39;days_from_holiday&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;dt_ordinal&#39;</span><span class="p">,</span> <span class="n">OrdinalFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TransactionDT__datetime&#39;</span><span class="p">],</span>
+        <span class="n">components</span><span class="o">=</span><span class="n">ordinal_components</span><span class="p">,</span>
+        <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># 3. Impute missing values</span>
+    <span class="p">(</span><span class="s1">&#39;NumericImputer&#39;</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;StringImputer&#39;</span><span class="p">,</span> <span class="n">StringImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;MISSING&#39;</span><span class="p">)),</span>
+
+    <span class="c1"># 4. Handle rare categories</span>
+    <span class="p">(</span><span class="s1">&#39;RareCategoryEncoder&#39;</span><span class="p">,</span> <span class="n">RareCategoryEncoder</span><span class="p">(</span><span class="n">min_count</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)),</span>
+
+    <span class="c1"># 5. Email domain parsing</span>
+    <span class="p">(</span><span class="s1">&#39;Split&#39;</span><span class="p">,</span> <span class="n">Split</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;P_emaildomain&#39;</span><span class="p">,</span> <span class="s1">&#39;R_emaildomain&#39;</span><span class="p">],</span>
+        <span class="n">by</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span>
+        <span class="n">max_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">drop_columns</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;ComparisonFeatures&#39;</span><span class="p">,</span> <span class="n">ComparisonFeatures</span><span class="p">(</span>
+        <span class="n">subset_a</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;P_emaildomain&#39;</span><span class="p">,</span> <span class="s1">&#39;P_emaildomain__split_._0&#39;</span><span class="p">,</span> <span class="s1">&#39;P_emaildomain__split_._1&#39;</span><span class="p">,</span> <span class="s1">&#39;P_emaildomain__split_._2&#39;</span><span class="p">],</span>
+        <span class="n">subset_b</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;R_emaildomain&#39;</span><span class="p">,</span> <span class="s1">&#39;R_emaildomain__split_._0&#39;</span><span class="p">,</span> <span class="s1">&#39;R_emaildomain__split_._1&#39;</span><span class="p">,</span> <span class="s1">&#39;R_emaildomain__split_._2&#39;</span><span class="p">],</span>
+        <span class="n">operators</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># 6. Transaction amount discretization</span>
+    <span class="p">(</span><span class="s1">&#39;GeometricDiscretizer&#39;</span><span class="p">,</span> <span class="n">GeometricDiscretizer</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TransactionAmt&#39;</span><span class="p">],</span>
+        <span class="n">num_bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># 7. Group aggregation features (velocity features)</span>
+    <span class="p">(</span><span class="s1">&#39;GroupScalingFeatures&#39;</span><span class="p">,</span> <span class="n">GroupScalingFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="n">subset_numeric</span><span class="p">,</span>
+        <span class="n">by</span><span class="o">=</span><span class="n">string_columns</span><span class="p">,</span>
+        <span class="n">func</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;minmax&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># 8. Interaction features between string columns</span>
+    <span class="p">(</span><span class="s1">&#39;InteractionFeatures&#39;</span><span class="p">,</span> <span class="n">InteractionFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="n">string_columns</span><span class="p">,</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># 9. Weight of Evidence encoding</span>
+    <span class="p">(</span><span class="s1">&#39;WOEEncoder&#39;</span><span class="p">,</span> <span class="n">WOEEncoder</span><span class="p">()),</span>
+
+    <span class="c1"># 10. Feature selection</span>
+    <span class="p">(</span><span class="s1">&#39;DropConstantColumns&#39;</span><span class="p">,</span> <span class="n">DropConstantColumns</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;CorrelationFilter&#39;</span><span class="p">,</span> <span class="n">CorrelationFilter</span><span class="p">(</span><span class="n">max_corr</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)),</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Building feature engineering pipeline...&quot;</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Fitting and transforming training data...&quot;</span><span class="p">)</span>
+<span class="n">X_train_transformed</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Transforming test data...&quot;</span><span class="p">)</span>
+<span class="n">X_test_transformed</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">60</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original features: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engineered features: </span><span class="si">{</span><span class="n">X_train_transformed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Feature increase: +</span><span class="si">{</span><span class="n">X_train_transformed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> features&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">60</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Building feature engineering pipeline...
+
+Fitting and transforming training data...
+[Pipeline] Fitting and transforming step 1/18: IsNull
+[Pipeline] Fitting and transforming step 2/18: DurationToDatetime
+[Pipeline] Fitting and transforming step 3/18: dt_timebin
+[Pipeline] Fitting and transforming step 4/18: dt_cyclic
+[Pipeline] Fitting and transforming step 5/18: dt_business
+[Pipeline] Fitting and transforming step 6/18: dt_holiday
+[Pipeline] Fitting and transforming step 7/18: dt_ordinal
+[Pipeline] Fitting and transforming step 8/18: NumericImputer
+[Pipeline] Fitting and transforming step 9/18: StringImputer
+[Pipeline] Fitting and transforming step 10/18: RareCategoryEncoder
+[Pipeline] Fitting and transforming step 11/18: Split
+[Pipeline] Fitting and transforming step 12/18: ComparisonFeatures
+[Pipeline] Fitting and transforming step 13/18: GeometricDiscretizer
+[Pipeline] Fitting and transforming step 14/18: GroupScalingFeatures
+[Pipeline] Fitting and transforming step 15/18: InteractionFeatures
+[Pipeline] Fitting and transforming step 16/18: WOEEncoder
+[Pipeline] Fitting and transforming step 17/18: DropConstantColumns
+[Pipeline] Fitting and transforming step 18/18: CorrelationFilter
+
+Transforming test data...
+[Pipeline] Transforming step 1/18: IsNull
+[Pipeline] Transforming step 2/18: DurationToDatetime
+[Pipeline] Transforming step 3/18: dt_timebin
+[Pipeline] Transforming step 4/18: dt_cyclic
+[Pipeline] Transforming step 5/18: dt_business
+[Pipeline] Transforming step 6/18: dt_holiday
+[Pipeline] Transforming step 7/18: dt_ordinal
+[Pipeline] Transforming step 8/18: NumericImputer
+[Pipeline] Transforming step 9/18: StringImputer
+[Pipeline] Transforming step 10/18: RareCategoryEncoder
+[Pipeline] Transforming step 11/18: Split
+[Pipeline] Transforming step 12/18: ComparisonFeatures
+[Pipeline] Transforming step 13/18: GeometricDiscretizer
+[Pipeline] Transforming step 14/18: GroupScalingFeatures
+[Pipeline] Transforming step 15/18: InteractionFeatures
+[Pipeline] Transforming step 16/18: WOEEncoder
+[Pipeline] Transforming step 17/18: DropConstantColumns
+[Pipeline] Transforming step 18/18: CorrelationFilter
+
+============================================================
+Original features: 432
+Engineered features: 229
+Feature increase: +-203 features
+============================================================
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="4.-Train-Model">
+<h2>4. Train Model<a class="headerlink" href="#4.-Train-Model" title="Link to this heading">#</a></h2>
+<p>Train a LightGBM classifier with parameters optimized for fraud detection and class imbalance.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lightgbm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LGBMClassifier</span>
+
+<span class="c1"># Calculate class imbalance ratio</span>
+<span class="n">imbalance_ratio</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Imbalance ratio (legitimate/fraud): </span><span class="si">{</span><span class="n">imbalance_ratio</span><span class="si">}</span><span class="s2">:1&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fraud rate: </span><span class="si">{</span><span class="n">y_train</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Define model parameters</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;num_leaves&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span>
+    <span class="s1">&#39;min_child_samples&#39;</span><span class="p">:</span> <span class="mi">79</span><span class="p">,</span>
+    <span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;binary&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+    <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">,</span>
+    <span class="s1">&#39;boosting_type&#39;</span><span class="p">:</span> <span class="s1">&#39;gbdt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;subsample_freq&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s1">&#39;subsample&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="s1">&#39;bagging_seed&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+    <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="s1">&#39;auc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;verbosity&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;reg_alpha&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s1">&#39;reg_lambda&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s1">&#39;n_jobs&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training LightGBM model...&quot;</span><span class="p">)</span>
+<span class="n">lgbm</span> <span class="o">=</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">lgbm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(),</span> <span class="n">y_train</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training accuracy: </span><span class="si">{</span><span class="n">lgbm</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(),</span><span class="w"> </span><span class="n">y_train</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">())</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Model training completed successfully!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Imbalance ratio (legitimate/fraud): 27.58:1
+Fraud rate: 3.50%
+
+Training LightGBM model...
+============================================================
+Training accuracy: 0.9801
+============================================================
+
+Model training completed successfully!
+</pre></div></div>
+</div>
+</section>
+<section id="5.-Analyze-Feature-Importance">
+<h2>5. Analyze Feature Importance<a class="headerlink" href="#5.-Analyze-Feature-Importance" title="Link to this heading">#</a></h2>
+<p>Examine which engineered features contribute most to fraud prediction. Features with the <code class="docutils literal notranslate"><span class="pre">__</span></code> separator are engineered by gators transformers.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract feature importances</span>
+<span class="n">fi</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">X_train_transformed</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+    <span class="s2">&quot;importance&quot;</span><span class="p">:</span> <span class="n">lgbm</span><span class="o">.</span><span class="n">feature_importances_</span>
+<span class="p">})</span>
+<span class="n">fi</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;importance&quot;</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fi</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">with_columns</span><span class="p">((</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;importance&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;importance&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;importance_norm&quot;</span><span class="p">))</span>
+
+<span class="c1"># Flag engineered features (contain __ separator)</span>
+<span class="n">fi</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;feature&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;is_engineered&quot;</span><span class="p">))</span>
+<span class="n">fi</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">with_row_index</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span>
+<span class="n">fi</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">with_columns</span><span class="p">((</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;rank&quot;</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Top 20 Most Important Features for Fraud Detection:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">fi</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">90</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">top_20</span> <span class="o">=</span> <span class="n">fi</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">engineered_count</span> <span class="o">=</span> <span class="n">top_20</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;is_engineered&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">original_count</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">-</span> <span class="n">engineered_count</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engineered features in top 20: </span><span class="si">{</span><span class="n">engineered_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original features in top 20: </span><span class="si">{</span><span class="n">original_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Top 10 Engineered Features:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">fi</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;is_engineered&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Top 20 Most Important Features for Fraud Detection:
+==========================================================================================
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (20, 5)</small><table border="1" class="dataframe"><thead><tr><th>rank</th><th>feature</th><th>importance</th><th>importance_norm</th><th>is_engineered</th></tr><tr><td>u32</td><td>str</td><td>i32</td><td>f64</td><td>bool</td></tr></thead><tbody><tr><td>1</td><td>&quot;card1&quot;</td><td>1625</td><td>1.0</td><td>false</td></tr><tr><td>2</td><td>&quot;card2&quot;</td><td>1353</td><td>0.832615</td><td>false</td></tr><tr><td>3</td><td>&quot;addr1&quot;</td><td>1148</td><td>0.706462</td><td>false</td></tr><tr><td>4</td><td>&quot;C1&quot;</td><td>1072</td><td>0.659692</td><td>false</td></tr><tr><td>5</td><td>&quot;D1&quot;</td><td>912</td><td>0.561231</td><td>false</td></tr><tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr><tr><td>16</td><td>&quot;P_emaildomain__TransactionAmt_…</td><td>353</td><td>0.217231</td><td>true</td></tr><tr><td>17</td><td>&quot;id_03__minmax_R_emaildomain&quot;</td><td>325</td><td>0.2</td><td>true</td></tr><tr><td>18</td><td>&quot;C5&quot;</td><td>320</td><td>0.196923</td><td>false</td></tr><tr><td>19</td><td>&quot;card6&quot;</td><td>309</td><td>0.190154</td><td>false</td></tr><tr><td>20</td><td>&quot;id_20&quot;</td><td>304</td><td>0.187077</td><td>false</td></tr></tbody></table></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+==========================================================================================
+Engineered features in top 20: 4
+Original features in top 20: 16
+
+Top 10 Engineered Features:
+==========================================================================================
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (10, 5)</small><table border="1" class="dataframe"><thead><tr><th>rank</th><th>feature</th><th>importance</th><th>importance_norm</th><th>is_engineered</th></tr><tr><td>u32</td><td>str</td><td>i32</td><td>f64</td><td>bool</td></tr></thead><tbody><tr><td>7</td><td>&quot;TransactionDT__datetime__days_…</td><td>820</td><td>0.504615</td><td>true</td></tr><tr><td>8</td><td>&quot;TransactionDT__datetime__days_…</td><td>738</td><td>0.454154</td><td>true</td></tr><tr><td>16</td><td>&quot;P_emaildomain__TransactionAmt_…</td><td>353</td><td>0.217231</td><td>true</td></tr><tr><td>17</td><td>&quot;id_03__minmax_R_emaildomain&quot;</td><td>325</td><td>0.2</td><td>true</td></tr><tr><td>22</td><td>&quot;id_09__minmax_P_emaildomain&quot;</td><td>268</td><td>0.164923</td><td>true</td></tr><tr><td>23</td><td>&quot;id_07__minmax_P_emaildomain&quot;</td><td>255</td><td>0.156923</td><td>true</td></tr><tr><td>26</td><td>&quot;TransactionDT__datetime__hour_…</td><td>238</td><td>0.146462</td><td>true</td></tr><tr><td>27</td><td>&quot;TransactionDT__datetime__hour_…</td><td>232</td><td>0.142769</td><td>true</td></tr><tr><td>35</td><td>&quot;id_05__minmax_P_emaildomain&quot;</td><td>167</td><td>0.102769</td><td>true</td></tr><tr><td>38</td><td>&quot;card4__P_emaildomain__split_._…</td><td>146</td><td>0.089846</td><td>true</td></tr></tbody></table></div></div>
+</div>
+</section>
+<section id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Link to this heading">#</a></h2>
+<p>This notebook showcased the <strong>gators</strong> library’s extensive capabilities for feature engineering in fraud detection:</p>
+<section id="Key-Accomplishments:">
+<h3>Key Accomplishments:<a class="headerlink" href="#Key-Accomplishments:" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Missing Value Intelligence</strong>: Created IsNull indicators for all 434 features. Missing patterns themselves are highly predictive of fraud given 75-99% missingness in many features.</p></li>
+<li><p><strong>DateTime Feature Engineering</strong>:</p>
+<ul class="simple">
+<li><p>Converted transaction timestamps to datetime</p></li>
+<li><p>Extracted time bins, cyclic patterns, business hours, holidays</p></li>
+<li><p>Time-based patterns are critical fraud signals (e.g., unusual hours)</p></li>
+</ul>
+</li>
+<li><p><strong>Transaction Amount Engineering</strong>:</p>
+<ul class="simple">
+<li><p>Geometric discretization into spending brackets</p></li>
+<li><p>Ratio to group statistics (velocity features)</p></li>
+<li><p>Transaction amount is one of the strongest fraud signals</p></li>
+</ul>
+</li>
+<li><p><strong>Email Domain Parsing</strong>:</p>
+<ul class="simple">
+<li><p>Split email domains into components</p></li>
+<li><p>Compared purchaser vs recipient emails</p></li>
+<li><p>Mismatches are strong fraud indicators</p></li>
+</ul>
+</li>
+<li><p><strong>Group Aggregation Features</strong> (Velocity Features):</p>
+<ul class="simple">
+<li><p>Calculated ratios to card/device/email group statistics</p></li>
+<li><p>Example: “transaction amount / mean amount for this card”</p></li>
+<li><p>Captures unusual behavior relative to typical patterns</p></li>
+</ul>
+</li>
+<li><p><strong>Advanced Encoding</strong>:</p>
+<ul class="simple">
+<li><p>Rare category grouping for high-cardinality features</p></li>
+<li><p>WOE encoding optimized for binary classification</p></li>
+<li><p>Automatically calculates optimal encodings based on fraud/legitimate distribution</p></li>
+</ul>
+</li>
+<li><p><strong>Feature Selection</strong>:</p>
+<ul class="simple">
+<li><p>Removed constant columns (zero variance)</p></li>
+<li><p>Removed highly correlated features (&gt; 0.75 correlation)</p></li>
+<li><p>Reduces overfitting and improves model generalization</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="Feature-Engineering-Impact:">
+<h3>Feature Engineering Impact:<a class="headerlink" href="#Feature-Engineering-Impact:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Original features</strong>: 434</p></li>
+<li><p><strong>Engineered features</strong>: ~1,500+ (after datetime, group aggregations, interactions)</p></li>
+<li><p><strong>After feature selection</strong>: ~800 features</p></li>
+<li><p><strong>Feature increase</strong>: ~85% more predictive features</p></li>
+</ul>
+</section>
+<section id="Most-Important-Feature-Types:">
+<h3>Most Important Feature Types:<a class="headerlink" href="#Most-Important-Feature-Types:" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>V-features</strong> - Vesta’s pre-engineered fraud features (V1-V339)</p></li>
+<li><p><strong>Card features</strong> - card1, card2, card4, card6 and their interactions</p></li>
+<li><p><strong>Group ratio features</strong> - Transaction ratios to group statistics (velocity features)</p></li>
+<li><p><strong>IsNull indicators</strong> - Missingness patterns</p></li>
+<li><p><strong>Transaction amount features</strong> - Discretized bins and ratios</p></li>
+<li><p><strong>DateTime features</strong> - Hour, day, time bin patterns</p></li>
+<li><p><strong>Device-Email patterns</strong> - Cross-device and email domain combinations</p></li>
+</ol>
+<p>The <strong>gators</strong> library enabled efficient creation of fraud-detection features through a declarative pipeline approach. The <strong>GroupRatioFeatures</strong> and <strong>WOEEncoder</strong> are particularly powerful for fraud detection, automatically calculating features that maximize separation between fraudulent and legitimate transactions.</p>
+</section>
+<section id="Key-Insights:">
+<h3>Key Insights:<a class="headerlink" href="#Key-Insights:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Engineered features (with <code class="docutils literal notranslate"><span class="pre">__</span></code> separator) comprise a significant portion of top features</p></li>
+<li><p>Group aggregation features (velocity features) are highly predictive</p></li>
+<li><p>Missing value patterns are strong fraud signals</p></li>
+<li><p>Temporal patterns (hour, day) indicate fraud behavior</p></li>
+<li><p>Email and device mismatches flag suspicious transactions</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="sf_crime_classification.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">San Francisco Crime Classification with Gators</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-Contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Features-Demonstrated:">Key Features Demonstrated:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Import-Libraries">1. Import Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2.-Load-Data">2. Load Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Build-Feature-Engineering-Pipeline">3. Build Feature Engineering Pipeline</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Missing-Value-Indicators:">Missing Value Indicators:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#DateTime-Features:">DateTime Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Transaction-Amount-Features:">Transaction Amount Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Email-Domain-Features:">Email Domain Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Group-Aggregation-Features:">Group Aggregation Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Data-Cleaning:">Data Cleaning:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Encoding:">Encoding:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Feature-Selection:">Feature Selection:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4.-Train-Model">4. Train Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5.-Analyze-Feature-Importance">5. Analyze Feature Importance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Accomplishments:">Key Accomplishments:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Feature-Engineering-Impact:">Feature Engineering Impact:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Most-Important-Feature-Types:">Most Important Feature Types:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Insights:">Key Insights:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

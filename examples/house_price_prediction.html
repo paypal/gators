@@ -1,0 +1,933 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>House Price Prediction with Gators &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/house_price_prediction';</script>
+    <link rel="icon" href="../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="San Francisco Crime Classification with Gators" href="sf_crime_classification.html" />
+    <link rel="prev" title="Titanic Survival Prediction with Gators" href="titanic_survival_prediction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="titanic_survival_prediction.html">Titanic Survival Prediction with Gators</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">House Price Prediction with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sf_crime_classification.html">San Francisco Crime Classification with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fraud_detection.html">IEEE-CIS Fraud Detection with Gators</a></li>
+</ul>
+</div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">House Price Prediction with Gators</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="House-Price-Prediction-with-Gators">
+<h1>House Price Prediction with Gators<a class="headerlink" href="#House-Price-Prediction-with-Gators" title="Link to this heading">#</a></h1>
+<p>This notebook demonstrates how to use the <strong>gators</strong> library for feature engineering in a regression problem. We’ll predict house prices from the Kaggle House Prices dataset using various gators transformers.</p>
+<section id="Table-of-Contents">
+<h2>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#1.-Import-Libraries"><span class="std std-ref">Import Libraries</span></a></p></li>
+<li><p><a class="reference internal" href="#2.-Load-and-Preprocess-Data"><span class="std std-ref">Load and Preprocess Data</span></a></p></li>
+<li><p><a class="reference internal" href="#3.-Build-Feature-Engineering-Pipeline"><span class="std std-ref">Build Feature Engineering Pipeline</span></a></p></li>
+<li><p><a class="reference internal" href="#4.-Feature-Selection-with-Stability-Index"><span class="std std-ref">Feature Selection with Stability Index</span></a></p></li>
+<li><p><a class="reference internal" href="#5.-Train-Model-and-Evaluate"><span class="std std-ref">Train Model and Evaluate</span></a></p></li>
+<li><p><a class="reference internal" href="#6.-Generate-Predictions"><span class="std std-ref">Generate Predictions</span></a></p></li>
+<li><p><a class="reference internal" href="#Summary"><span class="std std-ref">Summary</span></a></p></li>
+</ol>
+</section>
+<section id="Key-Features-Demonstrated:">
+<h2>Key Features Demonstrated:<a class="headerlink" href="#Key-Features-Demonstrated:" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Data cleaning and type casting</p></li>
+<li><p>Missing value imputation (simple and group-based)</p></li>
+<li><p>Mathematical feature engineering (ratios, statistics)</p></li>
+<li><p>Feature encoding (one-hot and count encoding)</p></li>
+<li><p>Feature stability analysis for robust feature selection</p></li>
+<li><p>Regression modeling with XGBoost</p></li>
+</ul>
+<p><strong>Dataset:</strong> <a class="reference external" href="https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques">Kaggle House Prices - Advanced Regression Techniques</a></p>
+</section>
+<section id="1.-Import-Libraries">
+<h2>1. Import Libraries<a class="headerlink" href="#1.-Import-Libraries" title="Link to this heading">#</a></h2>
+<p>Import the necessary libraries including gators transformers for feature engineering.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="c1"># import pandas as pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">CountEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropColumns</span><span class="p">,</span> <span class="n">CastColumns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">MathFeatures</span><span class="p">,</span> <span class="n">RatioFeatures</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringImputer</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">,</span> <span class="n">GroupByImputer</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">root_mean_squared_error</span><span class="p">,</span> <span class="n">make_scorer</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">xgboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">XGBRegressor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_selection.feature_stability_index</span><span class="w"> </span><span class="kn">import</span> <span class="n">feature_stability_index</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Load-and-Preprocess-Data">
+<h2>2. Load and Preprocess Data<a class="headerlink" href="#2.-Load-and-Preprocess-Data" title="Link to this heading">#</a></h2>
+<p>Load the house prices dataset and perform initial data cleaning:</p>
+<ul class="simple">
+<li><p>Handle ‘NA’ string values as null</p></li>
+<li><p>Apply log transformation to the target (SalePrice) to normalize distribution</p></li>
+<li><p>Clean inconsistent category values</p></li>
+<li><p>Fix problematic year values in GarageYrBlt</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data with &#39;NA&#39; strings interpreted as null values</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/house/train.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NA&#39;</span><span class="p">])</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/house/test.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NA&#39;</span><span class="p">])</span>
+
+<span class="c1"># Apply log transformation to target variable for better distribution</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;SalePrice&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">))</span>
+<span class="c1"># target =</span>
+
+<span class="c1"># Drop ID column and constant features</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Id&#39;</span><span class="p">,</span> <span class="s1">&#39;Utilities&#39;</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="s2">&quot;SalePrice&quot;</span><span class="p">])</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Utilities&#39;</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_data</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean inconsistent values and fix data quality issues&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span>
+        <span class="c1"># Fix Exterior2nd inconsistent naming</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Exterior2nd&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;Brk Cmn&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s1">&#39;BrkComm&#39;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Exterior2nd&#39;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;Exterior2nd&#39;</span><span class="p">),</span>
+
+        <span class="c1"># Fix future GarageYrBlt values (replace with YearBuilt if &gt; 2010)</span>
+        <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;GarageYrBlt&#39;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2010</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;GarageYrBlt&#39;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;YearBuilt&#39;</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;GarageYrBlt&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">clean_data</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">clean_data</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training data shape: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test data shape: </span><span class="si">{</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training data shape: (1460, 78)
+Test data shape: (1459, 79)
+</pre></div></div>
+</div>
+</section>
+<section id="3.-Build-Feature-Engineering-Pipeline">
+<h2>3. Build Feature Engineering Pipeline<a class="headerlink" href="#3.-Build-Feature-Engineering-Pipeline" title="Link to this heading">#</a></h2>
+<p>The gators Pipeline orchestrates multiple feature transformers:</p>
+<section id="Data-Type-Management:">
+<h3>Data Type Management:<a class="headerlink" href="#Data-Type-Management:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>CastColumns</strong>: Convert boolean and numeric codes to strings for categorical encoding</p></li>
+</ul>
+</section>
+<section id="Missing-Value-Imputation:">
+<h3>Missing Value Imputation:<a class="headerlink" href="#Missing-Value-Imputation:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>StringImputer</strong>: Fill missing categorical values with constants or most frequent values</p></li>
+<li><p><strong>NumericImputer</strong>: Fill missing numeric values with constants (0 for counts/areas)</p></li>
+<li><p><strong>GroupByImputer</strong>: Fill missing values using group-based statistics (e.g., median by neighborhood)</p></li>
+</ul>
+</section>
+<section id="Feature-Engineering:">
+<h3>Feature Engineering:<a class="headerlink" href="#Feature-Engineering:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>RatioFeatures</strong>: Create ratio features (e.g., living area / lot area)</p></li>
+<li><p><strong>MathFeatures</strong>: Generate statistical features from related columns (sum, std, range, min, max)</p></li>
+</ul>
+</section>
+<section id="Encoding:">
+<h3>Encoding:<a class="headerlink" href="#Encoding:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>OneHotEncoder</strong>: Create binary indicator features for categories</p></li>
+<li><p><strong>CountEncoder</strong>: Replace categories with their frequency counts</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Identify columns by data type for appropriate transformations</span>
+<span class="n">dtypes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">dtypes</span><span class="p">))</span>
+<span class="n">boolean_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Boolean</span><span class="p">]</span>
+<span class="n">int8_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">UInt8</span><span class="p">]</span>
+<span class="n">columns_to_encode</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">dtypes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">]</span> <span class="o">+</span> <span class="n">boolean_columns</span>
+
+<span class="c1"># Numeric columns that should be treated as categories</span>
+<span class="n">num_columns_to_cast</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MSSubClass&#39;</span><span class="p">,</span> <span class="s1">&#39;OverallCond&#39;</span><span class="p">,</span> <span class="s1">&#39;YrSold&#39;</span><span class="p">,</span> <span class="s1">&#39;MoSold&#39;</span><span class="p">]</span>
+
+<span class="c1"># Build the pipeline</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Cast data types for proper handling</span>
+    <span class="p">(</span><span class="s1">&#39;cast_boolean_to_string&#39;</span><span class="p">,</span> <span class="n">CastColumns</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="n">boolean_columns</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;cast_num_to_string&#39;</span><span class="p">,</span> <span class="n">CastColumns</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="n">num_columns_to_cast</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;cast_int_to_float&#39;</span><span class="p">,</span> <span class="n">CastColumns</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="n">int8_columns</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Impute missing string values</span>
+    <span class="p">(</span><span class="s1">&#39;string_imputer_missing&#39;</span><span class="p">,</span> <span class="n">StringImputer</span><span class="p">(</span>
+        <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">=</span><span class="s1">&#39;MISSING&#39;</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PoolQC&#39;</span><span class="p">,</span> <span class="s1">&#39;MiscFeature&#39;</span><span class="p">,</span> <span class="s1">&#39;Alley&#39;</span><span class="p">,</span> <span class="s1">&#39;Fence&#39;</span><span class="p">,</span> <span class="s1">&#39;FireplaceQu&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;GarageType&#39;</span><span class="p">,</span> <span class="s1">&#39;GarageFinish&#39;</span><span class="p">,</span> <span class="s1">&#39;GarageQual&#39;</span><span class="p">,</span> <span class="s1">&#39;GarageCond&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;BsmtQual&#39;</span><span class="p">,</span> <span class="s1">&#39;BsmtCond&#39;</span><span class="p">,</span> <span class="s1">&#39;BsmtExposure&#39;</span><span class="p">,</span> <span class="s1">&#39;BsmtFinType1&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;BsmtFinType2&#39;</span><span class="p">,</span> <span class="s1">&#39;MasVnrType&#39;</span><span class="p">],</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;string_imputer_const&#39;</span><span class="p">,</span> <span class="n">StringImputer</span><span class="p">(</span>
+        <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">=</span><span class="s1">&#39;Typ&#39;</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Functional&#39;</span><span class="p">],</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;string_imputer_most_freq&#39;</span><span class="p">,</span> <span class="n">StringImputer</span><span class="p">(</span>
+        <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;MSZoning&#39;</span><span class="p">,</span> <span class="s1">&#39;Electrical&#39;</span><span class="p">,</span> <span class="s1">&#39;KitchenQual&#39;</span><span class="p">,</span> <span class="s1">&#39;Exterior1st&#39;</span><span class="p">,</span> <span class="s1">&#39;SaleType&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">num_columns_to_cast</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Impute missing numeric values</span>
+    <span class="p">(</span><span class="s1">&#39;numerical_imputer_const&#39;</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">(</span>
+        <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GarageYrBlt&#39;</span><span class="p">,</span> <span class="s1">&#39;GarageArea&#39;</span><span class="p">,</span> <span class="s1">&#39;GarageCars&#39;</span><span class="p">,</span> <span class="s1">&#39;BsmtFinSF1&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;BsmtFinSF2&#39;</span><span class="p">,</span> <span class="s1">&#39;BsmtUnfSF&#39;</span><span class="p">,</span> <span class="s1">&#39;TotalBsmtSF&#39;</span><span class="p">,</span> <span class="s1">&#39;BsmtFullBath&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;BsmtHalfBath&#39;</span><span class="p">,</span> <span class="s1">&#39;MasVnrArea&#39;</span><span class="p">],</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Group-based imputation: use neighborhood median for lot frontage</span>
+    <span class="p">(</span><span class="s1">&#39;group_imputer&#39;</span><span class="p">,</span> <span class="n">GroupByImputer</span><span class="p">(</span>
+        <span class="n">group_by_column</span><span class="o">=</span><span class="s1">&#39;Neighborhood&#39;</span><span class="p">,</span>
+        <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">,</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;LotFrontage&#39;</span><span class="p">],</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Create ratio features</span>
+    <span class="p">(</span><span class="s1">&#39;ratio_features&#39;</span><span class="p">,</span> <span class="n">RatioFeatures</span><span class="p">(</span>
+        <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GrLivArea&#39;</span><span class="p">],</span>
+        <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;LotArea&#39;</span><span class="p">],</span>
+        <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;LivLotArea&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Generate statistical features from related area measurements</span>
+    <span class="p">(</span><span class="s1">&#39;stat&#39;</span><span class="p">,</span> <span class="n">MathFeatures</span><span class="p">(</span>
+        <span class="n">groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;TotalBsmtSF&#39;</span><span class="p">,</span> <span class="s1">&#39;1stFlrSF&#39;</span><span class="p">,</span> <span class="s1">&#39;2nXlrSF&#39;</span><span class="p">]],</span>
+        <span class="n">operations</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Encode categorical variables</span>
+    <span class="p">(</span><span class="s1">&#39;onehot&#39;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="n">columns_to_encode</span><span class="p">,</span>
+        <span class="n">drop_columns</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;count_encoder&#39;</span><span class="p">,</span> <span class="n">CountEncoder</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="n">columns_to_encode</span><span class="p">,</span>
+        <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+<span class="p">]</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Original features: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engineered features: </span><span class="si">{</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Original features: 349
+Engineered features: 350
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="4.-Feature-Selection-with-Stability-Index">
+<h2>4. Feature Selection with Stability Index<a class="headerlink" href="#4.-Feature-Selection-with-Stability-Index" title="Link to this heading">#</a></h2>
+<p>Use the <strong>feature_stability_index</strong> to identify robust features that consistently contribute to model performance across multiple training runs. This helps prevent overfitting by selecting only stable, reliable features.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define conservative model parameters to prevent overfitting</span>
+<span class="n">conservative_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s1">&#39;min_child_weight&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="s1">&#39;reg_alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="s1">&#39;reg_lambda&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="s1">&#39;subsample&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;reg:squarederror&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span> <span class="s1">&#39;rmse&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;tree_method&#39;</span><span class="p">:</span> <span class="s1">&#39;hist&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="s1">&#39;n_jobs&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}</span>
+
+<span class="c1"># Calculate feature stability index</span>
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">conservative_params</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">KFold</span>
+<span class="n">skf</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">fsi_results</span> <span class="o">=</span> <span class="n">feature_stability_index</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">skf</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Filter to stable features with non-zero importance</span>
+<span class="n">fsi_results</span> <span class="o">=</span> <span class="n">fsi_results</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;importance&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;fsi&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">fsi_results</span> <span class="o">=</span> <span class="n">fsi_results</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;importance&quot;</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Select stable features</span>
+<span class="n">selected_features</span> <span class="o">=</span> <span class="n">fsi_results</span><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of selected stable features: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_features</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Top 10 features by importance:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">fsi_results</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of selected stable features: 151
+
+Top 10 features by importance:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (10, 3)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>fsi</th><th>importance</th></tr><tr><td>str</td><td>f64</td><td>f32</td></tr></thead><tbody><tr><td>&quot;ExterQual&quot;</td><td>1.0</td><td>0.14994</td></tr><tr><td>&quot;OverallQual&quot;</td><td>1.0</td><td>0.133964</td></tr><tr><td>&quot;TotalBsmtSF_1stFlrSF_2nXlrSF_…</td><td>1.0</td><td>0.069442</td></tr><tr><td>&quot;GarageCars&quot;</td><td>1.0</td><td>0.02874</td></tr><tr><td>&quot;GrLivArea&quot;</td><td>1.0</td><td>0.024384</td></tr><tr><td>&quot;TotalBsmtSF&quot;</td><td>1.0</td><td>0.022596</td></tr><tr><td>&quot;CentralAir&quot;</td><td>1.0</td><td>0.021065</td></tr><tr><td>&quot;CentralAir__Y&quot;</td><td>1.0</td><td>0.020707</td></tr><tr><td>&quot;BsmtQual__Gd&quot;</td><td>0.8</td><td>0.017674</td></tr><tr><td>&quot;GarageQual&quot;</td><td>1.0</td><td>0.016767</td></tr></tbody></table></div></div>
+</div>
+</section>
+<section id="5.-Train-Model-and-Evaluate">
+<h2>5. Train Model and Evaluate<a class="headerlink" href="#5.-Train-Model-and-Evaluate" title="Link to this heading">#</a></h2>
+<p>Train an XGBoost regression model using only the stable features and evaluate performance with cross-validation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;target&quot;</span> <span class="ow">in</span> <span class="n">X_train</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare training data with selected features</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selected_features</span><span class="p">)</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">))</span>
+
+<span class="c1"># Update model parameters for final training</span>
+<span class="n">final_params</span> <span class="o">=</span> <span class="n">conservative_params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">final_params</span><span class="p">[</span><span class="s1">&#39;max_depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># Slightly deeper trees for better performance</span>
+
+<span class="c1"># Create RMSE scorer (lower is better)</span>
+<span class="n">rmse_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">root_mean_squared_error</span><span class="p">,</span> <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Train and evaluate with cross-validation</span>
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">final_params</span><span class="p">)</span>
+<span class="n">cv_scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">rmse_scorer</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cross-Validation RMSE: </span><span class="si">{</span><span class="o">-</span><span class="n">cv_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (+/- </span><span class="si">{</span><span class="n">cv_scores</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Train final model on all training data</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Final model trained successfully!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Cross-Validation RMSE: 0.1286 (+/- 0.0095)
+
+Final model trained successfully!
+</pre></div></div>
+</div>
+</section>
+<section id="6.-Generate-Predictions">
+<h2>6. Generate Predictions<a class="headerlink" href="#6.-Generate-Predictions" title="Link to this heading">#</a></h2>
+<p>Apply the trained model to generate predictions for the test set and create a submission file.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare test data</span>
+<span class="n">id_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="p">[</span><span class="s2">&quot;Id&quot;</span><span class="p">]</span>
+<span class="n">X_test</span> <span class="o">=</span>  <span class="n">X_test</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selected_features</span><span class="p">)</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">))</span>
+
+<span class="c1"># Generate predictions (remember to reverse log transformation)</span>
+<span class="n">log_predictions</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_predictions</span><span class="p">)</span>  <span class="c1"># Reverse log transformation</span>
+
+<span class="c1"># Create submission file</span>
+<span class="n">submission</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;Id&quot;</span><span class="p">:</span> <span class="n">id_test</span><span class="p">,</span>
+    <span class="s2">&quot;SalePrice&quot;</span><span class="p">:</span> <span class="n">predictions</span>
+<span class="p">})</span>
+<span class="n">submission</span><span class="o">.</span><span class="n">write_csv</span><span class="p">(</span><span class="s2">&quot;house_price_submission.csv&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submission file created successfully!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Predictions summary:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean: $</span><span class="si">{</span><span class="n">predictions</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Median: $</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Min: $</span><span class="si">{</span><span class="n">predictions</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Max: $</span><span class="si">{</span><span class="n">predictions</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Submission file created successfully!
+
+Predictions summary:
+Mean: $177,096.95
+Median: $155,665.30
+Min: $47,344.79
+Max: $484,264.44
+</pre></div></div>
+</div>
+</section>
+<section id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Link to this heading">#</a></h2>
+<p>This notebook demonstrates the power of the <strong>gators</strong> library for feature engineering in regression tasks:</p>
+<section id="Key-Takeaways:">
+<h3>Key Takeaways:<a class="headerlink" href="#Key-Takeaways:" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Comprehensive Imputation</strong>: Multiple strategies for handling missing values (constant, most frequent, group-based)</p></li>
+<li><p><strong>Smart Type Handling</strong>: Automatic casting and conversion of data types for proper feature engineering</p></li>
+<li><p><strong>Mathematical Features</strong>: Create ratio and statistical features from related columns</p></li>
+<li><p><strong>Feature Stability</strong>: Use FSI (Feature Stability Index) for robust feature selection</p></li>
+<li><p><strong>Flexible Encoding</strong>: Support for both one-hot and count encoding strategies</p></li>
+<li><p><strong>Pipeline Integration</strong>: Seamlessly integrates with scikit-learn Pipeline and XGBoost</p></li>
+</ol>
+<p>The gators library simplified complex feature engineering workflows while maintaining code clarity and reproducibility, particularly excelling at handling missing data through the innovative <strong>GroupByImputer</strong> transformer.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="titanic_survival_prediction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Titanic Survival Prediction with Gators</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="sf_crime_classification.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">San Francisco Crime Classification with Gators</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-Contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Features-Demonstrated:">Key Features Demonstrated:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Import-Libraries">1. Import Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2.-Load-and-Preprocess-Data">2. Load and Preprocess Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Build-Feature-Engineering-Pipeline">3. Build Feature Engineering Pipeline</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Data-Type-Management:">Data Type Management:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Missing-Value-Imputation:">Missing Value Imputation:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Feature-Engineering:">Feature Engineering:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Encoding:">Encoding:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4.-Feature-Selection-with-Stability-Index">4. Feature Selection with Stability Index</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5.-Train-Model-and-Evaluate">5. Train Model and Evaluate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#6.-Generate-Predictions">6. Generate Predictions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Takeaways:">Key Takeaways:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

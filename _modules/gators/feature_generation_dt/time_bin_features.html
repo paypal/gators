@@ -1,0 +1,657 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gators.feature_generation_dt.time_bin_features &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/feature_generation_dt/time_bin_features';</script>
+    <link rel="icon" href="../../../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.feature_generation_dt.time_bin_features</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gators.feature_generation_dt.time_bin_features</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+
+
+<div class="viewcode-block" id="TimeBinFeatures">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TimeBinFeatures</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates time bin features by categorizing datetime values into periods.</span>
+
+<span class="sd">    Bins datetime components into meaningful categories like part of day, season,</span>
+<span class="sd">    time of month, etc. These categorical features are particularly useful for</span>
+<span class="sd">    tree-based models to capture non-linear temporal patterns.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subset : Optional[List[str]], default=None</span>
+<span class="sd">        List of datetime columns to extract features from. If None, all datetime columns</span>
+<span class="sd">        will be used.</span>
+<span class="sd">    bin_types : List[Literal[&quot;part_of_day&quot;, &quot;season&quot;, &quot;time_of_month&quot;, &quot;time_of_year&quot;, &quot;rush_hour&quot;]], default=[&quot;part_of_day&quot;, &quot;season&quot;, &quot;time_of_month&quot;, &quot;time_of_year&quot;, &quot;rush_hour&quot;]</span>
+<span class="sd">        Types of time bins to generate. Options:</span>
+<span class="sd">        </span>
+<span class="sd">        - &quot;part_of_day&quot;: night, morning, afternoon, evening</span>
+<span class="sd">        - &quot;season&quot;: spring, summer, fall, winter</span>
+<span class="sd">        - &quot;time_of_month&quot;: beginning, middle, end</span>
+<span class="sd">        - &quot;time_of_year&quot;: early, mid, late</span>
+<span class="sd">        - &quot;rush_hour&quot;: morning_rush, evening_rush, off_peak</span>
+<span class="sd">    hemisphere : Literal[&quot;northern&quot;, &quot;southern&quot;], default=&quot;northern&quot;</span>
+<span class="sd">        Hemisphere for season calculation.</span>
+<span class="sd">    drop_columns : bool, default=False</span>
+<span class="sd">        Whether to drop the original datetime columns after feature extraction.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from gators.feature_generation_dt import TimeBinFeatures</span>
+<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
+
+<span class="sd">    &gt;&gt;&gt; X =pl.DataFrame({</span>
+<span class="sd">    ...     &#39;timestamp&#39;: [</span>
+<span class="sd">    ...         &#39;2024-01-15 06:00:00&#39;,</span>
+<span class="sd">    ...         &#39;2024-01-15 10:00:00&#39;,</span>
+<span class="sd">    ...         &#39;2024-01-15 14:00:00&#39;,</span>
+<span class="sd">    ...         &#39;2024-01-15 20:00:00&#39;,</span>
+<span class="sd">    ...         &#39;2024-07-15 14:00:00&#39;,</span>
+<span class="sd">    ...     ]</span>
+<span class="sd">    ... }).with_columns(</span>
+<span class="sd">    ...     pl.col(&#39;timestamp&#39;).str.strptime(pl.Datetime, &#39;%Y-%m-%d %H:%M:%S&#39;)</span>
+<span class="sd">    ... )</span>
+
+<span class="sd">    **Example 1: Part of day**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = TimeBinFeatures(</span>
+<span class="sd">    ...     subset=[&#39;timestamp&#39;],</span>
+<span class="sd">    ...     bin_types=[&#39;part_of_day&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (5, 2)</span>
+<span class="sd">    ┌─────────────────────┬─────────────────────────┐</span>
+<span class="sd">    │ timestamp           ┆ timestamp__part_of_day  │</span>
+<span class="sd">    │ ---                 ┆ ---                     │</span>
+<span class="sd">    │ datetime[μs]        ┆ str                     │</span>
+<span class="sd">    ├─────────────────────┼─────────────────────────┤</span>
+<span class="sd">    │ 2024-01-15 06:00:00 ┆ morning                 │</span>
+<span class="sd">    │ 2024-01-15 10:00:00 ┆ morning                 │</span>
+<span class="sd">    │ 2024-01-15 14:00:00 ┆ afternoon               │</span>
+<span class="sd">    │ 2024-01-15 20:00:00 ┆ evening                 │</span>
+<span class="sd">    │ 2024-07-15 14:00:00 ┆ afternoon               │</span>
+<span class="sd">    └─────────────────────┴─────────────────────────┘</span>
+
+<span class="sd">    **Example 2: Season (northern hemisphere)**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = TimeBinFeatures(</span>
+<span class="sd">    ...     subset=[&#39;timestamp&#39;],</span>
+<span class="sd">    ...     bin_types=[&#39;season&#39;],</span>
+<span class="sd">    ...     hemisphere=&#39;northern&#39;</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(result)</span>
+<span class="sd">    shape: (5, 2)</span>
+<span class="sd">    ┌─────────────────────┬───────────────────┐</span>
+<span class="sd">    │ timestamp           ┆ timestamp__season │</span>
+<span class="sd">    │ ---                 ┆ ---               │</span>
+<span class="sd">    │ datetime[μs]        ┆ str               │</span>
+<span class="sd">    ├─────────────────────┼───────────────────┤</span>
+<span class="sd">    │ 2024-01-15 06:00:00 ┆ winter            │</span>
+<span class="sd">    │ 2024-01-15 10:00:00 ┆ winter            │</span>
+<span class="sd">    │ 2024-01-15 14:00:00 ┆ winter            │</span>
+<span class="sd">    │ 2024-01-15 20:00:00 ┆ winter            │</span>
+<span class="sd">    │ 2024-07-15 14:00:00 ┆ summer            │</span>
+<span class="sd">    └─────────────────────┴───────────────────┘</span>
+
+<span class="sd">    **Example 3: Multiple bin types**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = TimeBinFeatures(</span>
+<span class="sd">    ...     subset=[&#39;timestamp&#39;],</span>
+<span class="sd">    ...     bin_types=[&#39;part_of_day&#39;, &#39;time_of_month&#39;, &#39;rush_hour&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">subset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bin_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span>
+        <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;part_of_day&quot;</span><span class="p">,</span> <span class="s2">&quot;season&quot;</span><span class="p">,</span> <span class="s2">&quot;time_of_month&quot;</span><span class="p">,</span> <span class="s2">&quot;time_of_year&quot;</span><span class="p">,</span> <span class="s2">&quot;rush_hour&quot;</span><span class="p">]</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;part_of_day&quot;</span><span class="p">,</span> <span class="s2">&quot;season&quot;</span><span class="p">,</span> <span class="s2">&quot;time_of_month&quot;</span><span class="p">,</span> <span class="s2">&quot;time_of_year&quot;</span><span class="p">,</span> <span class="s2">&quot;rush_hour&quot;</span><span class="p">]</span>
+    <span class="n">hemisphere</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;northern&quot;</span><span class="p">,</span> <span class="s2">&quot;southern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;northern&quot;</span>
+    <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;bin_types&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_bin_types</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bin_types</span><span class="p">):</span>
+        <span class="n">valid_types</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;part_of_day&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;season&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;time_of_month&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;time_of_year&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rush_hour&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">bin_type</span> <span class="ow">in</span> <span class="n">bin_types</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bin_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_types</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Bin type &#39;</span><span class="si">{</span><span class="n">bin_type</span><span class="si">}</span><span class="s2">&#39; is not supported. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Supported types: </span><span class="si">{</span><span class="n">valid_types</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">bin_types</span>
+
+<div class="viewcode-block" id="TimeBinFeatures.fit">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TimeBinFeatures&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by identifying datetime columns if not specified.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame.</span>
+<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">            Target variable. Not used, present here for compatibility.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TimeBinFeatures</span>
+<span class="sd">            Fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">col</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">))</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Datetime</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Date</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="TimeBinFeatures.transform">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the input DataFrame by creating time bin features.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame to transform.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pl.DataFrame</span>
+<span class="sd">            Transformed DataFrame with time bin features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_columns</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+            <span class="n">hour</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">hour</span><span class="p">()</span>
+            <span class="n">month</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="p">()</span>
+            <span class="n">day</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="s2">&quot;part_of_day&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin_types</span><span class="p">:</span>
+                <span class="n">part_of_day</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;night&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;morning&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;afternoon&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;evening&quot;</span><span class="p">))</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__part_of_day&quot;</span><span class="p">)</span>
+                <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">part_of_day</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;season&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin_types</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hemisphere</span> <span class="o">==</span> <span class="s2">&quot;northern&quot;</span><span class="p">:</span>
+                    <span class="n">season</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">is_in</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
+                        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;winter&quot;</span><span class="p">))</span>
+                        <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">is_in</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>
+                        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;spring&quot;</span><span class="p">))</span>
+                        <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">is_in</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]))</span>
+                        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;summer&quot;</span><span class="p">))</span>
+                        <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;fall&quot;</span><span class="p">))</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__season&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># southern hemisphere</span>
+                    <span class="n">season</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">is_in</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]))</span>
+                        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;winter&quot;</span><span class="p">))</span>
+                        <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">is_in</span><span class="p">([</span><span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">]))</span>
+                        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;spring&quot;</span><span class="p">))</span>
+                        <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">month</span><span class="o">.</span><span class="n">is_in</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
+                        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;summer&quot;</span><span class="p">))</span>
+                        <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;fall&quot;</span><span class="p">))</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__season&quot;</span><span class="p">)</span>
+                <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">season</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;time_of_month&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin_types</span><span class="p">:</span>
+                <span class="n">time_of_month</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">day</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;beginning&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">day</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;middle&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">))</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__time_of_month&quot;</span><span class="p">)</span>
+                <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time_of_month</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;time_of_year&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin_types</span><span class="p">:</span>
+                <span class="n">time_of_year</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">month</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;early&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">month</span> <span class="o">&lt;=</span> <span class="mi">8</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;mid&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;late&quot;</span><span class="p">))</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__time_of_year&quot;</span><span class="p">)</span>
+                <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time_of_year</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;rush_hour&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bin_types</span><span class="p">:</span>
+                <span class="n">rush_hour</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">((</span><span class="n">hour</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;morning_rush&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">when</span><span class="p">((</span><span class="n">hour</span> <span class="o">&gt;=</span> <span class="mi">17</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">19</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;evening_rush&quot;</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;off_peak&quot;</span><span class="p">))</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__rush_hour&quot;</span><span class="p">)</span>
+                <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rush_hour</span><span class="p">)</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">new_columns</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">X</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

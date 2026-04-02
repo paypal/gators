@@ -1,0 +1,840 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gators.feature_generation_dt.time_window_features &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/feature_generation_dt/time_window_features';</script>
+    <link rel="icon" href="../../../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.feature_generation_dt.time_window_features</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gators.feature_generation_dt.time_window_features</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">PrivateAttr</span><span class="p">,</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+
+<span class="n">AGGREGATION_FUNCTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_and_convert_window</span><span class="p">(</span><span class="n">window_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate window string and convert to polars-compatible format.</span>
+<span class="sd">    </span>
+<span class="sd">    Supported input formats:</span>
+<span class="sd">    </span>
+<span class="sd">    - &#39;30m&#39; -&gt; &#39;30m&#39; (30 minutes)</span>
+<span class="sd">    - &#39;1h&#39; -&gt; &#39;1h&#39; (1 hour)</span>
+<span class="sd">    - &#39;24h&#39; -&gt; &#39;24h&#39; (24 hours)</span>
+<span class="sd">    - &#39;7d&#39; -&gt; &#39;7d&#39; (7 days)</span>
+<span class="sd">    - &#39;1M&#39; -&gt; &#39;30d&#39; (1 month approximated as 30 days)</span>
+<span class="sd">    - &#39;1Y&#39; -&gt; &#39;365d&#39; (1 year approximated as 365 days)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns polars-compatible window string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+    
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(\d+)([mhdMY])$&#39;</span><span class="p">,</span> <span class="n">window_str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">match</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid window format: </span><span class="si">{</span><span class="n">window_str</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected format: number followed by m/h/d/M/Y (e.g., &#39;1h&#39;, &#39;24h&#39;, &#39;7d&#39;)&quot;</span>
+        <span class="p">)</span>
+    
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">unit</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="c1"># Convert custom units to polars-compatible format</span>
+    <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;M&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">30</span><span class="si">}</span><span class="s2">d&quot;</span>  <span class="c1"># Convert months to days</span>
+    <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">365</span><span class="si">}</span><span class="s2">d&quot;</span>  <span class="c1"># Convert years to days</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># m, h, d are already compatible</span>
+        <span class="k">return</span> <span class="n">window_str</span>
+
+
+<div class="viewcode-block" id="TimeWindowFeatures">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.TimeWindowFeatures">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TimeWindowFeatures</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates time-based window aggregation features (velocity features).</span>
+
+<span class="sd">    This transformer creates rolling window statistics over time periods, useful for</span>
+<span class="sd">    detecting unusual patterns like transaction velocity, spending bursts, etc.</span>
+
+<span class="sd">    Features are computed looking backward from each row (excluding the current row),</span>
+<span class="sd">    optionally grouped by categorical columns.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subset : List[str]</span>
+<span class="sd">        List of numerical column names to aggregate over time windows.</span>
+<span class="sd">    time_column : str</span>
+<span class="sd">        Name of the datetime column to use for time-based windowing.</span>
+<span class="sd">    windows : List[str]</span>
+<span class="sd">        List of time window strings. Supported formats:</span>
+<span class="sd">       </span>
+<span class="sd">        - &#39;30m&#39; = 30 minutes</span>
+<span class="sd">        - &#39;1h&#39; = 1 hour</span>
+<span class="sd">        - &#39;24h&#39; = 24 hours</span>
+<span class="sd">        - &#39;7d&#39; = 7 days</span>
+<span class="sd">        - &#39;1M&#39; = 1 month (30 days)</span>
+<span class="sd">        - &#39;1Y&#39; = 1 year (365 days)</span>
+<span class="sd">    by : Optional[List[str]], default=None</span>
+<span class="sd">        Optional list of columns to group by. Windows are computed within each group.</span>
+<span class="sd">        Example: [&#39;card1&#39;] computes &quot;transactions in last 24h for this card&quot;</span>
+<span class="sd">    func : List[str], default=[&#39;count&#39;, &#39;mean&#39;]</span>
+<span class="sd">        List of aggregation functions to apply. Available options:</span>
+<span class="sd">        </span>
+<span class="sd">        - &#39;count&#39;: Count of rows in window</span>
+<span class="sd">        - &#39;mean&#39;: Mean of values in window</span>
+<span class="sd">        - &#39;sum&#39;: Sum of values in window</span>
+<span class="sd">        - &#39;std&#39;: Standard deviation in window</span>
+<span class="sd">        - &#39;median&#39;: Median in window</span>
+<span class="sd">        - &#39;min&#39;: Minimum value in window</span>
+<span class="sd">        - &#39;max&#39;: Maximum value in window</span>
+<span class="sd">    drop_columns : bool, default=False</span>
+<span class="sd">        Whether to drop the original numerical columns after creating features.</span>
+<span class="sd">    new_column_names : Optional[List[str]], default=None</span>
+<span class="sd">        List of custom names for the window columns. If None, uses default naming pattern.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from gators.feature_generation import TimeWindowFeatures</span>
+<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">    &gt;&gt;&gt; from datetime import datetime, timedelta</span>
+
+<span class="sd">    &gt;&gt;&gt; # Sample transaction data</span>
+<span class="sd">    &gt;&gt;&gt; X ={</span>
+<span class="sd">    ...     &#39;TransactionDT&#39;: [</span>
+<span class="sd">    ...         datetime(2024, 1, 1, 10, 0),</span>
+<span class="sd">    ...         datetime(2024, 1, 1, 10, 30),</span>
+<span class="sd">    ...         datetime(2024, 1, 1, 11, 0),</span>
+<span class="sd">    ...         datetime(2024, 1, 1, 12, 0),</span>
+<span class="sd">    ...         datetime(2024, 1, 2, 10, 0),</span>
+<span class="sd">    ...     ],</span>
+<span class="sd">    ...     &#39;TransactionAmt&#39;: [100, 150, 200, 120, 180],</span>
+<span class="sd">    ...     &#39;card1&#39;: [&#39;A&#39;, &#39;A&#39;, &#39;A&#39;, &#39;B&#39;, &#39;A&#39;]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame(X)</span>
+
+<span class="sd">    **Example 1: Global time windows (no grouping)**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = TimeWindowFeatures(</span>
+<span class="sd">    ...     subset=[&#39;TransactionAmt&#39;],</span>
+<span class="sd">    ...     time_column=&#39;TransactionDT&#39;,</span>
+<span class="sd">    ...     windows=[&#39;1h&#39;, &#39;24h&#39;],</span>
+<span class="sd">    ...     func=[&#39;count&#39;, &#39;mean&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.columns</span>
+<span class="sd">    [&#39;TransactionDT&#39;, &#39;TransactionAmt&#39;, &#39;card1&#39;,</span>
+<span class="sd">     &#39;count_TransactionAmt_1h&#39;, &#39;mean_TransactionAmt_1h&#39;,</span>
+<span class="sd">     &#39;count_TransactionAmt_24h&#39;, &#39;mean_TransactionAmt_24h&#39;]</span>
+
+<span class="sd">    **Example 2: Grouped time windows (per card)**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = TimeWindowFeatures(</span>
+<span class="sd">    ...     subset=[&#39;TransactionAmt&#39;],</span>
+<span class="sd">    ...     time_column=&#39;TransactionDT&#39;,</span>
+<span class="sd">    ...     windows=[&#39;1h&#39;, &#39;24h&#39;],</span>
+<span class="sd">    ...     by=[&#39;card1&#39;],</span>
+<span class="sd">    ...     func=[&#39;count&#39;, &#39;sum&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; # Creates: count/sum of TransactionAmt in last 1h/24h per card1</span>
+
+<span class="sd">    **Example 3: Multiple windows for fraud detection**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = TimeWindowFeatures(</span>
+<span class="sd">    ...     subset=[&#39;TransactionAmt&#39;],</span>
+<span class="sd">    ...     time_column=&#39;TransactionDT&#39;,</span>
+<span class="sd">    ...     windows=[&#39;30m&#39;, &#39;1h&#39;, &#39;3h&#39;, &#39;24h&#39;, &#39;7d&#39;],</span>
+<span class="sd">    ...     by=[&#39;card1&#39;],</span>
+<span class="sd">    ...     func=[&#39;count&#39;, &#39;mean&#39;, &#39;sum&#39;, &#39;max&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; # Detects velocity: &quot;Card has 50 transactions in last hour&quot;</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    </span>
+<span class="sd">    - Data should be sorted by time_column for correct window calculations</span>
+<span class="sd">    - Current row is EXCLUDED from window calculations</span>
+<span class="sd">    - First rows (no history) have null values</span>
+<span class="sd">    - Windows look backward from current time</span>
+<span class="sd">    - Useful for velocity features, spending patterns, anomaly detection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">subset</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">time_column</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">windows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">]</span>
+    <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">new_column_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_column_mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">_converted_windows</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;windows&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_windows</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">windows</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">window</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">validate_and_convert_window</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid window format: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">windows</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;func&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_aggregations</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">fun</span> <span class="ow">in</span> <span class="n">func</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fun</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">AGGREGATION_FUNCTIONS</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fun</span><span class="si">}</span><span class="s2"> is not in the predefined list of aggregation functions: </span><span class="si">{</span><span class="n">AGGREGATION_FUNCTIONS</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;new_column_names&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_new_column_names_length</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_column_names</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">new_column_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">subset</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subset&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">windows</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;windows&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;func&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">expected_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">windows</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span> <span class="o">!=</span> <span class="n">expected_length</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Length of new_column_names (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span><span class="si">}</span><span class="s2">) &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;must match the total number of features created (</span><span class="si">{</span><span class="n">expected_length</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_column_names</span>
+
+<div class="viewcode-block" id="TimeWindowFeatures.fit">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.TimeWindowFeatures.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TimeWindowFeatures&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by generating column name mappings.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame.</span>
+<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">            Target variable. Not used, present here for compatibility.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TimeWindowFeatures</span>
+<span class="sd">            Fitted transformer instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert windows to polars-compatible format once during fit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_converted_windows</span> <span class="o">=</span> <span class="p">{</span><span class="n">w</span><span class="p">:</span> <span class="n">validate_and_convert_window</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">windows</span><span class="p">}</span>
+
+        <span class="c1"># Generate default column names</span>
+        <span class="n">default_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">group_suffix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">by</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">by</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        
+        <span class="k">for</span> <span class="n">num_col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">window</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">windows</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">fun</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">:</span>
+                    <span class="n">default_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fun</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num_col</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">window</span><span class="si">}{</span><span class="n">group_suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span> <span class="o">=</span> <span class="n">default_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">default_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="TimeWindowFeatures.transform">
+<a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.TimeWindowFeatures.transform">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the input DataFrame by creating time window features.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : pl.DataFrame</span>
+<span class="sd">            Input DataFrame to transform. Should be sorted by time_column.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pl.DataFrame</span>
+<span class="sd">            Transformed DataFrame with time window features.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_columns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">group_suffix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">by</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">by</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">num_col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">window_str</span><span class="p">,</span> <span class="n">window_polars</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_converted_windows</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">fun</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">:</span>
+                    <span class="n">default_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fun</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num_col</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">window_str</span><span class="si">}{</span><span class="n">group_suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">new_col_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="p">[</span><span class="n">default_name</span><span class="p">]</span>
+
+                    <span class="c1"># Use rolling with group_by for time-based windows</span>
+                    <span class="c1"># rolling_* excludes current row by default</span>
+                    <span class="n">over_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">by</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">by</span> <span class="k">else</span> <span class="p">[]</span>
+                    
+                    <span class="k">if</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;count&quot;</span><span class="p">:</span>
+                        <span class="c1"># For count, use any column (time column is guaranteed to exist)</span>
+                        <span class="k">if</span> <span class="n">over_cols</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>  <span class="c1"># Exclude current row</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">over_cols</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">over_cols</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">over_cols</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;sum&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">over_cols</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">over_cols</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;std&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">over_cols</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">std</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">over_cols</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">std</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;median&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">over_cols</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">median</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">over_cols</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">median</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">over_cols</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">min</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">over_cols</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">min</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">over_cols</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                                <span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">over_cols</span><span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span>
+                                <span class="o">.</span><span class="n">max</span><span class="p">()</span>
+                                <span class="o">.</span><span class="n">rolling</span><span class="p">(</span>
+                                    <span class="n">index_column</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_column</span><span class="p">,</span>
+                                    <span class="n">period</span><span class="o">=</span><span class="n">window_polars</span><span class="p">,</span>
+                                    <span class="n">closed</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+
+                    <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">))</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">new_columns</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">X</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

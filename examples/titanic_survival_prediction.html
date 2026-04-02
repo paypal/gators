@@ -1,0 +1,902 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Titanic Survival Prediction with Gators &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/titanic_survival_prediction';</script>
+    <link rel="icon" href="../_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="House Price Prediction with Gators" href="house_price_prediction.html" />
+    <link rel="prev" title="Examples" href="../examples.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about.html">
+    About Gators
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Example Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Titanic Survival Prediction with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="house_price_prediction.html">House Price Prediction with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sf_crime_classification.html">San Francisco Crime Classification with Gators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fraud_detection.html">IEEE-CIS Fraud Detection with Gators</a></li>
+</ul>
+</div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../examples.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Titanic Survival Prediction with Gators</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Titanic-Survival-Prediction-with-Gators">
+<h1>Titanic Survival Prediction with Gators<a class="headerlink" href="#Titanic-Survival-Prediction-with-Gators" title="Link to this heading">#</a></h1>
+<p>This notebook demonstrates how to use the <strong>gators</strong> library for advanced feature engineering in a binary classification problem. We’ll predict passenger survival on the Titanic using comprehensive feature transformations.</p>
+<section id="Table-of-Contents">
+<h2>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#1.-Import-Libraries"><span class="std std-ref">Import Libraries</span></a></p></li>
+<li><p><a class="reference internal" href="#2.-Load-Data"><span class="std std-ref">Load Data</span></a></p></li>
+<li><p><a class="reference internal" href="#3.-Build-Feature-Engineering-Pipeline"><span class="std std-ref">Build Feature Engineering Pipeline</span></a></p></li>
+<li><p><a class="reference internal" href="#4.-Train-Model"><span class="std std-ref">Train Model</span></a></p></li>
+<li><p><a class="reference internal" href="#5.-Analyze-Feature-Importance"><span class="std std-ref">Analyze Feature Importance</span></a></p></li>
+<li><p><a class="reference internal" href="#6.-Generate-Predictions"><span class="std std-ref">Generate Predictions</span></a></p></li>
+<li><p><a class="reference internal" href="#Summary"><span class="std std-ref">Summary</span></a></p></li>
+</ol>
+</section>
+<section id="Key-Features-Demonstrated:">
+<h2>Key Features Demonstrated:<a class="headerlink" href="#Key-Features-Demonstrated:" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Null indicator features</p></li>
+<li><p>String parsing and extraction (names, titles)</p></li>
+<li><p>Mathematical feature engineering</p></li>
+<li><p>Conditional features</p></li>
+<li><p>Custom discretization (age binning)</p></li>
+<li><p>Rare category encoding</p></li>
+<li><p>Weight of Evidence (WOE) encoding</p></li>
+<li><p>Feature interactions</p></li>
+</ul>
+<p><strong>Dataset:</strong> <a class="reference external" href="https://www.kaggle.com/competitions/titanic">Kaggle Titanic - Machine Learning from Disaster</a></p>
+</section>
+<section id="1.-Import-Libraries">
+<h2>1. Import Libraries<a class="headerlink" href="#1.-Import-Libraries" title="Link to this heading">#</a></h2>
+<p>Import the necessary libraries including gators transformers for comprehensive feature engineering.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">RareCategoryEncoder</span><span class="p">,</span> <span class="n">WOEEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.discretizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomDiscretizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropColumns</span><span class="p">,</span> <span class="n">CastColumns</span><span class="p">,</span> <span class="n">RenameColumns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">IsNull</span><span class="p">,</span>
+    <span class="n">MathFeatures</span><span class="p">,</span>
+    <span class="n">ConditionFeatures</span><span class="p">,</span>
+    <span class="n">ScalarMathFeatures</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringImputer</span><span class="p">,</span> <span class="n">NumericImputer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_str</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Length</span><span class="p">,</span>
+    <span class="n">SplitExtract</span><span class="p">,</span>
+    <span class="n">ExtractSubstring</span><span class="p">,</span>
+    <span class="n">InteractionFeatures</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">xgboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">XGBClassifier</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Load-Data">
+<h2>2. Load Data<a class="headerlink" href="#2.-Load-Data" title="Link to this heading">#</a></h2>
+<p>Load the Titanic dataset and prepare training and test sets.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load train and test data</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/titanic/train.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/titanic/test.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+
+<span class="c1"># Prepare training data</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;PassengerId&quot;</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;Survived&#39;</span><span class="p">]</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Survived&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training samples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test samples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Features: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training samples: 891
+Test samples: 418
+
+Features: [&#39;Pclass&#39;, &#39;Name&#39;, &#39;Sex&#39;, &#39;Age&#39;, &#39;SibSp&#39;, &#39;Parch&#39;, &#39;Ticket&#39;, &#39;Fare&#39;, &#39;Cabin&#39;, &#39;Embarked&#39;]
+</pre></div></div>
+</div>
+</section>
+<section id="3.-Build-Feature-Engineering-Pipeline">
+<h2>3. Build Feature Engineering Pipeline<a class="headerlink" href="#3.-Build-Feature-Engineering-Pipeline" title="Link to this heading">#</a></h2>
+<p>Create a comprehensive pipeline that demonstrates the power of gators transformers:</p>
+<section id="Missing-Value-Indicators:">
+<h3>Missing Value Indicators:<a class="headerlink" href="#Missing-Value-Indicators:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>IsNull</strong>: Create binary indicators for missing Age and Cabin values</p></li>
+</ul>
+</section>
+<section id="String-Feature-Engineering:">
+<h3>String Feature Engineering:<a class="headerlink" href="#String-Feature-Engineering:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Length</strong>: Calculate ticket string length</p></li>
+<li><p><strong>SplitExtract</strong>: Extract passenger title from name (e.g., ‘Mr.’, ‘Mrs.’, ‘Miss.’)</p></li>
+<li><p><strong>ExtractSubstring</strong>: Extract cabin deck letter from cabin number</p></li>
+</ul>
+</section>
+<section id="Mathematical-Features:">
+<h3>Mathematical Features:<a class="headerlink" href="#Mathematical-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>MathFeatures</strong>: Sum SibSp and Parch to get family size components</p></li>
+<li><p><strong>ScalarMathFeatures</strong>: Add 1 to include the passenger (FamilySize = SibSp + Parch + 1)</p></li>
+<li><p><strong>MathFeatures</strong>: Calculate fare per person (Fare / FamilySize)</p></li>
+</ul>
+</section>
+<section id="Conditional-Features:">
+<h3>Conditional Features:<a class="headerlink" href="#Conditional-Features:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>ConditionFeatures</strong>: Create ‘IsAlone’ indicator for passengers traveling solo</p></li>
+</ul>
+</section>
+<section id="Data-Cleaning:">
+<h3>Data Cleaning:<a class="headerlink" href="#Data-Cleaning:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>RenameColumns</strong>: Give intuitive names to extracted features</p></li>
+<li><p><strong>DropColumns</strong>: Remove raw columns after feature extraction</p></li>
+<li><p><strong>NumericImputer</strong>: Fill missing numeric values with mean</p></li>
+<li><p><strong>StringImputer</strong>: Fill missing categorical values with ‘MISSING’</p></li>
+</ul>
+</section>
+<section id="Discretization:">
+<h3>Discretization:<a class="headerlink" href="#Discretization:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>CustomDiscretizer</strong>: Bin ages into meaningful groups (child, teen, adult, senior)</p></li>
+</ul>
+</section>
+<section id="Encoding:">
+<h3>Encoding:<a class="headerlink" href="#Encoding:" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>RareCategoryEncoder</strong>: Group infrequent categories to reduce noise</p></li>
+<li><p><strong>CastColumns</strong>: Convert Pclass to string for categorical treatment</p></li>
+<li><p><strong>InteractionFeatures</strong>: Create feature interactions (e.g., Pclass × Age group)</p></li>
+<li><p><strong>WOEEncoder</strong>: Apply Weight of Evidence encoding for all categorical features</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the feature engineering pipeline</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Create missing value indicators</span>
+    <span class="p">(</span><span class="s1">&#39;IsNull&#39;</span><span class="p">,</span> <span class="n">IsNull</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Cabin&#39;</span><span class="p">])),</span>
+
+    <span class="c1"># String feature engineering</span>
+    <span class="p">(</span><span class="s1">&#39;Length&#39;</span><span class="p">,</span> <span class="n">Length</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ticket&#39;</span><span class="p">])),</span>
+    <span class="p">(</span><span class="s1">&#39;SplitExtractName&#39;</span><span class="p">,</span> <span class="n">SplitExtract</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">],</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;, &#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;SplitExtractTitle&#39;</span><span class="p">,</span> <span class="n">SplitExtract</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Name__split_,__1&#39;</span><span class="p">],</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
+
+    <span class="c1"># Calculate family size</span>
+    <span class="p">(</span><span class="s1">&#39;MathFeatures&#39;</span><span class="p">,</span> <span class="n">MathFeatures</span><span class="p">(</span>
+        <span class="n">groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;SibSp&#39;</span><span class="p">,</span> <span class="s1">&#39;Parch&#39;</span><span class="p">]],</span>
+        <span class="n">operations</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">],</span>
+        <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dummy&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;ScalarMathFeatures&#39;</span><span class="p">,</span> <span class="n">ScalarMathFeatures</span><span class="p">(</span>
+        <span class="n">operations</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;column&#39;</span><span class="p">:</span> <span class="s1">&#39;Dummy_sum&#39;</span><span class="p">,</span> <span class="s1">&#39;op&#39;</span><span class="p">:</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;scalar&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}],</span>
+        <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;FamilySize&quot;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Extract cabin deck</span>
+    <span class="p">(</span><span class="s1">&#39;ExtractSubstring&#39;</span><span class="p">,</span> <span class="n">ExtractSubstring</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cabin&#39;</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">)),</span>
+
+    <span class="c1"># Rename for clarity</span>
+    <span class="p">(</span><span class="s1">&#39;RenameColumns&#39;</span><span class="p">,</span> <span class="n">RenameColumns</span><span class="p">(</span><span class="n">column_mapping</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;Name__split_,__1__split_._0&#39;</span><span class="p">:</span> <span class="s1">&#39;Title&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Cabin__start0_end1&#39;</span><span class="p">:</span> <span class="s1">&#39;CabinDeck&#39;</span>
+    <span class="p">})),</span>
+
+    <span class="c1"># Handle rare categories</span>
+    <span class="p">(</span><span class="s1">&#39;RareCategoryEncoder&#39;</span><span class="p">,</span> <span class="n">RareCategoryEncoder</span><span class="p">()),</span>
+
+    <span class="c1"># Calculate fare per person</span>
+    <span class="p">(</span><span class="s1">&#39;MathFeatures2&#39;</span><span class="p">,</span> <span class="n">MathFeatures</span><span class="p">(</span>
+        <span class="n">groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;Fare&#39;</span><span class="p">,</span> <span class="s1">&#39;FamilySize&#39;</span><span class="p">]],</span>
+        <span class="n">operations</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;div&#39;</span><span class="p">],</span>
+        <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;FarePerPerson&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Create &#39;traveling alone&#39; indicator</span>
+    <span class="p">(</span><span class="s1">&#39;ConditionFeatures&#39;</span><span class="p">,</span> <span class="n">ConditionFeatures</span><span class="p">(</span>
+        <span class="n">conditions</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;column&quot;</span><span class="p">:</span> <span class="s2">&quot;FamilySize&quot;</span><span class="p">,</span> <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}],</span>
+        <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;IsAlone&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Drop raw columns</span>
+    <span class="p">(</span><span class="s1">&#39;DropColumns&#39;</span><span class="p">,</span> <span class="n">DropColumns</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cabin&#39;</span><span class="p">,</span> <span class="s1">&#39;Ticket&#39;</span><span class="p">,</span> <span class="s1">&#39;Dummy_sum&#39;</span><span class="p">])),</span>
+
+    <span class="c1"># Impute missing values</span>
+    <span class="p">(</span><span class="s1">&#39;NumericImputer&#39;</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;StringImputer&#39;</span><span class="p">,</span> <span class="n">StringImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;MISSING&#39;</span><span class="p">)),</span>
+
+    <span class="c1"># Discretize age into bins</span>
+    <span class="p">(</span><span class="s1">&#39;CustomDiscretizer&#39;</span><span class="p">,</span> <span class="n">CustomDiscretizer</span><span class="p">(</span>
+        <span class="n">bins</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">]},</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Convert passenger class to categorical</span>
+    <span class="p">(</span><span class="s1">&#39;CastColumns&#39;</span><span class="p">,</span> <span class="n">CastColumns</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Pclass&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">)),</span>
+
+    <span class="c1"># Create feature interactions</span>
+    <span class="p">(</span><span class="s1">&#39;InteractionFeatures&#39;</span><span class="p">,</span> <span class="n">InteractionFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Pclass&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;CabinDeck&#39;</span><span class="p">,</span> <span class="s1">&#39;Embarked&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
+
+    <span class="c1"># Apply Weight of Evidence encoding</span>
+    <span class="p">(</span><span class="s1">&#39;WOEEncoder&#39;</span><span class="p">,</span> <span class="n">WOEEncoder</span><span class="p">()),</span>
+<span class="p">]</span>
+
+<span class="c1"># Build and apply the pipeline</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X_train_transformed</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">X_test_transformed</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Original features: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engineered features: </span><span class="si">{</span><span class="n">X_train_transformed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[Pipeline] Fitting and transforming step 1/18: IsNull
+[Pipeline] Fitting and transforming step 2/18: Length
+[Pipeline] Fitting and transforming step 3/18: SplitExtractName
+[Pipeline] Fitting and transforming step 4/18: SplitExtractTitle
+[Pipeline] Fitting and transforming step 5/18: MathFeatures
+[Pipeline] Fitting and transforming step 6/18: ScalarMathFeatures
+[Pipeline] Fitting and transforming step 7/18: ExtractSubstring
+[Pipeline] Fitting and transforming step 8/18: RenameColumns
+[Pipeline] Fitting and transforming step 9/18: RareCategoryEncoder
+[Pipeline] Fitting and transforming step 10/18: MathFeatures2
+[Pipeline] Fitting and transforming step 11/18: ConditionFeatures
+[Pipeline] Fitting and transforming step 12/18: DropColumns
+[Pipeline] Fitting and transforming step 13/18: NumericImputer
+[Pipeline] Fitting and transforming step 14/18: StringImputer
+[Pipeline] Fitting and transforming step 15/18: CustomDiscretizer
+[Pipeline] Fitting and transforming step 16/18: CastColumns
+[Pipeline] Fitting and transforming step 17/18: InteractionFeatures
+[Pipeline] Fitting and transforming step 18/18: WOEEncoder
+[Pipeline] Transforming step 1/18: IsNull
+[Pipeline] Transforming step 2/18: Length
+[Pipeline] Transforming step 3/18: SplitExtractName
+[Pipeline] Transforming step 4/18: SplitExtractTitle
+[Pipeline] Transforming step 5/18: MathFeatures
+[Pipeline] Transforming step 6/18: ScalarMathFeatures
+[Pipeline] Transforming step 7/18: ExtractSubstring
+[Pipeline] Transforming step 8/18: RenameColumns
+[Pipeline] Transforming step 9/18: RareCategoryEncoder
+[Pipeline] Transforming step 10/18: MathFeatures2
+[Pipeline] Transforming step 11/18: ConditionFeatures
+[Pipeline] Transforming step 12/18: DropColumns
+[Pipeline] Transforming step 13/18: NumericImputer
+[Pipeline] Transforming step 14/18: StringImputer
+[Pipeline] Transforming step 15/18: CustomDiscretizer
+[Pipeline] Transforming step 16/18: CastColumns
+[Pipeline] Transforming step 17/18: InteractionFeatures
+[Pipeline] Transforming step 18/18: WOEEncoder
+
+Original features: 10
+Engineered features: 21
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="4.-Train-Model">
+<h2>4. Train Model<a class="headerlink" href="#4.-Train-Model" title="Link to this heading">#</a></h2>
+<p>Train an XGBoost classifier with parameters tuned for the Titanic dataset.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define model parameters</span>
+<span class="n">imbalance_ratio</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+    <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">,</span>
+    <span class="s1">&#39;subsample&#39;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span>
+    <span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span>
+    <span class="s1">&#39;min_child_weight&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="s1">&#39;reg_alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="s1">&#39;reg_lambda&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+    <span class="s1">&#39;objective&#39;</span><span class="p">:</span> <span class="s1">&#39;binary:logistic&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span> <span class="s1">&#39;logloss&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;scale_pos_weight&#39;</span><span class="p">:</span> <span class="n">imbalance_ratio</span><span class="p">,</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span>
+<span class="p">}</span>
+
+<span class="c1"># Train the model</span>
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model training completed successfully!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy on training set: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Model training completed successfully!
+Accuracy on training set: 0.880
+</pre></div></div>
+</div>
+</section>
+<section id="5.-Analyze-Feature-Importance">
+<h2>5. Analyze Feature Importance<a class="headerlink" href="#5.-Analyze-Feature-Importance" title="Link to this heading">#</a></h2>
+<p>Examine which engineered features contribute most to survival predictions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract and display feature importances</span>
+<span class="n">feature_importance</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">estimator</span><span class="o">.</span><span class="n">feature_names_in_</span><span class="p">,</span>
+    <span class="s2">&quot;importance&quot;</span><span class="p">:</span> <span class="n">estimator</span><span class="o">.</span><span class="n">feature_importances_</span>
+<span class="p">})</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;importance&quot;</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Top 10 Most Important Features:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">feature_importance</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Top 10 Most Important Features:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (10, 2)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>importance</th></tr><tr><td>str</td><td>f32</td></tr></thead><tbody><tr><td>&quot;Sex&quot;</td><td>0.252712</td></tr><tr><td>&quot;Title&quot;</td><td>0.2188</td></tr><tr><td>&quot;Pclass__Embarked&quot;</td><td>0.096314</td></tr><tr><td>&quot;FamilySize&quot;</td><td>0.053011</td></tr><tr><td>&quot;Pclass&quot;</td><td>0.047811</td></tr><tr><td>&quot;Age__CabinDeck&quot;</td><td>0.045299</td></tr><tr><td>&quot;Cabin__is_null&quot;</td><td>0.04449</td></tr><tr><td>&quot;Pclass__CabinDeck&quot;</td><td>0.038667</td></tr><tr><td>&quot;Pclass__Age&quot;</td><td>0.025938</td></tr><tr><td>&quot;FarePerPerson_div&quot;</td><td>0.020867</td></tr></tbody></table></div></div>
+</div>
+</section>
+<section id="6.-Generate-Predictions">
+<h2>6. Generate Predictions<a class="headerlink" href="#6.-Generate-Predictions" title="Link to this heading">#</a></h2>
+<p>Generate survival predictions for the test set and create a submission file.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate predictions</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_transformed</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;PassengerId&quot;</span><span class="p">))</span>
+
+<span class="c1"># Create submission file</span>
+<span class="n">submission</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;PassengerId&quot;</span><span class="p">:</span> <span class="n">test</span><span class="p">[</span><span class="s2">&quot;PassengerId&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;Survived&quot;</span><span class="p">:</span> <span class="n">y_pred</span>
+<span class="p">})</span>
+<span class="n">submission</span><span class="o">.</span><span class="n">write_csv</span><span class="p">(</span><span class="s2">&quot;titanic_submission.csv&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Submission file created successfully!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Predicted survival rate: </span><span class="si">{</span><span class="n">y_pred</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Submission file created successfully!
+Predicted survival rate: 40.91%
+</pre></div></div>
+</div>
+</section>
+<section id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Link to this heading">#</a></h2>
+<p>This notebook showcases the <strong>gators</strong> library’s extensive capabilities for feature engineering in binary classification:</p>
+<section id="Key-Accomplishments:">
+<h3>Key Accomplishments:<a class="headerlink" href="#Key-Accomplishments:" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>String Processing</strong>: Extracted titles from names and cabin decks from cabin numbers</p></li>
+<li><p><strong>Domain Knowledge Features</strong>: Created FamilySize, IsAlone, and FarePerPerson features</p></li>
+<li><p><strong>Missing Value Intelligence</strong>: Created IsNull indicators before imputation to preserve information</p></li>
+<li><p><strong>Smart Discretization</strong>: Binned ages into meaningful life stage categories</p></li>
+<li><p><strong>Advanced Encoding</strong>: Applied WOE encoding for optimal categorical variable handling</p></li>
+<li><p><strong>Feature Interactions</strong>: Generated interaction terms between key categorical features</p></li>
+<li><p><strong>Rare Category Handling</strong>: Automatically grouped infrequent categories to reduce noise</p></li>
+</ol>
+<p>The gators library enabled creation of 20+ engineered features from just 11 original features, demonstrating how domain knowledge can be efficiently encoded through a declarative pipeline approach. The <strong>WOEEncoder</strong> is particularly powerful for binary classification, automatically calculating optimal encodings based on target distribution.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../examples.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="house_price_prediction.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">House Price Prediction with Gators</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-Contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Features-Demonstrated:">Key Features Demonstrated:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Import-Libraries">1. Import Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2.-Load-Data">2. Load Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Build-Feature-Engineering-Pipeline">3. Build Feature Engineering Pipeline</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Missing-Value-Indicators:">Missing Value Indicators:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#String-Feature-Engineering:">String Feature Engineering:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Mathematical-Features:">Mathematical Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Conditional-Features:">Conditional Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Data-Cleaning:">Data Cleaning:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Discretization:">Discretization:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Encoding:">Encoding:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4.-Train-Model">4. Train Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5.-Analyze-Feature-Importance">5. Analyze Feature Importance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#6.-Generate-Predictions">6. Generate Predictions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Accomplishments:">Key Accomplishments:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
