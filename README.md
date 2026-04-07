@@ -3,6 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/gators)](https://pypi.org/project/gators/)
 [![Python versions](https://img.shields.io/pypi/pyversions/gators)](https://pypi.org/project/gators/)
 [![License](https://img.shields.io/github/license/paypal/gators)](https://github.com/paypal/gators/blob/main/LICENSE)
+[![Tests](https://github.com/paypal/gators/actions/workflows/tests.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/codecov/c/github/paypal/gators)](https://codecov.io/gh/paypal/gators)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
@@ -11,46 +12,126 @@
 
 ## What is Gators?
 
-Gators is a high-performance machine learning preprocessing library built on top of [Polars](https://pola.rs/), designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging Polars' blazing-fast multi-core processing, Gators makes data preprocessing and feature engineering both **faster** and **simpler**.
+Gators is a **lightning-fast data preprocessing and feature engineering** library built on top of Polars, designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging **Polars’ blazing-fast multi-core processing**.
 
-Built by the PSP Data Team at PayPal, Gators solves a critical pain point: bridging the gap between Python-based model development and production deployment. With Gators, you can **develop and deploy using only Python** — no more reimplementing preprocessing logic in other languages for production!
+Built by the PSP Data Team at PayPal, Gators makes data preprocessing and feature engineering both **faster and simpler**.
 
 ## ⚡ Key Features
 
 - **🚀 Lightning Fast**: Built on Polars for multi-core parallel processing
 - **🔄 Unified API**: Consistent sklearn-style `.fit()` and `.transform()` interface
-- **🎯 Comprehensive**: 60+ preprocessing transformers covering every use case
+- **📦 Production Ready**: Deploy the same Python code from notebook to production
+- **🎯 Comprehensive**: 75+ preprocessing transformers covering every use case
 - **🔗 Pipeline Support**: Chain transformers seamlessly with the Pipeline class
 - **🎓 Easy to Learn**: If you know sklearn, you already know Gators
 
 ## 🛠️ What Can Gators Do?
 
 ### 🧹 Data Cleaning
-Clean and prepare your data with powerful transformers.
+Clean and prepare your data with powerful transformers:
+- `CastColumns` - Convert column data types
+- `CorrelationFilter` - Remove highly correlated features
+- `DropColumns` - Remove specified columns
+- `DropConstantColumns` - Remove columns with constant values
+- `DropDuplicateColumns` - Remove duplicate columns
+- `DropDuplicateRows` - Remove duplicate rows
+- `DropHighNaNRatio` - Remove columns with high missing value ratio
+- `DropLowCardinality` - Remove low cardinality columns
+- `HighCardinalityFilter` - Filter high cardinality features
+- `OutlierFilter` - Detect and filter outliers
+- `RenameColumns` - Rename columns
+- `Replace` - Replace values in data
+- `VarianceFilter` - Remove low variance features
 
 ### 🔢 Categorical Encoding
-Transform categorical variables with advanced encoding techniques.
+Transform categorical variables with advanced encoding techniques:
+- `BinaryEncoder` - Binary representation encoding
+- `CatBoostEncoder` - CatBoost-style encoding
+- `CountEncoder` - Frequency-based encoding
+- `LeaveOneOutEncoder` - Leave-one-out encoding
+- `OneHotEncoder` - Classic one-hot encoding
+- `OrdinalEncoder` - Order-based encoding
+- `RareCategoryEncoder` - Handle rare categories intelligently
+- `TargetEncoder` - Target-based encoding for supervised learning
+- `WOEEncoder` - Weight of Evidence encoding
 
 ### 🎯 Feature Generation - Numeric
-Create powerful numeric features.
+Create powerful numeric features:
+- `ComparisonFeatures` - Generate comparison features
+- `ConditionFeatures` - Create conditional features
+- `DistanceFeatures` - Calculate distance features
+- `GroupLagFeatures` - Generate lag features by group
+- `GroupScalingFeatures` - Scale features within groups
+- `GroupStatisticsFeatures` - Calculate group statistics
+- `IsNull` - Generate null indicator features
+- `MathFeatures` - Apply mathematical operations (add, subtract, multiply, divide)
+- `PlanRotationFeatures` - Rotate features in feature space
+- `PolynomialFeatures` - Generate polynomial combinations
+- `RatioFeatures` - Create ratio features between columns
+- `RowStatisticsFeatures` - Calculate row-wise statistics
+- `RuleFeatures` - Apply custom business rules
+- `ScalarMathFeatures` - Apply scalar operations
 
 ### 📝 Feature Generation - String
-Extract insights from text data.
+Extract insights from text data:
+- `CharacterStatistics` - Extract character-level statistics
+- `CombineFeatures` - Combine string features
+- `Contains` - Check if string contains pattern
+- `Endswith` - Check if string ends with pattern
+- `ExtractSubstring` - Extract substring from text
+- `InteractionFeatures` - Generate string interaction features
+- `Length` - Calculate string length
+- `Lower` - Convert text to lowercase
+- `NGram` - Generate n-gram features
+- `Occurrences` - Count pattern occurrences
+- `PatternDetector` - Detect patterns in text
+- `Split` - Split strings
+- `SplitExtract` - Split and extract from strings
+- `Startswith` - Check if string starts with pattern
+- `Upper` - Convert text to uppercase
 
 ### 📅 Feature Generation - DateTime
-Unlock temporal patterns.
+Unlock temporal patterns:
+- `BusinessTimeFeatures` - Business hours/days calculations
+- `CyclicFeatures` - Circular encoding for cyclical time features
+- `DiffFeatures` - Calculate time differences
+- `DurationToDatetime` - Convert duration to datetime
+- `HolidayFeatures` - Detect and encode holidays
+- `OrdinalFeatures` - Extract year, month, day, hour, etc.
+- `TimeBinFeatures` - Bin times into categories
+- `TimeWindowFeatures` - Generate time window features
 
 ### 🔄 Missing Value Imputation
-Handle missing data intelligently.
+Handle missing data intelligently:
+- `BooleanImputer` - Impute boolean columns
+- `GroupByImputer` - Group-based imputation strategies
+- `NumericImputer` - Impute numeric columns (mean, median, mode, constant)
+- `StringImputer` - Impute string columns (mode, constant)
 
 ### 📊 Discretization
-Convert continuous variables into bins.
+Convert continuous variables into bins:
+- `CustomDiscretizer` - Custom bin edges
+- `EqualLengthDiscretizer` - Equal-width binning
+- `EqualSizeDiscretizer` - Equal-frequency binning
+- `GeometricDiscretizer` - Geometric progression binning
+- `KMeansDiscretizer` - K-means clustering-based binning
+- `QuantileDiscretizer` - Quantile-based binning
+- `TreeBasedDiscretizer` - Decision tree-based binning
 
 ### ⚖️ Feature Scaling
-Normalize your features.
+Normalize your features:
+- `ArcsinSquarerootScaler` - Arcsine square root transformation
+- `ArcsinhScaler` - Inverse hyperbolic sine transformation
+- `BoxCox` - Box-Cox power transformation
+- `LogScaler` - Logarithmic scaling
+- `MinmaxScaler` - Min-max normalization
+- `PowerScaler` - Power transformation
+- `StandardScaler` - Standardization (z-score normalization)
+- `YeoJonhson` - Yeo-Johnson power transformation
 
 ### 🔗 Pipeline
 Chain all transformers together:
+- `Pipeline` - sklearn-compatible pipeline for chaining transformers
 
 ## 🚀 Quick Start
 
@@ -98,19 +179,11 @@ pip install -e .
 
 Gators is perfect for:
 
-- **Data Preprocessing** - End-to-end data cleaning and feature engineering
+- **Fraud Detection** - Extensive feature engineering for anomaly detection
 - **Risk Modeling** - Create powerful predictive features
 - **Customer Analytics** - Transform complex customer data
 - **Time Series** - Rich datetime feature engineering
 - **NLP Tasks** - String feature extraction and encoding
-
-## 🏗️ Why Gators?
-
-Gators is a **lightning-fast data preprocessing and feature engineering** library built on top of  [Polars](https://pola.rs/), 
-designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging Polars' 
-blazing-fast multi-core processing.
-
-Built by the PSP Data Team at PayPal, Gators makes data preprocessing and feature engineering both **faster** and **simpler**.
 
 
 ## 🤝 Contributing
