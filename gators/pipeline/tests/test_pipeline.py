@@ -1,233 +1,387 @@
-# License: Apache-2.0
-import numpy as np
-import pandas as pd
+"""
+Tests for the Gators Pipeline class.
+"""
+
+import polars as pl
 import pytest
-from pandas.testing import assert_frame_equal, assert_series_equal
-from sklearn.ensemble import RandomForestClassifier
 
-from gators.feature_selection.select_from_model import SelectFromModel
-from gators.pipeline.pipeline import Pipeline
-from gators.transformers.transformer import Transformer
+from gators.imputers import NumericImputer, StringImputer
+from gators.pipeline import Pipeline
 
 
-class MultiplyTransformer(Transformer):
-    def __init__(self, multiplier):
-        self.multiplier = multiplier
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-
-        return self.multiplier * X
-
-    def transform_numpy(self, X):
-        return self.multiplier * X
-
-
-class NameTransformer(Transformer):
-    def fit(self, X, y=None):
-        self.column_names = [f"{c}_new" for c in X.columns]
-        self.column_mapping = dict(zip(self.column_names, [[c] for c in X.columns]))
-        self.column_mapping["D_new"] = "D"
-        return self
-
-    def transform(self, X):
-        return X.rename(columns=dict(zip(X.columns, self.column_names)))
-
-    def transform_numpy(self, X):
-        return X
-
-
-@pytest.fixture
-def pipeline_example():
-    X = pd.DataFrame(
-        [
-            [1.764, 0.4, 0.979, 2.241],
-            [1.868, -0.977, 0.95, -0.151],
-            [-0.103, 0.411, 0.144, 1.454],
-            [0.761, 0.122, 0.444, 0.334],
-        ],
-        columns=list("ABCD"),
-    )
-    y = pd.Series([0, 1, 0, 1], name="TARGET")
+def test_pipeline_creation():
+    """Test that a Pipeline can be created."""
     steps = [
-        MultiplyTransformer(4.0),
-        MultiplyTransformer(0.5),
-        NameTransformer(),
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+        (
+            "string_imputer",
+            StringImputer(strategy="constant", value="MISSING", inplace=True),
+        ),
     ]
-    pipe = Pipeline(steps)
-    X_expected = pd.DataFrame(
-        {
-            "A_new": {0: 3.528, 1: 3.736, 2: -0.206, 3: 1.522},
-            "B_new": {0: 0.8, 1: -1.954, 2: 0.822, 3: 0.244},
-            "C_new": {0: 1.958, 1: 1.9, 2: 0.288, 3: 0.888},
-            "D_new": {0: 4.482, 1: -0.302, 2: 2.908, 3: 0.668},
-        }
-    )
-    return pipe, X, X_expected
+    pipe = Pipeline(steps=steps)
+    assert len(pipe) == 2
+    assert "numeric_imputer" in pipe.named_steps
+    assert "string_imputer" in pipe.named_steps
 
 
-@pytest.fixture
-def pipeline_with_feature_selection_example():
-    X = pd.DataFrame(
-        [
-            [1.764, 0.4, 0.979, 2.241],
-            [1.868, -0.977, 0.95, -0.151],
-            [-0.103, 0.411, 0.144, 1.454],
-            [0.761, 0.122, 0.444, 0.334],
-        ],
-        columns=list("ABCD"),
-    )
-    y = pd.Series([0, 1, 0, 1], name="TARGET")
-    model = RandomForestClassifier(n_estimators=6, max_depth=4, random_state=0)
+def test_pipeline_fit_transform():
+    """Test fit_transform on a simple dataset."""
+    # Create test data
+    X = pl.DataFrame({"num_col": [1.0, 2.0, None, 4.0, 5.0], "str_col": ["a", "b", None, "d", "e"]})
+
     steps = [
-        MultiplyTransformer(4.0),
-        MultiplyTransformer(0.5),
-        NameTransformer(),
-        SelectFromModel(model=model, k=3),
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+        (
+            "string_imputer",
+            StringImputer(strategy="constant", value="MISSING", inplace=True),
+        ),
     ]
-    pipe = Pipeline(steps).fit(X, y)
-    X_expected = pd.DataFrame(
-        {
-            "A_new": {0: 3.528, 1: 3.736, 2: -0.206, 3: 1.522},
-            "B_new": {0: 0.8, 1: -1.954, 2: 0.822, 3: 0.244},
-            "C_new": {0: 1.958, 1: 1.9, 2: 0.288, 3: 0.888},
-            "D_new": {0: 4.482, 1: -0.302, 2: 2.908, 3: 0.668},
-        }
-    )
-    return pipe, X, X_expected
+
+    pipe = Pipeline(steps=steps)
+    result = pipe.fit_transform(X)
+
+    # Check no nulls remain
+    assert result.null_count().sum_horizontal()[0] == 0
+    assert isinstance(result, pl.DataFrame)
 
 
-@pytest.fixture
-def pipeline_with_model_example():
-    X = pd.DataFrame(
-        [
-            [1.764, 0.4, 0.979, 2.241],
-            [1.868, -0.977, 0.95, -0.151],
-            [-0.103, 0.411, 0.144, 1.454],
-            [0.761, 0.122, 0.444, 0.334],
-        ],
-        columns=list("ABCD"),
+def test_pipeline_fit_then_transform():
+    """Test separate fit and transform calls."""
+    X_train = pl.DataFrame(
+        {"num_col": [1.0, 2.0, None, 4.0, 5.0], "str_col": ["a", "b", None, "d", "e"]}
     )
-    y = pd.Series([0, 1, 0, 1], name="TARGET")
-    model = RandomForestClassifier(n_estimators=6, max_depth=4, random_state=0)
+
+    X_test = pl.DataFrame({"num_col": [None, 7.0, 8.0], "str_col": ["x", None, "z"]})
+
     steps = [
-        MultiplyTransformer(4.0),
-        MultiplyTransformer(0.5),
-        NameTransformer(),
-        model,
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+        (
+            "string_imputer",
+            StringImputer(strategy="constant", value="MISSING", inplace=True),
+        ),
     ]
-    X_expected = pd.DataFrame(
-        {
-            "A_new": {0: 3.528, 1: 3.736, 2: -0.206, 3: 1.522},
-            "B_new": {0: 0.8, 1: -1.954, 2: 0.822, 3: 0.244},
-            "C_new": {0: 1.958, 1: 1.9, 2: 0.288, 3: 0.888},
-            "D_new": {0: 4.482, 1: -0.302, 2: 2.908, 3: 0.668},
-        }
-    )
-    pipe = Pipeline(steps).fit(X, y)
-    return pipe, X, X_expected
+
+    pipe = Pipeline(steps=steps)
+    pipe.fit(X_train)
+    result = pipe.transform(X_test)
+
+    # Check no nulls remain
+    assert result.null_count().sum_horizontal()[0] == 0
+    assert isinstance(result, pl.DataFrame)
 
 
-def test_pandas_pipeline_fit_and_transform(pipeline_example):
-    pipe, X, X_expected = pipeline_example
-    _ = pipe.fit(X)
-    X_new = pipe.transform(X)
-    assert_frame_equal(X_expected, X_new)
+def test_pipeline_get_set_params():
+    """Test get_params and set_params."""
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps)
+    params = pipe.get_params(deep=True)
+
+    assert "steps" in params
+    assert "verbose" in params
+    assert "numeric_imputer__strategy" in params
+
+    # Test set_params
+    pipe.set_params(verbose=True)
+    assert pipe.verbose is True
 
 
-def test_pandas_fit_transform_pipeline(pipeline_example):
-    pipe, X, X_expected = pipeline_example
-    X_new = pipe.fit_transform(X)
-    assert_frame_equal(X_expected, X_new)
+def test_pipeline_indexing():
+    """Test accessing pipeline steps by index."""
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+        (
+            "string_imputer",
+            StringImputer(strategy="constant", value="MISSING", inplace=True),
+        ),
+    ]
+
+    pipe = Pipeline(steps=steps)
+
+    # Test integer indexing
+    first_step = pipe[0]
+    assert isinstance(first_step, NumericImputer)
+
+    # Test slice
+    sub_pipe = pipe[0:1]
+    assert isinstance(sub_pipe, Pipeline)
+    assert len(sub_pipe) == 1
 
 
-def test_pipeline_predict_pandas(pipeline_with_model_example):
-    pipe, X, X_expected = pipeline_with_model_example
-    y_pred = pipe.predict(X)
-    assert y_pred.shape == (4,)
+def test_pipeline_validation_missing_fit():
+    """Test that validation catches missing fit method."""
+
+    class BadTransformer:
+        def transform(self, X):
+            return X
+
+    steps = [("bad", BadTransformer())]
+
+    with pytest.raises(TypeError, match="All steps must have a 'fit' method"):
+        Pipeline(steps=steps)
 
 
-def test_pipeline_predict_proba_pandas(pipeline_with_model_example):
-    pipe, X, X_expected = pipeline_with_model_example
-    y_pred = pipe.predict_proba(X)
-    assert y_pred.shape == (4, 2)
+def test_pipeline_validation_missing_transform():
+    """Test that validation catches missing transform method."""
+
+    class BadTransformer:
+        def fit(self, X, y=None):
+            return self
+
+    steps = [("bad", BadTransformer())]
+
+    with pytest.raises(TypeError, match="All steps must have a 'transform' method"):
+        Pipeline(steps=steps)
 
 
-def test_pipeline_numpy(pipeline_example):
-    pipe, X, X_expected = pipeline_example
-    _ = pipe.fit(X)
-    X_numpy_new = pipe.transform_numpy(X.to_numpy())
-    assert np.allclose(X_expected.to_numpy(), X_numpy_new)
+def test_pipeline_verbose_fit():
+    """Test verbose mode during fit."""
+    X = pl.DataFrame({"num_col": [1.0, 2.0, 3.0]})
+
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps, verbose=True)
+    pipe.fit(X)
+    assert True
 
 
-def test_pipeline_predict_numpy(pipeline_with_model_example):
-    pipe, X, X_expected = pipeline_with_model_example
-    y_pred = pipe.predict_numpy(X.to_numpy())
-    assert y_pred.shape == (4,)
+def test_pipeline_verbose_transform():
+    """Test verbose mode during transform."""
+    X = pl.DataFrame({"num_col": [1.0, 2.0, 3.0]})
+
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps, verbose=True)
+    pipe.fit(X)
+    result = pipe.transform(X)
+    assert isinstance(result, pl.DataFrame)
 
 
-def test_pipeline_predict_proba_numpy(pipeline_with_model_example):
-    pipe, X, X_expected = pipeline_with_model_example
-    y_pred = pipe.predict_proba_numpy(X.to_numpy())
-    assert y_pred.shape == (4, 2)
+def test_pipeline_verbose_fit_transform():
+    """Test verbose mode during fit_transform."""
+    X = pl.DataFrame({"num_col": [1.0, 2.0, 3.0]})
+
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps, verbose=True)
+    result = pipe.fit_transform(X)
+    assert isinstance(result, pl.DataFrame)
 
 
-def test_default_fit_transform_pipeline(pipeline_example):
-    pipe, X, X_expected = pipeline_example
-    X_new = pipe.fit_transform(X)
-    assert_frame_equal(X_expected, X_new)
+def test_pipeline_get_params_shallow():
+    """Test get_params with deep=False."""
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps)
+    params = pipe.get_params(deep=False)
+
+    assert "steps" in params
+    assert "verbose" in params
+    # Should not have nested parameters
+    assert "numeric_imputer__strategy" not in params
 
 
-def test_init():
-    with pytest.raises(TypeError):
-        _ = Pipeline(0)
-    with pytest.raises(TypeError):
-        _ = Pipeline([])
+def test_pipeline_set_params_invalid():
+    """Test set_params with invalid parameter."""
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps)
+
+    with pytest.raises(ValueError, match="Invalid parameter"):
+        pipe.set_params(invalid_param="value")
 
 
-def test_pipeline_transform_input_data(pipeline_example):
-    pipe, X, _ = pipeline_example
-    _ = pipe.fit(X)
-    with pytest.raises(TypeError):
-        _ = pipe.transform(X.to_numpy())
-    with pytest.raises(TypeError):
-        _ = pipe.transform(X, X)
-    with pytest.raises(TypeError):
-        _ = pipe.transform_numpy(X)
+def test_pipeline_set_params_pipeline_level():
+    """Test set_params with pipeline-level parameters."""
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps, verbose=False)
+    pipe.set_params(verbose=True)
+
+    assert pipe.verbose == True
 
 
-def test_get_feature_importances(pipeline_with_feature_selection_example):
-    pipe, _, _ = pipeline_with_feature_selection_example
-    feature_importances_expected = pd.Series({"D_new": 0.6, "B_new": 0.4})
-    feature_importances = pipe.get_feature_importances(k=2)
-    assert_series_equal(feature_importances, feature_importances_expected)
+def test_pipeline_repr():
+    """Test string representation of pipeline."""
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+        ("string_imputer", StringImputer(strategy="constant", value="MISSING", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps)
+    repr_str = repr(pipe)
+
+    assert "Pipeline" in repr_str
+    assert "numeric_imputer" in repr_str
+    assert "string_imputer" in repr_str
+    assert "NumericImputer" in repr_str
+    assert "StringImputer" in repr_str
 
 
-def test_get_features(pipeline_with_feature_selection_example):
-    pipe, _, _ = pipeline_with_feature_selection_example
-    assert ["D_new", "B_new"] == pipe.get_features()
+def test_pipeline_empty_set_params():
+    """Test set_params with no parameters."""
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps)
+    result = pipe.set_params()
+
+    assert result is pipe
 
 
-def test_get_feature_importances_no_feature_selection(pipeline_example):
-    pipe, _, _ = pipeline_example
-    with pytest.raises(AttributeError):
-        pipe.get_feature_importances(k=2)
+def test_pipeline_get_params_no_deep_support():
+    """Test get_params with transformer that doesn't support deep parameter."""
+
+    class TransformerNoDeep:
+        def fit(self, X, y=None):
+            return self
+
+        def transform(self, X):
+            return X
+
+        def get_params(self):
+            # Doesn't accept deep parameter
+            return {"some_param": "value"}
+
+    steps = [("no_deep", TransformerNoDeep())]
+    pipe = Pipeline(steps=steps)
+    params = pipe.get_params(deep=True)
+
+    assert "steps" in params
+    assert "no_deep__some_param" in params
 
 
-def test_get_features_no_feature_selection(pipeline_example):
-    pipe, _, _ = pipeline_example
-    with pytest.raises(AttributeError):
-        pipe.get_features()
+def test_pipeline_get_params_exception():
+    """Test get_params with transformer whose get_params raises exception."""
+
+    class TransformerBadGetParams:
+        def fit(self, X, y=None):
+            return self
+
+        def transform(self, X):
+            return X
+
+        def get_params(self):
+            raise RuntimeError("get_params failed")
+
+    steps = [("bad_get", TransformerBadGetParams())]
+    pipe = Pipeline(steps=steps)
+    params = pipe.get_params(deep=True)
+
+    # Should still return pipeline params without crashing
+    assert "steps" in params
+    assert "verbose" in params
 
 
-def test_get_production_columns(pipeline_with_feature_selection_example):
-    pipe, _, _ = pipeline_with_feature_selection_example
-    assert pipe.get_production_columns() == ["B", "D"]
+def test_pipeline_get_params_pydantic_fallback():
+    """Test get_params falls back to Pydantic for gators transformers."""
+    # Gators transformers are Pydantic models
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+    ]
+
+    pipe = Pipeline(steps=steps)
+    params = pipe.get_params(deep=True)
+
+    # Should have Pydantic fields
+    assert "numeric_imputer__strategy" in params
+    assert "numeric_imputer__inplace" in params
 
 
-def test_get_production_columns_no_feature_selection(pipeline_example):
-    pipe, _, _ = pipeline_example
-    with pytest.raises(AttributeError):
-        pipe.get_production_columns()
+def test_pipeline_set_params_no_set_params_method():
+    """Test set_params with transformer lacking set_params method."""
+
+    class TransformerNoSetParams:
+        def __init__(self):
+            self.param1 = "initial"
+
+        def fit(self, X, y=None):
+            return self
+
+        def transform(self, X):
+            return X
+
+        def get_params(self, deep=True):
+            return {"param1": self.param1}
+
+    steps = [("no_set", TransformerNoSetParams())]
+    pipe = Pipeline(steps=steps)
+
+    pipe.set_params(no_set__param1="modified")
+
+    assert pipe.named_steps["no_set"].param1 == "modified"
+
+
+def test_pipeline_set_params_set_params_raises_exception():
+    """Test set_params with transformer whose set_params raises exception."""
+
+    class TransformerBadSetParams:
+        def __init__(self):
+            self.param1 = "initial"
+
+        def fit(self, X, y=None):
+            return self
+
+        def transform(self, X):
+            return X
+
+        def get_params(self, deep=True):
+            return {"param1": self.param1}
+
+        def set_params(self, **params):
+            raise TypeError("set_params not supported")
+
+    steps = [("bad_set", TransformerBadSetParams())]
+    pipe = Pipeline(steps=steps)
+
+    # Should fall back to direct attribute setting
+    pipe.set_params(bad_set__param1="modified")
+
+    assert pipe.named_steps["bad_set"].param1 == "modified"
+
+
+def test_pipeline_set_params_attribute_error():
+    """Test set_params with transformer that raises AttributeError."""
+
+    class TransformerAttrError:
+        def __init__(self):
+            self.param1 = "initial"
+
+        def fit(self, X, y=None):
+            return self
+
+        def transform(self, X):
+            return X
+
+        def get_params(self, deep=True):
+            return {"param1": self.param1}
+
+        def set_params(self, **params):
+            raise AttributeError("Attribute not found")
+
+    steps = [("attr_err", TransformerAttrError())]
+    pipe = Pipeline(steps=steps)
+
+    # Should fall back to direct attribute setting
+    pipe.set_params(attr_err__param1="modified")
+
+    assert pipe.named_steps["attr_err"].param1 == "modified"
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])

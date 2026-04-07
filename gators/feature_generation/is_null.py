@@ -1,168 +1,85 @@
-# License: Apache-2.0
-from typing import List, Union
+from typing import Dict, List, Optional
 
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
-
-from feature_gen import is_null, is_null_object
-
-from ..util import util
-from ._base_feature_generation import _BaseFeatureGeneration
+import polars as pl
+from pydantic import BaseModel
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class IsNull(_BaseFeatureGeneration):
-    """Create new columns based on missing values.
+class IsNull(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    Creates boolean features indicating whether values are null for specified columns.
 
     Parameters
     ----------
-    columns : List[str]
-        List of columns.
-    dtype : type, default to np.float64
-        Numpy dtype of the output columns.
+    subset : Optional[List[str]], default=None
+        List of column names to check for null values.
+        If None, all columns in the DataFrame are used.
 
     Examples
-    ---------
+    --------
+    >>> from is_null import IsNull
+    >>> import polars as pl
 
-    * fit & transform with `pandas`
+    >>> X ={'A': [1, None, 3, 4],
+    ...         'B': [4, 3, None, 1],
+    ...         'C': [1, 2, 1, 2]}
+    >>> X = pl.DataFrame(X)
 
-    >>> import pandas as pd
-    >>> from gators.feature_generation import IsNull
-    >>> X = pd.DataFrame({'A': [None, 'a', 'b'], 'B': [np.nan, 1, 1]})
-    >>> obj = IsNull(columns=['A', 'B'])
-    >>> obj.fit_transform(X)
-          A    B  A__is_null  B__is_null
-    0  None  NaN         1.0         1.0
-    1     a  1.0         0.0         0.0
-    2     b  1.0         0.0         0.0
-
-    * fit & transform with `koalas`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import IsNull
-    >>> X = ks.DataFrame({'A': [None, 'a', 'b'], 'B': [np.nan, 1, 1]})
-    >>> obj = IsNull(columns=['A', 'B'])
-    >>> obj.fit_transform(X)
-          A    B  A__is_null  B__is_null
-    0  None  NaN         1.0         1.0
-    1     a  1.0         0.0         0.0
-    2     b  1.0         0.0         0.0
-
-    * fit with `pandas` & transform with `NumPy`
-
-    >>> import pandas as pd
-    >>> from gators.feature_generation import IsNull
-    >>> X = pd.DataFrame({'A': [None, 'a', 'b'], 'B': [np.nan, 1, 1]})
-    >>> obj = IsNull(columns=['A', 'B'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[None, nan, 1.0, 1.0],
-           ['a', 1.0, 0.0, 0.0],
-           ['b', 1.0, 0.0, 0.0]], dtype=object)
-
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.feature_generation import IsNull
-    >>> X = ks.DataFrame({'A': [None, 'a', 'b'], 'B': [np.nan, 1, 1]})
-    >>> obj = IsNull(columns=['A', 'B'])
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[None, nan, 1.0, 1.0],
-           ['a', 1.0, 0.0, 0.0],
-           ['b', 1.0, 0.0, 0.0]], dtype=object)
-
+    >>> transformer = IsNull(subset=['A', 'B'])
+    >>> transformer.fit(X)
+    IsNull(subset=['A', 'B'])
+    >>> result = transformer.transform(X)
+    >>> result
+    shape: (4, 5)
+    ┌──────┬──────┬─────┬──────────────┬──────────────┐
+    │  A   │  B   │  C  │ A__is_null   │ B__is_null   │
+    │ i64  │ i64  │ i64 │ bool         │ bool         │
+    ├──────┼──────┼─────┼──────────────┼──────────────┤
+    │  1   │  4   │  1  │ false        │ false        │
+    │ null │  3   │  2  │ true         │ false        │
+    │  3   │ null │  1  │ false        │ true         │
+    │  4   │  1   │  2  │ false        │ false        │
+    └──────┴──────┴─────┴──────────────┴──────────────┘
     """
 
-    def __init__(
-        self,
-        columns: List[str],
-        column_names: List[str] = None,
-        dtype: type = np.float64,
-    ):
-        if not isinstance(columns, list):
-            raise TypeError("`columns` should be a list.")
-        if not columns:
-            raise ValueError("`columns` should not be empty.")
-        if column_names is not None and not isinstance(column_names, list):
-            raise TypeError("`column_names` should be a list.")
-        if not column_names:
-            column_names = [f"{c}__is_null" for c in columns]
-        if len(column_names) != len(columns):
-            raise ValueError("Length of `columns` and `column_names` should match.")
-        column_mapping = dict(zip(column_names, columns))
-        _BaseFeatureGeneration.__init__(
-            self,
-            columns=columns,
-            column_names=column_names,
-            column_mapping=column_mapping,
-            dtype=dtype,
-        )
+    subset: Optional[List[str]] = None
+    _column_mapping: Dict[str, str] = {}
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ):
-        """
-        Fit the dataframe X.
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "IsNull":
+        """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
-            y (np.ndarray, optional): labels. Defaults to None.
+        X : pl.DataFrame
+            Input DataFrame.
+        y : Optional[pl.Series], default=None
+            Target variable. Not used, present here for compatibility.
 
         Returns
         -------
-        IsNull:
-            Instance of itself.
+        IsNull
+            Fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.idx_columns = util.get_idx_columns(
-            columns=X.columns, selected_columns=self.columns
-        )
+        if self.subset is None:
+            self.subset = X.columns
+
+        self._column_mapping = {col: f"{col}__is_null" for col in self.subset}
         return self
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
-        """Transform the dataframe `X`.
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by adding is_null indicator columns.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
+        X : pl.DataFrame
+            Input DataFrame to transform.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
-            Transformed dataframe.
+        pl.DataFrame
+            Transformed DataFrame with additional is_null columns.
         """
-        self.check_dataframe(X)
-        if isinstance(X, pd.DataFrame):
-            X[self.column_names] = X[self.columns].isnull().astype(self.dtype)
-            return X
-        for col, name in zip(self.columns, self.column_names):
-            X = X.assign(dummy=X[col].isnull().astype(self.dtype)).rename(
-                columns={"dummy": name}
-            )
-        return X
-
-    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
-
-        Parameters
-        ----------
-        X  : np.ndarray
-            Input array.
-
-        Returns
-        -------
-        np.ndarray
-            Transformed array.
-        """
-        self.check_array(X)
-        if X.dtype == object:
-            return is_null_object(X, self.idx_columns)
-        return is_null(X, self.idx_columns, self.dtype)
+        new_columns = [
+            pl.col(col).is_null().alias(self._column_mapping[col]) for col in self.subset
+        ]
+        return X.with_columns(new_columns)

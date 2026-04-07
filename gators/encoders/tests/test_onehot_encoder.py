@@ -1,222 +1,155 @@
-# License: Apache-2.0
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
-from pandas.testing import assert_frame_equal
+from polars.testing import assert_frame_equal
 
-from gators.encoders.onehot_encoder import OneHotEncoder
-
-ks.set_option("compute.default_index_type", "distributed-sequence")
+from gators.encoders import OneHotEncoder
 
 
 @pytest.fixture
-def data():
-    X = pd.DataFrame(
+def sample_X():
+    return pl.DataFrame(
         {
-            "A": ["Q", "Q", "W"],
-            "B": ["Q", "W", "W"],
-            "C": ["W", "Q", "W"],
-            "D": [1, 2, 3],
+            "A": ["foo", "bar", "foo", "bar", "baz"],
+            "B": ["one", "one", "two", "two", "one"],
         }
     )
-    X_expected = pd.DataFrame(
-        {
-            "D": {0: 1.0, 1: 2.0, 2: 3.0},
-            "A__W": {0: 0.0, 1: 0.0, 2: 1.0},
-            "A__Q": {0: 1.0, 1: 1.0, 2: 0.0},
-            "B__W": {0: 0.0, 1: 1.0, 2: 1.0},
-            "B__Q": {0: 1.0, 1: 0.0, 2: 0.0},
-            "C__W": {0: 1.0, 1: 0.0, 2: 1.0},
-            "C__Q": {0: 0.0, 1: 1.0, 2: 0.0},
-        }
-    )
-    obj = OneHotEncoder().fit(X)
-    return obj, X, X_expected
 
 
 @pytest.fixture
-def data_int16():
-    X = pd.DataFrame(
+def encoder():
+    return OneHotEncoder()
+
+
+def test_transform_defaults(sample_X):
+    encoder = OneHotEncoder()
+    encoder.fit(sample_X)
+    transformed_X = encoder.transform(sample_X)
+    expected_X = pl.DataFrame(
         {
-            "A": ["Q", "Q", "W"],
-            "B": ["Q", "W", "W"],
-            "C": ["W", "Q", "W"],
-            "D": [1, 2, 3],
+            "A__foo": [1, 0, 1, 0, 0],
+            "A__bar": [0, 1, 0, 1, 0],
+            "A__baz": [0, 0, 0, 0, 1],
+            "B__one": [1, 1, 0, 0, 1],
+            "B__two": [0, 0, 1, 1, 0],
+        },
+        schema={
+            "A__foo": pl.Float64,
+            "A__bar": pl.Float64,
+            "A__baz": pl.Float64,
+            "B__one": pl.Float64,
+            "B__two": pl.Float64,
+        },
+    )
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)
+
+
+def test_transform_with_columns_and_no_drop(sample_X):
+    encoder = OneHotEncoder(subset=["A"], drop_columns=False)
+    encoder.fit(sample_X)
+    transformed_X = encoder.transform(sample_X)
+    expected_X = pl.DataFrame(
+        {
+            "A": ["foo", "bar", "foo", "bar", "baz"],
+            "B": ["one", "one", "two", "two", "one"],
+            "A__foo": [1, 0, 1, 0, 0],
+            "A__bar": [0, 1, 0, 1, 0],
+            "A__baz": [0, 0, 0, 0, 1],
+        },
+        schema={
+            "A": pl.String,
+            "B": pl.String,
+            "A__foo": pl.Float64,
+            "A__bar": pl.Float64,
+            "A__baz": pl.Float64,
+        },
+    )
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)
+
+
+def test_transform_with_min_count(sample_X):
+    encoder = OneHotEncoder(min_count=2)
+    encoder.fit(sample_X)
+    transformed_X = encoder.transform(sample_X)
+    expected_X = pl.DataFrame(
+        {
+            "A__foo": [1, 0, 1, 0, 0],
+            "A__bar": [0, 1, 0, 1, 0],
+            "B__one": [1, 1, 0, 0, 1],
+            "B__two": [0, 0, 1, 1, 0],
+        },
+        schema={
+            "A__foo": pl.Float64,
+            "A__bar": pl.Float64,
+            "B__one": pl.Float64,
+            "B__two": pl.Float64,
+        },
+    )
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)
+
+
+def test_transform_with_min_count_ratio(sample_X):
+    encoder = OneHotEncoder(min_count=0.3)
+    encoder.fit(sample_X)
+    transformed_X = encoder.transform(sample_X)
+    expected_X = pl.DataFrame(
+        {
+            "A__foo": [1, 0, 1, 0, 0],
+            "A__bar": [0, 1, 0, 1, 0],
+            "B__one": [1, 1, 0, 0, 1],
+            "B__two": [0, 0, 1, 1, 0],
+        },
+        schema={
+            "A__foo": pl.Float64,
+            "A__bar": pl.Float64,
+            "B__one": pl.Float64,
+            "B__two": pl.Float64,
+        },
+    )
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)
+
+
+def test_transform_with_categories(sample_X):
+    categories = {"A": ["foo", "baz"], "B": ["one"]}
+    encoder = OneHotEncoder(categories=categories)
+    encoder.fit(sample_X)
+    transformed_X = encoder.transform(sample_X)
+    expected_X = pl.DataFrame(
+        {
+            "A__foo": [1, 0, 1, 0, 0],
+            "A__baz": [0, 0, 0, 0, 1],
+            "B__one": [1, 1, 0, 0, 1],
+        },
+        schema={"A__foo": pl.Float64, "A__baz": pl.Float64, "B__one": pl.Float64},
+    )
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)
+
+
+def test_transform_with_missing_categories_at_test_time():
+    """Test handling of categories present in fit but missing in transform."""
+    train_X = pl.DataFrame(
+        {
+            "A": ["foo", "bar", "baz"],
+            "B": ["one", "two", "three"],
         }
     )
-    X_expected = pd.DataFrame(
+
+    test_X = pl.DataFrame(
         {
-            "D": {0: 1, 1: 2, 2: 3},
-            "A__W": {0: 0, 1: 0, 2: 1},
-            "A__Q": {0: 1, 1: 1, 2: 0},
-            "B__W": {0: 0, 1: 1, 2: 1},
-            "B__Q": {0: 1, 1: 0, 2: 0},
-            "C__W": {0: 1, 1: 0, 2: 1},
-            "C__Q": {0: 0, 1: 1, 2: 0},
-        }
-    ).astype(np.int16)
-    obj = OneHotEncoder(dtype=np.int16).fit(X)
-    return obj, X, X_expected
-
-
-@pytest.fixture
-def data_no_cat():
-    X = pd.DataFrame(
-        np.arange(12).reshape(3, 4),
-        columns=list("ABCD"),
-        dtype=float,
-    )
-    obj = OneHotEncoder().fit(X)
-    return obj, X, X.copy()
-
-
-@pytest.fixture
-def data_ks():
-    X = ks.DataFrame(
-        {
-            "A": ["Q", "Q", "W"],
-            "B": ["Q", "W", "W"],
-            "C": ["W", "Q", "W"],
-            "D": [1, 2, 3],
+            "A": ["foo", "bar"],  # Missing "baz"
+            "B": ["one", "two"],  # Missing "three"
         }
     )
-    X_expected = pd.DataFrame(
-        {
-            "D": {0: 1.0, 1: 2.0, 2: 3.0},
-            "A__W": {0: 0.0, 1: 0.0, 2: 1.0},
-            "A__Q": {0: 1.0, 1: 1.0, 2: 0.0},
-            "B__W": {0: 0.0, 1: 1.0, 2: 1.0},
-            "B__Q": {0: 1.0, 1: 0.0, 2: 0.0},
-            "C__W": {0: 1.0, 1: 0.0, 2: 1.0},
-            "C__Q": {0: 0.0, 1: 1.0, 2: 0.0},
-        }
-    )
-    obj = OneHotEncoder().fit(X)
-    return obj, X, X_expected
 
+    encoder = OneHotEncoder()
+    encoder.fit(train_X)
+    transformed_X = encoder.transform(test_X)
 
-@pytest.fixture
-def data_int16_ks():
-    X = ks.DataFrame(
-        {
-            "A": ["Q", "Q", "W"],
-            "B": ["Q", "W", "W"],
-            "C": ["W", "Q", "W"],
-            "D": [1, 2, 3],
-        }
-    )
-    X_expected = pd.DataFrame(
-        {
-            "D": {0: 1, 1: 2, 2: 3},
-            "A__W": {0: 0, 1: 0, 2: 1},
-            "A__Q": {0: 1, 1: 1, 2: 0},
-            "B__W": {0: 0, 1: 1, 2: 1},
-            "B__Q": {0: 1, 1: 0, 2: 0},
-            "C__W": {0: 1, 1: 0, 2: 1},
-            "C__Q": {0: 0, 1: 1, 2: 0},
-        }
-    ).astype(np.int16)
-    obj = OneHotEncoder(dtype=np.int16).fit(X)
-    return obj, X, X_expected
+    # Should have columns for all categories from fit, missing ones filled with 0
+    assert "A__foo" in transformed_X.columns
+    assert "A__bar" in transformed_X.columns
+    assert "A__baz" in transformed_X.columns  # Should exist with zeros
+    assert "B__three" in transformed_X.columns  # Should exist with zeros
 
-
-@pytest.fixture
-def data_no_cat_ks():
-    X = ks.DataFrame(
-        np.arange(12).reshape(3, 4),
-        columns=list("ABCD"),
-        dtype=float,
-    )
-    obj = OneHotEncoder().fit(X)
-    return obj, X, X.copy().to_pandas()
-
-
-def test_pd(data):
-    obj, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new, X_expected)
-
-
-@pytest.mark.koalas
-def test_ks(data_ks):
-    obj, X, X_expected = data_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
-
-
-def test_pd_np(data):
-    obj, X, X_expected = data
-    X_numpy = X.to_numpy()
-    X_numpy_new = obj.transform_numpy(X_numpy)
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected)
-
-
-@pytest.mark.koalas
-def test_ks_np(data_ks):
-    obj, X, X_expected = data_ks
-    X_numpy = X.to_numpy()
-    X_numpy_new = obj.transform_numpy(X_numpy)
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected)
-
-
-def test_int16_pd(data_int16):
-    obj, X, X_expected = data_int16
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new, X_expected)
-
-
-@pytest.mark.koalas
-def test_int16_ks(data_int16_ks):
-    obj, X, X_expected = data_int16_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
-
-
-def test_int16_pd_np(data_int16):
-    obj, X, X_expected = data_int16
-    X_numpy = X.to_numpy()
-    X_numpy_new = obj.transform_numpy(X_numpy)
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected)
-
-
-@pytest.mark.koalas
-def test_int16_ks_np(data_int16_ks):
-    obj, X, X_expected = data_int16_ks
-    X_numpy = X.to_numpy()
-    X_numpy_new = obj.transform_numpy(X_numpy)
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected)
-
-
-def test_without_cat_pd(data_no_cat):
-    obj, X, X_expected = data_no_cat
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new, X_expected)
-
-
-@pytest.mark.koalas
-def test_without_cat_ks(data_no_cat_ks):
-    obj, X, X_expected = data_no_cat_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
-
-
-def test_without_cat_pd_np(data_no_cat):
-    obj, X, X_expected = data_no_cat
-    X_numpy = X.to_numpy()
-    X_numpy_new = obj.transform_numpy(X_numpy)
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected)
-
-
-@pytest.mark.koalas
-def test_without_cat_ks_np(data_no_cat_ks):
-    obj, X, X_expected = data_no_cat_ks
-    X_numpy = X.to_numpy()
-    X_numpy_new = obj.transform_numpy(X_numpy)
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected)
+    # Check that missing categories are filled with zeros
+    assert all(transformed_X["A__baz"] == 0)
+    assert all(transformed_X["B__three"] == 0)

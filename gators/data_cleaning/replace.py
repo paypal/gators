@@ -1,167 +1,157 @@
-# License: Apache-2.0
-from typing import Dict, Union
+from typing import Dict, List, Optional
 
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
-
-from data_cleaning import replace
-
-from ..transformers.transformer import Transformer
-from ..util import util
+import polars as pl
+from pydantic import BaseModel, PrivateAttr
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class Replace(Transformer):
-    """Replace the categorical values by the ones given by the user.
-
-    The transformer only accepts categorical columns.
+class Replace(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    Replaces values in specified columns.
 
     Parameters
     ----------
-    to_replace_dict: Dict[str, Dict[str, str]]
-        The dictionary keys are the columns and the dictionary values
-        are the `to_replace` dictionary.
+    to_replace : Dict[str, Dict[str, any]]
+        Nested dictionary specifying replacement mappings. Outer keys are column names,
+        inner dictionaries map old values to new values.
+    inplace : bool, default=True
+        If True, replace values in the original columns.
+        If False, create new columns with suffix '__replace'.
+    drop_columns : bool, default=True
+        If inplace=False, whether to drop the original columns after replacement.
+        Ignored when inplace=True.
 
     Examples
-    ---------
-    * fit & transform with `pandas`
+    --------
+    Initializing and using `Replace` transformer.
 
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import Replace
-    >>> X = pd.DataFrame(
-    ...     {'A': ['a', 'b', 'c'], 'B': ['d', 'e','f'],'C': [1, 2, 3]})
-    >>> to_replace_dict = {'A': {'a': 'X', 'b': 'Z'}, 'B': {'d': 'Y'}}
-    >>> obj = Replace(to_replace_dict=to_replace_dict)
-    >>> obj.fit_transform(X)
-       A  B  C
-    0  X  Y  1
-    1  Z  e  2
-    2  c  f  3
+    Example with `drop_columns=True` and `columns=None`:
 
-    * fit & transform with `koalas`
+    >>> X = pl.DataFrame({
+    ...     "col1": ["a", "a", "b", "c"],
+    ...     "col2": ["x", "x", "x", "y"],
+    ...     "col3": [1, 2, 3, 4]
+    ... })
+    >>> replace_map = {
+    ...     "col1": {"a": "alpha", "b": "bravo"},
+    ...     "col2": {"x": "x-ray", "y": "yankee"}
+    ... }
+    >>> transformer = Replace(to_replace=replace_map, drop_columns=True)
+    >>> transformer.fit(X)
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 2)
+    ┌───────────────┬───────────────┐
+    │ col1__replace │ col2__replace │
+    │ str           │   str         │
+    ├───────────────┬───────────────┤
+    │ alpha         │  x-ray        │
+    │ alpha         │ x-ray         │
+    │ bravo         │ x-ray         │
+    │ charlie       │ yankee        │
+    └───────────────┴───────────────┘
 
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import Replace
-    >>> X = ks.DataFrame(
-    ...     {'A': ['a', 'b', 'c'], 'B': ['d', 'e','f'],'C': [1, 2, 3]})
-    >>> to_replace_dict = {'A': {'a': 'X', 'b': 'Z'}, 'B': {'d': 'Y'}}
-    >>> obj = Replace(to_replace_dict=to_replace_dict)
-    >>> obj.fit_transform(X)
-       A  B  C
-    0  X  Y  1
-    1  Z  e  2
-    2  c  f  3
+    Example with `drop_columns=True` and `columns` as a subset:
 
-    * fit with `pandas` & transform with `NumPy`
+    >>> X = pl.DataFrame({
+    ...     "col1": ["a", "a", "b", "c"],
+    ...     "col2": ["x", "x", "x", "y"],
+    ...     "col3": [1, 2, 3, 4]
+    ... })
+    >>> replace_map = {
+    ...     "col1": {"a": "alpha", "b": "bravo"}
+    ... }
+    >>> transformer = Replace(to_replace=replace_map, drop_columns=True)
+    >>> transformer.fit(X)
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 3)
+    ┌───────────────────┬─────────────────────┬────────────────────┐
+    │           col1    │           col2      │          col3      │
+    │ str               │          str        │           i64      │
+    ├───────────────────┬─────────────────────┬────────────────────┤
+    │ alpha             │         x           │           1        │
+    │ alpha             │         x           │           2        │
+    │ bravo             │         x           │           3        │
+    │ charlie           │         y           │           4        │
+    └───────────────────┴─────────────────────┴────────────────────┘
 
-    >>> import pandas as pd
-    >>> from gators.data_cleaning import Replace
-    >>> X = pd.DataFrame(
-    ...     {'A': ['a', 'b', 'c'], 'B': ['d', 'e','f'],'C': [1, 2, 3]})
-    >>> to_replace_dict = {'A': {'a': 'X', 'b': 'Z'}, 'B': {'d': 'Y'}}
-    >>> obj = Replace(to_replace_dict=to_replace_dict)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['X', 'Y', 1],
-           ['Z', 'e', 2],
-           ['c', 'f', 3]], dtype=object)
+    Example with `drop_columns=False` and `columns=None`:
 
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.data_cleaning import Replace
-    >>> X = ks.DataFrame(
-    ...     {'A': ['a', 'b', 'c'], 'B': ['d', 'e','f'],'C': [1, 2, 3]})
-    >>> to_replace_dict = {'A': {'a': 'X', 'b': 'Z'}, 'B': {'d': 'Y'}}
-    >>> obj = Replace(to_replace_dict=to_replace_dict)
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([['X', 'Y', 1],
-           ['Z', 'e', 2],
-           ['c', 'f', 3]], dtype=object)
-
-
+    >>> X = pl.DataFrame({
+    ...     "col1": ["a", "a", "b", "c"],
+    ...     "col2": ["x", "x", "x", "y"],
+    ...     "col3": [1, 2, 3, 4]
+    ... })
+    >>> replace_map = {
+    ...     "col1": {"a": "alpha", "b": "bravo"},
+    ...     "col2": {"x": "x-ray", "y": "yankee"}
+    ... }
+    >>> transformer = Replace(to_replace=replace_map, drop_columns=False)
+    >>> transformer.fit(X)
+    >>> transformed_X = transformer.transform(X)
+    >>> print(transformed_X)
+    shape: (4, 4)
+    ┌─────────────────┬──────────────────────┬─────────────────────┐─────────────────────────┐
+    │         col1    │           col2       │           col3      │           col1__replace │
+    │        str      │          str         │           i64       │           str           │
+    │─────────────────┬──────────────────────┬─────────────────────┬─────────────────────────┤
+    │            alpha│                x-ray │           1         │          alpha          │
+    │            alpha│                x-ray │           2         │          alpha          │
+    │            bravo│                x-ray │           3         │          bravo          │
+    │        charlie  │               yankee │           4         │          charlie        │
+    └─────────────────┴──────────────────────┴─────────────────────┴─────────────────────────┘
     """
 
-    def __init__(self, to_replace_dict: Dict[str, Dict[str, str]]):
-        if not isinstance(to_replace_dict, dict):
-            raise TypeError("`to_replace_dict` should be a dict.")
-        Transformer.__init__(self)
-        self.to_replace_dict = to_replace_dict
-        self.columns = list(to_replace_dict.keys())
-        n_cols = len(self.columns)
-        n_rows = max([len(v) for v in self.to_replace_dict.values()])
-        self.to_replace_np_keys = np.empty((n_cols, n_rows), object)
-        self.to_replace_np_vals = np.empty((n_cols, n_rows), object)
-        self.n_elements_vec = np.empty(n_cols, int)
-        for i, col in enumerate(self.to_replace_dict):
-            n_elements = len(self.to_replace_dict[col])
-            self.n_elements_vec[i] = n_elements
-            self.to_replace_np_keys[i, :n_elements] = list(
-                self.to_replace_dict[col].keys()
-            )[:n_elements]
-            self.to_replace_np_vals[i, :n_elements] = list(
-                self.to_replace_dict[col].values()
-            )[:n_elements]
+    to_replace: Dict[str, Dict[str, str]]
+    inplace: bool = True
+    drop_columns: bool = True
+    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _columns: List[str] = PrivateAttr(default_factory=list)
 
-    def fit(self, X: Union[pd.DataFrame, ks.DataFrame], y=None) -> "Replace":
-        """Fit the transformer on the dataframe X.
-
-        Get the list of column names to remove and the array of
-          indices to be kept.
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Replace":
+        """Fit the transformer.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame]
-            Input dataframe.
-        y : Union[pd.Series, ks.Series], default to None.
-            Labels.
+        X : pl.DataFrame
+            Input DataFrame.
+        y : Optional[pl.Series], default=None
+            Name of the target column (if needed).
 
         Returns
         -------
-        Replace: Instance of itself.
+        Self
+            The fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.check_nans(X, self.columns)
-        self.idx_columns = util.get_idx_columns(X.columns, self.columns)
+        available_columns = X.columns
+        self._columns = [col for col in list(self.to_replace.keys()) if col in available_columns]
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__replace" for col in self._columns}
         return self
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
-        """Transform the dataframe `X`.
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by extracting specified components.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
+        X : pl.DataFrame
+            Input DataFrame to transform.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
-            Transformed dataframe.
+        pl.DataFrame
+            Transformed DataFrame.
         """
-        self.check_dataframe(X)
-        return X.replace(self.to_replace_dict)
+        if self.inplace:
+            transformations = [pl.col(col).replace(self.to_replace[col]) for col in self._columns]
+            return X.with_columns(transformations)
 
-    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the NumPy array `X`.
-
-        Parameters
-        ----------
-        X  : np.ndarray
-            Input array.
-
-        Returns
-        -------
-        np.ndarray
-            Transformed array.
-        """
-        self.check_array(X)
-        return replace(
-            X,
-            self.idx_columns,
-            self.to_replace_np_keys,
-            self.to_replace_np_vals,
-            self.n_elements_vec,
-        )
+        transformations = [
+            pl.col(col).replace(self.to_replace[col]).alias(self._column_mapping[col])
+            for col in self._columns
+        ]
+        X = X.with_columns(transformations)
+        if self.drop_columns:
+            return X.drop(self._columns)
+        return X

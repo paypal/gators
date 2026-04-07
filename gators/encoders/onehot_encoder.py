@@ -1,205 +1,169 @@
-# License: Apache-2.0
-import warnings
-from typing import Union
+from typing import Dict, List, Optional, Union
 
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
-
-from encoder import onehot_encoder
-
-from ..util import util
-from . import OrdinalEncoder
-from ._base_encoder import _BaseEncoder
+import polars as pl
+from pydantic import BaseModel, PositiveFloat, PositiveInt
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
-class OneHotEncoder(_BaseEncoder):
-    """Encode the categorical columns as one-hot numeric columns.
+class OneHotEncoder(BaseModel, BaseEstimator, TransformerMixin):
+    """
+    One-hot encodes categorical values.
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
-        Numerical datatype of the output data.
+    subset : Optional[List[str]], default=None
+        List of string columns to encode. If None, all string columns are selected.
+    categories : Optional[Dict[str, List[str]]], default=None
+        Pre-defined categories for each column. If None, categories are inferred from data during fit.
+    min_count : Union[PositiveInt, PositiveFloat], default=1
+        Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
+    drop_columns : bool, default=True
+        Whether to drop the original columns after encoding.
 
     Examples
-    ---------
+    --------
+    Basic usage:
 
-    * fit & transform with `pandas`
-
-    >>> import pandas as pd
     >>> from gators.encoders import OneHotEncoder
-    >>> X = pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> obj = OneHotEncoder()
-    >>> obj.fit_transform(X)
-       A__b  A__a  B__d  B__c
-    0   0.0   1.0   0.0   1.0
-    1   0.0   1.0   1.0   0.0
-    2   1.0   0.0   1.0   0.0
+    >>> import polars as pl
+    >>> X = pl.DataFrame({
+    ...     "A": ["foo", "bar", "foo", "bar", "baz"],
+    ...     "B": ["one", "one", "two", "two", "one"],
+    ... })
+    >>> encoder = OneHotEncoder()
+    >>> encoder.fit(X)
+    OneHotEncoder(...)
+    >>> transformed_X = encoder.transform(X)
+    >>> print(transformed_X)
+    shape: (5, 5)
+    ┌───────┬───────┬───────┬───────┬───────┐
+    │ A|foo │ A|bar │ A|baz │ B|one │ B|two │
+    │ f64   │ f64   │ f64   │ f64   │ f64   │
+    ╞═══════╪═══════╪═══════╪═══════╪═══════╡
+    │ 1.0   │ 0.0   │ 0.0   │ 1.0   │ 0.0   │
+    │ 0.0   │ 1.0   │ 0.0   │ 1.0   │ 0.0   │
+    │ 1.0   │ 0.0   │ 0.0   │ 0.0   │ 1.0   │
+    │ 0.0   │ 1.0   │ 0.0   │ 0.0   │ 1.0   │
+    │ 0.0   │ 0.0   │ 1.0   │ 1.0   │ 0.0   │
+    └───────┴───────┴───────┴───────┴───────┘
 
-    * fit & transform with `koalas`
+    Drop columns:
 
-    >>> import databricks.koalas as ks
-    >>> from gators.encoders import OneHotEncoder
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> obj = OneHotEncoder()
-    >>> obj.fit_transform(X)
-       A__b  A__a  B__d  B__c
-    0   0.0   1.0   0.0   1.0
-    1   0.0   1.0   1.0   0.0
-    2   1.0   0.0   1.0   0.0
+    >>> encoder = OneHotEncoder(drop_columns=True)
+    >>> encoder.fit(X)
+    OneHotEncoder(...)
+    >>> transformed_X = encoder.transform(X)
+    >>> print(transformed_X)
+    shape: (5, 5)
+    ┌────────┬────────┬────────┬────────┬────────┐
+    │ A__foo │ A__bar │ A__baz │ B__one │ B__two │
+    │ f64    │ f64    │ f64    │ f64    │ f64    │
+    ╞════════╪════════╪════════╪════════╪════════╡
+    │ 1.0    │ 0.0    │ 0.0    │ 1.0    │ 0.0    │
+    │ 0.0    │ 1.0    │ 0.0    │ 1.0    │ 0.0    │
+    │ 1.0    │ 0.0    │ 0.0    │ 0.0    │ 1.0    │
+    │ 0.0    │ 1.0    │ 0.0    │ 0.0    │ 1.0    │
+    │ 0.0    │ 0.0    │ 1.0    │ 1.0    │ 0.0    │
+    └────────┴────────┴────────┴────────┴────────┘
 
-    * fit with `pandas` & transform with `NumPy`
+    Subset of columns:
 
-    >>> import pandas as pd
-    >>> from gators.encoders import OneHotEncoder
-    >>> X = pd.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> obj = OneHotEncoder()
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[0., 1., 0., 1.],
-           [0., 1., 1., 0.],
-           [1., 0., 1., 0.]])
+    >>> encoder = OneHotEncoder(subset=["A"])
+    >>> encoder.fit(X)
+    OneHotEncoder(...)
+    >>> transformed_X = encoder.transform(X)
+    >>> print(transformed_X)
+    shape: (5, 3)
+    ┌────────┬────────┬────────┐
+    │ A__foo │ A__bar │ A__baz │
+    │ f64    │ f64    │ f64    │
+    ╞════════╪════════╪════════╡
+    │ 1.0    │ 0.0    │ 0.0    │
+    │ 0.0    │ 1.0    │ 0.0    │
+    │ 1.0    │ 0.0    │ 0.0    │
+    │ 0.0    │ 1.0    │ 0.0    │
+    │ 0.0    │ 0.0    │ 1.0    │
+    └────────┴────────┴────────┘
 
-    * fit with `koalas` & transform with `NumPy`
-
-    >>> import databricks.koalas as ks
-    >>> from gators.encoders import OneHotEncoder
-    >>> X = ks.DataFrame({'A': ['a', 'a', 'b'], 'B': ['c', 'd', 'd']})
-    >>> obj = OneHotEncoder()
-    >>> _ = obj.fit(X)
-    >>> obj.transform_numpy(X.to_numpy())
-    array([[0., 1., 0., 1.],
-           [0., 1., 1., 0.],
-           [1., 0., 1., 0.]])
     """
 
-    def __init__(self, dtype: type = np.float64):
-        _BaseEncoder.__init__(self, dtype=dtype)
-        self.ordinal_encoder = OrdinalEncoder(dtype=dtype, add_other_columns=False)
-        self.idx_numerical_columns = np.array([])
-        self.onehot_columns = []
-        self.numerical_columns = []
-        self.column_mapping = {}
+    subset: Optional[List[str]] = None
+    categories: Optional[Dict[str, List[str]]] = None
+    min_count: Union[PositiveInt, PositiveFloat] = 1
+    drop_columns: bool = True
 
-    def fit(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-        y: Union[pd.Series, ks.Series] = None,
-    ) -> "OneHotEncoder":
-        """Fit the transformer on the dataframe `X`.
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "OneHotEncoder":
+        """Fit the transformer by identifying categories for one-hot encoding.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
-        y : None
-            None.
+        X : pl.DataFrame
+            Input DataFrame with string columns.
+        y : Optional[pl.Series], default=None
+            Target series (not used, present for sklearn compatibility).
 
         Returns
         -------
-        OneHotEncoder: Instance of itself.
+        OneHotEncoder
+            The fitted transformer instance.
         """
-        self.check_dataframe(X)
-        self.columns = util.get_datatype_columns(X, object)
-        if not self.columns:
-            warnings.warn(
-                f"""`X` does not contain object columns:
-                `{self.__class__.__name__}` is not needed"""
-            )
+        if self.categories:
+            self.subset = list(set(self.categories.keys()))
             return self
-        self.check_nans(X, self.columns)
-        self.numerical_columns = util.exclude_columns(X.columns, self.columns)
-        _ = self.ordinal_encoder.fit(X)
-        self.onehot_columns = []
-        for key, val in self.ordinal_encoder.mapping.items():
-            self.onehot_columns.extend(
-                [f"{key}__{self.dtype(c)}" for c in sorted(val.values(), key=int)]
-            )
-        for key, val in self.ordinal_encoder.mapping.items():
-            for k, v in val.items():
-                self.column_mapping[f"{key}__{self.dtype(v)}"] = f"{key}__{k}"
-        self.all_columns = self.numerical_columns + self.onehot_columns
-        self.idx_numerical_columns = util.get_idx_columns(
-            X.columns, self.numerical_columns
-        )
-        self.idx_columns = np.arange(
-            len(self.numerical_columns),
-            len(self.numerical_columns) + len(self.onehot_columns),
-            dtype=int,
-        )
-        self.idx_columns = np.arange(
-            len(self.numerical_columns), len(self.onehot_columns), dtype=int
-        )
-        self.n_categories_vec = np.empty(len(self.ordinal_encoder.columns), int)
-        for i, c in enumerate(self.columns):
-            self.n_categories_vec[i] = len(self.ordinal_encoder.mapping[c])
 
-        self.columns_flatten = np.array(
-            [
-                col
-                for col, mapping in self.ordinal_encoder.mapping.items()
-                for v in range(len(mapping))
+        if not self.subset:
+            self.subset = [
+                col for col, dtype in dict(zip(X.columns, X.dtypes)).items() if dtype in [pl.String]
             ]
-        )
-        self.idx_columns = util.get_idx_columns(X, self.columns_flatten)
-        self.idx_columns_to_keep = [
-            i
-            for i in range(X.shape[1] + self.idx_columns.shape[0])
-            if i not in util.get_idx_columns(X, self.columns)
-        ]
-        self.cats = np.array(
-            [
-                v
-                for col, mapping in self.ordinal_encoder.mapping.items()
-                for v in dict(sorted(mapping.items(), key=lambda item: item[1])).keys()
-            ]
-        ).astype(object)
+        X = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
+        self.categories = {}
+        n = len(X)
+        for col in self.subset:
+            counts = X[col].value_counts().to_pandas()
+            if self.min_count < 1:
+                counts["count"] /= n
+            counts = counts[counts["count"] >= self.min_count]
+
+            self.categories[col] = counts[col].to_list()
         return self
 
-    def transform(
-        self,
-        X: Union[pd.DataFrame, ks.DataFrame],
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
-        """Transform the dataframe `X`.
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by applying one-hot encoding to categorical columns.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
+        X : pl.DataFrame
+            Input DataFrame with string columns.
 
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
-            Transformed dataframe.
+        pl.DataFrame
+            DataFrame with one-hot encoded columns (one binary column per category).
         """
-        self.check_dataframe(X)
-        if not self.columns:
-            return X
-        dummy = X[self.columns].copy()
-        X_new = self.ordinal_encoder.transform(X)
-        X[self.columns] = dummy
-        if isinstance(X, pd.DataFrame):
-            X_new = pd.get_dummies(X_new, prefix_sep="__", columns=self.columns)
-        else:
-            X_new = ks.get_dummies(X_new, prefix_sep="__", columns=self.columns)
-        X_new = X_new.reindex(columns=self.all_columns, fill_value=0.0)
-        return X_new.rename(columns=self.column_mapping).astype(self.dtype)
+        # Use native Polars to_dummies - single call for all columns
+        cols_to_encode = list(self.categories.keys())
+        dummies = X.select(cols_to_encode).to_dummies(separator="__")
+        dummies = dummies.select(pl.all().cast(pl.Float64))
 
-    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the input array.
+        # Build list of expected columns from fit
+        expected_cols = [
+            f"{col}__{cat}" for col, cat_list in self.categories.items() for cat in cat_list
+        ]
 
-        Parameters
-        ----------
-        X  : np.ndarray
-            Input array.
+        # Keep only columns that exist and were learned during fit
+        existing_cols = [c for c in expected_cols if c in dummies.columns]
+        dummies = dummies.select(existing_cols)
 
-        Returns
-        -------
-        np.ndarray: Encoded array.
-        """
-        self.check_array(X)
-        if len(self.idx_columns) == 0:
-            return X
-        return onehot_encoder(X, self.idx_columns, self.cats)[
-            :, self.idx_columns_to_keep
-        ].astype(self.dtype)
+        # Add missing categories as zero columns
+        missing_cols = set(expected_cols) - set(existing_cols)
+        if missing_cols:
+            dummies = dummies.with_columns(
+                [pl.lit(0.0).alias(col_name) for col_name in sorted(missing_cols)]
+            )
+
+        # Concatenate with original dataframe
+        X = pl.concat([X, dummies], how="horizontal")
+
+        if self.drop_columns and self.subset:
+            X = X.drop(self.subset)
+        return X

@@ -1,112 +1,63 @@
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
-from pandas.testing import assert_frame_equal
+from polars.testing import assert_frame_equal
 
-from gators.data_cleaning.drop_high_nan_ratio import DropHighNaNRatio
-
-
-@pytest.fixture
-def data():
-    X = pd.DataFrame(
-        {"A": [np.nan, np.nan, np.nan], "B": [np.nan, 0.0, 1.0], "C": ["a", "a", "b"]},
-    )
-    X_expected = pd.DataFrame(
-        {"B": [np.nan, 0.0, 1.0], "C": ["a", "a", "b"]},
-    )
-    obj = DropHighNaNRatio(max_ratio=0.5).fit(X)
-    return obj, obj, X, X, X_expected
+from gators.data_cleaning import DropHighNaNRatio
 
 
 @pytest.fixture
-def data_no_drop():
-    X = pd.DataFrame(
-        {"A": list("qww"), "B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]}
-    )
-    X_expected = X.copy()
-    obj = DropHighNaNRatio(max_ratio=0.5).fit(X)
-    return obj, obj, X, X, X_expected
+def sample_data() -> pl.DataFrame:
+    X = {
+        "column1": [None, 2, 3],
+        "column2": ["A", None, None],
+        "column3": [1, 2, 3],
+    }
+    return pl.DataFrame(X)
 
 
 @pytest.fixture
-def data_ks():
-    X = ks.DataFrame(
-        {"A": [np.nan, np.nan, np.nan], "B": [np.nan, 0.0, 1.0], "C": ["a", "a", "b"]},
-    )
-    X_expected = pd.DataFrame(
-        {"B": [np.nan, 0.0, 1.0], "C": ["a", "a", "b"]},
-    )
-    obj = DropHighNaNRatio(max_ratio=0.5).fit(X)
-    return obj, obj, X, X, X_expected
+def expected_data1() -> pl.DataFrame:
+    X = {
+        "column1": [None, 2, 3],
+        "column3": [1, 2, 3],
+    }
+    return pl.DataFrame(X)
 
 
 @pytest.fixture
-def data_no_drop_ks():
-    X = ks.DataFrame(
-        {"A": list("qww"), "B": list("ass"), "C": list("zxx"), "D": [0, 1, 2]}
-    )
-    X_expected = X.to_pandas().copy()
-    obj = DropHighNaNRatio(max_ratio=0.5).fit(X)
-    return obj, obj, X, X, X_expected
+def expected_data2() -> pl.DataFrame:
+    X = {
+        "column3": [1, 2, 3],
+    }
+    return pl.DataFrame(X)
 
 
-def test_pd(data):
-    obj, obj, X, X, X_expected = data
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new, X_expected)
+@pytest.fixture
+def drop_nans() -> DropHighNaNRatio:
+    return DropHighNaNRatio(max_ratio=0.5)
 
 
-@pytest.mark.koalas
-def test_ks(data_ks):
-    obj, obj, X, X, X_expected = data_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
+def test_drop_high_nan_ratio_transform1(
+    sample_data: pl.DataFrame,
+    expected_data1: pl.DataFrame,
+):
+    drop_nans = DropHighNaNRatio(max_ratio=0.5)
+    drop_nans.fit(sample_data)
+    transformed_X = drop_nans.transform(sample_data)
+    assert_frame_equal(transformed_X, expected_data1)
 
 
-def test_pd_np(data):
-    obj, obj, X, X, X_expected = data
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected.astype(object))
+@pytest.fixture
+def drop_high_nan_ratio_instance2() -> DropHighNaNRatio:
+    return DropHighNaNRatio(max_ratio=0.3)
 
 
-@pytest.mark.koalas
-def test_ks_np(data_ks):
-    obj, obj, X, X, X_expected = data_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected.astype(object))
-
-
-def test_no_drop_pd(data_no_drop):
-    obj, obj, X, X, X_expected = data_no_drop
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new, X_expected)
-
-
-@pytest.mark.koalas
-def test_no_drop_ks(data_no_drop_ks):
-    obj, obj, X, X, X_expected = data_no_drop_ks
-    X_new = obj.transform(X)
-    assert_frame_equal(X_new.to_pandas(), X_expected)
-
-
-def test_no_drop_pd_np(data_no_drop):
-    obj, obj, X, X, X_expected = data_no_drop
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected.astype(object))
-
-
-@pytest.mark.koalas
-def test_no_drop_ks_np(data_no_drop_ks):
-    obj, obj, X, X, X_expected = data_no_drop_ks
-    X_numpy_new = obj.transform_numpy(X.to_numpy())
-    X_new = pd.DataFrame(X_numpy_new, columns=X_expected.columns)
-    assert_frame_equal(X_new, X_expected.astype(object))
-
-
-def test_init():
-    with pytest.raises(TypeError):
-        _ = DropHighNaNRatio(max_ratio="q")
+def test_drop_high_nan_ratio_transform2(
+    drop_high_nan_ratio_instance2: DropHighNaNRatio,
+    sample_data: pl.DataFrame,
+    expected_data2: pl.DataFrame,
+):
+    """Test that the transform method correctly drops columns with high NaN ratio."""
+    drop_high_nan_ratio_instance2.fit(sample_data)
+    transformed_X = drop_high_nan_ratio_instance2.transform(sample_data)
+    assert_frame_equal(transformed_X, expected_data2)

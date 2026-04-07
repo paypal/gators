@@ -1,5 +1,0 @@
-ignore:
-  - "gators/*/tests/*”
-  - "gators/util/benchmark.py"
-
-

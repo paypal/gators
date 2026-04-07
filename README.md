@@ -1,26 +1,203 @@
-# gators
+# 🐊 Gators
 
-![PyPI](https://img.shields.io/pypi/v/gators)
-[![build](https://github.com/paypal/gators/actions/workflows/build.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/build.yml)
-[![codecov](https://codecov.io/gh/paypal/gators/branch/graph/badge.svg?token=vllGApc9v9)](https://codecov.io/gh/paypal/gators)
-![GitHub](https://img.shields.io/github/license/paypal/gators)
-
+[![PyPI version](https://img.shields.io/pypi/v/gators)](https://pypi.org/project/gators/)
+[![Python versions](https://img.shields.io/pypi/pyversions/gators)](https://pypi.org/project/gators/)
+[![License](https://img.shields.io/github/license/paypal/gators)](https://github.com/paypal/gators/blob/main/LICENSE)
+[![Tests](https://github.com/paypal/gators/actions/workflows/tests.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/tests.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/paypal/gators)](https://codecov.io/gh/paypal/gators)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
+> **Lightning-fast data preprocessing and feature engineering for machine learning**
 
-<a href="https://paypal.github.io/gators/index.html" target="_blank">Documentation</a> | 
-<a href="https://paypal.github.io/gators/getting_started/install.html#install" target="_blank">Installation</a>
+## What is Gators?
 
-<div align="center">
-  <img src="https://paypal.github.io/gators/_static/GATORS_LOGO.png"><br>
-</div>
+Gators is a **lightning-fast data preprocessing and feature engineering** library built on top of Polars, designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging **Polars’ blazing-fast multi-core processing**.
 
-Gators is an in-house machine learning library developed by the Simility Data Team. While data pre-processing and machine learning models are developed in Python, the pre-processing aspect is replaced by faster compiled programming languages in the production environment. This change of programming language is an added complexity to the model deployment process but is required to cope with the large number of queries per second that can be observed.
+Built by the PSP Data Team at PayPal, Gators makes data preprocessing and feature engineering both **faster and simpler**.
 
-The goal of Gators is to be able to manage both model building and model serving using only Python, a language that data scientists are generally familiar with. Gators is built on top of Pandas, Koalas, NumPy and Cython. Pandas and Koalas are used for the offline model building, while NumPy and Cython are used to speed-up the model predictions in real-time. Gators was originally built for fraud modelling but can be generalized to other modelling domains.
+## ⚡ Key Features
 
-Gators helps to streamline the model building and productionization processes. The model building part is done using the Pandas library for datasets held in memory, or Koalas for big data. On the model serving side, the pre-processing is carried out directly with Python, using NumPy and Cython. As a result, the speed-up using both NumPy and Cython for pre-processing is around x100 compared to standard Python code. Moreover, the per-sample response time becomes similar to other compiled languages (microsecond scale).
+- **🚀 Lightning Fast**: Built on Polars for multi-core parallel processing
+- **🔄 Unified API**: Consistent sklearn-style `.fit()` and `.transform()` interface
+- **📦 Production Ready**: Deploy the same Python code from notebook to production
+- **🎯 Comprehensive**: 75+ preprocessing transformers covering every use case
+- **🔗 Pipeline Support**: Chain transformers seamlessly with the Pipeline class
+- **🎓 Easy to Learn**: If you know sklearn, you already know Gators
 
-In summary, Gators is a package to handle model building with big data and fast real-time pre-processing, even for a large number of QPS, using only Python.
+## 🛠️ What Can Gators Do?
 
+### 🧹 Data Cleaning
+Clean and prepare your data with powerful transformers:
+- `CastColumns` - Convert column data types
+- `CorrelationFilter` - Remove highly correlated features
+- `DropColumns` - Remove specified columns
+- `DropConstantColumns` - Remove columns with constant values
+- `DropDuplicateColumns` - Remove duplicate columns
+- `DropDuplicateRows` - Remove duplicate rows
+- `DropHighNaNRatio` - Remove columns with high missing value ratio
+- `DropLowCardinality` - Remove low cardinality columns
+- `HighCardinalityFilter` - Filter high cardinality features
+- `OutlierFilter` - Detect and filter outliers
+- `RenameColumns` - Rename columns
+- `Replace` - Replace values in data
+- `VarianceFilter` - Remove low variance features
+
+### 🔢 Categorical Encoding
+Transform categorical variables with advanced encoding techniques:
+- `BinaryEncoder` - Binary representation encoding
+- `CatBoostEncoder` - CatBoost-style encoding
+- `CountEncoder` - Frequency-based encoding
+- `LeaveOneOutEncoder` - Leave-one-out encoding
+- `OneHotEncoder` - Classic one-hot encoding
+- `OrdinalEncoder` - Order-based encoding
+- `RareCategoryEncoder` - Handle rare categories intelligently
+- `TargetEncoder` - Target-based encoding for supervised learning
+- `WOEEncoder` - Weight of Evidence encoding
+
+### 🎯 Feature Generation - Numeric
+Create powerful numeric features:
+- `ComparisonFeatures` - Generate comparison features
+- `ConditionFeatures` - Create conditional features
+- `DistanceFeatures` - Calculate distance features
+- `GroupLagFeatures` - Generate lag features by group
+- `GroupScalingFeatures` - Scale features within groups
+- `GroupStatisticsFeatures` - Calculate group statistics
+- `IsNull` - Generate null indicator features
+- `MathFeatures` - Apply mathematical operations (add, subtract, multiply, divide)
+- `PlanRotationFeatures` - Rotate features in feature space
+- `PolynomialFeatures` - Generate polynomial combinations
+- `RatioFeatures` - Create ratio features between columns
+- `RowStatisticsFeatures` - Calculate row-wise statistics
+- `RuleFeatures` - Apply custom business rules
+- `ScalarMathFeatures` - Apply scalar operations
+
+### 📝 Feature Generation - String
+Extract insights from text data:
+- `CharacterStatistics` - Extract character-level statistics
+- `CombineFeatures` - Combine string features
+- `Contains` - Check if string contains pattern
+- `Endswith` - Check if string ends with pattern
+- `ExtractSubstring` - Extract substring from text
+- `InteractionFeatures` - Generate string interaction features
+- `Length` - Calculate string length
+- `Lower` - Convert text to lowercase
+- `NGram` - Generate n-gram features
+- `Occurrences` - Count pattern occurrences
+- `PatternDetector` - Detect patterns in text
+- `Split` - Split strings
+- `SplitExtract` - Split and extract from strings
+- `Startswith` - Check if string starts with pattern
+- `Upper` - Convert text to uppercase
+
+### 📅 Feature Generation - DateTime
+Unlock temporal patterns:
+- `BusinessTimeFeatures` - Business hours/days calculations
+- `CyclicFeatures` - Circular encoding for cyclical time features
+- `DiffFeatures` - Calculate time differences
+- `DurationToDatetime` - Convert duration to datetime
+- `HolidayFeatures` - Detect and encode holidays
+- `OrdinalFeatures` - Extract year, month, day, hour, etc.
+- `TimeBinFeatures` - Bin times into categories
+- `TimeWindowFeatures` - Generate time window features
+
+### 🔄 Missing Value Imputation
+Handle missing data intelligently:
+- `BooleanImputer` - Impute boolean columns
+- `GroupByImputer` - Group-based imputation strategies
+- `NumericImputer` - Impute numeric columns (mean, median, mode, constant)
+- `StringImputer` - Impute string columns (mode, constant)
+
+### 📊 Discretization
+Convert continuous variables into bins:
+- `CustomDiscretizer` - Custom bin edges
+- `EqualLengthDiscretizer` - Equal-width binning
+- `EqualSizeDiscretizer` - Equal-frequency binning
+- `GeometricDiscretizer` - Geometric progression binning
+- `KMeansDiscretizer` - K-means clustering-based binning
+- `QuantileDiscretizer` - Quantile-based binning
+- `TreeBasedDiscretizer` - Decision tree-based binning
+
+### ⚖️ Feature Scaling
+Normalize your features:
+- `ArcsinSquarerootScaler` - Arcsine square root transformation
+- `ArcsinhScaler` - Inverse hyperbolic sine transformation
+- `BoxCox` - Box-Cox power transformation
+- `LogScaler` - Logarithmic scaling
+- `MinmaxScaler` - Min-max normalization
+- `PowerScaler` - Power transformation
+- `StandardScaler` - Standardization (z-score normalization)
+- `YeoJonhson` - Yeo-Johnson power transformation
+
+### 🔗 Pipeline
+Chain all transformers together:
+- `Pipeline` - sklearn-compatible pipeline for chaining transformers
+
+## 🚀 Quick Start
+
+```python
+import polars as pl
+from gators.data_cleaning import DropHighNaNRatio, VarianceFilter
+from gators.encoders import OneHotEncoder
+from gators.imputers import NumericImputer
+from gators.scalers import StandardScaler
+from gators.pipeline import Pipeline
+
+# Load your data
+X = pl.read_csv("data.csv")
+
+# Build a preprocessing pipeline
+pipeline = Pipeline([
+    ('drop_nan', DropHighNaNRatio(threshold=0.5)),
+    ('impute', NumericImputer(strategy='median')),
+    ('variance', VarianceFilter(threshold=0.01)),
+    ('encode', OneHotEncoder()),
+    ('scale', StandardScaler())
+])
+
+# Fit and transform
+X_processed = pipeline.fit_transform(X)
+
+# Deploy the same pipeline in production!
+```
+
+## 📦 Installation
+
+```bash
+pip install gators
+```
+
+Or install from source:
+
+```bash
+git clone https://github.com/paypal/gators.git
+cd gators
+pip install -e .
+```
+
+## 🎯 Use Cases
+
+Gators is perfect for:
+
+- **Fraud Detection** - Extensive feature engineering for anomaly detection
+- **Risk Modeling** - Create powerful predictive features
+- **Customer Analytics** - Transform complex customer data
+- **Time Series** - Rich datetime feature engineering
+- **NLP Tasks** - String feature extraction and encoding
+
+
+## 🤝 Contributing
+
+We welcome contributions! Please check out our contributing guidelines.
+
+## 📄 License
+
+Gators is licensed under the Apache License 2.0. See [LICENSE](LICENSE) file for details.
+
+## 🙏 Credits
+
+Developed by the PSP Data Team at PayPal.
+
+---
+
+**Built by data scientists, for data scientists**

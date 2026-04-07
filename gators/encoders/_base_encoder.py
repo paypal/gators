@@ -1,102 +1,103 @@
-# License: Apache-2.0
-from typing import Any, Collection, Dict, List, Tuple, Union
+from abc import ABCMeta
+from typing import Dict, List, Optional, Union
 
-import databricks.koalas as ks
-import numpy as np
-import pandas as pd
+import polars as pl
+from pydantic import BaseModel, ConfigDict, Field, PositiveFloat, PositiveInt
+from sklearn.base import BaseEstimator, TransformerMixin
 
-from encoder import encoder
-
-from ..transformers.transformer import (
-    NUMERICS_DTYPES,
-    PRINT_NUMERICS_DTYPES,
-    Transformer,
-)
+__all__ = ["_BaseEncoder"]
 
 
-class _BaseEncoder(Transformer):
-    """Base encoder transformer class.
+class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta):
+    """
+    Base encoder class for encoding categorical columns.
 
     Parameters
     ----------
-    dtype : type, default to np.float64.
-        Numerical datatype of the output data.
+    subset : list of str, default=None
+        List of columns to encode. If None, all applicable columns are encoded.
+    min_count : Union[int, float], default=1
+        Minimum count or frequency for encoding categories.
+    drop_columns : bool, default=True
+        If True, the original columns are dropped after encoding.
+    inplace : bool, default=True
+        If True, replaces column values in-place. If False, creates new columns with suffix.
+
+    Note
+    ----
+    _BaseEncoder is a base class and should not be used directly.
+    Use one of the concrete encoder implementations instead.
+
     """
 
-    def __init__(self, dtype=np.float64):
-        if dtype not in NUMERICS_DTYPES:
-            raise TypeError(f"`dtype` should be a dtype from {PRINT_NUMERICS_DTYPES}.")
-        Transformer.__init__(self)
-        self.dtype = dtype
-        self.columns = []
-        self.idx_columns: np.ndarray = np.array([])
-        self.num_categories_vec = np.array([])
-        self.values_vec = np.array([])
-        self.encoded_values_vec = np.array([])
-        self.mapping: Dict[str, Dict[str, float]] = {}
+    subset: Optional[List[str]] = None
+    mapping_: Dict[str, Dict[str, float]] = Field(default_factory=dict)
+    column_mapping_: Dict[str, str] = Field(default_factory=dict)
+    min_count: Union[PositiveInt, PositiveFloat] = 1
+    drop_columns: bool = True
+    inplace: bool = True
 
-    def transform(
-        self, X: Union[pd.DataFrame, ks.DataFrame]
-    ) -> Union[pd.DataFrame, ks.DataFrame]:
-        """Transform the dataframe `X`.
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by extracting specified components.
 
         Parameters
         ----------
-        X : Union[pd.DataFrame, ks.DataFrame].
-            Input dataframe.
+        X : pl.DataFrame
+            Input DataFrame to transform.
+
         Returns
         -------
-        Union[pd.DataFrame, ks.DataFrame]
-            Transformed dataframe.
+        pl.DataFrame
+            Transformed DataFrame.
         """
-        self.check_dataframe(X)
-        return X.replace(self.mapping).astype(self.dtype)
+        default_value = 0.0
+        if self.inplace:
+            expressions = []
+            for col in self.mapping_:
+                # Cast boolean columns to string for replacement
+                if X[col].dtype == pl.Boolean:
+                    # Convert boolean keys to lowercase string format used by Polars
+                    string_mapping = {str(k).lower(): v for k, v in self.mapping_[col].items()}
+                    expr = (
+                        pl.col(col)
+                        .cast(pl.String)
+                        .replace_strict(
+                            string_mapping,
+                            default=default_value,
+                            return_dtype=pl.Float64,
+                        )
+                    )
+                else:
+                    expr = pl.col(col).replace_strict(
+                        self.mapping_[col],
+                        default=default_value,
+                        return_dtype=pl.Float64,
+                    )
+                expressions.append(expr)
+            return X.with_columns(expressions)
 
-    def transform_numpy(self, X: np.ndarray) -> np.ndarray:
-        """Transform the input array.
-
-        Parameters
-        ----------
-        X  : np.ndarray
-            Input array.
-        Returns
-        -------
-        np.ndarray: Encoded array.
-        """
-        self.check_array(X)
-        if len(self.idx_columns) == 0:
-            return X.astype(self.dtype)
-        return encoder(
-            X,
-            self.num_categories_vec,
-            self.values_vec,
-            self.encoded_values_vec,
-            self.idx_columns,
-        ).astype(self.dtype)
-
-    @staticmethod
-    def decompose_mapping(
-        mapping: List[Dict[str, Collection[Any]]],
-    ) -> Tuple[List[str], np.ndarray, np.ndarray]:
-        """Decompose the mapping.
-
-        Parameters
-        ----------
-        mapping List[Dict[str, Collection[Any]]]:
-            Mapping obtained from the categorical encoder package.
-        Returns
-        -------
-        Tuple[List[str], np.ndarray, np.ndarray]
-            Decomposed mapping.
-        """
-        columns = list(mapping.keys())
-        n_columns = len(columns)
-        max_categories = max([len(m) for m in mapping.values()])
-        encoded_values_vec = np.zeros((n_columns, max_categories))
-        values_vec = np.zeros((n_columns, max_categories), dtype=object)
-        for i, c in enumerate(columns):
-            mapping_col = mapping[c]
-            n_values = len(mapping_col)
-            encoded_values_vec[i, :n_values] = np.array(list(mapping_col.values()))
-            values_vec[i, :n_values] = np.array(list(mapping_col.keys()))
-        return columns, values_vec, encoded_values_vec
+        expressions = []
+        for col, mapping in self.mapping_.items():
+            # Cast boolean columns to string for replacement, then to float
+            if X[col].dtype == pl.Boolean:
+                # Convert boolean keys to lowercase string format used by Polars
+                string_mapping = {str(k).lower(): v for k, v in mapping.items()}
+                expr = (
+                    pl.col(col)
+                    .cast(pl.String)
+                    .replace_strict(string_mapping, default=default_value, return_dtype=pl.Float64)
+                    .alias(self.column_mapping_[col])
+                )
+            else:
+                expr = (
+                    pl.col(col)
+                    .replace_strict(mapping, default=default_value, return_dtype=pl.Float64)
+                    .alias(self.column_mapping_[col])
+                )
+            expressions.append(expr)
+        X = X.with_columns(expressions)
+        if self.drop_columns and self.subset:
+            X = X.drop(self.subset)
+        return X
