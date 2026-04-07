@@ -3,8 +3,8 @@
 [![PyPI version](https://img.shields.io/pypi/v/gators)](https://pypi.org/project/gators/)
 [![Python versions](https://img.shields.io/pypi/pyversions/gators)](https://pypi.org/project/gators/)
 [![License](https://img.shields.io/github/license/paypal/gators)](https://github.com/paypal/gators/blob/main/LICENSE)
-[![Tests](https://github.com/paypal/gators/actions/workflows/tests.yml/badge.svg)](https://github.com/paypal/gators/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/codecov/c/github/paypal/gators)](https://codecov.io/gh/paypal/gators)
+[![Documentation](https://img.shields.io/badge/docs-online-blue)](https://paypal.github.io/gators/)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
@@ -174,6 +174,12 @@ git clone https://github.com/paypal/gators.git
 cd gators
 pip install -e .
 ```
+
+## 📚 Documentation
+
+For detailed documentation, tutorials, and API reference, visit:
+
+**[https://paypal.github.io/gators/](https://paypal.github.io/gators/)**
 
 ## 🎯 Use Cases
 
