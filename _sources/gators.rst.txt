@@ -9,6 +9,7 @@ Subpackages
 
    gators.data_cleaning
    gators.discretizers
+   gators.clippers
    gators.encoders
    gators.feature_generation
    gators.feature_generation_dt
@@ -16,7 +17,6 @@ Subpackages
    gators.feature_selection
    gators.imputers
    gators.pipeline
-   gators.rules
    gators.scalers
 
 Module contents

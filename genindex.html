@@ -132,13 +132,6 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about.html">
-    About Gators
-  </a>
-</li>
-
-
-<li class="nav-item ">
   <a class="nav-link nav-internal" href="installation.html">
     Installation
   </a>
@@ -229,13 +222,6 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about.html">
-    About Gators
-  </a>
-</li>
-
-
-<li class="nav-item ">
   <a class="nav-link nav-internal" href="installation.html">
     Installation
   </a>
@@ -314,7 +300,8 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
@@ -339,6 +326,18 @@
  | <a href="#Y"><strong>Y</strong></a>
  
 </div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.clippers.html#gators.clippers.CustomClipper._bounds_map">_bounds_map (gators.clippers.CustomClipper attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.clippers.html#gators.clippers.CustomClipper._columns">_columns (gators.clippers.CustomClipper attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -398,6 +397,8 @@
 </li>
       <li><a href="gators.encoders.html#gators.encoders.CountEncoder">CountEncoder (class in gators.encoders)</a>
 </li>
+      <li><a href="gators.clippers.html#gators.clippers.CustomClipper">CustomClipper (class in gators.clippers)</a>
+</li>
       <li><a href="gators.discretizers.html#gators.discretizers.CustomDiscretizer">CustomDiscretizer (class in gators.discretizers)</a>
 </li>
       <li><a href="gators.feature_generation_dt.html#gators.feature_generation_dt.CyclicFeatures">CyclicFeatures (class in gators.feature_generation_dt)</a>
@@ -456,9 +457,19 @@
         <li><a href="gators.feature_selection.html#gators.feature_selection.feature_stability_index.feature_stability_index">(in module gators.feature_selection.feature_stability_index)</a>
 </li>
       </ul></li>
-      <li><a href="gators.data_cleaning.html#gators.data_cleaning.CastColumns.fit">fit() (gators.data_cleaning.CastColumns method)</a>
+      <li><a href="gators.clippers.html#gators.clippers.CustomClipper.fit">fit() (gators.clippers.CustomClipper method)</a>
 
       <ul>
+        <li><a href="gators.clippers.html#gators.clippers.GaussianClipper.fit">(gators.clippers.GaussianClipper method)</a>
+</li>
+        <li><a href="gators.clippers.html#gators.clippers.IQRClipper.fit">(gators.clippers.IQRClipper method)</a>
+</li>
+        <li><a href="gators.clippers.html#gators.clippers.MADClipper.fit">(gators.clippers.MADClipper method)</a>
+</li>
+        <li><a href="gators.clippers.html#gators.clippers.QuantileClipper.fit">(gators.clippers.QuantileClipper method)</a>
+</li>
+        <li><a href="gators.data_cleaning.html#gators.data_cleaning.CastColumns.fit">(gators.data_cleaning.CastColumns method)</a>
+</li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.CorrelationFilter.fit">(gators.data_cleaning.CorrelationFilter method)</a>
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropColumns.fit">(gators.data_cleaning.DropColumns method)</a>
@@ -618,8 +629,12 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.pipeline.html#gators.pipeline.Pipeline.fit_transform">fit_transform() (gators.pipeline.Pipeline method)</a>
+      <li><a href="gators.clippers.html#gators.clippers.CustomClipper.fit_transform">fit_transform() (gators.clippers.CustomClipper method)</a>
+
+      <ul>
+        <li><a href="gators.pipeline.html#gators.pipeline.Pipeline.fit_transform">(gators.pipeline.Pipeline method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -631,6 +646,13 @@
 
       <ul>
         <li><a href="gators.html#module-gators">module</a>
+</li>
+      </ul></li>
+      <li>
+    gators.clippers
+
+      <ul>
+        <li><a href="gators.clippers.html#module-gators.clippers">module</a>
 </li>
       </ul></li>
       <li>
@@ -719,6 +741,8 @@
         <li><a href="gators.scalers.html#module-gators.scalers">module</a>
 </li>
       </ul></li>
+      <li><a href="gators.clippers.html#gators.clippers.GaussianClipper">GaussianClipper (class in gators.clippers)</a>
+</li>
       <li><a href="gators.discretizers.html#gators.discretizers.GeometricDiscretizer">GeometricDiscretizer (class in gators.discretizers)</a>
 </li>
       <li><a href="gators.pipeline.html#gators.pipeline.Pipeline.get_params">get_params() (gators.pipeline.Pipeline method)</a>
@@ -753,6 +777,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.clippers.html#gators.clippers.IQRClipper">IQRClipper (class in gators.clippers)</a>
+</li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.IsNull">IsNull (class in gators.feature_generation)</a>
 </li>
   </ul></td>
@@ -785,6 +811,8 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.clippers.html#gators.clippers.MADClipper">MADClipper (class in gators.clippers)</a>
+</li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.MathFeatures">MathFeatures (class in gators.feature_generation)</a>
 </li>
       <li><a href="gators.scalers.html#gators.scalers.MinmaxScaler">MinmaxScaler (class in gators.scalers)</a>
@@ -794,6 +822,8 @@
 
       <ul>
         <li><a href="gators.html#module-gators">gators</a>
+</li>
+        <li><a href="gators.clippers.html#module-gators.clippers">gators.clippers</a>
 </li>
         <li><a href="gators.data_cleaning.html#module-gators.data_cleaning">gators.data_cleaning</a>
 </li>
@@ -874,6 +904,10 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.clippers.html#gators.clippers.QuantileClipper">QuantileClipper (class in gators.clippers)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.discretizers.html#gators.discretizers.QuantileDiscretizer">QuantileDiscretizer (class in gators.discretizers)</a>
 </li>
   </ul></td>
@@ -930,9 +964,19 @@
 </li>
       <li><a href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeWindowFeatures">TimeWindowFeatures (class in gators.feature_generation_dt)</a>
 </li>
-      <li><a href="gators.data_cleaning.html#gators.data_cleaning.CastColumns.transform">transform() (gators.data_cleaning.CastColumns method)</a>
+      <li><a href="gators.clippers.html#gators.clippers.CustomClipper.transform">transform() (gators.clippers.CustomClipper method)</a>
 
       <ul>
+        <li><a href="gators.clippers.html#gators.clippers.GaussianClipper.transform">(gators.clippers.GaussianClipper method)</a>
+</li>
+        <li><a href="gators.clippers.html#gators.clippers.IQRClipper.transform">(gators.clippers.IQRClipper method)</a>
+</li>
+        <li><a href="gators.clippers.html#gators.clippers.MADClipper.transform">(gators.clippers.MADClipper method)</a>
+</li>
+        <li><a href="gators.clippers.html#gators.clippers.QuantileClipper.transform">(gators.clippers.QuantileClipper method)</a>
+</li>
+        <li><a href="gators.data_cleaning.html#gators.data_cleaning.CastColumns.transform">(gators.data_cleaning.CastColumns method)</a>
+</li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.CorrelationFilter.transform">(gators.data_cleaning.CorrelationFilter method)</a>
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropColumns.transform">(gators.data_cleaning.DropColumns method)</a>

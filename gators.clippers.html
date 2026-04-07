@@ -1,0 +1,1247 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>gators.clippers package &#8212; gators 1.0.x documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'gators.clippers';</script>
+    <link rel="icon" href="_static/gators_logo.ico"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
+    <img src="_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.clippers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
+</ul>
+</div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.clippers package</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="gators-clippers-package">
+<h1>gators.clippers package<a class="headerlink" href="#gators-clippers-package" title="Link to this heading">#</a></h1>
+<section id="module-gators.clippers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gators.clippers" title="Link to this heading">#</a></h2>
+<p>Clipping transformers for outlier handling.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.clippers.CustomClipper">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">CustomClipper</span></span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<p>Clip column values using custom lower and upper bounds.</p>
+<p>This transformer allows you to specify custom clipping bounds for each column
+independently. You can specify only lower bounds, only upper bounds, or both
+for different columns. Columns not specified in either dictionary are left unchanged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lower_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>str to float</em><em>, </em><em>optional</em>) – Dictionary mapping column names to their lower bounds.
+Values below the lower bound will be clipped to the lower bound.
+Default is None (no lower bounds).</p></li>
+<li><p><strong>upper_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>str to float</em><em>, </em><em>optional</em>) – Dictionary mapping column names to their upper bounds.
+Values above the upper bound will be clipped to the upper bound.
+Default is None (no upper bounds).</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+If False, create new columns with the suffix ‘__clip_custom’.</p></li>
+<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True and inplace=False, drop the original columns after clipping.
+If False and inplace=False, keep both original and clipped columns.
+Ignored if inplace=True.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gators.clippers.CustomClipper._columns">
+<span class="sig-name descname"><span class="pre">_columns</span></span><a class="headerlink" href="#gators.clippers.CustomClipper._columns" title="Link to this definition">#</a></dt>
+<dd><p>List of columns that will be clipped (union of lower_bounds and upper_bounds keys).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gators.clippers.CustomClipper._bounds_map">
+<span class="sig-name descname"><span class="pre">_bounds_map</span></span><a class="headerlink" href="#gators.clippers.CustomClipper._bounds_map" title="Link to this definition">#</a></dt>
+<dd><p>Mapping of column names to (lower_bound, upper_bound) tuples.
+None values indicate no bound on that side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a> of str to tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.clippers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CustomClipper</span>
+</pre></div>
+</div>
+<p>Clip with both lower and upper bounds:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">150</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;salary&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">50000</span><span class="p">,</span> <span class="mi">2000000</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span> <span class="o">=</span> <span class="n">CustomClipper</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">lower_bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;salary&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="n">upper_bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span> <span class="s2">&quot;salary&quot;</span><span class="p">:</span> <span class="mi">1000000</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">shape: (3, 2)</span>
+<span class="go">┌─────┬─────────┐</span>
+<span class="go">│ age ┆ salary  │</span>
+<span class="go">│ --- ┆ ---     │</span>
+<span class="go">│ f64 ┆ f64     │</span>
+<span class="go">╞═════╪═════════╡</span>
+<span class="go">│ 0.0 ┆ 0.0     │</span>
+<span class="go">│ 25.0┆ 50000.0 │</span>
+<span class="go">│ 120.0┆1000000.0│</span>
+<span class="go">└─────┴─────────┘</span>
+</pre></div>
+</div>
+<p>Clip with only lower bounds:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span> <span class="o">=</span> <span class="n">CustomClipper</span><span class="p">(</span><span class="n">lower_bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">shape: (3, 2)</span>
+<span class="go">┌─────┬─────────┐</span>
+<span class="go">│ age ┆ salary  │</span>
+<span class="go">│ --- ┆ ---     │</span>
+<span class="go">│ f64 ┆ f64     │</span>
+<span class="go">╞═════╪═════════╡</span>
+<span class="go">│ 0.0 ┆ -1000.0 │</span>
+<span class="go">│ 25.0┆ 50000.0 │</span>
+<span class="go">│ 150.0┆2000000.0│</span>
+<span class="go">└─────┴─────────┘</span>
+</pre></div>
+</div>
+<p>Create new columns instead of modifying in place:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span> <span class="o">=</span> <span class="n">CustomClipper</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">lower_bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="n">upper_bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">120</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">shape: (3, 2)</span>
+<span class="go">┌──────────────────┬─────────┐</span>
+<span class="go">│ age__clip_custom ┆ salary  │</span>
+<span class="go">│ ---              ┆ ---     │</span>
+<span class="go">│ f64              ┆ f64     │</span>
+<span class="go">╞══════════════════╪═════════╡</span>
+<span class="go">│ 0.0              ┆ -1000.0 │</span>
+<span class="go">│ 25.0             ┆ 50000.0 │</span>
+<span class="go">│ 120.0            ┆2000000.0│</span>
+<span class="go">└──────────────────┴─────────┘</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<ul class="simple">
+<li><p>Non-numeric columns are automatically ignored.</p></li>
+<li><p>Columns not specified in either bounds dictionary are left unchanged.</p></li>
+<li><p>You can specify bounds for only some columns while leaving others untouched.</p></li>
+<li><p>If a column appears in both dictionaries, both bounds are applied.</p></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#gators.clippers.GaussianClipper" title="gators.clippers.GaussianClipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GaussianClipper</span></code></a></dt><dd><p>Clip values based on mean and standard deviation.</p>
+</dd>
+<dt><a class="reference internal" href="#gators.clippers.QuantileClipper" title="gators.clippers.QuantileClipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuantileClipper</span></code></a></dt><dd><p>Clip values based on quantiles.</p>
+</dd>
+<dt><a class="reference internal" href="#gators.clippers.MADClipper" title="gators.clippers.MADClipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MADClipper</span></code></a></dt><dd><p>Clip values based on median absolute deviation.</p>
+</dd>
+<dt><a class="reference internal" href="#gators.clippers.IQRClipper" title="gators.clippers.IQRClipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IQRClipper</span></code></a></dt><dd><p>Clip values based on interquartile range.</p>
+</dd>
+</dl>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.CustomClipper.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the clipper by identifying columns to clip.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target values (ignored, present for sklearn compatibility).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Fitted clipper.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.CustomClipper" title="gators.clippers.custom_clipper.CustomClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomClipper</span></code></a></span></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If no bounds are specified or if specified columns don’t exist in X.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.CustomClipper.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper.transform" title="Link to this definition">#</a></dt>
+<dd><p>Clip values using the custom bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to clip.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with clipped values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.CustomClipper.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit the clipper and transform the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target values (ignored, present for sklearn compatibility).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with clipped values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.clippers.GaussianClipper">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">GaussianClipper</span></span><a class="reference internal" href="_modules/gators/clippers/gaussian_clipper.html#GaussianClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.GaussianClipper" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<p>Clip numeric values to mean ± n standard deviations.</p>
+<p>This transformer caps values that are smaller than mean - n*std or larger
+than mean + n*std, where n is the number of standard deviations (n_sigmas).
+Values outside this range are clipped to the boundary values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_sigmas</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=3</em>) – Number of standard deviations to use for clipping bounds.
+Must be a positive integer.</p></li>
+<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+If False, create new columns with suffix ‘__clip_gaussian’.</p></li>
+<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
+Ignored when inplace=True.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.clipping</span><span class="w"> </span><span class="kn">import</span> <span class="n">GaussianClipper</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Sample DataFrame with outliers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">],</span>  <span class="c1"># 100.0 is an outlier</span>
+<span class="gp">... </span>    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">],</span>  <span class="c1"># -50.0 is an outlier</span>
+<span class="gp">... </span>    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip using 3 standard deviations (default)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span> <span class="o">=</span> <span class="n">GaussianClipper</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">GaussianClipper(n_sigmas=3, subset=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">clipper</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
+<span class="go">shape: (5, 3)</span>
+<span class="go">┌───────────────────┬───────────────────┬───────────────────┐</span>
+<span class="go">│ A__clip_gaussian  ┆ B__clip_gaussian  ┆ C__clip_gaussian  │</span>
+<span class="go">│ ---               ┆ ---               ┆ ---               │</span>
+<span class="go">│ f64               ┆ f64               ┆ f64               │</span>
+<span class="go">╞═══════════════════╪═══════════════════╪═══════════════════╡</span>
+<span class="go">│ 1.0               ┆ -24.8             ┆ 10.0              │</span>
+<span class="go">│ 2.0               ┆ 5.0               ┆ 20.0              │</span>
+<span class="go">│ 3.0               ┆ 6.0               ┆ 30.0              │</span>
+<span class="go">│ 4.0               ┆ 7.0               ┆ 40.0              │</span>
+<span class="go">│ 42.8              ┆ 8.0               ┆ 50.0              │</span>
+<span class="go">└───────────────────┴───────────────────┴───────────────────┘</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip using 2 standard deviations (more aggressive)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_2sigma</span> <span class="o">=</span> <span class="n">GaussianClipper</span><span class="p">(</span><span class="n">n_sigmas</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_2sigma</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">GaussianClipper(n_sigmas=2, subset=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_2sigma</span> <span class="o">=</span> <span class="n">clipper_2sigma</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_2sigma</span><span class="p">)</span>
+<span class="go">shape: (5, 3)</span>
+<span class="go">┌───────────────────┬───────────────────┬───────────────────┐</span>
+<span class="go">│ A__clip_gaussian  ┆ B__clip_gaussian  ┆ C__clip_gaussian  │</span>
+<span class="go">│ ---               ┆ ---               ┆ ---               │</span>
+<span class="go">│ f64               ┆ f64               ┆ f64               │</span>
+<span class="go">╞═══════════════════╪═══════════════════╪═══════════════════╡</span>
+<span class="go">│ 1.0               ┆ -16.5             ┆ 10.0              │</span>
+<span class="go">│ 2.0               ┆ 5.0               ┆ 20.0              │</span>
+<span class="go">│ 3.0               ┆ 6.0               ┆ 30.0              │</span>
+<span class="go">│ 4.0               ┆ 7.0               ┆ 40.0              │</span>
+<span class="go">│ 28.5              ┆ 8.0               ┆ 50.0              │</span>
+<span class="go">└───────────────────┴───────────────────┴───────────────────┘</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip with drop_columns=False to keep original columns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_no_drop</span> <span class="o">=</span> <span class="n">GaussianClipper</span><span class="p">(</span><span class="n">n_sigmas</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">drop_columns</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_no_drop</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">GaussianClipper(n_sigmas=3, subset=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], drop_columns=False, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_no_drop</span> <span class="o">=</span> <span class="n">clipper_no_drop</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_no_drop</span><span class="p">)</span>
+<span class="go">shape: (5, 6)</span>
+<span class="go">┌───────┬────────┬──────┬───────────────────┬───────────────────┬───────────────────┐</span>
+<span class="go">│ A     ┆ B      ┆ C    ┆ A__clip_gaussian  ┆ B__clip_gaussian  ┆ C__clip_gaussian  │</span>
+<span class="go">│ ---   ┆ ---    ┆ ---  ┆ ---               ┆ ---               ┆ ---               │</span>
+<span class="go">│ f64   ┆ f64    ┆ f64  ┆ f64               ┆ f64               ┆ f64               │</span>
+<span class="go">╞═══════╪════════╪══════╪═══════════════════╪═══════════════════╪═══════════════════╡</span>
+<span class="go">│ 1.0   ┆ -50.0  ┆ 10.0 ┆ 1.0               ┆ -24.8             ┆ 10.0              │</span>
+<span class="go">│ 2.0   ┆ 5.0    ┆ 20.0 ┆ 2.0               ┆ 5.0               ┆ 20.0              │</span>
+<span class="go">│ 3.0   ┆ 6.0    ┆ 30.0 ┆ 3.0               ┆ 6.0               ┆ 30.0              │</span>
+<span class="go">│ 4.0   ┆ 7.0    ┆ 40.0 ┆ 4.0               ┆ 7.0               ┆ 40.0              │</span>
+<span class="go">│ 100.0 ┆ 8.0    ┆ 50.0 ┆ 42.8              ┆ 8.0               ┆ 50.0              │</span>
+<span class="go">└───────┴────────┴──────┴───────────────────┴───────────────────┴───────────────────┘</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip only a subset of columns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_subset</span> <span class="o">=</span> <span class="n">GaussianClipper</span><span class="p">(</span><span class="n">n_sigmas</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_subset</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">GaussianClipper(n_sigmas=3, subset=[&#39;A&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_subset</span> <span class="o">=</span> <span class="n">clipper_subset</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_subset</span><span class="p">)</span>
+<span class="go">shape: (5, 3)</span>
+<span class="go">┌────────┬──────┬───────────────────┐</span>
+<span class="go">│ B      ┆ C    ┆ A__clip_gaussian  │</span>
+<span class="go">│ ---    ┆ ---  ┆ ---               │</span>
+<span class="go">│ f64    ┆ f64  ┆ f64               │</span>
+<span class="go">╞════════╪══════╪═══════════════════╡</span>
+<span class="go">│ -50.0  ┆ 10.0 ┆ 1.0               │</span>
+<span class="go">│ 5.0    ┆ 20.0 ┆ 2.0               │</span>
+<span class="go">│ 6.0    ┆ 30.0 ┆ 3.0               │</span>
+<span class="go">│ 7.0    ┆ 40.0 ┆ 4.0               │</span>
+<span class="go">│ 8.0    ┆ 50.0 ┆ 42.8              │</span>
+<span class="go">└────────┴──────┴───────────────────┘</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip inplace (modifies original columns)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_inplace</span> <span class="o">=</span> <span class="n">GaussianClipper</span><span class="p">(</span><span class="n">n_sigmas</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_inplace</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">GaussianClipper(n_sigmas=3, subset=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], drop_columns=True, inplace=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_inplace</span> <span class="o">=</span> <span class="n">clipper_inplace</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_inplace</span><span class="p">)</span>
+<span class="go">shape: (5, 3)</span>
+<span class="go">┌───────┬────────┬──────┐</span>
+<span class="go">│ A     ┆ B      ┆ C    │</span>
+<span class="go">│ ---   ┆ ---    ┆ ---  │</span>
+<span class="go">│ f64   ┆ f64    ┆ f64  │</span>
+<span class="go">╞═══════╪════════╪══════╡</span>
+<span class="go">│ 1.0   ┆ -24.8  ┆ 10.0 │</span>
+<span class="go">│ 2.0   ┆ 5.0    ┆ 20.0 │</span>
+<span class="go">│ 3.0   ┆ 6.0    ┆ 30.0 │</span>
+<span class="go">│ 4.0   ┆ 7.0    ┆ 40.0 │</span>
+<span class="go">│ 42.8  ┆ 8.0    ┆ 50.0 │</span>
+<span class="go">└───────┴────────┴──────┘</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.GaussianClipper.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/gaussian_clipper.html#GaussianClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.GaussianClipper.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by computing clipping bounds for each column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.GaussianClipper" title="gators.clippers.gaussian_clipper.GaussianClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianClipper</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.GaussianClipper.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/gaussian_clipper.html#GaussianClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.GaussianClipper.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input DataFrame by clipping values to mean ± n*std.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with clipped numeric columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.clippers.IQRClipper">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">IQRClipper</span></span><a class="reference internal" href="_modules/gators/clippers/iqr_clipper.html#IQRClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.IQRClipper" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<p>Clip numeric values based on Interquartile Range (IQR).</p>
+<p>This transformer caps values that fall outside the range
+[Q1 - n_iqrs*IQR, Q3 + n_iqrs*IQR], where Q1 and Q3 are the first and
+third quartiles, and IQR = Q3 - Q1. This is a robust method commonly
+used for outlier detection (n_iqrs=1.5 is the standard for box plots).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_iqrs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=1.5</em>) – Number of IQRs beyond Q1/Q3 to use for clipping bounds.
+Must be a positive number. Common values:
+- 1.5: Standard box plot outlier threshold
+- 3.0: Extreme outlier threshold</p></li>
+<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+If False, create new columns with suffix ‘__clip_iqr’.</p></li>
+<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
+Ignored when inplace=True.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.clipping</span><span class="w"> </span><span class="kn">import</span> <span class="n">IQRClipper</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Sample DataFrame with outliers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">11.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">,</span> <span class="mf">14.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">,</span> <span class="mf">17.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">,</span> <span class="mf">19.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">11.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">,</span> <span class="mf">14.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">,</span> <span class="mf">17.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">,</span> <span class="mf">19.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip using 1.5 IQRs (default, standard box plot threshold)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span> <span class="o">=</span> <span class="n">IQRClipper</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">IQRClipper(n_iqrs=1.5, subset=[&#39;A&#39;, &#39;B&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">clipper</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
+<span class="go">shape: (12, 2)</span>
+<span class="go">┌──────────────┬──────────────┐</span>
+<span class="go">│ A__clip_iqr  ┆ B__clip_iqr  │</span>
+<span class="go">│ ---          ┆ ---          │</span>
+<span class="go">│ f64          ┆ f64          │</span>
+<span class="go">╞══════════════╪══════════════╡</span>
+<span class="go">│ 10.0         ┆ 1.25         │</span>
+<span class="go">│ 11.0         ┆ 10.0         │</span>
+<span class="go">│ 12.0         ┆ 11.0         │</span>
+<span class="go">│ 13.0         ┆ 12.0         │</span>
+<span class="go">│ 14.0         ┆ 13.0         │</span>
+<span class="go">│ 15.0         ┆ 14.0         │</span>
+<span class="go">│ 16.0         ┆ 15.0         │</span>
+<span class="go">│ 17.0         ┆ 16.0         │</span>
+<span class="go">│ 18.0         ┆ 17.0         │</span>
+<span class="go">│ 19.0         ┆ 18.0         │</span>
+<span class="go">│ 20.0         ┆ 19.0         │</span>
+<span class="go">│ 28.75        ┆ 20.0         │</span>
+<span class="go">└──────────────┴──────────────┘</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># More conservative clipping with 3 IQRs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_3iqr</span> <span class="o">=</span> <span class="n">IQRClipper</span><span class="p">(</span><span class="n">n_iqrs</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_3iqr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">IQRClipper(n_iqrs=3.0, subset=[&#39;A&#39;, &#39;B&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_3iqr</span> <span class="o">=</span> <span class="n">clipper_3iqr</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_3iqr</span><span class="p">)</span>
+<span class="go">shape: (12, 2)</span>
+<span class="go">┌──────────────┬──────────────┐</span>
+<span class="go">│ A__clip_iqr  ┆ B__clip_iqr  │</span>
+<span class="go">│ ---          ┆ ---          │</span>
+<span class="go">│ f64          ┆ f64          │</span>
+<span class="go">╞══════════════╪══════════════╡</span>
+<span class="go">│ 10.0         ┆ -15.0        │</span>
+<span class="go">│ 11.0         ┆ 10.0         │</span>
+<span class="go">│ 12.0         ┆ 11.0         │</span>
+<span class="go">│ 13.0         ┆ 12.0         │</span>
+<span class="go">│ 14.0         ┆ 13.0         │</span>
+<span class="go">│ 15.0         ┆ 14.0         │</span>
+<span class="go">│ 16.0         ┆ 15.0         │</span>
+<span class="go">│ 17.0         ┆ 16.0         │</span>
+<span class="go">│ 18.0         ┆ 17.0         │</span>
+<span class="go">│ 19.0         ┆ 18.0         │</span>
+<span class="go">│ 20.0         ┆ 19.0         │</span>
+<span class="go">│ 43.0         ┆ 20.0         │</span>
+<span class="go">└──────────────┴──────────────┘</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.IQRClipper.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/iqr_clipper.html#IQRClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.IQRClipper.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by computing IQR-based clipping bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.IQRClipper" title="gators.clippers.iqr_clipper.IQRClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">IQRClipper</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.IQRClipper.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/iqr_clipper.html#IQRClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.IQRClipper.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input DataFrame by clipping values based on IQR.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with clipped numeric columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.clippers.MADClipper">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">MADClipper</span></span><a class="reference internal" href="_modules/gators/clippers/mad_clipper.html#MADClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.MADClipper" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<p>Clip numeric values based on Median Absolute Deviation (MAD).</p>
+<p>This transformer caps values that are more than n_mads times the MAD away
+from the median. MAD is a robust measure of variability that is less
+sensitive to outliers than standard deviation.</p>
+<p>MAD = median(abs(X - median(X)))
+Clipping bounds: [median - n_mads*MAD, median + n_mads*MAD]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_mads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=3.0</em>) – Number of MADs from the median to use for clipping bounds.
+Must be a positive number.</p></li>
+<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+If False, create new columns with suffix ‘__clip_mad’.</p></li>
+<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
+Ignored when inplace=True.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.clipping</span><span class="w"> </span><span class="kn">import</span> <span class="n">MADClipper</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Sample DataFrame with outliers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">11.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">,</span> <span class="mf">14.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">,</span> <span class="mf">17.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">,</span> <span class="mf">19.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">11.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">,</span> <span class="mf">14.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mf">16.0</span><span class="p">,</span> <span class="mf">17.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">,</span> <span class="mf">19.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip using 3 MADs (default)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span> <span class="o">=</span> <span class="n">MADClipper</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">MADClipper(n_mads=3.0, subset=[&#39;A&#39;, &#39;B&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">clipper</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
+<span class="go">shape: (12, 2)</span>
+<span class="go">┌──────────────┬──────────────┐</span>
+<span class="go">│ A__clip_mad  ┆ B__clip_mad  │</span>
+<span class="go">│ ---          ┆ ---          │</span>
+<span class="go">│ f64          ┆ f64          │</span>
+<span class="go">╞══════════════╪══════════════╡</span>
+<span class="go">│ 10.0         ┆ -12.5        │</span>
+<span class="go">│ 11.0         ┆ 10.0         │</span>
+<span class="go">│ 12.0         ┆ 11.0         │</span>
+<span class="go">│ 13.0         ┆ 12.0         │</span>
+<span class="go">│ 14.0         ┆ 13.0         │</span>
+<span class="go">│ 15.0         ┆ 14.0         │</span>
+<span class="go">│ 16.0         ┆ 15.0         │</span>
+<span class="go">│ 17.0         ┆ 16.0         │</span>
+<span class="go">│ 18.0         ┆ 17.0         │</span>
+<span class="go">│ 19.0         ┆ 18.0         │</span>
+<span class="go">│ 20.0         ┆ 19.0         │</span>
+<span class="go">│ 27.5         ┆ 20.0         │</span>
+<span class="go">└──────────────┴──────────────┘</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># More aggressive clipping with 2 MADs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_2mad</span> <span class="o">=</span> <span class="n">MADClipper</span><span class="p">(</span><span class="n">n_mads</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_2mad</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">MADClipper(n_mads=2.0, subset=[&#39;A&#39;, &#39;B&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_2mad</span> <span class="o">=</span> <span class="n">clipper_2mad</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_2mad</span><span class="p">)</span>
+<span class="go">shape: (12, 2)</span>
+<span class="go">┌──────────────┬──────────────┐</span>
+<span class="go">│ A__clip_mad  ┆ B__clip_mad  │</span>
+<span class="go">│ ---          ┆ ---          │</span>
+<span class="go">│ f64          ┆ f64          │</span>
+<span class="go">╞══════════════╪══════════════╡</span>
+<span class="go">│ 10.0         ┆ -5.0         │</span>
+<span class="go">│ 11.0         ┆ 10.0         │</span>
+<span class="go">│ 12.0         ┆ 11.0         │</span>
+<span class="go">│ 13.0         ┆ 12.0         │</span>
+<span class="go">│ 14.0         ┆ 13.0         │</span>
+<span class="go">│ 15.0         ┆ 14.0         │</span>
+<span class="go">│ 16.0         ┆ 15.0         │</span>
+<span class="go">│ 17.0         ┆ 16.0         │</span>
+<span class="go">│ 18.0         ┆ 17.0         │</span>
+<span class="go">│ 19.0         ┆ 18.0         │</span>
+<span class="go">│ 20.0         ┆ 19.0         │</span>
+<span class="go">│ 22.5         ┆ 20.0         │</span>
+<span class="go">└──────────────┴──────────────┘</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.MADClipper.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/mad_clipper.html#MADClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.MADClipper.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by computing MAD-based clipping bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.MADClipper" title="gators.clippers.mad_clipper.MADClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">MADClipper</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.MADClipper.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/mad_clipper.html#MADClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.MADClipper.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input DataFrame by clipping values based on MAD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with clipped numeric columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.clippers.QuantileClipper">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">QuantileClipper</span></span><a class="reference internal" href="_modules/gators/clippers/quantile_clipper.html#QuantileClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.QuantileClipper" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<p>Clip numeric values based on quantile thresholds.</p>
+<p>This transformer caps values below the lower quantile and above the upper
+quantile. This is useful for removing extreme outliers while preserving
+the bulk of the data distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lower_quantile</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.01</em>) – Lower quantile threshold (0 to 1). Values below this quantile are clipped.</p></li>
+<li><p><strong>upper_quantile</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.99</em>) – Upper quantile threshold (0 to 1). Values above this quantile are clipped.</p></li>
+<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
+<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+If False, create new columns with suffix ‘__clip_quantile’.</p></li>
+<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
+Ignored when inplace=True.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.clipping</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantileClipper</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Sample DataFrame with outliers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip using 1st and 99th percentiles (default)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span> <span class="o">=</span> <span class="n">QuantileClipper</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">QuantileClipper(lower_quantile=0.01, upper_quantile=0.99, subset=[&#39;A&#39;, &#39;B&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">clipper</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
+<span class="go">shape: (10, 2)</span>
+<span class="go">┌─────────────────────┬─────────────────────┐</span>
+<span class="go">│ A__clip_quantile    ┆ B__clip_quantile    │</span>
+<span class="go">│ ---                 ┆ ---                 │</span>
+<span class="go">│ f64                 ┆ f64                 │</span>
+<span class="go">╞═════════════════════╪═════════════════════╡</span>
+<span class="go">│ 1.09                ┆ -45.1               │</span>
+<span class="go">│ 2.0                 ┆ 2.0                 │</span>
+<span class="go">│ 3.0                 ┆ 3.0                 │</span>
+<span class="go">│ 4.0                 ┆ 4.0                 │</span>
+<span class="go">│ 5.0                 ┆ 5.0                 │</span>
+<span class="go">│ 6.0                 ┆ 6.0                 │</span>
+<span class="go">│ 7.0                 ┆ 7.0                 │</span>
+<span class="go">│ 8.0                 ┆ 8.0                 │</span>
+<span class="go">│ 9.0                 ┆ 9.0                 │</span>
+<span class="go">│ 9.91                ┆ 9.91                │</span>
+<span class="go">└─────────────────────┴─────────────────────┘</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># More aggressive clipping with 5th and 95th percentiles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_5_95</span> <span class="o">=</span> <span class="n">QuantileClipper</span><span class="p">(</span><span class="n">lower_quantile</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">upper_quantile</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_5_95</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">QuantileClipper(lower_quantile=0.05, upper_quantile=0.95, subset=[&#39;A&#39;, &#39;B&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_5_95</span> <span class="o">=</span> <span class="n">clipper_5_95</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_5_95</span><span class="p">)</span>
+<span class="go">shape: (10, 2)</span>
+<span class="go">┌─────────────────────┬─────────────────────┐</span>
+<span class="go">│ A__clip_quantile    ┆ B__clip_quantile    │</span>
+<span class="go">│ ---                 ┆ ---                 │</span>
+<span class="go">│ f64                 ┆ f64                 │</span>
+<span class="go">╞═════════════════════╪═════════════════════╡</span>
+<span class="go">│ 1.45                ┆ -21.5               │</span>
+<span class="go">│ 2.0                 ┆ 2.0                 │</span>
+<span class="go">│ 3.0                 ┆ 3.0                 │</span>
+<span class="go">│ 4.0                 ┆ 4.0                 │</span>
+<span class="go">│ 5.0                 ┆ 5.0                 │</span>
+<span class="go">│ 6.0                 ┆ 6.0                 │</span>
+<span class="go">│ 7.0                 ┆ 7.0                 │</span>
+<span class="go">│ 8.0                 ┆ 8.0                 │</span>
+<span class="go">│ 9.0                 ┆ 9.0                 │</span>
+<span class="go">│ 8.55                ┆ 9.55                │</span>
+<span class="go">└─────────────────────┴─────────────────────┘</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Clip only specific columns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_subset</span> <span class="o">=</span> <span class="n">QuantileClipper</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clipper_subset</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">QuantileClipper(lower_quantile=0.01, upper_quantile=0.99, subset=[&#39;A&#39;], drop_columns=True, inplace=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_subset</span> <span class="o">=</span> <span class="n">clipper_subset</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_subset</span><span class="p">)</span>
+<span class="go">shape: (10, 2)</span>
+<span class="go">┌────────┬─────────────────────┐</span>
+<span class="go">│ B      ┆ A__clip_quantile    │</span>
+<span class="go">│ ---    ┆ ---                 │</span>
+<span class="go">│ f64    ┆ f64                 │</span>
+<span class="go">╞════════╪═════════════════════╡</span>
+<span class="go">│ -50.0  ┆ 1.09                │</span>
+<span class="go">│ 2.0    ┆ 2.0                 │</span>
+<span class="go">│ 3.0    ┆ 3.0                 │</span>
+<span class="go">│ 4.0    ┆ 4.0                 │</span>
+<span class="go">│ 5.0    ┆ 5.0                 │</span>
+<span class="go">│ 6.0    ┆ 6.0                 │</span>
+<span class="go">│ 7.0    ┆ 7.0                 │</span>
+<span class="go">│ 8.0    ┆ 8.0                 │</span>
+<span class="go">│ 9.0    ┆ 9.0                 │</span>
+<span class="go">│ 10.0   ┆ 9.91                │</span>
+<span class="go">└────────┴─────────────────────┘</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.QuantileClipper.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/quantile_clipper.html#QuantileClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.QuantileClipper.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by computing quantile-based clipping bounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.QuantileClipper" title="gators.clippers.quantile_clipper.QuantileClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileClipper</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.clippers.QuantileClipper.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/quantile_clipper.html#QuantileClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.QuantileClipper.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input DataFrame by clipping values to quantile thresholds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with clipped numeric columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-gators.clippers">Module contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper"><code class="docutils literal notranslate"><span class="pre">CustomClipper</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper._columns"><code class="docutils literal notranslate"><span class="pre">CustomClipper._columns</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper._bounds_map"><code class="docutils literal notranslate"><span class="pre">CustomClipper._bounds_map</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper.fit"><code class="docutils literal notranslate"><span class="pre">CustomClipper.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper.transform"><code class="docutils literal notranslate"><span class="pre">CustomClipper.transform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper.fit_transform"><code class="docutils literal notranslate"><span class="pre">CustomClipper.fit_transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.GaussianClipper"><code class="docutils literal notranslate"><span class="pre">GaussianClipper</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.GaussianClipper.fit"><code class="docutils literal notranslate"><span class="pre">GaussianClipper.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.GaussianClipper.transform"><code class="docutils literal notranslate"><span class="pre">GaussianClipper.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.IQRClipper"><code class="docutils literal notranslate"><span class="pre">IQRClipper</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.IQRClipper.fit"><code class="docutils literal notranslate"><span class="pre">IQRClipper.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.IQRClipper.transform"><code class="docutils literal notranslate"><span class="pre">IQRClipper.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.MADClipper"><code class="docutils literal notranslate"><span class="pre">MADClipper</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.MADClipper.fit"><code class="docutils literal notranslate"><span class="pre">MADClipper.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.MADClipper.transform"><code class="docutils literal notranslate"><span class="pre">MADClipper.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.QuantileClipper"><code class="docutils literal notranslate"><span class="pre">QuantileClipper</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.QuantileClipper.fit"><code class="docutils literal notranslate"><span class="pre">QuantileClipper.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.QuantileClipper.transform"><code class="docutils literal notranslate"><span class="pre">QuantileClipper.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

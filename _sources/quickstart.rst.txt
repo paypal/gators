@@ -87,6 +87,10 @@ Example: Encoding
     ohe = OneHotEncoder(columns=['category_col'])
     X =  ohe.fit_transform(X)
 
+    # Ordinal encoding
+    ordinal = OrdinalEncoder(columns=['category_col'])
+    X =  ordinal.fit_transform(X)
+
     # Target encoding (for supervised learning)
     target_encoder = TargetEncoder(columns=['category_col'])
     X =  target_encoder.fit_transform(X, y=target)
@@ -99,7 +103,6 @@ Example: Feature Generation
     from gators.feature_generation import (
         PolynomialFeatures,
         RatioFeatures,
-        ThresholXeatures
     )
     from gators.feature_generation_dt import DatetimeOrdinalFeatures
 

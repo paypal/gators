@@ -48,7 +48,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="next" title="Data Cleaning" href="api/data_cleaning.html" />
     <link rel="prev" title="Quick Start" href="quickstart.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -135,13 +135,6 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about.html">
-    About Gators
-  </a>
-</li>
-
-
-<li class="nav-item ">
   <a class="nav-link nav-internal" href="installation.html">
     Installation
   </a>
@@ -203,10 +196,6 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
-      <span class="fa-solid fa-outdent"></span>
-    </button>
-  
 </div>
 
     </header>
@@ -233,13 +222,6 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="about.html">
-    About Gators
-  </a>
-</li>
-
-
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="installation.html">
     Installation
@@ -282,7 +264,21 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="api/data_cleaning.html">Data Cleaning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/clippers.html">Clippers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/encoders.html">Encoders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/feature_generation.html">Feature Generation - Numeric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/feature_generation_str.html">Feature Generation - String</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/feature_generation_dt.html">Feature Generation - DateTime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/imputers.html">Imputers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/discretizers.html">Discretizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/scalers.html">Scalers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/feature_selection.html">Feature Selection</a></li>
+</ul>
+</div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -348,162 +344,22 @@
   <section id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h1>
 <p>Complete reference for all Gators transformers, organized by functionality.</p>
-<section id="data-cleaning">
-<h2>Data Cleaning<a class="headerlink" href="#data-cleaning" title="Link to this heading">#</a></h2>
-<p><strong>Column Operations</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.CastColumns" title="gators.data_cleaning.cast_columns.CastColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">CastColumns</span></code></a> - Cast columns to different data types</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropColumns" title="gators.data_cleaning.drop_columns.DropColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropColumns</span></code></a> - Drop specified columns</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.RenameColumns" title="gators.data_cleaning.rename_columns.RenameColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">RenameColumns</span></code></a> - Rename columns</p></li>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/data_cleaning.html">Data Cleaning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/clippers.html">Clippers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/encoders.html">Encoders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/feature_generation.html">Feature Generation - Numeric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/feature_generation_str.html">Feature Generation - String</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/feature_generation_dt.html">Feature Generation - DateTime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/imputers.html">Imputers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/discretizers.html">Discretizers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/scalers.html">Scalers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/feature_selection.html">Feature Selection</a></li>
 </ul>
-<p><strong>Quality Filters</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.CorrelationFilter" title="gators.data_cleaning.correlation_filter.CorrelationFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">CorrelationFilter</span></code></a> - Remove highly correlated features</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropConstantColumns" title="gators.data_cleaning.drop_constant_columns.DropConstantColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropConstantColumns</span></code></a> - Remove constant columns</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateColumns" title="gators.data_cleaning.drop_duplicate_columns.DropDuplicateColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropDuplicateColumns</span></code></a> - Remove duplicate columns</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateRows" title="gators.data_cleaning.drop_duplicate_rows.DropDuplicateRows"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropDuplicateRows</span></code></a> - Remove duplicate rows</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropHighNaNRatio" title="gators.data_cleaning.drop_high_nan_ratio.DropHighNaNRatio"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropHighNaNRatio</span></code></a> - Drop columns with high missing ratio</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.DropLowCardinality" title="gators.data_cleaning.drop_low_cardinality.DropLowCardinality"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropLowCardinality</span></code></a> - Drop low cardinality columns</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter" title="gators.data_cleaning.high_cardinality_filter.HighCardinalityFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">HighCardinalityFilter</span></code></a> - Filter high cardinality features</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.Replace" title="gators.data_cleaning.replace.Replace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Replace</span></code></a> - Replace values in columns</p></li>
-<li><p><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.VarianceFilter" title="gators.data_cleaning.variance_filter.VarianceFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">VarianceFilter</span></code></a> - Remove low variance features</p></li>
-</ul>
-</section>
-<section id="encoders">
-<h2>Encoders<a class="headerlink" href="#encoders" title="Link to this heading">#</a></h2>
-<p><strong>Categorical Encoding</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.BinaryEncoder" title="gators.encoders.binary_encoder.BinaryEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">BinaryEncoder</span></code></a> - Binary encoding for categorical features</p></li>
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.CatBoostEncoder" title="gators.encoders.catboost_encoder.CatBoostEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatBoostEncoder</span></code></a> - CatBoost-style encoding</p></li>
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.CountEncoder" title="gators.encoders.count_encoder.CountEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountEncoder</span></code></a> - Frequency-based encoding</p></li>
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.LeaveOneOutEncoder" title="gators.encoders.leave_one_out_encoder.LeaveOneOutEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">LeaveOneOutEncoder</span></code></a> - Leave-one-out encoding</p></li>
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.OneHotEncoder" title="gators.encoders.onehot_encoder.OneHotEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneHotEncoder</span></code></a> - One-hot encoding</p></li>
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.OrdinalEncoder" title="gators.encoders.ordinal_encoder.OrdinalEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrdinalEncoder</span></code></a> - Ordinal encoding for ordered categories</p></li>
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.RareCategoryEncoder" title="gators.encoders.rare_category_encoder.RareCategoryEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">RareCategoryEncoder</span></code></a> - Handle rare categories</p></li>
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.TargetEncoder" title="gators.encoders.target_encoder.TargetEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetEncoder</span></code></a> - Target mean encoding</p></li>
-<li><p><a class="reference internal" href="gators.encoders.html#gators.encoders.WOEEncoder" title="gators.encoders.woe_encoder.WOEEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">WOEEncoder</span></code></a> - Weight of Evidence encoding</p></li>
-</ul>
-</section>
-<section id="feature-generation-numeric">
-<h2>Feature Generation - Numeric<a class="headerlink" href="#feature-generation-numeric" title="Link to this heading">#</a></h2>
-<p><strong>Mathematical Operations</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures" title="gators.feature_generation.comparison_features.ComparisonFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComparisonFeatures</span></code></a> - Compare columns</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.DistanceFeatures" title="gators.feature_generation.distance_features.DistanceFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">DistanceFeatures</span></code></a> - Calculate distance between columns</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.MathFeatures" title="gators.feature_generation.math_features.MathFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">MathFeatures</span></code></a> - Mathematical operations between columns</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RatioFeatures" title="gators.feature_generation.ratio_features.RatioFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">RatioFeatures</span></code></a> - Calculate ratio between columns</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures" title="gators.feature_generation.plan_rotation_features.PlanRotationFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlanRotationFeatures</span></code></a> - Rotate features in space</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.PolynomialFeatures" title="gators.feature_generation.polynomial_features.PolynomialFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolynomialFeatures</span></code></a> - Generate polynomial features</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures" title="gators.feature_generation.scalar_math_features.ScalarMathFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScalarMathFeatures</span></code></a> - Scalar mathematical operations</p></li>
-</ul>
-<p><strong>Conditions and Rules</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.ConditionFeatures" title="gators.feature_generation.condition_features.ConditionFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConditionFeatures</span></code></a> - Condition-based features</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.IsNull" title="gators.feature_generation.is_null.IsNull"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsNull</span></code></a> - Generate null indicator features</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.RuleFeatures" title="gators.feature_generation.rule_features.RuleFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuleFeatures</span></code></a> - Apply business rules</p></li>
-</ul>
-<p><strong>Group Features</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures" title="gators.feature_generation.group_statistics_features.GroupStatisticsFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupStatisticsFeatures</span></code></a> - Generate group-based statistics</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupScalingFeatures" title="gators.feature_generation.group_scaling_features.GroupScalingFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupScalingFeatures</span></code></a> - Generate group-based scaling features</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation.html#gators.feature_generation.GroupLagFeatures" title="gators.feature_generation.group_lag_features.GroupLagFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupLagFeatures</span></code></a> - Generate group-based lag features</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">RowStatisticsFeatures</span></code> - Generate group-based statistics per row</p></li>
-</ul>
-</section>
-<section id="feature-generation-string">
-<h2>Feature Generation - String<a class="headerlink" href="#feature-generation-string" title="Link to this heading">#</a></h2>
-<p><strong>Text Properties</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.CharacterStatistics" title="gators.feature_generation_str.character_statistics.CharacterStatistics"><code class="xref py py-class docutils literal notranslate"><span class="pre">CharacterStatistics</span></code></a> - Character-level statistics</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Length" title="gators.feature_generation_str.length.Length"><code class="xref py py-class docutils literal notranslate"><span class="pre">Length</span></code></a> - String length</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Occurrences" title="gators.feature_generation_str.occurrences.Occurrences"><code class="xref py py-class docutils literal notranslate"><span class="pre">Occurrences</span></code></a> - Count substring occurrences</p></li>
-</ul>
-<p><strong>Text Patterns</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Contains" title="gators.feature_generation_str.contains.Contains"><code class="xref py py-class docutils literal notranslate"><span class="pre">Contains</span></code></a> - Check if string contains substring</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Endswith" title="gators.feature_generation_str.endswith.Endswith"><code class="xref py py-class docutils literal notranslate"><span class="pre">Endswith</span></code></a> - Check if string ends with pattern</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.PatternDetector" title="gators.feature_generation_str.pattern_detector.PatternDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">PatternDetector</span></code></a> - Detect regex patterns</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Startswith" title="gators.feature_generation_str.startswith.Startswith"><code class="xref py py-class docutils literal notranslate"><span class="pre">Startswith</span></code></a> - Check if string starts with pattern</p></li>
-</ul>
-<p><strong>Text Transformation</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.ExtractSubstring" title="gators.feature_generation_str.extract_substring.ExtractSubstring"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtractSubstring</span></code></a> - Extract substring</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Lower" title="gators.feature_generation_str.lower.Lower"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lower</span></code></a> - Convert to lowercase</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.NGram" title="gators.feature_generation_str.ngram.NGram"><code class="xref py py-class docutils literal notranslate"><span class="pre">NGram</span></code></a> - Generate n-gram</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Split" title="gators.feature_generation_str.split.Split"><code class="xref py py-class docutils literal notranslate"><span class="pre">Split</span></code></a> - Split based on a delimiter</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.SplitExtract" title="gators.feature_generation_str.split_extract.SplitExtract"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitExtract</span></code></a> - Split based on a delimiter and extract</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.Upper" title="gators.feature_generation_str.upper.Upper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Upper</span></code></a> - Convert to uppercase</p></li>
-</ul>
-<p><strong>Text Interaction</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.InteractionFeatures" title="gators.feature_generation_str.interaction_features.InteractionFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractionFeatures</span></code></a> - Exhaustive string interactions</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_str.html#gators.feature_generation_str.CombineFeatures" title="gators.feature_generation_str.combine_features.CombineFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">CombineFeatures</span></code></a> - Selected string interactions</p></li>
-<li></li>
-</ul>
-</section>
-<section id="feature-generation-datetime">
-<h2>Feature Generation - DateTime<a class="headerlink" href="#feature-generation-datetime" title="Link to this heading">#</a></h2>
-<p><strong>Temporal Features</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.BusinessTimeFeatures" title="gators.feature_generation_dt.business_time_features.BusinessTimeFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">BusinessTimeFeatures</span></code></a> - Business hours/days</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.CyclicFeatures" title="gators.feature_generation_dt.cyclic_features.CyclicFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicFeatures</span></code></a> - Cyclical time encoding</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.DiffFeatures" title="gators.feature_generation_dt.diff_features.DiffFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffFeatures</span></code></a> - Time differences</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.DurationToDatetime" title="gators.feature_generation_dt.duration_to_datetime.DurationToDatetime"><code class="xref py py-class docutils literal notranslate"><span class="pre">DurationToDatetime</span></code></a> - Convert duration to datetime</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.OrdinalFeatures" title="gators.feature_generation_dt.ordinal_features.OrdinalFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrdinalFeatures</span></code></a> - Extract time components</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.HolidayFeatures" title="gators.feature_generation_dt.holiday_features.HolidayFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">HolidayFeatures</span></code></a> - Holiday indicators</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures" title="gators.feature_generation_dt.time_bin_features.TimeBinFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeBinFeatures</span></code></a> - Time binning</p></li>
-<li><p><a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeWindowFeatures" title="gators.feature_generation_dt.time_window_features.TimeWindowFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeWindowFeatures</span></code></a> - Time-based window aggregation features</p></li>
-</ul>
-</section>
-<section id="imputers">
-<h2>Imputers<a class="headerlink" href="#imputers" title="Link to this heading">#</a></h2>
-<p><strong>Missing Value Imputation</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.imputers.html#gators.imputers.BooleanImputer" title="gators.imputers.boolean_imputer.BooleanImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BooleanImputer</span></code></a> - Impute boolean columns</p></li>
-<li><p><a class="reference internal" href="gators.imputers.html#gators.imputers.GroupByImputer" title="gators.imputers.groupby_imputer.GroupByImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupByImputer</span></code></a> - Group-based imputation</p></li>
-<li><p><a class="reference internal" href="gators.imputers.html#gators.imputers.NumericImputer" title="gators.imputers.numeric_imputer.NumericImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">NumericImputer</span></code></a> - Impute numeric columns</p></li>
-<li><p><a class="reference internal" href="gators.imputers.html#gators.imputers.StringImputer" title="gators.imputers.string_imputer.StringImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringImputer</span></code></a> - Impute string columns</p></li>
-</ul>
-</section>
-<section id="discretizers">
-<h2>Discretizers<a class="headerlink" href="#discretizers" title="Link to this heading">#</a></h2>
-<p><strong>Binning Methods</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.discretizers.html#gators.discretizers.CustomDiscretizer" title="gators.discretizers.custom_discretizer.CustomDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomDiscretizer</span></code></a> - Custom bin edges</p></li>
-<li><p><a class="reference internal" href="gators.discretizers.html#gators.discretizers.EqualLengthDiscretizer" title="gators.discretizers.equal_length_discretizer.EqualLengthDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">EqualLengthDiscretizer</span></code></a> - Equal-width binning</p></li>
-<li><p><a class="reference internal" href="gators.discretizers.html#gators.discretizers.EqualSizeDiscretizer" title="gators.discretizers.equal_size_discretizer.EqualSizeDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">EqualSizeDiscretizer</span></code></a> - Equal-frequency binning</p></li>
-<li><p><a class="reference internal" href="gators.discretizers.html#gators.discretizers.GeometricDiscretizer" title="gators.discretizers.geometric_discretizer.GeometricDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometricDiscretizer</span></code></a> - Geometric progression bins</p></li>
-<li><p><a class="reference internal" href="gators.discretizers.html#gators.discretizers.QuantileDiscretizer" title="gators.discretizers.quantile_discretizer.QuantileDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileDiscretizer</span></code></a> - Quantile-based binning</p></li>
-<li><p><a class="reference internal" href="gators.discretizers.html#gators.discretizers.TreeBasedDiscretizer" title="gators.discretizers.tree_based_discretizer.TreeBasedDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeBasedDiscretizer</span></code></a> - Decision tree bins</p></li>
-</ul>
-</section>
-<section id="scalers">
-<h2>Scalers<a class="headerlink" href="#scalers" title="Link to this heading">#</a></h2>
-<p><strong>Feature Scaling</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.scalers.html#gators.scalers.ArcSinSquareRootScaler" title="gators.scalers.arcsin_squareroot_scaler.ArcSinSquareRootScaler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArcSinSquareRootScaler</span></code></a> - Arcsinh square root transformation</p></li>
-<li><p><a class="reference internal" href="gators.scalers.html#gators.scalers.ArcSinhScaler" title="gators.scalers.arcsinh_scaler.ArcSinhScaler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArcSinhScaler</span></code></a> - Arcsinh transformation</p></li>
-<li><p><a class="reference internal" href="gators.scalers.html#gators.scalers.BoxCox" title="gators.scalers.box_cox.BoxCox"><code class="xref py py-class docutils literal notranslate"><span class="pre">BoxCox</span></code></a> - Box-Cox power transformation</p></li>
-<li><p><a class="reference internal" href="gators.scalers.html#gators.scalers.LogScaler" title="gators.scalers.log_scaler.LogScaler"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogScaler</span></code></a> - Log transformation</p></li>
-<li><p><a class="reference internal" href="gators.scalers.html#gators.scalers.MinmaxScaler" title="gators.scalers.minmax_scaler.MinmaxScaler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinmaxScaler</span></code></a> - Min-max normalization</p></li>
-<li><p><a class="reference internal" href="gators.scalers.html#gators.scalers.PowerScaler" title="gators.scalers.power_scaler.PowerScaler"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerScaler</span></code></a> - Power transformation</p></li>
-<li><p><a class="reference internal" href="gators.scalers.html#gators.scalers.StandardScaler" title="gators.scalers.standard_scaler.StandardScaler"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandardScaler</span></code></a> - Z-score standardization</p></li>
-<li><p><a class="reference internal" href="gators.scalers.html#gators.scalers.YeoJonhson" title="gators.scalers.yeo_jonhson.YeoJonhson"><code class="xref py py-class docutils literal notranslate"><span class="pre">YeoJonhson</span></code></a> - Yeo-Johnson power transformation</p></li>
-</ul>
-</section>
-<section id="pipeline">
-<h2>Pipeline<a class="headerlink" href="#pipeline" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline" title="gators.pipeline.pipeline.Pipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a> - Chain multiple transformers</p></li>
-</ul>
-</section>
-<section id="feature-selection">
-<h2>Feature Selection<a class="headerlink" href="#feature-selection" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="gators.feature_selection.html#gators.feature_selection.information_value.compute_iv" title="gators.feature_selection.information_value.compute_iv"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_iv()</span></code></a> - Compute Information Value (IV) for features</p></li>
-<li><p><a class="reference internal" href="gators.feature_selection.html#gators.feature_selection.feature_stability_index.feature_stability_index" title="gators.feature_selection.feature_stability_index.feature_stability_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">feature_stability_index()</span></code></a> - Measure feature importance stability</p></li>
-</ul>
-</section>
+</div>
 </section>
 
 
@@ -526,11 +382,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="examples.html"
+       href="api/data_cleaning.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Examples</p>
+        <p class="prev-next-title">Data Cleaning</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -540,33 +396,6 @@
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-cleaning">Data Cleaning</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#encoders">Encoders</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-generation-numeric">Feature Generation - Numeric</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-generation-string">Feature Generation - String</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-generation-datetime">Feature Generation - DateTime</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imputers">Imputers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discretizers">Discretizers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scalers">Scalers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline">Pipeline</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-selection">Feature Selection</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

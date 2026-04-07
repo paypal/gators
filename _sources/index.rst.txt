@@ -8,7 +8,6 @@
    :caption: Getting Started
    :hidden:
 
-   about
    installation
    quickstart
 
@@ -77,16 +76,16 @@ What Can Gators Do?
 
 **70+ transformers across 8 categories:**
 
-* 🧹 **Data Cleaning** (13 transformers) - Quality filters, deduplication, and more
-* 🧩 **Encoders** (9 encoders) - OneHot, Target, WOE, CatBoost, and more   
-* 🔢 **Categorical Encoding** (9 encoders) - OneHot, Target, WOE, CatBoost, and more
-* 🎯 **Numeric Features** (14 generators) - Polynomial, rule-based features, and more
-* 📝 **String Features** (15 generators) - Text properties, pattern detection, n-grams, and more
-* 📅 **DateTime Features** (8 generators) - Temporal patterns, cyclical encoding, holidays, and more
-* 🔄 **Imputation** (4 imputers) - Numeric, string, boolean, and group-based strategies
-* 📊 **Discretization** (7 discretizers) - Equal-width, quantile, tree-based binning, and more
-* ⚖️ **Scaling** (8 scalers) - Standard, min-max, Box-Cox, and more
-* 🔗 **Pipeline** (1 class) - Chain transformers seamlessly
+* 🧹 :doc:`Data Cleaning <api/data_cleaning>` - Quality filters, deduplication, and more
+* ✂️ :doc:`Clippers <api/clippers>` - Custom min/max bounds, Gaussian, IQR, MAD, Quantile, and more
+* 🧩 :doc:`Encoders <api/encoders>` - OneHot, Target, WOE, CatBoost, and more   
+* 🎯 :doc:`Numeric Features <api/feature_generation>` - Polynomial, rule-based features, and more
+* 📝 :doc:`String Features <api/feature_generation_str>` - Text properties, pattern detection, n-grams, and more
+* 📅 :doc:`DateTime Features <api/feature_generation_dt>` - Temporal patterns, cyclical encoding, holidays, and more
+* 🔄 :doc:`Imputation <api/imputers>` - Numeric, string, boolean, and group-based strategies
+* 📊 :doc:`Discretization <api/discretizers>` - Equal-width, quantile, tree-based binning, and more
+* ⚖️ :doc:`Scaling <api/scalers>` - Standard, min-max, Box-Cox, and more
+* 🔗 :doc:`Pipeline <api/pipeline>` - Chain transformers seamlessly
   
 Indices and tables
 ==================

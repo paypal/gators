@@ -133,13 +133,6 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about.html">
-    About Gators
-  </a>
-</li>
-
-
-<li class="nav-item ">
   <a class="nav-link nav-internal" href="installation.html">
     Installation
   </a>
@@ -232,13 +225,6 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="about.html">
-    About Gators
-  </a>
-</li>
-
-
-<li class="nav-item ">
   <a class="nav-link nav-internal" href="installation.html">
     Installation
   </a>
@@ -283,6 +269,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
@@ -290,7 +277,6 @@
 <li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.rules.html">gators.rules package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
 </ul>
 </div>
@@ -461,6 +447,40 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.TreeBasedDiscretizer"><code class="docutils literal notranslate"><span class="pre">TreeBasedDiscretizer</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="gators.discretizers.html#gators.discretizers.TreeBasedDiscretizer.fit"><code class="docutils literal notranslate"><span class="pre">TreeBasedDiscretizer.fit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gators.clippers.html#module-gators.clippers">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gators.clippers.html#gators.clippers.CustomClipper"><code class="docutils literal notranslate"><span class="pre">CustomClipper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.CustomClipper._columns"><code class="docutils literal notranslate"><span class="pre">CustomClipper._columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.CustomClipper._bounds_map"><code class="docutils literal notranslate"><span class="pre">CustomClipper._bounds_map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.CustomClipper.fit"><code class="docutils literal notranslate"><span class="pre">CustomClipper.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.CustomClipper.transform"><code class="docutils literal notranslate"><span class="pre">CustomClipper.transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.CustomClipper.fit_transform"><code class="docutils literal notranslate"><span class="pre">CustomClipper.fit_transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.clippers.html#gators.clippers.GaussianClipper"><code class="docutils literal notranslate"><span class="pre">GaussianClipper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.GaussianClipper.fit"><code class="docutils literal notranslate"><span class="pre">GaussianClipper.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.GaussianClipper.transform"><code class="docutils literal notranslate"><span class="pre">GaussianClipper.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.clippers.html#gators.clippers.IQRClipper"><code class="docutils literal notranslate"><span class="pre">IQRClipper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.IQRClipper.fit"><code class="docutils literal notranslate"><span class="pre">IQRClipper.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.IQRClipper.transform"><code class="docutils literal notranslate"><span class="pre">IQRClipper.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.clippers.html#gators.clippers.MADClipper"><code class="docutils literal notranslate"><span class="pre">MADClipper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.MADClipper.fit"><code class="docutils literal notranslate"><span class="pre">MADClipper.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.MADClipper.transform"><code class="docutils literal notranslate"><span class="pre">MADClipper.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.clippers.html#gators.clippers.QuantileClipper"><code class="docutils literal notranslate"><span class="pre">QuantileClipper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.QuantileClipper.fit"><code class="docutils literal notranslate"><span class="pre">QuantileClipper.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.clippers.html#gators.clippers.QuantileClipper.transform"><code class="docutils literal notranslate"><span class="pre">QuantileClipper.transform()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -773,10 +793,6 @@
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="gators.rules.html">gators.rules package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="gators.rules.html#module-gators.rules">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a><ul>
