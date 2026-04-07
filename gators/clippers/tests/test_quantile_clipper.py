@@ -108,7 +108,7 @@ def test_quantile_clipper_validation():
     # lower_quantile must be less than upper_quantile
     clipper = QuantileClipper(lower_quantile=0.9, upper_quantile=0.1)
     X = pl.DataFrame({"A": [1.0, 2.0, 3.0]})
-    
+
     with pytest.raises(ValueError, match="lower_quantile.*must be less than.*upper_quantile"):
         clipper.fit(X)
 
@@ -124,7 +124,7 @@ def test_quantile_clipper_equal_quantiles():
     """Test error when lower_quantile equals upper_quantile."""
     clipper = QuantileClipper(lower_quantile=0.5, upper_quantile=0.5)
     X = pl.DataFrame({"A": [1.0, 2.0, 3.0]})
-    
+
     with pytest.raises(ValueError):
         clipper.fit(X)
 

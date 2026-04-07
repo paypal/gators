@@ -9,7 +9,7 @@ class GaussianClipper(BaseModel, BaseEstimator, TransformerMixin):
     """
     Clip numeric values to mean ± n standard deviations.
 
-    This transformer caps values that are smaller than mean - n*std or larger 
+    This transformer caps values that are smaller than mean - n*std or larger
     than mean + n*std, where n is the number of standard deviations (n_sigmas).
     Values outside this range are clipped to the boundary values.
 
@@ -165,19 +165,12 @@ class GaussianClipper(BaseModel, BaseEstimator, TransformerMixin):
             ]
 
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__clip_gaussian" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__clip_gaussian" for col in self.subset}
 
         # Compute mean and std for each column in a single pass
         stats = X.select(
-            [
-                pl.col(c).mean().alias(f"{c}_mean")
-                for c in self.subset
-            ] + [
-                pl.col(c).std().alias(f"{c}_std")
-                for c in self.subset
-            ]
+            [pl.col(c).mean().alias(f"{c}_mean") for c in self.subset]
+            + [pl.col(c).std().alias(f"{c}_std") for c in self.subset]
         ).row(0)
 
         # Extract means and stds
@@ -187,10 +180,7 @@ class GaussianClipper(BaseModel, BaseEstimator, TransformerMixin):
 
         # Compute clipping bounds: [mean - n*std, mean + n*std]
         self._clip_bounds = {
-            col: (
-                mean - self.n_sigmas * std,
-                mean + self.n_sigmas * std
-            )
+            col: (mean - self.n_sigmas * std, mean + self.n_sigmas * std)
             for col, mean, std in zip(self.subset, means, stds)
         }
 
@@ -213,17 +203,15 @@ class GaussianClipper(BaseModel, BaseEstimator, TransformerMixin):
         if self.inplace:
             transformations = [
                 pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0],
-                    upper_bound=self._clip_bounds[col][1]
+                    lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
                 )
                 for col in self.subset
             ]
         else:
             transformations = [
-                pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0],
-                    upper_bound=self._clip_bounds[col][1]
-                ).alias(new)
+                pl.col(col)
+                .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
+                .alias(new)
                 for col, new in self._column_mapping.items()
             ]
 

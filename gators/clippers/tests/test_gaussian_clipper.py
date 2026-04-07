@@ -8,16 +8,68 @@ from gators.clippers.gaussian_clipper import GaussianClipper
 @pytest.fixture
 def sample_dataframe():
     """Sample DataFrame with outliers for testing.
-    
+
     Note: Uses data with many values to establish distribution,
     then adds outliers that will be clipped.
     """
     return pl.DataFrame(
         {
-            "A": [10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 100.0],  # 100.0 is an outlier
-            "B": [-100.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0],  # -100.0 is an outlier
-            "C": [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 110.0, 120.0],  # No outliers
-            "D": ["x", "y", "z", "x", "y", "z", "x", "y", "z", "x", "y", "z"],  # String column (should be ignored)
+            "A": [
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+                14.0,
+                15.0,
+                16.0,
+                17.0,
+                18.0,
+                19.0,
+                20.0,
+                100.0,
+            ],  # 100.0 is an outlier
+            "B": [
+                -100.0,
+                10.0,
+                11.0,
+                12.0,
+                13.0,
+                14.0,
+                15.0,
+                16.0,
+                17.0,
+                18.0,
+                19.0,
+                20.0,
+            ],  # -100.0 is an outlier
+            "C": [
+                10.0,
+                20.0,
+                30.0,
+                40.0,
+                50.0,
+                60.0,
+                70.0,
+                80.0,
+                90.0,
+                100.0,
+                110.0,
+                120.0,
+            ],  # No outliers
+            "D": [
+                "x",
+                "y",
+                "z",
+                "x",
+                "y",
+                "z",
+                "x",
+                "y",
+                "z",
+                "x",
+                "y",
+                "z",
+            ],  # String column (should be ignored)
         }
     )
 
@@ -105,8 +157,10 @@ def test_clipper_n_sigmas_2(sample_dataframe):
     # The clipped value for column A should be smaller with n_sigmas=2
     assert transformed_2["A__clip_gaussian"][11] <= transformed_3["A__clip_gaussian"][11]
     # At least one of them should actually clip the outlier
-    assert (transformed_2["A__clip_gaussian"][11] < 100.0 or 
-            transformed_3["A__clip_gaussian"][11] < 100.0)
+    assert (
+        transformed_2["A__clip_gaussian"][11] < 100.0
+        or transformed_3["A__clip_gaussian"][11] < 100.0
+    )
 
 
 def test_clipper_no_outliers(sample_dataframe_no_outliers):
@@ -172,7 +226,7 @@ def test_clipper_n_sigmas_validation():
 
 def test_clipper_empty_subset():
     """Test behavior when subset is explicitly set to empty list.
-    
+
     Note: Empty list is falsy, so it triggers auto-selection of numeric columns.
     """
     X = pl.DataFrame(

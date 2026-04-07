@@ -9,8 +9,8 @@ class MADClipper(BaseModel, BaseEstimator, TransformerMixin):
     """
     Clip numeric values based on Median Absolute Deviation (MAD).
 
-    This transformer caps values that are more than n_mads times the MAD away 
-    from the median. MAD is a robust measure of variability that is less 
+    This transformer caps values that are more than n_mads times the MAD away
+    from the median. MAD is a robust measure of variability that is less
     sensitive to outliers than standard deviation.
 
     MAD = median(abs(X - median(X)))
@@ -124,16 +124,14 @@ class MADClipper(BaseModel, BaseEstimator, TransformerMixin):
             ]
 
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__clip_mad" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__clip_mad" for col in self.subset}
 
         # Compute median and MAD for each column
         for col in self.subset:
             median = X[col].median()
             # MAD = median(|X - median(X)|)
             mad = (X[col] - median).abs().median()
-            
+
             # Clipping bounds: median ± n_mads * MAD
             lower_bound = median - self.n_mads * mad
             upper_bound = median + self.n_mads * mad
@@ -158,17 +156,15 @@ class MADClipper(BaseModel, BaseEstimator, TransformerMixin):
         if self.inplace:
             transformations = [
                 pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0],
-                    upper_bound=self._clip_bounds[col][1]
+                    lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
                 )
                 for col in self.subset
             ]
         else:
             transformations = [
-                pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0],
-                    upper_bound=self._clip_bounds[col][1]
-                ).alias(new)
+                pl.col(col)
+                .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
+                .alias(new)
                 for col, new in self._column_mapping.items()
             ]
 

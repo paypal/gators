@@ -253,8 +253,6 @@ def test_custom_clipper_preserves_other_columns(sample_dataframe):
     transformed = clipper.transform(sample_dataframe)
 
     # Temperature should be exactly the same
-    assert_frame_equal(
-        transformed.select("temperature"), sample_dataframe.select("temperature")
-    )
+    assert_frame_equal(transformed.select("temperature"), sample_dataframe.select("temperature"))
     # Salary should be exactly the same
     assert_frame_equal(transformed.select("salary"), sample_dataframe.select("salary"))

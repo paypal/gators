@@ -9,8 +9,8 @@ class QuantileClipper(BaseModel, BaseEstimator, TransformerMixin):
     """
     Clip numeric values based on quantile thresholds.
 
-    This transformer caps values below the lower quantile and above the upper 
-    quantile. This is useful for removing extreme outliers while preserving 
+    This transformer caps values below the lower quantile and above the upper
+    quantile. This is useful for removing extreme outliers while preserving
     the bulk of the data distribution.
 
     Parameters
@@ -149,9 +149,7 @@ class QuantileClipper(BaseModel, BaseEstimator, TransformerMixin):
             ]
 
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__clip_quantile" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__clip_quantile" for col in self.subset}
 
         # Compute quantiles for each column
         for col in self.subset:
@@ -178,17 +176,15 @@ class QuantileClipper(BaseModel, BaseEstimator, TransformerMixin):
         if self.inplace:
             transformations = [
                 pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0],
-                    upper_bound=self._clip_bounds[col][1]
+                    lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
                 )
                 for col in self.subset
             ]
         else:
             transformations = [
-                pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0],
-                    upper_bound=self._clip_bounds[col][1]
-                ).alias(new)
+                pl.col(col)
+                .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
+                .alias(new)
                 for col, new in self._column_mapping.items()
             ]
 

@@ -9,9 +9,9 @@ class IQRClipper(BaseModel, BaseEstimator, TransformerMixin):
     """
     Clip numeric values based on Interquartile Range (IQR).
 
-    This transformer caps values that fall outside the range 
-    [Q1 - n_iqrs*IQR, Q3 + n_iqrs*IQR], where Q1 and Q3 are the first and 
-    third quartiles, and IQR = Q3 - Q1. This is a robust method commonly 
+    This transformer caps values that fall outside the range
+    [Q1 - n_iqrs*IQR, Q3 + n_iqrs*IQR], where Q1 and Q3 are the first and
+    third quartiles, and IQR = Q3 - Q1. This is a robust method commonly
     used for outlier detection (n_iqrs=1.5 is the standard for box plots).
 
     Parameters
@@ -124,16 +124,14 @@ class IQRClipper(BaseModel, BaseEstimator, TransformerMixin):
             ]
 
         if not self.inplace:
-            self._column_mapping = {
-                col: f"{col}__clip_iqr" for col in self.subset
-            }
+            self._column_mapping = {col: f"{col}__clip_iqr" for col in self.subset}
 
         # Compute Q1, Q3, and IQR for each column
         for col in self.subset:
             q1 = X[col].quantile(0.25)
             q3 = X[col].quantile(0.75)
             iqr = q3 - q1
-            
+
             # Clipping bounds: [Q1 - n_iqrs*IQR, Q3 + n_iqrs*IQR]
             lower_bound = q1 - self.n_iqrs * iqr
             upper_bound = q3 + self.n_iqrs * iqr
@@ -158,17 +156,15 @@ class IQRClipper(BaseModel, BaseEstimator, TransformerMixin):
         if self.inplace:
             transformations = [
                 pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0],
-                    upper_bound=self._clip_bounds[col][1]
+                    lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
                 )
                 for col in self.subset
             ]
         else:
             transformations = [
-                pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0],
-                    upper_bound=self._clip_bounds[col][1]
-                ).alias(new)
+                pl.col(col)
+                .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
+                .alias(new)
                 for col, new in self._column_mapping.items()
             ]
 
