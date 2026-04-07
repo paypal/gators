@@ -1,6 +1,0 @@
-name: "gators-codeql-config"
-
-# Only analyze languages that exist in this repository
-languages:
-  - python
-  - actions
