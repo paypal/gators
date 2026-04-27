@@ -4,18 +4,17 @@ dynamic = ["version"]
 description = "Machine learning library for streamlined model building and fast real-time preprocessing"
 authors = [
     {name = "Charles Poli", email = "cpoli@paypal.com"},
-    {name = "Shreekanthadatta Eligar", email = "seligar@paypal.com"}
+    {name = "shreekanthadatta", email = "seligar@paypal.com"}
 ]
 maintainers = [
     {name = "Charles Poli", email = "cpoli@paypal.com"},
-    {name = "Shreekanthadatta Eligar", email = "seligar@paypal.com"}
+    {name = "shreekanthadatta", email = "seligar@paypal.com"}
 ]
 readme = "README.md"
 license = {text = "Apache-2.0"}
 requires-python = ">=3.10"
 keywords = ["machine-learning", "preprocessing", "feature-engineering", "data-science"]
 classifiers = [
-    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",
@@ -36,9 +35,7 @@ dependencies = [
     "pyarrow>=20.0.0",
     "typing-extensions>=4.15.0",
     "scikit-learn>=1.3.0",
-    "xgboost>=2.0.0",
     "lightgbm>=4.0.0",
-    "joblib>=1.3.0",
     "holidays>=0.92",
 ]
 
@@ -59,10 +56,11 @@ notebook = [
 all = ["gators[dev,notebook]"]
 
 [project.urls]
-Homepage = "https://github.com/paypal/gators"
+Homepage = "https://paypal.github.io/gators/"
 Repository = "https://github.com/paypal/gators"
-Documentation = "https://github.com/paypal/gators"
+Documentation = "https://paypal.github.io/gators/api_reference.html"
 "Bug Tracker" = "https://github.com/paypal/gators/issues"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class HighCardinalityFilter(BaseModel, BaseEstimator, TransformerMixin):
+class HighCardinalityFilter(_BaseTransformer):
     """
     Removes columns with too many unique values (high cardinality).
 

@@ -1,11 +1,12 @@
 from typing import Dict, List, Literal, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
+class NumericImputer(_BaseTransformer):
     """
     Impute missing values in numeric columns using various strategies.
 
@@ -165,15 +166,16 @@ class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
 
         # Only compute statistics for strategies that need them
         if self.strategy == "constant":
+            if self.value is None:
+                self.value = 0
             self._statistics = {col: self.value for col in self.subset}
         elif self.strategy == "median":
             # Compute all medians in single pass
-            self._statistics = dict(
-                zip(
-                    self.subset,
-                    X.select([pl.col(c).median() for c in self.subset]).row(0),
-                )
-            )
+            median_results = X.select([pl.col(c).median() for c in self.subset]).row(0)
+            self._statistics: Dict[str, Union[int, float]] = {}
+            for i, col in enumerate(self.subset):
+                if median_results[i] is not None:
+                    self._statistics[col] = median_results[i]  # type: ignore[assignment]
         elif self.strategy == "most_frequent":
             # Compute all modes in single pass, handle ties by taking smallest value
             self._statistics = {
@@ -196,6 +198,8 @@ class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             DataFrame with imputed numeric columns.
         """
+        if self.subset is None:
+            return X
         # Build all transformations at once based on strategy
         if self.strategy in [
             "mean",
@@ -206,18 +210,19 @@ class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
             "zero",
             "one",
         ]:
-            # Use Polars built-in strategies
             if self.inplace:
                 transformations = [
-                    pl.col(col).fill_null(strategy=self.strategy) for col in self.subset
+                    pl.col(col).fill_null(strategy=self.strategy)  # type: ignore[arg-type]
+                    for col in self.subset
                 ]
             else:
                 transformations = [
-                    pl.col(col).fill_null(strategy=self.strategy).alias(new)
+                    pl.col(col).fill_null(strategy=self.strategy).alias(new)  # type: ignore[arg-type]
                     for col, new in self._column_mapping.items()
                 ]
         else:
             # Use pre-computed statistics (constant, median, most_frequent)
+            # subset is guaranteed to be set during fit
             if self.inplace:
                 transformations = [
                     pl.col(col).fill_null(self._statistics[col]) for col in self.subset
@@ -230,6 +235,6 @@ class NumericImputer(BaseModel, BaseEstimator, TransformerMixin):
 
         X = X.with_columns(transformations)
 
-        if not self.inplace and self.drop_columns:
+        if not self.inplace and self.drop_columns and self.subset is not None:
             return X.drop(self.subset)
         return X

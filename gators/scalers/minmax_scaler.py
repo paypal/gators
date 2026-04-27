@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class MinmaxScaler(BaseModel, BaseEstimator, TransformerMixin):
+class MinmaxScaler(_BaseTransformer):
     """
     Scales numeric features to a [0, 1] range using min-max normalization.
 
@@ -108,5 +108,6 @@ class MinmaxScaler(BaseModel, BaseEstimator, TransformerMixin):
         ]
 
         X = X.with_columns(transformations)
-
-        return X.drop(self.subset) if self.drop_columns else X
+        if self.drop_columns and self.subset is not None:
+            return X.drop(self.subset)
+        return X

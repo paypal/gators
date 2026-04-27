@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Lower(BaseModel, BaseEstimator, TransformerMixin):
+class Lower(_BaseTransformer):
     """
     Converts string and Boolean columns to lowercase.
 
@@ -91,6 +91,9 @@ class Lower(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame.
         """
+        if self.subset is None:
+            return X
+            
         if self.inplace:
             transformations = [
                 pl.col(col).cast(pl.String).str.to_lowercase() for col in self.subset

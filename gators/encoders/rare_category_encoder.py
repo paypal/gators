@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, Field, PositiveFloat, PositiveInt
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field, PositiveFloat, PositiveInt
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class RareCategoryEncoder(BaseModel, BaseEstimator, TransformerMixin):
+class RareCategoryEncoder(_BaseTransformer):
     """
     Encodes rare categories.
 
@@ -127,7 +128,7 @@ class RareCategoryEncoder(BaseModel, BaseEstimator, TransformerMixin):
         min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
 
         self.mapping_ = {
-            col: {k: self.default for k, v in counts.items() if v < min_threshold_count}
+            col: {k: self.default for k, v in counts.items() if int(v) < min_threshold_count}
             for col, counts in self.mapping_.items()
         }
 

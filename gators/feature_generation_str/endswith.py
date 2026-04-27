@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Endswith(BaseModel, BaseEstimator, TransformerMixin):
+class Endswith(_BaseTransformer):
     """
     Generates Boolean features indicating if substrings are
     at the end of the original column values.

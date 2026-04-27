@@ -1,11 +1,12 @@
 from typing import List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PositiveInt
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PositiveInt
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Split(BaseModel, BaseEstimator, TransformerMixin):
+class Split(_BaseTransformer):
     """
     Generates features by splitting columns into multiple columns based on a delimiter.
 

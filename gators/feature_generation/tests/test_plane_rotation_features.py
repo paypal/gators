@@ -1,16 +1,16 @@
-"""Tests for PlanRotationFeatures transformer."""
+"""Tests for PlaneRotationFeatures transformer."""
 
 import polars as pl
 import pytest
 
-from gators.feature_generation.plan_rotation_features import PlanRotationFeatures
+from gators.feature_generation.plane_rotation_features import PlaneRotationFeatures
 
 
 def test_basic_rotation():
     """Test basic plan rotation with single pair and angle."""
     X = pl.DataFrame({"X": [200.0, 210.0], "Y": [140.0, 160.0], "Z": [100.0, 125.0]})
 
-    transformer = PlanRotationFeatures(columns=[["X", "Y"]], angles=[45.0])
+    transformer = PlaneRotationFeatures(columns=[["X", "Y"]], angles=[45.0])
     result = transformer.fit_transform(X)
 
     # Check new columns are created
@@ -25,7 +25,7 @@ def test_multiple_angles():
     """Test rotation with multiple angles."""
     X = pl.DataFrame({"X": [10.0, 20.0], "Y": [5.0, 10.0]})
 
-    transformer = PlanRotationFeatures(columns=[["X", "Y"]], angles=[30.0, 45.0, 60.0])
+    transformer = PlaneRotationFeatures(columns=[["X", "Y"]], angles=[30.0, 45.0, 60.0])
     result = transformer.fit_transform(X)
 
     # Check all angle variations are created
@@ -41,7 +41,7 @@ def test_multiple_column_pairs():
     """Test rotation with multiple column pairs."""
     X = pl.DataFrame({"X": [10.0], "Y": [5.0], "Z": [3.0]})
 
-    transformer = PlanRotationFeatures(columns=[["X", "Y"], ["X", "Z"]], angles=[45.0])
+    transformer = PlaneRotationFeatures(columns=[["X", "Y"], ["X", "Z"]], angles=[45.0])
     result = transformer.fit_transform(X)
 
     # Check both pairs are rotated
@@ -55,7 +55,7 @@ def test_fractional_angle():
     """Test rotation with fractional angle."""
     X = pl.DataFrame({"X": [10.0], "Y": [5.0]})
 
-    transformer = PlanRotationFeatures(columns=[["X", "Y"]], angles=[22.5])
+    transformer = PlaneRotationFeatures(columns=[["X", "Y"]], angles=[22.5])
     result = transformer.fit_transform(X)
 
     # Check fractional angle column name
@@ -67,7 +67,7 @@ def test_sklearn_compatibility():
     """Test sklearn pipeline compatibility."""
     X = pl.DataFrame({"X": [10.0], "Y": [5.0]})
 
-    transformer = PlanRotationFeatures(columns=[["X", "Y"]], angles=[45.0])
+    transformer = PlaneRotationFeatures(columns=[["X", "Y"]], angles=[45.0])
 
     # Test fit returns self
     result = transformer.fit(X)
@@ -80,7 +80,7 @@ def test_sklearn_compatibility():
 
 def test_column_names_computed():
     """Test that column names are computed correctly after initialization."""
-    transformer = PlanRotationFeatures(columns=[["X", "Y"], ["A", "B"]], angles=[30.0, 60.0])
+    transformer = PlaneRotationFeatures(columns=[["X", "Y"], ["A", "B"]], angles=[30.0, 60.0])
 
     # Check column_names are computed
     assert len(transformer.column_names) == 8  # 2 pairs * 2 angles * 2 (cos/sin)
@@ -94,7 +94,7 @@ def test_flatten_columns_computed():
     """Test that flatten_columns is computed during fit."""
     X = pl.DataFrame({"X": [10.0], "Y": [5.0], "Z": [3.0]})
 
-    transformer = PlanRotationFeatures(columns=[["X", "Y"], ["Y", "Z"]], angles=[45.0])
+    transformer = PlaneRotationFeatures(columns=[["X", "Y"], ["Y", "Z"]], angles=[45.0])
     transformer.fit(X)
 
     # Check flatten_columns contains all columns
@@ -105,7 +105,7 @@ def test_zero_angle():
     """Test rotation with zero angle (identity transformation)."""
     X = pl.DataFrame({"X": [10.0], "Y": [5.0]})
 
-    transformer = PlanRotationFeatures(columns=[["X", "Y"]], angles=[0.0])
+    transformer = PlaneRotationFeatures(columns=[["X", "Y"]], angles=[0.0])
     result = transformer.fit_transform(X)
 
     # At 0 degrees: cos(0)=1, sin(0)=0

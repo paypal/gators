@@ -2,8 +2,9 @@ from math import pi
 from typing import Any, Callable, Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, ValidationInfo, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import ValidationInfo, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 COMPONENT_FUNCTIONS: Dict[str, Callable[[Any], Any]] = {
     "semester": lambda x: pl.when(x.dt.quarter() <= 2).then(1).otherwise(2),
@@ -33,7 +34,7 @@ CYCLIC_FACTORS: Dict[str, float] = {
 }
 
 
-class CyclicFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class CyclicFeatures(_BaseTransformer):
     """
     Generates cyclic features from datetime columns using sine transformations with multiple phase angles.
 
@@ -139,6 +140,9 @@ class CyclicFeatures(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame with cyclic features (sine and cosine).
         """
+        if self.subset is None:
+            return X
+            
         # Parse datetime columns only if needed
         datetime_conversions = []
         for col in self.subset:
@@ -218,4 +222,4 @@ class CyclicFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
         X = X.drop(columns_to_drop)
 
-        return X.drop(self.subset) if self.drop_columns else X
+        return X.drop(self.subset) if (self.drop_columns and self.subset is not None) else X

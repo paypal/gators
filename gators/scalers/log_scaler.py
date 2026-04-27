@@ -1,11 +1,11 @@
 from typing import Dict, List, Literal, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class LogScaler(BaseModel, BaseEstimator, TransformerMixin):
+class LogScaler(_BaseTransformer):
     """
     Applies logarithm transformation with choice of base.
 

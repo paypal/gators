@@ -1,11 +1,12 @@
 from typing import Annotated, Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, Field
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DropHighNaNRatio(BaseModel, BaseEstimator, TransformerMixin):
+class DropHighNaNRatio(_BaseTransformer):
     """
     Drops columns with a high ratio of NaN values.
 

@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DropDuplicateColumns(BaseModel, BaseEstimator, TransformerMixin):
+class DropDuplicateColumns(_BaseTransformer):
     """
     Removes duplicate columns from the DataFrame.
 

@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Contains(BaseModel, BaseEstimator, TransformerMixin):
+class Contains(_BaseTransformer):
     """
     Generates Boolean columns indicating if substrings are
     contained within the original column values.

@@ -1,6 +1,7 @@
 import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
+from pydantic import ValidationError
 
 from gators.encoders import CountEncoder
 
@@ -80,6 +81,33 @@ def test_unseen_categories(sample_X):
         }
     )
     assert_frame_equal(transformed_X, expected_X)
+
+
+def test_invalid_parameter_names():
+    """Test that CountEncoder raises ValidationError for invalid parameter names.
+
+    This test verifies that _BaseTransformer (via _BaseEncoder) properly validates
+    parameter names and rejects incorrect ones like 'columns' instead of 'subset'.
+    """
+    # Test with incorrect parameter name 'columns' instead of 'subset'
+    with pytest.raises(ValidationError) as exc_info:
+        CountEncoder(columns=["category"], min_count=1, inplace=True)
+
+    assert "Extra inputs are not permitted" in str(exc_info.value)
+    assert "columns" in str(exc_info.value)
+
+    # Test with another incorrect parameter name
+    with pytest.raises(ValidationError) as exc_info:
+        CountEncoder(feature_list=["category"], min_count=1, inplace=True)
+
+    assert "Extra inputs are not permitted" in str(exc_info.value)
+    assert "feature_list" in str(exc_info.value)
+
+    # Test with multiple incorrect parameter names
+    with pytest.raises(ValidationError) as exc_info:
+        CountEncoder(columns=["category"], invalid_param=True, min_count=1)
+
+    assert "Extra inputs are not permitted" in str(exc_info.value)
 
 
 if __name__ == "__main__":

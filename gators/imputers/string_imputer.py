@@ -1,12 +1,13 @@
 from typing import Dict, List, Optional, cast
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
 from typing_extensions import Literal
 
+from ..transformer._base_transformer import _BaseTransformer
 
-class StringImputer(BaseModel, BaseEstimator, TransformerMixin):
+
+class StringImputer(_BaseTransformer):
     """
     Impute missing values in string columns of a Polars DataFrame.
 
@@ -119,11 +120,11 @@ class StringImputer(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             DataFrame with imputed string columns.
         """
-        # Ensure columns is set (should be set during fit)
-        columns = cast(List[str], self.subset)
+        if self.subset is None:
+            return X
 
         if self.inplace:
-            transformations = [pl.col(col).fill_null(self._statistics[col]) for col in columns]
+            transformations = [pl.col(col).fill_null(val) for col, val in self._statistics.items()]
             return X.with_columns(transformations)
 
         transformations = [
@@ -132,5 +133,5 @@ class StringImputer(BaseModel, BaseEstimator, TransformerMixin):
         ]
         X = X.with_columns(transformations)
         if self.drop_columns:
-            return X.drop(columns)
+            return X.drop(self.subset)
         return X

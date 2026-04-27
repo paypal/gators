@@ -1,11 +1,12 @@
 from typing import List, Optional
 
 import polars as pl
-from pydantic import BaseModel, NonNegativeInt
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import NonNegativeInt
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class SplitExtract(BaseModel, BaseEstimator, TransformerMixin):
+class SplitExtract(_BaseTransformer):
     """
     Generates features by splitting columns and extracting a specific part by index.
 

@@ -1,11 +1,12 @@
 from typing import Annotated, Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, Field, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field, PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DropLowCardinality(BaseModel, BaseEstimator, TransformerMixin):
+class DropLowCardinality(_BaseTransformer):
     """
     Drops columns with low cardinality.
 

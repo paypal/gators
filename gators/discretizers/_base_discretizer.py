@@ -2,8 +2,9 @@ from abc import ABCMeta
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PositiveInt, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PositiveInt, PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 __all__ = ["_BaseDiscretizer", "generate_labels"]
 
@@ -55,7 +56,7 @@ def generate_labels(bins: Dict[str, List[float]], rounding=3) -> Dict[str, List[
     return labels
 
 
-class _BaseDiscretizer(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta):
+class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
     """
     Base class for discretizers.
 
@@ -164,7 +165,11 @@ class _BaseDiscretizer(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABC
         pl.DataFrame
             Transformed DataFrame.
         """
+        if self.subset is None:
+            return X
+            
         if self.inplace:
+            # subset is guaranteed to be set during fit
             transformations = [
                 pl.col(col).cut(breaks=self._bins[col], labels=self._labels[col])
                 for col in self.subset

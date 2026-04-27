@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class ArcSinhScaler(BaseModel, BaseEstimator, TransformerMixin):
+class ArcSinhScaler(_BaseTransformer):
     """
     Applies inverse hyperbolic sine (arcsinh) transformation.
 

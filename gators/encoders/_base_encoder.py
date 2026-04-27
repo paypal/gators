@@ -2,13 +2,12 @@ from abc import ABCMeta
 from typing import Dict, List, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, ConfigDict, Field, PositiveFloat, PositiveInt
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import ConfigDict, Field, PositiveFloat, PositiveInt
 
-__all__ = ["_BaseEncoder"]
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta):
+class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
     """
     Base encoder class for encoding categorical columns.
 
@@ -37,7 +36,7 @@ class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta
     drop_columns: bool = True
     inplace: bool = True
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    model_config = ConfigDict(arbitrary_types_allowed=True, extra="forbid")
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting specified components.

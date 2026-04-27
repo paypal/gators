@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Startswith(BaseModel, BaseEstimator, TransformerMixin):
+class Startswith(_BaseTransformer):
     """
     Generates Boolean features to indicate if strings in the
     original columns start with specified substrings.

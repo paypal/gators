@@ -1,8 +1,9 @@
 from typing import Callable, Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, ValidationInfo, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import ValidationInfo, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 COMPONENT_FUNCTIONS: Dict[str, Callable] = {
     "century": lambda x: x.dt.century(),
@@ -22,7 +23,7 @@ COMPONENT_FUNCTIONS: Dict[str, Callable] = {
 }
 
 
-class OrdinalFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class OrdinalFeatures(_BaseTransformer):
     """
     Generates ordinal features from datetime columns.
 
@@ -140,6 +141,9 @@ class OrdinalFeatures(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame with ordinal features.
         """
+        if self.subset is None:
+            return X
+            
         # Parse datetime columns only if needed
         datetime_conversions = []
         for col in self.subset:
@@ -158,4 +162,4 @@ class OrdinalFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
         X = X.with_columns(all_features)
 
-        return X.drop(self.subset) if self.drop_columns else X
+        return X.drop(self.subset) if (self.drop_columns and self.subset is not None) else X

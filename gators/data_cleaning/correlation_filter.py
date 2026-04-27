@@ -2,11 +2,12 @@ from typing import Annotated, Dict, List, Optional, Set
 
 import numpy as np
 import polars as pl
-from pydantic import BaseModel, Field, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field, PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-def find_connected_components(adj_list: Dict[int, int]) -> List[Set[int]]:
+def find_connected_components(adj_list: Dict[int, Set[int]]) -> List[Set[int]]:
     """
     Find all connected components in an undirected graph represented by an adjacency list.
 
@@ -36,9 +37,9 @@ def find_connected_components(adj_list: Dict[int, int]) -> List[Set[int]]:
     [{0, 1, 2, 3}, {4, 5}]
     """
     visited = set()
-    components = []
+    components: List[Set[int]] = []
 
-    def Xs(node: int, component: Set[int]):
+    def Xs(node: int, component: Set[int]) -> None:
         visited.add(node)
         component.add(node)
         for neighbor in adj_list[node]:
@@ -47,7 +48,7 @@ def find_connected_components(adj_list: Dict[int, int]) -> List[Set[int]]:
 
     for node in adj_list:
         if node not in visited:
-            component = set()
+            component: Set[int] = set()
             Xs(node, component)
             if len(component) > 1:
                 components.append(component)
@@ -55,7 +56,7 @@ def find_connected_components(adj_list: Dict[int, int]) -> List[Set[int]]:
     return components
 
 
-class CorrelationFilter(BaseModel, BaseEstimator, TransformerMixin):
+class CorrelationFilter(_BaseTransformer):
     """Filters out highly correlated numeric columns.
 
     Identifies groups of highly correlated columns and removes all but one from each group,
@@ -152,7 +153,7 @@ class CorrelationFilter(BaseModel, BaseEstimator, TransformerMixin):
             self._to_drop = []
             return self
 
-        adj_list = {i: set() for i in range(n)}
+        adj_list: Dict[int, Set[int]] = {i: set() for i in range(n)}
         for i, j in zip(rows, cols):
             adj_list[i].add(j)
             adj_list[j].add(i)

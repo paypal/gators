@@ -1,8 +1,9 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 import polars as pl
-from pydantic import BaseModel, ConfigDict, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import ConfigDict, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 OPERATOR_NAMES = {
     ">": "gt",
@@ -19,7 +20,7 @@ OPERATOR_NAMES = {
 UNARY_OPERATORS = {"is_null", "is_not_null"}
 
 
-class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class ConditionFeatures(_BaseTransformer):
     """
     Creates multiple independent boolean features, one for each condition.
 
@@ -149,14 +150,14 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     ...     'fare_per_person': [50.0, 33.3, 30.0, 50.0, 40.0]
     ... }
     >>> fare_X = pl.DataFrame(fare_data)
-    >>> fare_transformer = ConditionFeatures(
+    >>> fare_BaseTransformer = ConditionFeatures(
     ...     conditions=[
     ...         {'column': 'fare', 'op': '>', 'value': 100},
     ...         {'column': 'fare_per_person', 'op': '>', 'other_column': 'fare'}
     ...     ],
     ...     new_column_names=['is_expensive', 'paid_more_per_person']
     ... )
-    >>> result = fare_transformer.fit_transform(fare_X)
+    >>> result = fare_BaseTransformer.fit_transform(fare_X)
     >>> result
     shape: (5, 4)
     ┌───────┬──────────────────┬──────────────┬──────────────────────┐
@@ -184,7 +185,7 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     >>> titanic_X = titanic_X.with_columns(
     ...     (pl.col('SibSp') + pl.col('Parch')).alias('family_size')
     ... )
-    >>> titanic_transformer = ConditionFeatures(
+    >>> titanic_BaseTransformer = ConditionFeatures(
     ...     conditions=[
     ...         {'column': 'Age', 'op': '<', 'value': 18},
     ...         {'column': 'Pclass', 'op': '==', 'value': 1},
@@ -192,7 +193,7 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     ...     ],
     ...     new_column_names=['is_child', 'is_first_class', 'is_alone']
     ... )
-    >>> result = titanic_transformer.fit_transform(titanic_X)
+    >>> result = titanic_BaseTransformer.fit_transform(titanic_X)
     >>> result.select(['Age', 'Pclass', 'family_size', 'is_child', 'is_first_class', 'is_alone'])
     shape: (5, 6)
     ┌──────┬────────┬─────────────┬──────────┬────────────────┬──────────┐
@@ -209,7 +210,7 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
     **Example 4: Auto-generated column names**
 
-    >>> auto_transformer = ConditionFeatures(
+    >>> auto_BaseTransformer = ConditionFeatures(
     ...     conditions=[
     ...         {'column': 'age', 'op': '>=', 'value': 18},
     ...         {'column': 'amount', 'op': '>', 'value': 1000},
@@ -217,7 +218,7 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     ...     ]
     ...     # new_column_names not specified - will be auto-generated
     ... )
-    >>> result = auto_transformer.fit_transform(X)
+    >>> result = auto_BaseTransformer.fit_transform(X)
     >>> result.select(['age', 'amount', 'family_size', 'age_gte_18', 'amount_gt_1000', 'family_size_eq_1'])
     shape: (5, 6)
     ┌─────┬────────┬─────────────┬────────────┬────────────────┬──────────────────┐
@@ -240,7 +241,7 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     ...     'amount': [100, 1500, 500, 200, 2000]
     ... }
     >>> X_nulls = pl.DataFrame(data_with_nulls)
-    >>> null_transformer = ConditionFeatures(
+    >>> null_BaseTransformer = ConditionFeatures(
     ...     conditions=[
     ...         {'column': 'age', 'op': 'is_null'},
     ...         {'column': 'email', 'op': 'is_not_null'},
@@ -248,7 +249,7 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     ...     ],
     ...     new_column_names=['age_missing', 'has_email', 'is_high_amount']
     ... )
-    >>> result = null_transformer.fit_transform(X_nulls)
+    >>> result = null_BaseTransformer.fit_transform(X_nulls)
     >>> result
     shape: (5, 6)
     ┌──────┬─────────────┬────────┬─────────────┬───────────┬─────────────────┐
@@ -477,16 +478,16 @@ class ConditionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     def _build_scalar_comparison(column: str, op: str, value: Any) -> pl.Expr:
         """Build a Polars expression for column-to-scalar comparison."""
         if op == ">":
-            return pl.col(column) > value
+            return cast(pl.Expr, pl.col(column) > value)
         elif op == "<":
-            return pl.col(column) < value
+            return cast(pl.Expr, pl.col(column) < value)
         elif op == ">=":
-            return pl.col(column) >= value
+            return cast(pl.Expr, pl.col(column) >= value)
         elif op == "<=":
-            return pl.col(column) <= value
+            return cast(pl.Expr, pl.col(column) <= value)
         elif op == "==":
-            return pl.col(column) == value
+            return cast(pl.Expr, pl.col(column) == value)
         elif op == "!=":
-            return pl.col(column) != value
+            return cast(pl.Expr, pl.col(column) != value)
         else:
             raise ValueError(f"Unsupported operator: {op}")

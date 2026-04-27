@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class StandardScaler(BaseModel, BaseEstimator, TransformerMixin):
+class StandardScaler(_BaseTransformer):
     """
     Standardizes numeric features by removing the mean and scaling to unit variance.
 
@@ -108,4 +108,6 @@ class StandardScaler(BaseModel, BaseEstimator, TransformerMixin):
 
         X = X.with_columns(transformations)
 
-        return X.drop(self.subset) if self.drop_columns else X
+        if self.drop_columns and self.subset is not None:
+            return X.drop(self.subset)
+        return X

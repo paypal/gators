@@ -1,0 +1,47 @@
+{% extends "!layout.html" %}
+
+{%- block extrahead %}
+{{ super() }}
+<!-- Structured Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Gators",
+  "description": "High-performance machine learning preprocessing and feature engineering library built on Polars with 75+ sklearn-compatible transformers",
+  "url": "https://paypal.github.io/gators/",
+  "codeRepository": "https://github.com/paypal/gators",
+  "license": "https://opensource.org/licenses/Apache-2.0",
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python 3.10+",
+  "author": {
+    "@type": "Person",
+    "name": "Charles Poli"
+  },
+  "maintainer": {
+    "@type": "Organization",
+    "name": "PayPal"
+  },
+  "keywords": ["machine learning", "preprocessing", "feature engineering", "polars", "data science", "sklearn", "python"]
+}
+</script>
+
+<!-- Additional meta tags for better SEO -->
+<meta name="description" content="Gators is a high-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API.">
+<meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline">
+<meta name="author" content="Charles Poli, PayPal">
+<link rel="canonical" href="https://paypal.github.io/gators/{{ pagename }}.html" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ title }} - Gators Documentation">
+<meta property="og:description" content="High-performance ML preprocessing with 75+ Polars-powered transformers">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://paypal.github.io/gators/{{ pagename }}.html">
+<meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ title }} - Gators">
+<meta name="twitter:description" content="Lightning-fast ML preprocessing with Polars">
+<meta name="twitter:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+{% endblock %}

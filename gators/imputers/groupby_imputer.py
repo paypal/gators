@@ -1,11 +1,12 @@
 from typing import Dict, List, Literal, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class GroupByImputer(BaseModel, BaseEstimator, TransformerMixin):
+class GroupByImputer(_BaseTransformer):
     """
     Impute missing values in numeric columns by grouping with a categorical column
     and filling with the median or mean of each group.
@@ -153,6 +154,8 @@ class GroupByImputer(BaseModel, BaseEstimator, TransformerMixin):
         """
         # Join all group statistics to the dataframe first
         temp_columns = []
+        if self.subset is None:
+            return X
 
         for col in self.subset:
             # Create temporary column name for group statistics
@@ -171,7 +174,7 @@ class GroupByImputer(BaseModel, BaseEstimator, TransformerMixin):
 
         # Build transformations for each column
         transformations = []
-
+        
         for col in self.subset:
             temp_col = f"__{col}_group_stat"
 
@@ -188,7 +191,7 @@ class GroupByImputer(BaseModel, BaseEstimator, TransformerMixin):
         # Drop temporary columns
         X = X.drop(temp_columns)
 
-        if not self.inplace and self.drop_columns:
+        if not self.inplace and self.drop_columns and self.subset is not None:
             return X.drop(self.subset)
 
         return X

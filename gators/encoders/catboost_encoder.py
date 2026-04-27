@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Union, cast
 
 import polars as pl
 from pydantic import Field, PositiveFloat
@@ -95,7 +95,7 @@ class CatBoostEncoder(_BaseEncoder):
             ]
 
         # Calculate global mean
-        self.global_mean_ = y.mean()
+        self.global_mean_ = cast(float, y.mean())
 
         min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
 

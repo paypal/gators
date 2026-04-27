@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DropColumns(BaseModel, BaseEstimator, TransformerMixin):
+class DropColumns(_BaseTransformer):
     """
     Drops specified columns from a DataFrame.
 
@@ -47,7 +47,6 @@ class DropColumns(BaseModel, BaseEstimator, TransformerMixin):
     """
 
     subset: List[str]
-    _column_mapping = Dict[str, str]
 
     def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropColumns":
         """Fit the transformer (no-op for DropColumns).

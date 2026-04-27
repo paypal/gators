@@ -1,4 +1,10 @@
-# 🐊 Gators
+<picture align="center">
+  <source media="(prefers-color-scheme: dark)" srcset="https://paypal.github.io/gators/_images/GATORS_LOGO.png">
+  <img alt="Gators Logo" src="https://paypal.github.io/gators/_images/GATORS_LOGO.png">
+</picture>
+
+# Gators: A Lightning-Fast Data Preprocessing And Feature Engineering Python Library
+
 
 [![PyPI version](https://img.shields.io/pypi/v/gators)](https://pypi.org/project/gators/)
 [![Python versions](https://img.shields.io/pypi/pyversions/gators)](https://pypi.org/project/gators/)
@@ -8,11 +14,14 @@
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
-> **Lightning-fast data preprocessing and feature engineering for machine learning**
+|
+
+📚 **[Full Documentation](https://paypal.github.io/gators/)**
+
 
 ## What is Gators?
 
-Gators is a **lightning-fast data preprocessing and feature engineering** library built on top of Polars, designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging **Polars’ blazing-fast multi-core processing**.
+Gators is a library built on top of Polars, designed to streamline your entire ML workflow from raw data to production-ready models, leveraging **Polars' blazing-fast multi-core processing**.
 
 Built by the PSP Data Team at PayPal, Gators makes data preprocessing and feature engineering both **faster and simpler**.
 
@@ -51,26 +60,33 @@ Transform categorical variables with advanced encoding techniques:
 - `LeaveOneOutEncoder` - Leave-one-out encoding
 - `OneHotEncoder` - Classic one-hot encoding
 - `OrdinalEncoder` - Order-based encoding
-- `RareCategoryEncoder` - Handle rare categories intelligently
+- `RareCategoryEncoder` -  Replace rare/infrequent categories by a single category
 - `TargetEncoder` - Target-based encoding for supervised learning
 - `WOEEncoder` - Weight of Evidence encoding
 
 ### 🎯 Feature Generation - Numeric
 Create powerful numeric features:
-- `ComparisonFeatures` - Generate comparison features
-- `ConditionFeatures` - Create conditional features
+**Mathematical Operations:**
 - `DistanceFeatures` - Calculate distance features
+- `IsNull` - Generate null indicator features
+- `MathFeatures` - Apply mathematical operations (add, subtract, multiply, divide)
+- `RatioFeatures` - Create ratio features between columns
+- `PlaneRotationFeatures` - Rotate features in feature space
+- `PolynomialFeatures` - Generate polynomial combinations
+- `ScalarMathFeatures` - Apply scalar operations
+
+**Aggregation & Statistics:**
 - `GroupLagFeatures` - Generate lag features by group
 - `GroupScalingFeatures` - Scale features within groups
 - `GroupStatisticsFeatures` - Calculate group statistics
-- `IsNull` - Generate null indicator features
-- `MathFeatures` - Apply mathematical operations (add, subtract, multiply, divide)
-- `PlanRotationFeatures` - Rotate features in feature space
-- `PolynomialFeatures` - Generate polynomial combinations
-- `RatioFeatures` - Create ratio features between columns
 - `RowStatisticsFeatures` - Calculate row-wise statistics
+
+**Rule-based**  
+- `ComparisonFeatures` - Generate comparison features
+- `ConditionFeatures` - Create conditional features
 - `RuleFeatures` - Apply custom business rules
-- `ScalarMathFeatures` - Apply scalar operations
+
+
 
 ### 📝 Feature Generation - String
 Extract insights from text data:
@@ -127,7 +143,7 @@ Normalize your features:
 - `MinmaxScaler` - Min-max normalization
 - `PowerScaler` - Power transformation
 - `StandardScaler` - Standardization (z-score normalization)
-- `YeoJonhson` - Yeo-Johnson power transformation
+- `YeoJohnson` - Yeo-Johnson power transformation
 
 ### 🔗 Pipeline
 Chain all transformers together:
@@ -147,21 +163,23 @@ from gators.pipeline import Pipeline
 X = pl.read_csv("data.csv")
 
 # Build a preprocessing pipeline
-pipeline = Pipeline([
-    ('drop_nan', DropHighNaNRatio(threshold=0.5)),
+pipeline = Pipeline(steps=[
+    ('drop_nan', DropHighNaNRatio(max_ratio=0.5)),
     ('impute', NumericImputer(strategy='median')),
-    ('variance', VarianceFilter(threshold=0.01)),
-    ('encode', OneHotEncoder()),
+    ('variance', VarianceFilter(min_var=0.01)),
+    ('encode', OneHotEncoder()),  # One-hot encode ALL the String or Categorical columns    
     ('scale', StandardScaler())
 ])
 
 # Fit and transform
 X_processed = pipeline.fit_transform(X)
 
-# Deploy the same pipeline in production!
+# Serialize the pipeline with pickle/joblib for production deployment
 ```
 
 ## 📦 Installation
+
+Requires Python 3.10 or higher.
 
 ```bash
 pip install gators
@@ -172,7 +190,7 @@ Or install from source:
 ```bash
 git clone https://github.com/paypal/gators.git
 cd gators
-pip install -e .
+pip install -e .    # Install in editable/development mode
 ```
 
 ## 📚 Documentation
@@ -194,11 +212,11 @@ Gators is perfect for:
 
 ## 🤝 Contributing
 
-We welcome contributions! Please check out our contributing guidelines.
+We welcome contributions! Please check out our [contributing guidelines](https://github.com/paypal/gators/blob/master/CONTRIBUTING.md).
 
 ## 📄 License
 
-Gators is licensed under the Apache License 2.0. See [LICENSE](LICENSE) file for details.
+Gators is licensed under the Apache License 2.0. See [LICENSE](https://github.com/paypal/gators/blob/master/LICENSE) file for details.
 
 ## 🙏 Credits
 

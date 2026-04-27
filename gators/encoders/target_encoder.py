@@ -1,4 +1,3 @@
-import numpy as np
 import polars as pl
 
 from ._base_encoder import _BaseEncoder

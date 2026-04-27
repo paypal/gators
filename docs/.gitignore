@@ -1,0 +1,11 @@
+# Sphinx build outputs
+build/
+_build/
+
+# Sphinx cache
+source/_autosummary/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class

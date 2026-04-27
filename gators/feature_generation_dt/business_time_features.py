@@ -1,11 +1,12 @@
 from typing import List, Optional
 
 import polars as pl
-from pydantic import BaseModel, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class BusinessTimeFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class BusinessTimeFeatures(_BaseTransformer):
     """
     Generates business time features from datetime columns.
 
@@ -181,6 +182,9 @@ class BusinessTimeFeatures(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame with business time features.
         """
+        if self.subset is None:
+            return X
+            
         new_columns = []
 
         for col in self.subset:
@@ -221,7 +225,7 @@ class BusinessTimeFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
         X = X.with_columns(new_columns)
 
-        if self.drop_columns:
+        if self.drop_columns and self.subset is not None:
             X = X.drop(self.subset)
 
         return X

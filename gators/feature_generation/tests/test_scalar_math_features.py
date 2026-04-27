@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation import ScalarMathFeatures
+from gators.pipeline import Pipeline
 
 
 @pytest.fixture
@@ -316,9 +317,9 @@ def test_transform_preserves_original_columns(sample_X):
         assert col in result.columns
 
 
-def test_sklearn_pipeline_compatibility(sample_X):
+def test_pipeline_compatibility(sample_X):
     """Test compatibility with sklearn pipeline."""
-    from sklearn.pipeline import Pipeline
+    # from sklearn.pipeline import Pipeline
 
     transformer = ScalarMathFeatures(
         operations=[
@@ -328,7 +329,7 @@ def test_sklearn_pipeline_compatibility(sample_X):
     )
 
     # Should work in a pipeline
-    pipe = Pipeline([("scalar_math", transformer)])
+    pipe = Pipeline(steps=[("scalar_math", transformer)])
     result = pipe.fit_transform(sample_X)
 
     assert isinstance(result, pl.DataFrame)

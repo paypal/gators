@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, PositiveFloat, PositiveInt
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PositiveFloat, PositiveInt
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class OneHotEncoder(BaseModel, BaseEstimator, TransformerMixin):
+class OneHotEncoder(_BaseTransformer):
     """
     One-hot encodes categorical values.
 
@@ -141,6 +142,8 @@ class OneHotEncoder(BaseModel, BaseEstimator, TransformerMixin):
             DataFrame with one-hot encoded columns (one binary column per category).
         """
         # Use native Polars to_dummies - single call for all columns
+        if self.categories is None:
+            return X
         cols_to_encode = list(self.categories.keys())
         dummies = X.select(cols_to_encode).to_dummies(separator="__")
         dummies = dummies.select(pl.all().cast(pl.Float64))

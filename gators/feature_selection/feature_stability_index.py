@@ -2,7 +2,7 @@ from typing import Annotated
 
 import numpy as np
 import polars as pl
-from pydantic import Field, PositiveInt
+from pydantic import Field
 
 
 def feature_stability_index(
@@ -56,11 +56,11 @@ def feature_stability_index(
         selected = (importances > importance_threshold).astype(int)
         selection_matrix.append(selected)
 
-    selection_matrix = np.array(selection_matrix)
-    importance_matrix = np.array(importance_matrix)
+    selection_matrix_arr = np.array(selection_matrix)
+    importance_matrix_arr = np.array(importance_matrix)
 
-    fsi_scores = selection_matrix.mean(axis=0)
-    importances = importance_matrix.mean(axis=0)
+    fsi_scores = selection_matrix_arr.mean(axis=0)
+    importances = importance_matrix_arr.mean(axis=0)
     X = pl.DataFrame({"feature": X.columns, "fsi": fsi_scores, "importance": importances}).sort(
         by=["fsi", "importance"], descending=True
     )

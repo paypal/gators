@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class ArcSinSquareRootScaler(BaseModel, BaseEstimator, TransformerMixin):
+class ArcSinSquareRootScaler(_BaseTransformer):
     """
     Applies arcsine square root transformation for proportion data.
 

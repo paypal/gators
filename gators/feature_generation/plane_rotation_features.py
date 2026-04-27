@@ -5,16 +5,17 @@ from math import sin
 from typing import List, Optional
 
 import polars as pl
-from pydantic import BaseModel, field_validator, model_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import model_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class PlanRotationFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class PlaneRotationFeatures(_BaseTransformer):
     """Create new columns based on the plan rotation mapping.
 
     The data should be composed of numerical columns only.
     Use `gators.encoders` to replace the categorical columns by
-    numerical ones before using `PlanRotationFeatures`.
+    numerical ones before using `PlaneRotationFeatures`.
 
     Parameters
     ----------
@@ -29,8 +30,8 @@ class PlanRotationFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
     Imports and initialization:
 
-    >>> from gators.feature_generation import PlanRotationFeatures
-    >>> obj = PlanRotationFeatures(
+    >>> from gators.feature_generation import PlaneRotationFeatures
+    >>> obj = PlaneRotationFeatures(
     ... subset=[['X', 'Y'], ['X', 'Z']] , angles=[45.0, 60.0])
 
     The `fit`, `transform`, and `fit_transform` methods accept `polars` dataframes:
@@ -75,7 +76,7 @@ class PlanRotationFeatures(BaseModel, BaseEstimator, TransformerMixin):
         self.column_names = [c for cols in column_names for c in cols]
         return self
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "PlanRotationFeatures":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "PlaneRotationFeatures":
         """Fit the transformer by identifying columns to flatten.
 
         Parameters
@@ -87,7 +88,7 @@ class PlanRotationFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
         Returns
         -------
-        PlanRotationFeatures
+        PlaneRotationFeatures
             Fitted transformer instance.
         """
         self.flatten_columns = [c for cols in self.columns for c in cols]

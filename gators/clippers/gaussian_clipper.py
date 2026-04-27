@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Tuple
 
 import polars as pl
-from pydantic import BaseModel, Field, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field, PrivateAttr
+
+from ._base_clipper import _BaseClipper
 
 
-class GaussianClipper(BaseModel, BaseEstimator, TransformerMixin):
+class GaussianClipper(_BaseClipper):
     """
     Clip numeric values to mean ± n standard deviations.
 
@@ -137,10 +138,7 @@ class GaussianClipper(BaseModel, BaseEstimator, TransformerMixin):
 
     n_sigmas: int = Field(default=3, ge=1)
     subset: Optional[List[str]] = None
-    drop_columns: bool = True
-    inplace: bool = True
-    _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    # _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GaussianClipper":
         """Fit the transformer by computing clipping bounds for each column.
@@ -185,38 +183,3 @@ class GaussianClipper(BaseModel, BaseEstimator, TransformerMixin):
         }
 
         return self
-
-    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        """Transform the input DataFrame by clipping values to mean ± n*std.
-
-        Parameters
-        ----------
-        X : pl.DataFrame
-            Input DataFrame with numeric columns.
-
-        Returns
-        -------
-        pl.DataFrame
-            DataFrame with clipped numeric columns.
-        """
-        # Build all transformations at once
-        if self.inplace:
-            transformations = [
-                pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
-                )
-                for col in self.subset
-            ]
-        else:
-            transformations = [
-                pl.col(col)
-                .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
-                .alias(new)
-                for col, new in self._column_mapping.items()
-            ]
-
-        X = X.with_columns(transformations)
-
-        if not self.inplace and self.drop_columns:
-            return X.drop(self.subset)
-        return X

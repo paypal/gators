@@ -9,11 +9,12 @@ conversion or validation that can cause issues with Polars DataFrames.
 from typing import Any, List, Optional, Tuple
 
 import polars as pl
-from pydantic import BaseModel, ConfigDict
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import ConfigDict
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
+class Pipeline(_BaseTransformer):
     """
     Pipeline of transformers for Polars DataFrames.
 
@@ -23,7 +24,7 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
 
     Parameters
     ----------
-    steps : list of tuple
+    steps : List[Tuple[str, Any]]
         List of (name, transform) tuples that are chained in the order they
         are specified. Each transform must implement fit and transform methods.
     verbose : bool, default=False
@@ -227,26 +228,20 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
         out = {"steps": self.steps, "verbose": self.verbose}
 
         for name, transformer in self.steps:
-            # Try sklearn-style get_params first
+            # Get transformer parameters
             transformer_params = {}
-
+            
             if hasattr(transformer, "get_params"):
                 try:
-                    transformer_params = transformer.get_params(deep=True)
+                    # Try with deep parameter (gators/sklearn convention)
+                    transformer_params = transformer.get_params(deep=False)
                 except TypeError:
-                    # get_params doesn't accept deep parameter
+                    # Transformer doesn't accept deep parameter
                     try:
                         transformer_params = transformer.get_params()
                     except Exception:
-                        # Transformer doesn't support get_params properly
+                        # get_params raises exception - skip this transformer
                         pass
-
-            # If get_params didn't return anything useful, try Pydantic
-            if not transformer_params and hasattr(transformer.__class__, "model_fields"):
-                # Pydantic-based transformer (gators transformers)
-                for key in transformer.__class__.model_fields.keys():
-                    value = getattr(transformer, key)
-                    transformer_params[key] = value
 
             # Add transformer params with nested naming
             for key, value in transformer_params.items():
@@ -299,8 +294,8 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
         # Set nested parameters
         for step_name, step_params in nested_params.items():
             transformer = self.named_steps[step_name]
-
-            # Try sklearn-style set_params first
+            
+            # Try using set_params method
             if hasattr(transformer, "set_params"):
                 try:
                     transformer.set_params(**step_params)
@@ -309,7 +304,7 @@ class Pipeline(BaseModel, BaseEstimator, TransformerMixin):
                     for param_name, param_value in step_params.items():
                         setattr(transformer, param_name, param_value)
             else:
-                # Direct attribute setting for Pydantic models
+                # Direct attribute setting for transformers without set_params
                 for param_name, param_value in step_params.items():
                     setattr(transformer, param_name, param_value)
 
