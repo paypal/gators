@@ -56,8 +56,8 @@ ogp_custom_meta_tags = [
     '<meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline" />',
 ]
 
-# Include robots.txt
-html_extra_path = ['robots.txt']
+# Include verification and robots files
+html_extra_path = ['robots.txt', 'BingSiteAuth.xml', 'google1962c166da0d7db8.html', '.nojekyll']
 
 # nbsphinx settings
 nbsphinx_execute = 'never'  # Don't execute notebooks during build
