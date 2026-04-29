@@ -20,7 +20,6 @@
 [![Contributors](https://img.shields.io/github/contributors/paypal/gators)](https://github.com/paypal/gators/graphs/contributors)
 [![Last Commit](https://img.shields.io/github/last-commit/paypal/gators)](https://github.com/paypal/gators/commits/main)
 
-|
 
 📚 **[Full Documentation](https://paypal.github.io/gators/)**
 
