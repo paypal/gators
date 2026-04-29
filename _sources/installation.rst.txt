@@ -51,10 +51,24 @@ Dependencies
 Gators automatically installs the following core dependencies:
 
 * **polars** - High-performance DataFrame library
+* **pyarrow** - For efficient data serialization
+* **pandas** - Data manipulation and analysis
+* **pydantic** - Data validation and settings management
 * **numpy** - Numerical computing
-* **scikit-learn** - For sklearn-compatible API
+* **scikit-learn** - For model building and evaluation
 
 Optional dependencies for specific features:
 
+* **lightgbm** - For Tree-based discretization   
 * **holidays** - For holiday feature generation
 * **pytest** - For running tests (development only)
+
+
+    "pandas>=2.0.0",
+    "polars>=0.19.0",
+    "pydantic>=2.12.0",
+    "pyarrow>=20.0.0",
+    "typing-extensions>=4.15.0",
+    "scikit-learn>=1.3.0",
+    "lightgbm>=4.0.0",
+    "holidays>=0.92",

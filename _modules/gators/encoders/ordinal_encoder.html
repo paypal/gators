@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gators.encoders.ordinal_encoder &#8212; gators 1.0.x documentation</title>
+    <title>gators.encoders.ordinal_encoder &#8212; Gators - Lightning Fast ML Preprocessing with Polars</title>
   
   
   
@@ -26,44 +26,112 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-Z5TR8D9VTQ"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-Z5TR8D9VTQ');
+            </script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/encoders/ordinal_encoder';</script>
-    <link rel="icon" href="../../../_static/gators_logo.ico"/>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/encoders/ordinal_encoder.html" />
+    <link rel="icon" href="../../../_static/gators_logo1.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-  </head>
   
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+<!-- Site Verification -->
+<meta name="msvalidate.01" content="278C9456AC3400A90623536C8A2114C1" />
 
+<!-- Structured Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Gators",
+  "description": "High-performance machine learning preprocessing and feature engineering library built on Polars with 75+ sklearn-compatible transformers",
+  "url": "https://paypal.github.io/gators/",
+  "codeRepository": "https://github.com/paypal/gators",
+  "license": "https://opensource.org/licenses/Apache-2.0",
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python 3.10+",
+  "author": {
+    "@type": "Person",
+    "name": "Charles Poli"
+  },
+  "maintainer": {
+    "@type": "Organization",
+    "name": "PayPal"
+  },
+  "keywords": ["machine learning", "preprocessing", "feature engineering", "polars", "data science", "sklearn", "python"]
+}
+</script>
+
+<!-- Additional meta tags for better SEO -->
+<meta name="description" content="Gators is a high-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API.">
+<meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline">
+<meta name="author" content="Charles Poli, PayPal">
+<link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/encoders/ordinal_encoder.html" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="gators.encoders.ordinal_encoder - Gators Documentation">
+<meta property="og:description" content="High-performance ML preprocessing with 75+ Polars-powered transformers">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://paypal.github.io/gators/_modules/gators/encoders/ordinal_encoder.html">
+<meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="gators.encoders.ordinal_encoder - Gators">
+<meta name="twitter:description" content="Lightning-fast ML preprocessing with Polars">
+<meta name="twitter:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+  </head>
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -89,7 +157,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -115,8 +183,8 @@
       
     
     
-    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
-    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="Gators - Lightning Fast ML Preprocessing with Polars - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="Gators - Lightning Fast ML Preprocessing with Polars - Home"/>
   
   
 </a></div>
@@ -176,6 +244,34 @@
 </button>
         </div>
       
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/paypal/gators" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/gators/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
       
     </div>
     
@@ -255,6 +351,38 @@
       </div>
     
     
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/paypal/gators" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/gators/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
     
   </div>
   
@@ -435,7 +563,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">col</span>
-                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">))</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Categorical</span><span class="p">]</span>
             <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mapping_</span> <span class="o">=</span> <span class="p">{}</span>
@@ -483,8 +611,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">

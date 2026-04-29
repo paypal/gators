@@ -24,7 +24,6 @@
    :hidden:
 
    examples
-|
 
 Gators is a **lightning-fast data preprocessing and feature engineering** library built on top of `Polars <https://pola.rs/>`_, 
 designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging Polars' 
@@ -59,11 +58,11 @@ Quick Start
 
     # Build a preprocessing pipeline
     pipeline = Pipeline([
-        ('drop_nan', DropHighNaNRatio(threshold=0.5)),
-        ('impute', NumericImputer(strategy='median')),
-        ('variance', VarianceFilter(threshold=0.01)),
-        ('encode', OneHotEncoder()),
-        ('scale', StandardScaler())
+        ('drop_nan', DropHighNaNRatio(threshold=0.5)),  # drop columns with >50% missing values
+        ('impute', NumericImputer(strategy='median')),  # impute missing values with median
+        ('variance', VarianceFilter(threshold=0.01)),   # remove numerical columns with a variance < 0.01
+        ('encode', OneHotEncoder()),  # one-hot encode categorical variables
+        ('scale', StandardScaler())  # standardize numerical features
     ])
 
     # Fit and transform
@@ -87,6 +86,26 @@ What Can Gators Do?
 * ⚖️ :doc:`Scaling <api/scalers>` - Standard, min-max, Box-Cox, and more
 * 🔗 :doc:`Pipeline <api/pipeline>` - Chain transformers seamlessly
   
+
+Credits
+-------
+
+Developed by the PSP Data Team at PayPal.
+
+**⚡ Built by data scientists, for data scientists**
+
+Standing on the Shoulders of Giants
+------------------------------------
+
+    *"If I have seen further, it is by standing on the shoulders of giants."* — Isaac Newton
+
+Gators builds upon the incredible work of the open-source community. We are deeply grateful to:
+
+* **scikit-learn** (`scikit-learn.org <https://scikit-learn.org/>`_) - Inspired Gators' API design
+* **feature-engine** (`feature-engine.trainindata.com <https://feature-engine.trainindata.com/>`_) - Inspired Gators' transformer patterns
+
+Gators continues this tradition with Polars-powered performance.
+
 Indices and tables
 ==================
 

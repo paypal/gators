@@ -7,8 +7,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="gators.clippers package" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://paypal.github.io/gators/gators.clippers.html" />
+<meta property="og:site_name" content="Gators - High-Performance ML Preprocessing Library" />
+<meta property="og:description" content="Module contents: Clipping transformers for outlier handling." />
+<meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png" />
+<meta property="og:image:alt" content="Gators - High-Performance ML Preprocessing Library" />
+<meta name="description" content="Module contents: Clipping transformers for outlier handling." />
+<meta name="description" content="High-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API." />
+<meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline" />
 
-    <title>gators.clippers package &#8212; gators 1.0.x documentation</title>
+    <title>gators.clippers package &#8212; Gators - Lightning Fast ML Preprocessing with Polars</title>
   
   
   
@@ -27,44 +37,112 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/gators.css?v=3bfac2a1" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="_static/documentation_options.js?v=692d9a0e"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-Z5TR8D9VTQ"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-Z5TR8D9VTQ');
+            </script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'gators.clippers';</script>
-    <link rel="icon" href="_static/gators_logo.ico"/>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://paypal.github.io/gators/gators.clippers.html" />
+    <link rel="icon" href="_static/gators_logo1.png"/>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-  </head>
   
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+<!-- Site Verification -->
+<meta name="msvalidate.01" content="278C9456AC3400A90623536C8A2114C1" />
 
+<!-- Structured Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Gators",
+  "description": "High-performance machine learning preprocessing and feature engineering library built on Polars with 75+ sklearn-compatible transformers",
+  "url": "https://paypal.github.io/gators/",
+  "codeRepository": "https://github.com/paypal/gators",
+  "license": "https://opensource.org/licenses/Apache-2.0",
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python 3.10+",
+  "author": {
+    "@type": "Person",
+    "name": "Charles Poli"
+  },
+  "maintainer": {
+    "@type": "Organization",
+    "name": "PayPal"
+  },
+  "keywords": ["machine learning", "preprocessing", "feature engineering", "polars", "data science", "sklearn", "python"]
+}
+</script>
+
+<!-- Additional meta tags for better SEO -->
+<meta name="description" content="Gators is a high-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API.">
+<meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline">
+<meta name="author" content="Charles Poli, PayPal">
+<link rel="canonical" href="https://paypal.github.io/gators/gators.clippers.html" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="gators.clippers package - Gators Documentation">
+<meta property="og:description" content="High-performance ML preprocessing with 75+ Polars-powered transformers">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://paypal.github.io/gators/gators.clippers.html">
+<meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="gators.clippers package - Gators">
+<meta name="twitter:description" content="Lightning-fast ML preprocessing with Polars">
+<meta name="twitter:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+  </head>
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -90,7 +168,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -116,8 +194,8 @@
       
     
     
-    <img src="_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
-    <img src="_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+    <img src="_static/GATORS_LOGO.png" class="logo__image only-light" alt="Gators - Lightning Fast ML Preprocessing with Polars - Home"/>
+    <img src="_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="Gators - Lightning Fast ML Preprocessing with Polars - Home"/>
   
   
 </a></div>
@@ -177,6 +255,34 @@
 </button>
         </div>
       
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/paypal/gators" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/gators/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
       
     </div>
     
@@ -259,10 +365,43 @@
     
     
     
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/paypal/gators" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/gators/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
@@ -350,7 +489,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.CustomClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">CustomClipper</span></span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
 <p>Clip column values using custom lower and upper bounds.</p>
 <p>This transformer allows you to specify custom clipping bounds for each column
 independently. You can specify only lower bounds, only upper bounds, or both
@@ -412,30 +551,30 @@ None values indicate no bound on that side.</p>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="go">shape: (3, 2)</span>
-<span class="go">┌─────┬─────────┐</span>
-<span class="go">│ age ┆ salary  │</span>
-<span class="go">│ --- ┆ ---     │</span>
-<span class="go">│ f64 ┆ f64     │</span>
-<span class="go">╞═════╪═════════╡</span>
-<span class="go">│ 0.0 ┆ 0.0     │</span>
-<span class="go">│ 25.0┆ 50000.0 │</span>
+<span class="go">┌─────┬──────────┐</span>
+<span class="go">│ age ┆ salary   │</span>
+<span class="go">│ --- ┆ ---      │</span>
+<span class="go">│ f64 ┆ f64      │</span>
+<span class="go">╞═════╪══════════╡</span>
+<span class="go">│ 0.0 ┆ 0.0      │</span>
+<span class="go">│ 25.0┆ 50000.0  │</span>
 <span class="go">│ 120.0┆1000000.0│</span>
-<span class="go">└─────┴─────────┘</span>
+<span class="go">└─────┴──────────┘</span>
 </pre></div>
 </div>
 <p>Clip with only lower bounds:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span> <span class="o">=</span> <span class="n">CustomClipper</span><span class="p">(</span><span class="n">lower_bounds</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">clipper</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="go">shape: (3, 2)</span>
-<span class="go">┌─────┬─────────┐</span>
-<span class="go">│ age ┆ salary  │</span>
-<span class="go">│ --- ┆ ---     │</span>
-<span class="go">│ f64 ┆ f64     │</span>
-<span class="go">╞═════╪═════════╡</span>
-<span class="go">│ 0.0 ┆ -1000.0 │</span>
-<span class="go">│ 25.0┆ 50000.0 │</span>
+<span class="go">┌─────┬──────────┐</span>
+<span class="go">│ age ┆ salary   │</span>
+<span class="go">│ --- ┆ ---      │</span>
+<span class="go">│ f64 ┆ f64      │</span>
+<span class="go">╞═════╪══════════╡</span>
+<span class="go">│ 0.0 ┆ -1000.0  │</span>
+<span class="go">│ 25.0┆ 50000.0  │</span>
 <span class="go">│ 150.0┆2000000.0│</span>
-<span class="go">└─────┴─────────┘</span>
+<span class="go">└─────┴──────────┘</span>
 </pre></div>
 </div>
 <p>Create new columns instead of modifying in place:</p>
@@ -520,32 +659,12 @@ None values indicate no bound on that side.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="gators.clippers.CustomClipper.fit_transform">
-<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper.fit_transform" title="Link to this definition">#</a></dt>
-<dd><p>Fit the clipper and transform the data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target values (ignored, present for sklearn compatibility).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame with clipped values.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.GaussianClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">GaussianClipper</span></span><a class="reference internal" href="_modules/gators/clippers/gaussian_clipper.html#GaussianClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.GaussianClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
 <p>Clip numeric values to mean ± n standard deviations.</p>
 <p>This transformer caps values that are smaller than mean - n*std or larger
 than mean + n*std, where n is the number of standard deviations (n_sigmas).
@@ -698,29 +817,12 @@ Ignored when inplace=True.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="gators.clippers.GaussianClipper.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/gaussian_clipper.html#GaussianClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.GaussianClipper.transform" title="Link to this definition">#</a></dt>
-<dd><p>Transform the input DataFrame by clipping values to mean ± n*std.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame with clipped numeric columns.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.IQRClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">IQRClipper</span></span><a class="reference internal" href="_modules/gators/clippers/iqr_clipper.html#IQRClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.IQRClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
 <p>Clip numeric values based on Interquartile Range (IQR).</p>
 <p>This transformer caps values that fall outside the range
 [Q1 - n_iqrs*IQR, Q3 + n_iqrs*IQR], where Q1 and Q3 are the first and
@@ -829,29 +931,12 @@ Ignored when inplace=True.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="gators.clippers.IQRClipper.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/iqr_clipper.html#IQRClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.IQRClipper.transform" title="Link to this definition">#</a></dt>
-<dd><p>Transform the input DataFrame by clipping values based on IQR.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame with clipped numeric columns.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.MADClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">MADClipper</span></span><a class="reference internal" href="_modules/gators/clippers/mad_clipper.html#MADClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.MADClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
 <p>Clip numeric values based on Median Absolute Deviation (MAD).</p>
 <p>This transformer caps values that are more than n_mads times the MAD away
 from the median. MAD is a robust measure of variability that is less
@@ -959,29 +1044,12 @@ Ignored when inplace=True.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="gators.clippers.MADClipper.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/mad_clipper.html#MADClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.MADClipper.transform" title="Link to this definition">#</a></dt>
-<dd><p>Transform the input DataFrame by clipping values based on MAD.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame with clipped numeric columns.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.QuantileClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">QuantileClipper</span></span><a class="reference internal" href="_modules/gators/clippers/quantile_clipper.html#QuantileClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.QuantileClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code></a>, <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TransformerMixin</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
 <p>Clip numeric values based on quantile thresholds.</p>
 <p>This transformer caps values below the lower quantile and above the upper
 quantile. This is useful for removing extreme outliers while preserving
@@ -1108,23 +1176,6 @@ Ignored when inplace=True.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="gators.clippers.QuantileClipper.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/quantile_clipper.html#QuantileClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.QuantileClipper.transform" title="Link to this definition">#</a></dt>
-<dd><p>Transform the input DataFrame by clipping values to quantile thresholds.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame with clipped numeric columns.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -1157,41 +1208,52 @@ Ignored when inplace=True.</p></li>
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-gators.clippers">Module contents</a><ul class="visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-gators.clippers">Module contents</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper"><code class="docutils literal notranslate"><span class="pre">CustomClipper</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper._columns"><code class="docutils literal notranslate"><span class="pre">CustomClipper._columns</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper._bounds_map"><code class="docutils literal notranslate"><span class="pre">CustomClipper._bounds_map</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper.fit"><code class="docutils literal notranslate"><span class="pre">CustomClipper.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper.transform"><code class="docutils literal notranslate"><span class="pre">CustomClipper.transform()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.CustomClipper.fit_transform"><code class="docutils literal notranslate"><span class="pre">CustomClipper.fit_transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.GaussianClipper"><code class="docutils literal notranslate"><span class="pre">GaussianClipper</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.GaussianClipper.fit"><code class="docutils literal notranslate"><span class="pre">GaussianClipper.fit()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.GaussianClipper.transform"><code class="docutils literal notranslate"><span class="pre">GaussianClipper.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.IQRClipper"><code class="docutils literal notranslate"><span class="pre">IQRClipper</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.IQRClipper.fit"><code class="docutils literal notranslate"><span class="pre">IQRClipper.fit()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.IQRClipper.transform"><code class="docutils literal notranslate"><span class="pre">IQRClipper.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.MADClipper"><code class="docutils literal notranslate"><span class="pre">MADClipper</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.MADClipper.fit"><code class="docutils literal notranslate"><span class="pre">MADClipper.fit()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.MADClipper.transform"><code class="docutils literal notranslate"><span class="pre">MADClipper.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.QuantileClipper"><code class="docutils literal notranslate"><span class="pre">QuantileClipper</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.QuantileClipper.fit"><code class="docutils literal notranslate"><span class="pre">QuantileClipper.fit()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.clippers.QuantileClipper.transform"><code class="docutils literal notranslate"><span class="pre">QuantileClipper.transform()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
   </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/paypal/gators/edit/main/docs/source/gators.clippers.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
 
 </div></div>
               
@@ -1206,8 +1268,8 @@ Ignored when inplace=True.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">

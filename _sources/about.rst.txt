@@ -62,3 +62,15 @@ Credits
 Developed by the PSP Data Team at PayPal.
 
 **Built with ⚡ by data scientists, for data scientists**
+
+Standing on the Shoulders of Giants
+------------------------------------
+
+    *"If I have seen further, it is by standing on the shoulders of giants."* — Isaac Newton
+
+Gators builds upon the incredible work of the open-source community. We are deeply grateful to:
+
+* **scikit-learn** (`scikit-learn.org <https://scikit-learn.org/>`_) - The foundation of ML in Python, whose elegant API design inspired Gators' transformer interface
+* **feature-engine** (`feature-engine.trainindata.com <https://feature-engine.trainindata.com/>`_) - A comprehensive feature engineering library that pioneered many transformer patterns also present in Gators
+
+These projects have shaped how millions of data scientists approach machine learning, and Gators aims to carry that tradition forward with performance optimizations powered by Polars.

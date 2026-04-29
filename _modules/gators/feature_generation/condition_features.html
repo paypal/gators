@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gators.feature_generation.condition_features &#8212; gators 1.0.x documentation</title>
+    <title>gators.feature_generation.condition_features &#8212; Gators - Lightning Fast ML Preprocessing with Polars</title>
   
   
   
@@ -26,44 +26,112 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-Z5TR8D9VTQ"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-Z5TR8D9VTQ');
+            </script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/feature_generation/condition_features';</script>
-    <link rel="icon" href="../../../_static/gators_logo.ico"/>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/feature_generation/condition_features.html" />
+    <link rel="icon" href="../../../_static/gators_logo1.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-  </head>
   
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+<!-- Site Verification -->
+<meta name="msvalidate.01" content="278C9456AC3400A90623536C8A2114C1" />
 
+<!-- Structured Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Gators",
+  "description": "High-performance machine learning preprocessing and feature engineering library built on Polars with 75+ sklearn-compatible transformers",
+  "url": "https://paypal.github.io/gators/",
+  "codeRepository": "https://github.com/paypal/gators",
+  "license": "https://opensource.org/licenses/Apache-2.0",
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python 3.10+",
+  "author": {
+    "@type": "Person",
+    "name": "Charles Poli"
+  },
+  "maintainer": {
+    "@type": "Organization",
+    "name": "PayPal"
+  },
+  "keywords": ["machine learning", "preprocessing", "feature engineering", "polars", "data science", "sklearn", "python"]
+}
+</script>
+
+<!-- Additional meta tags for better SEO -->
+<meta name="description" content="Gators is a high-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API.">
+<meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline">
+<meta name="author" content="Charles Poli, PayPal">
+<link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/feature_generation/condition_features.html" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="gators.feature_generation.condition_features - Gators Documentation">
+<meta property="og:description" content="High-performance ML preprocessing with 75+ Polars-powered transformers">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://paypal.github.io/gators/_modules/gators/feature_generation/condition_features.html">
+<meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="gators.feature_generation.condition_features - Gators">
+<meta name="twitter:description" content="Lightning-fast ML preprocessing with Polars">
+<meta name="twitter:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+  </head>
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -89,7 +157,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -115,8 +183,8 @@
       
     
     
-    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="gators 1.0.x documentation - Home"/>
-    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="gators 1.0.x documentation - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="Gators - Lightning Fast ML Preprocessing with Polars - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="Gators - Lightning Fast ML Preprocessing with Polars - Home"/>
   
   
 </a></div>
@@ -176,6 +244,34 @@
 </button>
         </div>
       
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/paypal/gators" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/gators/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
       
     </div>
     
@@ -256,6 +352,38 @@
     
     
     
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/paypal/gators" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/gators/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
@@ -324,11 +452,12 @@
                 <article class="bd-article">
                   
   <h1>Source code for gators.feature_generation.condition_features</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">field_validator</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">field_validator</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
 
 <span class="n">OPERATOR_NAMES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span> <span class="s2">&quot;gt&quot;</span><span class="p">,</span>
@@ -347,7 +476,7 @@
 
 <div class="viewcode-block" id="ConditionFeatures">
 <a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.ConditionFeatures">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ConditionFeatures</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConditionFeatures</span><span class="p">(</span><span class="n">_BaseTransformer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates multiple independent boolean features, one for each condition.</span>
 
@@ -356,21 +485,21 @@
 <span class="sd">    conditions with AND/OR logic, use RuleFeatures instead.</span>
 
 <span class="sd">    **Use Cases:**</span>
-<span class="sd">    </span>
+
 <span class="sd">    - Create simple boolean flags (is_adult, is_weekend, is_premium, etc.)</span>
 <span class="sd">    - Materialize threshold-based features (is_high_value, is_frequent_user)</span>
 <span class="sd">    - Feature engineering: Generate independent indicator variables</span>
 <span class="sd">    - Fraud detection: Create simple risk flags before combining them</span>
 
 <span class="sd">    **When to Use:**</span>
-<span class="sd">    </span>
+
 <span class="sd">    - Need multiple independent boolean columns</span>
 <span class="sd">    - Each condition stands alone (no AND/OR combination needed)</span>
 <span class="sd">    - Want cleaner API than RuleFeatures for simple cases</span>
 <span class="sd">    - Building feature sets for downstream transformers</span>
 
 <span class="sd">    **When NOT to Use:**</span>
-<span class="sd">    </span>
+
 <span class="sd">    - Need to combine conditions with AND/OR (use RuleFeatures)</span>
 <span class="sd">    - One-off exploratory analysis (use Polars native expressions)</span>
 <span class="sd">    - Very simple cases with 1-2 conditions (just use .with_columns())</span>
@@ -381,13 +510,13 @@
 <span class="sd">        List of condition dictionaries. Each condition creates one boolean output column.</span>
 
 <span class="sd">        Each condition dictionary must contain:</span>
-<span class="sd">        </span>
+
 <span class="sd">        - &#39;column&#39;: str - Name of the column to evaluate</span>
 <span class="sd">        - &#39;op&#39;: str - Comparison operator. Supported:</span>
-<span class="sd">        </span>
+
 <span class="sd">          * Binary: &#39;&gt;&#39;, &#39;&lt;&#39;, &#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;==&#39;, &#39;!=&#39; (require &#39;value&#39; or &#39;other_column&#39;)</span>
 <span class="sd">          * Unary: &#39;is_null&#39;, &#39;is_not_null&#39; (no &#39;value&#39; or &#39;other_column&#39; needed)</span>
-<span class="sd">          </span>
+
 <span class="sd">        - &#39;value&#39;: Any (optional) - Scalar value to compare the column against</span>
 <span class="sd">        - &#39;other_column&#39;: str (optional) - Name of another column to compare against</span>
 
@@ -395,18 +524,18 @@
 <span class="sd">        For unary operators: Neither &#39;value&#39; nor &#39;other_column&#39; should be specified.</span>
 
 <span class="sd">        Examples::</span>
-<span class="sd">        </span>
+
 <span class="sd">            # Simple conditions:</span>
 <span class="sd">            [</span>
 <span class="sd">                {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;&gt;=&#39;, &#39;value&#39;: 18},</span>
 <span class="sd">                {&#39;column&#39;: &#39;amount&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;value&#39;: 1000}</span>
 <span class="sd">            ]</span>
-<span class="sd">            </span>
+
 <span class="sd">            # Column comparison:</span>
 <span class="sd">            [</span>
 <span class="sd">                {&#39;column&#39;: &#39;velocity_24h&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;other_column&#39;: &#39;velocity_7d&#39;}</span>
 <span class="sd">            ]</span>
-<span class="sd">            </span>
+
 <span class="sd">            # Null checks:</span>
 <span class="sd">            [</span>
 <span class="sd">                {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;is_null&#39;},</span>
@@ -416,13 +545,13 @@
 <span class="sd">    new_column_names : Optional[List[str]], default=None</span>
 <span class="sd">        Names for the resulting boolean feature columns. If provided, must have the same</span>
 <span class="sd">        length as ``conditions``. If None, column names are auto-generated in the format:</span>
-<span class="sd">        </span>
+
 <span class="sd">        - Scalar comparison: ``{column}_{op_name}_{value}`` (e.g., &#39;age_gte_18&#39;)</span>
 <span class="sd">        - Column comparison: ``{column}_{op_name}_{other_column}`` (e.g., &#39;velocity_24h_gt_velocity_7d&#39;)</span>
 <span class="sd">        - Unary operation: ``{column}__{op_name}`` (e.g., &#39;age__is_null&#39;)</span>
 
-<span class="sd">        Operator name mapping: </span>
-<span class="sd">        </span>
+<span class="sd">        Operator name mapping:</span>
+
 <span class="sd">        - &#39;&gt;&#39; -&gt; &#39;gt&#39;</span>
 <span class="sd">        - &#39;&lt;&#39; -&gt; &#39;lt&#39;</span>
 <span class="sd">        - &#39;&gt;=&#39; -&gt; &#39;gte&#39;</span>
@@ -477,14 +606,14 @@
 <span class="sd">    ...     &#39;fare_per_person&#39;: [50.0, 33.3, 30.0, 50.0, 40.0]</span>
 <span class="sd">    ... }</span>
 <span class="sd">    &gt;&gt;&gt; fare_X = pl.DataFrame(fare_data)</span>
-<span class="sd">    &gt;&gt;&gt; fare_transformer = ConditionFeatures(</span>
+<span class="sd">    &gt;&gt;&gt; fare_BaseTransformer = ConditionFeatures(</span>
 <span class="sd">    ...     conditions=[</span>
 <span class="sd">    ...         {&#39;column&#39;: &#39;fare&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;value&#39;: 100},</span>
 <span class="sd">    ...         {&#39;column&#39;: &#39;fare_per_person&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;other_column&#39;: &#39;fare&#39;}</span>
 <span class="sd">    ...     ],</span>
 <span class="sd">    ...     new_column_names=[&#39;is_expensive&#39;, &#39;paid_more_per_person&#39;]</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; result = fare_transformer.fit_transform(fare_X)</span>
+<span class="sd">    &gt;&gt;&gt; result = fare_BaseTransformer.fit_transform(fare_X)</span>
 <span class="sd">    &gt;&gt;&gt; result</span>
 <span class="sd">    shape: (5, 4)</span>
 <span class="sd">    ┌───────┬──────────────────┬──────────────┬──────────────────────┐</span>
@@ -512,7 +641,7 @@
 <span class="sd">    &gt;&gt;&gt; titanic_X = titanic_X.with_columns(</span>
 <span class="sd">    ...     (pl.col(&#39;SibSp&#39;) + pl.col(&#39;Parch&#39;)).alias(&#39;family_size&#39;)</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; titanic_transformer = ConditionFeatures(</span>
+<span class="sd">    &gt;&gt;&gt; titanic_BaseTransformer = ConditionFeatures(</span>
 <span class="sd">    ...     conditions=[</span>
 <span class="sd">    ...         {&#39;column&#39;: &#39;Age&#39;, &#39;op&#39;: &#39;&lt;&#39;, &#39;value&#39;: 18},</span>
 <span class="sd">    ...         {&#39;column&#39;: &#39;Pclass&#39;, &#39;op&#39;: &#39;==&#39;, &#39;value&#39;: 1},</span>
@@ -520,7 +649,7 @@
 <span class="sd">    ...     ],</span>
 <span class="sd">    ...     new_column_names=[&#39;is_child&#39;, &#39;is_first_class&#39;, &#39;is_alone&#39;]</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; result = titanic_transformer.fit_transform(titanic_X)</span>
+<span class="sd">    &gt;&gt;&gt; result = titanic_BaseTransformer.fit_transform(titanic_X)</span>
 <span class="sd">    &gt;&gt;&gt; result.select([&#39;Age&#39;, &#39;Pclass&#39;, &#39;family_size&#39;, &#39;is_child&#39;, &#39;is_first_class&#39;, &#39;is_alone&#39;])</span>
 <span class="sd">    shape: (5, 6)</span>
 <span class="sd">    ┌──────┬────────┬─────────────┬──────────┬────────────────┬──────────┐</span>
@@ -537,7 +666,7 @@
 
 <span class="sd">    **Example 4: Auto-generated column names**</span>
 
-<span class="sd">    &gt;&gt;&gt; auto_transformer = ConditionFeatures(</span>
+<span class="sd">    &gt;&gt;&gt; auto_BaseTransformer = ConditionFeatures(</span>
 <span class="sd">    ...     conditions=[</span>
 <span class="sd">    ...         {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;&gt;=&#39;, &#39;value&#39;: 18},</span>
 <span class="sd">    ...         {&#39;column&#39;: &#39;amount&#39;, &#39;op&#39;: &#39;&gt;&#39;, &#39;value&#39;: 1000},</span>
@@ -545,7 +674,7 @@
 <span class="sd">    ...     ]</span>
 <span class="sd">    ...     # new_column_names not specified - will be auto-generated</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; result = auto_transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result = auto_BaseTransformer.fit_transform(X)</span>
 <span class="sd">    &gt;&gt;&gt; result.select([&#39;age&#39;, &#39;amount&#39;, &#39;family_size&#39;, &#39;age_gte_18&#39;, &#39;amount_gt_1000&#39;, &#39;family_size_eq_1&#39;])</span>
 <span class="sd">    shape: (5, 6)</span>
 <span class="sd">    ┌─────┬────────┬─────────────┬────────────┬────────────────┬──────────────────┐</span>
@@ -568,7 +697,7 @@
 <span class="sd">    ...     &#39;amount&#39;: [100, 1500, 500, 200, 2000]</span>
 <span class="sd">    ... }</span>
 <span class="sd">    &gt;&gt;&gt; X_nulls = pl.DataFrame(data_with_nulls)</span>
-<span class="sd">    &gt;&gt;&gt; null_transformer = ConditionFeatures(</span>
+<span class="sd">    &gt;&gt;&gt; null_BaseTransformer = ConditionFeatures(</span>
 <span class="sd">    ...     conditions=[</span>
 <span class="sd">    ...         {&#39;column&#39;: &#39;age&#39;, &#39;op&#39;: &#39;is_null&#39;},</span>
 <span class="sd">    ...         {&#39;column&#39;: &#39;email&#39;, &#39;op&#39;: &#39;is_not_null&#39;},</span>
@@ -576,7 +705,7 @@
 <span class="sd">    ...     ],</span>
 <span class="sd">    ...     new_column_names=[&#39;age_missing&#39;, &#39;has_email&#39;, &#39;is_high_amount&#39;]</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; result = null_transformer.fit_transform(X_nulls)</span>
+<span class="sd">    &gt;&gt;&gt; result = null_BaseTransformer.fit_transform(X_nulls)</span>
 <span class="sd">    &gt;&gt;&gt; result</span>
 <span class="sd">    shape: (5, 6)</span>
 <span class="sd">    ┌──────┬─────────────┬────────┬─────────────┬───────────┬─────────────────┐</span>
@@ -670,9 +799,7 @@
             <span class="k">return</span> <span class="n">new_column_names</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">new_column_names</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Column names list cannot be empty (use None for auto-naming)&quot;</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Column names list cannot be empty (use None for auto-naming)&quot;</span><span class="p">)</span>
 
         <span class="c1"># Check for duplicates</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">new_column_names</span><span class="p">)):</span>
@@ -813,17 +940,17 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_scalar_comparison</span><span class="p">(</span><span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a Polars expression for column-to-scalar comparison.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;==&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;!=&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported operator: </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
@@ -856,8 +983,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">

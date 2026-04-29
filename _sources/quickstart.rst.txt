@@ -167,11 +167,3 @@ Putting it all together in a production-ready pipeline:
 
     # Deploy the same pipeline in production!
     prod_data_processed = pipeline.transform(prod_data)
-
-Next Steps
-----------
-
-* Explore the :doc:`user_guide/data_cleaning` for data cleaning techniques
-* Learn about :doc:`user_guide/encoding` strategies
-* Check out :doc:`user_guide/feature_generation` for powerful feature engineering
-* Browse the :doc:`modules` for complete API documentation
