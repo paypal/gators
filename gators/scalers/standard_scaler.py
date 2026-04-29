@@ -82,10 +82,22 @@ class StandardScaler(_BaseTransformer):
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
         self._column_mapping = {col: f"{col}__standard_scale" for col in self.subset}
-        means = X[self.subset].mean().to_dict(as_series=False)
-        self._offset = {col: val[0] for col, val in means.items()}
-        stds = X[self.subset].std().to_dict(as_series=False)
-        self._scale = {col: 1.0 / val[0] for col, val in stds.items()}
+        
+        mean_std_exprs = []
+        for col in self.subset:
+            mean_std_exprs.append(pl.col(col).mean().alias(f"{col}__mean"))
+            mean_std_exprs.append(pl.col(col).std().alias(f"{col}__std"))
+        
+        stats = X.select(mean_std_exprs).row(0)
+        
+        self._offset = {}
+        self._scale = {}
+        for i, col in enumerate(self.subset):
+            mean_val = stats[i * 2]
+            std_val = stats[i * 2 + 1]
+            self._offset[col] = mean_val
+            self._scale[col] = 1.0 / std_val
+        
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

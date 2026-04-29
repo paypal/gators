@@ -66,6 +66,8 @@ nbsphinx_allow_errors = True  # Allow errors in notebooks
 # Suppress warnings
 suppress_warnings = [
     'ref.python',  # Suppress ambiguous cross-reference warnings for Python objects
+    'autodoc.duplicate',  # Suppress duplicate object description warnings
+    'sphinx_autodoc_typehints.forward_reference',  # Suppress Pydantic forward reference warnings
 ]
 
 # Napoleon settings for NumPy docstring style
@@ -210,10 +212,11 @@ html_theme_options = {
             "icon": "fa-solid fa-box",
         },
     ],
-    "repository_url": "https://github.com/paypal/gators",
-    "repository_branch": "main",
-    "path_to_docs": "docs/source",
     "use_edit_page_button": True,
+    # Google Analytics
+    "analytics": {
+        "google_analytics_id": "G-Z5TR8D9VTQ",
+    },
 }
 
 html_sidebars = {

@@ -18,7 +18,7 @@ class ArcSinhScaler(_BaseTransformer):
 
     - Defined for all real numbers (unlike log)
     - Approximately linear near zero
-    - Approximately logarithmic for large |X|
+    - Approximately logarithmic for large abs(X)
     - Symmetric around zero: asinh(-X) = -asinh(X)
 
     This transformation is commonly used in:
@@ -97,12 +97,15 @@ class ArcSinhScaler(_BaseTransformer):
             The fitted transformer instance.
         """
         if not self.subset:
+            # Use set for O(1) dtype lookup instead of list O(n) lookup
+            numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+                if dtype in numeric_dtypes
             ]
 
+        # Pre-build column mapping dictionary
         self._column_mapping = {col: f"{col}__arcsinh" for col in self.subset}
         return self
 

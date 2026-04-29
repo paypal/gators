@@ -135,7 +135,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
+                for col, dtype in X.schema.items()
                 if dtype in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
             ]
 

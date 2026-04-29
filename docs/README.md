@@ -100,20 +100,7 @@ docs/
 └── build/                   # Generated documentation (git-ignored)
 ```
 
-## Theme
 
-The documentation uses the **PyData Sphinx Theme**, which is the same theme used by:
-- NumPy
-- Pandas
-- Matplotlib
-- SciPy
-
-Features:
-- Modern, clean design
-- Responsive layout for mobile
-- Organized sidebar navigation
-- Built-in search functionality
-- Light/dark mode support
 
 ## Warnings
 

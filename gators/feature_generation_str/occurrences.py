@@ -112,7 +112,7 @@ class Occurrences(_BaseTransformer):
             # Use all columns that are in substrings and are string type
             string_cols = [
                 col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
+                for col, dtype in X.schema.items()
                 if dtype == pl.String or dtype == pl.Utf8
             ]
             self.subset = [col for col in self.substrings.keys() if col in string_cols]

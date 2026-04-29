@@ -39,6 +39,7 @@ def feature_stability_index(
         - feature: Feature name
         - fsi: Feature Stability Index (0 to 1, higher is more stable)
         - importance: Average importance across all runs
+
         Sorted by FSI and importance in descending order, filtered to fsi > 0.
     """
     selection_matrix = []

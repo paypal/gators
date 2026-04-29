@@ -105,7 +105,7 @@ class OrdinalEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
+                for col, dtype in X.schema.items()
                 if dtype in [pl.String, pl.Boolean, pl.Categorical]
             ]
         self.mapping_ = {}

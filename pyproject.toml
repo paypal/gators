@@ -13,19 +13,24 @@ maintainers = [
 readme = "README.md"
 license = {text = "Apache-2.0"}
 requires-python = ">=3.10"
-keywords = ["machine-learning", "preprocessing", "feature-engineering", "data-science"]
+keywords = ["machine-learning", "preprocessing", "feature-engineering", "data-science", "polars", "pipeline", "transformers", "data-pipeline", "feature-selection", "sklearn", "feature_engine"]
 classifiers = [
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Framework :: Jupyter",
+    "Typing :: Typed",
 ]
 
 dependencies = [
@@ -43,6 +48,7 @@ dependencies = [
 dev = [
     "pytest>=8.0.0",
     "pytest-cov>=4.1.0",
+    "coverage-badge>=1.1.0",
     "black==24.4.2",
     "isort==5.13.2",
     # "mypy>=1.8.0",
@@ -56,9 +62,9 @@ notebook = [
 all = ["gators[dev,notebook]"]
 
 [project.urls]
-Homepage = "https://paypal.github.io/gators/"
+Homepage = "https://github.com/paypal/Gators/"
 Repository = "https://github.com/paypal/gators"
-Documentation = "https://paypal.github.io/gators/api_reference.html"
+Documentation = "https://paypal.github.io/gators/"
 "Bug Tracker" = "https://github.com/paypal/gators/issues"
 
 [build-system]
@@ -169,7 +175,7 @@ ignore = [
 
 [tool.coverage.run]
 source = ["gators"]
-omit = ["*/tests/*", "*/test_*.py"]
+omit = ["*/tests/*", "*/test_*.py", "benchmarks/*"]
 
 [tool.coverage.report]
 exclude_lines = [

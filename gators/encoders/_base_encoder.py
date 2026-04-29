@@ -52,23 +52,32 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
             Transformed DataFrame.
         """
         default_value = 0.0
+        
+        dtypes = dict(zip(X.columns, X.dtypes))
+        boolean_cols = {col for col in self.mapping_ if dtypes.get(col) == pl.Boolean}
+        
+        boolean_string_mappings = {
+            col: {str(k).lower(): v for k, v in self.mapping_[col].items()}
+            for col in boolean_cols
+        }
+        
+        expressions = []
+        
         if self.inplace:
-            expressions = []
             for col in self.mapping_:
-                # Cast boolean columns to string for replacement
-                if X[col].dtype == pl.Boolean:
-                    # Convert boolean keys to lowercase string format used by Polars
-                    string_mapping = {str(k).lower(): v for k, v in self.mapping_[col].items()}
+                if col in boolean_cols:
+                    # Boolean column: cast to string then replace
                     expr = (
                         pl.col(col)
                         .cast(pl.String)
                         .replace_strict(
-                            string_mapping,
+                            boolean_string_mappings[col],
                             default=default_value,
                             return_dtype=pl.Float64,
                         )
                     )
                 else:
+                    # Non-boolean: direct replacement
                     expr = pl.col(col).replace_strict(
                         self.mapping_[col],
                         default=default_value,
@@ -76,27 +85,36 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
                     )
                 expressions.append(expr)
             return X.with_columns(expressions)
-
-        expressions = []
-        for col, mapping in self.mapping_.items():
-            # Cast boolean columns to string for replacement, then to float
-            if X[col].dtype == pl.Boolean:
-                # Convert boolean keys to lowercase string format used by Polars
-                string_mapping = {str(k).lower(): v for k, v in mapping.items()}
+        
+        for col in self.mapping_:
+            new_col_name = self.column_mapping_[col]
+            
+            if col in boolean_cols:
                 expr = (
                     pl.col(col)
                     .cast(pl.String)
-                    .replace_strict(string_mapping, default=default_value, return_dtype=pl.Float64)
-                    .alias(self.column_mapping_[col])
+                    .replace_strict(
+                        boolean_string_mappings[col],
+                        default=default_value,
+                        return_dtype=pl.Float64
+                    )
+                    .alias(new_col_name)
                 )
             else:
                 expr = (
                     pl.col(col)
-                    .replace_strict(mapping, default=default_value, return_dtype=pl.Float64)
-                    .alias(self.column_mapping_[col])
+                    .replace_strict(
+                        self.mapping_[col],
+                        default=default_value,
+                        return_dtype=pl.Float64
+                    )
+                    .alias(new_col_name)
                 )
             expressions.append(expr)
+        
         X = X.with_columns(expressions)
+        
         if self.drop_columns and self.subset:
             X = X.drop(self.subset)
+        
         return X

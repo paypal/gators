@@ -13,6 +13,12 @@
 [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://paypal.github.io/gators/)
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![Downloads](https://static.pepy.tech/badge/gators)](https://pepy.tech/project/gators)
+[![Downloads/Month](https://static.pepy.tech/badge/gators/month)](https://pepy.tech/project/gators)
+[![GitHub Stars](https://img.shields.io/github/stars/paypal/gators?style=social)](https://github.com/paypal/gators)
+[![GitHub Forks](https://img.shields.io/github/forks/paypal/gators?style=social)](https://github.com/paypal/gators)
+[![Contributors](https://img.shields.io/github/contributors/paypal/gators)](https://github.com/paypal/gators/graphs/contributors)
+[![Last Commit](https://img.shields.io/github/last-commit/paypal/gators)](https://github.com/paypal/gators/commits/main)
 
 |
 
@@ -182,7 +188,7 @@ X_processed = pipeline.fit_transform(X)
 Requires Python 3.10 or higher.
 
 ```bash
-pip install gators
+pip3 install gators
 ```
 
 Or install from source:
@@ -190,7 +196,7 @@ Or install from source:
 ```bash
 git clone https://github.com/paypal/gators.git
 cd gators
-pip install -e .    # Install in editable/development mode
+pip3 install -e .    # Install in editable/development mode
 ```
 
 ## 📚 Documentation
@@ -209,6 +215,10 @@ Gators is perfect for:
 - **Time Series** - Rich datetime feature engineering
 - **NLP Tasks** - String feature extraction and encoding
 
+## 🏢 Used By
+
+Gators powers ML pipelines at:
+- PayPal (internal use)
 
 ## 🤝 Contributing
 

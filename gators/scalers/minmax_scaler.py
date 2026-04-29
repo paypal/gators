@@ -83,10 +83,22 @@ class MinmaxScaler(_BaseTransformer):
             ]
         self._column_mapping = {col: f"{col}__minmax_scale" for col in self.subset}
 
-        X_min = X[self.subset].min().to_dict(as_series=False)
-        X_max = X[self.subset].max().to_dict(as_series=False)
-        self._offset = {col: val[0] for col, val in X_min.items()}
-        self._scale = {col: 1.0 / (X_max[col][0] - X_min[col][0]) for col in self.subset}
+        # Single-pass min/max computation - build all expressions at once
+        min_max_exprs = []
+        for col in self.subset:
+            min_max_exprs.append(pl.col(col).min().alias(f"{col}__min"))
+            min_max_exprs.append(pl.col(col).max().alias(f"{col}__max"))
+        
+        stats = X.select(min_max_exprs).row(0)
+        
+        self._offset = {}
+        self._scale = {}
+        for i, col in enumerate(self.subset):
+            min_val = stats[i * 2]
+            max_val = stats[i * 2 + 1]
+            self._offset[col] = min_val
+            self._scale[col] = 1.0 / (max_val - min_val)
+        
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

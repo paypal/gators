@@ -50,6 +50,7 @@ class MathFeatures(_BaseTransformer):
         - 'count_null': Count of null values
         - 'count_zero': Count of zero values
         - 'count_nonzero': Count of non-zero values
+
         Note: For division operations, consider using RatioFeatures instead, which provides safer
         division with automatic handling of division by zero and null values.
     drop_columns : bool, optional
