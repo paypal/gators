@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional, Tuple
 
 import polars as pl
-from pydantic import Field, PrivateAttr
+from pydantic import Field
 
 from ._base_clipper import _BaseClipper
 
