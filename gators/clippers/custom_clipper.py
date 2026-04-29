@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 import polars as pl
 import polars.selectors as cs
-from pydantic import Field, PrivateAttr, field_validator
+from pydantic import Field, field_validator
 
 from ._base_clipper import _BaseClipper
 
