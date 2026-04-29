@@ -124,7 +124,7 @@ class DropLowCardinality(_BaseTransformer):
             self.subset = [
                 col
                 for col, dtype in X.schema.items()
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
 
         counts = X[self.subset].with_columns(pl.all().n_unique()).row(0, named=True)

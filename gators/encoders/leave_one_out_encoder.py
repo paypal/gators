@@ -115,7 +115,7 @@ class LeaveOneOutEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
 
         # Calculate global mean

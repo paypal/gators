@@ -106,7 +106,7 @@ class OrdinalEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in X.schema.items()
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         self.mapping_ = {}
         n = len(X)

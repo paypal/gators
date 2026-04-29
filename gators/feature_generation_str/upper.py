@@ -107,7 +107,7 @@ class Upper(_BaseTransformer):
             self.subset = [
                 col
                 for col, dtype in X.schema.items()
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         if not self.inplace:
             self._column_mapping = {col: f"{col}__upper" for col in self.subset}

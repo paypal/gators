@@ -41,7 +41,7 @@ def map_substring_replacements(X: pl.DataFrame, old: str, new: str) -> dict:
 
     Notes
     -----
-    - Only processes string and categorical columns (pl.String or pl.Categorical dtype)
+    - Only processes string and categorical columns (pl.String, pl.Categorical, or pl.Enum dtype)
     - Only includes columns where the substring is found
     - Common use case: After one-hot encoding, column names like "color__light blue"
       should be changed to "color__light_blue" for LightGBM compatibility
@@ -51,11 +51,13 @@ def map_substring_replacements(X: pl.DataFrame, old: str, new: str) -> dict:
     escaped_old = re.escape(old)
 
     for column in X.columns:
-        if X[column].dtype not in [pl.String, pl.Categorical]:
+        # Support both Categorical and Enum types
+        if X[column].dtype not in [pl.String, pl.Categorical, pl.Enum]:
             continue
 
-        # Cast categorical to string for str operations
-        col_expr = X[column].cast(pl.String) if X[column].dtype == pl.Categorical else X[column]
+        # Cast categorical/enum to string for str operations
+        needs_cast = X[column].dtype in [pl.Categorical, pl.Enum]
+        col_expr = X[column].cast(pl.String) if needs_cast else X[column]
 
         filtered_series = col_expr.filter(col_expr.str.contains(escaped_old))
         categories = filtered_series.unique()

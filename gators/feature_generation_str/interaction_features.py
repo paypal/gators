@@ -108,7 +108,7 @@ class InteractionFeatures(_BaseTransformer):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         return self
 
