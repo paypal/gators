@@ -122,9 +122,7 @@ class DropLowCardinality(_BaseTransformer):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in X.schema.items()
-                if dtype in [pl.String, pl.Boolean, pl.Enum]
+                col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
 
         counts = X[self.subset].with_columns(pl.all().n_unique()).row(0, named=True)

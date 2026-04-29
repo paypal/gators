@@ -70,9 +70,7 @@ class Lower(_BaseTransformer):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in X.schema.items()
-                if dtype in [pl.String, pl.Boolean, pl.Enum]
+                col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         if not self.inplace:
             self._column_mapping = {col: f"{col}__lower" for col in self.subset}

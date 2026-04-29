@@ -130,9 +130,14 @@ def test_transform_as_numerics(sample_dataframe: pl.DataFrame):
     )
     # Check values match (dtype should be numeric)
     assert transformed_X["feature1__discretize_custom"].dtype in [pl.Int32, pl.Int64]
-    assert_frame_equal(transformed_X, expected_X.with_columns(
-        pl.col("feature1__discretize_custom").cast(transformed_X["feature1__discretize_custom"].dtype)
-    ))
+    assert_frame_equal(
+        transformed_X,
+        expected_X.with_columns(
+            pl.col("feature1__discretize_custom").cast(
+                transformed_X["feature1__discretize_custom"].dtype
+            )
+        ),
+    )
 
 
 if __name__ == "__main__":

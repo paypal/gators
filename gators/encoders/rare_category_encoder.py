@@ -114,9 +114,7 @@ class RareCategoryEncoder(_BaseTransformer):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Enum]
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype in [pl.String, pl.Enum]
             ]
 
         self.mapping_ = {
