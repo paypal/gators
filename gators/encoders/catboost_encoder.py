@@ -1,4 +1,4 @@
-from typing import Optional, Union, cast
+from typing import Optional, cast
 
 import polars as pl
 from pydantic import Field, PositiveFloat
