@@ -141,9 +141,7 @@ class TimeBinFeatures(_BaseTransformer):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in X.schema.items()
-                if dtype == pl.Datetime or dtype == pl.Date
+                col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
         return self
 
@@ -162,7 +160,7 @@ class TimeBinFeatures(_BaseTransformer):
         """
         if self.subset is None:
             return X
-            
+
         new_columns = []
 
         for col in self.subset:

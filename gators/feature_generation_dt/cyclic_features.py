@@ -120,9 +120,7 @@ class CyclicFeatures(_BaseTransformer):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in X.schema.items()
-                if dtype == pl.Datetime or dtype == pl.Date
+                col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
 
         return self
@@ -142,7 +140,7 @@ class CyclicFeatures(_BaseTransformer):
         """
         if self.subset is None:
             return X
-            
+
         # Parse datetime columns only if needed
         datetime_conversions = []
         for col in self.subset:

@@ -5,38 +5,39 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../'))
+
+sys.path.insert(0, os.path.abspath("../../"))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'gators'
-copyright = 'Mozilla Public License (MPL) 2.0'
-author = 'Charles Poli'
-release = '1.0.x'
+project = "gators"
+copyright = "Mozilla Public License (MPL) 2.0"
+author = "Charles Poli"
+release = "1.0.x"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.autosummary',
-    'sphinx_autodoc_typehints',
-    'nbsphinx',
-    'sphinxext.opengraph',
-    'sphinx_sitemap',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.autosummary",
+    "sphinx_autodoc_typehints",
+    "nbsphinx",
+    "sphinxext.opengraph",
+    "sphinx_sitemap",
 ]
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- SEO Configuration -------------------------------------------------------
 
 # Base URL for sitemap and canonical links
-html_baseurl = 'https://paypal.github.io/gators/'
+html_baseurl = "https://paypal.github.io/gators/"
 
 # SEO-optimized title and description
 html_title = "Gators - Lightning Fast ML Preprocessing with Polars"
@@ -57,17 +58,17 @@ ogp_custom_meta_tags = [
 ]
 
 # Include verification and robots files
-html_extra_path = ['robots.txt', 'BingSiteAuth.xml', 'google1962c166da0d7db8.html', '.nojekyll']
+html_extra_path = ["robots.txt", "BingSiteAuth.xml", "google1962c166da0d7db8.html", ".nojekyll"]
 
 # nbsphinx settings
-nbsphinx_execute = 'never'  # Don't execute notebooks during build
+nbsphinx_execute = "never"  # Don't execute notebooks during build
 nbsphinx_allow_errors = True  # Allow errors in notebooks
 
 # Suppress warnings
 suppress_warnings = [
-    'ref.python',  # Suppress ambiguous cross-reference warnings for Python objects
-    'autodoc.duplicate',  # Suppress duplicate object description warnings
-    'sphinx_autodoc_typehints.forward_reference',  # Suppress Pydantic forward reference warnings
+    "ref.python",  # Suppress ambiguous cross-reference warnings for Python objects
+    "autodoc.duplicate",  # Suppress duplicate object description warnings
+    "sphinx_autodoc_typehints.forward_reference",  # Suppress Pydantic forward reference warnings
 ]
 
 # Napoleon settings for NumPy docstring style
@@ -91,101 +92,107 @@ autosummary_generate = True
 
 # Autodoc settings
 autodoc_default_options = {
-    'members': True,
-    'undoc-members': False,
-    'show-inheritance': True,
-    'member-order': 'bysource',
-    'exclude-members': '__init__, __new__, __weakref__, __dict__, __module__, __len__, __getitem__, __setitem__, __delitem__, __iter__, __next__, __repr__, __str__',
+    "members": True,
+    "undoc-members": False,
+    "show-inheritance": True,
+    "member-order": "bysource",
+    "exclude-members": "__init__, __new__, __weakref__, __dict__, __module__, __len__, __getitem__, __setitem__, __delitem__, __iter__, __next__, __repr__, __str__",
 }
-autodoc_typehints = 'none'
-autodoc_typehints_description_target = 'documented'
-autodoc_class_signature = 'separated'
+autodoc_typehints = "none"
+autodoc_typehints_description_target = "documented"
+autodoc_class_signature = "separated"
 
-html_favicon = '_static/gators_logo1.png'
-html_logo = '_static/GATORS_LOGO.png'
-html_css_files = ['gators.css']
+html_favicon = "_static/gators_logo1.png"
+html_logo = "_static/GATORS_LOGO.png"
+html_css_files = ["gators.css"]
+
+
 # Custom filter to exclude Pydantic fields and validators
 def autodoc_skip_member(app, what, name, obj, skip, options):
     """Skip Pydantic fields, validators, and internal members."""
     import inspect
+
     from pydantic import BaseModel
     from pydantic.fields import FieldInfo, ModelPrivateAttr
-    
+
     # Allow _Base* classes (base classes for documentation)
-    if name.startswith('_Base'):
+    if name.startswith("_Base"):
         return None
-    
+
     # Skip other private members
-    if name.startswith('_'):
+    if name.startswith("_"):
         return True
-    
+
     # Skip Pydantic model methods
-    if name.startswith('model_'):
+    if name.startswith("model_"):
         return True
-    
-    # Skip validator methods  
-    if name.startswith(('check_', 'validate_')):
+
+    # Skip validator methods
+    if name.startswith(("check_", "validate_")):
         return True
-    
+
     # Skip if it's an attribute/data descriptor/property
-    if what in ('attribute', 'data', 'property'):
+    if what in ("attribute", "data", "property"):
         return True
-    
+
     # Skip if the object is a FieldInfo (Pydantic field descriptor)
     if isinstance(obj, (FieldInfo, ModelPrivateAttr)):
         return True
-    
+
     # Check if it's a descriptor or data attribute (not a method)
     if not (inspect.ismethod(obj) or inspect.isfunction(obj) or callable(obj)):
         # It's likely a data attribute
         return True
-    
+
     return None
+
 
 def remove_attributes_section(app, what, name, obj, options, lines):
     """Remove Attributes section from docstrings."""
-    if what in ('class', 'exception'):
+    if what in ("class", "exception"):
         i = 0
         while i < len(lines):
-            line = lines[i].strip() if i < len(lines) else ''
-            
+            line = lines[i].strip() if i < len(lines) else ""
+
             # Check if this is an Attributes section header
-            if line == 'Attributes':
+            if line == "Attributes":
                 # Check if next line is the underline (-----)
                 if i + 1 < len(lines):
                     next_line = lines[i + 1].strip()
-                    if next_line and all(c == '-' for c in next_line):
+                    if next_line and all(c == "-" for c in next_line):
                         # Found Attributes section, now find where it ends
                         start = i
                         i += 2  # Skip "Attributes" and "----------"
-                        
+
                         # Continue until we hit another section header (word followed by dashes)
                         # or until the end of the docstring
                         while i < len(lines):
-                            current = lines[i].strip() if i < len(lines) else ''
+                            current = lines[i].strip() if i < len(lines) else ""
                             # Look ahead to see if next line is a dash underline (section header)
                             if current and i + 1 < len(lines):
                                 next_line = lines[i + 1].strip()
-                                if next_line and all(c == '-' for c in next_line):
+                                if next_line and all(c == "-" for c in next_line):
                                     # Found next section, stop here
                                     break
                             i += 1
-                        
+
                         # Remove the Attributes section (from start to current position)
                         del lines[start:i]
                         # Don't increment i since we deleted lines
                         continue
             i += 1
 
+
 def setup(app):
-    app.connect('autodoc-skip-member', autodoc_skip_member)
-    app.connect('autodoc-process-docstring', remove_attributes_section)
+    app.connect("autodoc-skip-member", autodoc_skip_member)
+    app.connect("autodoc-process-docstring", remove_attributes_section)
+
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'pydata_sphinx_theme'
-html_static_path = ['_static']
+html_theme = "pydata_sphinx_theme"
+html_static_path = ["_static"]
 
 html_theme_options = {
     "show_toc_level": 2,
@@ -235,8 +242,8 @@ html_context = {
 # https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html#configuration
 
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'numpy': ('https://numpy.org/doc/stable/', None),
-    'pandas': ('https://pandas.pydata.org/docs/', None),
-    'sklearn': ('https://scikit-learn.org/stable/', None),
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
+    "sklearn": ("https://scikit-learn.org/stable/", None),
 }

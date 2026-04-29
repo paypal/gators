@@ -52,17 +52,16 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
             Transformed DataFrame.
         """
         default_value = 0.0
-        
+
         dtypes = dict(zip(X.columns, X.dtypes))
         boolean_cols = {col for col in self.mapping_ if dtypes.get(col) == pl.Boolean}
-        
+
         boolean_string_mappings = {
-            col: {str(k).lower(): v for k, v in self.mapping_[col].items()}
-            for col in boolean_cols
+            col: {str(k).lower(): v for k, v in self.mapping_[col].items()} for col in boolean_cols
         }
-        
+
         expressions = []
-        
+
         if self.inplace:
             for col in self.mapping_:
                 if col in boolean_cols:
@@ -85,18 +84,16 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
                     )
                 expressions.append(expr)
             return X.with_columns(expressions)
-        
+
         for col in self.mapping_:
             new_col_name = self.column_mapping_[col]
-            
+
             if col in boolean_cols:
                 expr = (
                     pl.col(col)
                     .cast(pl.String)
                     .replace_strict(
-                        boolean_string_mappings[col],
-                        default=default_value,
-                        return_dtype=pl.Float64
+                        boolean_string_mappings[col], default=default_value, return_dtype=pl.Float64
                     )
                     .alias(new_col_name)
                 )
@@ -104,17 +101,15 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
                 expr = (
                     pl.col(col)
                     .replace_strict(
-                        self.mapping_[col],
-                        default=default_value,
-                        return_dtype=pl.Float64
+                        self.mapping_[col], default=default_value, return_dtype=pl.Float64
                     )
                     .alias(new_col_name)
                 )
             expressions.append(expr)
-        
+
         X = X.with_columns(expressions)
-        
+
         if self.drop_columns and self.subset:
             X = X.drop(self.subset)
-        
+
         return X

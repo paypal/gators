@@ -133,9 +133,7 @@ class CharacterStatistics(_BaseTransformer):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in X.schema.items()
-                if dtype == pl.String or dtype == pl.Utf8
+                col for col, dtype in X.schema.items() if dtype == pl.String or dtype == pl.Utf8
             ]
         return self
 
@@ -154,7 +152,7 @@ class CharacterStatistics(_BaseTransformer):
         """
         if self.subset is None:
             return X
-            
+
         new_columns = []
 
         for col in self.subset:

@@ -174,7 +174,7 @@ class GroupByImputer(_BaseTransformer):
 
         # Build transformations for each column
         transformations = []
-        
+
         for col in self.subset:
             temp_col = f"__{col}_group_stat"
 

@@ -230,7 +230,7 @@ class Pipeline(_BaseTransformer):
         for name, transformer in self.steps:
             # Get transformer parameters
             transformer_params = {}
-            
+
             if hasattr(transformer, "get_params"):
                 try:
                     # Try with deep parameter (gators/sklearn convention)
@@ -294,7 +294,7 @@ class Pipeline(_BaseTransformer):
         # Set nested parameters
         for step_name, step_params in nested_params.items():
             transformer = self.named_steps[step_name]
-            
+
             # Try using set_params method
             if hasattr(transformer, "set_params"):
                 try:

@@ -113,21 +113,19 @@ class OneHotEncoder(_BaseTransformer):
             return self
 
         if not self.subset:
-            self.subset = [
-                col for col, dtype in X.schema.items() if dtype in [pl.String]
-            ]
-        
+            self.subset = [col for col, dtype in X.schema.items() if dtype in [pl.String]]
+
         X_filled = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
-        
+
         self.categories = {}
         n = len(X)
         threshold = self.min_count if self.min_count >= 1 else self.min_count * n
-        
+
         for col in self.subset:
             counts = X_filled[col].value_counts(sort=True)
             valid_categories = counts.filter(pl.col("count") >= threshold)
             self.categories[col] = valid_categories[col].to_list()
-        
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -145,21 +143,21 @@ class OneHotEncoder(_BaseTransformer):
         """
         if self.categories is None:
             return X
-        
+
         # Use native Polars to_dummies - single efficient call
         cols_to_encode = list(self.categories.keys())
         dummies = X.select(cols_to_encode).to_dummies(separator="__")
-        
+
         # Build expected columns list (pre-computed for efficiency)
         expected_cols = [
             f"{col}__{cat}" for col, cat_list in self.categories.items() for cat in cat_list
         ]
         expected_cols_set = set(expected_cols)
-        
+
         # Identify existing and missing columns efficiently
         existing_cols = [c for c in expected_cols if c in dummies.columns]
         missing_cols = expected_cols_set - set(dummies.columns)
-        
+
         # Select existing columns and add missing columns in single operation
         if missing_cols:
             # Batch: select existing + create missing columns together
@@ -169,15 +167,15 @@ class OneHotEncoder(_BaseTransformer):
         else:
             # Just select existing columns
             dummies = dummies.select(existing_cols)
-        
+
         # Cast all to Float64 in single operation
         dummies = dummies.select(pl.all().cast(pl.Float64))
-        
+
         # Concatenate with original dataframe
         X = pl.concat([X, dummies], how="horizontal")
 
         # Drop original columns if requested
         if self.drop_columns and self.subset:
             X = X.drop(self.subset)
-        
+
         return X

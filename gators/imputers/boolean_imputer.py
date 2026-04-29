@@ -147,7 +147,7 @@ class BooleanImputer(_BaseTransformer):
         """
         if self.subset is None:
             return X
-        
+
         if self.inplace:
             transformations = [pl.col(col).fill_null(val) for col, val in self._statistics.items()]
             return X.with_columns(transformations)

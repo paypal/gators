@@ -2,7 +2,9 @@ from typing import Dict, List, Optional
 
 import polars as pl
 from pydantic import PrivateAttr
+
 from ..transformer._base_transformer import _BaseTransformer
+
 
 class Replace(_BaseTransformer):
     """

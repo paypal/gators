@@ -94,9 +94,7 @@ class VarianceFilter(_BaseTransformer):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in X.schema.items()
-                if dtype not in [pl.String, pl.Boolean]
+                col for col, dtype in X.schema.items() if dtype not in [pl.String, pl.Boolean]
             ]
 
         self._std_devs = X.select(self.subset).std().row(0, named=True)

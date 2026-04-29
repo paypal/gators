@@ -1,6 +1,7 @@
+from typing import cast
+
 import polars as pl
 from pydantic import Field
-from typing import cast
 
 from ._base_encoder import _BaseEncoder
 

@@ -92,9 +92,7 @@ class ArcSinSquareRootScaler(_BaseTransformer):
         if not self.subset:
             numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
-                col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in numeric_dtypes
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype in numeric_dtypes
             ]
 
         self._column_mapping = {col: f"{col}__arcsin" for col in self.subset}

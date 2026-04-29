@@ -167,7 +167,7 @@ class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
         """
         if self.subset is None:
             return X
-            
+
         if self.inplace:
             # subset is guaranteed to be set during fit
             transformations = [

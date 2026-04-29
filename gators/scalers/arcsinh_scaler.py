@@ -100,9 +100,7 @@ class ArcSinhScaler(_BaseTransformer):
             # Use set for O(1) dtype lookup instead of list O(n) lookup
             numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
-                col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in numeric_dtypes
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype in numeric_dtypes
             ]
 
         # Pre-build column mapping dictionary

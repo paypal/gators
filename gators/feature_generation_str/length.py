@@ -105,7 +105,7 @@ class Length(_BaseTransformer):
         """
         if self.subset is None:
             return X
-            
+
         transformations = [
             pl.col(col).str.len_chars().cast(pl.Int64).alias(self._column_mapping[col])
             for col in self.subset

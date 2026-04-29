@@ -16,7 +16,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
 
     def __init__(self, *args, **kwargs):
         """Initialize transformer with clear error message for positional arguments.
-        
+
         Raises
         ------
         TypeError
@@ -72,7 +72,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
             If an invalid parameter name is provided.
         """
         valid_params = set(self.__class__.model_fields.keys())
-        
+
         for key, value in params.items():
             if key not in valid_params:
                 raise ValueError(
@@ -80,5 +80,5 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
                     f"Valid parameters are: {sorted(valid_params)}"
                 )
             setattr(self, key, value)
-        
+
         return self

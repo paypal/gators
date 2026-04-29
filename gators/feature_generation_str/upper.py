@@ -128,7 +128,7 @@ class Upper(_BaseTransformer):
         """
         if self.subset is None:
             return X
-            
+
         if self.inplace:
             transformations = [
                 pl.col(col).cast(pl.String).str.to_uppercase() for col in self.subset

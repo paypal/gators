@@ -88,9 +88,9 @@ class MinmaxScaler(_BaseTransformer):
         for col in self.subset:
             min_max_exprs.append(pl.col(col).min().alias(f"{col}__min"))
             min_max_exprs.append(pl.col(col).max().alias(f"{col}__max"))
-        
+
         stats = X.select(min_max_exprs).row(0)
-        
+
         self._offset = {}
         self._scale = {}
         for i, col in enumerate(self.subset):
@@ -98,7 +98,7 @@ class MinmaxScaler(_BaseTransformer):
             max_val = stats[i * 2 + 1]
             self._offset[col] = min_val
             self._scale[col] = 1.0 / (max_val - min_val)
-        
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

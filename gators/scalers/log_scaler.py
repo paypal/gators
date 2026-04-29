@@ -131,9 +131,7 @@ class LogScaler(_BaseTransformer):
             # Use set for O(1) dtype lookup instead of list O(n) lookup
             numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
-                col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in numeric_dtypes
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype in numeric_dtypes
             ]
 
         # Create suffix based on base
@@ -171,12 +169,9 @@ class LogScaler(_BaseTransformer):
             log_func = lambda col: pl.col(col).log10()
         else:  # '2'
             log_func = lambda col: pl.col(col).log(base=2)
-        
+
         # Build all transformations using pre-selected function
-        transformations = [
-            log_func(col).alias(new) 
-            for col, new in self._column_mapping.items()
-        ]
+        transformations = [log_func(col).alias(new) for col, new in self._column_mapping.items()]
 
         X = X.with_columns(transformations)
 
