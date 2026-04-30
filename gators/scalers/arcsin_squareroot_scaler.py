@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class ArcSinSquareRootScaler(BaseModel, BaseEstimator, TransformerMixin):
+class ArcSinSquareRootScaler(_BaseTransformer):
     """
     Applies arcsine square root transformation for proportion data.
 
@@ -90,10 +90,9 @@ class ArcSinSquareRootScaler(BaseModel, BaseEstimator, TransformerMixin):
             The fitted transformer instance.
         """
         if not self.subset:
+            numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
-                col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype in numeric_dtypes
             ]
 
         self._column_mapping = {col: f"{col}__arcsin" for col in self.subset}

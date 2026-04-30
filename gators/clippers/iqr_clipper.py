@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Tuple
 
 import polars as pl
-from pydantic import BaseModel, Field, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field
+
+from ._base_clipper import _BaseClipper
 
 
-class IQRClipper(BaseModel, BaseEstimator, TransformerMixin):
+class IQRClipper(_BaseClipper):
     """
     Clip numeric values based on Interquartile Range (IQR).
 
@@ -96,10 +97,7 @@ class IQRClipper(BaseModel, BaseEstimator, TransformerMixin):
 
     n_iqrs: float = Field(default=1.5, gt=0.0)
     subset: Optional[List[str]] = None
-    drop_columns: bool = True
-    inplace: bool = True
-    _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    # _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "IQRClipper":
         """Fit the transformer by computing IQR-based clipping bounds.
@@ -126,10 +124,18 @@ class IQRClipper(BaseModel, BaseEstimator, TransformerMixin):
         if not self.inplace:
             self._column_mapping = {col: f"{col}__clip_iqr" for col in self.subset}
 
-        # Compute Q1, Q3, and IQR for each column
+        # Compute Q1 and Q3 for all columns in a single operation
+        exprs = []
         for col in self.subset:
-            q1 = X[col].quantile(0.25)
-            q3 = X[col].quantile(0.75)
+            exprs.append(pl.col(col).quantile(0.25).alias(f"{col}_q1"))
+            exprs.append(pl.col(col).quantile(0.75).alias(f"{col}_q3"))
+
+        stats = X.select(exprs).to_dicts()[0]
+
+        # Calculate IQR and clipping bounds for each column
+        for col in self.subset:
+            q1 = stats[f"{col}_q1"]
+            q3 = stats[f"{col}_q3"]
             iqr = q3 - q1
 
             # Clipping bounds: [Q1 - n_iqrs*IQR, Q3 + n_iqrs*IQR]
@@ -138,38 +144,3 @@ class IQRClipper(BaseModel, BaseEstimator, TransformerMixin):
             self._clip_bounds[col] = (lower_bound, upper_bound)
 
         return self
-
-    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        """Transform the input DataFrame by clipping values based on IQR.
-
-        Parameters
-        ----------
-        X : pl.DataFrame
-            Input DataFrame with numeric columns.
-
-        Returns
-        -------
-        pl.DataFrame
-            DataFrame with clipped numeric columns.
-        """
-        # Build all transformations at once
-        if self.inplace:
-            transformations = [
-                pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
-                )
-                for col in self.subset
-            ]
-        else:
-            transformations = [
-                pl.col(col)
-                .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
-                .alias(new)
-                for col, new in self._column_mapping.items()
-            ]
-
-        X = X.with_columns(transformations)
-
-        if not self.inplace and self.drop_columns:
-            return X.drop(self.subset)
-        return X

@@ -3,11 +3,12 @@ from typing import List, Optional
 
 import holidays
 import polars as pl
-from pydantic import BaseModel, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class HolidayFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class HolidayFeatures(_BaseTransformer):
     """
     Generates holiday-related features from datetime columns.
 
@@ -133,9 +134,7 @@ class HolidayFeatures(BaseModel, BaseEstimator, TransformerMixin):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype == pl.Datetime or dtype == pl.Date
+                col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
 
         # Determine years to use
@@ -174,6 +173,9 @@ class HolidayFeatures(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame with holiday features.
         """
+        if self.subset is None:
+            return X
+
         new_columns = []
 
         for col in self.subset:
@@ -237,7 +239,7 @@ class HolidayFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
         X = X.with_columns(new_columns)
 
-        if self.drop_columns:
+        if self.drop_columns and self.subset is not None:
             X = X.drop(self.subset)
 
         return X

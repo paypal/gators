@@ -46,7 +46,7 @@ def compute_iv(X, y, regularization=0.01):
     └──────────┴────────────┘
     """
     string_cat_cols = [
-        col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Categorical]
+        col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Categorical, pl.Enum]
     ]
 
     # Return empty DataFrame if no String/Categorical columns

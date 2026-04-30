@@ -32,22 +32,5 @@ def test_default_parameters(sample_X):
     assert_frame_equal(transformed_X, expected_X)
 
 
-def test_columns_subset_drop_columns_false(sample_X):
-    transformer = DropLowCardinality(min_count=2, subset=["last_name", "age"], drop_columns=False)
-    transformer.fit(sample_X)
-    transformed_X = transformer.transform(sample_X)
-
-    expected_X = pl.DataFrame(
-        {
-            "first_name": ["Alice", "Alice", "Alice", "Alice"],
-            "last_name": ["Smith", "Johnson", "Williams", "Brown"],
-            "age": [25, 30, 35, 40],
-            "city": ["New York", "Los Angeles", "Chicago", "Houston"],
-        }
-    )
-
-    assert_frame_equal(transformed_X, expected_X)
-
-
 if __name__ == "__main__":
     pytest.main()

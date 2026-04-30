@@ -1,0 +1,28 @@
+gators package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   gators.data_cleaning
+   gators.discretizers
+   gators.clippers
+   gators.encoders
+   gators.feature_generation
+   gators.feature_generation_dt
+   gators.feature_generation_str
+   gators.feature_selection
+   gators.imputers
+   gators.pipeline
+   gators.scalers
+
+Module contents
+---------------
+
+.. automodule:: gators
+   :members:
+   :show-inheritance:
+   :undoc-members:

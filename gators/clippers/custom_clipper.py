@@ -1,14 +1,13 @@
-"""Custom clipper for capping values with user-defined bounds."""
-
 from typing import Dict, Optional
 
 import polars as pl
 import polars.selectors as cs
-from pydantic import BaseModel, Field, PrivateAttr, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field, field_validator
+
+from ._base_clipper import _BaseClipper
 
 
-class CustomClipper(BaseModel, BaseEstimator, TransformerMixin):
+class CustomClipper(_BaseClipper):
     """Clip column values using custom lower and upper bounds.
 
     This transformer allows you to specify custom clipping bounds for each column
@@ -58,30 +57,30 @@ class CustomClipper(BaseModel, BaseEstimator, TransformerMixin):
     ... )
     >>> clipper.fit_transform(X)
     shape: (3, 2)
-    ┌─────┬─────────┐
-    │ age ┆ salary  │
-    │ --- ┆ ---     │
-    │ f64 ┆ f64     │
-    ╞═════╪═════════╡
-    │ 0.0 ┆ 0.0     │
-    │ 25.0┆ 50000.0 │
+    ┌─────┬──────────┐
+    │ age ┆ salary   │
+    │ --- ┆ ---      │
+    │ f64 ┆ f64      │
+    ╞═════╪══════════╡
+    │ 0.0 ┆ 0.0      │
+    │ 25.0┆ 50000.0  │
     │ 120.0┆1000000.0│
-    └─────┴─────────┘
+    └─────┴──────────┘
 
     Clip with only lower bounds:
 
     >>> clipper = CustomClipper(lower_bounds={"age": 0})
     >>> clipper.fit_transform(X)
     shape: (3, 2)
-    ┌─────┬─────────┐
-    │ age ┆ salary  │
-    │ --- ┆ ---     │
-    │ f64 ┆ f64     │
-    ╞═════╪═════════╡
-    │ 0.0 ┆ -1000.0 │
-    │ 25.0┆ 50000.0 │
+    ┌─────┬──────────┐
+    │ age ┆ salary   │
+    │ --- ┆ ---      │
+    │ f64 ┆ f64      │
+    ╞═════╪══════════╡
+    │ 0.0 ┆ -1000.0  │
+    │ 25.0┆ 50000.0  │
     │ 150.0┆2000000.0│
-    └─────┴─────────┘
+    └─────┴──────────┘
 
     Create new columns instead of modifying in place:
 
@@ -119,10 +118,6 @@ class CustomClipper(BaseModel, BaseEstimator, TransformerMixin):
 
     lower_bounds: Optional[Dict[str, float]] = Field(default=None)
     upper_bounds: Optional[Dict[str, float]] = Field(default=None)
-    inplace: bool = Field(default=True)
-    drop_columns: bool = Field(default=True)
-    _columns: list = PrivateAttr(default_factory=list)
-    _bounds_map: Dict[str, tuple] = PrivateAttr(default_factory=dict)
 
     @field_validator("lower_bounds", "upper_bounds")
     @classmethod
@@ -163,23 +158,26 @@ class CustomClipper(BaseModel, BaseEstimator, TransformerMixin):
         # Get all columns that have bounds specified
         lower_cols = set(self.lower_bounds.keys()) if self.lower_bounds else set()
         upper_cols = set(self.upper_bounds.keys()) if self.upper_bounds else set()
-        all_bound_cols = lower_cols | upper_cols
+        subset = lower_cols | upper_cols
+
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__clip_custom" for col in subset}
 
         # Check that all specified columns exist in X
-        missing_cols = all_bound_cols - set(X.columns)
+        missing_cols = subset - set(X.columns)
         if missing_cols:
             raise ValueError(f"Columns specified in bounds not found in DataFrame: {missing_cols}")
 
         # Filter to only numeric columns
         numeric_cols = set(X.select(cs.numeric()).columns)
-        self._columns = sorted(all_bound_cols & numeric_cols)
+        self._columns = sorted(subset & numeric_cols)
 
         # Create bounds map: column -> (lower_bound, upper_bound)
-        self._bounds_map = {}
+        self._clip_bounds = {}
         for col in self._columns:
             lower = self.lower_bounds.get(col) if self.lower_bounds else None
             upper = self.upper_bounds.get(col) if self.upper_bounds else None
-            self._bounds_map[col] = (lower, upper)
+            self._clip_bounds[col] = (lower, upper)
 
         return self
 
@@ -196,37 +194,20 @@ class CustomClipper(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             DataFrame with clipped values.
         """
-        X_transformed = X.clone()
-
+        clipped_cols = []
         for col in self._columns:
-            lower, upper = self._bounds_map[col]
-            clipped_col = X_transformed[col].clip(lower, upper)
+            lower, upper = self._clip_bounds[col]
+            clipped_col = X[col].clip(lower, upper)
 
             if self.inplace:
-                X_transformed = X_transformed.with_columns(clipped_col.alias(col))
+                clipped_cols.append(clipped_col.alias(col))
             else:
-                new_col_name = f"{col}__clip_custom"
-                X_transformed = X_transformed.with_columns(clipped_col.alias(new_col_name))
+                clipped_cols.append(clipped_col.alias(self._column_mapping[col]))
 
-        # Drop original columns if not inplace and drop_columns is True
+        if clipped_cols:
+            X = X.with_columns(clipped_cols)
+
         if not self.inplace and self.drop_columns:
-            X_transformed = X_transformed.drop(self._columns)
+            X = X.drop(self._columns)
 
-        return X_transformed
-
-    def fit_transform(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> pl.DataFrame:
-        """Fit the clipper and transform the data.
-
-        Parameters
-        ----------
-        X : pl.DataFrame
-            Input DataFrame.
-        y : pl.Series, optional
-            Target values (ignored, present for sklearn compatibility).
-
-        Returns
-        -------
-        pl.DataFrame
-            DataFrame with clipped values.
-        """
-        return self.fit(X, y).transform(X)
+        return X

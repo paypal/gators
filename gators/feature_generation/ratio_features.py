@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class RatioFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class RatioFeatures(_BaseTransformer):
     """
     Generates ratio features by dividing numerator columns by denominator columns.
 

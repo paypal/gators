@@ -2,13 +2,12 @@ from abc import ABCMeta
 from typing import Dict, List, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, ConfigDict, Field, PositiveFloat, PositiveInt
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import ConfigDict, Field, PositiveFloat, PositiveInt
 
-__all__ = ["_BaseEncoder"]
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta):
+class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
     """
     Base encoder class for encoding categorical columns.
 
@@ -37,7 +36,7 @@ class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta
     drop_columns: bool = True
     inplace: bool = True
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    model_config = ConfigDict(arbitrary_types_allowed=True, extra="forbid")
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting specified components.
@@ -53,23 +52,31 @@ class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta
             Transformed DataFrame.
         """
         default_value = 0.0
+
+        dtypes = dict(zip(X.columns, X.dtypes))
+        boolean_cols = {col for col in self.mapping_ if dtypes.get(col) == pl.Boolean}
+
+        boolean_string_mappings = {
+            col: {str(k).lower(): v for k, v in self.mapping_[col].items()} for col in boolean_cols
+        }
+
+        expressions = []
+
         if self.inplace:
-            expressions = []
             for col in self.mapping_:
-                # Cast boolean columns to string for replacement
-                if X[col].dtype == pl.Boolean:
-                    # Convert boolean keys to lowercase string format used by Polars
-                    string_mapping = {str(k).lower(): v for k, v in self.mapping_[col].items()}
+                if col in boolean_cols:
+                    # Boolean column: cast to string then replace
                     expr = (
                         pl.col(col)
                         .cast(pl.String)
                         .replace_strict(
-                            string_mapping,
+                            boolean_string_mappings[col],
                             default=default_value,
                             return_dtype=pl.Float64,
                         )
                     )
                 else:
+                    # Non-boolean: direct replacement
                     expr = pl.col(col).replace_strict(
                         self.mapping_[col],
                         default=default_value,
@@ -78,26 +85,31 @@ class _BaseEncoder(BaseModel, BaseEstimator, TransformerMixin, metaclass=ABCMeta
                 expressions.append(expr)
             return X.with_columns(expressions)
 
-        expressions = []
-        for col, mapping in self.mapping_.items():
-            # Cast boolean columns to string for replacement, then to float
-            if X[col].dtype == pl.Boolean:
-                # Convert boolean keys to lowercase string format used by Polars
-                string_mapping = {str(k).lower(): v for k, v in mapping.items()}
+        for col in self.mapping_:
+            new_col_name = self.column_mapping_[col]
+
+            if col in boolean_cols:
                 expr = (
                     pl.col(col)
                     .cast(pl.String)
-                    .replace_strict(string_mapping, default=default_value, return_dtype=pl.Float64)
-                    .alias(self.column_mapping_[col])
+                    .replace_strict(
+                        boolean_string_mappings[col], default=default_value, return_dtype=pl.Float64
+                    )
+                    .alias(new_col_name)
                 )
             else:
                 expr = (
                     pl.col(col)
-                    .replace_strict(mapping, default=default_value, return_dtype=pl.Float64)
-                    .alias(self.column_mapping_[col])
+                    .replace_strict(
+                        self.mapping_[col], default=default_value, return_dtype=pl.Float64
+                    )
+                    .alias(new_col_name)
                 )
             expressions.append(expr)
+
         X = X.with_columns(expressions)
+
         if self.drop_columns and self.subset:
             X = X.drop(self.subset)
+
         return X

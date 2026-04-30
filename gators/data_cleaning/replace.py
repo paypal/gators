@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Replace(BaseModel, BaseEstimator, TransformerMixin):
+class Replace(_BaseTransformer):
     """
     Replaces values in specified columns.
 
@@ -144,13 +145,20 @@ class Replace(BaseModel, BaseEstimator, TransformerMixin):
             Transformed DataFrame.
         """
         if self.inplace:
-            transformations = [pl.col(col).replace(self.to_replace[col]) for col in self._columns]
+            transformations = []
+            for col in self._columns:
+                expr = pl.col(col)
+                for old_val, new_val in self.to_replace[col].items():
+                    expr = expr.str.replace_all(old_val, new_val)
+                transformations.append(expr)
             return X.with_columns(transformations)
 
-        transformations = [
-            pl.col(col).replace(self.to_replace[col]).alias(self._column_mapping[col])
-            for col in self._columns
-        ]
+        transformations = []
+        for col in self._columns:
+            expr = pl.col(col)
+            for old_val, new_val in self.to_replace[col].items():
+                expr = expr.str.replace_all(old_val, new_val)
+            transformations.append(expr.alias(self._column_mapping[col]))
         X = X.with_columns(transformations)
         if self.drop_columns:
             return X.drop(self._columns)

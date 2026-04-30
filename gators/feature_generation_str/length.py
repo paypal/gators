@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Length(BaseModel, BaseEstimator, TransformerMixin):
+class Length(_BaseTransformer):
     """
     Generates features based on the length of the variables.
 
@@ -64,7 +64,7 @@ class Length(BaseModel, BaseEstimator, TransformerMixin):
     """
 
     subset: Optional[List[str]] = None
-    _column_mapping = Dict[str, str]
+    _column_mapping: Dict[str, str] = {}
 
     def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Length":
         """Fit the transformer by identifying categorical columns and generating column mappings.
@@ -83,9 +83,7 @@ class Length(BaseModel, BaseEstimator, TransformerMixin):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         self._column_mapping = {col: f"{col}__length" for col in self.subset}
         return self
@@ -103,6 +101,9 @@ class Length(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame.
         """
+        if self.subset is None:
+            return X
+
         transformations = [
             pl.col(col).str.len_chars().cast(pl.Int64).alias(self._column_mapping[col])
             for col in self.subset

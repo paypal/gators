@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class BoxCox(BaseModel, BaseEstimator, TransformerMixin):
+class BoxCox(_BaseTransformer):
     """
     Applies the Box-Cox power transformation to numeric features.
 
@@ -99,14 +100,17 @@ class BoxCox(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame with power-transformed columns.
         """
-        for col, lmbda in self.lambdas.items():
-            new = self._column_mapping[col]
-            if lmbda == 0:
-                # log(x)
-                X = X.with_columns(pl.col(col).log().alias(new))
-            else:
-                # (x^lambda - 1) / lambda
-                X = X.with_columns(((pl.col(col) ** lmbda - 1) / lmbda).alias(new))
+        # Build all transformation expressions
+        exprs = [
+            (
+                pl.col(col).log().alias(self._column_mapping[col])
+                if lmbda == 0
+                else ((pl.col(col) ** lmbda - 1) / lmbda).alias(self._column_mapping[col])
+            )
+            for col, lmbda in self.lambdas.items()
+        ]
+
+        X = X.with_columns(exprs)
 
         if self.drop_columns:
             return X.drop(self._columns)

@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class YeoJonhson(BaseModel, BaseEstimator, TransformerMixin):
+class YeoJohnson(_BaseTransformer):
     """
     Applies the Yeo-Johnson power transformation to numeric features.
 
@@ -32,11 +33,11 @@ class YeoJonhson(BaseModel, BaseEstimator, TransformerMixin):
 
     Examples
     --------
-    Create an instance of the YeoJonhson class:
+    Create an instance of the YeoJohnson class:
 
     >>> import polars as pl
-    >>> from gators.scalers import YeoJonhson
-    >>> transformer = YeoJonhson(lambdas={"sales": 0.5, "profit": 0.0})
+    >>> from gators.scalers import YeoJohnson
+    >>> transformer = YeoJohnson(lambdas={"sales": 0.5, "profit": 0.0})
 
     Fit the transformer:
 
@@ -65,7 +66,7 @@ class YeoJonhson(BaseModel, BaseEstimator, TransformerMixin):
     _columns: List[str] = PrivateAttr()
     _column_mapping: Dict[str, str] = PrivateAttr()
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "YeoJonhson":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "YeoJohnson":
         """Fit the transformer by storing column names.
 
         Parameters
@@ -77,7 +78,7 @@ class YeoJonhson(BaseModel, BaseEstimator, TransformerMixin):
 
         Returns
         -------
-        YeoJonhson
+        YeoJohnson
             The fitted transformer instance.
         """
         self._columns = list(self.lambdas.keys())
@@ -97,29 +98,34 @@ class YeoJonhson(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame with power-transformed columns.
         """
+        # Build all transformation expressions
+        exprs = []
         for col, lmbda in self.lambdas.items():
             new = self._column_mapping[col]
             if lmbda == 0:
-                X = X.with_columns(
-                    pl.when(pl.col(col) < 0)
+                expr = (
+                    pl.when(pl.col(col) >= 0)
                     .then(pl.col(col).log1p())
                     .otherwise(-((-pl.col(col) + 1) ** (2 - lmbda) - 1) / (2 - lmbda))
                     .alias(new)
                 )
             elif lmbda == 2:
-                X = X.with_columns(
-                    pl.when(pl.col(col) < 0)
+                expr = (
+                    pl.when(pl.col(col) >= 0)
                     .then(((pl.col(col) + 1) ** lmbda - 1) / lmbda)
-                    .otherwise(-pl.col(col).log1p())
+                    .otherwise(-(-pl.col(col)).log1p())
                     .alias(new)
                 )
             else:
-                X = X.with_columns(
-                    pl.when(pl.col(col) < 0)
+                expr = (
+                    pl.when(pl.col(col) >= 0)
                     .then(((pl.col(col) + 1) ** lmbda - 1) / lmbda)
                     .otherwise(-((-pl.col(col) + 1) ** (2 - lmbda) - 1) / (2 - lmbda))
                     .alias(new)
                 )
+            exprs.append(expr)
+
+        X = X.with_columns(exprs)
 
         if self.drop_columns:
             return X.drop(self._columns)

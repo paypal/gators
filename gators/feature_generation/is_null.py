@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class IsNull(BaseModel, BaseEstimator, TransformerMixin):
+class IsNull(_BaseTransformer):
     """
     Creates boolean features indicating whether values are null for specified columns.
 
@@ -79,6 +79,8 @@ class IsNull(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame with additional is_null columns.
         """
+        if self.subset is None:
+            return X
         new_columns = [
             pl.col(col).is_null().alias(self._column_mapping[col]) for col in self.subset
         ]

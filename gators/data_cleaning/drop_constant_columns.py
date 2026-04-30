@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DropConstantColumns(BaseModel, BaseEstimator, TransformerMixin):
+class DropConstantColumns(_BaseTransformer):
     """
     Removes columns that have only a single unique value (constant columns).
 

@@ -1,8 +1,9 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 OPERATION_FUNCTIONS = {
     "sum": lambda cols: pl.sum_horizontal(*cols),
@@ -23,7 +24,7 @@ OPERATION_FUNCTIONS = {
 }
 
 
-class MathFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class MathFeatures(_BaseTransformer):
     """
     Generates new features by applying mathematical operations to groups of columns.
 
@@ -49,6 +50,7 @@ class MathFeatures(BaseModel, BaseEstimator, TransformerMixin):
         - 'count_null': Count of null values
         - 'count_zero': Count of zero values
         - 'count_nonzero': Count of non-zero values
+
         Note: For division operations, consider using RatioFeatures instead, which provides safer
         division with automatic handling of division by zero and null values.
     drop_columns : bool, optional

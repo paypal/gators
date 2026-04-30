@@ -1,8 +1,9 @@
 from typing import Dict, List, Literal, Optional
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 EARTH_RADIUS = {
     "km": 6371.0,
@@ -12,7 +13,7 @@ EARTH_RADIUS = {
 }
 
 
-class DistanceFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class DistanceFeatures(_BaseTransformer):
     """
     Calculates distances between geographic coordinate pairs.
 

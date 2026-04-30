@@ -1,7 +1,7 @@
-from typing import Optional, Union
+from typing import cast
 
 import polars as pl
-from pydantic import Field, PositiveFloat
+from pydantic import Field
 
 from ._base_encoder import _BaseEncoder
 
@@ -115,11 +115,11 @@ class LeaveOneOutEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
 
         # Calculate global mean
-        self.global_mean_ = y.mean()
+        self.global_mean_ = cast(float, y.mean())
 
         min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
 

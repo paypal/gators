@@ -6,7 +6,7 @@ from .group_scaling_features import GroupScalingFeatures
 from .group_statistics_features import GroupStatisticsFeatures
 from .is_null import IsNull
 from .math_features import MathFeatures
-from .plan_rotation_features import PlanRotationFeatures
+from .plane_rotation_features import PlaneRotationFeatures
 from .polynomial_features import PolynomialFeatures
 from .ratio_features import RatioFeatures
 from .row_statistics_features import RowStatisticsFeatures
@@ -16,7 +16,7 @@ from .scalar_math_features import ScalarMathFeatures
 __all__ = [
     "IsNull",
     "PolynomialFeatures",
-    "PlanRotationFeatures",
+    "PlaneRotationFeatures",
     "MathFeatures",
     "RatioFeatures",
     "GroupScalingFeatures",

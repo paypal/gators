@@ -2,11 +2,12 @@ from itertools import combinations_with_replacement
 from typing import List, Optional
 
 import polars as pl
-from pydantic import BaseModel, conint
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class PolynomialFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class PolynomialFeatures(_BaseTransformer):
     """
     Generates polynomial and interaction features.
 
@@ -68,7 +69,7 @@ class PolynomialFeatures(BaseModel, BaseEstimator, TransformerMixin):
     """
 
     subset: Optional[List[str]] = None
-    degree: conint(gt=1) = 2
+    degree: int = Field(default=2, gt=1)
     interaction_only: bool = False
     include_bias: bool = False
 
@@ -112,6 +113,9 @@ class PolynomialFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
         if self.include_bias:
             transformations.append(pl.lit(1).alias("bias"))
+
+        if self.subset is None:
+            return X
 
         for i in range(2, self.degree + 1):
             for combination in combinations_with_replacement(self.subset, i):

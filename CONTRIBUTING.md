@@ -165,20 +165,6 @@ pytest gators/encoders/tests/test_onehot_encoder.py
 pytest gators/encoders/tests/test_onehot_encoder.py::test_basic_encoding
 ```
 
-### Using Tox
-
-Test across multiple Python versions:
-
-```bash
-# Run all environments
-tox
-
-# Run specific Python version
-tox -e py314
-
-# Run in parallel
-tox -p auto
-```
 
 ### Writing Tests
 

@@ -1,11 +1,12 @@
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, cast
 
 import polars as pl
-from pydantic import BaseModel, ConfigDict, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import ConfigDict, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class RuleFeatures(_BaseTransformer):
     """
     Creates multiple boolean features, each from a group of conditions combined with logical operators.
 
@@ -92,7 +93,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
     **Example 1: Create two risk indicators in one pass**
 
-    >>> multi_risk_transformer = RuleFeatures(
+    >>> multi_risk_BaseTransformer = RuleFeatures(
     ...     rules=[
     ...         # Rule 1: Activity spike (24h > 0 AND 7d == 24h)
     ...         [
@@ -108,7 +109,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
     ...     new_column_names=['is_activity_spike', 'is_high_amount'],
     ...     drop_conditions=True
     ... )
-    >>> result = multi_risk_transformer.fit_transform(X)
+    >>> result = multi_risk_BaseTransformer.fit_transform(X)
     >>> result.select(['velocity_24h', 'velocity_7d', 'amount',
     ...                'is_activity_spike', 'is_high_amount'])
     shape: (5, 5)
@@ -126,7 +127,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
     **Example 2: OR logic within a rule (high amount OR high velocity)**
 
-    >>> or_transformer = RuleFeatures(
+    >>> or_BaseTransformer = RuleFeatures(
     ...     rules=[
     ...         [
     ...             {'column': 'amount', 'op': '>', 'value': 1000},
@@ -137,7 +138,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
     ...     new_column_names=['is_high_risk'],
     ...     drop_conditions=True
     ... )
-    >>> result = or_transformer.fit_transform(X)
+    >>> result = or_BaseTransformer.fit_transform(X)
     >>> result.select(['amount', 'velocity_24h', 'is_high_risk'])
     shape: (5, 3)
     ┌────────┬──────────────┬──────────────┐
@@ -154,7 +155,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
     **Example 3: Multiple rules with different logic patterns**
 
-    >>> complex_transformer = RuleFeatures(
+    >>> complex_BaseTransformer = RuleFeatures(
     ...     rules=[
     ...         # New user AND high amount AND high velocity
     ...         [
@@ -170,7 +171,7 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
     ...     rule_logic='and',
     ...     new_column_names=['is_suspicious_new_user', 'is_extreme_velocity']
     ... )
-    >>> result = complex_transformer.fit_transform(X)
+    >>> result = complex_BaseTransformer.fit_transform(X)
     >>> result.select(['is_new_user', 'amount', 'velocity_24h',
     ...                'is_suspicious_new_user', 'is_extreme_velocity'])
     shape: (5, 5)
@@ -297,55 +298,84 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame with new boolean features (one per rule).
         """
-        all_condition_cols = []
-
-        # Process each rule group
-        for rule_idx, (rule, output_col_name) in enumerate(zip(self.rules, self.new_column_names)):
-            condition_cols = []
-
-            # Create intermediate boolean column for each condition in this rule
-            for cond_idx, cond in enumerate(rule):
-                col_name = f"_rule_{rule_idx}_cond_{cond_idx}_{output_col_name}"
-                column = cond["column"]
-                op = cond["op"]
-
-                # Build condition expression
-                if "other_column" in cond:
-                    # Column to column comparison
-                    other_col = cond["other_column"]
-                    expr = self._build_column_comparison(column, op, other_col)
-                else:
-                    # Column to scalar comparison
-                    value = cond["value"]
-                    expr = self._build_scalar_comparison(column, op, value)
-
-                X = X.with_columns(expr.alias(col_name))
-                condition_cols.append(col_name)
-                all_condition_cols.append(col_name)
-
-            # Combine conditions within this rule using rule_logic
-            if len(condition_cols) == 1:
-                # Single condition, no combining needed
-                combined_expr = pl.col(condition_cols[0])
-            elif self.rule_logic == "and":
-                # AND: all conditions must be true
-                combined_expr = pl.col(condition_cols[0])
-                for col in condition_cols[1:]:
-                    combined_expr = combined_expr & pl.col(col)
-            else:  # 'or'
-                # OR: at least one condition must be true
-                combined_expr = pl.col(condition_cols[0])
-                for col in condition_cols[1:]:
-                    combined_expr = combined_expr | pl.col(col)
-
-            # Create the output column for this rule
-            X = X.with_columns(combined_expr.alias(output_col_name))
-
-        # Optionally drop all intermediate condition columns
         if self.drop_conditions:
-            X = X.drop(all_condition_cols)
+            # Optimize: build combined expressions directly, skipping intermediate columns
+            output_exprs = []
 
-        return X
+            for rule, output_col_name in zip(self.rules, self.new_column_names):
+                # Build condition expressions
+                condition_exprs = []
+                for cond in rule:
+                    column = cond["column"]
+                    op = cond["op"]
+
+                    if "other_column" in cond:
+                        expr = self._build_column_comparison(column, op, cond["other_column"])
+                    else:
+                        expr = self._build_scalar_comparison(column, op, cond["value"])
+
+                    condition_exprs.append(expr)
+
+                # Combine conditions using rule_logic
+                if len(condition_exprs) == 1:
+                    combined_expr = condition_exprs[0]
+                elif self.rule_logic == "and":
+                    combined_expr = condition_exprs[0]
+                    for expr in condition_exprs[1:]:
+                        combined_expr = combined_expr & expr
+                else:  # 'or'
+                    combined_expr = condition_exprs[0]
+                    for expr in condition_exprs[1:]:
+                        combined_expr = combined_expr | expr
+
+                output_exprs.append(combined_expr.alias(output_col_name))
+
+            # Apply all output columns in one operation
+            return X.with_columns(output_exprs)
+
+        else:
+            # Keep intermediate columns: batch all expressions
+            all_exprs = []
+            all_condition_cols = []
+            output_exprs = []
+
+            for rule_idx, (rule, output_col_name) in enumerate(
+                zip(self.rules, self.new_column_names)
+            ):
+                condition_cols = []
+
+                # Build intermediate column expressions
+                for cond_idx, cond in enumerate(rule):
+                    col_name = f"_rule_{rule_idx}_cond_{cond_idx}_{output_col_name}"
+                    column = cond["column"]
+                    op = cond["op"]
+
+                    if "other_column" in cond:
+                        expr = self._build_column_comparison(column, op, cond["other_column"])
+                    else:
+                        expr = self._build_scalar_comparison(column, op, cond["value"])
+
+                    all_exprs.append(expr.alias(col_name))
+                    condition_cols.append(col_name)
+                    all_condition_cols.append(col_name)
+
+                # Build combined expression
+                if len(condition_cols) == 1:
+                    combined_expr = pl.col(condition_cols[0])
+                elif self.rule_logic == "and":
+                    combined_expr = pl.col(condition_cols[0])
+                    for col in condition_cols[1:]:
+                        combined_expr = combined_expr & pl.col(col)
+                else:  # 'or'
+                    combined_expr = pl.col(condition_cols[0])
+                    for col in condition_cols[1:]:
+                        combined_expr = combined_expr | pl.col(col)
+
+                output_exprs.append(combined_expr.alias(output_col_name))
+
+            # Apply all expressions in two batches: intermediates then outputs
+            X = X.with_columns(all_exprs)
+            return X.with_columns(output_exprs)
 
     @staticmethod
     def _build_column_comparison(column: str, op: str, other_column: str) -> pl.Expr:
@@ -369,16 +399,16 @@ class RuleFeatures(BaseModel, BaseEstimator, TransformerMixin):
     def _build_scalar_comparison(column: str, op: str, value: Any) -> pl.Expr:
         """Build a Polars expression for column-to-scalar comparison."""
         if op == ">":
-            return pl.col(column) > value
+            return cast(pl.Expr, pl.col(column) > value)
         elif op == "<":
-            return pl.col(column) < value
+            return cast(pl.Expr, pl.col(column) < value)
         elif op == ">=":
-            return pl.col(column) >= value
+            return cast(pl.Expr, pl.col(column) >= value)
         elif op == "<=":
-            return pl.col(column) <= value
+            return cast(pl.Expr, pl.col(column) <= value)
         elif op == "==":
-            return pl.col(column) == value
+            return cast(pl.Expr, pl.col(column) == value)
         elif op == "!=":
-            return pl.col(column) != value
+            return cast(pl.Expr, pl.col(column) != value)
         else:
             raise ValueError(f"Unsupported operator: {op}")

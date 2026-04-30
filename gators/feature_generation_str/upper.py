@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class Upper(BaseModel, BaseEstimator, TransformerMixin):
+class Upper(_BaseTransformer):
     """
     Converts string and Boolean columns to uppercase.
 
@@ -105,9 +105,7 @@ class Upper(BaseModel, BaseEstimator, TransformerMixin):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         if not self.inplace:
             self._column_mapping = {col: f"{col}__upper" for col in self.subset}
@@ -126,6 +124,9 @@ class Upper(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame.
         """
+        if self.subset is None:
+            return X
+
         if self.inplace:
             transformations = [
                 pl.col(col).cast(pl.String).str.to_uppercase() for col in self.subset

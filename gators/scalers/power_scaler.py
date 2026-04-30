@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class PowerScaler(BaseModel, BaseEstimator, TransformerMixin):
+class PowerScaler(_BaseTransformer):
     """
     Scales numeric features using power transformation X^power.
 
@@ -95,10 +96,10 @@ class PowerScaler(BaseModel, BaseEstimator, TransformerMixin):
             The fitted transformer instance.
         """
         if not self.subset:
+            # Use set for O(1) dtype lookup instead of list O(n) lookup
+            numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
-                col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype in numeric_dtypes
             ]
 
         # Format power value for column naming

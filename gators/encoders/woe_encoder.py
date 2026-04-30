@@ -164,7 +164,7 @@ class WOEEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         X = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
         stats = compute_woe_iv(

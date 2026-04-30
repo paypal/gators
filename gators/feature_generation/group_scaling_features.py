@@ -1,13 +1,14 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 SCALING_FUNCTIONS = ["mean", "median", "zscore", "minmax"]
 
 
-class GroupScalingFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class GroupScalingFeatures(_BaseTransformer):
     """
     Generates group-based scaling features for numerical columns.
 

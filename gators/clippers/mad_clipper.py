@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Tuple
 
 import polars as pl
-from pydantic import BaseModel, Field, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field
+
+from ._base_clipper import _BaseClipper
 
 
-class MADClipper(BaseModel, BaseEstimator, TransformerMixin):
+class MADClipper(_BaseClipper):
     """
     Clip numeric values based on Median Absolute Deviation (MAD).
 
@@ -96,10 +97,7 @@ class MADClipper(BaseModel, BaseEstimator, TransformerMixin):
 
     n_mads: float = Field(default=3.0, gt=0.0)
     subset: Optional[List[str]] = None
-    drop_columns: bool = True
-    inplace: bool = True
-    _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    # _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "MADClipper":
         """Fit the transformer by computing MAD-based clipping bounds.
@@ -126,11 +124,23 @@ class MADClipper(BaseModel, BaseEstimator, TransformerMixin):
         if not self.inplace:
             self._column_mapping = {col: f"{col}__clip_mad" for col in self.subset}
 
-        # Compute median and MAD for each column
+        # Compute all medians in a single operation
+        median_exprs = [pl.col(col).median().alias(f"{col}_median") for col in self.subset]
+        medians = X.select(median_exprs).to_dicts()[0]
+
+        # Compute all MADs in a single operation
+        mad_exprs = []
         for col in self.subset:
-            median = X[col].median()
+            median = medians[f"{col}_median"]
             # MAD = median(|X - median(X)|)
-            mad = (X[col] - median).abs().median()
+            mad_exprs.append(((pl.col(col) - median).abs().median()).alias(f"{col}_mad"))
+
+        mads = X.select(mad_exprs).to_dicts()[0]
+
+        # Calculate clipping bounds for each column
+        for col in self.subset:
+            median = medians[f"{col}_median"]
+            mad = mads[f"{col}_mad"]
 
             # Clipping bounds: median ± n_mads * MAD
             lower_bound = median - self.n_mads * mad
@@ -138,38 +148,3 @@ class MADClipper(BaseModel, BaseEstimator, TransformerMixin):
             self._clip_bounds[col] = (lower_bound, upper_bound)
 
         return self
-
-    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        """Transform the input DataFrame by clipping values based on MAD.
-
-        Parameters
-        ----------
-        X : pl.DataFrame
-            Input DataFrame with numeric columns.
-
-        Returns
-        -------
-        pl.DataFrame
-            DataFrame with clipped numeric columns.
-        """
-        # Build all transformations at once
-        if self.inplace:
-            transformations = [
-                pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
-                )
-                for col in self.subset
-            ]
-        else:
-            transformations = [
-                pl.col(col)
-                .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
-                .alias(new)
-                for col, new in self._column_mapping.items()
-            ]
-
-        X = X.with_columns(transformations)
-
-        if not self.inplace and self.drop_columns:
-            return X.drop(self.subset)
-        return X

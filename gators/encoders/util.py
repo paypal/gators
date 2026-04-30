@@ -22,9 +22,7 @@ def determine_encoding_strategy(train: pl.DataFrame, max_count_woe: int = 100) -
         - onehot_columns: List of column names for one-hot encoding (high cardinality)
     """
     string_columns = [
-        col
-        for col, dtype in zip(train.columns, train.dtypes)
-        if dtype in [pl.Categorical, pl.String]
+        col for col, dtype in zip(train.columns, train.dtypes) if dtype in [pl.Enum, pl.String]
     ]
 
     column_counts = {col: train[col].n_unique() for col in string_columns}

@@ -4,65 +4,69 @@ dynamic = ["version"]
 description = "Machine learning library for streamlined model building and fast real-time preprocessing"
 authors = [
     {name = "Charles Poli", email = "cpoli@paypal.com"},
-    {name = "Shreekanthadatta Eligar", email = "seligar@paypal.com"}
+    {name = "shreekanthadatta", email = "seligar@paypal.com"}
 ]
 maintainers = [
     {name = "Charles Poli", email = "cpoli@paypal.com"},
-    {name = "Shreekanthadatta Eligar", email = "seligar@paypal.com"}
+    {name = "shreekanthadatta", email = "seligar@paypal.com"}
 ]
 readme = "README.md"
 license = {text = "Apache-2.0"}
 requires-python = ">=3.10"
-keywords = ["machine-learning", "preprocessing", "feature-engineering", "data-science"]
+keywords = ["machine-learning", "preprocessing", "feature-engineering", "data-science", "polars", "pipeline", "transformers", "data-pipeline", "feature-selection", "sklearn", "feature_engine"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Framework :: Jupyter",
+    "Typing :: Typed",
 ]
 
 dependencies = [
     "pandas>=2.0.0",
-    "polars>=0.19.0",
+    "polars>=1.20.0",
     "pydantic>=2.12.0",
     "pyarrow>=20.0.0",
     "typing-extensions>=4.15.0",
     "scikit-learn>=1.3.0",
-    "xgboost>=2.0.0",
     "lightgbm>=4.0.0",
-    "joblib>=1.3.0",
     "holidays>=0.92",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "black==24.4.2",
-    "isort==5.13.2",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "coverage-badge>=1.1.0",
+    "black==26.3.1",
+    "isort==8.0.1",
     # "mypy>=1.8.0",
     "nbsphinx>=0.9.0",
 ]
 notebook = [
-    "ipykernel>=6.29.0",
+    "ipykernel>=7.2.0",
     "jupyter>=1.0.0",
     "matplotlib>=3.8.0",
 ]
 all = ["gators[dev,notebook]"]
 
 [project.urls]
-Homepage = "https://github.com/paypal/gators"
+Homepage = "https://github.com/paypal/Gators/"
 Repository = "https://github.com/paypal/gators"
-Documentation = "https://github.com/paypal/gators"
+Documentation = "https://paypal.github.io/gators/"
 "Bug Tracker" = "https://github.com/paypal/gators/issues"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -171,7 +175,7 @@ ignore = [
 
 [tool.coverage.run]
 source = ["gators"]
-omit = ["*/tests/*", "*/test_*.py"]
+omit = ["*/tests/*", "*/test_*.py", "benchmarks/*"]
 
 [tool.coverage.report]
 exclude_lines = [

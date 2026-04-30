@@ -1,13 +1,14 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 AGGREGATION_FUNCTIONS = ["mean", "std", "median", "min", "max", "sum", "count", "range"]
 
 
-class GroupStatisticsFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class GroupStatisticsFeatures(_BaseTransformer):
     """
     Generates statistical aggregation features based on group-level computations.
 

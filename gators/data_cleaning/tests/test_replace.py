@@ -36,7 +36,7 @@ def test_default_parameters(sample_X):
     assert_frame_equal(transformed_X, expected_X)
 
 
-def test_replace_transformer_drop_columns_false(sample_X):
+def test_replace_BaseTransformer_drop_columns_false(sample_X):
     to_replace = {
         "first_name": {"Alice": "Alicia", "Bob": "Robert"},
         "city": {"NYC": "New York", "LA": "Los Angeles"},
@@ -56,7 +56,7 @@ def test_replace_transformer_drop_columns_false(sample_X):
     assert_frame_equal(transformed_X, expected_X)
 
 
-def test_replace_transformer_inplace_true(sample_X):
+def test_replace_BaseTransformer_inplace_true(sample_X):
     """Test replace with inplace=True to modify columns in place."""
     to_replace = {
         "first_name": {"Alice": "Alicia", "Bob": "Robert"},

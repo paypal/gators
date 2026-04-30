@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, field_validator, model_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator, model_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class GroupLagFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class GroupLagFeatures(_BaseTransformer):
     """
     Generates lag (previous values) and lead (next values) features within groups.
 

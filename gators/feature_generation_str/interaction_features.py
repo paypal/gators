@@ -2,11 +2,12 @@ from itertools import combinations
 from typing import List, Optional
 
 import polars as pl
-from pydantic import BaseModel, conint
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class InteractionFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class InteractionFeatures(_BaseTransformer):
     """
     Generates interaction features for categorical variables.
 
@@ -86,7 +87,7 @@ class InteractionFeatures(BaseModel, BaseEstimator, TransformerMixin):
     """
 
     subset: Optional[List[str]] = None
-    degree: conint(gt=1) = 2
+    degree: int = Field(default=2, gt=1)
 
     def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "InteractionFeatures":
         """Fit the transformer by identifying categorical columns if not specified.
@@ -107,7 +108,7 @@ class InteractionFeatures(BaseModel, BaseEstimator, TransformerMixin):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         return self
 
@@ -124,6 +125,8 @@ class InteractionFeatures(BaseModel, BaseEstimator, TransformerMixin):
         pl.DataFrame
             Transformed DataFrame.
         """
+        if self.subset is None:
+            return X
 
         transformations = []
         for i in range(2, self.degree + 1):

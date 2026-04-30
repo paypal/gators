@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, Tuple
 
 import polars as pl
-from pydantic import BaseModel, Field, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field
+
+from ._base_clipper import _BaseClipper
 
 
-class QuantileClipper(BaseModel, BaseEstimator, TransformerMixin):
+class QuantileClipper(_BaseClipper):
     """
     Clip numeric values based on quantile thresholds.
 
@@ -115,10 +116,7 @@ class QuantileClipper(BaseModel, BaseEstimator, TransformerMixin):
     lower_quantile: float = Field(default=0.01, ge=0.0, le=1.0)
     upper_quantile: float = Field(default=0.99, ge=0.0, le=1.0)
     subset: Optional[List[str]] = None
-    drop_columns: bool = True
-    inplace: bool = True
-    _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    # _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "QuantileClipper":
         """Fit the transformer by computing quantile-based clipping bounds.
@@ -151,45 +149,18 @@ class QuantileClipper(BaseModel, BaseEstimator, TransformerMixin):
         if not self.inplace:
             self._column_mapping = {col: f"{col}__clip_quantile" for col in self.subset}
 
-        # Compute quantiles for each column
+        # Compute all quantiles in a single operation
+        exprs = []
         for col in self.subset:
-            lower_bound = X[col].quantile(self.lower_quantile)
-            upper_bound = X[col].quantile(self.upper_quantile)
+            exprs.append(pl.col(col).quantile(self.lower_quantile).alias(f"{col}_lower"))
+            exprs.append(pl.col(col).quantile(self.upper_quantile).alias(f"{col}_upper"))
+
+        stats = X.select(exprs).to_dicts()[0]
+
+        # Extract bounds for each column
+        for col in self.subset:
+            lower_bound = stats[f"{col}_lower"]
+            upper_bound = stats[f"{col}_upper"]
             self._clip_bounds[col] = (lower_bound, upper_bound)
 
         return self
-
-    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        """Transform the input DataFrame by clipping values to quantile thresholds.
-
-        Parameters
-        ----------
-        X : pl.DataFrame
-            Input DataFrame with numeric columns.
-
-        Returns
-        -------
-        pl.DataFrame
-            DataFrame with clipped numeric columns.
-        """
-        # Build all transformations at once
-        if self.inplace:
-            transformations = [
-                pl.col(col).clip(
-                    lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
-                )
-                for col in self.subset
-            ]
-        else:
-            transformations = [
-                pl.col(col)
-                .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
-                .alias(new)
-                for col, new in self._column_mapping.items()
-            ]
-
-        X = X.with_columns(transformations)
-
-        if not self.inplace and self.drop_columns:
-            return X.drop(self.subset)
-        return X

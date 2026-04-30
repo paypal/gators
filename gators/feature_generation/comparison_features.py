@@ -1,8 +1,9 @@
 from typing import List, Literal, Optional
 
 import polars as pl
-from pydantic import BaseModel, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 COMPARISON_OPERATORS = {
     ">": lambda x, y: x > y,
@@ -19,7 +20,7 @@ COMPARISON_OPERATORS = {
 UNARY_OPERATORS = {"is_null", "is_not_null"}
 
 
-class ComparisonFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class ComparisonFeatures(_BaseTransformer):
     """
     Generates binary comparison features between pairs of columns, or unary null checks.
 

@@ -1,11 +1,12 @@
 from typing import Annotated, Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, Field, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field, PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DropLowCardinality(BaseModel, BaseEstimator, TransformerMixin):
+class DropLowCardinality(_BaseTransformer):
     """
     Drops columns with low cardinality.
 
@@ -121,9 +122,7 @@ class DropLowCardinality(BaseModel, BaseEstimator, TransformerMixin):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
 
         counts = X[self.subset].with_columns(pl.all().n_unique()).row(0, named=True)

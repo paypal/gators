@@ -103,7 +103,7 @@ class BinaryEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
 
         min_threshold_count = self.min_count if self.min_count >= 1 else self.min_count * len(X)
@@ -163,6 +163,8 @@ class BinaryEncoder(_BaseEncoder):
         """
         default_value = 0.0
         expressions = []
+        if self.subset is None:
+            return X
         for col in self.subset:
             if col not in self.n_bits_:
                 continue

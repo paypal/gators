@@ -1,11 +1,11 @@
 from typing import Dict, List, Literal, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class LogScaler(BaseModel, BaseEstimator, TransformerMixin):
+class LogScaler(_BaseTransformer):
     """
     Applies logarithm transformation with choice of base.
 
@@ -128,10 +128,10 @@ class LogScaler(BaseModel, BaseEstimator, TransformerMixin):
             The fitted transformer instance.
         """
         if not self.subset:
+            # Use set for O(1) dtype lookup instead of list O(n) lookup
+            numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
-                col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype in numeric_dtypes
             ]
 
         # Create suffix based on base
@@ -162,17 +162,16 @@ class LogScaler(BaseModel, BaseEstimator, TransformerMixin):
         -----
         Zero and negative values will result in null or -inf values.
         """
-        # Select appropriate log function
-        transformations = []
-        for col, new in self._column_mapping.items():
-            if self.base == "e":
-                expr = pl.col(col).log()
-            elif self.base == "10":
-                expr = pl.col(col).log10()
-            else:  # '2'
-                expr = pl.col(col).log(base=2)
+        # Pre-select log function once (avoid repeated conditionals in loop)
+        if self.base == "e":
+            log_func = lambda col: pl.col(col).log()
+        elif self.base == "10":
+            log_func = lambda col: pl.col(col).log10()
+        else:  # '2'
+            log_func = lambda col: pl.col(col).log(base=2)
 
-            transformations.append(expr.alias(new))
+        # Build all transformations using pre-selected function
+        transformations = [log_func(col).alias(new) for col, new in self._column_mapping.items()]
 
         X = X.with_columns(transformations)
 

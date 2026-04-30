@@ -103,7 +103,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
             raise ValueError("min_samples_leaf must be at least 1")
         return min_samples_leaf
 
-    def fit(self, X: pl.DataFrame, y: pl.Series = None) -> "TreeBasedDiscretizer":
+    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "TreeBasedDiscretizer":
         """Fit the discretizer by learning optimal splits from decision tree.
 
         Parameters
@@ -135,7 +135,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
+                for col, dtype in X.schema.items()
                 if dtype in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
             ]
 
@@ -181,10 +181,16 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
                 self._bins[col] = thresholds
             else:
                 # If no splits found, use min/max
-                min_val = float(X[col].cast(pl.Float64).min())
-                max_val = float(X[col].cast(pl.Float64).max())
-                if min_val != max_val:
-                    self._bins[col] = [(min_val + max_val) / 2]
+                min_result = X[col].cast(pl.Float64).min()
+                max_result = X[col].cast(pl.Float64).max()
+                if min_result is not None and max_result is not None:
+                    # mypy: Polars min/max can return various types, cast to float
+                    min_val = float(min_result)  # type: ignore[arg-type]
+                    max_val = float(max_result)  # type: ignore[arg-type]
+                    if min_val != max_val:
+                        self._bins[col] = [(min_val + max_val) / 2]
+                    else:
+                        self._bins[col] = []
                 else:
                     self._bins[col] = []
 

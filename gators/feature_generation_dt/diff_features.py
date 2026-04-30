@@ -2,11 +2,12 @@ from datetime import datetime
 from typing import List, Literal, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DiffFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class DiffFeatures(_BaseTransformer):
     """
     Generates time difference features between datetime columns or against reference dates.
 

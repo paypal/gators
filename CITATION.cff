@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Poli"
+    given-names: "Charles"
+    email: "cpoli@paypal.com"
+title: "Gators: Lightning-Fast ML Preprocessing with Polars"
+version: 1.0.0
+date-released: 2026-01-01
+url: "https://github.com/paypal/gators"
+repository-code: "https://github.com/paypal/gators"
+license: Apache-2.0
+keywords:
+  - machine-learning
+  - preprocessing
+  - feature-engineering
+  - polars

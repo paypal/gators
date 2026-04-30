@@ -1,8 +1,9 @@
 from typing import Any, Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, ConfigDict, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import ConfigDict, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 # Operator symbol to name mapping for auto-generated column names
 OPERATOR_NAMES = {
@@ -16,7 +17,7 @@ OPERATOR_NAMES = {
 }
 
 
-class ScalarMathFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class ScalarMathFeatures(_BaseTransformer):
     """
     Generates new features by applying mathematical operations between columns and scalar values.
 
@@ -110,14 +111,14 @@ class ScalarMathFeatures(BaseModel, BaseEstimator, TransformerMixin):
 
     **Example 2: Auto-generated column names**
 
-    >>> auto_transformer = ScalarMathFeatures(
+    >>> auto_BaseTransformer = ScalarMathFeatures(
     ...     operations=[
     ...         {'column': 'Price', 'op': '*', 'scalar': 1.1},
     ...         {'column': 'Price', 'op': '/', 'scalar': 100}
     ...     ]
     ...     # new_column_names not specified - will be auto-generated
     ... )
-    >>> result = auto_transformer.fit_transform(X)
+    >>> result = auto_BaseTransformer.fit_transform(X)
     >>> result.select(['Price', 'Price_mul_1.1', 'Price_div_100'])
     shape: (5, 3)
     ┌───────┬──────────────┬───────────────┐

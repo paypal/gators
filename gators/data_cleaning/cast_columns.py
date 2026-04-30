@@ -1,11 +1,12 @@
 from typing import Dict, List, Optional, cast
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class CastColumns(BaseModel, BaseEstimator, TransformerMixin):
+class CastColumns(_BaseTransformer):
     """
     Casts specified columns to a given data type.
 
@@ -180,7 +181,7 @@ class CastColumns(BaseModel, BaseEstimator, TransformerMixin):
                 # Handle string to date conversion
                 transformations.append(pl.col(col).str.strptime(pl.Date, "%Y-%m-%d").alias(new))
             else:
-                transformations.append(X[col].cast(self.dtype).alias(new))
+                transformations.append(pl.col(col).cast(self.dtype).alias(new))
 
         X = X.with_columns(transformations)
         if self.drop_columns:

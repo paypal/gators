@@ -1,11 +1,11 @@
 from typing import List, Literal, Optional
 
 import polars as pl
-from pydantic import BaseModel
-from sklearn.base import BaseEstimator, TransformerMixin
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DropDuplicateRows(BaseModel, BaseEstimator, TransformerMixin):
+class DropDuplicateRows(_BaseTransformer):
     """
     Removes duplicate rows from the DataFrame.
 

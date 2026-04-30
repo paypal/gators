@@ -1,4 +1,3 @@
-import numpy as np
 import polars as pl
 
 from ._base_encoder import _BaseEncoder
@@ -117,7 +116,7 @@ class TargetEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         # Add target as a temporary column for unpivoting
         X_with_target = X.select(self.subset).with_columns(y.alias("__target__"))

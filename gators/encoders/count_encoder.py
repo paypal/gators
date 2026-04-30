@@ -128,7 +128,7 @@ class CountEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Categorical]
+                if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         self.mapping_ = {
             col: dict(zip(d[col].to_list(), d["count"].to_list()))

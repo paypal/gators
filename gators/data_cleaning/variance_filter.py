@@ -1,11 +1,12 @@
 from typing import Annotated, Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, Field
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class VarianceFilter(BaseModel, BaseEstimator, TransformerMixin):
+class VarianceFilter(_BaseTransformer):
     """
     Removes numerical columns with a low variance.
 
@@ -93,9 +94,7 @@ class VarianceFilter(BaseModel, BaseEstimator, TransformerMixin):
         """
         if not self.subset:
             self.subset = [
-                col
-                for col, dtype in dict(zip(X.columns, X.dtypes)).items()
-                if dtype not in [pl.String, pl.Boolean]
+                col for col, dtype in X.schema.items() if dtype not in [pl.String, pl.Boolean]
             ]
 
         self._std_devs = X.select(self.subset).std().row(0, named=True)

@@ -2,11 +2,12 @@ from datetime import datetime
 from typing import List, Literal, Optional, Union
 
 import polars as pl
-from pydantic import BaseModel, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class DurationToDatetime(BaseModel, BaseEstimator, TransformerMixin):
+class DurationToDatetime(_BaseTransformer):
     """
     Converts numeric time offset columns to datetime by adding durations to a reference date.
 
@@ -218,7 +219,8 @@ class DurationToDatetime(BaseModel, BaseEstimator, TransformerMixin):
         for col in self.subset:
             # Create duration and add to reference date
             param_name = param_names[self.unit]
-            duration_expr = duration_functions[self.unit](**{param_name: pl.col(col)})
+            kwargs = {param_name: pl.col(col)}
+            duration_expr = duration_functions[self.unit](**kwargs)  # type: ignore[arg-type]
             datetime_expr = self._reference_expr + duration_expr
 
             new_col_name = f"{col}__datetime"

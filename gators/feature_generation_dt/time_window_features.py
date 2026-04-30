@@ -1,8 +1,9 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 AGGREGATION_FUNCTIONS = ["mean", "std", "median", "min", "max", "sum", "count"]
 
@@ -44,7 +45,7 @@ def validate_and_convert_window(window_str: str) -> str:
         return window_str
 
 
-class TimeWindowFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class TimeWindowFeatures(_BaseTransformer):
     """
     Generates time-based window aggregation features (velocity features).
 

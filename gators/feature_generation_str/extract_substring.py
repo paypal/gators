@@ -1,14 +1,15 @@
 from typing import List, Optional
 
 import polars as pl
-from pydantic import BaseModel, conint
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import Field
+
+from ..transformer._base_transformer import _BaseTransformer
 
 
-class ExtractSubstring(BaseModel, BaseEstimator, TransformerMixin):
+class ExtractSubstring(_BaseTransformer):
     subset: List[str]
-    start: conint(ge=0)
-    end: Optional[conint(ge=1)] = None
+    start: int = Field(ge=0)
+    end: Optional[int] = Field(default=None, ge=1)
 
     def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "ExtractSubstring":
         """Fit the transformer (no-op, but required for sklearn compatibility).

@@ -1,13 +1,14 @@
 from typing import Dict, List, Optional
 
 import polars as pl
-from pydantic import BaseModel, PrivateAttr, field_validator
-from sklearn.base import BaseEstimator, TransformerMixin
+from pydantic import PrivateAttr, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
 
 AGGREGATION_FUNCTIONS = ["min", "max", "mean", "median", "std", "range", "sum"]
 
 
-class RowStatisticsFeatures(BaseModel, BaseEstimator, TransformerMixin):
+class RowStatisticsFeatures(_BaseTransformer):
     """
     Generates row-level aggregation features across groups of columns.
 
