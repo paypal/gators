@@ -1,6 +1,5 @@
 from typing import Dict, List, Optional
 
-import numpy as np
 import polars as pl
 
 from gators.discretizers._base_discretizer import _BaseDiscretizer, generate_labels
@@ -128,15 +127,24 @@ class CustomDiscretizer(_BaseDiscretizer):
         CustomDiscretizer
             The fitted discretizer instance.
         """
+        # Use bins keys if subset not specified
         if self.subset is None:
             self.subset = list(self.bins.keys())
 
+        # Store bins (already provided by user)
         self._bins = self.bins
-        self._labels = generate_labels(bins=self.bins)
+        
+        # Generate labels with proper rounding
+        self._labels = generate_labels(bins=self.bins, rounding=self.rounding)
+        
+        # Convert to numeric labels if requested
         if self.as_numerics:
             self._labels = {
                 col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
+        
+        # Set column mapping for non-inplace mode
         if not self.inplace:
             self._column_mapping = {col: f"{col}__discretize_custom" for col in self.subset}
+        
         return self

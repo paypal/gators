@@ -157,32 +157,45 @@ class QuantileDiscretizer(_BaseDiscretizer):
         # Learn bins for each column
         self._bins = {}
 
+        # Build expressions to compute all quantiles for all columns in a single pass
+        quantile_expressions = []
         for col in self.subset:
-            # Compute quantile values
-            quantile_values = []
-            for q in quantiles_to_use:
-                val = X[col].quantile(q)
-                if val is not None and not (isinstance(val, float) and np.isnan(val)):
-                    quantile_values.append(val)
+            for i, q in enumerate(quantiles_to_use):
+                quantile_expressions.append(
+                    pl.col(col).quantile(q).alias(f"{col}__q{i}")
+                )
 
-            # Handle duplicates
-            if len(quantile_values) != len(set(quantile_values)):
-                if self.handle_duplicates == "raise":
-                    raise ValueError(
-                        f"Column '{col}' has duplicate quantile values. "
-                        "Consider using fewer bins or set handle_duplicates='drop'."
-                    )
-                else:
-                    # Drop duplicates while maintaining order
-                    seen = set()
-                    unique_values = []
-                    for val in quantile_values:
-                        if val not in seen:
-                            seen.add(val)
-                            unique_values.append(val)
-                    quantile_values = unique_values
+        # Compute all quantiles in a single select() operation
+        if quantile_expressions:
+            quantile_dict = X.select(quantile_expressions).to_dict()
+            
+            # Parse results back into bins structure
+            for col in self.subset:
+                quantile_values = []
+                for i in range(len(quantiles_to_use)):
+                    alias = f"{col}__q{i}"
+                    val = quantile_dict[alias][0]  # First (and only) row
+                    if val is not None and not (isinstance(val, float) and np.isnan(val)):
+                        quantile_values.append(val)
 
-            self._bins[col] = sorted(quantile_values)
+                # Handle duplicates
+                if len(quantile_values) != len(set(quantile_values)):
+                    if self.handle_duplicates == "raise":
+                        raise ValueError(
+                            f"Column '{col}' has duplicate quantile values. "
+                            "Consider using fewer bins or set handle_duplicates='drop'."
+                        )
+                    else:
+                        # Drop duplicates while maintaining order
+                        seen = set()
+                        unique_values = []
+                        for val in quantile_values:
+                            if val not in seen:
+                                seen.add(val)
+                                unique_values.append(val)
+                        quantile_values = unique_values
+
+                self._bins[col] = sorted(quantile_values)
 
         # Generate labels
         self._labels = generate_labels(self._bins, self.rounding)

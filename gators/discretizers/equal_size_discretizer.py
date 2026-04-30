@@ -7,7 +7,7 @@ import polars as pl
 from ._base_discretizer import _BaseDiscretizer, generate_labels
 
 
-def compute_equal_size_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[float]]:
+def compute_equal_size_bins(X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None) -> dict[str, list[float]]:
     """
     Discretizes numerical variables using an equal size bins.
 
@@ -17,6 +17,8 @@ def compute_equal_size_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[fl
         Input DataFrame containing the data to discretize.
     num_bins : int
         Number of bins to divide each numeric column into.
+    subset : Optional[list[str]], default=None
+        List of column names to compute bins for. If None, uses all columns in X.
 
     Returns
     -------
@@ -35,20 +37,29 @@ def compute_equal_size_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[fl
     >>> print(bins)
     {'A': [0.2, 0.3], 'B': [20.0, 30.0]}
     """
-
+    cols_to_process = subset if subset is not None else X.columns
     percentiles = np.linspace(0, 1, num_bins + 1)[1:-1]
-    bins = X.select(
-        [
-            pl.col(col_name).quantile(p).alias(f"{col_name}_{p}")
-            for p in percentiles
-            for col_name in X.columns
-        ]
-    ).to_dict(as_series=False)
+    
+    # Build all quantile expressions in a single pass - optimize order for better cache locality
+    expressions = []
+    for col_name in cols_to_process:
+        for p in percentiles:
+            expressions.append(
+                pl.col(col_name).quantile(p).alias(f"{col_name}_{p}")
+            )
+    
+    # Single select operation to compute all quantiles
+    bins = X.select(expressions).to_dict(as_series=False)
+    
+    # Process results - handle duplicates and nulls efficiently
     selected_bins = {}
-    for col in X.columns:
-        bins_ = sorted(set([bins[f"{col}_{p}"][0] for p in percentiles]))  # unique bins
-        bins_ = [b for b in bins_ if not isnan(b)]  # drop nan bins
-        selected_bins[col] = bins_
+    for col in cols_to_process:
+        # Extract all quantile values for this column
+        col_bins = [bins[f"{col}_{p}"][0] for p in percentiles]
+        # Filter out NaN/None values and get unique sorted values in one pass
+        col_bins = sorted(set(b for b in col_bins if b is not None and not (isinstance(b, float) and isnan(b))))
+        selected_bins[col] = col_bins
+    
     return selected_bins
 
 
@@ -153,6 +164,7 @@ class EqualSizeDiscretizer(_BaseDiscretizer):
         EqualSizeDiscretizer
             The fitted discretizer instance.
         """
+        # Auto-detect numeric columns if not specified
         if not self.subset:
             self.subset = [
                 col
@@ -160,12 +172,20 @@ class EqualSizeDiscretizer(_BaseDiscretizer):
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
 
-        self._bins = compute_equal_size_bins(X[self.subset], self.num_bins)
-        self._labels = generate_labels(self._bins)
+        # Compute bins - pass subset to avoid creating intermediate DataFrame
+        self._bins = compute_equal_size_bins(X, self.num_bins, subset=self.subset)
+        
+        # Generate labels with proper rounding
+        self._labels = generate_labels(self._bins, self.rounding)
+        
+        # Convert to numeric labels if requested
         if self.as_numerics:
             self._labels = {
                 col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
+        
+        # Set column mapping for non-inplace mode
         if not self.inplace:
             self._column_mapping = {col: f"{col}__discretize_size" for col in self.subset}
+        
         return self

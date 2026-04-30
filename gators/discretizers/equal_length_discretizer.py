@@ -6,7 +6,7 @@ import polars as pl
 from ._base_discretizer import _BaseDiscretizer, generate_labels
 
 
-def compute_equal_length_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[float]]:
+def compute_equal_length_bins(X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None) -> dict[str, list[float]]:
     """
     Computes equal-length bins for discretization.
 
@@ -16,6 +16,8 @@ def compute_equal_length_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[
         Input DataFrame containing the data to discretize.
     num_bins : int
         Number of bins to divide each numeric column into.
+    subset : Optional[list[str]], default=None
+        List of column names to compute bins for. If None, uses all columns in X.
 
     Returns
     -------
@@ -34,16 +36,24 @@ def compute_equal_length_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[
     >>> print(bins)
     {'A': [0.2, 0.3], 'B': [20.0, 30.0]}
     """
-
-    min_max = X.select(
-        [pl.col(col_name).min().alias(f"{col_name}_min") for col_name in X.columns]
-        + [pl.col(col_name).max().alias(f"{col_name}_max") for col_name in X.columns]
-    ).to_dict(as_series=False)
+    cols_to_process = subset if subset is not None else X.columns
+    
+    # Build all min/max expressions in a single pass - avoid list concatenation
+    expressions = []
+    for col_name in cols_to_process:
+        expressions.append(pl.col(col_name).min().alias(f"{col_name}_min"))
+        expressions.append(pl.col(col_name).max().alias(f"{col_name}_max"))
+    
+    # Single select operation to get all min/max values
+    min_max = X.select(expressions).to_dict(as_series=False)
+    
+    # Compute bins using numpy's efficient linspace
     bins = {}
-    for col in X.columns:
-        bins[col] = np.linspace(min_max[f"{col}_min"][0], min_max[f"{col}_max"][0], num_bins + 1)[
-            1:-1
-        ].tolist()
+    for col in cols_to_process:
+        col_min = min_max[f"{col}_min"][0]
+        col_max = min_max[f"{col}_max"][0]
+        bins[col] = np.linspace(col_min, col_max, num_bins + 1)[1:-1].tolist()
+    
     return bins
 
 
@@ -157,6 +167,7 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
         EqualLengthDiscretizer
             The fitted discretizer instance.
         """
+        # Auto-detect numeric columns if not specified
         if not self.subset:
             self.subset = [
                 col
@@ -164,12 +175,20 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
 
-        self._bins = compute_equal_length_bins(X[self.subset], self.num_bins)
-        self._labels = generate_labels(self._bins)
+        # Compute bins - pass subset to avoid creating intermediate DataFrame
+        self._bins = compute_equal_length_bins(X, self.num_bins, subset=self.subset)
+        
+        # Generate labels
+        self._labels = generate_labels(self._bins, self.rounding)
+        
+        # Convert to numeric labels if requested
         if self.as_numerics:
             self._labels = {
                 col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
+        
+        # Set column mapping for non-inplace mode
         if not self.inplace:
             self._column_mapping = {col: f"{col}__discretize_length" for col in self.subset}
+        
         return self

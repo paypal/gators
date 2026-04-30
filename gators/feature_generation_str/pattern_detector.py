@@ -21,7 +21,7 @@ class PatternDetector(_BaseTransformer):
     patterns : List[str], default=["is_numeric", "is_email", "is_url", "is_phone"]
         Patterns to detect. Options:
 
-        - "is_numeric": Contains only digits (possibly with decimal/negative)
+        - "is_numeric": Contains only digits (with decimal/negative)
         - "is_email": Matches email pattern (basic check)
         - "is_url": Matches URL pattern (http/https)
         - "is_phone": Matches phone number pattern
