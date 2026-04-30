@@ -57,10 +57,10 @@ Quick Start
     X =  pl.read_csv("data.csv")
 
     # Build a preprocessing pipeline
-    pipeline = Pipeline([
-        ('drop_nan', DropHighNaNRatio(threshold=0.5)),  # drop columns with >50% missing values
+    pipeline = Pipeline(steps=[
+        ('drop_nan', DropHighNaNRatio(max_ratio=0.5)),  # drop columns with >50% missing values
         ('impute', NumericImputer(strategy='median')),  # impute missing values with median
-        ('variance', VarianceFilter(threshold=0.01)),   # remove numerical columns with a variance < 0.01
+        ('variance', VarianceFilter(min_var=0.01)),     # remove numerical columns with a variance < 0.01
         ('encode', OneHotEncoder()),  # one-hot encode categorical variables
         ('scale', StandardScaler())  # standardize numerical features
     ])
