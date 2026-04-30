@@ -133,18 +133,18 @@ class CustomDiscretizer(_BaseDiscretizer):
 
         # Store bins (already provided by user)
         self._bins = self.bins
-        
+
         # Generate labels with proper rounding
         self._labels = generate_labels(bins=self.bins, rounding=self.rounding)
-        
+
         # Convert to numeric labels if requested
         if self.as_numerics:
             self._labels = {
                 col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
-        
+
         # Set column mapping for non-inplace mode
         if not self.inplace:
             self._column_mapping = {col: f"{col}__discretize_custom" for col in self.subset}
-        
+
         return self

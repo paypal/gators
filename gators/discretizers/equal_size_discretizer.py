@@ -7,7 +7,9 @@ import polars as pl
 from ._base_discretizer import _BaseDiscretizer, generate_labels
 
 
-def compute_equal_size_bins(X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None) -> dict[str, list[float]]:
+def compute_equal_size_bins(
+    X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None
+) -> dict[str, list[float]]:
     """
     Discretizes numerical variables using an equal size bins.
 
@@ -39,27 +41,27 @@ def compute_equal_size_bins(X: pl.DataFrame, num_bins: int, subset: Optional[lis
     """
     cols_to_process = subset if subset is not None else X.columns
     percentiles = np.linspace(0, 1, num_bins + 1)[1:-1]
-    
+
     # Build all quantile expressions in a single pass - optimize order for better cache locality
     expressions = []
     for col_name in cols_to_process:
         for p in percentiles:
-            expressions.append(
-                pl.col(col_name).quantile(p).alias(f"{col_name}_{p}")
-            )
-    
+            expressions.append(pl.col(col_name).quantile(p).alias(f"{col_name}_{p}"))
+
     # Single select operation to compute all quantiles
     bins = X.select(expressions).to_dict(as_series=False)
-    
+
     # Process results - handle duplicates and nulls efficiently
     selected_bins = {}
     for col in cols_to_process:
         # Extract all quantile values for this column
         col_bins = [bins[f"{col}_{p}"][0] for p in percentiles]
         # Filter out NaN/None values and get unique sorted values in one pass
-        col_bins = sorted(set(b for b in col_bins if b is not None and not (isinstance(b, float) and isnan(b))))
+        col_bins = sorted(
+            set(b for b in col_bins if b is not None and not (isinstance(b, float) and isnan(b)))
+        )
         selected_bins[col] = col_bins
-    
+
     return selected_bins
 
 
@@ -174,18 +176,18 @@ class EqualSizeDiscretizer(_BaseDiscretizer):
 
         # Compute bins - pass subset to avoid creating intermediate DataFrame
         self._bins = compute_equal_size_bins(X, self.num_bins, subset=self.subset)
-        
+
         # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, self.rounding)
-        
+
         # Convert to numeric labels if requested
         if self.as_numerics:
             self._labels = {
                 col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
-        
+
         # Set column mapping for non-inplace mode
         if not self.inplace:
             self._column_mapping = {col: f"{col}__discretize_size" for col in self.subset}
-        
+
         return self

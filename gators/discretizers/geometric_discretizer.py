@@ -5,7 +5,9 @@ import polars as pl
 from ._base_discretizer import _BaseDiscretizer, generate_labels
 
 
-def compute_geometric_bins(X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None) -> dict[str, list[float]]:
+def compute_geometric_bins(
+    X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None
+) -> dict[str, list[float]]:
     """
     Computes geometric progression bins for discretization.
 
@@ -42,7 +44,7 @@ def compute_geometric_bins(X: pl.DataFrame, num_bins: int, subset: Optional[list
     {'A': [10.0, 100.0], 'B': [1.0, 10.0]}
     """
     cols_to_process = subset if subset is not None else X.columns
-    
+
     # Compute min and max for all columns in a single select operation
     min_max = X.select(
         [pl.col(col_name).min().alias(f"{col_name}_min") for col_name in cols_to_process]
@@ -202,7 +204,7 @@ class GeometricDiscretizer(_BaseDiscretizer):
 
         # Compute geometric bins - pass subset to avoid creating intermediate DataFrame
         self._bins = compute_geometric_bins(X, self.num_bins, subset=self.subset)
-        
+
         # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, rounding=self.rounding)
 

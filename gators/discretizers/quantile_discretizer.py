@@ -161,14 +161,12 @@ class QuantileDiscretizer(_BaseDiscretizer):
         quantile_expressions = []
         for col in self.subset:
             for i, q in enumerate(quantiles_to_use):
-                quantile_expressions.append(
-                    pl.col(col).quantile(q).alias(f"{col}__q{i}")
-                )
+                quantile_expressions.append(pl.col(col).quantile(q).alias(f"{col}__q{i}"))
 
         # Compute all quantiles in a single select() operation
         if quantile_expressions:
             quantile_dict = X.select(quantile_expressions).to_dict()
-            
+
             # Parse results back into bins structure
             for col in self.subset:
                 quantile_values = []
