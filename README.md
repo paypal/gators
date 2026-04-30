@@ -6,19 +6,14 @@
 # Gators: A Lightning-Fast Data Preprocessing And Feature Engineering Python Library
 
 
-[![PyPI version](https://img.shields.io/pypi/v/gators)](https://pypi.org/project/gators/)
-[![Python versions](https://img.shields.io/pypi/pyversions/gators)](https://pypi.org/project/gators/)
-[![License](https://img.shields.io/github/license/paypal/gators)](https://github.com/paypal/gators/blob/main/LICENSE)
-[![Coverage](https://img.shields.io/codecov/c/github/paypal/gators)](https://codecov.io/gh/paypal/gators)
-[![Documentation](https://img.shields.io/badge/docs-online-blue)](https://paypal.github.io/gators/)
-[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
-[![Downloads](https://static.pepy.tech/badge/gators)](https://pepy.tech/project/gators)
-[![Downloads/Month](https://static.pepy.tech/badge/gators/month)](https://pepy.tech/project/gators)
-[![GitHub Stars](https://img.shields.io/github/stars/paypal/gators?style=social)](https://github.com/paypal/gators)
-[![GitHub Forks](https://img.shields.io/github/forks/paypal/gators?style=social)](https://github.com/paypal/gators)
-[![Contributors](https://img.shields.io/github/contributors/paypal/gators)](https://github.com/paypal/gators/graphs/contributors)
-[![Last Commit](https://img.shields.io/github/last-commit/paypal/gators)](https://github.com/paypal/gators/commits/main)
+| | |
+|:--|:-:|
+| Package | [![PyPI version](https://img.shields.io/pypi/v/gators)](https://pypi.org/project/gators/) [![Python versions](https://img.shields.io/pypi/pyversions/gators)](https://pypi.org/project/gators/) |
+| Quality | [![License](https://img.shields.io/github/license/paypal/gators)](https://github.com/paypal/gators/blob/main/LICENSE) [![Coverage](https://img.shields.io/codecov/c/github/paypal/gators)](https://codecov.io/gh/paypal/gators) |
+| Documentation | [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://paypal.github.io/gators/) |
+| Code style | [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/) |
+| Downloads | [![Downloads](https://static.pepy.tech/badge/gators)](https://pepy.tech/project/gators) [![Downloads/Month](https://static.pepy.tech/badge/gators/month)](https://pepy.tech/project/gators) |
+| Community | [![GitHub Stars](https://img.shields.io/github/stars/paypal/gators?style=social)](https://github.com/paypal/gators) [![GitHub Forks](https://img.shields.io/github/forks/paypal/gators?style=social)](https://github.com/paypal/gators) [![Contributors](https://img.shields.io/github/contributors/paypal/gators)](https://github.com/paypal/gators/graphs/contributors) [![Last Commit](https://img.shields.io/github/last-commit/paypal/gators)](https://github.com/paypal/gators/commits/main) |
 
 
 📚 **[Full Documentation](https://paypal.github.io/gators/)**
