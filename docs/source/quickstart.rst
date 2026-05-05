@@ -21,8 +21,8 @@ Here's a simple example showing the core Gators workflow:
     X =  pl.read_csv("data.csv")
 
     # Build a preprocessing pipeline
-    pipeline = Pipeline([
-        ('drop_nan', DropHighNaNRatio(threshold=0.5)),
+    pipeline = Pipeline(steps=[
+        ('drop_nan', DropHighNaNRatio(max_ratio=0.5)),
         ('impute', NumericImputer(strategy='median')),
         ('encode', OneHotEncoder()),
         ('scale', StandardScaler())
@@ -61,15 +61,15 @@ Example: Data Cleaning
     )
 
     # Remove columns with >50% missing values
-    drop_nan = DropHighNaNRatio(threshold=0.5)
+    drop_nan = DropHighNaNRatio(max_ratio=0.5)
     X =  drop_nan.fit_transform(X)
 
     # Remove low-variance features
-    var_filter = VarianceFilter(threshold=0.01)
+    var_filter = VarianceFilter(min_var=0.01)
     X =  var_filter.fit_transform(X)
 
     # Remove highly correlated features
-    corr_filter = CorrelationFilter(threshold=0.95)
+    corr_filter = CorrelationFilter(max_corr=0.95)
     X =  corr_filter.fit_transform(X)
 
 Example: Encoding
@@ -136,10 +136,10 @@ Putting it all together in a production-ready pipeline:
     from gators.scalers import StandardScaler
 
     # Define the complete pipeline
-    pipeline = Pipeline([
+    pipeline = Pipeline(steps=[
         # Step 1: Clean data
-        ('drop_high_nan', DropHighNaNRatio(threshold=0.5)),
-        ('variance_filter', VarianceFilter(threshold=0.01)),
+        ('drop_high_nan', DropHighNaNRatio(max_ratio=0.5)),
+        ('variance_filter', VarianceFilter(min_var=0.01)),
         
         # Step 2: Handle missing values
         ('impute_numeric', NumericImputer(strategy='median')),
