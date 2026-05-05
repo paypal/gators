@@ -301,7 +301,7 @@ class TestRuleFeatures:
             drop_conditions=True,
         )
 
-        pipeline = Pipeline([("logical_features", transformer)])
+        pipeline = Pipeline(steps=[("logical_features", transformer)])
 
         result = pipeline.fit_transform(sample_data)
         assert "pipeline_test" in result.columns
