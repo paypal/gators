@@ -134,3 +134,5 @@ dmypy.json
 
 # Benchmarks (development tools, not tracked)
 benchmarks/
+
+tst*/
