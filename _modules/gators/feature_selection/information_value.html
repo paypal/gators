@@ -502,7 +502,7 @@
 <span class="sd">    └──────────┴────────────┘</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">string_cat_cols</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Categorical</span><span class="p">]</span>
+        <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Categorical</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Enum</span><span class="p">]</span>
     <span class="p">]</span>
 
     <span class="c1"># Return empty DataFrame if no String/Categorical columns</span>

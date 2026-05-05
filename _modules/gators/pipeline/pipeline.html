@@ -697,7 +697,7 @@
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">:</span>
             <span class="c1"># Get transformer parameters</span>
             <span class="n">transformer_params</span> <span class="o">=</span> <span class="p">{}</span>
-            
+
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;get_params&quot;</span><span class="p">):</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="c1"># Try with deep parameter (gators/sklearn convention)</span>
@@ -764,7 +764,7 @@
         <span class="c1"># Set nested parameters</span>
         <span class="k">for</span> <span class="n">step_name</span><span class="p">,</span> <span class="n">step_params</span> <span class="ow">in</span> <span class="n">nested_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">transformer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="n">step_name</span><span class="p">]</span>
-            
+
             <span class="c1"># Try using set_params method</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;set_params&quot;</span><span class="p">):</span>
                 <span class="k">try</span><span class="p">:</span>

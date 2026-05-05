@@ -579,9 +579,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">col</span>
-                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Datetime</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Date</span>
+                <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Datetime</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Date</span>
             <span class="p">]</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
@@ -604,7 +602,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">X</span>
-            
+
         <span class="c1"># Parse datetime columns only if needed</span>
         <span class="n">datetime_conversions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>

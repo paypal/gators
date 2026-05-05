@@ -487,8 +487,8 @@
 <span class="n">X</span> <span class="o">=</span>  <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data.csv&quot;</span><span class="p">)</span>
 
 <span class="c1"># Build a preprocessing pipeline</span>
-<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-    <span class="p">(</span><span class="s1">&#39;drop_nan&#39;</span><span class="p">,</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;drop_nan&#39;</span><span class="p">,</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>
     <span class="p">(</span><span class="s1">&#39;impute&#39;</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)),</span>
     <span class="p">(</span><span class="s1">&#39;encode&#39;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">()),</span>
     <span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
@@ -524,15 +524,15 @@
 <span class="p">)</span>
 
 <span class="c1"># Remove columns with &gt;50% missing values</span>
-<span class="n">drop_nan</span> <span class="o">=</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">drop_nan</span> <span class="o">=</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">X</span> <span class="o">=</span>  <span class="n">drop_nan</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># Remove low-variance features</span>
-<span class="n">var_filter</span> <span class="o">=</span> <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">var_filter</span> <span class="o">=</span> <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">min_var</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">X</span> <span class="o">=</span>  <span class="n">var_filter</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># Remove highly correlated features</span>
-<span class="n">corr_filter</span> <span class="o">=</span> <span class="n">CorrelationFilter</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+<span class="n">corr_filter</span> <span class="o">=</span> <span class="n">CorrelationFilter</span><span class="p">(</span><span class="n">max_corr</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
 <span class="n">X</span> <span class="o">=</span>  <span class="n">corr_filter</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -595,10 +595,10 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.scalers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
 
 <span class="c1"># Define the complete pipeline</span>
-<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
     <span class="c1"># Step 1: Clean data</span>
-    <span class="p">(</span><span class="s1">&#39;drop_high_nan&#39;</span><span class="p">,</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s1">&#39;variance_filter&#39;</span><span class="p">,</span> <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;drop_high_nan&#39;</span><span class="p">,</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;variance_filter&#39;</span><span class="p">,</span> <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">min_var</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)),</span>
 
     <span class="c1"># Step 2: Handle missing values</span>
     <span class="p">(</span><span class="s1">&#39;impute_numeric&#39;</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)),</span>

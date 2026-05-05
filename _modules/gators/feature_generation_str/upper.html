@@ -563,9 +563,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">col</span>
-                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Categorical</span><span class="p">]</span>
+                <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Enum</span><span class="p">]</span>
             <span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__upper&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">}</span>
@@ -589,7 +587,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">X</span>
-            
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span><span class="p">:</span>
             <span class="n">transformations</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">to_uppercase</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span>

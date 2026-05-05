@@ -589,9 +589,7 @@
             <span class="c1"># Use set for O(1) dtype lookup instead of list O(n) lookup</span>
             <span class="n">numeric_dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Int64</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float32</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Int32</span><span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">col</span>
-                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">numeric_dtypes</span>
+                <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">numeric_dtypes</span>
             <span class="p">]</span>
 
         <span class="c1"># Create suffix based on base</span>
@@ -632,12 +630,9 @@
             <span class="n">log_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">log10</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># &#39;2&#39;</span>
             <span class="n">log_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        
+
         <span class="c1"># Build all transformations using pre-selected function</span>
-        <span class="n">transformations</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">log_func</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> 
-            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-        <span class="p">]</span>
+        <span class="n">transformations</span> <span class="o">=</span> <span class="p">[</span><span class="n">log_func</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
 
         <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">transformations</span><span class="p">)</span>
 
