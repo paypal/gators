@@ -95,8 +95,8 @@ class StandardScaler(_BaseTransformer):
         for i, col in enumerate(self.subset):
             mean_val = stats[i * 2]
             std_val = stats[i * 2 + 1]
-            self._offset[col] = mean_val
-            self._scale[col] = 1.0 / std_val
+            self._offset[col] = mean_val if mean_val is not None else 0.0
+            self._scale[col] = 1.0 / std_val if std_val else 0.0
 
         return self
 

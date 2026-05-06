@@ -119,7 +119,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
         KMeansDiscretizer
             The fitted discretizer instance.
         """
-        # Identify numeric columns if not specified
+        # Auto-detect numeric columns if not specified
         if not self.subset:
             self.subset = [
                 col
@@ -127,25 +127,26 @@ class KMeansDiscretizer(_BaseDiscretizer):
                 if dtype in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
             ]
 
-        # Learn bins for each column using k-means
+        # Learn bins for each column using k-means clustering
+        # Note: Cannot batch k-means operations - each column needs separate clustering
         self._bins = {}
         self._centroids = {}
 
         for col in self.subset:
-            # Get column data and handle nulls
+            # Extract column data and impute nulls with median
             X_col = X.select(pl.col(col).fill_null(pl.col(col).median())).to_numpy().reshape(-1, 1)
 
-            # Check if we have enough unique values for the requested number of bins
+            # Ensure we don't request more clusters than unique values
             unique_values = np.unique(X_col)
             n_clusters = min(self.num_bins, len(unique_values))
 
             if n_clusters < 2:
-                # Not enough unique values to cluster
+                # Not enough unique values to create meaningful bins
                 self._bins[col] = []
                 self._centroids[col] = unique_values
                 continue
 
-            # Fit k-means
+            # Fit k-means clustering
             kmeans = KMeans(
                 n_clusters=n_clusters,
                 random_state=self.random_state,
@@ -154,11 +155,11 @@ class KMeansDiscretizer(_BaseDiscretizer):
             )
             kmeans.fit(X_col)
 
-            # Get cluster centers and sort them
+            # Sort cluster centers to create ordered bins
             centroids = sorted(kmeans.cluster_centers_.flatten())
             self._centroids[col] = np.array(centroids)
 
-            # Create bin boundaries at midpoints between centroids
+            # Create bin boundaries at midpoints between adjacent centroids
             boundaries = []
             for i in range(len(centroids) - 1):
                 midpoint = (centroids[i] + centroids[i + 1]) / 2
@@ -166,10 +167,17 @@ class KMeansDiscretizer(_BaseDiscretizer):
 
             self._bins[col] = boundaries
 
-        # Generate labels
+        # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, self.rounding)
 
-        # Create column mapping
-        self._column_mapping = {col: f"{col}__dic_kmeans" for col in self.subset}
+        # Convert to numeric labels if requested
+        if self.as_numerics:
+            self._labels = {
+                col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
+            }
+
+        # Set column mapping for non-inplace mode
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__dic_kmeans" for col in self.subset}
 
         return self

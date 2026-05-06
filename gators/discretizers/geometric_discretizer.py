@@ -5,7 +5,9 @@ import polars as pl
 from ._base_discretizer import _BaseDiscretizer, generate_labels
 
 
-def compute_geometric_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[float]]:
+def compute_geometric_bins(
+    X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None
+) -> dict[str, list[float]]:
     """
     Computes geometric progression bins for discretization.
 
@@ -21,6 +23,8 @@ def compute_geometric_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[flo
         Input DataFrame containing the data to discretize.
     num_bins : int
         Number of bins to divide each numeric column into.
+    subset : Optional[list[str]], default=None
+        List of column names to compute bins for. If None, uses all columns in X.
 
     Returns
     -------
@@ -39,14 +43,16 @@ def compute_geometric_bins(X: pl.DataFrame, num_bins: int) -> dict[str, list[flo
     >>> print(bins)
     {'A': [10.0, 100.0], 'B': [1.0, 10.0]}
     """
+    cols_to_process = subset if subset is not None else X.columns
 
+    # Compute min and max for all columns in a single select operation
     min_max = X.select(
-        [pl.col(col_name).min().alias(f"{col_name}_min") for col_name in X.columns]
-        + [pl.col(col_name).max().alias(f"{col_name}_max") for col_name in X.columns]
+        [pl.col(col_name).min().alias(f"{col_name}_min") for col_name in cols_to_process]
+        + [pl.col(col_name).max().alias(f"{col_name}_max") for col_name in cols_to_process]
     ).to_dict(as_series=False)
 
     bins: Dict[str, List[float]] = {}
-    for col in X.columns:
+    for col in cols_to_process:
         col_min = min_max[f"{col}_min"][0]
         col_max = min_max[f"{col}_max"][0]
 
@@ -188,6 +194,7 @@ class GeometricDiscretizer(_BaseDiscretizer):
         GeometricDiscretizer
             The fitted discretizer instance.
         """
+        # Auto-detect numeric columns if not specified
         if not self.subset:
             self.subset = [
                 col
@@ -195,14 +202,19 @@ class GeometricDiscretizer(_BaseDiscretizer):
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
 
-        self._bins = compute_geometric_bins(X[self.subset], self.num_bins)
+        # Compute geometric bins - pass subset to avoid creating intermediate DataFrame
+        self._bins = compute_geometric_bins(X, self.num_bins, subset=self.subset)
+
+        # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, rounding=self.rounding)
 
+        # Convert to numeric labels if requested
         if self.as_numerics:
             self._labels = {
                 col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
             }
 
+        # Set column mapping for non-inplace mode
         if not self.inplace:
             self._column_mapping = {col: f"{col}__discretize_geom" for col in self.subset}
 

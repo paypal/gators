@@ -96,8 +96,11 @@ class MinmaxScaler(_BaseTransformer):
         for i, col in enumerate(self.subset):
             min_val = stats[i * 2]
             max_val = stats[i * 2 + 1]
-            self._offset[col] = min_val
-            self._scale[col] = 1.0 / (max_val - min_val)
+            self._offset[col] = min_val if min_val is not None else 0.0
+            range_val = (
+                (max_val - min_val) if (max_val is not None and min_val is not None) else 0.0
+            )
+            self._scale[col] = 1.0 / range_val if range_val else 0.0
 
         return self
 

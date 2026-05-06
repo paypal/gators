@@ -131,7 +131,6 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
                 "discretizer.fit(X, y=y_train) or pipeline.fit_transform(X, y=y_train)"
             )
 
-        # Identify numeric columns if not specified
         if not self.subset:
             self.subset = [
                 col
@@ -139,10 +138,10 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
                 if dtype in [pl.Float32, pl.Float64, pl.Int32, pl.Int64, pl.UInt32, pl.UInt64]
             ]
 
-        # Learn bins for each column using decision tree
+        # Learn bins for each column using decision tree splits
         self._bins = {}
         for col in self.subset:
-            # Create LightGBM model
+            # Create LightGBM model based on task type
             if self.task == "classification":
                 tree = LGBMClassifier(
                     max_depth=int(np.log2(self.num_bins)) + 1,
@@ -160,11 +159,11 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
                     verbose=-1,
                 )
 
-            # Fit tree on single column
+            # Fit decision tree on single feature
             X_col = X.select(pl.col(col)).to_numpy()
             tree.fit(X_col, y.to_numpy() if hasattr(y, "to_numpy") else y)
 
-            # Extract split thresholds from LightGBM tree
+            # Extract split thresholds from LightGBM tree structure
             thresholds = []
             tree_X = tree.booster_.trees_to_dataframe()
 
@@ -175,12 +174,12 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
             if not split_nodes.empty:
                 thresholds = split_nodes["threshold"].dropna().tolist()
 
-            # Sort and deduplicate thresholds
+            # Sort and deduplicate thresholds to create bin boundaries
             if thresholds:
                 thresholds = sorted(set(thresholds))
                 self._bins[col] = thresholds
             else:
-                # If no splits found, use min/max
+                # No splits found - fallback to midpoint between min/max
                 min_result = X[col].cast(pl.Float64).min()
                 max_result = X[col].cast(pl.Float64).max()
                 if min_result is not None and max_result is not None:
@@ -194,10 +193,17 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
                 else:
                     self._bins[col] = []
 
-        # Generate labels
+        # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, self.rounding)
 
-        # Create column mapping
-        self._column_mapping = {col: f"{col}__dic_tree" for col in self.subset}
+        # Convert to numeric labels if requested
+        if self.as_numerics:
+            self._labels = {
+                col: [str(v) for v in range(len(vals))] for col, vals in self._labels.items()
+            }
+
+        # Set column mapping for non-inplace mode
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__dic_tree" for col in self.subset}
 
         return self
