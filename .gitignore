@@ -136,3 +136,5 @@ dmypy.json
 benchmarks/
 
 tst*/
+
+dist/
