@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -19,13 +17,13 @@ class HighCardinalityFilter(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of columns to check for high cardinality. If None, all columns
         are checked.
-    max_unique : Optional[int], default=None
+    max_unique : int, default=None
         Maximum number of unique values allowed. Columns with more unique
         values will be removed. If None, no absolute threshold is applied.
-    max_ratio : Optional[float], default=None
+    max_ratio : float, default=None
         Maximum ratio of unique values to total rows. Must be between 0 and 1.
         For example, 0.9 means columns where >90% of rows are unique will be
         removed. If None, no ratio threshold is applied.
@@ -108,22 +106,22 @@ class HighCardinalityFilter(_BaseTransformer):
     ['feature']
     """
 
-    subset: Optional[List[str]] = None
-    max_unique: Optional[int] = None
-    max_ratio: Optional[float] = None
+    subset: list[str] | None = None
+    max_unique: int = None
+    max_ratio: float = None
     ignore_na: bool = True
-    _to_drop: List[str] = []
+    _to_drop: list[str] = []
 
     @field_validator("max_unique")
     @classmethod
-    def validate_max_unique(cls, v: Optional[int]) -> Optional[int]:
+    def validate_max_unique(cls, v: int) -> int:
         if v is not None and v < 1:
             raise ValueError("max_unique must be >= 1")
         return v
 
     @field_validator("max_ratio")
     @classmethod
-    def validate_max_ratio(cls, v: Optional[float]) -> Optional[float]:
+    def validate_max_ratio(cls, v: float) -> float:
         if v is not None and (v < 0 or v > 1):
             raise ValueError("max_ratio must be between 0 and 1")
         return v
@@ -133,14 +131,14 @@ class HighCardinalityFilter(_BaseTransformer):
         if self.max_unique is None and self.max_ratio is None:
             raise ValueError("At least one of max_unique or max_ratio must be provided")
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "HighCardinalityFilter":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "HighCardinalityFilter":
         """Fit the transformer by identifying high-cardinality columns.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

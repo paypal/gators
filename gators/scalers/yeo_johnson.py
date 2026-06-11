@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Union
-
 import polars as pl
 from pydantic import PrivateAttr
 
@@ -24,7 +22,7 @@ class YeoJohnson(_BaseTransformer):
 
     Parameters
     ----------
-    lambdas : Dict[str, Union[int, float]]
+    lambdas : dict[str, int | float]
         Dictionary mapping column names to their lambda (power) parameters.
         Lambda values typically range from -2 to 2.
     drop_columns : bool, default=True
@@ -60,20 +58,20 @@ class YeoJohnson(_BaseTransformer):
 
     """
 
-    lambdas: Dict[str, Union[int, float]]
-    _scale: Dict[str, float] = PrivateAttr()
+    lambdas: dict[str, int | float]
+    _scale: dict[str, float] = PrivateAttr()
     drop_columns: bool = True
-    _columns: List[str] = PrivateAttr()
-    _column_mapping: Dict[str, str] = PrivateAttr()
+    _columns: list[str] = PrivateAttr()
+    _column_mapping: dict[str, str] = PrivateAttr()
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "YeoJohnson":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "YeoJohnson":
         """Fit the transformer by storing column names.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame to fit.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

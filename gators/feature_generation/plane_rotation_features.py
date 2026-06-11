@@ -2,7 +2,6 @@
 from math import cos
 from math import pi as PI
 from math import sin
-from typing import List, Optional
 
 import polars as pl
 from pydantic import model_validator
@@ -19,9 +18,9 @@ class PlaneRotationFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : List[List[str]]
+    subset : list[list[str]]
         List of pair-wise columns.
-    angles : List[float]
+    angles : list[float]
         List of rotation angles.
 
     Examples
@@ -55,12 +54,10 @@ class PlaneRotationFeatures(_BaseTransformer):
 
     """
 
-    columns: List[List[str]]
-    angles: List[float]
-    column_names: List[str] = []
-    flatten_columns: List[str] = []
-
-    model_config = {"arbitrary_types_allowed": True}
+    columns: list[list[str]]
+    angles: list[float]
+    column_names: list[str] = []
+    flatten_columns: list[str] = []
 
     @model_validator(mode="after")
     def compute_column_names(self):
@@ -76,14 +73,14 @@ class PlaneRotationFeatures(_BaseTransformer):
         self.column_names = [c for cols in column_names for c in cols]
         return self
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "PlaneRotationFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PlaneRotationFeatures":
         """Fit the transformer by identifying columns to flatten.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input dataframe.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

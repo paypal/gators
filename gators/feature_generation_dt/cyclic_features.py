@@ -1,12 +1,12 @@
 from math import pi
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Optional
 
 import polars as pl
 from pydantic import ValidationInfo, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
-COMPONENT_FUNCTIONS: Dict[str, Callable[[Any], Any]] = {
+COMPONENT_FUNCTIONS: dict[str, Callable[[Any], Any]] = {
     "semester": lambda x: pl.when(x.dt.quarter() <= 2).then(1).otherwise(2),
     "quarter": lambda x: x.dt.quarter(),
     "month": lambda x: x.dt.month(),
@@ -21,7 +21,7 @@ COMPONENT_FUNCTIONS: Dict[str, Callable[[Any], Any]] = {
 
 TWO_PI = 2 * pi
 
-CYCLIC_FACTORS: Dict[str, float] = {
+CYCLIC_FACTORS: dict[str, float] = {
     "month": TWO_PI / 12.0,
     "quarter": TWO_PI / 4.0,
     "semester": TWO_PI / 2.0,
@@ -43,14 +43,14 @@ class CyclicFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], optional
+    subset : list[str]], optional
         List of datetime columns to extract features from. If None, all datetime columns
         in the dataframe will be used, by default None.
-    components : List[str]
+    components : list[str]
         List of date and time components to extract cyclic features from.
         Valid values: 'semester', 'quarter', 'month', 'week', 'day_of_week',
         'day_of_month', 'day_of_year', 'hour', 'minute', 'second'.
-    angles : List[float]
+    angles : list[float]
         List of phase shift angles in degrees. For each component, a sine feature will be
         generated for each angle. For example, [0, 45, 90, 135, 180] will create five features
         with 0°, 45°, 90°, 135°, and 180° phase shifts.
@@ -87,9 +87,9 @@ class CyclicFeatures(_BaseTransformer):
     └────────────┴──────────────┴────────────┴────────────┴────────────┴─────────────┴─────────────┘
     """
 
-    subset: Optional[List[str]] = None
-    components: List[str]
-    angles: List[float]
+    subset: list[str] | None = None
+    components: list[str]
+    angles: list[float]
     drop_columns: bool = False
 
     @field_validator("components")
@@ -103,14 +103,14 @@ class CyclicFeatures(_BaseTransformer):
                 )
         return components
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CyclicFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CyclicFeatures":
         """Fit the transformer.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

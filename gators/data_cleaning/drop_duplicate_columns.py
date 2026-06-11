@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from ..transformer._base_transformer import _BaseTransformer
@@ -110,17 +108,17 @@ class DropDuplicateColumns(_BaseTransformer):
     """
 
     keep: str = "first"
-    columns_to_drop_: List[str] = []
-    column_groups_: Dict[str, List[str]] = {}
+    columns_to_drop_: list[str] = []
+    column_groups_: dict[str, list[str]] = {}
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropDuplicateColumns":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DropDuplicateColumns":
         """Fit the transformer by identifying duplicate columns.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns
@@ -145,7 +143,7 @@ class DropDuplicateColumns(_BaseTransformer):
             return self
 
         # Find duplicate columns by comparing their values
-        duplicate_groups: Dict[str, List[str]] = {}
+        duplicate_groups: dict[str, list[str]] = {}
         processed = set()
 
         for i in range(n_cols):

@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -15,11 +13,11 @@ class RatioFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    numerator_columns : List[str]
+    numerator_columns : list[str]
         List of column names to use as numerators.
-    denominator_columns : List[str]
+    denominator_columns : list[str]
         List of column names to use as denominators. Must have the same length as numerator_columns.
-    new_column_names : Optional[List[str]], optional
+    new_column_names : list[str]], optional
         List of custom names for the ratio features. If None, names will be automatically
         generated as '{numerator}__div__{denominator}', by default None.
     drop_columns : bool, optional
@@ -123,11 +121,11 @@ class RatioFeatures(_BaseTransformer):
     └──────┴──────┴──────────────┘
     """
 
-    numerator_columns: List[str]
-    denominator_columns: List[str]
-    new_column_names: Optional[List[str]] = None
+    numerator_columns: list[str]
+    denominator_columns: list[str]
+    new_column_names: list[str] | None = None
     drop_columns: bool = False
-    _column_mapping: Dict[str, str] = {}
+    _column_mapping: dict[str, str] = {}
 
     @field_validator("denominator_columns", mode="after")
     def check_lengths_match(cls, denominator_columns, info):
@@ -153,14 +151,14 @@ class RatioFeatures(_BaseTransformer):
 
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "RatioFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RatioFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

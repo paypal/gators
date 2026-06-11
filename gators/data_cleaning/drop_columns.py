@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from ..transformer._base_transformer import _BaseTransformer
@@ -11,7 +9,7 @@ class DropColumns(_BaseTransformer):
 
     Parameters
     ----------
-    subset : List[str]
+    subset : list[str]
         List of column names to drop.
 
     Examples
@@ -46,16 +44,16 @@ class DropColumns(_BaseTransformer):
 
     """
 
-    subset: List[str]
+    subset: list[str]
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropColumns":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DropColumns":
         """Fit the transformer (no-op for DropColumns).
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

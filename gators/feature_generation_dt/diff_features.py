@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Literal, Optional, Union
+from typing import Literal
 
 import polars as pl
 from pydantic import field_validator
@@ -16,13 +16,13 @@ class DiffFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    column_pairs : Optional[List[tuple[str, str]]], default=None
+    column_pairs : list[tuple[str, str]]], default=None
         List of column pairs (col_a, col_b) to compute differences (col_a - col_b).
         If None, no pairwise differences are computed.
-    reference_dates : Optional[dict[str, Union[str, datetime]]], default=None
+    reference_dates : dict[str, str | datetime] | None, default=None
         Dictionary mapping column names to reference dates. Computes (column - reference_date).
         Reference dates can be ISO format strings or datetime objects.
-    units : List[Literal["d", "h", "m", "s"]], default=["d"]
+    units : list[Literal["d", "h", "m", "s"]], default=["d"]
         Units for computing time differences.
     drop_columns : bool, default=False
         Whether to drop the original datetime columns after creating differences.
@@ -89,9 +89,9 @@ class DiffFeatures(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    column_pairs: Optional[List[tuple[str, str]]] = None
-    reference_dates: Optional[dict[str, Union[str, datetime]]] = None
-    units: List[Literal["d", "h", "m", "s"]] = ["d"]
+    column_pairs: list[tuple[str, str]] | None = None
+    reference_dates: dict[str, str | datetime] | None = None
+    units: list[Literal["d", "h", "m", "s"]] = ["d"]
     drop_columns: bool = False
     _parsed_reference_dates: dict = {}
 
@@ -105,14 +105,14 @@ class DiffFeatures(_BaseTransformer):
                 )
         return units
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DiffFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DiffFeatures":
         """Fit the transformer by parsing reference dates.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

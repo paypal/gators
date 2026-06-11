@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -16,7 +14,7 @@ class CombineFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    column_groups : List[List[str]]
+    column_groups : list[list[str]]
         List of column groups to combine. Each group is a list of column names
         that will be concatenated together.
         Example: [['cat1', 'cat2'], ['cat1', 'addr1']]
@@ -24,7 +22,7 @@ class CombineFeatures(_BaseTransformer):
         String to use as separator when combining column values.
     drop_columns : bool, default=False
         Whether to drop the original columns after creating combinations.
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         List of custom names for the combined columns. If None, uses default naming
         pattern where columns are joined with '__' (e.g., 'cat1__cat2').
         Must have same length as column_groups.
@@ -127,11 +125,11 @@ class CombineFeatures(_BaseTransformer):
       combinations you need
     """
 
-    column_groups: List[List[str]]
+    column_groups: list[list[str]]
     separator: str = "_"
     drop_columns: bool = False
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = {}
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = {}
 
     @field_validator("new_column_names")
     def check_new_column_names_length(cls, new_column_names, info):
@@ -144,14 +142,14 @@ class CombineFeatures(_BaseTransformer):
                 )
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CombineFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CombineFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

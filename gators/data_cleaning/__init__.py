@@ -9,6 +9,7 @@ from .drop_low_cardinality import DropLowCardinality
 from .high_cardinality_filter import HighCardinalityFilter
 from .rename_columns import RenameColumns
 from .replace import Replace
+from .round_significant_digits import RoundSignificantDigits
 from .variance_filter import VarianceFilter
 
 __all__ = [
@@ -24,4 +25,5 @@ __all__ = [
     "DropDuplicateRows",
     "DropConstantColumns",
     "HighCardinalityFilter",
+    "RoundSignificantDigits",
 ]

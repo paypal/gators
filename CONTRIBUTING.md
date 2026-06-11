@@ -102,7 +102,7 @@ tox -e lint    # Run all checks
 
 ```python
 import polars as pl
-from typing import Optional
+
 
 from gators.data_cleaning import DropColumns
 

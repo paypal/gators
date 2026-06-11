@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List, Optional
 
 import holidays
 import polars as pl
@@ -18,16 +17,16 @@ class HolidayFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of datetime columns to extract features from. If None, all datetime columns
         will be used.
     country : str, default="US"
         Country code for holidays (e.g., "US", "UK", "CA", "DE", "FR", "JP").
         Supports any country code from the holidays library.
         See https://pypi.org/project/holidays/ for full list of supported countries.
-    years : Optional[List[int]], default=None
+    years : list[int]] | default=None
         Years to include holidays for. If None, will automatically detect years from data.
-    features : List[str], default=["is_holiday", "days_to_holiday", "days_from_holiday"]
+    features : list[str], default=["is_holiday", "days_to_holiday", "days_from_holiday"]
         Features to generate. Options:
 
         - "is_holiday": Boolean for whether date is a holiday
@@ -93,13 +92,13 @@ class HolidayFeatures(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     country: str = "US"
-    years: Optional[List[int]] = None
-    features: List[str] = ["is_holiday", "days_to_holiday", "days_from_holiday"]
+    years: list[int] | None = None
+    features: list[str] = ["is_holiday", "days_to_holiday", "days_from_holiday"]
     drop_columns: bool = False
     _holidays: dict = {}
-    _years: List[int] = []
+    _years: list[int] = []
 
     @field_validator("features")
     def check_features(cls, features):
@@ -117,14 +116,14 @@ class HolidayFeatures(_BaseTransformer):
                 )
         return features
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "HolidayFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "HolidayFeatures":
         """Fit the transformer by identifying datetime columns and building holiday list.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

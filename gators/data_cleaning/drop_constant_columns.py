@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import PrivateAttr
 
@@ -16,7 +14,7 @@ class DropConstantColumns(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of columns to check for constant values. If None, all columns
         are checked.
     include_na : bool, default=True
@@ -132,18 +130,18 @@ class DropConstantColumns(_BaseTransformer):
     └──────┘
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     include_na: bool = True
-    _to_drop: List[str] = PrivateAttr(default_factory=list)
+    _to_drop: list[str] = PrivateAttr(default_factory=list)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropConstantColumns":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DropConstantColumns":
         """Fit the transformer by identifying constant columns.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

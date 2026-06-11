@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from ..transformer._base_transformer import _BaseTransformer
@@ -29,7 +27,7 @@ class ArcSinhScaler(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to transform. If None, all numeric columns
         (Float64, Int64, Float32, Int32) are automatically selected.
     drop_columns : bool, default=True
@@ -77,18 +75,18 @@ class ArcSinhScaler(_BaseTransformer):
     - asinh(-X) = -asinh(X)
     """
 
-    subset: Optional[List[str]] = None
-    _column_mapping: Dict[str, str]
+    subset: list[str] | None = None
+    _column_mapping: dict[str, str]
     drop_columns: bool = True
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "ArcSinhScaler":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ArcSinhScaler":
         """Fit the transformer by storing column names.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame to fit.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

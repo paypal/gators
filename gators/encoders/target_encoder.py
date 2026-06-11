@@ -9,9 +9,9 @@ class TargetEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
-    min_count : Union[int, float], default=1
+    min_count : int | float, default=1
         Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     inplace : bool, default=True
         If True, replace original columns with encoded values.
@@ -116,7 +116,7 @@ class TargetEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Enum]
+                if dtype.base_type() in self._CAT_DTYPES
             ]
         # Add target as a temporary column for unpivoting
         X_with_target = X.select(self.subset).with_columns(y.alias("__target__"))

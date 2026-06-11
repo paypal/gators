@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Union
-
 import polars as pl
 from pydantic import Field, PositiveFloat, PositiveInt
 
@@ -12,11 +10,11 @@ class RareCategoryEncoder(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
     default : str, default="RARE"
         Value to replace rare categories with.
-    min_count : Union[PositiveInt, PositiveFloat], default=2
+    min_count : PositiveInt | PositiveFloat, default=2
         Minimum count threshold for categories. Categories below this threshold are replaced with `default`. If >= 1, treated as absolute count; if < 1, treated as frequency.
     inplace : bool, default=True
         If True, replace original columns with encoded values.
@@ -89,22 +87,23 @@ class RareCategoryEncoder(_BaseTransformer):
     └─────┴─────┴────────┴───────────────────┘
     """
 
-    subset: Optional[List[str]] = None
-    mapping_: Dict[str, Dict[str, str]] = Field(default_factory=dict)
+    subset: list[str] | None = None
+    mapping_: dict[str, dict[str, str]] = Field(default_factory=dict)
     default: str = "RARE"
-    column_mapping_: Dict[str, str] = Field(default_factory=dict)
-    min_count: Union[PositiveInt, PositiveFloat] = 2
+    column_mapping_: dict[str, str] = Field(default_factory=dict)
+    min_count: PositiveInt | PositiveFloat = 2
     drop_columns: bool = True
     inplace: bool = True
+    _CAT_DTYPES = {pl.String, pl.Categorical, pl.Enum}
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None):
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None):
         """Fit the transformer by identifying rare categories.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with categorical columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -114,7 +113,9 @@ class RareCategoryEncoder(_BaseTransformer):
         """
         if not self.subset:
             self.subset = [
-                col for col, dtype in zip(X.columns, X.dtypes) if dtype in [pl.String, pl.Enum]
+                col
+                for col, dtype in zip(X.columns, X.dtypes)
+                if dtype.base_type() in self._CAT_DTYPES
             ]
 
         self.mapping_ = {

@@ -1,4 +1,4 @@
-from typing import Dict, List, Literal, Optional
+from typing import Literal, Optional
 
 import polars as pl
 from pydantic import PrivateAttr, field_validator
@@ -29,10 +29,10 @@ class DistanceFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    lats : List[str]
+    lats : list[str]
         List of latitude column names. Must have at least 2 elements.
         Coordinates are paired sequentially: (lats[0], longs[0]) to (lats[1], longs[1]), etc.
-    longs : List[str]
+    longs : list[str]
         List of longitude column names. Must have same length as lats.
     unit : Literal["km", "miles", "meters", "feet"], default="km"
         Unit for distance output.
@@ -43,7 +43,7 @@ class DistanceFeatures(_BaseTransformer):
         - 'manhattan': Sum of absolute differences (taxicab distance)
     drop_columns : bool, default=True
         Whether to drop the original coordinate columns.
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         Custom names for distance columns. If None, uses pattern:
         'distance__{lat1}_to_{lat2}__{method}_{unit}'
 
@@ -112,13 +112,13 @@ class DistanceFeatures(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    lats: List[str]
-    longs: List[str]
+    lats: list[str]
+    longs: list[str]
     unit: Literal["km", "miles", "meters", "feet"] = "km"
     method: Literal["euclidean", "manhattan", "haversine"] = "haversine"
     drop_columns: bool = True
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("lats")
     def check_lats_length(cls, lats):
@@ -147,14 +147,14 @@ class DistanceFeatures(_BaseTransformer):
                 )
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DistanceFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DistanceFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

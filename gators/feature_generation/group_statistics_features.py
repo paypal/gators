@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import PrivateAttr, field_validator
 
@@ -17,13 +15,13 @@ class GroupStatisticsFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : List[str]
+    subset : list[str]
         List of numerical column names to aggregate.
-    by : List[str]
+    by : list[str]
         List of column names to use for groupby operations. Each column will be used
         for a separate groupby operation (e.g., ['cat1', 'cat2'] creates features
         grouped by cat1 and separate features grouped by cat2).
-    func : List[str]
+    func : list[str]
         List of aggregation functions to apply. Available options:
         - 'mean': Group mean
         - 'std': Group standard deviation
@@ -35,7 +33,7 @@ class GroupStatisticsFeatures(_BaseTransformer):
         - 'range': Group range (max - min)
     drop_columns : bool, default=False
         Whether to drop the original numerical columns after creating statistics.
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         List of custom names for the statistic columns. If None, uses default naming pattern
         '{agg}_{num_col}__per_{groupby_col}'. Must have same length as the total number
         of features created (subset × by × func).
@@ -105,12 +103,12 @@ class GroupStatisticsFeatures(_BaseTransformer):
      'min_amount__per_cat1', 'max_amount__per_cat1']
     """
 
-    subset: List[str]
-    by: List[str]
-    func: List[str]
+    subset: list[str]
+    by: list[str]
+    func: list[str]
     drop_columns: bool = False
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("func")
     def check_func(cls, func):
@@ -136,14 +134,14 @@ class GroupStatisticsFeatures(_BaseTransformer):
                 )
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GroupStatisticsFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "GroupStatisticsFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from ..transformer._base_transformer import _BaseTransformer
@@ -40,16 +38,16 @@ class Startswith(_BaseTransformer):
     └───────────────┴─────────────┴───────────────────────┴───────────────────────┴───────────────────────┘
     """
 
-    startswith_dict: Dict[str, List[str]]
+    startswith_dict: dict[str, list[str]]
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Startswith":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Startswith":
         """Fit the transformer (no-op, but required for sklearn compatibility).
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

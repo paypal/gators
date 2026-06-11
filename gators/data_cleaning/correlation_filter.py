@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Optional, Set
+from typing import Annotated
 
 import numpy as np
 import polars as pl
@@ -7,19 +7,19 @@ from pydantic import Field, PrivateAttr
 from ..transformer._base_transformer import _BaseTransformer
 
 
-def find_connected_components(adj_list: Dict[int, Set[int]]) -> List[Set[int]]:
+def find_connected_components(adj_list: dict[int, set[int]]) -> list[set[int]]:
     """
     Find all connected components in an undirected graph represented by an adjacency list.
 
     Parameters
     ----------
-    adj_list : Dict[int, int]
+    adj_list : dict[int, int]
         Dictionary representing the adjacency list of the graph.
         The keys are nodes, and the values are sets of neighboring nodes.
 
     Returns
     -------
-    List[Set[int]]
+    list[Set[int]]
         A list of sets, where each set represents a connected component of the graph.
         Each set contains the nodes that are part of the connected component.
 
@@ -37,9 +37,9 @@ def find_connected_components(adj_list: Dict[int, Set[int]]) -> List[Set[int]]:
     [{0, 1, 2, 3}, {4, 5}]
     """
     visited = set()
-    components: List[Set[int]] = []
+    components: list[set[int]] = []
 
-    def Xs(node: int, component: Set[int]) -> None:
+    def Xs(node: int, component: set[int]) -> None:
         visited.add(node)
         component.add(node)
         for neighbor in adj_list[node]:
@@ -48,7 +48,7 @@ def find_connected_components(adj_list: Dict[int, Set[int]]) -> List[Set[int]]:
 
     for node in adj_list:
         if node not in visited:
-            component: Set[int] = set()
+            component: set[int] = set()
             Xs(node, component)
             if len(component) > 1:
                 components.append(component)
@@ -64,7 +64,7 @@ class CorrelationFilter(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric columns to consider for correlation filtering. If None, all numeric columns are used.
     max_corr : float
         Maximum allowed absolute correlation between columns. Must be > 0 and <= 1.
@@ -113,18 +113,18 @@ class CorrelationFilter(_BaseTransformer):
     └─────┴─────┴─────┴─────┘
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     max_corr: Annotated[float, Field(gt=0.0, le=1.0)]
-    _to_drop: List[str] = PrivateAttr(default_factory=list)
+    _to_drop: list[str] = PrivateAttr(default_factory=list)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CorrelationFilter":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CorrelationFilter":
         """Fit the transformer by identifying highly correlated columns to drop.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -153,7 +153,7 @@ class CorrelationFilter(_BaseTransformer):
             self._to_drop = []
             return self
 
-        adj_list: Dict[int, Set[int]] = {i: set() for i in range(n)}
+        adj_list: dict[int, set[int]] = {i: set() for i in range(n)}
         for i, j in zip(rows, cols):
             adj_list[i].add(j)
             adj_list[j].add(i)

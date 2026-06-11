@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Optional
+from typing import Annotated
 
 import polars as pl
 from pydantic import Field
@@ -12,7 +12,7 @@ class VarianceFilter(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric columns to check for variance. If None, all numeric columns are checked.
     min_var : float
         Minimum variance threshold. Columns with variance <= min_var will be dropped. Must be >= 0.0.
@@ -71,20 +71,20 @@ class VarianceFilter(_BaseTransformer):
 
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     min_var: Annotated[float, Field(ge=0.0)]
-    _to_drop: List[str]
-    _column_mapping = Dict[str, str]
-    _std_devs: Dict[str, float]
+    _to_drop: list[str]
+    _column_mapping = dict[str, str]
+    _std_devs: dict[str, float]
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "VarianceFilter":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "VarianceFilter":
         """Fit the transformer by identifying low-variance columns.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -98,7 +98,11 @@ class VarianceFilter(_BaseTransformer):
             ]
 
         self._std_devs = X.select(self.subset).std().row(0, named=True)
-        self._to_drop = [col for col, ratio in self._std_devs.items() if ratio <= self.min_var]
+        self._to_drop = [
+            col
+            for col, ratio in self._std_devs.items()
+            if ratio is not None and ratio <= self.min_var
+        ]
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

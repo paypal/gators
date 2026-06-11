@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator, model_validator
 
@@ -20,21 +18,21 @@ class GroupLagFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : List[str]
+    subset : list[str]
         List of numerical column names to create lag/lead features for.
-    by : List[str]
+    by : list[str]
         List of columns to group by. Lags/leads are computed within each group.
-    lags : List[int]
+    lags : list[int]
         List of lag periods. Positive integers create lag features (previous values).
         Example: [1, 2, 3] creates lag_1, lag_2, lag_3
-    leads : List[int], default=[]
+    leads : list[int], default=[]
         List of lead periods. Positive integers create lead features (next values).
         Example: [1, 2] creates lead_1, lead_2
-    fill_value : Optional[float], default=None
+    fill_value : float, default=None
         Value to use for missing lag/lead values. If None, uses null.
     drop_columns : bool, default=False
         Whether to drop the original numerical columns after creating lag features.
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         List of custom names for the lag/lead columns. If None, uses default naming pattern
         '{num_col}_lag{n}_{groupby_cols}' or '{num_col}_lead{n}_{groupby_cols}'.
         Must have same length as the total number of features created.
@@ -119,14 +117,14 @@ class GroupLagFeatures(_BaseTransformer):
     - Last rows in each group will have null (or fill_value) for lead features
     """
 
-    subset: List[str]
-    by: List[str]
-    lags: List[int]
-    leads: List[int] = []
-    fill_value: Optional[float] = None
+    subset: list[str]
+    by: list[str]
+    lags: list[int]
+    leads: list[int] = []
+    fill_value: float = None
     drop_columns: bool = False
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = {}
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = {}
 
     @field_validator("lags")
     def check_lags(cls, lags):
@@ -162,14 +160,14 @@ class GroupLagFeatures(_BaseTransformer):
                 )
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GroupLagFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "GroupLagFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Union
-
 import polars as pl
 from pydantic import PositiveFloat, PositiveInt
 
@@ -7,16 +5,18 @@ from ..transformer._base_transformer import _BaseTransformer
 
 
 class OneHotEncoder(_BaseTransformer):
+    _CAT_DTYPES = {pl.String, pl.Categorical, pl.Enum}
+
     """
     One-hot encodes categorical values.
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of string columns to encode. If None, all string columns are selected.
-    categories : Optional[Dict[str, List[str]]], default=None
+    categories : dict[str, list[str]], default=None
         Pre-defined categories for each column. If None, categories are inferred from data during fit.
-    min_count : Union[PositiveInt, PositiveFloat], default=1
+    min_count : PositiveInt | PositiveFloat, default=1
         Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     drop_columns : bool, default=True
         Whether to drop the original columns after encoding.
@@ -88,19 +88,19 @@ class OneHotEncoder(_BaseTransformer):
 
     """
 
-    subset: Optional[List[str]] = None
-    categories: Optional[Dict[str, List[str]]] = None
-    min_count: Union[PositiveInt, PositiveFloat] = 1
+    subset: list[str] | None = None
+    categories: dict[str, list[str]] | None = None
+    min_count: PositiveInt | PositiveFloat = 1
     drop_columns: bool = True
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "OneHotEncoder":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "OneHotEncoder":
         """Fit the transformer by identifying categories for one-hot encoding.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with string columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -113,7 +113,9 @@ class OneHotEncoder(_BaseTransformer):
             return self
 
         if not self.subset:
-            self.subset = [col for col, dtype in X.schema.items() if dtype in [pl.String]]
+            self.subset = [
+                col for col, dtype in X.schema.items() if dtype.base_type() in self._CAT_DTYPES
+            ]
 
         X_filled = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
 
@@ -146,7 +148,11 @@ class OneHotEncoder(_BaseTransformer):
 
         # Use native Polars to_dummies - single efficient call
         cols_to_encode = list(self.categories.keys())
-        dummies = X.select(cols_to_encode).to_dummies(separator="__")
+        cat_cols = [col for col in cols_to_encode if X[col].dtype.base_type() in self._CAT_DTYPES]
+        X_encode = X.select(cols_to_encode)
+        if cat_cols:
+            X_encode = X_encode.with_columns([pl.col(c).cast(pl.String) for c in cat_cols])
+        dummies = X_encode.to_dummies(separator="__")
 
         # Build expected columns list (pre-computed for efficiency)
         expected_cols = [

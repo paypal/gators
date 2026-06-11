@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -15,10 +13,10 @@ class Occurrences(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of string columns to extract features from. If None, all string columns
         will be used.
-    substrings : Dict[str, List[str]]
+    substrings : dict[str, list[str]]
         Dictionary mapping column names to lists of substrings to count.
         For example: {"description": ["error", "warning", "success"]}
         will create 3 count features for the "description" column.
@@ -79,8 +77,8 @@ class Occurrences(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    subset: Optional[List[str]] = None
-    substrings: Dict[str, List[str]]
+    subset: list[str] | None = None
+    substrings: dict[str, list[str]]
     case_sensitive: bool = False
     drop_columns: bool = False
 
@@ -93,14 +91,14 @@ class Occurrences(_BaseTransformer):
                 raise ValueError(f"Column '{col}' must have a non-empty list of substrings")
         return substrings
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Occurrences":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Occurrences":
         """Fit the transformer by identifying string columns if not specified.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

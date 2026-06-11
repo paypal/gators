@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import polars as pl
 from pydantic import NonNegativeInt
 
@@ -12,7 +10,7 @@ class SplitExtract(_BaseTransformer):
 
     Parameters
     ----------
-    subset : List[str]
+    subset : list[str]
         List of column names to split and extract from.
     by : str
         Delimiter to split the columns by.
@@ -64,19 +62,19 @@ class SplitExtract(_BaseTransformer):
     └──────────────────┴────────────────────┘
     """
 
-    subset: List[str]
+    subset: list[str]
     by: str
     n: NonNegativeInt
     drop_columns: bool = True
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "SplitExtract":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "SplitExtract":
         """Fit the transformer (no-op, but required for sklearn compatibility).
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

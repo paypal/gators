@@ -1,5 +1,3 @@
-from typing import Optional
-
 import numpy as np
 import polars as pl
 
@@ -12,9 +10,9 @@ class OrdinalEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
-    min_count : Union[int, float], default=1
+    min_count : int | float, default=1
         Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     inplace : bool, default=True
         If True, replace original columns with encoded values.
@@ -87,14 +85,14 @@ class OrdinalEncoder(_BaseEncoder):
 
     """
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "OrdinalEncoder":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "OrdinalEncoder":
         """Fit the transformer by computing ordinal mappings based on category frequency.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with categorical columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -104,7 +102,7 @@ class OrdinalEncoder(_BaseEncoder):
         """
         if not self.subset:
             self.subset = [
-                col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
+                col for col, dtype in X.schema.items() if dtype.base_type() in self._CAT_DTYPES
             ]
         self.mapping_ = {}
         n = len(X)

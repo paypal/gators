@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -15,10 +13,10 @@ class PatternDetector(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of string columns to extract features from. If None, all string columns
         will be used.
-    patterns : List[str], default=["is_numeric", "is_email", "is_url", "is_phone"]
+    patterns : list[str], default=["is_numeric", "is_email", "is_url", "is_phone"]
         Patterns to detect. Options:
 
         - "is_numeric": Contains only digits (with decimal/negative)
@@ -82,8 +80,8 @@ class PatternDetector(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    subset: Optional[List[str]] = None
-    patterns: List[str] = ["is_numeric", "is_email", "is_url", "is_phone"]
+    subset: list[str] | None = None
+    patterns: list[str] = ["is_numeric", "is_email", "is_url", "is_phone"]
     drop_columns: bool = False
 
     @field_validator("patterns")
@@ -107,14 +105,14 @@ class PatternDetector(_BaseTransformer):
                 )
         return patterns
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "PatternDetector":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PatternDetector":
         """Fit the transformer by identifying string columns if not specified.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

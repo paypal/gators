@@ -1,6 +1,8 @@
 """Tests for _BaseTransformer class."""
 
+import polars as pl
 import pytest
+from polars.testing import assert_frame_equal
 from pydantic import ValidationError
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -208,3 +210,54 @@ class TestConcreteDerivedTransformer:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Concrete transformer with fit/transform for fit_transform tests
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+class DoubleTransformer(_BaseTransformer):
+    """Multiplies every column by 2 – used purely for fit_transform tests."""
+
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DoubleTransformer":
+        return self
+
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        return X.with_columns([pl.col(c) * 2 for c in X.columns])
+
+
+class TestBaseTransformerFitTransform:
+    """Tests for the explicit fit_transform method on _BaseTransformer."""
+
+    def test_fit_transform_returns_dataframe(self):
+        X = pl.DataFrame({"a": [1.0, 2.0, 3.0]})
+        result = DoubleTransformer().fit_transform(X)
+        assert isinstance(result, pl.DataFrame)
+
+    def test_fit_transform_equivalent_to_fit_then_transform(self):
+        X = pl.DataFrame({"a": [1.0, 2.0, 3.0], "b": [4.0, 5.0, 6.0]})
+        t = DoubleTransformer()
+        result_ft = t.fit_transform(X)
+        result_seq = t.fit(X).transform(X)
+        assert_frame_equal(result_ft, result_seq)
+
+    def test_fit_transform_returns_self_is_fitted(self):
+        X = pl.DataFrame({"a": [1.0, 2.0]})
+        t = DoubleTransformer()
+        t.fit_transform(X)
+        # Subsequent transform must work (transformer was fitted)
+        result = t.transform(X)
+        assert_frame_equal(result, pl.DataFrame({"a": [2.0, 4.0]}))
+
+    def test_fit_transform_passes_y(self):
+        """y must be forwarded to fit() without error."""
+        X = pl.DataFrame({"a": [1.0, 2.0]})
+        y = pl.Series("target", [0, 1])
+        result = DoubleTransformer().fit_transform(X, y=y)
+        assert isinstance(result, pl.DataFrame)
+
+    def test_fit_transform_values_correct(self):
+        X = pl.DataFrame({"a": [1.0, 2.0, 3.0]})
+        result = DoubleTransformer().fit_transform(X)
+        assert_frame_equal(result, pl.DataFrame({"a": [2.0, 4.0, 6.0]}))

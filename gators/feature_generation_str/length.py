@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from ..transformer._base_transformer import _BaseTransformer
@@ -11,7 +9,7 @@ class Length(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of columns to calculate length for.
 
     Examples
@@ -63,17 +61,17 @@ class Length(_BaseTransformer):
     └─────┴──────┴───────┴──────────┘
     """
 
-    subset: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = {}
+    subset: list[str] | None = None
+    _column_mapping: dict[str, str] = {}
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Length":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Length":
         """Fit the transformer by identifying categorical columns and generating column mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

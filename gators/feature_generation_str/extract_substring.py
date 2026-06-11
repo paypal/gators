@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import polars as pl
 from pydantic import Field
 
@@ -7,18 +5,18 @@ from ..transformer._base_transformer import _BaseTransformer
 
 
 class ExtractSubstring(_BaseTransformer):
-    subset: List[str]
+    subset: list[str]
     start: int = Field(ge=0)
-    end: Optional[int] = Field(default=None, ge=1)
+    end: int | None = Field(default=None, ge=1)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "ExtractSubstring":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ExtractSubstring":
         """Fit the transformer (no-op, but required for sklearn compatibility).
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -30,9 +28,9 @@ class MathFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    groups : List[List[str]]
+    groups : list[list[str]]
         List of groups of column names to apply operations on.
-    operations : List[str]
+    operations : list[str]
         List of operations to apply to each group of columns. Available operations:
 
         - 'sum': Sum of all columns
@@ -55,7 +53,7 @@ class MathFeatures(_BaseTransformer):
         division with automatic handling of division by zero and null values.
     drop_columns : bool, optional
         Whether to drop the original columns after creating the new features, by default False.
-    new_column_names : Optional[List[str]], optional
+    new_column_names : list[str]], optional
         List of new column names for the created features, by default None.
 
     Examples
@@ -105,11 +103,11 @@ class MathFeatures(_BaseTransformer):
     └────────┴────────┘
     """
 
-    groups: List[List[str]]
-    operations: List[str]
+    groups: list[list[str]]
+    operations: list[str]
     drop_columns: bool = False
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = {}
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = {}
 
     @field_validator("operations")
     def check_operators(cls, operations):
@@ -120,14 +118,14 @@ class MathFeatures(_BaseTransformer):
                 )
         return operations
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "MathFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "MathFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import Literal
 
 import polars as pl
 from pydantic import field_validator
@@ -16,10 +16,10 @@ class TimeBinFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of datetime columns to extract features from. If None, all datetime columns
         will be used.
-    bin_types : List[Literal["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]], default=["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
+    bin_types : list[Literal["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]], default=["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
         Types of time bins to generate. Options:
 
         - "part_of_day": night, morning, afternoon, evening
@@ -101,8 +101,8 @@ class TimeBinFeatures(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    subset: Optional[List[str]] = None
-    bin_types: List[
+    subset: list[str] | None = None
+    bin_types: list[
         Literal["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
     ] = ["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
     hemisphere: Literal["northern", "southern"] = "northern"
@@ -124,14 +124,14 @@ class TimeBinFeatures(_BaseTransformer):
                 )
         return bin_types
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "TimeBinFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "TimeBinFeatures":
         """Fit the transformer by identifying datetime columns if not specified.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

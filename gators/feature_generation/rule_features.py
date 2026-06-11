@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Literal, Optional, cast
+from typing import Any, Literal, Optional, cast
 
 import polars as pl
 from pydantic import ConfigDict, field_validator
@@ -37,7 +37,7 @@ class RuleFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    rules : List[List[Dict[str, Any]]]
+    rules : list[list[dict[str, Any]]]
         List of rule groups. Each rule group contains condition dictionaries that will
         be combined to create one boolean output column.
 
@@ -70,7 +70,7 @@ class RuleFeatures(_BaseTransformer):
         - 'and': All conditions in a group must be True
         - 'or': At least one condition in a group must be True
 
-    new_column_names : List[str]
+    new_column_names : list[str]
         Names for the resulting boolean feature columns. Must have the same length as `rules`.
         Each rule group will produce a column with the corresponding name.
 
@@ -197,12 +197,10 @@ class RuleFeatures(_BaseTransformer):
       use this transformer to create intermediate columns, then combine them manually
     """
 
-    rules: List[List[Dict[str, Any]]]
+    rules: list[list[dict[str, Any]]]
     rule_logic: Literal["and", "or"] = "and"
-    new_column_names: List[str]
+    new_column_names: list[str]
     drop_conditions: bool = False
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @field_validator("rules")
     def validate_rules(cls, rules):
@@ -268,14 +266,14 @@ class RuleFeatures(_BaseTransformer):
 
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[Any] = None) -> "RuleFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RuleFeatures":
         """Fit the transformer (no-op, but required for sklearn compatibility).
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[Any], default=None
+        y : pl.Series , default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

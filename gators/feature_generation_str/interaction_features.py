@@ -1,5 +1,4 @@
 from itertools import combinations
-from typing import List, Optional
 
 import polars as pl
 from pydantic import Field
@@ -13,7 +12,7 @@ class InteractionFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of columns to consider for interaction.
     degree : conint(gt=1), default=2
         Degree of interaction terms.
@@ -86,17 +85,17 @@ class InteractionFeatures(_BaseTransformer):
 
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     degree: int = Field(default=2, gt=1)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "InteractionFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "InteractionFeatures":
         """Fit the transformer by identifying categorical columns if not specified.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

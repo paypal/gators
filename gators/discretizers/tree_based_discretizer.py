@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import numpy as np
 import polars as pl
 from lightgbm import LGBMClassifier, LGBMRegressor
@@ -18,7 +16,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to discretize. If None, all numeric columns are selected.
     num_bins : PositiveInt, default=5
         Maximum number of bins to create. Actual number may be less if tree finds fewer optimal splits.
@@ -38,7 +36,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
     min_samples_leaf : int, default=10
         Minimum number of samples required in each leaf node (min_data_in_leaf in LightGBM).
         Controls the granularity of binning (higher = fewer, coarser bins).
-    random_state : Optional[int], default=None
+    random_state : int, default=None
         Random state for reproducibility of tree splits.
 
     Examples
@@ -89,7 +87,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
 
     task: str = "classification"
     min_samples_leaf: PositiveInt = 10
-    random_state: Optional[int] = None
+    random_state: int = None
 
     @field_validator("task")
     def check_task(cls, task):
@@ -103,7 +101,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
             raise ValueError("min_samples_leaf must be at least 1")
         return min_samples_leaf
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "TreeBasedDiscretizer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "TreeBasedDiscretizer":
         """Fit the discretizer by learning optimal splits from decision tree.
 
         Parameters

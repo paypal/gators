@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import PrivateAttr, field_validator
 
@@ -35,11 +33,11 @@ class RowStatisticsFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    column_groups : Dict[str, List[str]]
+    column_groups : dict[str, list[str]]
         Dictionary mapping group names to lists of column names. Each group defines
         a set of columns over which to compute row-level statistics.
         Example: {'card_fields': ['card1', 'card2', 'card3']}
-    func : List[str]
+    func : list[str]
         List of aggregation functions to apply. Available options:
 
         - 'min': Row-wise minimum value
@@ -51,7 +49,7 @@ class RowStatisticsFeatures(_BaseTransformer):
         - 'sum': Row-wise sum
     drop_columns : bool, default=False
         Whether to drop the original columns after creating aggregation features.
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         List of custom names for the aggregation columns. If None, uses default
         naming pattern '{group_name}__{func}'. Must have same length as the total
         number of features created (len(column_groups) × len(func)).
@@ -169,11 +167,11 @@ class RowStatisticsFeatures(_BaseTransformer):
     # Fraudulent transactions show inconsistent verification patterns
     """
 
-    column_groups: Dict[str, List[str]]
-    func: List[str]
+    column_groups: dict[str, list[str]]
+    func: list[str]
     drop_columns: bool = False
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("func")
     def check_func(cls, func):
@@ -210,14 +208,14 @@ class RowStatisticsFeatures(_BaseTransformer):
                 )
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "RowStatisticsFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RowStatisticsFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 
 import polars as pl
 import pytest
@@ -30,7 +30,7 @@ def expected_X() -> pl.DataFrame:
 
 @pytest.fixture
 def startswith_instance() -> Startswith:
-    startswith_dict: Dict[str, List[str]] = {
+    startswith_dict: dict[str, list[str]] = {
         "column1": ["prefix1", "prefix2"],
         "column2": ["prefix3"],
     }

@@ -1,4 +1,4 @@
-from typing import Dict, List, Literal, Optional
+from typing import Literal, Optional
 
 import polars as pl
 
@@ -27,7 +27,7 @@ class LogScaler(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to transform. If None, all numeric columns
         (Float64, Int64, Float32, Int32) are automatically selected.
     base : Literal['e', '10', '2'], default='e'
@@ -107,19 +107,19 @@ class LogScaler(_BaseTransformer):
     └──────────────┘
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     base: Literal["e", "10", "2"] = "e"
-    _column_mapping: Dict[str, str]
+    _column_mapping: dict[str, str]
     drop_columns: bool = True
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "LogScaler":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "LogScaler":
         """Fit the transformer by storing column names.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame to fit.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

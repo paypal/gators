@@ -153,3 +153,32 @@ def test_transform_with_missing_categories_at_test_time():
     # Check that missing categories are filled with zeros
     assert all(transformed_X["A__baz"] == 0)
     assert all(transformed_X["B__three"] == 0)
+
+
+def test_transform_categorical_dtype():
+    X = pl.DataFrame(
+        {
+            "A": pl.Series(["foo", "bar", "foo", "bar", "baz"]).cast(pl.Categorical),
+            "B": pl.Series(["one", "one", "two", "two", "one"]).cast(pl.Categorical),
+        }
+    )
+    encoder = OneHotEncoder()
+    encoder.fit(X)
+    transformed_X = encoder.transform(X)
+    expected_X = pl.DataFrame(
+        {
+            "A__foo": [1, 0, 1, 0, 0],
+            "A__bar": [0, 1, 0, 1, 0],
+            "A__baz": [0, 0, 0, 0, 1],
+            "B__one": [1, 1, 0, 0, 1],
+            "B__two": [0, 0, 1, 1, 0],
+        },
+        schema={
+            "A__foo": pl.Float64,
+            "A__bar": pl.Float64,
+            "A__baz": pl.Float64,
+            "B__one": pl.Float64,
+            "B__two": pl.Float64,
+        },
+    )
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)

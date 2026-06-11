@@ -1,5 +1,3 @@
-from typing import Dict, Optional, Tuple
-
 import polars as pl
 from pydantic import PrivateAttr
 
@@ -26,11 +24,10 @@ class _BaseClipper(_BaseTransformer):
     """
 
     drop_columns: bool = True
+    subset: list[str] | None = None
     inplace: bool = True
-    _clip_bounds: Dict[str, Tuple[Optional[float], Optional[float]]] = PrivateAttr(
-        default_factory=dict
-    )
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _clip_bounds: dict[str, tuple[float, float]] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by clipping values to quantile thresholds.

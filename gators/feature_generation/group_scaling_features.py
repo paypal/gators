@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import PrivateAttr, field_validator
 
@@ -35,13 +33,13 @@ class GroupScalingFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : List[str]
+    subset : list[str]
         List of numerical column names to transform.
-    by : List[str]
+    by : list[str]
         List of column names to use for groupby operations. Each column will be used
         for a separate groupby operation (e.g., ['cat1', 'cat2'] creates features
         grouped by cat1 and separate features grouped by cat2).
-    func : List[str]
+    func : list[str]
         List of scaling functions to apply. Available options:
         - 'mean': value / group_mean (relative position vs average)
         - 'median': value / group_median (robust to outliers)
@@ -51,7 +49,7 @@ class GroupScalingFeatures(_BaseTransformer):
         Value to use when denominator is zero or null (safe division/scaling).
     drop_columns : bool, default=False
         Whether to drop the original numerical columns after creating scaled features.
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         List of custom names for the scaled feature columns. If None, uses default naming pattern
         '{num_col}__{func}_{groupby_col}'. Must have same length as the total number
         of features created (subset × by × func).
@@ -138,13 +136,13 @@ class GroupScalingFeatures(_BaseTransformer):
     └────────┴──────┴─────────────────────┘
     """
 
-    subset: List[str]
-    by: List[str]
-    func: List[str]
+    subset: list[str]
+    by: list[str]
+    func: list[str]
     fill_value: float = 0.0
     drop_columns: bool = False
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("func")
     def check_func(cls, func):
@@ -169,14 +167,14 @@ class GroupScalingFeatures(_BaseTransformer):
                 )
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GroupScalingFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "GroupScalingFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns
