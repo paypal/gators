@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -498,7 +485,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>pl.DataFrame</em>) – The input features.</p></li>
 <li><p><strong>y</strong> (<em>pl.Series</em>) – The target variable (binary).</p></li>
-<li><p><strong>regularization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.01</em>) – Regularization parameter to avoid division by zero in WOE/IV calculation.</p></li>
+<li><p><strong>regularization</strong> (float<em>, </em><em>default=0.01</em>) – Regularization parameter to avoid division by zero in WOE/IV calculation.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -540,7 +527,7 @@
 <span id="gators-feature-selection-feature-stability-index-module"></span><h2>gators.feature_selection.feature_stability_index module<a class="headerlink" href="#module-gators.feature_selection.feature_stability_index" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="gators.feature_selection.feature_stability_index.feature_stability_index">
-<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.feature_stability_index.</span></span><span class="sig-name descname"><span class="pre">feature_stability_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_index.html#feature_stability_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_selection.feature_stability_index.feature_stability_index" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.feature_stability_index.</span></span><span class="sig-name descname"><span class="pre">feature_stability_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="pre">0.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Le</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="pre">1.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_index.html#feature_stability_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_selection.feature_stability_index.feature_stability_index" title="Link to this definition">#</a></dt>
 <dd><p>Compute Feature Stability Index (FSI) using repeated estimator feature importance.</p>
 <p>Measures how consistently a feature is selected across different training folds.
 Higher FSI indicates more stable/reliable feature importance.</p>
@@ -549,9 +536,9 @@ Higher FSI indicates more stable/reliable feature importance.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>estimator</strong> (<em>estimator object</em>) – Any estimator with a <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code> attribute (e.g., XGBoost, RandomForest).</p></li>
 <li><p><strong>skf</strong> (<em>sklearn fold splitter object</em>) – Any sklearn fold splitter object (e.g., StratifiedKFold, KFold) for splitting the data.</p></li>
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Feature DataFrame with shape (n_samples, n_features).</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code></span>) – Target series for training.</p></li>
-<li><p><strong>importance_threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Minimum importance value for a feature to be considered “selected” in a run.
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Feature DataFrame with shape (n_samples, n_features).</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Target series for training.</p></li>
+<li><p><strong>importance_threshold</strong> (<em>Annotated</em><em>[</em>float<em>, </em><em>Field</em><em>(</em><em>ge=0.0</em><em>, </em><em>le=1.0</em><em>)</em><em>]</em><em>, </em><em>default=0.0</em>) – Minimum importance value for a feature to be considered “selected” in a run.
 Must be between 0.0 and 1.0.</p></li>
 </ul>
 </dd>
@@ -584,7 +571,7 @@ Must be between 0.0 and 1.0.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>pl.DataFrame</em>) – The input features.</p></li>
 <li><p><strong>y</strong> (<em>pl.Series</em>) – The target variable (binary).</p></li>
-<li><p><strong>regularization</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.01</em>) – Regularization parameter to avoid division by zero in WOE/IV calculation.</p></li>
+<li><p><strong>regularization</strong> (float<em>, </em><em>default=0.01</em>) – Regularization parameter to avoid division by zero in WOE/IV calculation.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -623,7 +610,7 @@ Must be between 0.0 and 1.0.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">feature_stability_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_index.html#feature_stability_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">feature_stability_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="pre">0.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Le</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="pre">1.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_index.html#feature_stability_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Compute Feature Stability Index (FSI) using repeated estimator feature importance.</p>
 <p>Measures how consistently a feature is selected across different training folds.
 Higher FSI indicates more stable/reliable feature importance.</p>
@@ -632,9 +619,9 @@ Higher FSI indicates more stable/reliable feature importance.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>estimator</strong> (<em>estimator object</em>) – Any estimator with a <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code> attribute (e.g., XGBoost, RandomForest).</p></li>
 <li><p><strong>skf</strong> (<em>sklearn fold splitter object</em>) – Any sklearn fold splitter object (e.g., StratifiedKFold, KFold) for splitting the data.</p></li>
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Feature DataFrame with shape (n_samples, n_features).</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code></span>) – Target series for training.</p></li>
-<li><p><strong>importance_threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Minimum importance value for a feature to be considered “selected” in a run.
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Feature DataFrame with shape (n_samples, n_features).</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Target series for training.</p></li>
+<li><p><strong>importance_threshold</strong> (<em>Annotated</em><em>[</em>float<em>, </em><em>Field</em><em>(</em><em>ge=0.0</em><em>, </em><em>le=1.0</em><em>)</em><em>]</em><em>, </em><em>default=0.0</em>) – Minimum importance value for a feature to be considered “selected” in a run.
 Must be between 0.0 and 1.0.</p></li>
 </ul>
 </dd>
@@ -652,6 +639,463 @@ Must be between 0.0 and 1.0.</p></li>
 <dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">FeatureStabilitySelector</span></span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_selector.html#FeatureStabilitySelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Drop columns whose Feature Stability Index falls below a threshold.</p>
+<p>Wraps <a class="reference internal" href="#module-gators.feature_selection.feature_stability_index" title="gators.feature_selection.feature_stability_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">feature_stability_index()</span></code></a> into a
+fit/transform interface.  The FSI measures how consistently a feature is
+selected across cross-validation folds; features with low FSI are
+considered unstable and are dropped.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sklearn estimators require NumPy arrays.  The <code class="docutils literal notranslate"><span class="pre">fit</span></code> method calls
+<code class="docutils literal notranslate"><span class="pre">.to_numpy()</span></code> internally — this is unavoidable and correct.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> (<em>estimator object</em>) – Any fitted estimator with a <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code> attribute
+(e.g., <code class="docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code>, <code class="docutils literal notranslate"><span class="pre">XGBClassifier</span></code>).</p></li>
+<li><p><strong>skf</strong> (<em>sklearn splitter object</em>) – Any sklearn cross-validation splitter (e.g., <code class="docutils literal notranslate"><span class="pre">StratifiedKFold</span></code>).</p></li>
+<li><p><strong>threshold</strong> (float<em>, </em><em>default=0.5</em>) – Minimum FSI required to keep a column.  Columns with FSI strictly
+below this value are dropped.</p></li>
+<li><p><strong>importance_threshold</strong> (float<em>, </em><em>default=0.0</em>) – Minimum per-fold importance for a feature to count as “selected”
+in that fold.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">selected_features_</span></span></dt>
+<dd><p>Column names that survive the FSI threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">columns_to_drop_</span></span></dt>
+<dd><p>Column names dropped due to low FSI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fsi_scores_</span></span></dt>
+<dd><p>Full FSI DataFrame (feature, fsi, importance) computed during fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">StratifiedKFold</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">FeatureStabilitySelector</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;stable&quot;</span><span class="p">:</span>   <span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+<span class="gp">... </span>    <span class="s2">&quot;unstable&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">7</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skf</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span> <span class="o">=</span> <span class="n">FeatureStabilitySelector</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span> <span class="n">skf</span><span class="o">=</span><span class="n">skf</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_transformed</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gators.feature_selection.feature_stability_selector.FeatureStabilitySelector</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_selector.html#FeatureStabilitySelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Compute FSI for each column and record which to drop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Target series for training the estimator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>FeatureStabilitySelector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_selector.html#FeatureStabilitySelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Drop unstable columns from the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with unstable columns removed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">InformationValueSelector</span></span><a class="reference internal" href="_modules/gators/feature_selection/information_value_selector.html#InformationValueSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Drop columns whose Information Value falls below a threshold.</p>
+<p>Computes the IV for each categorical (String/Categorical/Enum) column
+and drops those whose IV is below <code class="docutils literal notranslate"><span class="pre">threshold</span></code>.  Numeric columns are
+always kept untouched; they are not considered for IV computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threshold</strong> (float<em>, </em><em>default=0.02</em>) – Minimum IV required to keep a column.  Columns with IV strictly
+below this value are dropped.</p></li>
+<li><p><strong>regularization</strong> (float<em>, </em><em>default=0.01</em>) – Regularization applied to WOE/IV calculation to avoid division by zero.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">selected_features_</span></span></dt>
+<dd><p>All column names that survive the threshold (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">columns_to_drop_</span></span></dt>
+<dd><p>Categorical column names dropped because their IV was too low.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">InformationValueSelector</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;cat_strong&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;cat_weak&quot;</span><span class="p">:</span>   <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;numeric&quot;</span><span class="p">:</span>    <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span> <span class="o">=</span> <span class="n">InformationValueSelector</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_transformed</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gators.feature_selection.information_value_selector.InformationValueSelector</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/information_value_selector.html#InformationValueSelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Compute IV for each categorical column and record which to drop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Binary target series.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>InformationValueSelector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/information_value_selector.html#InformationValueSelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Drop low-IV columns from the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with low-IV categorical columns removed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">PermutationImportanceSelector</span></span><a class="reference internal" href="_modules/gators/feature_selection/permutation_importance_selector.html#PermutationImportanceSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Drop columns whose permutation importance falls below a threshold.</p>
+<p>Fits <code class="docutils literal notranslate"><span class="pre">estimator</span></code> on the training data, then measures how much the
+model score degrades when each feature is randomly shuffled
+(permuted).  Features whose mean importance across <code class="docutils literal notranslate"><span class="pre">n_repeats</span></code>
+permutations is below <code class="docutils literal notranslate"><span class="pre">threshold</span></code> are dropped.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sklearn estimators require NumPy arrays.  The <code class="docutils literal notranslate"><span class="pre">fit</span></code> method calls
+<code class="docutils literal notranslate"><span class="pre">.to_numpy()</span></code> internally — this is unavoidable and correct.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> (<em>estimator object</em>) – A fitted or unfitted sklearn-compatible estimator.  Must implement
+<code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">score</span></code>.</p></li>
+<li><p><strong>n_repeats</strong> (int<em>, </em><em>default=5</em>) – Number of times to permute each feature.</p></li>
+<li><p><strong>threshold</strong> (float<em>, </em><em>default=0.0</em>) – Minimum mean importance drop required to keep a feature.  Features
+with mean permutation importance strictly below this value are
+dropped.  A value of <code class="docutils literal notranslate"><span class="pre">0.0</span></code> keeps all features that contribute
+at least marginally.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">selected_features_</span></span></dt>
+<dd><p>Column names that survive the importance threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">columns_to_drop_</span></span></dt>
+<dd><p>Column names dropped due to low permutation importance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">importances_</span></span></dt>
+<dd><p>Mean permutation importance for each input feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">PermutationImportanceSelector</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;informative&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+<span class="gp">... </span>    <span class="s2">&quot;noise&quot;</span><span class="p">:</span>       <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">estimator</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span> <span class="o">=</span> <span class="n">PermutationImportanceSelector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.0</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_transformed</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gators.feature_selection.permutation_importance_selector.PermutationImportanceSelector</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/permutation_importance_selector.html#PermutationImportanceSelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Fit estimator and compute permutation importances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Target series.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PermutationImportanceSelector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/permutation_importance_selector.html#PermutationImportanceSelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Drop low-importance columns from the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with low-importance columns removed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">PSIFilter</span></span><a class="reference internal" href="_modules/gators/feature_selection/psi_filter.html#PSIFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Drop columns whose Population Stability Index exceeds a threshold.</p>
+<p>PSI quantifies how much a feature’s distribution has shifted between a
+reference dataset (typically training data) and the current dataset.
+High PSI signals distributional drift; such features are unreliable at
+inference time and are dropped.</p>
+<p>PSI interpretation:</p>
+<ul class="simple">
+<li><p>PSI &lt; 0.10 — stable, no significant change</p></li>
+<li><p>0.10 ≤ PSI &lt; 0.25 — moderate shift, investigate</p></li>
+<li><p>PSI ≥ 0.25 — significant shift, feature is unstable</p></li>
+</ul>
+<p>Only numeric (Float64, Float32, Int64, Int32) columns are evaluated for
+PSI.  Non-numeric columns are always kept.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_df</strong> (<em>pl.DataFrame</em>) – Reference DataFrame whose distributions define the baseline.</p></li>
+<li><p><strong>threshold</strong> (float<em>, </em><em>default=0.2</em>) – Maximum PSI allowed.  Columns with PSI strictly above this value
+are dropped.</p></li>
+<li><p><strong>n_bins</strong> (int<em>, </em><em>default=10</em>) – Number of quantile-based bins used when computing PSI.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>] or </em><em>None</em><em>, </em><em>default=None</em>) – Numeric columns to evaluate.  If None, all numeric columns shared
+between <code class="docutils literal notranslate"><span class="pre">reference_df</span></code> and the DataFrame passed to <code class="docutils literal notranslate"><span class="pre">fit</span></code> are used.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">psi_scores_</span></span></dt>
+<dd><p>PSI score for each evaluated column (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">columns_to_drop_</span></span></dt>
+<dd><p>Columns dropped because their PSI exceeded the threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">selected_features_</span></span></dt>
+<dd><p>Columns kept after filtering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSIFilter</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reference</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;stable&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+<span class="gp">... </span>    <span class="s2">&quot;drifted&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">current</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;stable&quot;</span><span class="p">:</span>  <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+<span class="gp">... </span>    <span class="s2">&quot;drifted&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">200</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span> <span class="o">=</span> <span class="n">PSIFilter</span><span class="p">(</span><span class="n">reference_df</span><span class="o">=</span><span class="n">reference</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_transformed</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gators.feature_selection.psi_filter.PSIFilter</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/psi_filter.html#PSIFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Compute PSI for each numeric column against the reference DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Current DataFrame to compare against <code class="docutils literal notranslate"><span class="pre">reference_df</span></code>.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Not used; present for sklearn compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PSIFilter</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/psi_filter.html#PSIFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Drop high-PSI columns from the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with high-PSI columns removed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

@@ -460,12 +460,19 @@
 <span class="sd">conversion or validation that can cause issues with Polars DataFrames.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigDict</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_step_stats</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a compact stats string for a DataFrame (used by verbose mode).&quot;&quot;&quot;</span>
+    <span class="n">n_nulls</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">null_count</span><span class="p">()</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;rows=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">}</span><span class="s2">  cols=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">  nulls=</span><span class="si">{</span><span class="n">n_nulls</span><span class="si">}</span><span class="s2">&quot;</span>
 
 
 <div class="viewcode-block" id="Pipeline">
@@ -480,11 +487,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    steps : List[Tuple[str, Any]]</span>
+<span class="sd">    steps : list[tuple[ str, Any]]</span>
 <span class="sd">        List of (name, transform) tuples that are chained in the order they</span>
 <span class="sd">        are specified. Each transform must implement fit and transform methods.</span>
 <span class="sd">    verbose : bool, default=False</span>
-<span class="sd">        If True, prints the name of each step as it&#39;s being executed.</span>
+<span class="sd">        If True, emits a one-line summary per step to stdout showing the step</span>
+<span class="sd">        name, row count, column count, total null count, and wall-clock time.</span>
+<span class="sd">        When ``False`` there is zero measurement overhead.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -502,10 +511,8 @@
 <span class="sd">    &gt;&gt;&gt; X_transformed = pipe.transform(X_train)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">steps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">steps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">arbitrary_types_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">model_post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__context</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Called after Pydantic model initialization to validate steps.&quot;&quot;&quot;</span>
@@ -574,7 +581,7 @@
 
 <div class="viewcode-block" id="Pipeline.fit">
 <a class="viewcode-back" href="../../../gators.pipeline.html#gators.pipeline.Pipeline.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Pipeline&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Pipeline&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit all transformers in the pipeline.</span>
 
 <span class="sd">        Fits each transformer sequentially, transforming the data before</span>
@@ -585,7 +592,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        X : pl.DataFrame</span>
 <span class="sd">            Input DataFrame to fit.</span>
-<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">        y : pl.Series, default=None</span>
 <span class="sd">            Target series for supervised transformers (e.g., WOEEncoder).</span>
 
 <span class="sd">        Returns</span>
@@ -597,7 +604,8 @@
 
         <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">transformer</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Pipeline] Fitting step </span><span class="si">{</span><span class="n">step_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+                <span class="n">in_stats</span> <span class="o">=</span> <span class="n">_step_stats</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">)</span>
 
             <span class="c1"># Fit the transformer</span>
             <span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
@@ -605,6 +613,13 @@
             <span class="c1"># Transform for the next step (except for the last step in fit)</span>
             <span class="k">if</span> <span class="n">step_idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">X_transformed</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[Pipeline] fit   </span><span class="si">{</span><span class="n">step_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span><span class="si">}</span><span class="s2"> · </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;  |  </span><span class="si">{</span><span class="n">in_stats</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s)&quot;</span>
+                <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -628,16 +643,25 @@
 
         <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">transformer</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Pipeline] Transforming step </span><span class="si">{</span><span class="n">step_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+                <span class="n">in_stats</span> <span class="o">=</span> <span class="n">_step_stats</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">)</span>
 
             <span class="n">X_transformed</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+                <span class="n">out_stats</span> <span class="o">=</span> <span class="n">_step_stats</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[Pipeline] transform   </span><span class="si">{</span><span class="n">step_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span><span class="si">}</span><span class="s2"> · </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;  |  in: </span><span class="si">{</span><span class="n">in_stats</span><span class="si">}</span><span class="s2">  →  out: </span><span class="si">{</span><span class="n">out_stats</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s)&quot;</span>
+                <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">X_transformed</span></div>
 
 
 <div class="viewcode-block" id="Pipeline.fit_transform">
 <a class="viewcode-back" href="../../../gators.pipeline.html#gators.pipeline.Pipeline.fit_transform">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit all transformers and transform the data.</span>
 
 <span class="sd">        Fits and transforms each transformer sequentially. This is more</span>
@@ -647,7 +671,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        X : pl.DataFrame</span>
 <span class="sd">            Input DataFrame to fit and transform.</span>
-<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">        y : pl.Series, default=None</span>
 <span class="sd">            Target series for supervised transformers.</span>
 
 <span class="sd">        Returns</span>
@@ -659,15 +683,19 @@
 
         <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">transformer</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+                <span class="n">in_stats</span> <span class="o">=</span> <span class="n">_step_stats</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">)</span>
+
+            <span class="c1"># Fit and transform the data, honouring any custom fit_transform</span>
+            <span class="n">X_transformed</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+                <span class="n">out_stats</span> <span class="o">=</span> <span class="n">_step_stats</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;[Pipeline] Fitting and transforming step </span><span class="si">{</span><span class="n">step_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;[Pipeline] fit+transform   </span><span class="si">{</span><span class="n">step_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span><span class="si">}</span><span class="s2"> · </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;  |  in: </span><span class="si">{</span><span class="n">in_stats</span><span class="si">}</span><span class="s2">  →  out: </span><span class="si">{</span><span class="n">out_stats</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s)&quot;</span>
                 <span class="p">)</span>
-
-            <span class="c1"># Fit the transformer</span>
-            <span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
-
-            <span class="c1"># Transform the data</span>
-            <span class="n">X_transformed</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_transformed</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">X_transformed</span></div>
 
@@ -715,6 +743,48 @@
                 <span class="n">out</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Pipeline.clone">
+<a class="viewcode-back" href="../../../gators.pipeline.html#gators.pipeline.Pipeline.clone">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Pipeline&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a new unfitted pipeline with the same hyperparameters.</span>
+
+<span class="sd">        Each transformer is re-instantiated using only its public constructor</span>
+<span class="sd">        parameters (obtained via ``get_params()``).  Private attributes that</span>
+<span class="sd">        hold fitted state (e.g. ``_statistics``, ``mapping_``) are not copied,</span>
+<span class="sd">        so the returned pipeline is guaranteed to be unfitted.</span>
+
+<span class="sd">        This is the recommended alternative to ``copy.deepcopy`` for</span>
+<span class="sd">        cross-validation workflows where you need multiple independent copies</span>
+<span class="sd">        of the same pipeline configuration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pipeline</span>
+<span class="sd">            A new, unfitted ``Pipeline`` instance with identical hyperparameters.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from gators.pipeline import Pipeline</span>
+<span class="sd">        &gt;&gt;&gt; from gators.imputers import NumericImputer</span>
+<span class="sd">        &gt;&gt;&gt; from gators.scalers import StandardScaler</span>
+
+<span class="sd">        &gt;&gt;&gt; pipe = Pipeline(steps=[</span>
+<span class="sd">        ...     (&#39;impute&#39;, NumericImputer(strategy=&#39;median&#39;)),</span>
+<span class="sd">        ...     (&#39;scale&#39;, StandardScaler()),</span>
+<span class="sd">        ... ])</span>
+<span class="sd">        &gt;&gt;&gt; pipe_clone = pipe.clone()</span>
+<span class="sd">        &gt;&gt;&gt; pipe_clone is pipe</span>
+<span class="sd">        False</span>
+<span class="sd">        &gt;&gt;&gt; pipe_clone.named_steps[&#39;impute&#39;] is pipe.named_steps[&#39;impute&#39;]</span>
+<span class="sd">        False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cloned_steps</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">transformer</span><span class="p">)(</span><span class="o">**</span><span class="n">transformer</span><span class="o">.</span><span class="n">get_params</span><span class="p">()))</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">cloned_steps</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Pipeline.set_params">

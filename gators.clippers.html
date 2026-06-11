@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -489,7 +476,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.CustomClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">CustomClipper</span></span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.clippers._base_clipper._BaseClipper</span></code></p>
 <p>Clip column values using custom lower and upper bounds.</p>
 <p>This transformer allows you to specify custom clipping bounds for each column
 independently. You can specify only lower bounds, only upper bounds, or both
@@ -497,15 +484,15 @@ for different columns. Columns not specified in either dictionary are left uncha
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lower_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>str to float</em><em>, </em><em>optional</em>) – Dictionary mapping column names to their lower bounds.
+<li><p><strong>lower_bounds</strong> (dict<em> of </em><em>str to float</em><em>, </em><em>optional</em>) – Dictionary mapping column names to their lower bounds.
 Values below the lower bound will be clipped to the lower bound.
 Default is None (no lower bounds).</p></li>
-<li><p><strong>upper_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>str to float</em><em>, </em><em>optional</em>) – Dictionary mapping column names to their upper bounds.
+<li><p><strong>upper_bounds</strong> (dict<em> of </em><em>str to float</em><em>, </em><em>optional</em>) – Dictionary mapping column names to their upper bounds.
 Values above the upper bound will be clipped to the upper bound.
 Default is None (no upper bounds).</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, clip values in the original columns.
 If False, create new columns with the suffix ‘__clip_custom’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True and inplace=False, drop the original columns after clipping.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True and inplace=False, drop the original columns after clipping.
 If False and inplace=False, keep both original and clipped columns.
 Ignored if inplace=True.</p></li>
 </ul>
@@ -517,7 +504,7 @@ Ignored if inplace=True.</p></li>
 <dd><p>List of columns that will be clipped (union of lower_bounds and upper_bounds keys).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+<dd class="field-odd"><p>list of str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -529,7 +516,7 @@ Ignored if inplace=True.</p></li>
 None values indicate no bound on that side.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a> of str to tuple</p>
+<dd class="field-odd"><p>dict of str to tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -609,32 +596,32 @@ None values indicate no bound on that side.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#gators.clippers.GaussianClipper" title="gators.clippers.GaussianClipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GaussianClipper</span></code></a></dt><dd><p>Clip values based on mean and standard deviation.</p>
+<dt>GaussianClipper</dt><dd><p>Clip values based on mean and standard deviation.</p>
 </dd>
-<dt><a class="reference internal" href="#gators.clippers.QuantileClipper" title="gators.clippers.QuantileClipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuantileClipper</span></code></a></dt><dd><p>Clip values based on quantiles.</p>
+<dt>QuantileClipper</dt><dd><p>Clip values based on quantiles.</p>
 </dd>
-<dt><a class="reference internal" href="#gators.clippers.MADClipper" title="gators.clippers.MADClipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MADClipper</span></code></a></dt><dd><p>Clip values based on median absolute deviation.</p>
+<dt>MADClipper</dt><dd><p>Clip values based on median absolute deviation.</p>
 </dd>
-<dt><a class="reference internal" href="#gators.clippers.IQRClipper" title="gators.clippers.IQRClipper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IQRClipper</span></code></a></dt><dd><p>Clip values based on interquartile range.</p>
+<dt>IQRClipper</dt><dd><p>Clip values based on interquartile range.</p>
 </dd>
 </dl>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.clippers.CustomClipper.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.clippers.CustomClipper" title="gators.clippers.custom_clipper.CustomClipper"><span class="pre">gators.clippers.custom_clipper.CustomClipper</span></a></span></span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the clipper by identifying columns to clip.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target values (ignored, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>optional</em>) – Target values (ignored, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>self</strong> – Fitted clipper.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.CustomClipper" title="gators.clippers.custom_clipper.CustomClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomClipper</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.clippers.CustomClipper" title="gators.clippers.CustomClipper">CustomClipper</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If no bounds are specified or if specified columns don’t exist in X.</p>
@@ -644,17 +631,17 @@ None values indicate no bound on that side.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.clippers.CustomClipper.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/clippers/custom_clipper.html#CustomClipper.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.CustomClipper.transform" title="Link to this definition">#</a></dt>
 <dd><p>Clip values using the custom bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to clip.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to clip.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with clipped values.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -664,7 +651,7 @@ None values indicate no bound on that side.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.GaussianClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">GaussianClipper</span></span><a class="reference internal" href="_modules/gators/clippers/gaussian_clipper.html#GaussianClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.GaussianClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.clippers._base_clipper._BaseClipper</span></code></p>
 <p>Clip numeric values to mean ± n standard deviations.</p>
 <p>This transformer caps values that are smaller than mean - n*std or larger
 than mean + n*std, where n is the number of standard deviations (n_sigmas).
@@ -672,12 +659,12 @@ Values outside this range are clipped to the boundary values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_sigmas</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=3</em>) – Number of standard deviations to use for clipping bounds.
+<li><p><strong>n_sigmas</strong> (int<em>, </em><em>default=3</em>) – Number of standard deviations to use for clipping bounds.
 Must be a positive integer.</p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, clip values in the original columns.
 If False, create new columns with suffix ‘__clip_gaussian’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -799,20 +786,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.clippers.GaussianClipper.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/gaussian_clipper.html#GaussianClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.GaussianClipper.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.clippers.GaussianClipper" title="gators.clippers.gaussian_clipper.GaussianClipper"><span class="pre">gators.clippers.gaussian_clipper.GaussianClipper</span></a></span></span><a class="reference internal" href="_modules/gators/clippers/gaussian_clipper.html#GaussianClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.GaussianClipper.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing clipping bounds for each column.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.GaussianClipper" title="gators.clippers.gaussian_clipper.GaussianClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianClipper</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.clippers.GaussianClipper" title="gators.clippers.GaussianClipper">GaussianClipper</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -822,7 +809,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.IQRClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">IQRClipper</span></span><a class="reference internal" href="_modules/gators/clippers/iqr_clipper.html#IQRClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.IQRClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.clippers._base_clipper._BaseClipper</span></code></p>
 <p>Clip numeric values based on Interquartile Range (IQR).</p>
 <p>This transformer caps values that fall outside the range
 [Q1 - n_iqrs*IQR, Q3 + n_iqrs*IQR], where Q1 and Q3 are the first and
@@ -831,14 +818,14 @@ used for outlier detection (n_iqrs=1.5 is the standard for box plots).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_iqrs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=1.5</em>) – Number of IQRs beyond Q1/Q3 to use for clipping bounds.
+<li><p><strong>n_iqrs</strong> (float<em>, </em><em>default=1.5</em>) – Number of IQRs beyond Q1/Q3 to use for clipping bounds.
 Must be a positive number. Common values:
 - 1.5: Standard box plot outlier threshold
 - 3.0: Extreme outlier threshold</p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, clip values in the original columns.
 If False, create new columns with suffix ‘__clip_iqr’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -913,20 +900,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.clippers.IQRClipper.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/iqr_clipper.html#IQRClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.IQRClipper.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.clippers.IQRClipper" title="gators.clippers.iqr_clipper.IQRClipper"><span class="pre">gators.clippers.iqr_clipper.IQRClipper</span></a></span></span><a class="reference internal" href="_modules/gators/clippers/iqr_clipper.html#IQRClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.IQRClipper.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing IQR-based clipping bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.IQRClipper" title="gators.clippers.iqr_clipper.IQRClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">IQRClipper</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.clippers.IQRClipper" title="gators.clippers.IQRClipper">IQRClipper</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -936,7 +923,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.MADClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">MADClipper</span></span><a class="reference internal" href="_modules/gators/clippers/mad_clipper.html#MADClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.MADClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.clippers._base_clipper._BaseClipper</span></code></p>
 <p>Clip numeric values based on Median Absolute Deviation (MAD).</p>
 <p>This transformer caps values that are more than n_mads times the MAD away
 from the median. MAD is a robust measure of variability that is less
@@ -946,12 +933,12 @@ Clipping bounds: [median - n_mads*MAD, median + n_mads*MAD]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_mads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=3.0</em>) – Number of MADs from the median to use for clipping bounds.
+<li><p><strong>n_mads</strong> (float<em>, </em><em>default=3.0</em>) – Number of MADs from the median to use for clipping bounds.
 Must be a positive number.</p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, clip values in the original columns.
 If False, create new columns with suffix ‘__clip_mad’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -1026,20 +1013,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.clippers.MADClipper.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/mad_clipper.html#MADClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.MADClipper.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.clippers.MADClipper" title="gators.clippers.mad_clipper.MADClipper"><span class="pre">gators.clippers.mad_clipper.MADClipper</span></a></span></span><a class="reference internal" href="_modules/gators/clippers/mad_clipper.html#MADClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.MADClipper.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing MAD-based clipping bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.MADClipper" title="gators.clippers.mad_clipper.MADClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">MADClipper</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.clippers.MADClipper" title="gators.clippers.MADClipper">MADClipper</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1049,7 +1036,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.clippers.QuantileClipper">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.clippers.</span></span><span class="sig-name descname"><span class="pre">QuantileClipper</span></span><a class="reference internal" href="_modules/gators/clippers/quantile_clipper.html#QuantileClipper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.QuantileClipper" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseClipper</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.clippers._base_clipper._BaseClipper</span></code></p>
 <p>Clip numeric values based on quantile thresholds.</p>
 <p>This transformer caps values below the lower quantile and above the upper
 quantile. This is useful for removing extreme outliers while preserving
@@ -1057,12 +1044,12 @@ the bulk of the data distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lower_quantile</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.01</em>) – Lower quantile threshold (0 to 1). Values below this quantile are clipped.</p></li>
-<li><p><strong>upper_quantile</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.99</em>) – Upper quantile threshold (0 to 1). Values above this quantile are clipped.</p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, clip values in the original columns.
+<li><p><strong>lower_quantile</strong> (float<em>, </em><em>default=0.01</em>) – Lower quantile threshold (0 to 1). Values below this quantile are clipped.</p></li>
+<li><p><strong>upper_quantile</strong> (float<em>, </em><em>default=0.99</em>) – Upper quantile threshold (0 to 1). Values above this quantile are clipped.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to clip. If None, all numeric columns are selected.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, clip values in the original columns.
 If False, create new columns with suffix ‘__clip_quantile’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after clipping.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -1158,20 +1145,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.clippers.QuantileClipper.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/clippers/quantile_clipper.html#QuantileClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.QuantileClipper.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.clippers.QuantileClipper" title="gators.clippers.quantile_clipper.QuantileClipper"><span class="pre">gators.clippers.quantile_clipper.QuantileClipper</span></a></span></span><a class="reference internal" href="_modules/gators/clippers/quantile_clipper.html#QuantileClipper.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.clippers.QuantileClipper.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing quantile-based clipping bounds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.clippers.QuantileClipper" title="gators.clippers.quantile_clipper.QuantileClipper"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileClipper</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.clippers.QuantileClipper" title="gators.clippers.QuantileClipper">QuantileClipper</a></p>
 </dd>
 </dl>
 </dd></dl>

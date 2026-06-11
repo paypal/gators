@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -488,7 +475,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.imputers.BooleanImputer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.imputers.</span></span><span class="sig-name descname"><span class="pre">BooleanImputer</span></span><a class="reference internal" href="_modules/gators/imputers/boolean_imputer.html#BooleanImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.BooleanImputer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Imputes missing values in boolean columns using a specified strategy.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -499,12 +486,12 @@
 <li><p>”most_frequent”: Fill with the mode (most frequent value)</p></li>
 </ul>
 </p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of boolean columns to impute. If None, all boolean columns are selected.</p></li>
-<li><p><strong>value</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>]</em><em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Must be True or False.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of boolean columns to impute. If None, all boolean columns are selected.</p></li>
+<li><p><strong>value</strong> (bool<em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Must be True or False.
 Required when strategy=’constant’, ignored otherwise.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, impute values in the original columns.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, impute values in the original columns.
 If False, create new columns with suffix ‘__impute_{strategy}’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -584,37 +571,37 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.imputers.BooleanImputer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/imputers/boolean_imputer.html#BooleanImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.BooleanImputer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.imputers.BooleanImputer" title="gators.imputers.boolean_imputer.BooleanImputer"><span class="pre">gators.imputers.boolean_imputer.BooleanImputer</span></a></span></span><a class="reference internal" href="_modules/gators/imputers/boolean_imputer.html#BooleanImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.BooleanImputer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing imputation statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with boolean columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with boolean columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.imputers.BooleanImputer" title="gators.imputers.boolean_imputer.BooleanImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BooleanImputer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.imputers.BooleanImputer" title="gators.imputers.BooleanImputer">BooleanImputer</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.imputers.BooleanImputer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/imputers/boolean_imputer.html#BooleanImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.BooleanImputer.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/imputers/boolean_imputer.html#BooleanImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.BooleanImputer.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by imputing missing values in boolean columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with boolean columns containing null values.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with boolean columns containing null values.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with imputed boolean columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -624,23 +611,23 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.imputers.GroupByImputer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.imputers.</span></span><span class="sig-name descname"><span class="pre">GroupByImputer</span></span><a class="reference internal" href="_modules/gators/imputers/groupby_imputer.html#GroupByImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.GroupByImputer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Impute missing values in numeric columns by grouping with a categorical column
 and filling with the median or mean of each group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>group_by_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The categorical column to group by for computing group-wise statistics.</p></li>
+<li><p><strong>group_by_column</strong> (str) – The categorical column to group by for computing group-wise statistics.</p></li>
 <li><p><strong>strategy</strong> (<em>Literal</em><em>[</em><em>'median'</em><em>, </em><em>'mean'</em><em>]</em>) – <p>Strategy to use for imputing missing values within each group.</p>
 <ul>
 <li><p>’median’: Fill with the median of each group</p></li>
 <li><p>’mean’: Fill with the mean of each group</p></li>
 </ul>
 </p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to impute. If None, all numeric columns (except group_by_column) are selected.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, impute values in the original columns.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to impute. If None, all numeric columns (except group_by_column) are selected.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, impute values in the original columns.
 If False, create new columns with suffix ‘__impute_groupby_{strategy}’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -706,37 +693,182 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.imputers.GroupByImputer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/imputers/groupby_imputer.html#GroupByImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.GroupByImputer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.imputers.GroupByImputer" title="gators.imputers.groupby_imputer.GroupByImputer"><span class="pre">gators.imputers.groupby_imputer.GroupByImputer</span></a></span></span><a class="reference internal" href="_modules/gators/imputers/groupby_imputer.html#GroupByImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.GroupByImputer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing group-wise imputation statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns and a grouping column.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns and a grouping column.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.imputers.GroupByImputer" title="gators.imputers.groupby_imputer.GroupByImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupByImputer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.imputers.GroupByImputer" title="gators.imputers.GroupByImputer">GroupByImputer</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.imputers.GroupByImputer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/imputers/groupby_imputer.html#GroupByImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.GroupByImputer.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/imputers/groupby_imputer.html#GroupByImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.GroupByImputer.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by imputing missing values using group-wise statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns containing null values and a grouping column.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns containing null values and a grouping column.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with imputed numeric columns based on group statistics.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.imputers.KNNImputer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.imputers.</span></span><span class="sig-name descname"><span class="pre">KNNImputer</span></span><a class="reference internal" href="_modules/gators/imputers/knn_imputer.html#KNNImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.KNNImputer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Impute missing values using K-Nearest Neighbors.</p>
+<p>For each row with missing values, finds the <code class="docutils literal notranslate"><span class="pre">n_neighbors</span></code> closest rows in
+the training set (using Euclidean distance over the non-null numeric
+columns) and fills the missing values with the mean (<code class="docutils literal notranslate"><span class="pre">weights='uniform'</span></code>)
+or inverse-distance-weighted mean (<code class="docutils literal notranslate"><span class="pre">weights='distance'</span></code>) of those
+neighbors’ values.</p>
+<p>The algorithm is implemented entirely in Polars:</p>
+<ol class="arabic simple">
+<li><p><strong>Fit</strong>: retain all training rows that are complete in both <code class="docutils literal notranslate"><span class="pre">subset</span></code>
+and the feature columns; store them in <code class="docutils literal notranslate"><span class="pre">_train_df_</span></code> as the reference
+pool.  Compute per-column medians as a global fallback.</p></li>
+<li><p><strong>Transform</strong>: rows with no nulls pass through unchanged.  Rows with
+nulls are grouped by their <em>missing pattern</em> (which columns are null)
+so that each group can share a single cross-join + distance computation
+with the reference pool.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>KNN distance is scale-sensitive.  Consider adding a
+<a class="reference internal" href="gators.scalers.html#gators.scalers.StandardScaler" title="gators.scalers.StandardScaler"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandardScaler</span></code></a> (or similar) before this
+imputer when columns have very different magnitudes.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_neighbors</strong> (int<em>, </em><em>default=5</em>) – Number of nearest neighbors to use for imputation.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>] or </em><em>None</em><em>, </em><em>default=None</em>) – Numeric columns to impute.  If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all numeric columns that
+contain at least one null in the training data are selected
+automatically.</p></li>
+<li><p><strong>weights</strong> (<em>{'uniform'</em><em>, </em><em>'distance'}</em><em>, </em><em>default='uniform'</em>) – <p>Weight function applied when aggregating neighbor values.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>: all neighbors contribute equally (plain mean).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'distance'</span></code>: neighbors are weighted by <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">/</span> <span class="pre">(d</span> <span class="pre">+</span> <span class="pre">ε)</span></code> so that
+closer neighbors have a stronger influence.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gators.imputers.KNNImputer._train_df_">
+<span class="sig-name descname"><span class="pre">_train_df_</span></span><a class="headerlink" href="#gators.imputers.KNNImputer._train_df_" title="Link to this definition">#</a></dt>
+<dd><p>Complete training rows used as the KNN reference pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gators.imputers.KNNImputer._global_stats_">
+<span class="sig-name descname"><span class="pre">_global_stats_</span></span><a class="headerlink" href="#gators.imputers.KNNImputer._global_stats_" title="Link to this definition">#</a></dt>
+<dd><p>Per-column median fallback values, used when no feature columns are
+available to compute distances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gators.imputers.KNNImputer._feature_cols_">
+<span class="sig-name descname"><span class="pre">_feature_cols_</span></span><a class="headerlink" href="#gators.imputers.KNNImputer._feature_cols_" title="Link to this definition">#</a></dt>
+<dd><p>Numeric columns (not in <code class="docutils literal notranslate"><span class="pre">subset</span></code>) used to compute pairwise distances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNNImputer</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;age&quot;</span><span class="p">:</span>    <span class="p">[</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="mf">35.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;salary&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">50.0</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">,</span> <span class="mf">80.0</span><span class="p">,</span> <span class="mf">75.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span> <span class="o">=</span> <span class="n">KNNImputer</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">KNNImputer(n_neighbors=2, subset=[&#39;age&#39;], weights=&#39;uniform&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">shape: (5, 2)</span>
+<span class="go">┌──────┬────────┐</span>
+<span class="go">│ age  ┆ salary │</span>
+<span class="go">│ ---  ┆ ---    │</span>
+<span class="go">│ f64  ┆ f64    │</span>
+<span class="go">╞══════╪════════╡</span>
+<span class="go">│ 25.0 ┆ 50.0   │</span>
+<span class="go">│ 30.0 ┆ 60.0   │</span>
+<span class="go">│ 35.0 ┆ 70.0   │</span>
+<span class="go">│ 40.0 ┆ 80.0   │</span>
+<span class="go">│ 37.5 ┆ 75.0   │  ← mean of the 2 nearest neighbours (age=35, age=40)</span>
+<span class="go">└──────┴────────┘</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.imputers.KNNImputer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.imputers.KNNImputer" title="gators.imputers.knn_imputer.KNNImputer"><span class="pre">gators.imputers.knn_imputer.KNNImputer</span></a></span></span><a class="reference internal" href="_modules/gators/imputers/knn_imputer.html#KNNImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.KNNImputer.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit by storing the complete training rows as the KNN reference pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Training DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Ignored. Present for sklearn API compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.imputers.KNNImputer" title="gators.imputers.KNNImputer">KNNImputer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.imputers.KNNImputer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/imputers/knn_imputer.html#KNNImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.KNNImputer.transform" title="Link to this definition">#</a></dt>
+<dd><p>Impute missing values in <code class="docutils literal notranslate"><span class="pre">subset</span></code> columns using KNN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – DataFrame to transform. May contain nulls in <code class="docutils literal notranslate"><span class="pre">subset</span></code> columns.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with nulls in <code class="docutils literal notranslate"><span class="pre">subset</span></code> columns filled.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -746,7 +878,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.imputers.NumericImputer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.imputers.</span></span><span class="sig-name descname"><span class="pre">NumericImputer</span></span><a class="reference internal" href="_modules/gators/imputers/numeric_imputer.html#NumericImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.NumericImputer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Impute missing values in numeric columns using various strategies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -765,11 +897,11 @@ Ignored when inplace=True.</p></li>
 <li><p>’one’: Fill missing values with 1</p></li>
 </ul>
 </p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to impute. If None, all numeric columns are selected.</p></li>
-<li><p><strong>value</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Required when strategy=’constant’, ignored otherwise.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, impute values in the original columns.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to impute. If None, all numeric columns are selected.</p></li>
+<li><p><strong>value</strong> (int<em> | </em>float<em> | </em><em>None</em><em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Required when strategy=’constant’, ignored otherwise.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, impute values in the original columns.
 If False, create new columns with suffix ‘__impute_{strategy}’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -867,37 +999,37 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.imputers.NumericImputer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/imputers/numeric_imputer.html#NumericImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.NumericImputer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.imputers.NumericImputer" title="gators.imputers.numeric_imputer.NumericImputer"><span class="pre">gators.imputers.numeric_imputer.NumericImputer</span></a></span></span><a class="reference internal" href="_modules/gators/imputers/numeric_imputer.html#NumericImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.NumericImputer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing imputation statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.imputers.NumericImputer" title="gators.imputers.numeric_imputer.NumericImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">NumericImputer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.imputers.NumericImputer" title="gators.imputers.NumericImputer">NumericImputer</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.imputers.NumericImputer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/imputers/numeric_imputer.html#NumericImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.NumericImputer.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/imputers/numeric_imputer.html#NumericImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.NumericImputer.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by imputing missing values in numeric columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns containing null values.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns containing null values.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with imputed numeric columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -907,7 +1039,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.imputers.StringImputer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.imputers.</span></span><span class="sig-name descname"><span class="pre">StringImputer</span></span><a class="reference internal" href="_modules/gators/imputers/string_imputer.html#StringImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.StringImputer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Impute missing values in string columns of a Polars DataFrame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -918,11 +1050,11 @@ Ignored when inplace=True.</p></li>
 <li><p>”most_frequent”: Fill with the mode (most frequent value)</p></li>
 </ul>
 </p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of string columns to impute. If None, all string columns are selected.</p></li>
-<li><p><strong>value</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Required when strategy=’constant’, ignored otherwise.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, impute values in the original columns.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of string columns to impute. If None, all string columns are selected.</p></li>
+<li><p><strong>value</strong> (str<em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Required when strategy=’constant’, ignored otherwise.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, impute values in the original columns.
 If False, create new columns with suffix ‘__impute_{strategy}’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -974,37 +1106,37 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.imputers.StringImputer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/imputers/string_imputer.html#StringImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.StringImputer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.imputers.StringImputer" title="gators.imputers.string_imputer.StringImputer"><span class="pre">gators.imputers.string_imputer.StringImputer</span></a></span></span><a class="reference internal" href="_modules/gators/imputers/string_imputer.html#StringImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.StringImputer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing imputation statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with string columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with string columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.imputers.StringImputer" title="gators.imputers.string_imputer.StringImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">StringImputer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.imputers.StringImputer" title="gators.imputers.StringImputer">StringImputer</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.imputers.StringImputer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/imputers/string_imputer.html#StringImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.StringImputer.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/imputers/string_imputer.html#StringImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.StringImputer.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by imputing missing values in string columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with string columns containing null values.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with string columns containing null values.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with imputed string columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1052,6 +1184,14 @@ Ignored when inplace=True.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.GroupByImputer"><code class="docutils literal notranslate"><span class="pre">GroupByImputer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.GroupByImputer.fit"><code class="docutils literal notranslate"><span class="pre">GroupByImputer.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.GroupByImputer.transform"><code class="docutils literal notranslate"><span class="pre">GroupByImputer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.KNNImputer"><code class="docutils literal notranslate"><span class="pre">KNNImputer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.KNNImputer._train_df_"><code class="docutils literal notranslate"><span class="pre">KNNImputer._train_df_</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.KNNImputer._global_stats_"><code class="docutils literal notranslate"><span class="pre">KNNImputer._global_stats_</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.KNNImputer._feature_cols_"><code class="docutils literal notranslate"><span class="pre">KNNImputer._feature_cols_</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.KNNImputer.fit"><code class="docutils literal notranslate"><span class="pre">KNNImputer.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.KNNImputer.transform"><code class="docutils literal notranslate"><span class="pre">KNNImputer.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.NumericImputer"><code class="docutils literal notranslate"><span class="pre">NumericImputer</span></code></a><ul class="nav section-nav flex-column">

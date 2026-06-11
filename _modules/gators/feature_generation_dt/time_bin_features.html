@@ -452,7 +452,7 @@
                 <article class="bd-article">
                   
   <h1>Source code for gators.feature_generation_dt.time_bin_features</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">field_validator</span>
@@ -472,10 +472,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    subset : Optional[List[str]], default=None</span>
+<span class="sd">    subset : list[str], default=None</span>
 <span class="sd">        List of datetime columns to extract features from. If None, all datetime columns</span>
 <span class="sd">        will be used.</span>
-<span class="sd">    bin_types : List[Literal[&quot;part_of_day&quot;, &quot;season&quot;, &quot;time_of_month&quot;, &quot;time_of_year&quot;, &quot;rush_hour&quot;]], default=[&quot;part_of_day&quot;, &quot;season&quot;, &quot;time_of_month&quot;, &quot;time_of_year&quot;, &quot;rush_hour&quot;]</span>
+<span class="sd">    bin_types : list[Literal[&quot;part_of_day&quot;, &quot;season&quot;, &quot;time_of_month&quot;, &quot;time_of_year&quot;, &quot;rush_hour&quot;]], default=[&quot;part_of_day&quot;, &quot;season&quot;, &quot;time_of_month&quot;, &quot;time_of_year&quot;, &quot;rush_hour&quot;]</span>
 <span class="sd">        Types of time bins to generate. Options:</span>
 
 <span class="sd">        - &quot;part_of_day&quot;: night, morning, afternoon, evening</span>
@@ -557,8 +557,8 @@
 <span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">subset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">bin_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span>
+    <span class="n">subset</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bin_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span>
         <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;part_of_day&quot;</span><span class="p">,</span> <span class="s2">&quot;season&quot;</span><span class="p">,</span> <span class="s2">&quot;time_of_month&quot;</span><span class="p">,</span> <span class="s2">&quot;time_of_year&quot;</span><span class="p">,</span> <span class="s2">&quot;rush_hour&quot;</span><span class="p">]</span>
     <span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;part_of_day&quot;</span><span class="p">,</span> <span class="s2">&quot;season&quot;</span><span class="p">,</span> <span class="s2">&quot;time_of_month&quot;</span><span class="p">,</span> <span class="s2">&quot;time_of_year&quot;</span><span class="p">,</span> <span class="s2">&quot;rush_hour&quot;</span><span class="p">]</span>
     <span class="n">hemisphere</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;northern&quot;</span><span class="p">,</span> <span class="s2">&quot;southern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;northern&quot;</span>
@@ -582,14 +582,14 @@
 
 <div class="viewcode-block" id="TimeBinFeatures.fit">
 <a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TimeBinFeatures&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TimeBinFeatures&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by identifying datetime columns if not specified.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        X : pl.DataFrame</span>
 <span class="sd">            Input DataFrame.</span>
-<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">        y : pl.Series, default=None</span>
 <span class="sd">            Target variable. Not used, present here for compatibility.</span>
 
 <span class="sd">        Returns</span>

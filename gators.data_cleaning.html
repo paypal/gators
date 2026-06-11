@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -488,11 +475,11 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.RenameColumns">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">RenameColumns</span></span><a class="reference internal" href="_modules/gators/data_cleaning/rename_columns.html#RenameColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RenameColumns" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Renames columns based on a provided mapping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>column_mapping</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Dictionary mapping original column names to new column names.</p>
+<dd class="field-odd"><p><strong>column_mapping</strong> (dict<em>[</em>str<em>, </em>str<em>]</em>) – Dictionary mapping original column names to new column names.</p>
 </dd>
 </dl>
 <div class="admonition-examples admonition">
@@ -525,37 +512,37 @@
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.RenameColumns.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/rename_columns.html#RenameColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RenameColumns.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.RenameColumns" title="gators.data_cleaning.rename_columns.RenameColumns"><span class="pre">gators.data_cleaning.rename_columns.RenameColumns</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/rename_columns.html#RenameColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RenameColumns.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by storing the column mapping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.RenameColumns" title="gators.data_cleaning.rename_columns.RenameColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">RenameColumns</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.RenameColumns" title="gators.data_cleaning.RenameColumns">RenameColumns</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.RenameColumns.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/rename_columns.html#RenameColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RenameColumns.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/rename_columns.html#RenameColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RenameColumns.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by extracting specified components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -565,16 +552,16 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.CastColumns">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">CastColumns</span></span><a class="reference internal" href="_modules/gators/data_cleaning/cast_columns.html#CastColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CastColumns" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Casts specified columns to a given data type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of column names to cast. If None, all columns will be cast.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of column names to cast. If None, all columns will be cast.</p></li>
 <li><p><strong>dtype</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.14)"><em>type</em></a>) – Target Polars data type (e.g., pl.Float64, pl.String, pl.Int64, pl.Datetime, pl.Date).</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, cast values in the original columns.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, cast values in the original columns.
 If False, create new columns with suffix ‘__cast_{dtype}’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after casting.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after casting.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -664,40 +651,40 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.CastColumns.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/cast_columns.html#CastColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CastColumns.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.CastColumns" title="gators.data_cleaning.cast_columns.CastColumns"><span class="pre">gators.data_cleaning.cast_columns.CastColumns</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/cast_columns.html#CastColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CastColumns.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying columns to cast.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.CastColumns" title="gators.data_cleaning.cast_columns.CastColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">CastColumns</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.CastColumns" title="gators.data_cleaning.CastColumns">CastColumns</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.CastColumns.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/cast_columns.html#CastColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CastColumns.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/cast_columns.html#CastColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CastColumns.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by casting columns to the target type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with cast columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -707,11 +694,11 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropColumns">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">DropColumns</span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_columns.html#DropColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropColumns" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Drops specified columns from a DataFrame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subset</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of column names to drop.</p>
+<dd class="field-odd"><p><strong>subset</strong> (list<em>[</em>str<em>]</em>) – List of column names to drop.</p>
 </dd>
 </dl>
 <div class="admonition-examples admonition">
@@ -747,37 +734,37 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropColumns.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_columns.html#DropColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropColumns.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.DropColumns" title="gators.data_cleaning.drop_columns.DropColumns"><span class="pre">gators.data_cleaning.drop_columns.DropColumns</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_columns.html#DropColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropColumns.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer (no-op for DropColumns).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.DropColumns" title="gators.data_cleaning.drop_columns.DropColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropColumns</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.DropColumns" title="gators.data_cleaning.DropColumns">DropColumns</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropColumns.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_columns.html#DropColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropColumns.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_columns.html#DropColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropColumns.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by extracting specified components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -787,13 +774,13 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropHighNaNRatio">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">DropHighNaNRatio</span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_high_nan_ratio.html#DropHighNaNRatio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropHighNaNRatio" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Drops columns with a high ratio of NaN values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>max_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Maximum allowed ratio of NaN values (0.0-1.0). Columns with NaN ratio &gt;= max_ratio will be dropped.</p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of columns to check for high NaN ratio. If None, all columns are checked.</p></li>
+<li><p><strong>max_ratio</strong> (float) – Maximum allowed ratio of NaN values (0.0-1.0). Columns with NaN ratio &gt;= max_ratio will be dropped.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of columns to check for high NaN ratio. If None, all columns are checked.</p></li>
 </ul>
 </dd>
 </dl>
@@ -882,37 +869,37 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropHighNaNRatio.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_high_nan_ratio.html#DropHighNaNRatio.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropHighNaNRatio.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.DropHighNaNRatio" title="gators.data_cleaning.drop_high_nan_ratio.DropHighNaNRatio"><span class="pre">gators.data_cleaning.drop_high_nan_ratio.DropHighNaNRatio</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_high_nan_ratio.html#DropHighNaNRatio.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropHighNaNRatio.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying columns with high NaN ratios.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.DropHighNaNRatio" title="gators.data_cleaning.drop_high_nan_ratio.DropHighNaNRatio"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropHighNaNRatio</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.DropHighNaNRatio" title="gators.data_cleaning.DropHighNaNRatio">DropHighNaNRatio</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropHighNaNRatio.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_high_nan_ratio.html#DropHighNaNRatio.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropHighNaNRatio.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_high_nan_ratio.html#DropHighNaNRatio.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropHighNaNRatio.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by dropping columns with high NaN ratios.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with high-NaN columns removed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -922,14 +909,14 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropLowCardinality">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">DropLowCardinality</span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_low_cardinality.html#DropLowCardinality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropLowCardinality" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Drops columns with low cardinality.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>min_count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Minimum number of unique values for a column to be retained. Must be &gt;= 1.
+<li><p><strong>min_count</strong> (int) – Minimum number of unique values for a column to be retained. Must be &gt;= 1.
 Columns with unique count &lt; min_count will be dropped.</p></li>
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of columns to check for low cardinality. If None, all string, boolean, and categorical columns are checked.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of columns to check for low cardinality. If None, all string, boolean, and categorical columns are checked.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1016,37 +1003,37 @@ Columns with unique count &lt; min_count will be dropped.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropLowCardinality.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_low_cardinality.html#DropLowCardinality.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropLowCardinality.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.DropLowCardinality" title="gators.data_cleaning.drop_low_cardinality.DropLowCardinality"><span class="pre">gators.data_cleaning.drop_low_cardinality.DropLowCardinality</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_low_cardinality.html#DropLowCardinality.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropLowCardinality.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying columns with low cardinality.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.DropLowCardinality" title="gators.data_cleaning.drop_low_cardinality.DropLowCardinality"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropLowCardinality</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.DropLowCardinality" title="gators.data_cleaning.DropLowCardinality">DropLowCardinality</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropLowCardinality.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_low_cardinality.html#DropLowCardinality.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropLowCardinality.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_low_cardinality.html#DropLowCardinality.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropLowCardinality.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by dropping low cardinality columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with low-cardinality columns removed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1056,13 +1043,13 @@ Columns with unique count &lt; min_count will be dropped.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.VarianceFilter">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">VarianceFilter</span></span><a class="reference internal" href="_modules/gators/data_cleaning/variance_filter.html#VarianceFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.VarianceFilter" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Removes numerical columns with a low variance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to check for variance. If None, all numeric columns are checked.</p></li>
-<li><p><strong>min_var</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Minimum variance threshold. Columns with variance &lt;= min_var will be dropped. Must be &gt;= 0.0.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to check for variance. If None, all numeric columns are checked.</p></li>
+<li><p><strong>min_var</strong> (float) – Minimum variance threshold. Columns with variance &lt;= min_var will be dropped. Must be &gt;= 0.0.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1120,37 +1107,37 @@ Columns with unique count &lt; min_count will be dropped.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.VarianceFilter.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/variance_filter.html#VarianceFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.VarianceFilter.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.VarianceFilter" title="gators.data_cleaning.variance_filter.VarianceFilter"><span class="pre">gators.data_cleaning.variance_filter.VarianceFilter</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/variance_filter.html#VarianceFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.VarianceFilter.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying low-variance columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.VarianceFilter" title="gators.data_cleaning.variance_filter.VarianceFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">VarianceFilter</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.VarianceFilter" title="gators.data_cleaning.VarianceFilter">VarianceFilter</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.VarianceFilter.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/variance_filter.html#VarianceFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.VarianceFilter.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/variance_filter.html#VarianceFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.VarianceFilter.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by dropping low-variance columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with low-variance columns removed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1160,16 +1147,16 @@ Columns with unique count &lt; min_count will be dropped.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.Replace">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">Replace</span></span><a class="reference internal" href="_modules/gators/data_cleaning/replace.html#Replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.Replace" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Replaces values in specified columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>to_replace</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>any</em><em>]</em><em>]</em>) – Nested dictionary specifying replacement mappings. Outer keys are column names,
+<li><p><strong>to_replace</strong> (dict<em>[</em>str<em>, </em>dict<em>[</em>str<em>, </em><em>any</em><em>]</em><em>]</em>) – Nested dictionary specifying replacement mappings. Outer keys are column names,
 inner dictionaries map old values to new values.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace values in the original columns.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace values in the original columns.
 If False, create new columns with suffix ‘__replace’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after replacement.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after replacement.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -1257,37 +1244,37 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.Replace.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/replace.html#Replace.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.Replace.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.Replace" title="gators.data_cleaning.replace.Replace"><span class="pre">gators.data_cleaning.replace.Replace</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/replace.html#Replace.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.Replace.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Name of the target column (if needed).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Name of the target column (if needed).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.Replace" title="gators.data_cleaning.replace.Replace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Replace</span></code></a></span></p>
+<dd class="field-odd"><p>Self</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.Replace.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/replace.html#Replace.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.Replace.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/replace.html#Replace.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.Replace.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by extracting specified components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1297,15 +1284,15 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.CorrelationFilter">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">CorrelationFilter</span></span><a class="reference internal" href="_modules/gators/data_cleaning/correlation_filter.html#CorrelationFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CorrelationFilter" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Filters out highly correlated numeric columns.</p>
 <p>Identifies groups of highly correlated columns and removes all but one from each group,
 helping to reduce multicollinearity in the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to consider for correlation filtering. If None, all numeric columns are used.</p></li>
-<li><p><strong>max_corr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Maximum allowed absolute correlation between columns. Must be &gt; 0 and &lt;= 1.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to consider for correlation filtering. If None, all numeric columns are used.</p></li>
+<li><p><strong>max_corr</strong> (float) – Maximum allowed absolute correlation between columns. Must be &gt; 0 and &lt;= 1.
 Columns with correlation &gt;= max_corr are considered highly correlated.</p></li>
 </ul>
 </dd>
@@ -1358,37 +1345,37 @@ Columns with correlation &gt;= max_corr are considered highly correlated.</p></l
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.CorrelationFilter.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/correlation_filter.html#CorrelationFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CorrelationFilter.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.CorrelationFilter" title="gators.data_cleaning.correlation_filter.CorrelationFilter"><span class="pre">gators.data_cleaning.correlation_filter.CorrelationFilter</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/correlation_filter.html#CorrelationFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CorrelationFilter.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying highly correlated columns to drop.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.CorrelationFilter" title="gators.data_cleaning.correlation_filter.CorrelationFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">CorrelationFilter</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.CorrelationFilter" title="gators.data_cleaning.CorrelationFilter">CorrelationFilter</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.CorrelationFilter.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/correlation_filter.html#CorrelationFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CorrelationFilter.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/correlation_filter.html#CorrelationFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.CorrelationFilter.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by dropping highly correlated columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with highly correlated columns removed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1398,14 +1385,14 @@ Columns with correlation &gt;= max_corr are considered highly correlated.</p></l
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropDuplicateColumns">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">DropDuplicateColumns</span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_columns.html#DropDuplicateColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateColumns" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Removes duplicate columns from the DataFrame.</p>
 <p>Identifies and removes columns that have identical values across all rows.
 This is useful for reducing dimensionality and removing redundant features
 that don’t add predictive value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default='first'</em>) – <p>Strategy for keeping duplicate columns:</p>
+<dd class="field-odd"><p><strong>keep</strong> (str<em>, </em><em>default='first'</em>) – <p>Strategy for keeping duplicate columns:</p>
 <ul class="simple">
 <li><p>’first’: Keep first occurrence of duplicate columns</p></li>
 <li><p>’last’: Keep last occurrence of duplicate columns</p></li>
@@ -1503,20 +1490,20 @@ that don’t add predictive value.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropDuplicateColumns.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_columns.html#DropDuplicateColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateColumns.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.DropDuplicateColumns" title="gators.data_cleaning.drop_duplicate_columns.DropDuplicateColumns"><span class="pre">gators.data_cleaning.drop_duplicate_columns.DropDuplicateColumns</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_columns.html#DropDuplicateColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateColumns.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying duplicate columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.DropDuplicateColumns" title="gators.data_cleaning.drop_duplicate_columns.DropDuplicateColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropDuplicateColumns</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.DropDuplicateColumns" title="gators.data_cleaning.DropDuplicateColumns">DropDuplicateColumns</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If keep parameter is not ‘first’ or ‘last’.</p>
@@ -1526,17 +1513,17 @@ that don’t add predictive value.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropDuplicateColumns.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_columns.html#DropDuplicateColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateColumns.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_columns.html#DropDuplicateColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateColumns.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by removing duplicate columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with duplicate columns removed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1546,16 +1533,16 @@ that don’t add predictive value.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropDuplicateRows">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">DropDuplicateRows</span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_rows.html#DropDuplicateRows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateRows" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Removes duplicate rows from the DataFrame.</p>
 <p>Identifies and removes duplicate rows based on all columns or a subset of
 columns. Critical for preventing data leakage and ensuring data quality.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of columns to consider for identifying duplicates. If None, all
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of columns to consider for identifying duplicates. If None, all
 columns are used.</p></li>
-<li><p><strong>keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default='first'</em>) – <p>Strategy for keeping duplicates:</p>
+<li><p><strong>keep</strong> (str<em>, </em><em>default='first'</em>) – <p>Strategy for keeping duplicates:</p>
 <ul>
 <li><p>’first’: Keep first occurrence, drop subsequent duplicates</p></li>
 <li><p>’last’: Keep last occurrence, drop previous duplicates</p></li>
@@ -1654,20 +1641,20 @@ columns are used.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropDuplicateRows.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_rows.html#DropDuplicateRows.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateRows.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.DropDuplicateRows" title="gators.data_cleaning.drop_duplicate_rows.DropDuplicateRows"><span class="pre">gators.data_cleaning.drop_duplicate_rows.DropDuplicateRows</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_rows.html#DropDuplicateRows.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateRows.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by validating parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.DropDuplicateRows" title="gators.data_cleaning.drop_duplicate_rows.DropDuplicateRows"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropDuplicateRows</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.DropDuplicateRows" title="gators.data_cleaning.DropDuplicateRows">DropDuplicateRows</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If subset columns are specified but not found in DataFrame.</p>
@@ -1677,17 +1664,17 @@ columns are used.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropDuplicateRows.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_rows.html#DropDuplicateRows.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateRows.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_duplicate_rows.html#DropDuplicateRows.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropDuplicateRows.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by removing duplicate rows.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with duplicates removed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1697,7 +1684,7 @@ columns are used.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropConstantColumns">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">DropConstantColumns</span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_constant_columns.html#DropConstantColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropConstantColumns" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Removes columns that have only a single unique value (constant columns).</p>
 <p>Identifies and removes columns with zero information content. More specific
 than VarianceFilter (which only works on numerics) and faster than variance
@@ -1705,9 +1692,9 @@ calculation. Handles both numeric and categorical constant columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of columns to check for constant values. If None, all columns
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of columns to check for constant values. If None, all columns
 are checked.</p></li>
-<li><p><strong>include_na</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – Whether to count NaN/null as a unique value. If True, a column with
+<li><p><strong>include_na</strong> (bool<em>, </em><em>default=True</em>) – Whether to count NaN/null as a unique value. If True, a column with
 all NaN is considered constant. If False, NaN values are ignored
 when counting unique values.</p></li>
 </ul>
@@ -1823,37 +1810,37 @@ when counting unique values.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropConstantColumns.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_constant_columns.html#DropConstantColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropConstantColumns.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.DropConstantColumns" title="gators.data_cleaning.drop_constant_columns.DropConstantColumns"><span class="pre">gators.data_cleaning.drop_constant_columns.DropConstantColumns</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_constant_columns.html#DropConstantColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropConstantColumns.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying constant columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.DropConstantColumns" title="gators.data_cleaning.drop_constant_columns.DropConstantColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropConstantColumns</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.DropConstantColumns" title="gators.data_cleaning.DropConstantColumns">DropConstantColumns</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.DropConstantColumns.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/drop_constant_columns.html#DropConstantColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropConstantColumns.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_constant_columns.html#DropConstantColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropConstantColumns.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by removing constant columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with constant columns removed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1863,7 +1850,7 @@ when counting unique values.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.HighCardinalityFilter">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">HighCardinalityFilter</span></span><a class="reference internal" href="_modules/gators/data_cleaning/high_cardinality_filter.html#HighCardinalityFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.HighCardinalityFilter" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Removes columns with too many unique values (high cardinality).</p>
 <p>Identifies and removes columns with excessive cardinality, which can cause
 issues for tree-based models (memory, overfitting) and create sparse encodings.
@@ -1873,14 +1860,14 @@ or by ratio of unique values to total rows.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of columns to check for high cardinality. If None, all columns
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of columns to check for high cardinality. If None, all columns
 are checked.</p></li>
-<li><p><strong>max_unique</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>default=None</em>) – Maximum number of unique values allowed. Columns with more unique
+<li><p><strong>max_unique</strong> (int<em>, </em><em>default=None</em>) – Maximum number of unique values allowed. Columns with more unique
 values will be removed. If None, no absolute threshold is applied.</p></li>
-<li><p><strong>max_ratio</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=None</em>) – Maximum ratio of unique values to total rows. Must be between 0 and 1.
+<li><p><strong>max_ratio</strong> (float<em>, </em><em>default=None</em>) – Maximum ratio of unique values to total rows. Must be between 0 and 1.
 For example, 0.9 means columns where &gt;90% of rows are unique will be
 removed. If None, no ratio threshold is applied.</p></li>
-<li><p><strong>ignore_na</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – Whether to ignore NaN/null values when counting unique values.
+<li><p><strong>ignore_na</strong> (bool<em>, </em><em>default=True</em>) – Whether to ignore NaN/null values when counting unique values.
 If True, NaN is not counted as a unique value.</p></li>
 </ul>
 </dd>
@@ -1962,37 +1949,174 @@ If True, NaN is not counted as a unique value.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.HighCardinalityFilter.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/high_cardinality_filter.html#HighCardinalityFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.HighCardinalityFilter.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.HighCardinalityFilter" title="gators.data_cleaning.high_cardinality_filter.HighCardinalityFilter"><span class="pre">gators.data_cleaning.high_cardinality_filter.HighCardinalityFilter</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/high_cardinality_filter.html#HighCardinalityFilter.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.HighCardinalityFilter.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying high-cardinality columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.data_cleaning.HighCardinalityFilter" title="gators.data_cleaning.high_cardinality_filter.HighCardinalityFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">HighCardinalityFilter</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.HighCardinalityFilter" title="gators.data_cleaning.HighCardinalityFilter">HighCardinalityFilter</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.data_cleaning.HighCardinalityFilter.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/data_cleaning/high_cardinality_filter.html#HighCardinalityFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.HighCardinalityFilter.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/high_cardinality_filter.html#HighCardinalityFilter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.HighCardinalityFilter.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the DataFrame by removing high-cardinality columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with high-cardinality columns removed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.data_cleaning.RoundSignificantDigits">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">RoundSignificantDigits</span></span><a class="reference internal" href="_modules/gators/data_cleaning/round_significant_digits.html#RoundSignificantDigits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RoundSignificantDigits" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Round selected numeric columns to a given number of significant figures.</p>
+<p>Significant-figure rounding preserves the most meaningful digits of a
+value regardless of its magnitude (e.g., with <code class="docutils literal notranslate"><span class="pre">n_digits=3</span></code>:
+<code class="docutils literal notranslate"><span class="pre">0.001234</span> <span class="pre">→</span> <span class="pre">0.00123</span></code>, <code class="docutils literal notranslate"><span class="pre">1234.0</span> <span class="pre">→</span> <span class="pre">1230.0</span></code>, <code class="docutils literal notranslate"><span class="pre">-9876.5</span> <span class="pre">→</span> <span class="pre">-9880.0</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_digits</strong> (int) – Number of significant figures to keep. Must be &gt;= 1.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – Columns to round. When <code class="docutils literal notranslate"><span class="pre">None</span></code>, all numeric columns in the
+DataFrame are rounded automatically.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the original columns are replaced in-place.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, new columns named <code class="docutils literal notranslate"><span class="pre">{col}__round_{n_digits}sig</span></code> are
+added alongside the originals.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – Relevant only when <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the original
+columns are dropped after the new rounded columns are added.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<p><strong>Example 1: Round all numeric columns in-place (default)</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">RoundSignificantDigits</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001234</span><span class="p">,</span> <span class="mf">1234.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">9876.5</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">3.14159</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">9.9999</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RoundSignificantDigits</span><span class="p">(</span><span class="n">n_digits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">RoundSignificantDigits(n_digits=3, subset=None, inplace=True, drop_columns=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+<span class="go">shape: (3, 3)</span>
+<span class="go">┌──────────┬───────┬───────┐</span>
+<span class="go">│ a        ┆ b     ┆ label │</span>
+<span class="go">│ ---      ┆ ---   ┆ ---   │</span>
+<span class="go">│ f64      ┆ f64   ┆ str   │</span>
+<span class="go">╞══════════╪═══════╪═══════╡</span>
+<span class="go">│ 0.00123  ┆ 3.14  ┆ x     │</span>
+<span class="go">│ 1230.0   ┆ 0.0   ┆ y     │</span>
+<span class="go">│ -9880.0  ┆ 10.0  ┆ z     │</span>
+<span class="go">└──────────┴───────┴───────┘</span>
+</pre></div>
+</div>
+<p><strong>Example 2: Add rounded columns without dropping originals</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RoundSignificantDigits</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">n_digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">drop_columns</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">RoundSignificantDigits(n_digits=2, subset=[&#39;a&#39;], inplace=False, drop_columns=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+<span class="go">shape: (3, 4)</span>
+<span class="go">┌──────────┬───────┬───────┬───────────────┐</span>
+<span class="go">│ a        ┆ b     ┆ label ┆ a__round_2sig │</span>
+<span class="go">│ ---      ┆ ---   ┆ ---   ┆ ---           │</span>
+<span class="go">│ f64      ┆ f64   ┆ str   ┆ f64           │</span>
+<span class="go">╞══════════╪═══════╪═══════╪═══════════════╡</span>
+<span class="go">│ 0.001234 ┆ 3.14  ┆ x     ┆ 0.0012        │</span>
+<span class="go">│ 1234.0   ┆ 0.0   ┆ y     ┆ 1200.0        │</span>
+<span class="go">│ -9876.5  ┆ 10.0  ┆ z     ┆ -9900.0       │</span>
+<span class="go">└──────────┴───────┴───────┴───────────────┘</span>
+</pre></div>
+</div>
+<p><strong>Example 3: Add rounded columns and drop originals</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RoundSignificantDigits</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">n_digits</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">RoundSignificantDigits(n_digits=2, subset=[&#39;a&#39;], inplace=False, drop_columns=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+<span class="go">shape: (3, 3)</span>
+<span class="go">┌───────┬───────┬───────────────┐</span>
+<span class="go">│ b     ┆ label ┆ a__round_2sig │</span>
+<span class="go">│ ---   ┆ ---   ┆ ---           │</span>
+<span class="go">│ f64   ┆ str   ┆ f64           │</span>
+<span class="go">╞═══════╪═══════╪═══════════════╡</span>
+<span class="go">│ 3.14  ┆ x     ┆ 0.0012        │</span>
+<span class="go">│ 0.0   ┆ y     ┆ 1200.0        │</span>
+<span class="go">│ 10.0  ┆ z     ┆ -9900.0       │</span>
+<span class="go">└───────┴───────┴───────────────┘</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<ul class="simple">
+<li><p>All numeric columns (including integers) are cast to <code class="docutils literal notranslate"><span class="pre">Float64</span></code> during
+the rounding computation; the output columns therefore have dtype
+<code class="docutils literal notranslate"><span class="pre">Float64</span></code>.</p></li>
+<li><p>Zero values are returned as <code class="docutils literal notranslate"><span class="pre">0.0</span></code> (log10(0) is undefined).</p></li>
+<li><p>Null values propagate unchanged.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.data_cleaning.RoundSignificantDigits.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.RoundSignificantDigits" title="gators.data_cleaning.round_significant_digits.RoundSignificantDigits"><span class="pre">gators.data_cleaning.round_significant_digits.RoundSignificantDigits</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/round_significant_digits.html#RoundSignificantDigits.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RoundSignificantDigits.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by recording which columns to round.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Ignored; present for sklearn compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.RoundSignificantDigits" title="gators.data_cleaning.RoundSignificantDigits">RoundSignificantDigits</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.data_cleaning.RoundSignificantDigits.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/round_significant_digits.html#RoundSignificantDigits.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RoundSignificantDigits.transform" title="Link to this definition">#</a></dt>
+<dd><p>Round the selected columns to the configured number of significant figures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with rounded columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2090,6 +2214,11 @@ If True, NaN is not counted as a unique value.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.HighCardinalityFilter"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.HighCardinalityFilter.fit"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.HighCardinalityFilter.transform"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundSignificantDigits"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundSignificantDigits.fit"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundSignificantDigits.transform"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits.transform()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -465,9 +465,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    subset : Optional[List[str]], default=None</span>
+<span class="sd">    subset : list[str], default=None</span>
 <span class="sd">        List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</span>
-<span class="sd">    min_count : Union[int, float], default=1</span>
+<span class="sd">    min_count : int | float, default=1</span>
 <span class="sd">        Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</span>
 <span class="sd">    inplace : bool, default=True</span>
 <span class="sd">        If True, replace original columns with encoded values.</span>
@@ -574,7 +574,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">col</span>
                 <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Enum</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">dtype</span><span class="o">.</span><span class="n">base_type</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CAT_DTYPES</span>
             <span class="p">]</span>
         <span class="c1"># Add target as a temporary column for unpivoting</span>
         <span class="n">X_with_target</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">)</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;__target__&quot;</span><span class="p">))</span>

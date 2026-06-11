@@ -314,6 +314,8 @@
       
       
       
+        
+      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -400,26 +402,6 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
-</nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
       class="flat"
@@ -549,6 +531,11 @@
 <li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter.transform"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter.transform()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits.fit"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits.transform"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits.transform()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -630,6 +617,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.CountEncoder"><code class="docutils literal notranslate"><span class="pre">CountEncoder</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.CountEncoder.fit"><code class="docutils literal notranslate"><span class="pre">CountEncoder.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.HashEncoder"><code class="docutils literal notranslate"><span class="pre">HashEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.HashEncoder.fit"><code class="docutils literal notranslate"><span class="pre">HashEncoder.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.encoders.html#gators.encoders.HashEncoder.transform"><code class="docutils literal notranslate"><span class="pre">HashEncoder.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="gators.encoders.html#gators.encoders.LeaveOneOutEncoder"><code class="docutils literal notranslate"><span class="pre">LeaveOneOutEncoder</span></code></a><ul>
@@ -892,6 +884,14 @@
 <li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.GroupByImputer.transform"><code class="docutils literal notranslate"><span class="pre">GroupByImputer.transform()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="gators.imputers.html#gators.imputers.KNNImputer"><code class="docutils literal notranslate"><span class="pre">KNNImputer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.KNNImputer._train_df_"><code class="docutils literal notranslate"><span class="pre">KNNImputer._train_df_</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.KNNImputer._global_stats_"><code class="docutils literal notranslate"><span class="pre">KNNImputer._global_stats_</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.KNNImputer._feature_cols_"><code class="docutils literal notranslate"><span class="pre">KNNImputer._feature_cols_</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.KNNImputer.fit"><code class="docutils literal notranslate"><span class="pre">KNNImputer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.KNNImputer.transform"><code class="docutils literal notranslate"><span class="pre">KNNImputer.transform()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="gators.imputers.html#gators.imputers.NumericImputer"><code class="docutils literal notranslate"><span class="pre">NumericImputer</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.NumericImputer.fit"><code class="docutils literal notranslate"><span class="pre">NumericImputer.fit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="gators.imputers.html#gators.imputers.NumericImputer.transform"><code class="docutils literal notranslate"><span class="pre">NumericImputer.transform()</span></code></a></li>
@@ -913,6 +913,7 @@
 <li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.transform"><code class="docutils literal notranslate"><span class="pre">Pipeline.transform()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.fit_transform"><code class="docutils literal notranslate"><span class="pre">Pipeline.fit_transform()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.get_params"><code class="docutils literal notranslate"><span class="pre">Pipeline.get_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.clone"><code class="docutils literal notranslate"><span class="pre">Pipeline.clone()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="gators.pipeline.html#gators.pipeline.Pipeline.set_params"><code class="docutils literal notranslate"><span class="pre">Pipeline.set_params()</span></code></a></li>
 </ul>
 </li>
@@ -950,6 +951,14 @@
 <li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.PowerScaler"><code class="docutils literal notranslate"><span class="pre">PowerScaler</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.PowerScaler.fit"><code class="docutils literal notranslate"><span class="pre">PowerScaler.fit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.PowerScaler.transform"><code class="docutils literal notranslate"><span class="pre">PowerScaler.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.RobustScaler"><code class="docutils literal notranslate"><span class="pre">RobustScaler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.RobustScaler._median"><code class="docutils literal notranslate"><span class="pre">RobustScaler._median</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.RobustScaler._scale"><code class="docutils literal notranslate"><span class="pre">RobustScaler._scale</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.RobustScaler._column_mapping"><code class="docutils literal notranslate"><span class="pre">RobustScaler._column_mapping</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.RobustScaler.fit"><code class="docutils literal notranslate"><span class="pre">RobustScaler.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gators.scalers.html#gators.scalers.RobustScaler.transform"><code class="docutils literal notranslate"><span class="pre">RobustScaler.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="gators.scalers.html#gators.scalers.StandardScaler"><code class="docutils literal notranslate"><span class="pre">StandardScaler</span></code></a><ul>

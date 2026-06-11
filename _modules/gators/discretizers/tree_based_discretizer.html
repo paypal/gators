@@ -452,9 +452,7 @@
                 <article class="bd-article">
                   
   <h1>Source code for gators.discretizers.tree_based_discretizer</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">lightgbm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LGBMClassifier</span><span class="p">,</span> <span class="n">LGBMRegressor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PositiveInt</span><span class="p">,</span> <span class="n">field_validator</span>
@@ -474,7 +472,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    subset : Optional[List[str]], default=None</span>
+<span class="sd">    subset : list[str], default=None</span>
 <span class="sd">        List of numeric column names to discretize. If None, all numeric columns are selected.</span>
 <span class="sd">    num_bins : PositiveInt, default=5</span>
 <span class="sd">        Maximum number of bins to create. Actual number may be less if tree finds fewer optimal splits.</span>
@@ -494,7 +492,7 @@
 <span class="sd">    min_samples_leaf : int, default=10</span>
 <span class="sd">        Minimum number of samples required in each leaf node (min_data_in_leaf in LightGBM).</span>
 <span class="sd">        Controls the granularity of binning (higher = fewer, coarser bins).</span>
-<span class="sd">    random_state : Optional[int], default=None</span>
+<span class="sd">    random_state : int, default=None</span>
 <span class="sd">        Random state for reproducibility of tree splits.</span>
 
 <span class="sd">    Examples</span>
@@ -545,7 +543,7 @@
 
     <span class="n">task</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
     <span class="n">min_samples_leaf</span><span class="p">:</span> <span class="n">PositiveInt</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">random_state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;task&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_task</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
@@ -561,7 +559,7 @@
 
 <div class="viewcode-block" id="TreeBasedDiscretizer.fit">
 <a class="viewcode-back" href="../../../gators.discretizers.html#gators.discretizers.TreeBasedDiscretizer.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TreeBasedDiscretizer&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TreeBasedDiscretizer&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the discretizer by learning optimal splits from decision tree.</span>
 
 <span class="sd">        Parameters</span>
@@ -589,7 +587,6 @@
                 <span class="s2">&quot;discretizer.fit(X, y=y_train) or pipeline.fit_transform(X, y=y_train)&quot;</span>
             <span class="p">)</span>
 
-        <span class="c1"># Identify numeric columns if not specified</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">col</span>
@@ -597,10 +594,10 @@
                 <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Float32</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Int32</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Int64</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">UInt32</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">UInt64</span><span class="p">]</span>
             <span class="p">]</span>
 
-        <span class="c1"># Learn bins for each column using decision tree</span>
+        <span class="c1"># Learn bins for each column using decision tree splits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_bins</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
-            <span class="c1"># Create LightGBM model</span>
+            <span class="c1"># Create LightGBM model based on task type</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
                 <span class="n">tree</span> <span class="o">=</span> <span class="n">LGBMClassifier</span><span class="p">(</span>
                     <span class="n">max_depth</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_bins</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
@@ -618,11 +615,11 @@
                     <span class="n">verbose</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                 <span class="p">)</span>
 
-            <span class="c1"># Fit tree on single column</span>
+            <span class="c1"># Fit decision tree on single feature</span>
             <span class="n">X_col</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">))</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
             <span class="n">tree</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_col</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="s2">&quot;to_numpy&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">y</span><span class="p">)</span>
 
-            <span class="c1"># Extract split thresholds from LightGBM tree</span>
+            <span class="c1"># Extract split thresholds from LightGBM tree structure</span>
             <span class="n">thresholds</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">tree_X</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">booster_</span><span class="o">.</span><span class="n">trees_to_dataframe</span><span class="p">()</span>
 
@@ -633,12 +630,12 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">split_nodes</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
                 <span class="n">thresholds</span> <span class="o">=</span> <span class="n">split_nodes</span><span class="p">[</span><span class="s2">&quot;threshold&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
-            <span class="c1"># Sort and deduplicate thresholds</span>
+            <span class="c1"># Sort and deduplicate thresholds to create bin boundaries</span>
             <span class="k">if</span> <span class="n">thresholds</span><span class="p">:</span>
                 <span class="n">thresholds</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">thresholds</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_bins</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">thresholds</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># If no splits found, use min/max</span>
+                <span class="c1"># No splits found - fallback to midpoint between min/max</span>
                 <span class="n">min_result</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
                 <span class="n">max_result</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">min_result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -652,11 +649,18 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_bins</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># Generate labels</span>
+        <span class="c1"># Generate labels with proper rounding</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">generate_labels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bins</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rounding</span><span class="p">)</span>
 
-        <span class="c1"># Create column mapping</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__dic_tree&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">}</span>
+        <span class="c1"># Convert to numeric labels if requested</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_numerics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">col</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">))]</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">vals</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+
+        <span class="c1"># Set column mapping for non-inplace mode</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__dic_tree&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 </div>

@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -488,7 +475,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.BinaryEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">BinaryEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/binary_encoder.html#BinaryEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.BinaryEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEncoder</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.encoders._base_encoder._BaseEncoder</span></code></p>
 <p>Encodes categorical values using binary representation.</p>
 <p>Each category is first encoded as an integer, then converted to binary,
 with each binary digit becoming a separate column. This is more compact
@@ -496,11 +483,11 @@ than one-hot encoding for high cardinality features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
+<li><p><strong>min_count</strong> (int<em> | </em>float<em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__binary_enc_{bit_index}’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -561,37 +548,37 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.BinaryEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/binary_encoder.html#BinaryEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.BinaryEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.BinaryEncoder" title="gators.encoders.binary_encoder.BinaryEncoder"><span class="pre">gators.encoders.binary_encoder.BinaryEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/binary_encoder.html#BinaryEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.BinaryEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing binary encoding mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.encoders.BinaryEncoder" title="gators.encoders.binary_encoder.BinaryEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">BinaryEncoder</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.BinaryEncoder" title="gators.encoders.BinaryEncoder">BinaryEncoder</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.BinaryEncoder.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/binary_encoder.html#BinaryEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.BinaryEncoder.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/encoders/binary_encoder.html#BinaryEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.BinaryEncoder.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by applying binary encoding to categorical columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with binary encoded columns (each bit as a separate column).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -601,7 +588,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.CatBoostEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">CatBoostEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/catboost_encoder.html#CatBoostEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.CatBoostEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEncoder</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.encoders._base_encoder._BaseEncoder</span></code></p>
 <p>Encodes categorical values using CatBoost target encoding with ordered statistics.</p>
 <p>This encoder implements the CatBoost algorithm’s approach to target encoding,
 which uses ordered target statistics to prevent target leakage and overfitting.
@@ -610,12 +597,12 @@ not including) the current row.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>smoothing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=1.0</em>) – Smoothing parameter for regularization toward the global mean. Higher values increase regularization.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
+<li><p><strong>min_count</strong> (int<em> | </em>float<em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
+<li><p><strong>smoothing</strong> (float<em>, </em><em>default=1.0</em>) – Smoothing parameter for regularization toward the global mean. Higher values increase regularization.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__encode_catboost’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -653,20 +640,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.CatBoostEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/catboost_encoder.html#CatBoostEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.CatBoostEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.CatBoostEncoder" title="gators.encoders.catboost_encoder.CatBoostEncoder"><span class="pre">gators.encoders.catboost_encoder.CatBoostEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/catboost_encoder.html#CatBoostEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.CatBoostEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing CatBoost ordered target statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (binary or continuous). Required for CatBoostEncoder.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (binary or continuous). Required for CatBoostEncoder.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.encoders.CatBoostEncoder" title="gators.encoders.catboost_encoder.CatBoostEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatBoostEncoder</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.CatBoostEncoder" title="gators.encoders.CatBoostEncoder">CatBoostEncoder</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If y is None.</p>
@@ -676,17 +663,17 @@ Ignored when inplace=True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.CatBoostEncoder.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/catboost_encoder.html#CatBoostEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.CatBoostEncoder.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/encoders/catboost_encoder.html#CatBoostEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.CatBoostEncoder.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame using CatBoost encoding.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with CatBoost encoded columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -696,16 +683,16 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.CountEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">CountEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/count_encoder.html#CountEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.CountEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEncoder</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.encoders._base_encoder._BaseEncoder</span></code></p>
 <p>Encodes categorical values with their occurrence counts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
+<li><p><strong>min_count</strong> (int<em> | </em>float<em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__count_enc’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -798,20 +785,113 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.CountEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/count_encoder.html#CountEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.CountEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.CountEncoder" title="gators.encoders.count_encoder.CountEncoder"><span class="pre">gators.encoders.count_encoder.CountEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/count_encoder.html#CountEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.CountEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing count statistics for each category.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.encoders.CountEncoder" title="gators.encoders.count_encoder.CountEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountEncoder</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.CountEncoder" title="gators.encoders.CountEncoder">CountEncoder</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.encoders.HashEncoder">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">HashEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/hash_encoder.html#HashEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.HashEncoder" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Encode categorical features via feature hashing (hashing trick).</p>
+<p>Maps each category value to an integer bucket in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">n_features)</span></code> using
+a deterministic hash function.  Because no vocabulary is learnt during
+<code class="docutils literal notranslate"><span class="pre">fit()</span></code>, the encoder handles <strong>unknown categories at inference time
+naturally</strong> — any unseen value simply hashes to some bucket without
+raising an error.</p>
+<p>Each input column produces one output column containing integers in
+<code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">n_features)</span></code>.  The output column name is <code class="docutils literal notranslate"><span class="pre">{col}__hash</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_features</strong> (int<em>, </em><em>default=16</em>) – Number of hash buckets.  Controls the trade-off between collision
+rate (lower → more collisions) and the number of distinct encodings
+(higher → fewer collisions but larger range).  Must be ≥ 2.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>] or </em><em>None</em><em>, </em><em>default=None</em>) – Categorical (String, Categorical, Enum, Boolean) columns to encode.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all such columns are selected automatically.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the original columns are overwritten with hash values
+(cast to <code class="docutils literal notranslate"><span class="pre">Float64</span></code> for consistency with other encoders).
+If <code class="docutils literal notranslate"><span class="pre">False</span></code> new columns suffixed <code class="docutils literal notranslate"><span class="pre">__hash</span></code> are added alongside the
+originals (subject to <code class="docutils literal notranslate"><span class="pre">drop_columns</span></code>).</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – When <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after
+adding the hashed columns.  Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-notes admonition">
+<p class="admonition-title">Notes</p>
+<p>The hash is computed with <code class="xref py py-meth docutils literal notranslate"><span class="pre">polars.Expr.hash()</span></code> using <code class="docutils literal notranslate"><span class="pre">seed=0</span></code> for
+full determinism across processes (unlike Python’s built-in <code class="docutils literal notranslate"><span class="pre">hash()</span></code>
+which is randomised by <code class="docutils literal notranslate"><span class="pre">PYTHONHASHSEED</span></code>).  Boolean columns are cast to
+<code class="docutils literal notranslate"><span class="pre">String</span></code> before hashing so that <code class="docutils literal notranslate"><span class="pre">True</span></code> / <code class="docutils literal notranslate"><span class="pre">False</span></code> map to stable
+buckets.</p>
+</div>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">HashEncoder</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;color&quot;</span><span class="p">:</span>  <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;size&quot;</span><span class="p">:</span>   <span class="p">[</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;XL&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">HashEncoder</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_enc</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.encoders.HashEncoder.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.HashEncoder" title="gators.encoders.hash_encoder.HashEncoder"><span class="pre">gators.encoders.hash_encoder.HashEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/hash_encoder.html#HashEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.HashEncoder.fit" title="Link to this definition">#</a></dt>
+<dd><p>Detect the subset of categorical columns (no statistics are learnt).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Not used; present for sklearn compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.HashEncoder" title="gators.encoders.HashEncoder">HashEncoder</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.encoders.HashEncoder.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/encoders/hash_encoder.html#HashEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.HashEncoder.transform" title="Link to this definition">#</a></dt>
+<dd><p>Encode categorical columns using the hashing trick.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with hash-encoded columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -821,7 +901,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.LeaveOneOutEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">LeaveOneOutEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/leave_one_out_encoder.html#LeaveOneOutEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.LeaveOneOutEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEncoder</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.encoders._base_encoder._BaseEncoder</span></code></p>
 <p>Encodes categorical values using leave-one-out target encoding.</p>
 <p>For each row, this encoder calculates the mean of the target variable for
 the category, excluding the current row. This reduces overfitting compared
@@ -830,12 +910,12 @@ its own encoding.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>smoothing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.0</em>) – Smoothing parameter for regularization toward the global mean. Higher values increase regularization. Use 0 for no smoothing.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
+<li><p><strong>min_count</strong> (int<em> | </em>float<em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
+<li><p><strong>smoothing</strong> (float<em>, </em><em>default=0.0</em>) – Smoothing parameter for regularization toward the global mean. Higher values increase regularization. Use 0 for no smoothing.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__encode_loo’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -897,20 +977,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.LeaveOneOutEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/leave_one_out_encoder.html#LeaveOneOutEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.LeaveOneOutEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.LeaveOneOutEncoder" title="gators.encoders.leave_one_out_encoder.LeaveOneOutEncoder"><span class="pre">gators.encoders.leave_one_out_encoder.LeaveOneOutEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/leave_one_out_encoder.html#LeaveOneOutEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.LeaveOneOutEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing leave-one-out target statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code></span>) – Target series (binary or continuous). Required for LeaveOneOutEncoder.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Target series (binary or continuous). Required for LeaveOneOutEncoder.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.encoders.LeaveOneOutEncoder" title="gators.encoders.leave_one_out_encoder.LeaveOneOutEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">LeaveOneOutEncoder</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.LeaveOneOutEncoder" title="gators.encoders.LeaveOneOutEncoder">LeaveOneOutEncoder</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If y is None.</p>
@@ -920,17 +1000,17 @@ Ignored when inplace=True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.LeaveOneOutEncoder.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/leave_one_out_encoder.html#LeaveOneOutEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.LeaveOneOutEncoder.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/encoders/leave_one_out_encoder.html#LeaveOneOutEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.LeaveOneOutEncoder.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame using leave-one-out encoding.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with leave-one-out encoded columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -940,117 +1020,40 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.OneHotEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">OneHotEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/onehot_encoder.html#OneHotEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
-<p>One-hot encodes categorical values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of string columns to encode. If None, all string columns are selected.</p></li>
-<li><p><strong>categories</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>default=None</em>) – Pre-defined categories for each column. If None, categories are inferred from data during fit.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><em>PositiveInt</em><em>, </em><em>PositiveFloat</em><em>]</em><em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – Whether to drop the original columns after encoding.</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition-examples admonition">
-<p class="admonition-title">Examples</p>
-<p>Basic usage:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;one&quot;</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">OneHotEncoder(...)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
-<span class="go">shape: (5, 5)</span>
-<span class="go">┌───────┬───────┬───────┬───────┬───────┐</span>
-<span class="go">│ A|foo │ A|bar │ A|baz │ B|one │ B|two │</span>
-<span class="go">│ f64   │ f64   │ f64   │ f64   │ f64   │</span>
-<span class="go">╞═══════╪═══════╪═══════╪═══════╪═══════╡</span>
-<span class="go">│ 1.0   │ 0.0   │ 0.0   │ 1.0   │ 0.0   │</span>
-<span class="go">│ 0.0   │ 1.0   │ 0.0   │ 1.0   │ 0.0   │</span>
-<span class="go">│ 1.0   │ 0.0   │ 0.0   │ 0.0   │ 1.0   │</span>
-<span class="go">│ 0.0   │ 1.0   │ 0.0   │ 0.0   │ 1.0   │</span>
-<span class="go">│ 0.0   │ 0.0   │ 1.0   │ 1.0   │ 0.0   │</span>
-<span class="go">└───────┴───────┴───────┴───────┴───────┘</span>
-</pre></div>
-</div>
-<p>Drop columns:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">OneHotEncoder(...)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
-<span class="go">shape: (5, 5)</span>
-<span class="go">┌────────┬────────┬────────┬────────┬────────┐</span>
-<span class="go">│ A__foo │ A__bar │ A__baz │ B__one │ B__two │</span>
-<span class="go">│ f64    │ f64    │ f64    │ f64    │ f64    │</span>
-<span class="go">╞════════╪════════╪════════╪════════╪════════╡</span>
-<span class="go">│ 1.0    │ 0.0    │ 0.0    │ 1.0    │ 0.0    │</span>
-<span class="go">│ 0.0    │ 1.0    │ 0.0    │ 1.0    │ 0.0    │</span>
-<span class="go">│ 1.0    │ 0.0    │ 0.0    │ 0.0    │ 1.0    │</span>
-<span class="go">│ 0.0    │ 1.0    │ 0.0    │ 0.0    │ 1.0    │</span>
-<span class="go">│ 0.0    │ 0.0    │ 1.0    │ 1.0    │ 0.0    │</span>
-<span class="go">└────────┴────────┴────────┴────────┴────────┘</span>
-</pre></div>
-</div>
-<p>Subset of columns:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">OneHotEncoder(...)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
-<span class="go">shape: (5, 3)</span>
-<span class="go">┌────────┬────────┬────────┐</span>
-<span class="go">│ A__foo │ A__bar │ A__baz │</span>
-<span class="go">│ f64    │ f64    │ f64    │</span>
-<span class="go">╞════════╪════════╪════════╡</span>
-<span class="go">│ 1.0    │ 0.0    │ 0.0    │</span>
-<span class="go">│ 0.0    │ 1.0    │ 0.0    │</span>
-<span class="go">│ 1.0    │ 0.0    │ 0.0    │</span>
-<span class="go">│ 0.0    │ 1.0    │ 0.0    │</span>
-<span class="go">│ 0.0    │ 0.0    │ 1.0    │</span>
-<span class="go">└────────┴────────┴────────┘</span>
-</pre></div>
-</div>
-</div>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.OneHotEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/onehot_encoder.html#OneHotEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.OneHotEncoder" title="gators.encoders.onehot_encoder.OneHotEncoder"><span class="pre">gators.encoders.onehot_encoder.OneHotEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/onehot_encoder.html#OneHotEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying categories for one-hot encoding.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with string columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with string columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.encoders.OneHotEncoder" title="gators.encoders.onehot_encoder.OneHotEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneHotEncoder</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.OneHotEncoder" title="gators.encoders.OneHotEncoder">OneHotEncoder</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.OneHotEncoder.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/onehot_encoder.html#OneHotEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/encoders/onehot_encoder.html#OneHotEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OneHotEncoder.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by applying one-hot encoding to categorical columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with string columns.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with string columns.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with one-hot encoded columns (one binary column per category).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1060,16 +1063,16 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.OrdinalEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">OrdinalEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/ordinal_encoder.html#OrdinalEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OrdinalEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEncoder</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.encoders._base_encoder._BaseEncoder</span></code></p>
 <p>Encodes categorical values as ordinal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
+<li><p><strong>min_count</strong> (int<em> | </em>float<em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__ordinal_enc’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -1139,20 +1142,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.OrdinalEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/ordinal_encoder.html#OrdinalEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OrdinalEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.OrdinalEncoder" title="gators.encoders.ordinal_encoder.OrdinalEncoder"><span class="pre">gators.encoders.ordinal_encoder.OrdinalEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/ordinal_encoder.html#OrdinalEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.OrdinalEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing ordinal mappings based on category frequency.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.encoders.OrdinalEncoder" title="gators.encoders.ordinal_encoder.OrdinalEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrdinalEncoder</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.OrdinalEncoder" title="gators.encoders.OrdinalEncoder">OrdinalEncoder</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1162,17 +1165,17 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.RareCategoryEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">RareCategoryEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/rare_category_encoder.html#RareCategoryEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.RareCategoryEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Encodes rare categories.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default=&quot;RARE&quot;</em>) – Value to replace rare categories with.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><em>PositiveInt</em><em>, </em><em>PositiveFloat</em><em>]</em><em>, </em><em>default=2</em>) – Minimum count threshold for categories. Categories below this threshold are replaced with <cite>default</cite>. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
+<li><p><strong>default</strong> (str<em>, </em><em>default=&quot;RARE&quot;</em>) – Value to replace rare categories with.</p></li>
+<li><p><strong>min_count</strong> (<em>PositiveInt</em><em> | </em><em>PositiveFloat</em><em>, </em><em>default=2</em>) – Minimum count threshold for categories. Categories below this threshold are replaced with <cite>default</cite>. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__encode_rare’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -1248,13 +1251,13 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.RareCategoryEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/rare_category_encoder.html#RareCategoryEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.RareCategoryEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/rare_category_encoder.html#RareCategoryEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.RareCategoryEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying rare categories.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1268,17 +1271,17 @@ Ignored when inplace=True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.RareCategoryEncoder.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/rare_category_encoder.html#RareCategoryEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.RareCategoryEncoder.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/encoders/rare_category_encoder.html#RareCategoryEncoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.RareCategoryEncoder.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by replacing rare categories with the default value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>DataFrame with rare categories replaced.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1288,16 +1291,16 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.TargetEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">TargetEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/target_encoder.html#TargetEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.TargetEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEncoder</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.encoders._base_encoder._BaseEncoder</span></code></p>
 <p>Target-based encoded categorical values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
+<li><p><strong>min_count</strong> (int<em> | </em>float<em>, </em><em>default=1</em>) – Minimum count threshold for encoding categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__target_enc’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -1372,20 +1375,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.TargetEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/target_encoder.html#TargetEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.TargetEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.TargetEncoder" title="gators.encoders.target_encoder.TargetEncoder"><span class="pre">gators.encoders.target_encoder.TargetEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/target_encoder.html#TargetEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.TargetEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing target mean for each category.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code></span>) – Target series (binary or continuous).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Target series (binary or continuous).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.encoders.TargetEncoder" title="gators.encoders.target_encoder.TargetEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetEncoder</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.TargetEncoder" title="gators.encoders.TargetEncoder">TargetEncoder</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1395,18 +1398,18 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.encoders.WOEEncoder">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.encoders.</span></span><span class="sig-name descname"><span class="pre">WOEEncoder</span></span><a class="reference internal" href="_modules/gators/encoders/woe_encoder.html#WOEEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.WOEEncoder" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEncoder</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.encoders._base_encoder._BaseEncoder</span></code></p>
 <p>Weight of Evidence (WOE) encodes categorical variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>regularization</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=0.01</em>) – Regularization term (0.0-1.0) to prevent division by zero in WOE calculation.</p></li>
-<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>default=0.0</em>) – Default WOE value for categories with insufficient counts or unseen categories.</p></li>
-<li><p><strong>min_count</strong> (<em>Union</em><em>[</em><em>PositiveInt</em><em>, </em><em>PositiveFloat</em><em>]</em><em>, </em><em>default=1</em>) – Minimum count threshold for categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
+<li><p><strong>regularization</strong> (float<em>, </em><em>default=0.01</em>) – Regularization term (0.0-1.0) to prevent division by zero in WOE calculation.</p></li>
+<li><p><strong>default</strong> (float<em>, </em><em>default=0.0</em>) – Default WOE value for categories with insufficient counts or unseen categories.</p></li>
+<li><p><strong>min_count</strong> (<em>PositiveInt</em><em> | </em><em>PositiveFloat</em><em>, </em><em>default=1</em>) – Minimum count threshold for categories. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__encode_woe’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after encoding.
 Ignored when inplace=True.</p></li>
 </ul>
 </dd>
@@ -1484,20 +1487,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.encoders.WOEEncoder.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/encoders/woe_encoder.html#WOEEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.WOEEncoder.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.encoders.WOEEncoder" title="gators.encoders.woe_encoder.WOEEncoder"><span class="pre">gators.encoders.woe_encoder.WOEEncoder</span></a></span></span><a class="reference internal" href="_modules/gators/encoders/woe_encoder.html#WOEEncoder.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.encoders.WOEEncoder.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by computing Weight of Evidence values for each category.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with categorical columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code></span>) – Binary target series (must contain 0s and 1s).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with categorical columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Binary target series (must contain 0s and 1s).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.encoders.WOEEncoder" title="gators.encoders.woe_encoder.WOEEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">WOEEncoder</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.encoders.WOEEncoder" title="gators.encoders.WOEEncoder">WOEEncoder</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1549,6 +1552,11 @@ Ignored when inplace=True.</p></li>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.encoders.CountEncoder"><code class="docutils literal notranslate"><span class="pre">CountEncoder</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.encoders.CountEncoder.fit"><code class="docutils literal notranslate"><span class="pre">CountEncoder.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.encoders.HashEncoder"><code class="docutils literal notranslate"><span class="pre">HashEncoder</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.encoders.HashEncoder.fit"><code class="docutils literal notranslate"><span class="pre">HashEncoder.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.encoders.HashEncoder.transform"><code class="docutils literal notranslate"><span class="pre">HashEncoder.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.encoders.LeaveOneOutEncoder"><code class="docutils literal notranslate"><span class="pre">LeaveOneOutEncoder</span></code></a><ul class="nav section-nav flex-column">

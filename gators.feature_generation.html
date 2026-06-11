@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -488,11 +475,11 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.IsNull">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">IsNull</span></span><a class="reference internal" href="_modules/gators/feature_generation/is_null.html#IsNull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.IsNull" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Creates boolean features indicating whether values are null for specified columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of column names to check for null values.
+<dd class="field-odd"><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of column names to check for null values.
 If None, all columns in the DataFrame are used.</p>
 </dd>
 </dl>
@@ -528,37 +515,37 @@ If None, all columns in the DataFrame are used.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.IsNull.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/is_null.html#IsNull.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.IsNull.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.IsNull" title="gators.feature_generation.is_null.IsNull"><span class="pre">gators.feature_generation.is_null.IsNull</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/is_null.html#IsNull.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.IsNull.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.IsNull" title="gators.feature_generation.is_null.IsNull"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsNull</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.IsNull" title="gators.feature_generation.IsNull">IsNull</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.IsNull.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/is_null.html#IsNull.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.IsNull.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/is_null.html#IsNull.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.IsNull.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by adding is_null indicator columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with additional is_null columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -568,16 +555,16 @@ If None, all columns in the DataFrame are used.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.PolynomialFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">PolynomialFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/polynomial_features.html#PolynomialFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PolynomialFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates polynomial and interaction features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – Subset of columns to transform. If None, all columns
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – Subset of columns to transform. If None, all columns
 except strings and booleans.</p></li>
-<li><p><strong>degree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=2</em>) – The degree of the polynomial features.</p></li>
-<li><p><strong>interaction_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – If True, only interaction features are produced.</p></li>
-<li><p><strong>include_bias</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, include a bias column (column of ones).</p></li>
+<li><p><strong>degree</strong> (int<em>, </em><em>default=2</em>) – The degree of the polynomial features.</p></li>
+<li><p><strong>interaction_only</strong> (bool<em>, </em><em>default=False</em>) – If True, only interaction features are produced.</p></li>
+<li><p><strong>include_bias</strong> (bool<em>, </em><em>default=True</em>) – If True, include a bias column (column of ones).</p></li>
 </ul>
 </dd>
 </dl>
@@ -628,37 +615,37 @@ except strings and booleans.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.PolynomialFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/polynomial_features.html#PolynomialFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PolynomialFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.PolynomialFeatures" title="gators.feature_generation.polynomial_features.PolynomialFeatures"><span class="pre">gators.feature_generation.polynomial_features.PolynomialFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/polynomial_features.html#PolynomialFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PolynomialFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying columns to transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.PolynomialFeatures" title="gators.feature_generation.polynomial_features.PolynomialFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolynomialFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.PolynomialFeatures" title="gators.feature_generation.PolynomialFeatures">PolynomialFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.PolynomialFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/polynomial_features.html#PolynomialFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PolynomialFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/polynomial_features.html#PolynomialFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PolynomialFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by extracting specified components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -668,7 +655,7 @@ except strings and booleans.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.PlaneRotationFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">PlaneRotationFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/plane_rotation_features.html#PlaneRotationFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PlaneRotationFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Create new columns based on the plan rotation mapping.</p>
 <p>The data should be composed of numerical columns only.
 Use <cite>gators.encoders</cite> to replace the categorical columns by
@@ -676,8 +663,8 @@ numerical ones before using <cite>PlaneRotationFeatures</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – List of pair-wise columns.</p></li>
-<li><p><strong>angles</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em>) – List of rotation angles.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>list<em>[</em>str<em>]</em><em>]</em>) – List of pair-wise columns.</p></li>
+<li><p><strong>angles</strong> (list<em>[</em>float<em>]</em>) – List of rotation angles.</p></li>
 </ul>
 </dd>
 </dl>
@@ -718,37 +705,37 @@ numerical ones before using <cite>PlaneRotationFeatures</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.PlaneRotationFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/plane_rotation_features.html#PlaneRotationFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PlaneRotationFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.PlaneRotationFeatures" title="gators.feature_generation.plane_rotation_features.PlaneRotationFeatures"><span class="pre">gators.feature_generation.plane_rotation_features.PlaneRotationFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/plane_rotation_features.html#PlaneRotationFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PlaneRotationFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying columns to flatten.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input dataframe.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input dataframe.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.PlaneRotationFeatures" title="gators.feature_generation.plane_rotation_features.PlaneRotationFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlaneRotationFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.PlaneRotationFeatures" title="gators.feature_generation.PlaneRotationFeatures">PlaneRotationFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.PlaneRotationFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/plane_rotation_features.html#PlaneRotationFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PlaneRotationFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/plane_rotation_features.html#PlaneRotationFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PlaneRotationFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the dataframe <cite>X</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input dataframe.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame.</em>) – Input dataframe.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed dataframe.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -758,13 +745,13 @@ numerical ones before using <cite>PlaneRotationFeatures</cite>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.MathFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">MathFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/math_features.html#MathFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.MathFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates new features by applying mathematical operations to groups of columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>groups</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – List of groups of column names to apply operations on.</p></li>
-<li><p><strong>operations</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – <p>List of operations to apply to each group of columns. Available operations:</p>
+<li><p><strong>groups</strong> (list<em>[</em>list<em>[</em>str<em>]</em><em>]</em>) – List of groups of column names to apply operations on.</p></li>
+<li><p><strong>operations</strong> (list<em>[</em>str<em>]</em>) – <p>List of operations to apply to each group of columns. Available operations:</p>
 <ul>
 <li><p>’sum’: Sum of all columns</p></li>
 <li><p>’mean’: Mean of all columns</p></li>
@@ -785,8 +772,8 @@ numerical ones before using <cite>PlaneRotationFeatures</cite>.</p>
 <p>Note: For division operations, consider using RatioFeatures instead, which provides safer
 division with automatic handling of division by zero and null values.</p>
 </p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to drop the original columns after creating the new features, by default False.</p></li>
-<li><p><strong>new_column_names</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – List of new column names for the created features, by default None.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>optional</em>) – Whether to drop the original columns after creating the new features, by default False.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>]</em><em>, </em><em>optional</em>) – List of new column names for the created features, by default None.</p></li>
 </ul>
 </dd>
 </dl>
@@ -841,37 +828,37 @@ division with automatic handling of division by zero and null values.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.MathFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/math_features.html#MathFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.MathFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.MathFeatures" title="gators.feature_generation.math_features.MathFeatures"><span class="pre">gators.feature_generation.math_features.MathFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/math_features.html#MathFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.MathFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.MathFeatures" title="gators.feature_generation.math_features.MathFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">MathFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.MathFeatures" title="gators.feature_generation.MathFeatures">MathFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.MathFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/math_features.html#MathFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.MathFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/math_features.html#MathFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.MathFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by extracting specified components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -881,7 +868,7 @@ division with automatic handling of division by zero and null values.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupScalingFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">GroupScalingFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/group_scaling_features.html#GroupScalingFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupScalingFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates group-based scaling features for numerical columns.</p>
 <p>This transformer creates features like:</p>
 <ul class="simple">
@@ -908,7 +895,7 @@ different aspects of abnormal behavior.</p>
 <dd class="field-odd"><p>List of numerical column names to transform.</p>
 </dd>
 <dt class="field-even">type subset<span class="colon">:</span></dt>
-<dd class="field-even"><p>List[str]</p>
+<dd class="field-even"><p>list[str]</p>
 </dd>
 <dt class="field-odd">param by<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List of column names to use for groupby operations. Each column will be used
@@ -916,7 +903,7 @@ for a separate groupby operation (e.g., [‘cat1’, ‘cat2’] creates feature
 grouped by cat1 and separate features grouped by cat2).</p>
 </dd>
 <dt class="field-even">type by<span class="colon">:</span></dt>
-<dd class="field-even"><p>List[str]</p>
+<dd class="field-even"><p>list[str]</p>
 </dd>
 <dt class="field-odd">param func<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List of scaling functions to apply. Available options:
@@ -926,7 +913,7 @@ grouped by cat1 and separate features grouped by cat2).</p>
 - ‘minmax’: (value - group_min) / (group_max - group_min) (0-1 normalization)</p>
 </dd>
 <dt class="field-even">type func<span class="colon">:</span></dt>
-<dd class="field-even"><p>List[str]</p>
+<dd class="field-even"><p>list[str]</p>
 </dd>
 <dt class="field-odd">param fill_value<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Value to use when denominator is zero or null (safe division/scaling).</p>
@@ -946,7 +933,7 @@ grouped by cat1 and separate features grouped by cat2).</p>
 of features created (subset × by × func).</p>
 </dd>
 <dt class="field-even">type new_column_names<span class="colon">:</span></dt>
-<dd class="field-even"><p>Optional[List[str]], default=None</p>
+<dd class="field-even"><p>list[str], default=None</p>
 </dd>
 </dl>
 <div class="admonition-examples admonition">
@@ -1035,37 +1022,37 @@ of features created (subset × by × func).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupScalingFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/group_scaling_features.html#GroupScalingFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupScalingFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.GroupScalingFeatures" title="gators.feature_generation.group_scaling_features.GroupScalingFeatures"><span class="pre">gators.feature_generation.group_scaling_features.GroupScalingFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/group_scaling_features.html#GroupScalingFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupScalingFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.GroupScalingFeatures" title="gators.feature_generation.group_scaling_features.GroupScalingFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupScalingFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.GroupScalingFeatures" title="gators.feature_generation.GroupScalingFeatures">GroupScalingFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupScalingFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/group_scaling_features.html#GroupScalingFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupScalingFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/group_scaling_features.html#GroupScalingFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupScalingFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating group scaling features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with group scaling features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1076,18 +1063,18 @@ of features created (subset × by × func).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupStatisticsFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">GroupStatisticsFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/group_statistics_features.html#GroupStatisticsFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupStatisticsFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates statistical aggregation features based on group-level computations.</p>
 <p>Unlike GroupRatioFeatures which divides values by group stats, this transformer
 directly adds the group statistics as new columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of numerical column names to aggregate.</p></li>
-<li><p><strong>by</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of column names to use for groupby operations. Each column will be used
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em>) – List of numerical column names to aggregate.</p></li>
+<li><p><strong>by</strong> (list<em>[</em>str<em>]</em>) – List of column names to use for groupby operations. Each column will be used
 for a separate groupby operation (e.g., [‘cat1’, ‘cat2’] creates features
 grouped by cat1 and separate features grouped by cat2).</p></li>
-<li><p><strong>func</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of aggregation functions to apply. Available options:
+<li><p><strong>func</strong> (list<em>[</em>str<em>]</em>) – List of aggregation functions to apply. Available options:
 - ‘mean’: Group mean
 - ‘std’: Group standard deviation
 - ‘median’: Group median
@@ -1096,8 +1083,8 @@ grouped by cat1 and separate features grouped by cat2).</p></li>
 - ‘sum’: Group sum
 - ‘count’: Group count
 - ‘range’: Group range (max - min)</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original numerical columns after creating statistics.</p></li>
-<li><p><strong>new_column_names</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of custom names for the statistic columns. If None, uses default naming pattern
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original numerical columns after creating statistics.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of custom names for the statistic columns. If None, uses default naming pattern
 ‘{agg}_{num_col}__per_{groupby_col}’. Must have same length as the total number
 of features created (subset × by × func).</p></li>
 </ul>
@@ -1172,37 +1159,37 @@ of features created (subset × by × func).</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupStatisticsFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/group_statistics_features.html#GroupStatisticsFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupStatisticsFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.GroupStatisticsFeatures" title="gators.feature_generation.group_statistics_features.GroupStatisticsFeatures"><span class="pre">gators.feature_generation.group_statistics_features.GroupStatisticsFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/group_statistics_features.html#GroupStatisticsFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupStatisticsFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.GroupStatisticsFeatures" title="gators.feature_generation.group_statistics_features.GroupStatisticsFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupStatisticsFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.GroupStatisticsFeatures" title="gators.feature_generation.GroupStatisticsFeatures">GroupStatisticsFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupStatisticsFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/group_statistics_features.html#GroupStatisticsFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupStatisticsFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/group_statistics_features.html#GroupStatisticsFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupStatisticsFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating group statistic features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with group statistic features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1212,7 +1199,7 @@ of features created (subset × by × func).</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupLagFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">GroupLagFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/group_lag_features.html#GroupLagFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupLagFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates lag (previous values) and lead (next values) features within groups.</p>
 <p>This transformer creates features like:</p>
 <ul class="simple">
@@ -1224,15 +1211,15 @@ of features created (subset × by × func).</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of numerical column names to create lag/lead features for.</p></li>
-<li><p><strong>by</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of columns to group by. Lags/leads are computed within each group.</p></li>
-<li><p><strong>lags</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em>) – List of lag periods. Positive integers create lag features (previous values).
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em>) – List of numerical column names to create lag/lead features for.</p></li>
+<li><p><strong>by</strong> (list<em>[</em>str<em>]</em>) – List of columns to group by. Lags/leads are computed within each group.</p></li>
+<li><p><strong>lags</strong> (list<em>[</em>int<em>]</em>) – List of lag periods. Positive integers create lag features (previous values).
 Example: [1, 2, 3] creates lag_1, lag_2, lag_3</p></li>
-<li><p><strong>leads</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>default=</em><em>[</em><em>]</em>) – List of lead periods. Positive integers create lead features (next values).
+<li><p><strong>leads</strong> (list<em>[</em>int<em>]</em><em>, </em><em>default=</em><em>[</em><em>]</em>) – List of lead periods. Positive integers create lead features (next values).
 Example: [1, 2] creates lead_1, lead_2</p></li>
-<li><p><strong>fill_value</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>, </em><em>default=None</em>) – Value to use for missing lag/lead values. If None, uses null.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original numerical columns after creating lag features.</p></li>
-<li><p><strong>new_column_names</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of custom names for the lag/lead columns. If None, uses default naming pattern
+<li><p><strong>fill_value</strong> (float<em>, </em><em>default=None</em>) – Value to use for missing lag/lead values. If None, uses null.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original numerical columns after creating lag features.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of custom names for the lag/lead columns. If None, uses default naming pattern
 ‘{num_col}_lag{n}_{groupby_cols}’ or ‘{num_col}_lead{n}_{groupby_cols}’.
 Must have same length as the total number of features created.</p></li>
 </ul>
@@ -1324,37 +1311,37 @@ Must have same length as the total number of features created.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupLagFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/group_lag_features.html#GroupLagFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupLagFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.GroupLagFeatures" title="gators.feature_generation.group_lag_features.GroupLagFeatures"><span class="pre">gators.feature_generation.group_lag_features.GroupLagFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/group_lag_features.html#GroupLagFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupLagFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.GroupLagFeatures" title="gators.feature_generation.group_lag_features.GroupLagFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupLagFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.GroupLagFeatures" title="gators.feature_generation.GroupLagFeatures">GroupLagFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupLagFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/group_lag_features.html#GroupLagFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupLagFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/group_lag_features.html#GroupLagFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupLagFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating lag/lead features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with lag/lead features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1364,18 +1351,18 @@ Must have same length as the total number of features created.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.ComparisonFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">ComparisonFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/comparison_features.html#ComparisonFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ComparisonFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates binary comparison features between pairs of columns, or unary null checks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset_a</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of column names for the left side of comparisons (or the only column for unary operators).</p></li>
-<li><p><strong>subset_b</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of column names for the right side of comparisons.
+<li><p><strong>subset_a</strong> (list<em>[</em>str<em>]</em>) – List of column names for the left side of comparisons (or the only column for unary operators).</p></li>
+<li><p><strong>subset_b</strong> (list<em>[</em>str<em>]</em>) – List of column names for the right side of comparisons.
 For unary operators (‘is_null’, ‘is_not_null’), these values are ignored.</p></li>
-<li><p><strong>operators</strong> (<em>List</em><em>[</em><em>Literal</em><em>[</em><em>&quot;&gt;&quot;</em><em>, </em><em>&quot;&lt;&quot;</em><em>, </em><em>&quot;&gt;=&quot;</em><em>, </em><em>&quot;&lt;=&quot;</em><em>, </em><em>&quot;==&quot;</em><em>, </em><em>&quot;!=&quot;</em><em>, </em><em>&quot;is_null&quot;</em><em>, </em><em>&quot;is_not_null&quot;</em><em>]</em><em>]</em>) – List of comparison operators to apply. Must match length of columns.
+<li><p><strong>operators</strong> (list<em>[</em><em>Literal</em><em>[</em><em>&quot;&gt;&quot;</em><em>, </em><em>&quot;&lt;&quot;</em><em>, </em><em>&quot;&gt;=&quot;</em><em>, </em><em>&quot;&lt;=&quot;</em><em>, </em><em>&quot;==&quot;</em><em>, </em><em>&quot;!=&quot;</em><em>, </em><em>&quot;is_null&quot;</em><em>, </em><em>&quot;is_not_null&quot;</em><em>]</em><em>]</em>) – List of comparison operators to apply. Must match length of columns.
 Unary operators: ‘is_null’, ‘is_not_null’ (only use subset_a)
 Binary operators: ‘&gt;’, ‘&lt;’, ‘&gt;=’, ‘&lt;=’, ‘==’, ‘!=’ (use both subset_a and subset_b)</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original columns after creating comparisons.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original columns after creating comparisons.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1481,37 +1468,37 @@ Binary operators: ‘&gt;’, ‘&lt;’, ‘&gt;=’, ‘&lt;=’, ‘==’, �
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.ComparisonFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/comparison_features.html#ComparisonFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ComparisonFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.ComparisonFeatures" title="gators.feature_generation.comparison_features.ComparisonFeatures"><span class="pre">gators.feature_generation.comparison_features.ComparisonFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/comparison_features.html#ComparisonFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ComparisonFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer (no-op, but required for sklearn compatibility).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.ComparisonFeatures" title="gators.feature_generation.comparison_features.ComparisonFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComparisonFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.ComparisonFeatures" title="gators.feature_generation.ComparisonFeatures">ComparisonFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.ComparisonFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/comparison_features.html#ComparisonFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ComparisonFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/comparison_features.html#ComparisonFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ComparisonFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating comparison features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with comparison features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1521,7 +1508,7 @@ Binary operators: ‘&gt;’, ‘&lt;’, ‘&gt;=’, ‘&lt;=’, ‘==’, �
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.ConditionFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">ConditionFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/condition_features.html#ConditionFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ConditionFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Creates multiple independent boolean features, one for each condition.</p>
 <p>This transformer is designed for creating simple boolean flags without combination logic.
 Each condition produces exactly one boolean output column. For combining multiple
@@ -1549,7 +1536,7 @@ conditions with AND/OR logic, use RuleFeatures instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>conditions</strong> (<em>List</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Any</em><em>]</em><em>]</em>) – <p>List of condition dictionaries. Each condition creates one boolean output column.</p>
+<li><p><strong>conditions</strong> (list<em>[</em>dict<em>[</em>str<em>, </em><em>Any</em><em>]</em><em>]</em>) – <p>List of condition dictionaries. Each condition creates one boolean output column.</p>
 <p>Each condition dictionary must contain:</p>
 <ul>
 <li><p>’column’: str - Name of the column to evaluate</p></li>
@@ -1584,7 +1571,7 @@ For unary operators: Neither ‘value’ nor ‘other_column’ should be specif
 </pre></div>
 </div>
 </p></li>
-<li><p><strong>new_column_names</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – <p>Names for the resulting boolean feature columns. If provided, must have the same
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – <p>Names for the resulting boolean feature columns. If provided, must have the same
 length as <code class="docutils literal notranslate"><span class="pre">conditions</span></code>. If None, column names are auto-generated in the format:</p>
 <ul>
 <li><p>Scalar comparison: <code class="docutils literal notranslate"><span class="pre">{column}_{op_name}_{value}</span></code> (e.g., ‘age_gte_18’)</p></li>
@@ -1786,43 +1773,43 @@ length as <code class="docutils literal notranslate"><span class="pre">condition
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#gators.feature_generation.RuleFeatures" title="gators.feature_generation.RuleFeatures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RuleFeatures</span></code></a></dt><dd><p>For combining multiple conditions with AND/OR logic</p>
+<dt>RuleFeatures</dt><dd><p>For combining multiple conditions with AND/OR logic</p>
 </dd>
 </dl>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.ConditionFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/condition_features.html#ConditionFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ConditionFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.ConditionFeatures" title="gators.feature_generation.condition_features.ConditionFeatures"><span class="pre">gators.feature_generation.condition_features.ConditionFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/condition_features.html#ConditionFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ConditionFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column names if not provided.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.ConditionFeatures" title="gators.feature_generation.condition_features.ConditionFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConditionFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.ConditionFeatures" title="gators.feature_generation.ConditionFeatures">ConditionFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.ConditionFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/condition_features.html#ConditionFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ConditionFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/condition_features.html#ConditionFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ConditionFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating boolean features for each condition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with new boolean features (one per condition).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1832,7 +1819,7 @@ length as <code class="docutils literal notranslate"><span class="pre">condition
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.DistanceFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">DistanceFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/distance_features.html#DistanceFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.DistanceFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Calculates distances between geographic coordinate pairs.</p>
 <p>This transformer computes distances between consecutive pairs of latitude/longitude coordinates
 using different distance metrics (euclidean, manhattan, haversine) and units (km, miles, meters, feet).</p>
@@ -1846,16 +1833,16 @@ using different distance metrics (euclidean, manhattan, haversine) and units (km
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lats</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of latitude column names. Must have at least 2 elements.
+<li><p><strong>lats</strong> (list<em>[</em>str<em>]</em>) – List of latitude column names. Must have at least 2 elements.
 Coordinates are paired sequentially: (lats[0], longs[0]) to (lats[1], longs[1]), etc.</p></li>
-<li><p><strong>longs</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of longitude column names. Must have same length as lats.</p></li>
+<li><p><strong>longs</strong> (list<em>[</em>str<em>]</em>) – List of longitude column names. Must have same length as lats.</p></li>
 <li><p><strong>unit</strong> (<em>Literal</em><em>[</em><em>&quot;km&quot;</em><em>, </em><em>&quot;miles&quot;</em><em>, </em><em>&quot;meters&quot;</em><em>, </em><em>&quot;feet&quot;</em><em>]</em><em>, </em><em>default=&quot;km&quot;</em>) – Unit for distance output.</p></li>
 <li><p><strong>method</strong> (<em>Literal</em><em>[</em><em>&quot;euclidean&quot;</em><em>, </em><em>&quot;manhattan&quot;</em><em>, </em><em>&quot;haversine&quot;</em><em>]</em><em>, </em><em>default=&quot;haversine&quot;</em>) – Distance calculation method:
 - ‘haversine’: Great-circle distance on a sphere (recommended for lat/long)
 - ‘euclidean’: Straight-line distance
 - ‘manhattan’: Sum of absolute differences (taxicab distance)</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – Whether to drop the original coordinate columns.</p></li>
-<li><p><strong>new_column_names</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – Custom names for distance columns. If None, uses pattern:
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – Whether to drop the original coordinate columns.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – Custom names for distance columns. If None, uses pattern:
 ‘distance__{lat1}_to_{lat2}__{method}_{unit}’</p></li>
 </ul>
 </dd>
@@ -1928,37 +1915,37 @@ Coordinates are paired sequentially: (lats[0], longs[0]) to (lats[1], longs[1]),
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.DistanceFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/distance_features.html#DistanceFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.DistanceFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.DistanceFeatures" title="gators.feature_generation.distance_features.DistanceFeatures"><span class="pre">gators.feature_generation.distance_features.DistanceFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/distance_features.html#DistanceFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.DistanceFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.DistanceFeatures" title="gators.feature_generation.distance_features.DistanceFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">DistanceFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.DistanceFeatures" title="gators.feature_generation.DistanceFeatures">DistanceFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.DistanceFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/distance_features.html#DistanceFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.DistanceFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/distance_features.html#DistanceFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.DistanceFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by calculating distance features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with distance features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1968,7 +1955,7 @@ Coordinates are paired sequentially: (lats[0], longs[0]) to (lats[1], longs[1]),
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.ScalarMathFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">ScalarMathFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/scalar_math_features.html#ScalarMathFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ScalarMathFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates new features by applying mathematical operations between columns and scalar values.</p>
 <p>This transformer performs element-wise operations between a column and a scalar constant.
 Each operation creates one new feature column. For operations between multiple columns,
@@ -2001,7 +1988,7 @@ use MathFeatures instead.</p>
 </dd>
 </dl>
 <dl>
-<dt>new_column_names<span class="classifier">Optional[List[str]], default=None</span></dt><dd><p>Names for the resulting feature columns. If provided, must have the same
+<dt>new_column_names<span class="classifier">list[str], default=None</span></dt><dd><p>Names for the resulting feature columns. If provided, must have the same
 length as <code class="docutils literal notranslate"><span class="pre">operations</span></code>. If None, column names are auto-generated in the format:
 <code class="docutils literal notranslate"><span class="pre">{column}_{op_name}_{scalar}</span></code> (e.g., ‘Age_div_365’, ‘Price_mul_1.1’)</p>
 <p>Operator name mapping: ‘+’ -&gt; ‘plus’, ‘-’ -&gt; ‘minus’, ‘*’ -&gt; ‘mul’,
@@ -2135,45 +2122,45 @@ length as <code class="docutils literal notranslate"><span class="pre">operation
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#gators.feature_generation.MathFeatures" title="gators.feature_generation.MathFeatures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MathFeatures</span></code></a></dt><dd><p>For operations between multiple columns</p>
+<dt>MathFeatures</dt><dd><p>For operations between multiple columns</p>
 </dd>
-<dt><a class="reference internal" href="#gators.feature_generation.ConditionFeatures" title="gators.feature_generation.ConditionFeatures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConditionFeatures</span></code></a></dt><dd><p>For creating boolean features from conditions</p>
+<dt>ConditionFeatures</dt><dd><p>For creating boolean features from conditions</p>
 </dd>
 </dl>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.ScalarMathFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/scalar_math_features.html#ScalarMathFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ScalarMathFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.ScalarMathFeatures" title="gators.feature_generation.scalar_math_features.ScalarMathFeatures"><span class="pre">gators.feature_generation.scalar_math_features.ScalarMathFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/scalar_math_features.html#ScalarMathFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ScalarMathFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column names if not provided.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em> , </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.ScalarMathFeatures" title="gators.feature_generation.scalar_math_features.ScalarMathFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScalarMathFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.ScalarMathFeatures" title="gators.feature_generation.ScalarMathFeatures">ScalarMathFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.ScalarMathFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/scalar_math_features.html#ScalarMathFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ScalarMathFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/scalar_math_features.html#ScalarMathFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ScalarMathFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating new features from scalar operations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with new computed features (one per operation).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2183,7 +2170,7 @@ length as <code class="docutils literal notranslate"><span class="pre">operation
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.RuleFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">RuleFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/rule_features.html#RuleFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RuleFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Creates multiple boolean features, each from a group of conditions combined with logical operators.</p>
 <p>This transformer is useful for creating multiple rule-based features simultaneously,
 where each rule represents a distinct business logic or fraud detection pattern.
@@ -2212,7 +2199,7 @@ Each rule group produces its own boolean output column.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rules</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Any</em><em>]</em><em>]</em><em>]</em>) – <p>List of rule groups. Each rule group contains condition dictionaries that will
+<li><p><strong>rules</strong> (list<em>[</em>list<em>[</em>dict<em>[</em>str<em>, </em><em>Any</em><em>]</em><em>]</em><em>]</em>) – <p>List of rule groups. Each rule group contains condition dictionaries that will
 be combined to create one boolean output column.</p>
 <p>Each condition dictionary must contain:</p>
 <ul>
@@ -2243,9 +2230,9 @@ be combined to create one boolean output column.</p>
 <li><p>’or’: At least one condition in a group must be True</p></li>
 </ul>
 </p></li>
-<li><p><strong>new_column_names</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Names for the resulting boolean feature columns. Must have the same length as <cite>rules</cite>.
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em>) – Names for the resulting boolean feature columns. Must have the same length as <cite>rules</cite>.
 Each rule group will produce a column with the corresponding name.</p></li>
-<li><p><strong>drop_conditions</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop intermediate condition columns after combining.
+<li><p><strong>drop_conditions</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop intermediate condition columns after combining.
 Recommended: True for cleaner output.</p></li>
 </ul>
 </dd>
@@ -2375,37 +2362,37 @@ use this transformer to create intermediate columns, then combine them manually<
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.RuleFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/rule_features.html#RuleFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RuleFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.RuleFeatures" title="gators.feature_generation.rule_features.RuleFeatures"><span class="pre">gators.feature_generation.rule_features.RuleFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/rule_features.html#RuleFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RuleFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer (no-op, but required for sklearn compatibility).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em> , </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.RuleFeatures" title="gators.feature_generation.rule_features.RuleFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuleFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.RuleFeatures" title="gators.feature_generation.RuleFeatures">RuleFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.RuleFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/rule_features.html#RuleFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RuleFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/rule_features.html#RuleFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RuleFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating boolean features for each rule.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with new boolean features (one per rule).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2415,7 +2402,7 @@ use this transformer to create intermediate columns, then combine them manually<
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.RowStatisticsFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">RowStatisticsFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/row_statistics_features.html#RowStatisticsFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RowStatisticsFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates row-level aggregation features across groups of columns.</p>
 <p>This transformer computes statistics (min, max, mean, median, std, range)
 horizontally across specified column groups for each row. Unlike
@@ -2443,7 +2430,7 @@ a set of columns over which to compute row-level statistics.
 Example: {‘card_fields’: [‘card1’, ‘card2’, ‘card3’]}</p>
 </dd>
 <dt class="field-even">type column_groups<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, List[str]]</p>
+<dd class="field-even"><p>dict[str, list[str]]</p>
 </dd>
 <dt class="field-odd">param func<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List of aggregation functions to apply. Available options:</p>
@@ -2458,7 +2445,7 @@ Example: {‘card_fields’: [‘card1’, ‘card2’, ‘card3’]}</p>
 </ul>
 </dd>
 <dt class="field-even">type func<span class="colon">:</span></dt>
-<dd class="field-even"><p>List[str]</p>
+<dd class="field-even"><p>list[str]</p>
 </dd>
 <dt class="field-odd">param drop_columns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Whether to drop the original columns after creating aggregation features.</p>
@@ -2472,7 +2459,7 @@ naming pattern ‘{group_name}__{func}’. Must have same length as the total
 number of features created (len(column_groups) × len(func)).</p>
 </dd>
 <dt class="field-even">type new_column_names<span class="colon">:</span></dt>
-<dd class="field-even"><p>Optional[List[str]], default=None</p>
+<dd class="field-even"><p>list[str], default=None</p>
 </dd>
 </dl>
 <div class="admonition-examples admonition">
@@ -2591,37 +2578,37 @@ number of features created (len(column_groups) × len(func)).</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.RowStatisticsFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/row_statistics_features.html#RowStatisticsFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RowStatisticsFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.RowStatisticsFeatures" title="gators.feature_generation.row_statistics_features.RowStatisticsFeatures"><span class="pre">gators.feature_generation.row_statistics_features.RowStatisticsFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/row_statistics_features.html#RowStatisticsFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RowStatisticsFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.RowStatisticsFeatures" title="gators.feature_generation.row_statistics_features.RowStatisticsFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">RowStatisticsFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.RowStatisticsFeatures" title="gators.feature_generation.RowStatisticsFeatures">RowStatisticsFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.RowStatisticsFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/row_statistics_features.html#RowStatisticsFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RowStatisticsFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/row_statistics_features.html#RowStatisticsFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RowStatisticsFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating row-level aggregation features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with row-level aggregation features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2632,18 +2619,18 @@ number of features created (len(column_groups) × len(func)).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">RatioFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates ratio features by dividing numerator columns by denominator columns.</p>
 <p>This transformer creates ratio features in a 1-to-1 pairing between numerator and denominator
 columns. Division by zero is handled by replacing the result with null values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>numerator_columns</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of column names to use as numerators.</p></li>
-<li><p><strong>denominator_columns</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of column names to use as denominators. Must have the same length as numerator_columns.</p></li>
-<li><p><strong>new_column_names</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – List of custom names for the ratio features. If None, names will be automatically
+<li><p><strong>numerator_columns</strong> (list<em>[</em>str<em>]</em>) – List of column names to use as numerators.</p></li>
+<li><p><strong>denominator_columns</strong> (list<em>[</em>str<em>]</em>) – List of column names to use as denominators. Must have the same length as numerator_columns.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>]</em><em>, </em><em>optional</em>) – List of custom names for the ratio features. If None, names will be automatically
 generated as ‘{numerator}__div__{denominator}’, by default None.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to drop the original numerator and denominator columns after creating ratios,
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>optional</em>) – Whether to drop the original numerator and denominator columns after creating ratios,
 by default False.</p></li>
 </ul>
 </dd>
@@ -2749,37 +2736,37 @@ by default False.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.RatioFeatures" title="gators.feature_generation.ratio_features.RatioFeatures"><span class="pre">gators.feature_generation.ratio_features.RatioFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation.RatioFeatures" title="gators.feature_generation.ratio_features.RatioFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">RatioFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.RatioFeatures" title="gators.feature_generation.RatioFeatures">RatioFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating ratio features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with ratio features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>

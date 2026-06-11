@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -488,22 +475,22 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.CyclicFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_dt.</span></span><span class="sig-name descname"><span class="pre">CyclicFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/cyclic_features.html#CyclicFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.CyclicFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates cyclic features from datetime columns using sine transformations with multiple phase angles.</p>
 <p>Cyclic features are useful for representing periodic temporal patterns (e.g., month, hour)
 where the start and end of the cycle should be close in feature space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – List of datetime columns to extract features from. If None, all datetime columns
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>]</em><em>, </em><em>optional</em>) – List of datetime columns to extract features from. If None, all datetime columns
 in the dataframe will be used, by default None.</p></li>
-<li><p><strong>components</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of date and time components to extract cyclic features from.
+<li><p><strong>components</strong> (list<em>[</em>str<em>]</em>) – List of date and time components to extract cyclic features from.
 Valid values: ‘semester’, ‘quarter’, ‘month’, ‘week’, ‘day_of_week’,
 ‘day_of_month’, ‘day_of_year’, ‘hour’, ‘minute’, ‘second’.</p></li>
-<li><p><strong>angles</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em>) – List of phase shift angles in degrees. For each component, a sine feature will be
+<li><p><strong>angles</strong> (list<em>[</em>float<em>]</em>) – List of phase shift angles in degrees. For each component, a sine feature will be
 generated for each angle. For example, [0, 45, 90, 135, 180] will create five features
 with 0°, 45°, 90°, 135°, and 180° phase shifts.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to drop the original datetime columns after feature extraction, by default False.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>optional</em>) – Whether to drop the original datetime columns after feature extraction, by default False.</p></li>
 </ul>
 </dd>
 </dl>
@@ -540,37 +527,37 @@ shape: (3, 7)
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.CyclicFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/cyclic_features.html#CyclicFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.CyclicFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_dt.CyclicFeatures" title="gators.feature_generation_dt.cyclic_features.CyclicFeatures"><span class="pre">gators.feature_generation_dt.cyclic_features.CyclicFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/cyclic_features.html#CyclicFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.CyclicFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation_dt.CyclicFeatures" title="gators.feature_generation_dt.cyclic_features.CyclicFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">CyclicFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_dt.CyclicFeatures" title="gators.feature_generation_dt.CyclicFeatures">CyclicFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.CyclicFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/cyclic_features.html#CyclicFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.CyclicFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/cyclic_features.html#CyclicFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.CyclicFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by extracting cyclic features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with cyclic features (sine and cosine).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -580,20 +567,20 @@ shape: (3, 7)
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.OrdinalFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_dt.</span></span><span class="sig-name descname"><span class="pre">OrdinalFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/ordinal_features.html#OrdinalFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.OrdinalFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates ordinal features from datetime columns.</p>
 <p>Ordinal features extract standard temporal components (year, month, hour, etc.)
 as integer values from datetime columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – List of datetime columns to extract features from. If None, all datetime columns
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>]</em><em>, </em><em>optional</em>) – List of datetime columns to extract features from. If None, all datetime columns
 in the dataframe will be used, by default None.</p></li>
-<li><p><strong>components</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of date and time components to extract.
+<li><p><strong>components</strong> (list<em>[</em>str<em>]</em>) – List of date and time components to extract.
 Valid values: ‘century’, ‘year’, ‘semester’, ‘quarter’, ‘month’, ‘week’,
 ‘day_of_week’, ‘day_of_month’, ‘day_of_year’, ‘weekend’, ‘leap_year’,
 ‘hour’, ‘minute’, ‘second’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to drop the original datetime columns after feature extraction, by default False.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>optional</em>) – Whether to drop the original datetime columns after feature extraction, by default False.</p></li>
 </ul>
 </dd>
 </dl>
@@ -648,37 +635,37 @@ Valid values: ‘century’, ‘year’, ‘semester’, ‘quarter’, ‘month
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.OrdinalFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/ordinal_features.html#OrdinalFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.OrdinalFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_dt.OrdinalFeatures" title="gators.feature_generation_dt.ordinal_features.OrdinalFeatures"><span class="pre">gators.feature_generation_dt.ordinal_features.OrdinalFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/ordinal_features.html#OrdinalFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.OrdinalFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation_dt.OrdinalFeatures" title="gators.feature_generation_dt.ordinal_features.OrdinalFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrdinalFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_dt.OrdinalFeatures" title="gators.feature_generation_dt.OrdinalFeatures">OrdinalFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.OrdinalFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/ordinal_features.html#OrdinalFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.OrdinalFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/ordinal_features.html#OrdinalFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.OrdinalFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by extracting ordinal features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with ordinal features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -688,19 +675,19 @@ Valid values: ‘century’, ‘year’, ‘semester’, ‘quarter’, ‘month
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.DiffFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_dt.</span></span><span class="sig-name descname"><span class="pre">DiffFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/diff_features.html#DiffFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DiffFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates time difference features between datetime columns or against reference dates.</p>
 <p>Calculates differences in various units (days, hours, minutes, seconds) which are
 particularly useful for tree-based models to capture recency, age, and time elapsed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>column_pairs</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of column pairs (col_a, col_b) to compute differences (col_a - col_b).
+<li><p><strong>column_pairs</strong> (list<em>[</em>tuple<em>[</em>str<em>, </em>str<em>]</em><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of column pairs (col_a, col_b) to compute differences (col_a - col_b).
 If None, no pairwise differences are computed.</p></li>
-<li><p><strong>reference_dates</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>datetime</em><em>]</em><em>]</em><em>]</em><em>, </em><em>default=None</em>) – Dictionary mapping column names to reference dates. Computes (column - reference_date).
+<li><p><strong>reference_dates</strong> (dict<em>[</em>str<em>, </em>str<em> | </em><em>datetime</em><em>] </em><em>| </em><em>None</em><em>, </em><em>default=None</em>) – Dictionary mapping column names to reference dates. Computes (column - reference_date).
 Reference dates can be ISO format strings or datetime objects.</p></li>
-<li><p><strong>units</strong> (<em>List</em><em>[</em><em>Literal</em><em>[</em><em>&quot;d&quot;</em><em>, </em><em>&quot;h&quot;</em><em>, </em><em>&quot;m&quot;</em><em>, </em><em>&quot;s&quot;</em><em>]</em><em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;d&quot;</em><em>]</em>) – Units for computing time differences.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after creating differences.</p></li>
+<li><p><strong>units</strong> (list<em>[</em><em>Literal</em><em>[</em><em>&quot;d&quot;</em><em>, </em><em>&quot;h&quot;</em><em>, </em><em>&quot;m&quot;</em><em>, </em><em>&quot;s&quot;</em><em>]</em><em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;d&quot;</em><em>]</em>) – Units for computing time differences.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after creating differences.</p></li>
 </ul>
 </dd>
 </dl>
@@ -770,37 +757,37 @@ Reference dates can be ISO format strings or datetime objects.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.DiffFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/diff_features.html#DiffFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DiffFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_dt.DiffFeatures" title="gators.feature_generation_dt.diff_features.DiffFeatures"><span class="pre">gators.feature_generation_dt.diff_features.DiffFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/diff_features.html#DiffFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DiffFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by parsing reference dates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation_dt.DiffFeatures" title="gators.feature_generation_dt.diff_features.DiffFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_dt.DiffFeatures" title="gators.feature_generation_dt.DiffFeatures">DiffFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.DiffFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/diff_features.html#DiffFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DiffFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/diff_features.html#DiffFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DiffFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating time difference features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with time difference features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -810,7 +797,7 @@ Reference dates can be ISO format strings or datetime objects.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.DurationToDatetime">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_dt.</span></span><span class="sig-name descname"><span class="pre">DurationToDatetime</span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/duration_to_datetime.html#DurationToDatetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DurationToDatetime" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Converts numeric time offset columns to datetime by adding durations to a reference date.</p>
 <p>This transformer is useful when you have numeric time offsets (e.g., seconds, days) that
 need to be converted to actual datetime values by adding them to a reference date. The
@@ -818,8 +805,8 @@ reference date can be a fixed datetime literal or a column containing dates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of column names containing numeric time offsets to convert.</p></li>
-<li><p><strong>reference_date</strong> (<em>Union</em><em>[</em><em>datetime</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – <p>Reference date to add offsets to. Can be:</p>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em>) – List of column names containing numeric time offsets to convert.</p></li>
+<li><p><strong>reference_date</strong> (<em>datetime</em><em> | </em>str) – <p>Reference date to add offsets to. Can be:</p>
 <ul>
 <li><p>A datetime object: Same reference date for all rows</p></li>
 <li><p>A string (column name): Different reference date per row from that column</p></li>
@@ -835,7 +822,7 @@ reference date can be a fixed datetime literal or a column containing dates.</p>
 <li><p>”us”: microseconds</p></li>
 </ul>
 </p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original numeric offset columns after conversion.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original numeric offset columns after conversion.</p></li>
 </ul>
 </dd>
 </dl>
@@ -922,37 +909,37 @@ reference date can be a fixed datetime literal or a column containing dates.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.DurationToDatetime.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/duration_to_datetime.html#DurationToDatetime.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DurationToDatetime.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_dt.DurationToDatetime" title="gators.feature_generation_dt.duration_to_datetime.DurationToDatetime"><span class="pre">gators.feature_generation_dt.duration_to_datetime.DurationToDatetime</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/duration_to_datetime.html#DurationToDatetime.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DurationToDatetime.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by preparing the reference date expression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation_dt.DurationToDatetime" title="gators.feature_generation_dt.duration_to_datetime.DurationToDatetime"><code class="xref py py-class docutils literal notranslate"><span class="pre">DurationToDatetime</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_dt.DurationToDatetime" title="gators.feature_generation_dt.DurationToDatetime">DurationToDatetime</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.DurationToDatetime.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/duration_to_datetime.html#DurationToDatetime.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DurationToDatetime.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/duration_to_datetime.html#DurationToDatetime.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.DurationToDatetime.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform numeric offset columns to datetime columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with datetime columns.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -962,19 +949,19 @@ reference date can be a fixed datetime literal or a column containing dates.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.BusinessTimeFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_dt.</span></span><span class="sig-name descname"><span class="pre">BusinessTimeFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/business_time_features.html#BusinessTimeFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.BusinessTimeFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates business time features from datetime columns.</p>
 <p>Creates binary indicators and classifications for business-relevant time periods
 such as business hours, business days, and time of business day.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of datetime columns to extract features from. If None, all datetime columns
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of datetime columns to extract features from. If None, all datetime columns
 will be used.</p></li>
-<li><p><strong>business_hours_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=9</em>) – Start hour for business hours (24-hour format, 0-23).</p></li>
-<li><p><strong>business_hours_end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=17</em>) – End hour for business hours (24-hour format, 0-23).</p></li>
-<li><p><strong>weekend_days</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>default=</em><em>[</em><em>5</em><em>, </em><em>6</em><em>]</em>) – Days of week considered weekend (0=Monday, 6=Sunday). Default is Saturday and Sunday.</p></li>
-<li><p><strong>features</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;is_business_hour&quot;</em><em>, </em><em>&quot;is_business_day&quot;</em><em>, </em><em>&quot;time_of_business_day&quot;</em><em>]</em>) – <p>List of features to generate. Options:</p>
+<li><p><strong>business_hours_start</strong> (int<em>, </em><em>default=9</em>) – Start hour for business hours (24-hour format, 0-23).</p></li>
+<li><p><strong>business_hours_end</strong> (int<em>, </em><em>default=17</em>) – End hour for business hours (24-hour format, 0-23).</p></li>
+<li><p><strong>weekend_days</strong> (list<em>[</em>int<em>]</em><em>, </em><em>default=</em><em>[</em><em>5</em><em>, </em><em>6</em><em>]</em>) – Days of week considered weekend (0=Monday, 6=Sunday). Default is Saturday and Sunday.</p></li>
+<li><p><strong>features</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;is_business_hour&quot;</em><em>, </em><em>&quot;is_business_day&quot;</em><em>, </em><em>&quot;time_of_business_day&quot;</em><em>]</em>) – <p>List of features to generate. Options:</p>
 <ul>
 <li><p>”is_business_hour”: Boolean for whether time is during business hours</p></li>
 <li><p>”is_business_day”: Boolean for whether day is a business day (not weekend)</p></li>
@@ -982,7 +969,7 @@ will be used.</p></li>
 <li><p>”hour_of_business_day”: Hour within business day (0-based from start)</p></li>
 </ul>
 </p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after feature extraction.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after feature extraction.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1061,37 +1048,37 @@ will be used.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.BusinessTimeFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/business_time_features.html#BusinessTimeFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.BusinessTimeFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_dt.BusinessTimeFeatures" title="gators.feature_generation_dt.business_time_features.BusinessTimeFeatures"><span class="pre">gators.feature_generation_dt.business_time_features.BusinessTimeFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/business_time_features.html#BusinessTimeFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.BusinessTimeFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying datetime columns if not specified.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation_dt.BusinessTimeFeatures" title="gators.feature_generation_dt.business_time_features.BusinessTimeFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">BusinessTimeFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_dt.BusinessTimeFeatures" title="gators.feature_generation_dt.BusinessTimeFeatures">BusinessTimeFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.BusinessTimeFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/business_time_features.html#BusinessTimeFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.BusinessTimeFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/business_time_features.html#BusinessTimeFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.BusinessTimeFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating business time features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with business time features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1101,7 +1088,7 @@ will be used.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.TimeBinFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_dt.</span></span><span class="sig-name descname"><span class="pre">TimeBinFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_bin_features.html#TimeBinFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeBinFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates time bin features by categorizing datetime values into periods.</p>
 <p>Bins datetime components into meaningful categories like part of day, season,
 time of month, etc. These categorical features are particularly useful for
@@ -1109,9 +1096,9 @@ tree-based models to capture non-linear temporal patterns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of datetime columns to extract features from. If None, all datetime columns
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of datetime columns to extract features from. If None, all datetime columns
 will be used.</p></li>
-<li><p><strong>bin_types</strong> (<em>List</em><em>[</em><em>Literal</em><em>[</em><em>&quot;part_of_day&quot;</em><em>, </em><em>&quot;season&quot;</em><em>, </em><em>&quot;time_of_month&quot;</em><em>, </em><em>&quot;time_of_year&quot;</em><em>, </em><em>&quot;rush_hour&quot;</em><em>]</em><em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;part_of_day&quot;</em><em>, </em><em>&quot;season&quot;</em><em>, </em><em>&quot;time_of_month&quot;</em><em>, </em><em>&quot;time_of_year&quot;</em><em>, </em><em>&quot;rush_hour&quot;</em><em>]</em>) – <p>Types of time bins to generate. Options:</p>
+<li><p><strong>bin_types</strong> (list<em>[</em><em>Literal</em><em>[</em><em>&quot;part_of_day&quot;</em><em>, </em><em>&quot;season&quot;</em><em>, </em><em>&quot;time_of_month&quot;</em><em>, </em><em>&quot;time_of_year&quot;</em><em>, </em><em>&quot;rush_hour&quot;</em><em>]</em><em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;part_of_day&quot;</em><em>, </em><em>&quot;season&quot;</em><em>, </em><em>&quot;time_of_month&quot;</em><em>, </em><em>&quot;time_of_year&quot;</em><em>, </em><em>&quot;rush_hour&quot;</em><em>]</em>) – <p>Types of time bins to generate. Options:</p>
 <ul>
 <li><p>”part_of_day”: night, morning, afternoon, evening</p></li>
 <li><p>”season”: spring, summer, fall, winter</p></li>
@@ -1121,7 +1108,7 @@ will be used.</p></li>
 </ul>
 </p></li>
 <li><p><strong>hemisphere</strong> (<em>Literal</em><em>[</em><em>&quot;northern&quot;</em><em>, </em><em>&quot;southern&quot;</em><em>]</em><em>, </em><em>default=&quot;northern&quot;</em>) – Hemisphere for season calculation.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after feature extraction.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after feature extraction.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1198,37 +1185,37 @@ will be used.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.TimeBinFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_bin_features.html#TimeBinFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeBinFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_dt.TimeBinFeatures" title="gators.feature_generation_dt.time_bin_features.TimeBinFeatures"><span class="pre">gators.feature_generation_dt.time_bin_features.TimeBinFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_bin_features.html#TimeBinFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeBinFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying datetime columns if not specified.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation_dt.TimeBinFeatures" title="gators.feature_generation_dt.time_bin_features.TimeBinFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeBinFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_dt.TimeBinFeatures" title="gators.feature_generation_dt.TimeBinFeatures">TimeBinFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.TimeBinFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_bin_features.html#TimeBinFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeBinFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_bin_features.html#TimeBinFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeBinFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating time bin features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with time bin features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1238,7 +1225,7 @@ will be used.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.TimeWindowFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_dt.</span></span><span class="sig-name descname"><span class="pre">TimeWindowFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_window_features.html#TimeWindowFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeWindowFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates time-based window aggregation features (velocity features).</p>
 <p>This transformer creates rolling window statistics over time periods, useful for
 detecting unusual patterns like transaction velocity, spending bursts, etc.</p>
@@ -1247,9 +1234,9 @@ optionally grouped by categorical columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – List of numerical column names to aggregate over time windows.</p></li>
-<li><p><strong>time_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Name of the datetime column to use for time-based windowing.</p></li>
-<li><p><strong>windows</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – <p>List of time window strings. Supported formats:</p>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em>) – List of numerical column names to aggregate over time windows.</p></li>
+<li><p><strong>time_column</strong> (str) – Name of the datetime column to use for time-based windowing.</p></li>
+<li><p><strong>windows</strong> (list<em>[</em>str<em>]</em>) – <p>List of time window strings. Supported formats:</p>
 <ul>
 <li><p>’30m’ = 30 minutes</p></li>
 <li><p>’1h’ = 1 hour</p></li>
@@ -1259,9 +1246,9 @@ optionally grouped by categorical columns.</p>
 <li><p>’1Y’ = 1 year (365 days)</p></li>
 </ul>
 </p></li>
-<li><p><strong>by</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – Optional list of columns to group by. Windows are computed within each group.
+<li><p><strong>by</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – Optional list of columns to group by. Windows are computed within each group.
 Example: [‘card1’] computes “transactions in last 24h for this card”</p></li>
-<li><p><strong>func</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>default=</em><em>[</em><em>'count'</em><em>, </em><em>'mean'</em><em>]</em>) – <p>List of aggregation functions to apply. Available options:</p>
+<li><p><strong>func</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=</em><em>[</em><em>'count'</em><em>, </em><em>'mean'</em><em>]</em>) – <p>List of aggregation functions to apply. Available options:</p>
 <ul>
 <li><p>’count’: Count of rows in window</p></li>
 <li><p>’mean’: Mean of values in window</p></li>
@@ -1272,8 +1259,8 @@ Example: [‘card1’] computes “transactions in last 24h for this card”</p>
 <li><p>’max’: Maximum value in window</p></li>
 </ul>
 </p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original numerical columns after creating features.</p></li>
-<li><p><strong>new_column_names</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of custom names for the window columns. If None, uses default naming pattern.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original numerical columns after creating features.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of custom names for the window columns. If None, uses default naming pattern.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1349,37 +1336,37 @@ Example: [‘card1’] computes “transactions in last 24h for this card”</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.TimeWindowFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_window_features.html#TimeWindowFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeWindowFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_dt.TimeWindowFeatures" title="gators.feature_generation_dt.time_window_features.TimeWindowFeatures"><span class="pre">gators.feature_generation_dt.time_window_features.TimeWindowFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_window_features.html#TimeWindowFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeWindowFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by generating column name mappings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation_dt.TimeWindowFeatures" title="gators.feature_generation_dt.time_window_features.TimeWindowFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">TimeWindowFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_dt.TimeWindowFeatures" title="gators.feature_generation_dt.TimeWindowFeatures">TimeWindowFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.TimeWindowFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_window_features.html#TimeWindowFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeWindowFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/time_window_features.html#TimeWindowFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.TimeWindowFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating time window features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform. Should be sorted by time_column.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform. Should be sorted by time_column.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with time window features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1389,7 +1376,7 @@ Example: [‘card1’] computes “transactions in last 24h for this card”</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.HolidayFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_dt.</span></span><span class="sig-name descname"><span class="pre">HolidayFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/holiday_features.html#HolidayFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.HolidayFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Generates holiday-related features from datetime columns.</p>
 <p>Detects holidays and calculates distance to nearest holidays, which is useful
 for retail, finance, and other domains where holidays affect patterns.
@@ -1397,13 +1384,13 @@ Uses the <cite>holidays</cite> library for accurate, year-specific holiday dates
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of datetime columns to extract features from. If None, all datetime columns
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of datetime columns to extract features from. If None, all datetime columns
 will be used.</p></li>
-<li><p><strong>country</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default=&quot;US&quot;</em>) – Country code for holidays (e.g., “US”, “UK”, “CA”, “DE”, “FR”, “JP”).
+<li><p><strong>country</strong> (str<em>, </em><em>default=&quot;US&quot;</em>) – Country code for holidays (e.g., “US”, “UK”, “CA”, “DE”, “FR”, “JP”).
 Supports any country code from the holidays library.
 See <a class="reference external" href="https://pypi.org/project/holidays/">https://pypi.org/project/holidays/</a> for full list of supported countries.</p></li>
-<li><p><strong>years</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – Years to include holidays for. If None, will automatically detect years from data.</p></li>
-<li><p><strong>features</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;is_holiday&quot;</em><em>, </em><em>&quot;days_to_holiday&quot;</em><em>, </em><em>&quot;days_from_holiday&quot;</em><em>]</em>) – <p>Features to generate. Options:</p>
+<li><p><strong>years</strong> (list<em>[</em>int<em>]</em><em>] </em><em>| </em><em>default=None</em>) – Years to include holidays for. If None, will automatically detect years from data.</p></li>
+<li><p><strong>features</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;is_holiday&quot;</em><em>, </em><em>&quot;days_to_holiday&quot;</em><em>, </em><em>&quot;days_from_holiday&quot;</em><em>]</em>) – <p>Features to generate. Options:</p>
 <ul>
 <li><p>”is_holiday”: Boolean for whether date is a holiday</p></li>
 <li><p>”days_to_holiday”: Days until next holiday (negative if past)</p></li>
@@ -1411,7 +1398,7 @@ See <a class="reference external" href="https://pypi.org/project/holidays/">http
 <li><p>”nearest_holiday_distance”: Absolute days to nearest holiday</p></li>
 </ul>
 </p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after feature extraction.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after feature extraction.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1475,37 +1462,37 @@ See <a class="reference external" href="https://pypi.org/project/holidays/">http
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.HolidayFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/holiday_features.html#HolidayFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.HolidayFeatures.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_dt.HolidayFeatures" title="gators.feature_generation_dt.holiday_features.HolidayFeatures"><span class="pre">gators.feature_generation_dt.holiday_features.HolidayFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/holiday_features.html#HolidayFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.HolidayFeatures.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by identifying datetime columns and building holiday list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target variable. Not used, present here for compatibility.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.feature_generation_dt.HolidayFeatures" title="gators.feature_generation_dt.holiday_features.HolidayFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">HolidayFeatures</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_dt.HolidayFeatures" title="gators.feature_generation_dt.HolidayFeatures">HolidayFeatures</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.feature_generation_dt.HolidayFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_generation_dt/holiday_features.html#HolidayFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.HolidayFeatures.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/holiday_features.html#HolidayFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.HolidayFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating holiday features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with holiday features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>

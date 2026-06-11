@@ -452,9 +452,7 @@
                 <article class="bd-article">
                   
   <h1>Source code for gators.feature_generation_dt.business_time_features</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">field_validator</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
@@ -471,16 +469,16 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    subset : Optional[List[str]], default=None</span>
+<span class="sd">    subset : list[str], default=None</span>
 <span class="sd">        List of datetime columns to extract features from. If None, all datetime columns</span>
 <span class="sd">        will be used.</span>
 <span class="sd">    business_hours_start : int, default=9</span>
 <span class="sd">        Start hour for business hours (24-hour format, 0-23).</span>
 <span class="sd">    business_hours_end : int, default=17</span>
 <span class="sd">        End hour for business hours (24-hour format, 0-23).</span>
-<span class="sd">    weekend_days : List[int], default=[5, 6]</span>
+<span class="sd">    weekend_days : list[int], default=[5, 6]</span>
 <span class="sd">        Days of week considered weekend (0=Monday, 6=Sunday). Default is Saturday and Sunday.</span>
-<span class="sd">    features : List[str], default=[&quot;is_business_hour&quot;, &quot;is_business_day&quot;, &quot;time_of_business_day&quot;]</span>
+<span class="sd">    features : list[str], default=[&quot;is_business_hour&quot;, &quot;is_business_day&quot;, &quot;time_of_business_day&quot;]</span>
 <span class="sd">        List of features to generate. Options:</span>
 
 <span class="sd">        - &quot;is_business_hour&quot;: Boolean for whether time is during business hours</span>
@@ -561,11 +559,11 @@
 <span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">subset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">subset</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">business_hours_start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">9</span>
     <span class="n">business_hours_end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">17</span>
-    <span class="n">weekend_days</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
-    <span class="n">features</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">weekend_days</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+    <span class="n">features</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;is_business_hour&quot;</span><span class="p">,</span>
         <span class="s2">&quot;is_business_day&quot;</span><span class="p">,</span>
         <span class="s2">&quot;time_of_business_day&quot;</span><span class="p">,</span>
@@ -603,14 +601,14 @@
 
 <div class="viewcode-block" id="BusinessTimeFeatures.fit">
 <a class="viewcode-back" href="../../../gators.feature_generation_dt.html#gators.feature_generation_dt.BusinessTimeFeatures.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BusinessTimeFeatures&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BusinessTimeFeatures&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by identifying datetime columns if not specified.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        X : pl.DataFrame</span>
 <span class="sd">            Input DataFrame.</span>
-<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">        y : pl.Series, default=None</span>
 <span class="sd">            Target variable. Not used, present here for compatibility.</span>
 
 <span class="sd">        Returns</span>

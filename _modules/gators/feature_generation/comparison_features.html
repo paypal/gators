@@ -452,7 +452,7 @@
                 <article class="bd-article">
                   
   <h1>Source code for gators.feature_generation.comparison_features</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">field_validator</span>
@@ -482,12 +482,12 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    subset_a : List[str]</span>
+<span class="sd">    subset_a : list[str]</span>
 <span class="sd">        List of column names for the left side of comparisons (or the only column for unary operators).</span>
-<span class="sd">    subset_b : List[str]</span>
+<span class="sd">    subset_b : list[str]</span>
 <span class="sd">        List of column names for the right side of comparisons.</span>
 <span class="sd">        For unary operators (&#39;is_null&#39;, &#39;is_not_null&#39;), these values are ignored.</span>
-<span class="sd">    operators : List[Literal[&quot;&gt;&quot;, &quot;&lt;&quot;, &quot;&gt;=&quot;, &quot;&lt;=&quot;, &quot;==&quot;, &quot;!=&quot;, &quot;is_null&quot;, &quot;is_not_null&quot;]]</span>
+<span class="sd">    operators : list[Literal[&quot;&gt;&quot;, &quot;&lt;&quot;, &quot;&gt;=&quot;, &quot;&lt;=&quot;, &quot;==&quot;, &quot;!=&quot;, &quot;is_null&quot;, &quot;is_not_null&quot;]]</span>
 <span class="sd">        List of comparison operators to apply. Must match length of columns.</span>
 <span class="sd">        Unary operators: &#39;is_null&#39;, &#39;is_not_null&#39; (only use subset_a)</span>
 <span class="sd">        Binary operators: &#39;&gt;&#39;, &#39;&lt;&#39;, &#39;&gt;=&#39;, &#39;&lt;=&#39;, &#39;==&#39;, &#39;!=&#39; (use both subset_a and subset_b)</span>
@@ -592,9 +592,9 @@
 <span class="sd">    └──────┴─────────┘</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">subset_a</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">subset_b</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">operators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="s2">&quot;!=&quot;</span><span class="p">,</span> <span class="s2">&quot;is_null&quot;</span><span class="p">,</span> <span class="s2">&quot;is_not_null&quot;</span><span class="p">]]</span>
+    <span class="n">subset_a</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">subset_b</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">operators</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="s2">&quot;!=&quot;</span><span class="p">,</span> <span class="s2">&quot;is_null&quot;</span><span class="p">,</span> <span class="s2">&quot;is_not_null&quot;</span><span class="p">]]</span>
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;operators&quot;</span><span class="p">)</span>
@@ -628,14 +628,14 @@
 
 <div class="viewcode-block" id="ComparisonFeatures.fit">
 <a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.ComparisonFeatures.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ComparisonFeatures&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ComparisonFeatures&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer (no-op, but required for sklearn compatibility).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        X : pl.DataFrame</span>
 <span class="sd">            Input DataFrame.</span>
-<span class="sd">        y : Optional[pl.Series], default=None</span>
+<span class="sd">        y : pl.Series, default=None</span>
 <span class="sd">            Target variable. Not used, present here for compatibility.</span>
 
 <span class="sd">        Returns</span>

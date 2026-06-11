@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.discretizers.html">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -488,7 +475,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.pipeline.Pipeline">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.pipeline.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
 <p>Pipeline of transformers for Polars DataFrames.</p>
 <p>Sequentially applies a list of transforms. This is a lightweight alternative
 to sklearn.pipeline.Pipeline specifically designed for Gators transformers
@@ -496,9 +483,11 @@ that work with Polars DataFrames.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>steps</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Any</em><em>]</em><em>]</em>) – List of (name, transform) tuples that are chained in the order they
+<li><p><strong>steps</strong> (list<em>[</em>tuple<em>[ </em>str<em>, </em><em>Any</em><em>]</em><em>]</em>) – List of (name, transform) tuples that are chained in the order they
 are specified. Each transform must implement fit and transform methods.</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – If True, prints the name of each step as it’s being executed.</p></li>
+<li><p><strong>verbose</strong> (bool<em>, </em><em>default=False</em>) – If True, emits a one-line summary per step to stdout showing the step
+name, row count, column count, total null count, and wall-clock time.
+When <code class="docutils literal notranslate"><span class="pre">False</span></code> there is zero measurement overhead.</p></li>
 </ul>
 </dd>
 </dl>
@@ -521,7 +510,7 @@ are specified. Each transform must implement fit and transform methods.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.pipeline.Pipeline.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.pipeline.Pipeline" title="gators.pipeline.pipeline.Pipeline"><span class="pre">gators.pipeline.pipeline.Pipeline</span></a></span></span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit all transformers in the pipeline.</p>
 <p>Fits each transformer sequentially, transforming the data before
 fitting the next transformer. This ensures each transformer sees
@@ -529,65 +518,65 @@ the output of the previous transformer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to fit.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series for supervised transformers (e.g., WOEEncoder).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to fit.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series for supervised transformers (e.g., WOEEncoder).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted pipeline instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.pipeline.Pipeline" title="gators.pipeline.pipeline.Pipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.pipeline.Pipeline" title="gators.pipeline.Pipeline">Pipeline</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.pipeline.Pipeline.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform data by applying all transformers in sequence.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to transform.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.pipeline.Pipeline.fit_transform">
-<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.fit_transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.fit_transform" title="Link to this definition">#</a></dt>
 <dd><p>Fit all transformers and transform the data.</p>
 <p>Fits and transforms each transformer sequentially. This is more
 efficient than calling fit() followed by transform() separately.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame to fit and transform.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series for supervised transformers.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to fit and transform.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series for supervised transformers.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.pipeline.Pipeline.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.get_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.get_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.get_params" title="Link to this definition">#</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>deep</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – If True, returns parameters of all sub-estimators.
+<dd class="field-odd"><p><strong>deep</strong> (bool<em>, </em><em>default=True</em>) – If True, returns parameters of all sub-estimators.
 If False, only returns pipeline-level parameters.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -595,9 +584,49 @@ If False, only returns pipeline-level parameters.</p>
 use double underscore notation (e.g., ‘step_name__param’).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.pipeline.Pipeline.clone">
+<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.pipeline.Pipeline" title="gators.pipeline.pipeline.Pipeline"><span class="pre">gators.pipeline.pipeline.Pipeline</span></a></span></span><a class="reference internal" href="_modules/gators/pipeline/pipeline.html#Pipeline.clone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.pipeline.Pipeline.clone" title="Link to this definition">#</a></dt>
+<dd><p>Return a new unfitted pipeline with the same hyperparameters.</p>
+<p>Each transformer is re-instantiated using only its public constructor
+parameters (obtained via <code class="docutils literal notranslate"><span class="pre">get_params()</span></code>).  Private attributes that
+hold fitted state (e.g. <code class="docutils literal notranslate"><span class="pre">_statistics</span></code>, <code class="docutils literal notranslate"><span class="pre">mapping_</span></code>) are not copied,
+so the returned pipeline is guaranteed to be unfitted.</p>
+<p>This is the recommended alternative to <code class="docutils literal notranslate"><span class="pre">copy.deepcopy</span></code> for
+cross-validation workflows where you need multiple independent copies
+of the same pipeline configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new, unfitted <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> instance with identical hyperparameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#gators.pipeline.Pipeline" title="gators.pipeline.Pipeline">Pipeline</a></p>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NumericImputer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.scalers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;impute&#39;</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipe_clone</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipe_clone</span> <span class="ow">is</span> <span class="n">pipe</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pipe_clone</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;impute&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="n">pipe</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;impute&#39;</span><span class="p">]</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -606,7 +635,7 @@ use double underscore notation (e.g., ‘step_name__param’).</p>
 <dd><p>Set parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>**params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Estimator parameters. Use double underscore notation for
+<dd class="field-odd"><p><strong>**params</strong> (dict) – Estimator parameters. Use double underscore notation for
 nested parameters (e.g., step_name__param_name=value).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -661,6 +690,7 @@ nested parameters (e.g., step_name__param_name=value).</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.pipeline.Pipeline.transform"><code class="docutils literal notranslate"><span class="pre">Pipeline.transform()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.pipeline.Pipeline.fit_transform"><code class="docutils literal notranslate"><span class="pre">Pipeline.fit_transform()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.pipeline.Pipeline.get_params"><code class="docutils literal notranslate"><span class="pre">Pipeline.get_params()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.pipeline.Pipeline.clone"><code class="docutils literal notranslate"><span class="pre">Pipeline.clone()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.pipeline.Pipeline.set_params"><code class="docutils literal notranslate"><span class="pre">Pipeline.set_params()</span></code></a></li>
 </ul>
 </li>

@@ -405,20 +405,7 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="gators.data_cleaning.html">gators.data_cleaning package</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">gators.discretizers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.clippers.html">gators.clippers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.encoders.html">gators.encoders package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation.html">gators.feature_generation package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_dt.html">gators.feature_generation_dt package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_generation_str.html">gators.feature_generation_str package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.feature_selection.html">gators.feature_selection package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.imputers.html">gators.imputers package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.pipeline.html">gators.pipeline package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gators.scalers.html">gators.scalers package</a></li>
-</ul>
-</div>
+  <div class="bd-toc-item navbar-nav"></div>
 </nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
@@ -488,21 +475,21 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.discretizers.CustomDiscretizer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.discretizers.</span></span><span class="sig-name descname"><span class="pre">CustomDiscretizer</span></span><a class="reference internal" href="_modules/gators/discretizers/custom_discretizer.html#CustomDiscretizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.CustomDiscretizer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseDiscretizer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.discretizers._base_discretizer._BaseDiscretizer</span></code></p>
 <p>Custom discretizer class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, uses all columns in the bins dictionary.</p></li>
-<li><p><strong>bins</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>]</em>) – Dictionary specifying bin edges for each column. Keys are column names, values are lists of bin boundaries.
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, uses all columns in the bins dictionary.</p></li>
+<li><p><strong>bins</strong> (dict<em>[</em>str<em>, </em>list<em>[</em>float<em>]</em><em>]</em>) – Dictionary specifying bin edges for each column. Keys are column names, values are lists of bin boundaries.
 Use -np.inf and np.inf for open-ended bins.</p></li>
 <li><p><strong>num_bins</strong> (<em>PositiveInt</em><em>, </em><em>default=5</em>) – Number of bins (used for validation, not for computation since bins are custom).</p></li>
 <li><p><strong>rounding</strong> (<em>PositiveInt</em><em>, </em><em>default=3</em>) – Decimal places to round bin edges for labels.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
 If False, create new columns with suffix ‘__discretize_custom’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
 Ignored when inplace=True.</p></li>
-<li><p><strong>as_numerics</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
+<li><p><strong>as_numerics</strong> (bool<em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
 </ul>
 </dd>
 </dl>
@@ -589,20 +576,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.discretizers.CustomDiscretizer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/discretizers/custom_discretizer.html#CustomDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.CustomDiscretizer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.discretizers.CustomDiscretizer" title="gators.discretizers.custom_discretizer.CustomDiscretizer"><span class="pre">gators.discretizers.custom_discretizer.CustomDiscretizer</span></a></span></span><a class="reference internal" href="_modules/gators/discretizers/custom_discretizer.html#CustomDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.CustomDiscretizer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the discretizer using predefined custom bins.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted discretizer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.discretizers.CustomDiscretizer" title="gators.discretizers.custom_discretizer.CustomDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomDiscretizer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.discretizers.CustomDiscretizer" title="gators.discretizers.CustomDiscretizer">CustomDiscretizer</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -612,21 +599,21 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.discretizers.EqualLengthDiscretizer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.discretizers.</span></span><span class="sig-name descname"><span class="pre">EqualLengthDiscretizer</span></span><a class="reference internal" href="_modules/gators/discretizers/equal_length_discretizer.html#EqualLengthDiscretizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.EqualLengthDiscretizer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseDiscretizer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.discretizers._base_discretizer._BaseDiscretizer</span></code></p>
 <p>Discretizes numerical variables using equal-length bins.</p>
 <p>Creates bins with equal width (range) by dividing the data range into
 num_bins intervals of equal length. Good for uniformly distributed data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
 <li><p><strong>num_bins</strong> (<em>PositiveInt</em><em>, </em><em>default=5</em>) – Number of equal-length bins to create.</p></li>
 <li><p><strong>rounding</strong> (<em>PositiveInt</em><em>, </em><em>default=3</em>) – Decimal places to round bin edges for labels.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
 If False, create new columns with suffix ‘__discretize_length’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
 Ignored when inplace=True.</p></li>
-<li><p><strong>as_numerics</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
+<li><p><strong>as_numerics</strong> (bool<em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
 </ul>
 </dd>
 </dl>
@@ -707,20 +694,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.discretizers.EqualLengthDiscretizer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/discretizers/equal_length_discretizer.html#EqualLengthDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.EqualLengthDiscretizer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.discretizers.EqualLengthDiscretizer" title="gators.discretizers.equal_length_discretizer.EqualLengthDiscretizer"><span class="pre">gators.discretizers.equal_length_discretizer.EqualLengthDiscretizer</span></a></span></span><a class="reference internal" href="_modules/gators/discretizers/equal_length_discretizer.html#EqualLengthDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.EqualLengthDiscretizer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the discretizer by computing equal-length bin boundaries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted discretizer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.discretizers.EqualLengthDiscretizer" title="gators.discretizers.equal_length_discretizer.EqualLengthDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">EqualLengthDiscretizer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.discretizers.EqualLengthDiscretizer" title="gators.discretizers.EqualLengthDiscretizer">EqualLengthDiscretizer</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -730,15 +717,15 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.discretizers.EqualSizeDiscretizer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.discretizers.</span></span><span class="sig-name descname"><span class="pre">EqualSizeDiscretizer</span></span><a class="reference internal" href="_modules/gators/discretizers/equal_size_discretizer.html#EqualSizeDiscretizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.EqualSizeDiscretizer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseDiscretizer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.discretizers._base_discretizer._BaseDiscretizer</span></code></p>
 <p>Equal-size discretizer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of column names to discretize. If None, all numeric columns are used.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of column names to discretize. If None, all numeric columns are used.</p></li>
 <li><p><strong>num_bins</strong> (<em>PositiveInt</em><em>, </em><em>default=5</em>) – Number of bins to divide each numeric column into.</p></li>
 <li><p><strong>rounding</strong> (<em>PositiveInt</em><em>, </em><em>default=3</em>) – Decimal places to round bin edges for labels.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, drops original columns after discretizing.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drops original columns after discretizing.</p></li>
 </ul>
 </dd>
 </dl>
@@ -819,20 +806,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.discretizers.EqualSizeDiscretizer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/discretizers/equal_size_discretizer.html#EqualSizeDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.EqualSizeDiscretizer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.discretizers.EqualSizeDiscretizer" title="gators.discretizers.equal_size_discretizer.EqualSizeDiscretizer"><span class="pre">gators.discretizers.equal_size_discretizer.EqualSizeDiscretizer</span></a></span></span><a class="reference internal" href="_modules/gators/discretizers/equal_size_discretizer.html#EqualSizeDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.EqualSizeDiscretizer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the discretizer by computing equal-size (quantile-based) bin boundaries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted discretizer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.discretizers.EqualSizeDiscretizer" title="gators.discretizers.equal_size_discretizer.EqualSizeDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">EqualSizeDiscretizer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.discretizers.EqualSizeDiscretizer" title="gators.discretizers.EqualSizeDiscretizer">EqualSizeDiscretizer</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -842,7 +829,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.discretizers.GeometricDiscretizer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.discretizers.</span></span><span class="sig-name descname"><span class="pre">GeometricDiscretizer</span></span><a class="reference internal" href="_modules/gators/discretizers/geometric_discretizer.html#GeometricDiscretizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.GeometricDiscretizer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseDiscretizer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.discretizers._base_discretizer._BaseDiscretizer</span></code></p>
 <p>Discretizes numerical variables using geometric progression bins.</p>
 <p>Creates bins following a geometric progression where each bin edge is a constant
 multiple of the previous edge. The common ratio is calculated as r = (max/min)^(1/num_bins).
@@ -852,14 +839,14 @@ range before computing geometric bins.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
 <li><p><strong>num_bins</strong> (<em>PositiveInt</em><em>, </em><em>default=5</em>) – Number of geometric bins to create.</p></li>
 <li><p><strong>rounding</strong> (<em>PositiveInt</em><em>, </em><em>default=3</em>) – Decimal places to round bin edges for labels.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
 If False, create new columns with suffix ‘__discretize_geom’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
 Ignored when inplace=True.</p></li>
-<li><p><strong>as_numerics</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
+<li><p><strong>as_numerics</strong> (bool<em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
 </ul>
 </dd>
 </dl>
@@ -931,20 +918,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.discretizers.GeometricDiscretizer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/discretizers/geometric_discretizer.html#GeometricDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.GeometricDiscretizer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.discretizers.GeometricDiscretizer" title="gators.discretizers.geometric_discretizer.GeometricDiscretizer"><span class="pre">gators.discretizers.geometric_discretizer.GeometricDiscretizer</span></a></span></span><a class="reference internal" href="_modules/gators/discretizers/geometric_discretizer.html#GeometricDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.GeometricDiscretizer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the discretizer by computing geometric progression bin boundaries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted discretizer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.discretizers.GeometricDiscretizer" title="gators.discretizers.geometric_discretizer.GeometricDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeometricDiscretizer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.discretizers.GeometricDiscretizer" title="gators.discretizers.GeometricDiscretizer">GeometricDiscretizer</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -954,7 +941,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.discretizers.KMeansDiscretizer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.discretizers.</span></span><span class="sig-name descname"><span class="pre">KMeansDiscretizer</span></span><a class="reference internal" href="_modules/gators/discretizers/kmeans_discretizer.html#KMeansDiscretizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.KMeansDiscretizer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseDiscretizer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.discretizers._base_discretizer._BaseDiscretizer</span></code></p>
 <p>Clustering-based discretizer using k-means to find natural data clusters.</p>
 <p>Uses k-means clustering to identify natural groupings in the data, creating
 bins based on cluster boundaries. This is more effective than equal-length
@@ -962,17 +949,17 @@ binning for non-uniform distributions as it groups similar values together.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
 <li><p><strong>num_bins</strong> (<em>PositiveInt</em><em>, </em><em>default=5</em>) – Number of clusters (bins) to create using k-means.</p></li>
 <li><p><strong>rounding</strong> (<em>PositiveInt</em><em>, </em><em>default=3</em>) – Decimal places to round bin edges for labels.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
 If False, create new columns with suffix ‘__dic_kmeans’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
 Ignored when inplace=True.</p></li>
-<li><p><strong>as_numerics</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
-<li><p><strong>random_state</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>default=None</em>) – Random state for reproducibility of k-means clustering.</p></li>
-<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=300</em>) – Maximum number of iterations for k-means algorithm.</p></li>
-<li><p><strong>n_init</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=10</em>) – Number of times k-means will be run with different centroid seeds.</p></li>
+<li><p><strong>as_numerics</strong> (bool<em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
+<li><p><strong>random_state</strong> (int<em>, </em><em>default=None</em>) – Random state for reproducibility of k-means clustering.</p></li>
+<li><p><strong>max_iter</strong> (int<em>, </em><em>default=300</em>) – Maximum number of iterations for k-means algorithm.</p></li>
+<li><p><strong>n_init</strong> (int<em>, </em><em>default=10</em>) – Number of times k-means will be run with different centroid seeds.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1026,20 +1013,20 @@ This is more meaningful than equal-length bins like [10-190], [190-370], [370-55
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.discretizers.KMeansDiscretizer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/discretizers/kmeans_discretizer.html#KMeansDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.KMeansDiscretizer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.discretizers.KMeansDiscretizer" title="gators.discretizers.kmeans_discretizer.KMeansDiscretizer"><span class="pre">gators.discretizers.kmeans_discretizer.KMeansDiscretizer</span></a></span></span><a class="reference internal" href="_modules/gators/discretizers/kmeans_discretizer.html#KMeansDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.KMeansDiscretizer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the discretizer by learning cluster boundaries using k-means.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted discretizer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.discretizers.KMeansDiscretizer" title="gators.discretizers.kmeans_discretizer.KMeansDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">KMeansDiscretizer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.discretizers.KMeansDiscretizer" title="gators.discretizers.KMeansDiscretizer">KMeansDiscretizer</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1049,7 +1036,7 @@ This is more meaningful than equal-length bins like [10-190], [190-370], [370-55
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.discretizers.QuantileDiscretizer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.discretizers.</span></span><span class="sig-name descname"><span class="pre">QuantileDiscretizer</span></span><a class="reference internal" href="_modules/gators/discretizers/quantile_discretizer.html#QuantileDiscretizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.QuantileDiscretizer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseDiscretizer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.discretizers._base_discretizer._BaseDiscretizer</span></code></p>
 <p>Flexible quantile-based discretizer with explicit quantile control.</p>
 <p>Creates bins based on specified quantiles, allowing fine-grained control over
 bin boundaries. More flexible than EqualSizeDiscretizer as you can specify
@@ -1058,19 +1045,19 @@ contains similar numbers of samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
 <li><p><strong>num_bins</strong> (<em>PositiveInt</em><em>, </em><em>default=5</em>) – Number of quantile-based bins to create (used if quantiles not specified).
 Ignored if quantiles parameter is provided.</p></li>
-<li><p><strong>quantiles</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – Explicit list of quantiles (0.0-1.0) to use as bin boundaries.
+<li><p><strong>quantiles</strong> (list<em>[</em>float<em>]</em><em>]</em><em>, </em><em>default=None</em>) – Explicit list of quantiles (0.0-1.0) to use as bin boundaries.
 If None, equally-spaced quantiles are generated based on num_bins.
 Example: [0.25, 0.5, 0.75] creates quartile bins.</p></li>
 <li><p><strong>rounding</strong> (<em>PositiveInt</em><em>, </em><em>default=3</em>) – Decimal places to round bin edges for labels.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
 If False, create new columns with suffix ‘__dic_quantile’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
 Ignored when inplace=True.</p></li>
-<li><p><strong>as_numerics</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
-<li><p><strong>handle_duplicates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default='drop'</em>) – <p>How to handle duplicate quantile values:</p>
+<li><p><strong>as_numerics</strong> (bool<em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
+<li><p><strong>handle_duplicates</strong> (str<em>, </em><em>default='drop'</em>) – <p>How to handle duplicate quantile values:</p>
 <ul>
 <li><p>’drop’: Remove duplicate bin edges (recommended for low variance data)</p></li>
 <li><p>’raise’: Raise error if duplicates are found</p></li>
@@ -1142,20 +1129,20 @@ Ignored when inplace=True.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.discretizers.QuantileDiscretizer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/discretizers/quantile_discretizer.html#QuantileDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.QuantileDiscretizer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.discretizers.QuantileDiscretizer" title="gators.discretizers.quantile_discretizer.QuantileDiscretizer"><span class="pre">gators.discretizers.quantile_discretizer.QuantileDiscretizer</span></a></span></span><a class="reference internal" href="_modules/gators/discretizers/quantile_discretizer.html#QuantileDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.QuantileDiscretizer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the discretizer by computing quantile-based bin boundaries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target series (not used, present for sklearn compatibility).</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target series (not used, present for sklearn compatibility).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The fitted discretizer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.discretizers.QuantileDiscretizer" title="gators.discretizers.quantile_discretizer.QuantileDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileDiscretizer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.discretizers.QuantileDiscretizer" title="gators.discretizers.QuantileDiscretizer">QuantileDiscretizer</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1165,7 +1152,7 @@ Ignored when inplace=True.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="gators.discretizers.TreeBasedDiscretizer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.discretizers.</span></span><span class="sig-name descname"><span class="pre">TreeBasedDiscretizer</span></span><a class="reference internal" href="_modules/gators/discretizers/tree_based_discretizer.html#TreeBasedDiscretizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.TreeBasedDiscretizer" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseDiscretizer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.discretizers._base_discretizer._BaseDiscretizer</span></code></p>
 <p>Supervised discretizer using decision tree splits for optimal bin boundaries.</p>
 <p>Finds bin boundaries that maximize information gain or reduce variance by
 using decision tree split points. This is particularly effective for tree-based
@@ -1173,19 +1160,19 @@ models as bins align with natural decision boundaries in the data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subset</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to discretize. If None, all numeric columns are selected.</p></li>
 <li><p><strong>num_bins</strong> (<em>PositiveInt</em><em>, </em><em>default=5</em>) – Maximum number of bins to create. Actual number may be less if tree finds fewer optimal splits.</p></li>
 <li><p><strong>rounding</strong> (<em>PositiveInt</em><em>, </em><em>default=3</em>) – Decimal places to round bin edges for labels.</p></li>
-<li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
 If False, create new columns with suffix ‘__dic_tree’.</p></li>
-<li><p><strong>drop_columns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
 Ignored when inplace=True.</p></li>
-<li><p><strong>as_numerics</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
-<li><p><strong>task</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>default='classification'</em>) – Type of supervised learning task: ‘classification’ or ‘regression’.
+<li><p><strong>as_numerics</strong> (bool<em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>
+<li><p><strong>task</strong> (str<em>, </em><em>default='classification'</em>) – Type of supervised learning task: ‘classification’ or ‘regression’.
 Determines which tree algorithm to use (LGBMClassifier vs LGBMRegressor).</p></li>
-<li><p><strong>min_samples_leaf</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>default=10</em>) – Minimum number of samples required in each leaf node (min_data_in_leaf in LightGBM).
+<li><p><strong>min_samples_leaf</strong> (int<em>, </em><em>default=10</em>) – Minimum number of samples required in each leaf node (min_data_in_leaf in LightGBM).
 Controls the granularity of binning (higher = fewer, coarser bins).</p></li>
-<li><p><strong>random_state</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>default=None</em>) – Random state for reproducibility of tree splits.</p></li>
+<li><p><strong>random_state</strong> (int<em>, </em><em>default=None</em>) – Random state for reproducibility of tree splits.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1237,13 +1224,13 @@ Controls the granularity of binning (higher = fewer, coarser bins).</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gators.discretizers.TreeBasedDiscretizer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/discretizers/tree_based_discretizer.html#TreeBasedDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.TreeBasedDiscretizer.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.discretizers.TreeBasedDiscretizer" title="gators.discretizers.tree_based_discretizer.TreeBasedDiscretizer"><span class="pre">gators.discretizers.tree_based_discretizer.TreeBasedDiscretizer</span></a></span></span><a class="reference internal" href="_modules/gators/discretizers/tree_based_discretizer.html#TreeBasedDiscretizer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.discretizers.TreeBasedDiscretizer.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the discretizer by learning optimal splits from decision tree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span>) – Input DataFrame with numeric columns.</p></li>
-<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Target values (binary for classification, continuous for regression).
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Target values (binary for classification, continuous for regression).
 Required for TreeBasedDiscretizer.</p></li>
 </ul>
 </dd>
@@ -1251,7 +1238,7 @@ Required for TreeBasedDiscretizer.</p></li>
 <dd class="field-even"><p>The fitted discretizer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#gators.discretizers.TreeBasedDiscretizer" title="gators.discretizers.tree_based_discretizer.TreeBasedDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeBasedDiscretizer</span></code></a></span></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.discretizers.TreeBasedDiscretizer" title="gators.discretizers.TreeBasedDiscretizer">TreeBasedDiscretizer</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If y is None.</p>
