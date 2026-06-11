@@ -26,7 +26,6 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosummary",
-    "sphinx_autodoc_typehints",
     "nbsphinx",
     "sphinxext.opengraph",
     "sphinx_sitemap",
@@ -154,7 +153,11 @@ def autodoc_skip_member(app, what, name, obj, skip, options):
 
 
 def remove_attributes_section(app, what, name, obj, options, lines):
-    """Remove Attributes section from docstrings."""
+    """Remove Attributes section from docstrings and strip type-role markup."""
+    pattern = re.compile(r":py:(?:class|data|obj|func|meth|attr|mod):`~?([^`]+)`")
+    for idx, line in enumerate(lines):
+        lines[idx] = pattern.sub(r"\1", line)
+
     if what in ("class", "exception"):
         i = 0
         while i < len(lines):
