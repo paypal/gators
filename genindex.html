@@ -459,9 +459,21 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.clippers.html#gators.clippers.CustomClipper._bounds_map">_bounds_map (gators.clippers.CustomClipper attribute)</a>
 </li>
+      <li><a href="gators.scalers.html#gators.scalers.RobustScaler._column_mapping">_column_mapping (gators.scalers.RobustScaler attribute)</a>
+</li>
+      <li><a href="gators.clippers.html#gators.clippers.CustomClipper._columns">_columns (gators.clippers.CustomClipper attribute)</a>
+</li>
+      <li><a href="gators.imputers.html#gators.imputers.KNNImputer._feature_cols_">_feature_cols_ (gators.imputers.KNNImputer attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.clippers.html#gators.clippers.CustomClipper._columns">_columns (gators.clippers.CustomClipper attribute)</a>
+      <li><a href="gators.imputers.html#gators.imputers.KNNImputer._global_stats_">_global_stats_ (gators.imputers.KNNImputer attribute)</a>
+</li>
+      <li><a href="gators.scalers.html#gators.scalers.RobustScaler._median">_median (gators.scalers.RobustScaler attribute)</a>
+</li>
+      <li><a href="gators.scalers.html#gators.scalers.RobustScaler._scale">_scale (gators.scalers.RobustScaler attribute)</a>
+</li>
+      <li><a href="gators.imputers.html#gators.imputers.KNNImputer._train_df_">_train_df_ (gators.imputers.KNNImputer attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -503,16 +515,18 @@
 </li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.CharacterStatistics">CharacterStatistics (class in gators.feature_generation_str)</a>
 </li>
+      <li><a href="gators.pipeline.html#gators.pipeline.Pipeline.clone">clone() (gators.pipeline.Pipeline method)</a>
+</li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.CombineFeatures">CombineFeatures (class in gators.feature_generation_str)</a>
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures">ComparisonFeatures (class in gators.feature_generation)</a>
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures.compute_column_names">compute_column_names() (gators.feature_generation.PlaneRotationFeatures method)</a>
 </li>
-      <li><a href="gators.feature_selection.html#gators.feature_selection.information_value.compute_iv">compute_iv() (in module gators.feature_selection.information_value)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.information_value.compute_iv">compute_iv() (in module gators.feature_selection.information_value)</a>
+</li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.ConditionFeatures">ConditionFeatures (class in gators.feature_generation)</a>
 </li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Contains">Contains (class in gators.feature_generation_str)</a>
@@ -610,6 +624,8 @@
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.Replace.fit">(gators.data_cleaning.Replace method)</a>
 </li>
+        <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits.fit">(gators.data_cleaning.RoundSignificantDigits method)</a>
+</li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.VarianceFilter.fit">(gators.data_cleaning.VarianceFilter method)</a>
 </li>
         <li><a href="gators.discretizers.html#gators.discretizers.CustomDiscretizer.fit">(gators.discretizers.CustomDiscretizer method)</a>
@@ -631,6 +647,8 @@
         <li><a href="gators.encoders.html#gators.encoders.CatBoostEncoder.fit">(gators.encoders.CatBoostEncoder method)</a>
 </li>
         <li><a href="gators.encoders.html#gators.encoders.CountEncoder.fit">(gators.encoders.CountEncoder method)</a>
+</li>
+        <li><a href="gators.encoders.html#gators.encoders.HashEncoder.fit">(gators.encoders.HashEncoder method)</a>
 </li>
         <li><a href="gators.encoders.html#gators.encoders.LeaveOneOutEncoder.fit">(gators.encoders.LeaveOneOutEncoder method)</a>
 </li>
@@ -722,6 +740,8 @@
 </li>
         <li><a href="gators.imputers.html#gators.imputers.GroupByImputer.fit">(gators.imputers.GroupByImputer method)</a>
 </li>
+        <li><a href="gators.imputers.html#gators.imputers.KNNImputer.fit">(gators.imputers.KNNImputer method)</a>
+</li>
         <li><a href="gators.imputers.html#gators.imputers.NumericImputer.fit">(gators.imputers.NumericImputer method)</a>
 </li>
         <li><a href="gators.imputers.html#gators.imputers.StringImputer.fit">(gators.imputers.StringImputer method)</a>
@@ -739,6 +759,8 @@
         <li><a href="gators.scalers.html#gators.scalers.MinmaxScaler.fit">(gators.scalers.MinmaxScaler method)</a>
 </li>
         <li><a href="gators.scalers.html#gators.scalers.PowerScaler.fit">(gators.scalers.PowerScaler method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.RobustScaler.fit">(gators.scalers.RobustScaler method)</a>
 </li>
         <li><a href="gators.scalers.html#gators.scalers.StandardScaler.fit">(gators.scalers.StandardScaler method)</a>
 </li>
@@ -861,10 +883,12 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter">HighCardinalityFilter (class in gators.data_cleaning)</a>
+      <li><a href="gators.encoders.html#gators.encoders.HashEncoder">HashEncoder (class in gators.encoders)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter">HighCardinalityFilter (class in gators.data_cleaning)</a>
+</li>
       <li><a href="gators.feature_generation_dt.html#gators.feature_generation_dt.HolidayFeatures">HolidayFeatures (class in gators.feature_generation_dt)</a>
 </li>
   </ul></td>
@@ -888,6 +912,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.discretizers.html#gators.discretizers.KMeansDiscretizer">KMeansDiscretizer (class in gators.discretizers)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.imputers.html#gators.imputers.KNNImputer">KNNImputer (class in gators.imputers)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1016,9 +1044,13 @@
 </li>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.RenameColumns">RenameColumns (class in gators.data_cleaning)</a>
 </li>
+      <li><a href="gators.data_cleaning.html#gators.data_cleaning.Replace">Replace (class in gators.data_cleaning)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.data_cleaning.html#gators.data_cleaning.Replace">Replace (class in gators.data_cleaning)</a>
+      <li><a href="gators.scalers.html#gators.scalers.RobustScaler">RobustScaler (class in gators.scalers)</a>
+</li>
+      <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits">RoundSignificantDigits (class in gators.data_cleaning)</a>
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.RowStatisticsFeatures">RowStatisticsFeatures (class in gators.feature_generation)</a>
 </li>
@@ -1083,11 +1115,15 @@
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.Replace.transform">(gators.data_cleaning.Replace method)</a>
 </li>
+        <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits.transform">(gators.data_cleaning.RoundSignificantDigits method)</a>
+</li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.VarianceFilter.transform">(gators.data_cleaning.VarianceFilter method)</a>
 </li>
         <li><a href="gators.encoders.html#gators.encoders.BinaryEncoder.transform">(gators.encoders.BinaryEncoder method)</a>
 </li>
         <li><a href="gators.encoders.html#gators.encoders.CatBoostEncoder.transform">(gators.encoders.CatBoostEncoder method)</a>
+</li>
+        <li><a href="gators.encoders.html#gators.encoders.HashEncoder.transform">(gators.encoders.HashEncoder method)</a>
 </li>
         <li><a href="gators.encoders.html#gators.encoders.LeaveOneOutEncoder.transform">(gators.encoders.LeaveOneOutEncoder method)</a>
 </li>
@@ -1173,6 +1209,8 @@
 </li>
         <li><a href="gators.imputers.html#gators.imputers.GroupByImputer.transform">(gators.imputers.GroupByImputer method)</a>
 </li>
+        <li><a href="gators.imputers.html#gators.imputers.KNNImputer.transform">(gators.imputers.KNNImputer method)</a>
+</li>
         <li><a href="gators.imputers.html#gators.imputers.NumericImputer.transform">(gators.imputers.NumericImputer method)</a>
 </li>
         <li><a href="gators.imputers.html#gators.imputers.StringImputer.transform">(gators.imputers.StringImputer method)</a>
@@ -1190,6 +1228,8 @@
         <li><a href="gators.scalers.html#gators.scalers.MinmaxScaler.transform">(gators.scalers.MinmaxScaler method)</a>
 </li>
         <li><a href="gators.scalers.html#gators.scalers.PowerScaler.transform">(gators.scalers.PowerScaler method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.RobustScaler.transform">(gators.scalers.RobustScaler method)</a>
 </li>
         <li><a href="gators.scalers.html#gators.scalers.StandardScaler.transform">(gators.scalers.StandardScaler method)</a>
 </li>
