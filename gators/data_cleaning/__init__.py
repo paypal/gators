@@ -6,6 +6,7 @@ from .drop_duplicate_columns import DropDuplicateColumns
 from .drop_duplicate_rows import DropDuplicateRows
 from .drop_high_nan_ratio import DropHighNaNRatio
 from .drop_low_cardinality import DropLowCardinality
+from .drop_near_constant_columns import DropNearConstantColumns
 from .high_cardinality_filter import HighCardinalityFilter
 from .rename_columns import RenameColumns
 from .replace import Replace
@@ -24,6 +25,7 @@ __all__ = [
     "DropDuplicateColumns",
     "DropDuplicateRows",
     "DropConstantColumns",
+    "DropNearConstantColumns",
     "HighCardinalityFilter",
     "RoundSignificantDigits",
 ]

@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -53,9 +54,9 @@ class StandardScaler(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    _offset: dict[str, float]
-    _scale: dict[str, float]
-    _column_mapping: dict[str, str]
+    _offset: dict[str, float] = PrivateAttr(default_factory=dict)
+    _scale: dict[str, float] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
     drop_columns: bool = True
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "StandardScaler":

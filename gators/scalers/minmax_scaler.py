@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -53,9 +54,9 @@ class MinmaxScaler(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    _offset: dict[str, float]
-    _scale: dict[str, float]
-    _column_mapping: dict[str, str]
+    _offset: dict[str, float] = PrivateAttr()
+    _scale: dict[str, float] = PrivateAttr()
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
     drop_columns: bool = True
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "MinmaxScaler":

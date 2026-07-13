@@ -190,3 +190,10 @@ def test_different_length_columns():
 
     # Only one column should remain after removing duplicates
     assert result.shape[1] == 1
+
+
+def test_are_columns_identical_different_lengths_returns_false():
+    """_columns_equal returns False when columns have different lengths."""
+    s1 = pl.Series([1, 2, 3])
+    s2 = pl.Series([1, 2])
+    assert DropDuplicateColumns._columns_equal(s1, s2) is False

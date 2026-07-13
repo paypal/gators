@@ -3,11 +3,11 @@ from typing import Annotated
 import polars as pl
 from pydantic import Field, PrivateAttr
 
-from ..transformer._base_transformer import _BaseTransformer
+from ._base_selector import _BaseSelector
 from .feature_stability_index import feature_stability_index
 
 
-class FeatureStabilitySelector(_BaseTransformer):
+class FeatureStabilitySelector(_BaseSelector):
     """Drop columns whose Feature Stability Index falls below a threshold.
 
     Wraps :func:`~gators.feature_selection.feature_stability_index` into a
@@ -66,17 +66,7 @@ class FeatureStabilitySelector(_BaseTransformer):
     threshold: Annotated[float, Field(ge=0.0, le=1.0)] = 0.5
     importance_threshold: Annotated[float, Field(ge=0.0, le=1.0)] = 0.0
 
-    _selected_features: list[str] = PrivateAttr(default_factory=list)
-    _columns_to_drop: list[str] = PrivateAttr(default_factory=list)
     _fsi_scores: pl.DataFrame = PrivateAttr(default_factory=pl.DataFrame)
-
-    @property
-    def selected_features_(self) -> list[str]:
-        return self._selected_features
-
-    @property
-    def columns_to_drop_(self) -> list[str]:
-        return self._columns_to_drop
 
     @property
     def fsi_scores_(self) -> pl.DataFrame:
@@ -118,20 +108,3 @@ class FeatureStabilitySelector(_BaseTransformer):
         self._selected_features = [col for col in X.columns if all_fsi[col] >= self.threshold]
         self._columns_to_drop = [col for col in X.columns if all_fsi[col] < self.threshold]
         return self
-
-    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        """Drop unstable columns from the DataFrame.
-
-        Parameters
-        ----------
-        X : pl.DataFrame
-            Input DataFrame to transform.
-
-        Returns
-        -------
-        pl.DataFrame
-            DataFrame with unstable columns removed.
-        """
-        if not self._columns_to_drop:
-            return X
-        return X.drop(self._columns_to_drop)

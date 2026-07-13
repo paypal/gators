@@ -1,29 +1,30 @@
-from typing import Literal, Optional
+from typing import Literal
 
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
 
-class LogScaler(_BaseTransformer):
+class Log1pScaler(_BaseTransformer):
     """
-    Applies logarithm transformation with choice of base.
+    Applies log1p transformation log(1+x) with choice of base.
 
-    Log transformation is useful for:
+    Log1p transformation is useful for:
 
     - Reducing right skewness in data
     - Stabilizing variance
     - Converting multiplicative relationships to additive
-    - Compressing large value ranges
+    - Compressing large value ranges while handling zero values
 
     Supports three bases:
 
-    - 'e': Natural logarithm ln(X) / log_e(X)
-    - '10': Base-10 logarithm
-    - '2': Base-2 logarithm
+    - 'e': Natural log1p ln(1+X)
+    - '10': Base-10 log1p log10(1+X)
+    - '2': Base-2 log1p log2(1+X)
 
-    Note: Only positive values can be transformed. Zero and negative values
-    will result in null/inf values.
+    Note: Values must be greater than -1. Values of -1 or below will
+    result in null/inf values.
 
     Parameters
     ----------
@@ -32,20 +33,20 @@ class LogScaler(_BaseTransformer):
         (Float64, Int64, Float32, Int32) are automatically selected.
     base : Literal['e', '10', '2'], default='e'
         The logarithm base to use:
-        - 'e': ln(X)
-        - '10': log10(X)
-        - '2': log2(X)
+        - 'e': ln(1+X)
+        - '10': log10(1+X)
+        - '2': log2(1+X)
     drop_columns : bool, default=True
         If True, drop the original columns after transformation.
         If False, keep both original and transformed columns.
 
     Examples
     --------
-    Create an instance of the LogScaler class with natural log:
+    Create an instance of the Log1pScaler class with natural log:
 
     >>> import polars as pl
-    >>> from gators.scalers import LogScaler
-    >>> scaler = LogScaler(subset=["sales", "revenue"], base="e")
+    >>> from gators.scalers import Log1pScaler
+    >>> scaler = Log1pScaler(subset=["sales", "revenue"], base="e")
 
     Fit the transformer:
 
@@ -60,59 +61,59 @@ class LogScaler(_BaseTransformer):
     >>> transformed_X = scaler.transform(X)
     >>> print(transformed_X)
     shape: (4, 2)
-    ┌───────────────┬──────────────────┐
-    │ sales__log_ln ┆ revenue__log_ln  │
-    │ ---           ┆ ---              │
-    │ f64           ┆ f64              │
-    ├───────────────┼──────────────────┤
-    │ 0.0           ┆ 2.303            │
-    │ 2.303         ┆ 4.605            │
-    │ 4.605         ┆ 6.908            │
-    │ 6.908         ┆ 9.210            │
-    └───────────────┴──────────────────┘
+    ┌─────────────────┬───────────────────┐
+    │ sales__log1p ┆ revenue__log1p │
+    │ ---             ┆ ---               │
+    │ f64             ┆ f64               │
+    ├─────────────────┼───────────────────┤
+    │ 0.693           ┆ 2.398             │
+    │ 2.398           ┆ 4.615             │
+    │ 4.615           ┆ 6.909             │
+    │ 6.909           ┆ 9.210             │
+    └─────────────────┴───────────────────┘
 
     >>> # Using log10
-    >>> scaler10 = LogScaler(subset=["count"], base="10")
+    >>> scaler10 = Log1pScaler(subset=["count"], base="10")
     >>> X2 = pl.DataFrame({"count": [1, 10, 100, 1000]})
     >>> scaler10.fit(X2)
     >>> scaler10.transform(X2)
     shape: (4, 1)
     ┌─────────────────┐
-    │ count__log_10   │
+    │ count__log1p_10 │
     │ ---             │
     │ f64             │
     ├─────────────────┤
-    │ 0.0             │
-    │ 1.0             │
-    │ 2.0             │
-    │ 3.0             │
+    │ 0.301           │
+    │ 1.041           │
+    │ 2.004           │
+    │ 3.000           │
     └─────────────────┘
 
     >>> # Using log2
-    >>> scaler2 = LogScaler(subset=["size"], base="2")
+    >>> scaler2 = Log1pScaler(subset=["size"], base="2")
     >>> X3 = pl.DataFrame({"size": [1, 2, 4, 8, 16]})
     >>> scaler2.fit(X3)
     >>> scaler2.transform(X3)
     shape: (5, 1)
-    ┌──────────────┐
-    │ size__log_2  │
-    │ ---          │
-    │ f64          │
-    ├──────────────┤
-    │ 0.0          │
-    │ 1.0          │
-    │ 2.0          │
-    │ 3.0          │
-    │ 4.0          │
-    └──────────────┘
+    ┌───────────────┐
+    │ size__log1p_2 │
+    │ ---           │
+    │ f64           │
+    ├───────────────┤
+    │ 1.000         │
+    │ 1.585         │
+    │ 2.322         │
+    │ 3.170         │
+    │ 4.087         │
+    └───────────────┘
     """
 
     subset: list[str] | None = None
     base: Literal["e", "10", "2"] = "e"
-    _column_mapping: dict[str, str]
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
     drop_columns: bool = True
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "LogScaler":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Log1pScaler":
         """Fit the transformer by storing column names.
 
         Parameters
@@ -124,7 +125,7 @@ class LogScaler(_BaseTransformer):
 
         Returns
         -------
-        LogScaler
+        Log1pScaler
             The fitted transformer instance.
         """
         if not self.subset:
@@ -136,11 +137,11 @@ class LogScaler(_BaseTransformer):
 
         # Create suffix based on base
         if self.base == "e":
-            suffix = "log_ln"
+            suffix = "log1p"
         elif self.base == "10":
-            suffix = "log_10"
+            suffix = "log1p_10"
         else:  # '2'
-            suffix = "log_2"
+            suffix = "log1p_2"
 
         self._column_mapping = {col: f"{col}__{suffix}" for col in self.subset}
         return self
@@ -162,13 +163,13 @@ class LogScaler(_BaseTransformer):
         -----
         Zero and negative values will result in null or -inf values.
         """
-        # Pre-select log function once (avoid repeated conditionals in loop)
+        # Pre-select log1p function once (avoid repeated conditionals in loop)
         if self.base == "e":
-            log_func = lambda col: pl.col(col).log()
+            log_func = lambda col: (pl.col(col) + 1).log()
         elif self.base == "10":
-            log_func = lambda col: pl.col(col).log10()
+            log_func = lambda col: (pl.col(col) + 1).log(base=10)
         else:  # '2'
-            log_func = lambda col: pl.col(col).log(base=2)
+            log_func = lambda col: (pl.col(col) + 1).log(base=2)
 
         # Build all transformations using pre-selected function
         transformations = [log_func(col).alias(new) for col, new in self._column_mapping.items()]

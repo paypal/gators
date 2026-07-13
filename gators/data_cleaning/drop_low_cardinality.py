@@ -102,7 +102,7 @@ class DropLowCardinality(_BaseTransformer):
 
     min_count: Annotated[int, Field(ge=1)]
     subset: list[str] | None = None
-    _to_drop: list[str] = PrivateAttr()
+    _to_drop: list[str] = PrivateAttr(default_factory=list)
     _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DropLowCardinality":

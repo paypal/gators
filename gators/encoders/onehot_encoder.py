@@ -89,7 +89,7 @@ class OneHotEncoder(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    categories: dict[str, list[str]] | None = None
+    column_categories: dict[str, list[str]] | None = None
     min_count: PositiveInt | PositiveFloat = 1
     drop_columns: bool = True
 
@@ -108,8 +108,8 @@ class OneHotEncoder(_BaseTransformer):
         OneHotEncoder
             The fitted transformer instance.
         """
-        if self.categories:
-            self.subset = list(set(self.categories.keys()))
+        if self.column_categories:
+            self.subset = list(set(self.column_categories.keys()))
             return self
 
         if not self.subset:
@@ -119,14 +119,14 @@ class OneHotEncoder(_BaseTransformer):
 
         X_filled = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
 
-        self.categories = {}
+        self.column_categories = {}
         n = len(X)
         threshold = self.min_count if self.min_count >= 1 else self.min_count * n
 
         for col in self.subset:
             counts = X_filled[col].value_counts(sort=True)
             valid_categories = counts.filter(pl.col("count") >= threshold)
-            self.categories[col] = valid_categories[col].to_list()
+            self.column_categories[col] = valid_categories[col].to_list()
 
         return self
 
@@ -143,11 +143,11 @@ class OneHotEncoder(_BaseTransformer):
         pl.DataFrame
             DataFrame with one-hot encoded columns (one binary column per category).
         """
-        if self.categories is None:
+        if self.column_categories is None:
             return X
 
         # Use native Polars to_dummies - single efficient call
-        cols_to_encode = list(self.categories.keys())
+        cols_to_encode = list(self.column_categories.keys())
         cat_cols = [col for col in cols_to_encode if X[col].dtype.base_type() in self._CAT_DTYPES]
         X_encode = X.select(cols_to_encode)
         if cat_cols:
@@ -156,7 +156,7 @@ class OneHotEncoder(_BaseTransformer):
 
         # Build expected columns list (pre-computed for efficiency)
         expected_cols = [
-            f"{col}__{cat}" for col, cat_list in self.categories.items() for cat in cat_list
+            f"{col}__{cat}" for col, cat_list in self.column_categories.items() for cat in cat_list
         ]
         expected_cols_set = set(expected_cols)
 

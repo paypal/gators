@@ -263,3 +263,10 @@ def test_edge_case_exact_business_hour_boundaries():
 
     # 9:00 is in, 17:00 is out (< not <=), 16:59 is in
     assert result["timestamp__is_business_hour"].to_list() == [True, False, True]
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"ts": [datetime(2024, 1, 15, 10, 0)]})
+    transformer = BusinessTimeFeatures()
+    assert_frame_equal(transformer.transform(X), X)

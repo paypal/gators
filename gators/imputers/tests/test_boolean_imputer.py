@@ -108,3 +108,11 @@ def test_transform_inplace_true(sample_X):
     )
 
     assert_frame_equal(transformed_X, expected_X)
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"A": [True, None, False]})
+    imputer = BooleanImputer(strategy="constant", value=False)
+    result = imputer.transform(X)
+    assert_frame_equal(result, X)

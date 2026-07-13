@@ -1,7 +1,7 @@
-from typing import Any, Literal, Optional, cast
+from typing import Any, Literal, cast
 
 import polars as pl
-from pydantic import ConfigDict, field_validator
+from pydantic import field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 

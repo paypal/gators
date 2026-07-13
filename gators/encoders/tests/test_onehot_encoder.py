@@ -110,7 +110,7 @@ def test_transform_with_min_count_ratio(sample_X):
 
 def test_transform_with_categories(sample_X):
     categories = {"A": ["foo", "baz"], "B": ["one"]}
-    encoder = OneHotEncoder(categories=categories)
+    encoder = OneHotEncoder(column_categories=categories)
     encoder.fit(sample_X)
     transformed_X = encoder.transform(sample_X)
     expected_X = pl.DataFrame(
@@ -182,3 +182,10 @@ def test_transform_categorical_dtype():
         },
     )
     assert_frame_equal(transformed_X, expected_X, check_column_order=False)
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when categories is None."""
+    X = pl.DataFrame({"cat": ["a", "b", "c"]})
+    encoder = OneHotEncoder()
+    assert_frame_equal(encoder.transform(X), X)

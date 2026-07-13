@@ -90,3 +90,11 @@ def test_transform_unseen(sample_X, sample_target):
         }
     )
     assert_frame_equal(transformed_X, expected_X, check_column_order=False)
+
+
+def test_fit_without_y_raises_value_error():
+    """fit() raises ValueError when y is None."""
+    X = pl.DataFrame({"A": ["a", "b", "c"]})
+    encoder = TargetEncoder(subset=["A"])
+    with pytest.raises(ValueError, match="requires a target variable"):
+        encoder.fit(X, y=None)

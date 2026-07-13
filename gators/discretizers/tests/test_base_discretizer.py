@@ -201,5 +201,13 @@ def test_generate_labels_empty_bins():
     assert labels["constant_col"] == ["constant"]
 
 
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged (subset is None)."""
+    X = pl.DataFrame({"A": [1.0, 2.0, 3.0], "B": [4.0, 5.0, 6.0]})
+    discretizer = ExampleDiscretizer()
+    result = discretizer.transform(X)
+    assert_frame_equal(result, X)
+
+
 if __name__ == "__main__":
     pytest.main()

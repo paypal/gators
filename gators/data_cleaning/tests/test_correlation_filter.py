@@ -54,5 +54,20 @@ def test_correlation_filter_no_correlations():
     assert set(transformed_X.columns) == {"A", "B", "C"}
 
 
+def test_fit_all_constant_columns_skips_filtering():
+    """When all subset columns are constant (std=0), _to_drop is set to [] and fit returns early."""
+    X = pl.DataFrame(
+        {
+            "A": [1.0, 1.0, 1.0, 1.0],
+            "B": [2.0, 2.0, 2.0, 2.0],
+        }
+    )
+    f = CorrelationFilter(max_corr=0.9)
+    f.fit(X)
+    # No columns should be dropped since there are no correlations to compute
+    assert f._to_drop == []
+    assert_frame_equal(f.transform(X), X)
+
+
 if __name__ == "__main__":
     pytest.main()

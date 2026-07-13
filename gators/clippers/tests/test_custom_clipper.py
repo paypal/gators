@@ -256,3 +256,21 @@ def test_custom_clipper_preserves_other_columns(sample_dataframe):
     assert_frame_equal(transformed.select("temperature"), sample_dataframe.select("temperature"))
     # Salary should be exactly the same
     assert_frame_equal(transformed.select("salary"), sample_dataframe.select("salary"))
+
+
+def test_validate_bounds_non_dict_raises_type_error():
+    """validate_bounds raises TypeError when passed a non-dict value."""
+    with pytest.raises(TypeError, match="Bounds must be a dictionary"):
+        CustomClipper.validate_bounds(42)
+
+
+def test_validate_bounds_non_string_keys_raises_type_error():
+    """validate_bounds raises TypeError when dict has non-string keys."""
+    with pytest.raises(TypeError, match="All keys in bounds must be strings"):
+        CustomClipper.validate_bounds({1: 0.0})
+
+
+def test_validate_bounds_non_numeric_values_raises_type_error():
+    """validate_bounds raises TypeError when dict has non-numeric values."""
+    with pytest.raises(TypeError, match="All values in bounds must be numeric"):
+        CustomClipper.validate_bounds({"a": "text"})

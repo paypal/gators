@@ -29,7 +29,7 @@ class QuantileDiscretizer(_BaseDiscretizer):
         Decimal places to round bin edges for labels.
     inplace : bool, default=True
         If True, replace original columns with discretized values.
-        If False, create new columns with suffix '__dic_quantile'.
+        If False, create new columns with suffix '__discretize_quant'.
     drop_columns : bool, default=True
         If inplace=False, whether to drop the original columns after discretizing.
         Ignored when inplace=True.
@@ -197,6 +197,6 @@ class QuantileDiscretizer(_BaseDiscretizer):
         self._labels = generate_labels(self._bins, self.rounding)
 
         # Create column mapping
-        self._column_mapping = {col: f"{col}__dic_quantile" for col in self.subset}
+        self._column_mapping = {col: f"{col}__discretize_quant" for col in self.subset}
 
         return self

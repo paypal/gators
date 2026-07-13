@@ -115,3 +115,19 @@ class TestPSIFilter:
         selector.fit(current_stable)
         # Both columns have identical distributions → PSI should be near 0
         assert selector.psi_scores_["stable"] < 0.01
+
+    def test_all_null_reference_column_returns_zero_psi(self):
+        """ref_arr empty after drop_nulls → _compute_psi early-returns 0.0 (line 37)."""
+        reference_df = pl.DataFrame({"a": pl.Series("a", [None, None, None], dtype=pl.Float64)})
+        current = pl.DataFrame({"a": [1.0, 2.0, 3.0]})
+        selector = PSIFilter(reference_df=reference_df, threshold=0.1)
+        selector.fit(current)
+        assert selector.psi_scores_["a"] == 0.0
+
+    def test_constant_reference_column_returns_zero_psi(self):
+        """Constant reference → all quantile breaks identical → _compute_psi returns 0.0 (line 44)."""
+        reference_df = pl.DataFrame({"a": [5.0, 5.0, 5.0, 5.0, 5.0]})
+        current = pl.DataFrame({"a": [1.0, 2.0, 3.0, 4.0, 5.0]})
+        selector = PSIFilter(reference_df=reference_df, threshold=0.1)
+        selector.fit(current)
+        assert selector.psi_scores_["a"] == 0.0

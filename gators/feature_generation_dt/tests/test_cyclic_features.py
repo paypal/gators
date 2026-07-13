@@ -284,3 +284,10 @@ def test_string_datetime_conversion():
     assert "timestamp_str__hour__sin0" in result.columns
     # Verify the result has correct number of rows
     assert result.height == 3
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"ts": [datetime(2024, 1, 15, 10, 0)]})
+    transformer = CyclicFeatures(components=["month"], angles=[0.0])
+    assert_frame_equal(transformer.transform(X), X)

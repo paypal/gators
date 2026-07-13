@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -69,7 +70,7 @@ class ArcSinSquareRootScaler(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    _column_mapping: dict[str, str]
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
     drop_columns: bool = True
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ArcSinSquareRootScaler":

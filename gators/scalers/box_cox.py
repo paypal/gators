@@ -62,8 +62,8 @@ class BoxCox(_BaseTransformer):
 
     lambdas: dict[str, int | float]
     drop_columns: bool = True
-    _columns: list[str] = PrivateAttr()
-    _column_mapping: dict[str, str] = PrivateAttr()
+    _columns: list[str] = PrivateAttr(default_factory=list)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "BoxCox":
         """Fit the transformer by storing column names.

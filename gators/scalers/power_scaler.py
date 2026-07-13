@@ -75,7 +75,7 @@ class PowerScaler(_BaseTransformer):
 
     subset: list[str] | None = None
     power: float = 0.5
-    _column_mapping: dict[str, str] = PrivateAttr()
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
     drop_columns: bool = True
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PowerScaler":

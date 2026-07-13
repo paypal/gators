@@ -4,10 +4,10 @@ import numpy as np
 import polars as pl
 from pydantic import Field, PrivateAttr
 
-from ..transformer._base_transformer import _BaseTransformer
+from ._base_selector import _BaseSelector
 
 
-class PermutationImportanceSelector(_BaseTransformer):
+class PermutationImportanceSelector(_BaseSelector):
     """Drop columns whose permutation importance falls below a threshold.
 
     Fits ``estimator`` on the training data, then measures how much the
@@ -64,17 +64,7 @@ class PermutationImportanceSelector(_BaseTransformer):
     n_repeats: Annotated[int, Field(ge=1)] = 5
     threshold: float = 0.0
 
-    _selected_features: list[str] = PrivateAttr(default_factory=list)
-    _columns_to_drop: list[str] = PrivateAttr(default_factory=list)
     _importances: dict[str, float] = PrivateAttr(default_factory=dict)
-
-    @property
-    def selected_features_(self) -> list[str]:
-        return self._selected_features
-
-    @property
-    def columns_to_drop_(self) -> list[str]:
-        return self._columns_to_drop
 
     @property
     def importances_(self) -> dict[str, float]:
@@ -123,20 +113,3 @@ class PermutationImportanceSelector(_BaseTransformer):
             col for col in X.columns if self._importances[col] < self.threshold
         ]
         return self
-
-    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        """Drop low-importance columns from the DataFrame.
-
-        Parameters
-        ----------
-        X : pl.DataFrame
-            Input DataFrame to transform.
-
-        Returns
-        -------
-        pl.DataFrame
-            DataFrame with low-importance columns removed.
-        """
-        if not self._columns_to_drop:
-            return X
-        return X.drop(self._columns_to_drop)

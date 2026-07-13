@@ -1,5 +1,5 @@
 from math import pi
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 import polars as pl
 from pydantic import ValidationInfo, field_validator

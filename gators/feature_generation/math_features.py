@@ -30,7 +30,7 @@ class MathFeatures(_BaseTransformer):
     ----------
     groups : list[list[str]]
         List of groups of column names to apply operations on.
-    operations : list[str]
+    func : list[str]
         List of operations to apply to each group of columns. Available operations:
 
         - 'sum': Sum of all columns
@@ -68,9 +68,9 @@ class MathFeatures(_BaseTransformer):
 
     **Example 1: drop_columns=False**
 
-    >>> transformer = MathFeatures(groups=[['A', 'B'], ['B', 'C']], operations=['sum', 'mean'])
+    >>> transformer = MathFeatures(groups=[['A', 'B'], ['B', 'C']], func=['sum', 'mean'])
     >>> transformer.fit(X)
-    MathFeatures(groups=[['A', 'B'], ['B', 'C']], operations=['sum', 'mean'])
+    MathFeatures(groups=[['A', 'B'], ['B', 'C']], func=['sum', 'mean'])
     >>> result = transformer.transform(X)
     >>> result
     shape: (4, 6)
@@ -86,9 +86,9 @@ class MathFeatures(_BaseTransformer):
 
     **Example 2: drop_columns=True**
 
-    >>> transformer = MathFeatures(groups=[['A', 'B'], ['B', 'C']], operations=['sum'], drop_columns=True)
+    >>> transformer = MathFeatures(groups=[['A', 'B'], ['B', 'C']], func=['sum'], drop_columns=True)
     >>> transformer.fit(X)
-    MathFeatures(groups=[['A', 'B'], ['B', 'C']], operations=['sum'], drop_columns=True)
+    MathFeatures(groups=[['A', 'B'], ['B', 'C']], func=['sum'], drop_columns=True)
     >>> result = transformer.transform(X)
     >>> result
     shape: (4, 2)
@@ -104,19 +104,17 @@ class MathFeatures(_BaseTransformer):
     """
 
     groups: list[list[str]]
-    operations: list[str]
+    func: list[str]
     drop_columns: bool = False
     new_column_names: list[str] | None = None
     _column_mapping: dict[str, str] = {}
 
-    @field_validator("operations")
-    def check_operators(cls, operations):
-        for operation in operations:
-            if operation not in list(OPERATION_FUNCTIONS.keys()):
-                raise ValueError(
-                    f"{operation} is not in the predefined list of datetime functions."
-                )
-        return operations
+    @field_validator("func")
+    def check_func(cls, func):
+        for f in func:
+            if f not in list(OPERATION_FUNCTIONS.keys()):
+                raise ValueError(f"{f} is not in the predefined list of datetime functions.")
+        return func
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "MathFeatures":
         """Fit the transformer by generating column name mappings.
@@ -156,7 +154,7 @@ class MathFeatures(_BaseTransformer):
         new_columns = []
         for group in self.groups:
             name = f"{'_'.join(group)}"
-            for op in self.operations:
+            for op in self.func:
                 new = f"{self._column_mapping[name]}_{op}"
                 new_columns.append(
                     OPERATION_FUNCTIONS[op]([pl.col(col) for col in group]).alias(new)

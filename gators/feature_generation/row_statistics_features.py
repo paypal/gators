@@ -3,56 +3,44 @@ from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
-AGGREGATION_FUNCTIONS = ["min", "max", "mean", "median", "std", "range", "sum"]
+AGGREGATION_FUNCTIONS = ["min", "max", "mean", "median", "std", "range", "sum", "count"]
 
 
 class RowStatisticsFeatures(_BaseTransformer):
     """
     Generates row-level aggregation features across groups of columns.
 
-    This transformer computes statistics (min, max, mean, median, std, range)
+    This transformer computes statistics (min, max, mean, median, std, range, sum, count)
     horizontally across specified column groups for each row. Unlike
-    GroupRatioFeatures which aggregates vertically (across rows within groups),
+    GroupStatisticsFeatures which aggregates vertically (across rows within groups),
     this computes statistics across columns within each row.
 
-    Importance for Fraud Detection
-    -------------------------------
-    Row-level aggregation features are valuable in fraud detection because they
-    capture relationships and patterns across related features within individual
-    transactions. For example:
-
-    - Computing statistics across multiple transaction amounts can reveal unusual
-      patterns (e.g., all amounts being identical might indicate scripted fraud)
-    - Aggregating across card verification fields can identify inconsistencies
-    - Statistics across temporal features can detect velocity anomalies
-    - Range calculations can flag suspiciously uniform or extreme value spreads
-
-    These features help models identify transactions where the distribution of
-    values across related fields deviates from normal patterns, which is often
-    indicative of fraudulent behavior.
+    Auto-generated column names follow the pattern ``'{group_name}__{func}'``.
 
     Parameters
     ----------
     column_groups : dict[str, list[str]]
         Dictionary mapping group names to lists of column names. Each group defines
-        a set of columns over which to compute row-level statistics.
-        Example: {'card_fields': ['card1', 'card2', 'card3']}
+        a set of columns over which to compute row-level statistics. Every list must
+        contain at least 2 columns.
+        Example: ``{'card_fields': ['card1', 'card2', 'card3']}``
     func : list[str]
-        List of aggregation functions to apply. Available options:
+        Aggregation functions to apply to every group. Available options:
 
-        - 'min': Row-wise minimum value
-        - 'max': Row-wise maximum value
-        - 'mean': Row-wise mean (average)
-        - 'median': Row-wise median
-        - 'std': Row-wise standard deviation
-        - 'range': Row-wise range (max - min)
-        - 'sum': Row-wise sum
+        - ``'min'``: Row-wise minimum
+        - ``'max'``: Row-wise maximum
+        - ``'mean'``: Row-wise mean
+        - ``'median'``: Row-wise median
+        - ``'std'``: Row-wise standard deviation
+        - ``'range'``: Row-wise range (max − min)
+        - ``'sum'``: Row-wise sum
+        - ``'count'``: Row-wise count of non-null values
     drop_columns : bool, default=False
         Whether to drop the original columns after creating aggregation features.
     new_column_names : list[str], default=None
-        List of custom names for the aggregation columns. If None, uses default
-        naming pattern '{group_name}__{func}'. Must have same length as the total
-        number of features created (len(column_groups) × len(func)).
+        Custom names for the generated columns. If ``None``, names are
+        auto-generated as ``'{group_name}__{func}'``. Must have the same length as
+        ``len(column_groups) × len(func)``.
 
     Examples
     --------
@@ -61,110 +49,65 @@ class RowStatisticsFeatures(_BaseTransformer):
 
     **Example 1: Single group with multiple aggregations**
 
-    >>> X = pl.DataFrame({
-    ...     'A': [9, 9, 7],
-    ...     'B': [3, 4, 5],
-    ...     'C': [6, 7, 8]
-    ... })
+    >>> X = pl.DataFrame({'A': [9, 9, 7], 'B': [3, 4, 5], 'C': [6, 7, 8]})
     >>> transformer = RowStatisticsFeatures(
     ...     column_groups={'cluster_1': ['A', 'B']},
-    ...     func=['mean', 'std']
+    ...     func=['mean', 'std'],
     ... )
     >>> result = transformer.fit_transform(X)
-    >>> result
-    shape: (3, 5)
-    ┌─────┬─────┬─────┬───────────────────┬──────────────────┐
-    │ A   ┆ B   ┆ C   ┆ cluster_1__mean   ┆ cluster_1__std   │
-    │ --- ┆ --- ┆ --- ┆ ---               ┆ ---              │
-    │ i64 ┆ i64 ┆ i64 ┆ f64               ┆ f64              │
-    ╞═════╪═════╪═════╪═══════════════════╪══════════════════╡
-    │ 9   ┆ 3   ┆ 6   ┆ 6.0               ┆ 4.242641         │
-    │ 9   ┆ 4   ┆ 7   ┆ 6.5               ┆ 3.535534         │
-    │ 7   ┆ 5   ┆ 8   ┆ 6.0               ┆ 1.414214         │
-    └─────┴─────┴─────┴───────────────────┴──────────────────┘
+    >>> result.select(['cluster_1__mean', 'cluster_1__std'])
+    shape: (3, 2)
+    ┌─────────────────┬────────────────┐
+    │ cluster_1__mean ┆ cluster_1__std │
+    │ ---             ┆ ---            │
+    │ f64             ┆ f64            │
+    ╞═════════════════╪════════════════╡
+    │ 6.0             ┆ 4.242641       │
+    │ 6.5             ┆ 3.535534       │
+    │ 6.0             ┆ 1.414214       │
+    └─────────────────┴────────────────┘
 
-    **Example 2: Multiple groups with different columns**
+    **Example 2: Multiple groups**
 
-    >>> X = pl.DataFrame({
-    ...     'A': [9, 9, 7],
-    ...     'B': [3, 4, 5],
-    ...     'C': [6, 7, 8],
-    ...     'D': [1, 2, 3]
-    ... })
+    >>> X = pl.DataFrame({'A': [9, 9, 7], 'B': [3, 4, 5], 'C': [6, 7, 8], 'D': [1, 2, 3]})
     >>> transformer = RowStatisticsFeatures(
-    ...     column_groups={
-    ...         'cluster_1': ['A', 'B'],
-    ...         'cluster_2': ['C', 'D']
-    ...     },
-    ...     func=['min', 'max', 'range']
+    ...     column_groups={'cluster_1': ['A', 'B'], 'cluster_2': ['C', 'D']},
+    ...     func=['min', 'max'],
     ... )
     >>> result = transformer.fit_transform(X)
-    >>> result
-    shape: (3, 10)
-    ┌─────┬─────┬─────┬─────┬──────────────┬──────────────┬─────────────────┬──────────────┬──────────────┬─────────────────┐
-    │ A   ┆ B   ┆ C   ┆ D   ┆ cluster_1__… ┆ cluster_1__… ┆ cluster_1__ran… ┆ cluster_2__… ┆ cluster_2__… ┆ cluster_2__ran… │
-    │ --- ┆ --- ┆ --- ┆ --- ┆ ---          ┆ ---          ┆ ---             ┆ ---          ┆ ---          ┆ ---             │
-    │ i64 ┆ i64 ┆ i64 ┆ i64 ┆ i64          ┆ i64          ┆ i64             ┆ i64          ┆ i64          ┆ i64             │
-    ╞═════╪═════╪═════╪═════╪══════════════╪══════════════╪═════════════════╪══════════════╪══════════════╪═════════════════╡
-    │ 9   ┆ 3   ┆ 6   ┆ 1   ┆ 3            ┆ 9            ┆ 6               ┆ 1            ┆ 6            ┆ 5               │
-    │ 9   ┆ 4   ┆ 7   ┆ 2   ┆ 4            ┆ 9            ┆ 5               ┆ 2            ┆ 7            ┆ 5               │
-    │ 7   ┆ 5   ┆ 8   ┆ 3   ┆ 5            ┆ 7            ┆ 2               ┆ 3            ┆ 8            ┆ 5               │
-    └─────┴─────┴─────┴─────┴──────────────┴──────────────┴─────────────────┴──────────────┴──────────────┴─────────────────┘
+    >>> result.columns
+    ['A', 'B', 'C', 'D', 'cluster_1__min', 'cluster_1__max', 'cluster_2__min', 'cluster_2__max']
 
-    **Example 3: Using custom column names**
+    **Example 3: Custom column names**
 
-    >>> X = pl.DataFrame({
-    ...     'amount1': [100, 200, 150],
-    ...     'amount2': [50, 100, 75],
-    ...     'amount3': [25, 50, 30]
-    ... })
+    >>> X = pl.DataFrame({'amount1': [100, 200, 150], 'amount2': [50, 100, 75], 'amount3': [25, 50, 30]})
     >>> transformer = RowStatisticsFeatures(
     ...     column_groups={'amounts': ['amount1', 'amount2', 'amount3']},
     ...     func=['mean', 'std'],
-    ...     new_column_names=['avg_amount', 'std_amount']
+    ...     new_column_names=['avg_amount', 'std_amount'],
     ... )
     >>> result = transformer.fit_transform(X)
-    >>> result
-    shape: (3, 5)
-    ┌──────────┬──────────┬──────────┬────────────┬────────────┐
-    │ amount1  ┆ amount2  ┆ amount3  ┆ avg_amount ┆ std_amount │
-    │ ---      ┆ ---      ┆ ---      ┆ ---        ┆ ---        │
-    │ i64      ┆ i64      ┆ i64      ┆ f64        ┆ f64        │
-    ╞══════════╪══════════╪══════════╪════════════╪════════════╡
-    │ 100      ┆ 50       ┆ 25       ┆ 58.333333  ┆ 30.957...  │
-    │ 200      ┆ 100      ┆ 50       ┆ 116.666... ┆ 61.914...  │
-    │ 150      ┆ 75       ┆ 30       ┆ 85.0       ┆ 49.606...  │
-    └──────────┴──────────┴──────────┴────────────┴────────────┘
+    >>> 'avg_amount' in result.columns
+    True
 
-    **Example 4: Fraud detection use case - card verification fields**
+    **Example 4: Fraud detection — card verification fields**
 
     >>> X = pl.DataFrame({
-    ...     'card_cvv_match': [1, 0, 1, 1],
+    ...     'card_cvv_match':  [1, 0, 1, 1],
     ...     'card_addr_match': [1, 1, 0, 1],
-    ...     'card_zip_match': [1, 1, 1, 0],
-    ...     'is_fraud': [0, 1, 1, 1]
+    ...     'card_zip_match':  [1, 1, 1, 0],
+    ...     'is_fraud':        [0, 1, 1, 1],
     ... })
-    >>> # Aggregate verification fields to detect inconsistencies
     >>> transformer = RowStatisticsFeatures(
     ...     column_groups={'verification': ['card_cvv_match', 'card_addr_match', 'card_zip_match']},
     ...     func=['mean', 'std'],
-    ...     drop_columns=False
+    ...     new_column_names=['verif__mean', 'verif__std'],
     ... )
     >>> result = transformer.fit_transform(X)
-    >>> result.select(['verification__mean', 'verification__std', 'is_fraud'])
-    shape: (4, 3)
-    ┌─────────────────────┬────────────────────┬──────────┐
-    │ verification__mean  ┆ verification__std  ┆ is_fraud │
-    │ ---                 ┆ ---                ┆ ---      │
-    │ f64                 ┆ f64                ┆ i64      │
-    ╞═════════════════════╪════════════════════╪══════════╡
-    │ 1.0                 ┆ 0.0                ┆ 0        │
-    │ 0.666667            ┆ 0.471405           ┆ 1        │
-    │ 0.666667            ┆ 0.471405           ┆ 1        │
-    │ 0.666667            ┆ 0.471405           ┆ 1        │
-    └─────────────────────┴────────────────────┴──────────┘
-    # Notice: legitimate transaction has perfect verification (mean=1, std=0)
-    # Fraudulent transactions show inconsistent verification patterns
+    >>> result['verif__mean'][0]   # legitimate: all checks pass
+    1.0
+    >>> result['verif__std'][0]    # legitimate: no variance
+    0.0
     """
 
     column_groups: dict[str, list[str]]
@@ -172,15 +115,6 @@ class RowStatisticsFeatures(_BaseTransformer):
     drop_columns: bool = False
     new_column_names: list[str] | None = None
     _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
-
-    @field_validator("func")
-    def check_func(cls, func):
-        for f in func:
-            if f not in AGGREGATION_FUNCTIONS:
-                raise ValueError(
-                    f"{f} is not in the predefined list of aggregation functions: {AGGREGATION_FUNCTIONS}"
-                )
-        return func
 
     @field_validator("column_groups")
     def check_column_groups(cls, column_groups):
@@ -194,6 +128,15 @@ class RowStatisticsFeatures(_BaseTransformer):
                     f"column_groups['{key}'] must contain at least 2 columns for row-level aggregation"
                 )
         return column_groups
+
+    @field_validator("func")
+    def check_func(cls, func):
+        for f in func:
+            if f not in AGGREGATION_FUNCTIONS:
+                raise ValueError(
+                    f"{f} is not in the predefined list of aggregation functions: {AGGREGATION_FUNCTIONS}"
+                )
+        return func
 
     @field_validator("new_column_names")
     def check_new_column_names_length(cls, new_column_names, info):
@@ -223,10 +166,9 @@ class RowStatisticsFeatures(_BaseTransformer):
         RowStatisticsFeatures
             Fitted transformer instance.
         """
-        default_names = []
-        for group_name in self.column_groups.keys():
-            for f in self.func:
-                default_names.append(f"{group_name}__{f}")
+        default_names = [
+            f"{group_name}__{f}" for group_name in self.column_groups for f in self.func
+        ]
 
         if not self.new_column_names:
             self.new_column_names = default_names
@@ -245,7 +187,7 @@ class RowStatisticsFeatures(_BaseTransformer):
         Returns
         -------
         pl.DataFrame
-            Transformed DataFrame with row-level aggregation features.
+            Transformed DataFrame with row-level aggregation features appended.
         """
         new_columns = []
         columns_to_drop = set()
@@ -255,7 +197,6 @@ class RowStatisticsFeatures(_BaseTransformer):
                 default_name = f"{group_name}__{f}"
                 new_col_name = self._column_mapping[default_name]
 
-                # Create row-wise aggregation expression
                 if f == "mean":
                     expr = pl.concat_list(cols).list.mean().alias(new_col_name)
                 elif f == "std":
@@ -272,6 +213,8 @@ class RowStatisticsFeatures(_BaseTransformer):
                     ).alias(new_col_name)
                 elif f == "sum":
                     expr = pl.concat_list(cols).list.sum().alias(new_col_name)
+                elif f == "count":
+                    expr = (pl.concat_list(cols).list.drop_nulls().list.len()).alias(new_col_name)
 
                 new_columns.append(expr)
 

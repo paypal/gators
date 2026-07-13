@@ -7,10 +7,9 @@ conversion or validation that can cause issues with Polars DataFrames.
 """
 
 import time
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
 import polars as pl
-from pydantic import ConfigDict
 
 from ..transformer._base_transformer import _BaseTransformer
 

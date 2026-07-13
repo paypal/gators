@@ -11,6 +11,7 @@ def feature_stability_index(
     X: pl.DataFrame,
     y: pl.Series,
     importance_threshold: Annotated[float, Field(ge=0.0, le=1.0)] = 0.0,
+    k: Annotated[int, Field(ge=1)] = 5,
 ):
     """Compute Feature Stability Index (FSI) using repeated estimator feature importance.
 
@@ -30,6 +31,8 @@ def feature_stability_index(
     importance_threshold : Annotated[float, Field(ge=0.0, le=1.0)], default=0.0
         Minimum importance value for a feature to be considered "selected" in a run.
         Must be between 0.0 and 1.0.
+    k : Annotated[int, Field(ge=1)], default=100
+        Number of selected features. Must be at least 1.
 
     Returns
     -------

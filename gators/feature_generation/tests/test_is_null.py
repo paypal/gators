@@ -127,5 +127,12 @@ def test_transform_with_none_subset():
     assert_frame_equal(result_X, expected_X, check_column_order=False)
 
 
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"col": [1, None, 3]})
+    transformer = IsNull()
+    assert_frame_equal(transformer.transform(X), X)
+
+
 if __name__ == "__main__":
     pytest.main()

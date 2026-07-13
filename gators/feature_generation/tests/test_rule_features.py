@@ -507,6 +507,29 @@ class TestStaticMethods:
         # Second row: 25 < 20 = False (0)
         assert result["age_below_limit"][1] == 0
 
+    def test_or_logic_keep_intermediate_columns(self):
+        """Test OR logic with 2+ conditions and drop_conditions=False (covers else branch)."""
+        X = pl.DataFrame(
+            {
+                "amount": [100, 500, 1200, 50, 2000],
+                "velocity_24h": [1, 3, 5, 0, 10],
+            }
+        )
+        transformer = RuleFeatures(
+            rules=[
+                [
+                    {"column": "amount", "op": ">", "value": 1000},
+                    {"column": "velocity_24h", "op": ">=", "value": 5},
+                ]
+            ],
+            rule_logic="or",
+            new_column_names=["risk_flag"],
+            drop_conditions=False,
+        )
+        result = transformer.fit_transform(X)
+        assert "risk_flag" in result.columns
+        assert result["risk_flag"].to_list() == [False, False, True, False, True]
+
 
 if __name__ == "__main__":
     pytest.main([__file__])

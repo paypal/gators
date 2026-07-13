@@ -59,10 +59,10 @@ class YeoJohnson(_BaseTransformer):
     """
 
     lambdas: dict[str, int | float]
-    _scale: dict[str, float] = PrivateAttr()
+    _scale: dict[str, float] = PrivateAttr(default_factory=dict)
     drop_columns: bool = True
-    _columns: list[str] = PrivateAttr()
-    _column_mapping: dict[str, str] = PrivateAttr()
+    _columns: list[str] = PrivateAttr(default_factory=list)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "YeoJohnson":
         """Fit the transformer by storing column names.

@@ -361,3 +361,18 @@ def test_empty_new_column_names_raises_error():
             operators=["+"],
             new_column_names=[],  # Empty list should raise error
         )
+
+
+def test_validate_new_column_names_explicit_none():
+    """Explicitly passing new_column_names=None triggers validator early-return (line 244)."""
+    t = ScalarMathFeatures(
+        operations=[{"column": "A", "op": "+", "scalar": 1}],
+        new_column_names=None,
+    )
+    assert t.new_column_names is None
+
+
+def test_build_operation_unsupported_op_raises():
+    """_build_operation raises ValueError for unsupported operator."""
+    with pytest.raises(ValueError, match="Unsupported operator"):
+        ScalarMathFeatures._build_operation("col", "invalid_op", 2.0)

@@ -60,6 +60,7 @@ dev = [
 notebook = [
     "ipykernel>=7.2.0",
     "jupyter>=1.0.0",
+    "jupyter-server>=2.20.0",
     "matplotlib>=3.8.0",
 ]
 all = ["gators[dev,notebook]"]

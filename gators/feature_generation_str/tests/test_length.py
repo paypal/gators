@@ -58,3 +58,10 @@ def test_length_transform(sample_data):
         }
     )
     assert_frame_equal(transformed_X, expected_X)
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"col": ["hello", "world"]})
+    transformer = Length()
+    assert_frame_equal(transformer.transform(X), X)

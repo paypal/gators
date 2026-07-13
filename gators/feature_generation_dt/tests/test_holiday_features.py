@@ -453,3 +453,10 @@ def test_days_from_holiday_after_all_holidays():
     assert days_from[0] == 0  # On Christmas
     assert days_from[1] == 1  # 1 day after Christmas
     assert days_from[2] == 5  # 5 days after Christmas
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"date": [datetime(2024, 12, 25)]})
+    transformer = HolidayFeatures()
+    assert_frame_equal(transformer.transform(X), X)

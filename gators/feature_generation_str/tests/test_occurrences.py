@@ -403,3 +403,13 @@ class TestOccurrencesEdgeCases:
 
         # First row has 2 "/" (path/to/file) and 2 "-" (path-to-folder), total = 4
         assert result["text___"][0] == 4
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    import polars as pl
+    from polars.testing import assert_frame_equal
+
+    X = pl.DataFrame({"text": ["hello", "world"]})
+    transformer = Occurrences(substrings={"text": ["l"]})
+    assert_frame_equal(transformer.transform(X), X)

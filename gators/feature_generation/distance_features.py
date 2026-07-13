@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 import polars as pl
 from pydantic import PrivateAttr, field_validator

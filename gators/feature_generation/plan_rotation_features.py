@@ -9,12 +9,12 @@ from pydantic import model_validator
 from ..transformer._base_transformer import _BaseTransformer
 
 
-class PlaneRotationFeatures(_BaseTransformer):
+class PlanRotationFeatures(_BaseTransformer):
     """Create new columns based on the plan rotation mapping.
 
     The data should be composed of numerical columns only.
     Use `gators.encoders` to replace the categorical columns by
-    numerical ones before using `PlaneRotationFeatures`.
+    numerical ones before using `PlanRotationFeatures`.
 
     Parameters
     ----------
@@ -29,8 +29,8 @@ class PlaneRotationFeatures(_BaseTransformer):
 
     Imports and initialization:
 
-    >>> from gators.feature_generation import PlaneRotationFeatures
-    >>> obj = PlaneRotationFeatures(
+    >>> from gators.feature_generation import PlanRotationFeatures
+    >>> obj = PlanRotationFeatures(
     ... subset=[['X', 'Y'], ['X', 'Z']] , angles=[45.0, 60.0])
 
     The `fit`, `transform`, and `fit_transform` methods accept `polars` dataframes:
@@ -73,7 +73,7 @@ class PlaneRotationFeatures(_BaseTransformer):
         self.column_names = [c for cols in column_names for c in cols]
         return self
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PlaneRotationFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PlanRotationFeatures":
         """Fit the transformer by identifying columns to flatten.
 
         Parameters
@@ -85,7 +85,7 @@ class PlaneRotationFeatures(_BaseTransformer):
 
         Returns
         -------
-        PlaneRotationFeatures
+        PlanRotationFeatures
             Fitted transformer instance.
         """
         self.flatten_columns = [c for cols in self.columns for c in cols]

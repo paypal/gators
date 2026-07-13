@@ -250,3 +250,11 @@ class TestSklearnAPI:
         result2 = imp2.transform(X_simple)
 
         assert_frame_equal(result1, result2)
+
+    def test_transform_empty_subset_returns_x_unchanged(self):
+        """transform() before fit() (subset is None) returns X unchanged."""
+        X = pl.DataFrame({"A": [1.0, 2.0, 3.0], "B": [4.0, 5.0, 6.0]})
+        imp = KNNImputer(n_neighbors=2)
+        # Do NOT call fit() — subset remains None → not self.subset is True
+        result = imp.transform(X)
+        assert_frame_equal(result, X)

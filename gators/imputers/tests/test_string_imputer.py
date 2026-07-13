@@ -93,3 +93,23 @@ def test_drop_columns(sample_X_drop):
     )
 
     assert_frame_equal(transformed, expected)
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"A": ["a", None, "b"]})
+    imputer = StringImputer(strategy="constant", value="missing")
+    result = imputer.transform(X)
+    assert_frame_equal(result, X)
+
+
+def test_transform_inplace_true():
+    """inplace=True fills nulls in the original columns (lines 124-126)."""
+    X = pl.DataFrame({"A": ["a", None, "b"], "B": ["x", "y", None]})
+    imputer = StringImputer(strategy="constant", value="missing", inplace=True)
+    imputer.fit(X)
+    result = imputer.transform(X)
+    assert result["A"].null_count() == 0
+    assert result["B"].null_count() == 0
+    assert result["A"][1] == "missing"
+    assert result["B"][2] == "missing"
