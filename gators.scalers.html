@@ -314,6 +314,8 @@
       
       
       
+        
+      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -400,13 +402,6 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
-</nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
       class="flat"
@@ -786,34 +781,34 @@ must be strictly positive (&gt; 0).</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="gators.scalers.LogScaler">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.scalers.</span></span><span class="sig-name descname"><span class="pre">LogScaler</span></span><a class="reference internal" href="_modules/gators/scalers/log_scaler.html#LogScaler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.scalers.LogScaler" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="gators.scalers.Log1pScaler">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.scalers.</span></span><span class="sig-name descname"><span class="pre">Log1pScaler</span></span><a class="reference internal" href="_modules/gators/scalers/log1p_scaler.html#Log1pScaler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.scalers.Log1pScaler" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
-<p>Applies logarithm transformation with choice of base.</p>
-<p>Log transformation is useful for:</p>
+<p>Applies log1p transformation log(1+x) with choice of base.</p>
+<p>Log1p transformation is useful for:</p>
 <ul class="simple">
 <li><p>Reducing right skewness in data</p></li>
 <li><p>Stabilizing variance</p></li>
 <li><p>Converting multiplicative relationships to additive</p></li>
-<li><p>Compressing large value ranges</p></li>
+<li><p>Compressing large value ranges while handling zero values</p></li>
 </ul>
 <p>Supports three bases:</p>
 <ul class="simple">
-<li><p>‘e’: Natural logarithm ln(X) / log_e(X)</p></li>
-<li><p>‘10’: Base-10 logarithm</p></li>
-<li><p>‘2’: Base-2 logarithm</p></li>
+<li><p>‘e’: Natural log1p ln(1+X)</p></li>
+<li><p>‘10’: Base-10 log1p log10(1+X)</p></li>
+<li><p>‘2’: Base-2 log1p log2(1+X)</p></li>
 </ul>
-<p>Note: Only positive values can be transformed. Zero and negative values
-will result in null/inf values.</p>
+<p>Note: Values must be greater than -1. Values of -1 or below will
+result in null/inf values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to transform. If None, all numeric columns
 (Float64, Int64, Float32, Int32) are automatically selected.</p></li>
 <li><p><strong>base</strong> (<em>Literal</em><em>[</em><em>'e'</em><em>, </em><em>'10'</em><em>, </em><em>'2'</em><em>]</em><em>, </em><em>default='e'</em>) – The logarithm base to use:
-- ‘e’: ln(X)
-- ‘10’: log10(X)
-- ‘2’: log2(X)</p></li>
+- ‘e’: ln(1+X)
+- ‘10’: log10(1+X)
+- ‘2’: log2(1+X)</p></li>
 <li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after transformation.
 If False, keep both original and transformed columns.</p></li>
 </ul>
@@ -821,10 +816,10 @@ If False, keep both original and transformed columns.</p></li>
 </dl>
 <div class="admonition-examples admonition">
 <p class="admonition-title">Examples</p>
-<p>Create an instance of the LogScaler class with natural log:</p>
+<p>Create an instance of the Log1pScaler class with natural log:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.scalers</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogScaler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scaler</span> <span class="o">=</span> <span class="n">LogScaler</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sales&quot;</span><span class="p">,</span> <span class="s2">&quot;revenue&quot;</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.scalers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log1pScaler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scaler</span> <span class="o">=</span> <span class="n">Log1pScaler</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sales&quot;</span><span class="p">,</span> <span class="s2">&quot;revenue&quot;</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="s2">&quot;e&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Fit the transformer:</p>
@@ -839,59 +834,59 @@ If False, keep both original and transformed columns.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
 <span class="go">shape: (4, 2)</span>
-<span class="go">┌───────────────┬──────────────────┐</span>
-<span class="go">│ sales__log_ln ┆ revenue__log_ln  │</span>
-<span class="go">│ ---           ┆ ---              │</span>
-<span class="go">│ f64           ┆ f64              │</span>
-<span class="go">├───────────────┼──────────────────┤</span>
-<span class="go">│ 0.0           ┆ 2.303            │</span>
-<span class="go">│ 2.303         ┆ 4.605            │</span>
-<span class="go">│ 4.605         ┆ 6.908            │</span>
-<span class="go">│ 6.908         ┆ 9.210            │</span>
-<span class="go">└───────────────┴──────────────────┘</span>
+<span class="go">┌─────────────────┬───────────────────┐</span>
+<span class="go">│ sales__log1p ┆ revenue__log1p │</span>
+<span class="go">│ ---             ┆ ---               │</span>
+<span class="go">│ f64             ┆ f64               │</span>
+<span class="go">├─────────────────┼───────────────────┤</span>
+<span class="go">│ 0.693           ┆ 2.398             │</span>
+<span class="go">│ 2.398           ┆ 4.615             │</span>
+<span class="go">│ 4.615           ┆ 6.909             │</span>
+<span class="go">│ 6.909           ┆ 9.210             │</span>
+<span class="go">└─────────────────┴───────────────────┘</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Using log10</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scaler10</span> <span class="o">=</span> <span class="n">LogScaler</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scaler10</span> <span class="o">=</span> <span class="n">Log1pScaler</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X2</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">scaler10</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">scaler10</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span>
 <span class="go">shape: (4, 1)</span>
 <span class="go">┌─────────────────┐</span>
-<span class="go">│ count__log_10   │</span>
+<span class="go">│ count__log1p_10 │</span>
 <span class="go">│ ---             │</span>
 <span class="go">│ f64             │</span>
 <span class="go">├─────────────────┤</span>
-<span class="go">│ 0.0             │</span>
-<span class="go">│ 1.0             │</span>
-<span class="go">│ 2.0             │</span>
-<span class="go">│ 3.0             │</span>
+<span class="go">│ 0.301           │</span>
+<span class="go">│ 1.041           │</span>
+<span class="go">│ 2.004           │</span>
+<span class="go">│ 3.000           │</span>
 <span class="go">└─────────────────┘</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Using log2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">scaler2</span> <span class="o">=</span> <span class="n">LogScaler</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="s2">&quot;2&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scaler2</span> <span class="o">=</span> <span class="n">Log1pScaler</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">],</span> <span class="n">base</span><span class="o">=</span><span class="s2">&quot;2&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X3</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">scaler2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">scaler2</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X3</span><span class="p">)</span>
 <span class="go">shape: (5, 1)</span>
-<span class="go">┌──────────────┐</span>
-<span class="go">│ size__log_2  │</span>
-<span class="go">│ ---          │</span>
-<span class="go">│ f64          │</span>
-<span class="go">├──────────────┤</span>
-<span class="go">│ 0.0          │</span>
-<span class="go">│ 1.0          │</span>
-<span class="go">│ 2.0          │</span>
-<span class="go">│ 3.0          │</span>
-<span class="go">│ 4.0          │</span>
-<span class="go">└──────────────┘</span>
+<span class="go">┌───────────────┐</span>
+<span class="go">│ size__log1p_2 │</span>
+<span class="go">│ ---           │</span>
+<span class="go">│ f64           │</span>
+<span class="go">├───────────────┤</span>
+<span class="go">│ 1.000         │</span>
+<span class="go">│ 1.585         │</span>
+<span class="go">│ 2.322         │</span>
+<span class="go">│ 3.170         │</span>
+<span class="go">│ 4.087         │</span>
+<span class="go">└───────────────┘</span>
 </pre></div>
 </div>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="gators.scalers.LogScaler.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.scalers.LogScaler" title="gators.scalers.log_scaler.LogScaler"><span class="pre">gators.scalers.log_scaler.LogScaler</span></a></span></span><a class="reference internal" href="_modules/gators/scalers/log_scaler.html#LogScaler.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.scalers.LogScaler.fit" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="gators.scalers.Log1pScaler.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.scalers.Log1pScaler" title="gators.scalers.log1p_scaler.Log1pScaler"><span class="pre">gators.scalers.log1p_scaler.Log1pScaler</span></a></span></span><a class="reference internal" href="_modules/gators/scalers/log1p_scaler.html#Log1pScaler.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.scalers.Log1pScaler.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transformer by storing column names.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -904,14 +899,14 @@ If False, keep both original and transformed columns.</p></li>
 <dd class="field-even"><p>The fitted transformer instance.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#gators.scalers.LogScaler" title="gators.scalers.LogScaler">LogScaler</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.scalers.Log1pScaler" title="gators.scalers.Log1pScaler">Log1pScaler</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gators.scalers.LogScaler.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/scalers/log_scaler.html#LogScaler.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.scalers.LogScaler.transform" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="gators.scalers.Log1pScaler.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/scalers/log1p_scaler.html#Log1pScaler.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.scalers.Log1pScaler.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by applying logarithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1476,9 +1471,9 @@ If False, keep both original and transformed columns.</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.scalers.BoxCox.transform"><code class="docutils literal notranslate"><span class="pre">BoxCox.transform()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.scalers.LogScaler"><code class="docutils literal notranslate"><span class="pre">LogScaler</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.scalers.LogScaler.fit"><code class="docutils literal notranslate"><span class="pre">LogScaler.fit()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.scalers.LogScaler.transform"><code class="docutils literal notranslate"><span class="pre">LogScaler.transform()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.scalers.Log1pScaler"><code class="docutils literal notranslate"><span class="pre">Log1pScaler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.scalers.Log1pScaler.fit"><code class="docutils literal notranslate"><span class="pre">Log1pScaler.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.scalers.Log1pScaler.transform"><code class="docutils literal notranslate"><span class="pre">Log1pScaler.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.scalers.MinmaxScaler"><code class="docutils literal notranslate"><span class="pre">MinmaxScaler</span></code></a><ul class="nav section-nav flex-column">

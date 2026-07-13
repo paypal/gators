@@ -552,8 +552,8 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load train and test data</span>
-<span class="n">train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/titanic/train.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
-<span class="n">test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/titanic/test.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/titanic/train.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/titanic/test.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
 
 <span class="c1"># Prepare training data</span>
 <span class="n">train</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;PassengerId&quot;</span><span class="p">)</span>
@@ -649,7 +649,7 @@ Features: [&#39;Pclass&#39;, &#39;Name&#39;, &#39;Sex&#39;, &#39;Age&#39;, &#39;
     <span class="c1"># Calculate family size</span>
     <span class="p">(</span><span class="s1">&#39;MathFeatures&#39;</span><span class="p">,</span> <span class="n">MathFeatures</span><span class="p">(</span>
         <span class="n">groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;SibSp&#39;</span><span class="p">,</span> <span class="s1">&#39;Parch&#39;</span><span class="p">]],</span>
-        <span class="n">operations</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">],</span>
+        <span class="n">func</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">],</span>
         <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dummy&#39;</span><span class="p">]</span>
     <span class="p">)),</span>
     <span class="p">(</span><span class="s1">&#39;ScalarMathFeatures&#39;</span><span class="p">,</span> <span class="n">ScalarMathFeatures</span><span class="p">(</span>
@@ -672,7 +672,7 @@ Features: [&#39;Pclass&#39;, &#39;Name&#39;, &#39;Sex&#39;, &#39;Age&#39;, &#39;
     <span class="c1"># Calculate fare per person</span>
     <span class="p">(</span><span class="s1">&#39;MathFeatures2&#39;</span><span class="p">,</span> <span class="n">MathFeatures</span><span class="p">(</span>
         <span class="n">groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;Fare&#39;</span><span class="p">,</span> <span class="s1">&#39;FamilySize&#39;</span><span class="p">]],</span>
-        <span class="n">operations</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;div&#39;</span><span class="p">],</span>
+        <span class="n">func</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;div&#39;</span><span class="p">],</span>
         <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;FarePerPerson&#39;</span><span class="p">]</span>
     <span class="p">)),</span>
 
@@ -722,42 +722,42 @@ Features: [&#39;Pclass&#39;, &#39;Name&#39;, &#39;Sex&#39;, &#39;Age&#39;, &#39;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[Pipeline] Fitting and transforming step 1/18: IsNull
-[Pipeline] Fitting and transforming step 2/18: Length
-[Pipeline] Fitting and transforming step 3/18: SplitExtractName
-[Pipeline] Fitting and transforming step 4/18: SplitExtractTitle
-[Pipeline] Fitting and transforming step 5/18: MathFeatures
-[Pipeline] Fitting and transforming step 6/18: ScalarMathFeatures
-[Pipeline] Fitting and transforming step 7/18: ExtractSubstring
-[Pipeline] Fitting and transforming step 8/18: RenameColumns
-[Pipeline] Fitting and transforming step 9/18: RareCategoryEncoder
-[Pipeline] Fitting and transforming step 10/18: MathFeatures2
-[Pipeline] Fitting and transforming step 11/18: ConditionFeatures
-[Pipeline] Fitting and transforming step 12/18: DropColumns
-[Pipeline] Fitting and transforming step 13/18: NumericImputer
-[Pipeline] Fitting and transforming step 14/18: StringImputer
-[Pipeline] Fitting and transforming step 15/18: CustomDiscretizer
-[Pipeline] Fitting and transforming step 16/18: CastColumns
-[Pipeline] Fitting and transforming step 17/18: InteractionFeatures
-[Pipeline] Fitting and transforming step 18/18: WOEEncoder
-[Pipeline] Transforming step 1/18: IsNull
-[Pipeline] Transforming step 2/18: Length
-[Pipeline] Transforming step 3/18: SplitExtractName
-[Pipeline] Transforming step 4/18: SplitExtractTitle
-[Pipeline] Transforming step 5/18: MathFeatures
-[Pipeline] Transforming step 6/18: ScalarMathFeatures
-[Pipeline] Transforming step 7/18: ExtractSubstring
-[Pipeline] Transforming step 8/18: RenameColumns
-[Pipeline] Transforming step 9/18: RareCategoryEncoder
-[Pipeline] Transforming step 10/18: MathFeatures2
-[Pipeline] Transforming step 11/18: ConditionFeatures
-[Pipeline] Transforming step 12/18: DropColumns
-[Pipeline] Transforming step 13/18: NumericImputer
-[Pipeline] Transforming step 14/18: StringImputer
-[Pipeline] Transforming step 15/18: CustomDiscretizer
-[Pipeline] Transforming step 16/18: CastColumns
-[Pipeline] Transforming step 17/18: InteractionFeatures
-[Pipeline] Transforming step 18/18: WOEEncoder
+[Pipeline] fit+transform   1/18 · IsNull  |  in: rows=891  cols=10  nulls=866  →  out: rows=891  cols=12  nulls=866  (0.001s)
+[Pipeline] fit+transform   2/18 · Length  |  in: rows=891  cols=12  nulls=866  →  out: rows=891  cols=13  nulls=866  (0.001s)
+[Pipeline] fit+transform   3/18 · SplitExtractName  |  in: rows=891  cols=13  nulls=866  →  out: rows=891  cols=13  nulls=866  (0.001s)
+[Pipeline] fit+transform   4/18 · SplitExtractTitle  |  in: rows=891  cols=13  nulls=866  →  out: rows=891  cols=13  nulls=866  (0.001s)
+[Pipeline] fit+transform   5/18 · MathFeatures  |  in: rows=891  cols=13  nulls=866  →  out: rows=891  cols=14  nulls=866  (0.000s)
+[Pipeline] fit+transform   6/18 · ScalarMathFeatures  |  in: rows=891  cols=14  nulls=866  →  out: rows=891  cols=15  nulls=866  (0.000s)
+[Pipeline] fit+transform   7/18 · ExtractSubstring  |  in: rows=891  cols=15  nulls=866  →  out: rows=891  cols=16  nulls=1553  (0.000s)
+[Pipeline] fit+transform   8/18 · RenameColumns  |  in: rows=891  cols=16  nulls=1553  →  out: rows=891  cols=16  nulls=1553  (0.000s)
+[Pipeline] fit+transform   9/18 · RareCategoryEncoder  |  in: rows=891  cols=16  nulls=1553  →  out: rows=891  cols=16  nulls=1553  (0.002s)
+[Pipeline] fit+transform   10/18 · MathFeatures2  |  in: rows=891  cols=16  nulls=1553  →  out: rows=891  cols=17  nulls=1553  (0.000s)
+[Pipeline] fit+transform   11/18 · ConditionFeatures  |  in: rows=891  cols=17  nulls=1553  →  out: rows=891  cols=18  nulls=1553  (0.000s)
+[Pipeline] fit+transform   12/18 · DropColumns  |  in: rows=891  cols=18  nulls=1553  →  out: rows=891  cols=15  nulls=866  (0.000s)
+[Pipeline] fit+transform   13/18 · NumericImputer  |  in: rows=891  cols=15  nulls=866  →  out: rows=891  cols=15  nulls=689  (0.000s)
+[Pipeline] fit+transform   14/18 · StringImputer  |  in: rows=891  cols=15  nulls=689  →  out: rows=891  cols=15  nulls=0  (0.000s)
+[Pipeline] fit+transform   15/18 · CustomDiscretizer  |  in: rows=891  cols=15  nulls=0  →  out: rows=891  cols=15  nulls=0  (0.000s)
+[Pipeline] fit+transform   16/18 · CastColumns  |  in: rows=891  cols=15  nulls=0  →  out: rows=891  cols=15  nulls=0  (0.000s)
+[Pipeline] fit+transform   17/18 · InteractionFeatures  |  in: rows=891  cols=15  nulls=0  →  out: rows=891  cols=21  nulls=0  (0.000s)
+[Pipeline] fit+transform   18/18 · WOEEncoder  |  in: rows=891  cols=21  nulls=0  →  out: rows=891  cols=21  nulls=0  (0.007s)
+[Pipeline] transform   1/18 · IsNull  |  in: rows=418  cols=11  nulls=414  →  out: rows=418  cols=13  nulls=414  (0.000s)
+[Pipeline] transform   2/18 · Length  |  in: rows=418  cols=13  nulls=414  →  out: rows=418  cols=14  nulls=414  (0.000s)
+[Pipeline] transform   3/18 · SplitExtractName  |  in: rows=418  cols=14  nulls=414  →  out: rows=418  cols=14  nulls=414  (0.001s)
+[Pipeline] transform   4/18 · SplitExtractTitle  |  in: rows=418  cols=14  nulls=414  →  out: rows=418  cols=14  nulls=414  (0.001s)
+[Pipeline] transform   5/18 · MathFeatures  |  in: rows=418  cols=14  nulls=414  →  out: rows=418  cols=15  nulls=414  (0.000s)
+[Pipeline] transform   6/18 · ScalarMathFeatures  |  in: rows=418  cols=15  nulls=414  →  out: rows=418  cols=16  nulls=414  (0.000s)
+[Pipeline] transform   7/18 · ExtractSubstring  |  in: rows=418  cols=16  nulls=414  →  out: rows=418  cols=17  nulls=741  (0.000s)
+[Pipeline] transform   8/18 · RenameColumns  |  in: rows=418  cols=17  nulls=741  →  out: rows=418  cols=17  nulls=741  (0.000s)
+[Pipeline] transform   9/18 · RareCategoryEncoder  |  in: rows=418  cols=17  nulls=741  →  out: rows=418  cols=17  nulls=741  (0.001s)
+[Pipeline] transform   10/18 · MathFeatures2  |  in: rows=418  cols=17  nulls=741  →  out: rows=418  cols=18  nulls=742  (0.000s)
+[Pipeline] transform   11/18 · ConditionFeatures  |  in: rows=418  cols=18  nulls=742  →  out: rows=418  cols=19  nulls=742  (0.000s)
+[Pipeline] transform   12/18 · DropColumns  |  in: rows=418  cols=19  nulls=742  →  out: rows=418  cols=16  nulls=415  (0.000s)
+[Pipeline] transform   13/18 · NumericImputer  |  in: rows=418  cols=16  nulls=415  →  out: rows=418  cols=16  nulls=327  (0.000s)
+[Pipeline] transform   14/18 · StringImputer  |  in: rows=418  cols=16  nulls=327  →  out: rows=418  cols=16  nulls=0  (0.000s)
+[Pipeline] transform   15/18 · CustomDiscretizer  |  in: rows=418  cols=16  nulls=0  →  out: rows=418  cols=16  nulls=0  (0.000s)
+[Pipeline] transform   16/18 · CastColumns  |  in: rows=418  cols=16  nulls=0  →  out: rows=418  cols=16  nulls=0  (0.000s)
+[Pipeline] transform   17/18 · InteractionFeatures  |  in: rows=418  cols=16  nulls=0  →  out: rows=418  cols=22  nulls=0  (0.000s)
+[Pipeline] transform   18/18 · WOEEncoder  |  in: rows=418  cols=22  nulls=0  →  out: rows=418  cols=22  nulls=0  (0.001s)
 
 Original features: 10
 Engineered features: 21

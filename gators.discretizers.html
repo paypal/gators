@@ -314,6 +314,8 @@
       
       
       
+        
+      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -400,13 +402,6 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
-</nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
       class="flat"
@@ -1053,7 +1048,7 @@ If None, equally-spaced quantiles are generated based on num_bins.
 Example: [0.25, 0.5, 0.75] creates quartile bins.</p></li>
 <li><p><strong>rounding</strong> (<em>PositiveInt</em><em>, </em><em>default=3</em>) – Decimal places to round bin edges for labels.</p></li>
 <li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with discretized values.
-If False, create new columns with suffix ‘__dic_quantile’.</p></li>
+If False, create new columns with suffix ‘__discretize_quant’.</p></li>
 <li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after discretizing.
 Ignored when inplace=True.</p></li>
 <li><p><strong>as_numerics</strong> (bool<em>, </em><em>default=False</em>) – If True, create numeric labels (0, 1, 2, …) instead of interval strings.</p></li>

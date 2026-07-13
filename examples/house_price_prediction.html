@@ -513,7 +513,7 @@
 <h2>1. Import Libraries<a class="headerlink" href="#1.-Import-Libraries" title="Link to this heading">#</a></h2>
 <p>Import the necessary libraries including gators transformers for feature engineering.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
@@ -524,8 +524,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropColumns</span><span class="p">,</span> <span class="n">CastColumns</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">MathFeatures</span><span class="p">,</span> <span class="n">RatioFeatures</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringImputer</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">,</span> <span class="n">GroupByImputer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">root_mean_squared_error</span><span class="p">,</span> <span class="n">make_scorer</span>
 
@@ -549,8 +549,8 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data with &#39;NA&#39; strings interpreted as null values</span>
-<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/house/train.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NA&#39;</span><span class="p">])</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/house/test.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NA&#39;</span><span class="p">])</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/house/train.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NA&#39;</span><span class="p">])</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/house/test.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NA&#39;</span><span class="p">])</span>
 
 <span class="c1"># Apply log transformation to target variable for better distribution</span>
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;SalePrice&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">))</span>
@@ -625,7 +625,7 @@ Test data shape: (1459, 79)
 <li><p><strong>OneHotEncoder</strong>: Create binary indicator features for categories</p></li>
 <li><p><strong>CountEncoder</strong>: Replace categories with their frequency counts</p></li>
 </ul>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -706,8 +706,8 @@ Test data shape: (1459, 79)
 
     <span class="c1"># Generate statistical features from related area measurements</span>
     <span class="p">(</span><span class="s1">&#39;stat&#39;</span><span class="p">,</span> <span class="n">MathFeatures</span><span class="p">(</span>
-        <span class="n">groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;TotalBsmtSF&#39;</span><span class="p">,</span> <span class="s1">&#39;1stFlrSF&#39;</span><span class="p">,</span> <span class="s1">&#39;2nXlrSF&#39;</span><span class="p">]],</span>
-        <span class="n">operations</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">]</span>
+        <span class="n">groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;TotalBsmtSF&#39;</span><span class="p">,</span> <span class="s1">&#39;1stFlrSF&#39;</span><span class="p">,</span> <span class="s1">&#39;2ndFlrSF&#39;</span><span class="p">]],</span>
+        <span class="n">func</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">]</span>
     <span class="p">)),</span>
 
     <span class="c1"># Encode categorical variables</span>
@@ -722,24 +722,14 @@ Test data shape: (1459, 79)
     <span class="p">)),</span>
 <span class="p">]</span>
 
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
 <span class="n">X_test</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Original features: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Engineered features: </span><span class="si">{</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># print(f&quot;\nOriginal features: {X_train.shape[1]}&quot;)</span>
+<span class="c1"># print(f&quot;Engineered features: {X_test.shape[1]}&quot;)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Original features: 349
-Engineered features: 350
-</pre></div></div>
 </div>
 </section>
 </section>
@@ -747,7 +737,7 @@ Engineered features: 350
 <h2>4. Feature Selection with Stability Index<a class="headerlink" href="#4.-Feature-Selection-with-Stability-Index" title="Link to this heading">#</a></h2>
 <p>Use the <strong>feature_stability_index</strong> to identify robust features that consistently contribute to model performance across multiple training runs. This helps prevent overfitting by selecting only stable, reliable features.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define conservative model parameters to prevent overfitting</span>
@@ -794,7 +784,7 @@ Engineered features: 350
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Number of selected stable features: 151
+Number of selected stable features: 149
 
 Top 10 features by importance:
 </pre></div></div>
@@ -810,7 +800,7 @@ Top 10 features by importance:
   white-space: pre-wrap;
 }
 </style>
-<small>shape: (10, 3)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>fsi</th><th>importance</th></tr><tr><td>str</td><td>f64</td><td>f32</td></tr></thead><tbody><tr><td>&quot;ExterQual&quot;</td><td>1.0</td><td>0.14994</td></tr><tr><td>&quot;OverallQual&quot;</td><td>1.0</td><td>0.133964</td></tr><tr><td>&quot;TotalBsmtSF_1stFlrSF_2nXlrSF_…</td><td>1.0</td><td>0.069442</td></tr><tr><td>&quot;GarageCars&quot;</td><td>1.0</td><td>0.02874</td></tr><tr><td>&quot;GrLivArea&quot;</td><td>1.0</td><td>0.024384</td></tr><tr><td>&quot;TotalBsmtSF&quot;</td><td>1.0</td><td>0.022596</td></tr><tr><td>&quot;CentralAir&quot;</td><td>1.0</td><td>0.021065</td></tr><tr><td>&quot;CentralAir__Y&quot;</td><td>1.0</td><td>0.020707</td></tr><tr><td>&quot;BsmtQual__Gd&quot;</td><td>0.8</td><td>0.017674</td></tr><tr><td>&quot;GarageQual&quot;</td><td>1.0</td><td>0.016767</td></tr></tbody></table></div></div>
+<small>shape: (10, 3)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>fsi</th><th>importance</th></tr><tr><td>str</td><td>f64</td><td>f32</td></tr></thead><tbody><tr><td>&quot;ExterQual&quot;</td><td>1.0</td><td>0.14603</td></tr><tr><td>&quot;OverallQual&quot;</td><td>1.0</td><td>0.128996</td></tr><tr><td>&quot;TotalBsmtSF_1stFlrSF_2ndFlrSF_…</td><td>1.0</td><td>0.071166</td></tr><tr><td>&quot;GarageCars&quot;</td><td>1.0</td><td>0.028733</td></tr><tr><td>&quot;GrLivArea&quot;</td><td>1.0</td><td>0.024264</td></tr><tr><td>&quot;TotalBsmtSF&quot;</td><td>1.0</td><td>0.024178</td></tr><tr><td>&quot;CentralAir&quot;</td><td>1.0</td><td>0.023048</td></tr><tr><td>&quot;CentralAir__Y&quot;</td><td>1.0</td><td>0.018462</td></tr><tr><td>&quot;GarageCond__TA&quot;</td><td>0.8</td><td>0.017281</td></tr><tr><td>&quot;YearBuilt&quot;</td><td>1.0</td><td>0.015729</td></tr></tbody></table></div></div>
 </div>
 </section>
 <section id="5.-Train-Model-and-Evaluate">
@@ -864,7 +854,7 @@ False
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Cross-Validation RMSE: 0.1286 (+/- 0.0095)
+Cross-Validation RMSE: 0.1306 (+/- 0.0094)
 
 Final model trained successfully!
 </pre></div></div>
@@ -909,10 +899,10 @@ Final model trained successfully!
 Submission file created successfully!
 
 Predictions summary:
-Mean: $177,096.95
-Median: $155,665.30
-Min: $47,344.79
-Max: $484,264.44
+Mean: $177,062.38
+Median: $156,061.42
+Min: $49,124.10
+Max: $472,172.97
 </pre></div></div>
 </div>
 </section>

@@ -314,6 +314,8 @@
       
       
       
+        
+      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -400,13 +402,6 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
-</nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
       class="flat"
@@ -527,7 +522,7 @@
 <span id="gators-feature-selection-feature-stability-index-module"></span><h2>gators.feature_selection.feature_stability_index module<a class="headerlink" href="#module-gators.feature_selection.feature_stability_index" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="gators.feature_selection.feature_stability_index.feature_stability_index">
-<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.feature_stability_index.</span></span><span class="sig-name descname"><span class="pre">feature_stability_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="pre">0.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Le</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="pre">1.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_index.html#feature_stability_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_selection.feature_stability_index.feature_stability_index" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.feature_stability_index.</span></span><span class="sig-name descname"><span class="pre">feature_stability_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="pre">0.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Le</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="pre">1.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_index.html#feature_stability_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_selection.feature_stability_index.feature_stability_index" title="Link to this definition">#</a></dt>
 <dd><p>Compute Feature Stability Index (FSI) using repeated estimator feature importance.</p>
 <p>Measures how consistently a feature is selected across different training folds.
 Higher FSI indicates more stable/reliable feature importance.</p>
@@ -540,6 +535,7 @@ Higher FSI indicates more stable/reliable feature importance.</p>
 <li><p><strong>y</strong> (<em>pl.Series</em>) – Target series for training.</p></li>
 <li><p><strong>importance_threshold</strong> (<em>Annotated</em><em>[</em>float<em>, </em><em>Field</em><em>(</em><em>ge=0.0</em><em>, </em><em>le=1.0</em><em>)</em><em>]</em><em>, </em><em>default=0.0</em>) – Minimum importance value for a feature to be considered “selected” in a run.
 Must be between 0.0 and 1.0.</p></li>
+<li><p><strong>k</strong> (<em>Annotated</em><em>[</em>int<em>, </em><em>Field</em><em>(</em><em>ge=1</em><em>)</em><em>]</em><em>, </em><em>default=100</em>) – Number of selected features. Must be at least 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -608,9 +604,130 @@ Must be between 0.0 and 1.0.</p></li>
 </div>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">CorrelationSelector</span></span><a class="reference internal" href="_modules/gators/feature_selection/correlation_selector.html#CorrelationSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.feature_selection._base_selector._BaseSelector</span></code></p>
+<p>Drop redundant features by removing highly correlated ones, keeping the most important.</p>
+<p>For every pair of numeric features (restricted to those present in
+<code class="docutils literal notranslate"><span class="pre">importance</span></code>) whose Pearson correlation exceeds <code class="docutils literal notranslate"><span class="pre">max_corr</span></code>, the
+feature with the lower importance score is discarded.  The greedy pass
+iterates over pairs in column order: once a feature is marked for
+removal it is skipped for all subsequent comparisons.</p>
+<p>Only numeric columns (non-String, non-Boolean, non-Categorical, non-Enum)
+that appear in <code class="docutils literal notranslate"><span class="pre">importance</span></code> are candidates for removal.  All other
+columns are kept untouched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>importance</strong> (dict<em>[</em>str<em>, </em>float<em>]</em>) – Mapping of feature name to importance score.  Only columns listed
+here are considered for correlation filtering; all other columns are
+passed through unchanged.</p></li>
+<li><p><strong>max_corr</strong> (float<em>, </em><em>default=0.95</em>) – Correlation threshold above which a pair is considered redundant.
+Must be in the range <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1]</span></code>.</p></li>
+<li><p><strong>use_abs</strong> (bool<em>, </em><em>default=True</em>) – When <code class="docutils literal notranslate"><span class="pre">True</span></code> the absolute value of the correlation is compared
+against <code class="docutils literal notranslate"><span class="pre">max_corr</span></code>, so strong negative correlations (e.g. −0.97)
+are treated the same as strong positive ones.  When <code class="docutils literal notranslate"><span class="pre">False</span></code> only
+correlations that are strictly greater than <code class="docutils literal notranslate"><span class="pre">max_corr</span></code> (positive)
+trigger removal.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">selected_features_</span></span></dt>
+<dd><p>Column names that survive the filter (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">columns_to_drop_</span></span></dt>
+<dd><p>Column names removed because a more important correlated feature
+exists (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">CorrelationSelector</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">,</span> <span class="mf">3.1</span><span class="p">,</span> <span class="mf">4.1</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">],</span>   <span class="c1"># nearly identical to &quot;a&quot;</span>
+<span class="gp">... </span>    <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>   <span class="c1"># independent</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Example 1: Default threshold (0.95)</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span> <span class="o">=</span> <span class="n">CorrelationSelector</span><span class="p">(</span><span class="n">importance</span><span class="o">=</span><span class="n">importance</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">CorrelationSelector(importance={&#39;a&#39;: 0.9, &#39;b&#39;: 0.4, &#39;c&#39;: 0.7}, max_corr=0.95, use_abs=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span><span class="o">.</span><span class="n">columns_to_drop_</span>
+<span class="go">[&#39;b&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;a&#39;, &#39;c&#39;]</span>
+</pre></div>
+</div>
+<p><strong>Example 2: Stricter threshold keeps both correlated features</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">selector2</span> <span class="o">=</span> <span class="n">CorrelationSelector</span><span class="p">(</span><span class="n">importance</span><span class="o">=</span><span class="n">importance</span><span class="p">,</span> <span class="n">max_corr</span><span class="o">=</span><span class="mf">0.999</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">CorrelationSelector(importance={&#39;a&#39;: 0.9, &#39;b&#39;: 0.4, &#39;c&#39;: 0.7}, max_corr=0.999, use_abs=True)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector2</span><span class="o">.</span><span class="n">columns_to_drop_</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+<p><strong>Example 3: use_abs=False ignores negative correlations</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X_neg</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">],</span>  <span class="c1"># perfectly negatively correlated</span>
+<span class="gp">... </span>    <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">importance_neg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector3</span> <span class="o">=</span> <span class="n">CorrelationSelector</span><span class="p">(</span><span class="n">importance</span><span class="o">=</span><span class="n">importance_neg</span><span class="p">,</span> <span class="n">max_corr</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">use_abs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector3</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_neg</span><span class="p">)</span>
+<span class="go">CorrelationSelector(importance={&#39;a&#39;: 0.9, &#39;b&#39;: 0.4, &#39;c&#39;: 0.7}, max_corr=0.95, use_abs=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector3</span><span class="o">.</span><span class="n">columns_to_drop_</span>   <span class="c1"># negative corr not filtered when use_abs=False</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gators.feature_selection.correlation_selector.CorrelationSelector</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/correlation_selector.html#CorrelationSelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Compute pairwise Pearson correlations and record which columns to drop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Not used; present for sklearn API compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CorrelationSelector</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">feature_stability_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="pre">0.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Le</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="pre">1.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_index.html#feature_stability_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">feature_stability_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="pre">0.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Le</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="pre">1.0</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_index.html#feature_stability_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Compute Feature Stability Index (FSI) using repeated estimator feature importance.</p>
 <p>Measures how consistently a feature is selected across different training folds.
 Higher FSI indicates more stable/reliable feature importance.</p>
@@ -623,6 +740,7 @@ Higher FSI indicates more stable/reliable feature importance.</p>
 <li><p><strong>y</strong> (<em>pl.Series</em>) – Target series for training.</p></li>
 <li><p><strong>importance_threshold</strong> (<em>Annotated</em><em>[</em>float<em>, </em><em>Field</em><em>(</em><em>ge=0.0</em><em>, </em><em>le=1.0</em><em>)</em><em>]</em><em>, </em><em>default=0.0</em>) – Minimum importance value for a feature to be considered “selected” in a run.
 Must be between 0.0 and 1.0.</p></li>
+<li><p><strong>k</strong> (<em>Annotated</em><em>[</em>int<em>, </em><em>Field</em><em>(</em><em>ge=1</em><em>)</em><em>]</em><em>, </em><em>default=100</em>) – Number of selected features. Must be at least 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -641,10 +759,43 @@ Must be between 0.0 and 1.0.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">select_k_best_stable_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="pre">NoneType</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">required</span></span><span class="o"><span class="pre">=</span></span><span class="k"><span class="pre">True</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Ge</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">ge</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gators/feature_selection/select_k_best_stable_features.html#select_k_best_stable_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Select features that consistently appear in the top-k across all folds.</p>
+<p>For each fold, fits the estimator on the training split and selects the top-k
+features by importance. Returns the intersection — features that ranked in the
+top-k in every fold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> (<em>estimator object</em>) – Any estimator with a <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code> attribute (e.g., XGBoost, RandomForest).</p></li>
+<li><p><strong>skf</strong> (<em>sklearn fold splitter object</em>) – Any sklearn fold splitter object (e.g., StratifiedKFold, KFold) for splitting the data.</p></li>
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Feature DataFrame with shape (n_samples, n_features).</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em>) – Target series for training.</p></li>
+<li><p><strong>k</strong> (<em>Annotated</em><em>[</em>int<em>, </em><em>Field</em><em>(</em><em>ge=1</em><em>)</em><em>]</em><em>, </em><em>default=200</em>) – Number of top features to consider per fold. Must be at least 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>DataFrame with columns:</p>
+<ul class="simple">
+<li><p>feature: Feature name</p></li>
+<li><p>importance: Average feature importance across all folds</p></li>
+</ul>
+<p>Contains only features that appeared in the top-k in every fold,
+sorted by importance in descending order.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">FeatureStabilitySelector</span></span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_selector.html#FeatureStabilitySelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.feature_selection._base_selector._BaseSelector</span></code></p>
 <p>Drop columns whose Feature Stability Index falls below a threshold.</p>
 <p>Wraps <a class="reference internal" href="#module-gators.feature_selection.feature_stability_index" title="gators.feature_selection.feature_stability_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">feature_stability_index()</span></code></a> into a
 fit/transform interface.  The FSI measures how consistently a feature is
@@ -742,39 +893,29 @@ in that fold.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/feature_stability_selector.html#FeatureStabilitySelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Drop unstable columns from the DataFrame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame with unstable columns removed.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pl.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">InformationValueSelector</span></span><a class="reference internal" href="_modules/gators/feature_selection/information_value_selector.html#InformationValueSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.feature_selection._base_selector._BaseSelector</span></code></p>
 <p>Drop columns whose Information Value falls below a threshold.</p>
 <p>Computes the IV for each categorical (String/Categorical/Enum) column
-and drops those whose IV is below <code class="docutils literal notranslate"><span class="pre">threshold</span></code>.  Numeric columns are
-always kept untouched; they are not considered for IV computation.</p>
+and drops those whose IV is below <code class="docutils literal notranslate"><span class="pre">threshold</span></code>.  When a <code class="docutils literal notranslate"><span class="pre">discretizer</span></code>
+is provided, numeric columns are first binned by the discretizer before
+IV computation; the discretized values are used only for scoring and are
+<strong>not</strong> applied during <code class="docutils literal notranslate"><span class="pre">transform</span></code> — numeric columns that survive the
+threshold remain numeric in the output.  Without a discretizer, numeric
+columns are excluded from IV computation and are always kept.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>threshold</strong> (float<em>, </em><em>default=0.02</em>) – Minimum IV required to keep a column.  Columns with IV strictly
 below this value are dropped.</p></li>
 <li><p><strong>regularization</strong> (float<em>, </em><em>default=0.01</em>) – Regularization applied to WOE/IV calculation to avoid division by zero.</p></li>
+<li><p><strong>discretizer</strong> (<em>_BaseDiscretizer</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Optional discretizer used to bin numeric columns before computing IV.
+When <code class="docutils literal notranslate"><span class="pre">None</span></code>, numeric columns are excluded from IV computation and
+always kept (backward-compatible behaviour).</p></li>
 </ul>
 </dd>
 </dl>
@@ -792,10 +933,21 @@ below this value are dropped.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">columns_to_drop_</span></span></dt>
-<dd><p>Categorical column names dropped because their IV was too low.</p>
+<dd><p>Column names dropped because their IV was too low (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">iv_values_</span></span></dt>
+<dd><p>Mapping of feature name to its computed IV value (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, float]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -817,11 +969,24 @@ below this value are dropped.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_transformed</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>With a discretizer to score numeric columns:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.discretizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">EqualSizeDiscretizer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span> <span class="o">=</span> <span class="n">InformationValueSelector</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">threshold</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">discretizer</span><span class="o">=</span><span class="n">EqualSizeDiscretizer</span><span class="p">(</span><span class="n">num_bins</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selector</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_transformed</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># numeric columns remain numeric</span>
+</pre></div>
+</div>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gators.feature_selection.information_value_selector.InformationValueSelector</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/information_value_selector.html#InformationValueSelector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Compute IV for each categorical column and record which to drop.</p>
+<dd><p>Compute IV for each applicable column and record which to drop.</p>
+<p>Categorical columns are always scored.  Numeric columns are scored
+only when a <code class="docutils literal notranslate"><span class="pre">discretizer</span></code> is provided; the discretizer is fitted and
+applied to <code class="docutils literal notranslate"><span class="pre">X</span></code> internally and its output is passed to <code class="docutils literal notranslate"><span class="pre">compute_iv</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -838,29 +1003,12 @@ below this value are dropped.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/information_value_selector.html#InformationValueSelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Drop low-IV columns from the DataFrame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame with low-IV categorical columns removed.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pl.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_selection.</span></span><span class="sig-name descname"><span class="pre">PermutationImportanceSelector</span></span><a class="reference internal" href="_modules/gators/feature_selection/permutation_importance_selector.html#PermutationImportanceSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.feature_selection._base_selector._BaseSelector</span></code></p>
 <p>Drop columns whose permutation importance falls below a threshold.</p>
 <p>Fits <code class="docutils literal notranslate"><span class="pre">estimator</span></code> on the training data, then measures how much the
 model score degrades when each feature is randomly shuffled
@@ -954,23 +1102,6 @@ at least marginally.</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>PermutationImportanceSelector</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_selection/permutation_importance_selector.html#PermutationImportanceSelector.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Drop low-importance columns from the DataFrame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>DataFrame with low-importance columns removed.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pl.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>

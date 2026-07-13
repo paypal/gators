@@ -500,7 +500,7 @@
 <h2>1. Import Libraries<a class="headerlink" href="#1.-Import-Libraries" title="Link to this heading">#</a></h2>
 <p>Import the necessary libraries including gators transformers for feature engineering.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
@@ -513,8 +513,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlanRotationFeatures</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">GroupByImputer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_dt</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">DatetimeCyclicFeatures</span><span class="p">,</span>
-    <span class="n">DatetimeOrdinalFeatures</span><span class="p">,</span>
+    <span class="n">CyclicFeatures</span><span class="p">,</span>
+    <span class="n">OrdinalFeatures</span><span class="p">,</span>
     <span class="n">BusinessTimeFeatures</span><span class="p">,</span>
     <span class="n">TimeBinFeatures</span><span class="p">,</span>
     <span class="n">HolidayFeatures</span><span class="p">,</span>
@@ -538,12 +538,12 @@
 <li><p>Create a distance-to-center feature using San Francisco’s geographic center</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data</span>
-<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/sf/train.parquet&#39;</span><span class="p">)</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/sf/test.parquet&#39;</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/sf/train.parquet&#39;</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/sf/test.parquet&#39;</span><span class="p">)</span>
 
 <span class="c1"># Drop unnecessary columns</span>
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Descript&quot;</span><span class="p">,</span> <span class="s2">&quot;Resolution&quot;</span><span class="p">,</span> <span class="s2">&quot;DayOfWeek&quot;</span><span class="p">])</span>
@@ -593,7 +593,7 @@ Test data shape: (884262, 7)
 <h2>3. Prepare Target Variable<a class="headerlink" href="#3.-Prepare-Target-Variable" title="Link to this heading">#</a></h2>
 <p>Convert crime category labels to numeric format for model training.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define all crime categories</span>
@@ -669,7 +669,7 @@ Target shape: (878049,)
 <li><p><strong>CountEncoder</strong>: Encode categories by their frequency</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define datetime components to extract</span>
@@ -699,7 +699,7 @@ Target shape: (878049,)
     <span class="p">(</span><span class="s2">&quot;dt_timebin&quot;</span><span class="p">,</span> <span class="n">TimeBinFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">])),</span>
 
     <span class="c1"># Create cyclic datetime features (captures cyclical nature of time)</span>
-    <span class="p">(</span><span class="s2">&quot;dt_cyclic&quot;</span><span class="p">,</span> <span class="n">DatetimeCyclicFeatures</span><span class="p">(</span>
+    <span class="p">(</span><span class="s2">&quot;dt_cyclic&quot;</span><span class="p">,</span> <span class="n">CyclicFeatures</span><span class="p">(</span>
         <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span>
         <span class="n">angles</span><span class="o">=</span><span class="p">[</span><span class="mi">180</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">4</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)],</span>
         <span class="n">components</span><span class="o">=</span><span class="n">cyclic_components</span>
@@ -712,7 +712,7 @@ Target shape: (878049,)
     <span class="p">(</span><span class="s2">&quot;dt_holiday&quot;</span><span class="p">,</span> <span class="n">HolidayFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;is_holiday&#39;</span><span class="p">])),</span>
 
     <span class="c1"># Extract ordinal datetime components</span>
-    <span class="p">(</span><span class="s2">&quot;dt_ordinal&quot;</span><span class="p">,</span> <span class="n">DatetimeOrdinalFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span> <span class="n">components</span><span class="o">=</span><span class="n">ordinal_components</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;dt_ordinal&quot;</span><span class="p">,</span> <span class="n">OrdinalFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span> <span class="n">components</span><span class="o">=</span><span class="n">ordinal_components</span><span class="p">)),</span>
 
     <span class="c1"># Extract patterns from address strings</span>
     <span class="p">(</span><span class="s2">&quot;contains&quot;</span><span class="p">,</span> <span class="n">Contains</span><span class="p">(</span><span class="n">contains_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Address&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;Block&#39;</span><span class="p">,</span> <span class="s1">&#39;AV&#39;</span><span class="p">,</span> <span class="s1">&#39;ST&#39;</span><span class="p">]})),</span>
@@ -750,34 +750,34 @@ Target shape: (878049,)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[Pipeline] Fitting and transforming step 1/14: group_imputer
-[Pipeline] Fitting and transforming step 2/14: cast
-[Pipeline] Fitting and transforming step 3/14: dt_timebin
-[Pipeline] Fitting and transforming step 4/14: dt_cyclic
-[Pipeline] Fitting and transforming step 5/14: dt_business
-[Pipeline] Fitting and transforming step 6/14: dt_holiday
-[Pipeline] Fitting and transforming step 7/14: dt_ordinal
-[Pipeline] Fitting and transforming step 8/14: contains
-[Pipeline] Fitting and transforming step 9/14: drop
-[Pipeline] Fitting and transforming step 10/14: interaction_time
-[Pipeline] Fitting and transforming step 11/14: interaction_district
-[Pipeline] Fitting and transforming step 12/14: plan_rotation
-[Pipeline] Fitting and transforming step 13/14: onehot_encoder
-[Pipeline] Fitting and transforming step 14/14: count_encoder
-[Pipeline] Transforming step 1/14: group_imputer
-[Pipeline] Transforming step 2/14: cast
-[Pipeline] Transforming step 3/14: dt_timebin
-[Pipeline] Transforming step 4/14: dt_cyclic
-[Pipeline] Transforming step 5/14: dt_business
-[Pipeline] Transforming step 6/14: dt_holiday
-[Pipeline] Transforming step 7/14: dt_ordinal
-[Pipeline] Transforming step 8/14: contains
-[Pipeline] Transforming step 9/14: drop
-[Pipeline] Transforming step 10/14: interaction_time
-[Pipeline] Transforming step 11/14: interaction_district
-[Pipeline] Transforming step 12/14: plan_rotation
-[Pipeline] Transforming step 13/14: onehot_encoder
-[Pipeline] Transforming step 14/14: count_encoder
+[Pipeline] fit+transform   1/14 · group_imputer  |  in: rows=878049  cols=6  nulls=201  →  out: rows=878049  cols=6  nulls=67  (0.018s)
+[Pipeline] fit+transform   2/14 · cast  |  in: rows=878049  cols=6  nulls=67  →  out: rows=878049  cols=6  nulls=67  (0.032s)
+[Pipeline] fit+transform   3/14 · dt_timebin  |  in: rows=878049  cols=6  nulls=67  →  out: rows=878049  cols=11  nulls=67  (0.044s)
+[Pipeline] fit+transform   4/14 · dt_cyclic  |  in: rows=878049  cols=11  nulls=67  →  out: rows=878049  cols=67  nulls=67  (0.089s)
+[Pipeline] fit+transform   5/14 · dt_business  |  in: rows=878049  cols=67  nulls=67  →  out: rows=878049  cols=70  nulls=67  (0.034s)
+[Pipeline] fit+transform   6/14 · dt_holiday  |  in: rows=878049  cols=70  nulls=67  →  out: rows=878049  cols=71  nulls=67  (0.113s)
+[Pipeline] fit+transform   7/14 · dt_ordinal  |  in: rows=878049  cols=71  nulls=67  →  out: rows=878049  cols=79  nulls=67  (0.012s)
+[Pipeline] fit+transform   8/14 · contains  |  in: rows=878049  cols=79  nulls=67  →  out: rows=878049  cols=83  nulls=67  (0.013s)
+[Pipeline] fit+transform   9/14 · drop  |  in: rows=878049  cols=83  nulls=67  →  out: rows=878049  cols=81  nulls=67  (0.001s)
+[Pipeline] fit+transform   10/14 · interaction_time  |  in: rows=878049  cols=81  nulls=67  →  out: rows=878049  cols=82  nulls=67  (0.023s)
+[Pipeline] fit+transform   11/14 · interaction_district  |  in: rows=878049  cols=82  nulls=67  →  out: rows=878049  cols=83  nulls=67  (0.029s)
+[Pipeline] fit+transform   12/14 · plan_rotation  |  in: rows=878049  cols=83  nulls=67  →  out: rows=878049  cols=99  nulls=67  (0.012s)
+[Pipeline] fit+transform   13/14 · onehot_encoder  |  in: rows=878049  cols=99  nulls=67  →  out: rows=878049  cols=189  nulls=67  (0.133s)
+[Pipeline] fit+transform   14/14 · count_encoder  |  in: rows=878049  cols=189  nulls=67  →  out: rows=878049  cols=189  nulls=67  (0.042s)
+[Pipeline] transform   1/14 · group_imputer  |  in: rows=884262  cols=7  nulls=228  →  out: rows=884262  cols=7  nulls=76  (0.014s)
+[Pipeline] transform   2/14 · cast  |  in: rows=884262  cols=7  nulls=76  →  out: rows=884262  cols=7  nulls=76  (0.033s)
+[Pipeline] transform   3/14 · dt_timebin  |  in: rows=884262  cols=7  nulls=76  →  out: rows=884262  cols=12  nulls=76  (0.048s)
+[Pipeline] transform   4/14 · dt_cyclic  |  in: rows=884262  cols=12  nulls=76  →  out: rows=884262  cols=68  nulls=76  (0.094s)
+[Pipeline] transform   5/14 · dt_business  |  in: rows=884262  cols=68  nulls=76  →  out: rows=884262  cols=71  nulls=76  (0.035s)
+[Pipeline] transform   6/14 · dt_holiday  |  in: rows=884262  cols=71  nulls=76  →  out: rows=884262  cols=72  nulls=76  (0.004s)
+[Pipeline] transform   7/14 · dt_ordinal  |  in: rows=884262  cols=72  nulls=76  →  out: rows=884262  cols=80  nulls=76  (0.012s)
+[Pipeline] transform   8/14 · contains  |  in: rows=884262  cols=80  nulls=76  →  out: rows=884262  cols=84  nulls=76  (0.012s)
+[Pipeline] transform   9/14 · drop  |  in: rows=884262  cols=84  nulls=76  →  out: rows=884262  cols=82  nulls=76  (0.001s)
+[Pipeline] transform   10/14 · interaction_time  |  in: rows=884262  cols=82  nulls=76  →  out: rows=884262  cols=83  nulls=76  (0.025s)
+[Pipeline] transform   11/14 · interaction_district  |  in: rows=884262  cols=83  nulls=76  →  out: rows=884262  cols=84  nulls=76  (0.031s)
+[Pipeline] transform   12/14 · plan_rotation  |  in: rows=884262  cols=84  nulls=76  →  out: rows=884262  cols=100  nulls=76  (0.005s)
+[Pipeline] transform   13/14 · onehot_encoder  |  in: rows=884262  cols=100  nulls=76  →  out: rows=884262  cols=190  nulls=76  (0.072s)
+[Pipeline] transform   14/14 · count_encoder  |  in: rows=884262  cols=190  nulls=76  →  out: rows=884262  cols=190  nulls=76  (0.023s)
 
 Original features: 6
 Engineered features: 189
@@ -789,7 +789,7 @@ Engineered features: 189
 <h2>5. Train Model and Generate Predictions<a class="headerlink" href="#5.-Train-Model-and-Generate-Predictions" title="Link to this heading">#</a></h2>
 <p>Train an XGBoost classifier with the engineered features and generate predictions.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">X_test_transformed</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">X_train_transformed</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
@@ -797,7 +797,7 @@ Engineered features: 189
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -806,7 +806,7 @@ Engineered features: 189
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define model parameters</span>
@@ -855,7 +855,7 @@ Submission file created successfully!
 <h2>6. Feature Importance Analysis<a class="headerlink" href="#6.-Feature-Importance-Analysis" title="Link to this heading">#</a></h2>
 <p>Analyze which features contribute most to the model’s predictions.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract feature importances</span>
@@ -890,7 +890,7 @@ Top 20 Most Important Features:
   white-space: pre-wrap;
 }
 </style>
-<small>shape: (20, 2)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>importance</th></tr><tr><td>str</td><td>f32</td></tr></thead><tbody><tr><td>&quot;Address__contains_Block&quot;</td><td>0.047442</td></tr><tr><td>&quot;Address__contains_/&quot;</td><td>0.042024</td></tr><tr><td>&quot;Dates__minute__sin90&quot;</td><td>0.039019</td></tr><tr><td>&quot;XY_x315&quot;</td><td>0.033719</td></tr><tr><td>&quot;Dates__minute__sin270&quot;</td><td>0.032337</td></tr><tr><td>&hellip;</td><td>&hellip;</td></tr><tr><td>&quot;PdDistrict__PARK&quot;</td><td>0.012953</td></tr><tr><td>&quot;XY_y90&quot;</td><td>0.012377</td></tr><tr><td>&quot;Dates__hour__sin90&quot;</td><td>0.012303</td></tr><tr><td>&quot;PdDistrict__NORTHERN&quot;</td><td>0.011099</td></tr><tr><td>&quot;XY_x90&quot;</td><td>0.011072</td></tr></tbody></table></div></div>
+<small>shape: (20, 2)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>importance</th></tr><tr><td>str</td><td>f32</td></tr></thead><tbody><tr><td>&quot;Address__contains_/&quot;</td><td>0.044727</td></tr><tr><td>&quot;Address__contains_Block&quot;</td><td>0.040278</td></tr><tr><td>&quot;Dates__minute__sin90&quot;</td><td>0.036214</td></tr><tr><td>&quot;Dates__minute__sin270&quot;</td><td>0.035519</td></tr><tr><td>&quot;Dates__minute&quot;</td><td>0.033772</td></tr><tr><td>&hellip;</td><td>&hellip;</td></tr><tr><td>&quot;Dates__rush_hour__morning_rush&quot;</td><td>0.012069</td></tr><tr><td>&quot;PdDistrict__Dates__part_of_day…</td><td>0.011952</td></tr><tr><td>&quot;PdDistrict__Dates__part_of_day…</td><td>0.011936</td></tr><tr><td>&quot;PdDistrict__Dates__part_of_day…</td><td>0.011771</td></tr><tr><td>&quot;Dates__hour__sin315&quot;</td><td>0.01068</td></tr></tbody></table></div></div>
 </div>
 </section>
 <section id="Summary">

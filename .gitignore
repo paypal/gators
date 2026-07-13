@@ -133,4 +133,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
->>>>>>> origin
+
+# PyPI credentials
+.pypirc

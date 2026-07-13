@@ -11,10 +11,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://paypal.github.io/gators/api/feature_generation.html" />
 <meta property="og:site_name" content="Gators - High-Performance ML Preprocessing Library" />
-<meta property="og:description" content="Mathematical Operations: ComparisonFeatures- Compare columns, DistanceFeatures- Calculate distance between columns, MathFeatures- Mathematical operations bet..." />
+<meta property="og:description" content="Mathematical Operations: AsymmetryIndexFeatures- Generate asymmetry index features, ComparisonFeatures- Compare columns, ConcentrationIndexFeatures- Generate..." />
 <meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png" />
 <meta property="og:image:alt" content="Gators - High-Performance ML Preprocessing Library" />
-<meta name="description" content="Mathematical Operations: ComparisonFeatures- Compare columns, DistanceFeatures- Calculate distance between columns, MathFeatures- Mathematical operations bet..." />
+<meta name="description" content="Mathematical Operations: AsymmetryIndexFeatures- Generate asymmetry index features, ComparisonFeatures- Compare columns, ConcentrationIndexFeatures- Generate..." />
 <meta name="description" content="High-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API." />
 <meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline" />
 
@@ -491,13 +491,18 @@
 <section id="mathematical-operations">
 <h2>Mathematical Operations<a class="headerlink" href="#mathematical-operations" title="Link to this heading">#</a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.AsymmetryIndexFeatures" title="gators.feature_generation.asymmetry_index_features.AsymmetryIndexFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsymmetryIndexFeatures</span></code></a> - Generate asymmetry index features</p></li>
 <li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.ComparisonFeatures" title="gators.feature_generation.comparison_features.ComparisonFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComparisonFeatures</span></code></a> - Compare columns</p></li>
+<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.ConcentrationIndexFeatures" title="gators.feature_generation.concentration_index_features.ConcentrationIndexFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConcentrationIndexFeatures</span></code></a> - Generate concentration index features</p></li>
 <li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.DistanceFeatures" title="gators.feature_generation.distance_features.DistanceFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">DistanceFeatures</span></code></a> - Calculate distance between columns</p></li>
+<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.GeneralizedRatioFeatures" title="gators.feature_generation.generalized_ratio_features.GeneralizedRatioFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneralizedRatioFeatures</span></code></a> - Generate generalized ratio features</p></li>
+<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.HHIFeatures" title="gators.feature_generation.hhi_features.HHIFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">HHIFeatures</span></code></a> - Generate Herfindahl-Hirschman index features</p></li>
 <li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.MathFeatures" title="gators.feature_generation.math_features.MathFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">MathFeatures</span></code></a> - Mathematical operations between columns</p></li>
 <li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.RatioFeatures" title="gators.feature_generation.ratio_features.RatioFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">RatioFeatures</span></code></a> - Calculate ratio between columns</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PlanRotationFeatures</span></code> - Rotate features in space</p></li>
+<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures" title="gators.feature_generation.plan_rotation_features.PlanRotationFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlanRotationFeatures</span></code></a> - Rotate features in space</p></li>
 <li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.PolynomialFeatures" title="gators.feature_generation.polynomial_features.PolynomialFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolynomialFeatures</span></code></a> - Generate polynomial features</p></li>
 <li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures" title="gators.feature_generation.scalar_math_features.ScalarMathFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScalarMathFeatures</span></code></a> - Scalar mathematical operations</p></li>
+<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.WeightedSumFeatures" title="gators.feature_generation.weighted_sum_features.WeightedSumFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">WeightedSumFeatures</span></code></a> - Generate weighted sum features</p></li>
 </ul>
 </section>
 <section id="conditions-and-rules">
@@ -512,9 +517,9 @@
 <h2>Group Features<a class="headerlink" href="#group-features" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures" title="gators.feature_generation.group_statistics_features.GroupStatisticsFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupStatisticsFeatures</span></code></a> - Generate group-based statistics</p></li>
-<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.GroupScalingFeatures" title="gators.feature_generation.group_scaling_features.GroupScalingFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupScalingFeatures</span></code></a> - Generate group-based scaling features</p></li>
 <li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.GroupLagFeatures" title="gators.feature_generation.group_lag_features.GroupLagFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupLagFeatures</span></code></a> - Generate group-based lag features</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">RowStatisticsFeatures</span></code> - Generate group-based statistics per row</p></li>
+<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.HHIFeatures" title="gators.feature_generation.hhi_features.HHIFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">HHIFeatures</span></code></a> - Generate Herfindahl-Hirschman index features</p></li>
+<li><p><a class="reference internal" href="../gators.feature_generation.html#gators.feature_generation.RowStatisticsFeatures" title="gators.feature_generation.row_statistics_features.RowStatisticsFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">RowStatisticsFeatures</span></code></a> - Generate row-based statistics features</p></li>
 </ul>
 </section>
 </section>

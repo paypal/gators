@@ -314,6 +314,8 @@
       
       
       
+        
+      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -400,13 +402,6 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-<nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
-</nav></div>
         <div class="sidebar-primary-item">
 <div id="ethical-ad-placement"
       class="flat"
@@ -1848,6 +1843,132 @@ when counting unique values.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="gators.data_cleaning.DropNearConstantColumns">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">DropNearConstantColumns</span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_near_constant_columns.html#DropNearConstantColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropNearConstantColumns" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Removes columns where fewer than a given fraction of rows have a distinct value.</p>
+<p>A column is considered <em>near-constant</em> when the number of unique values is
+not greater than <code class="docutils literal notranslate"><span class="pre">threshold</span> <span class="pre">*</span> <span class="pre">n_rows</span></code>.  This generalises
+<a class="reference internal" href="#gators.data_cleaning.DropConstantColumns" title="gators.data_cleaning.DropConstantColumns"><code class="xref py py-class docutils literal notranslate"><span class="pre">DropConstantColumns</span></code></a> (threshold=0) to low-variance categorical and
+numeric columns alike without requiring variance computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threshold</strong> (float<em>, </em><em>default=0.01</em>) – Minimum fraction of rows that must be distinct for a column to be kept.
+A column is dropped when <code class="docutils literal notranslate"><span class="pre">n_unique</span> <span class="pre">&lt;=</span> <span class="pre">threshold</span> <span class="pre">*</span> <span class="pre">n_rows</span></code>.
+Must be in the range <code class="docutils literal notranslate"><span class="pre">[0.0,</span> <span class="pre">1.0)</span></code>.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – Columns to evaluate. When <code class="docutils literal notranslate"><span class="pre">None</span></code> all columns are evaluated.</p></li>
+<li><p><strong>include_na</strong> (bool<em>, </em><em>default=True</em>) – Whether null values count as a distinct value. When <code class="docutils literal notranslate"><span class="pre">True</span></code> a column
+whose only values are <code class="docutils literal notranslate"><span class="pre">null</span></code> contributes one unique value.  When
+<code class="docutils literal notranslate"><span class="pre">False</span></code> nulls are excluded before counting unique values.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<p><strong>Example 1: Drop near-constant numeric column</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropNearConstantColumns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="s1">&#39;near_const&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">42</span><span class="p">]</span> <span class="o">*</span> <span class="mi">99</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;varying&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">remover</span> <span class="o">=</span> <span class="n">DropNearConstantColumns</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">remover</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;id&#39;, &#39;varying&#39;]</span>
+</pre></div>
+</div>
+<p><strong>Example 2: Drop near-constant categorical column</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;country&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;USA&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;UK&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;NYC&#39;</span><span class="p">,</span> <span class="s1">&#39;LA&#39;</span><span class="p">,</span> <span class="s1">&#39;Chicago&#39;</span><span class="p">,</span> <span class="s1">&#39;Boston&#39;</span><span class="p">,</span> <span class="s1">&#39;Seattle&#39;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="s1">&#39;Denver&#39;</span><span class="p">,</span> <span class="s1">&#39;Miami&#39;</span><span class="p">,</span> <span class="s1">&#39;Austin&#39;</span><span class="p">,</span> <span class="s1">&#39;Portland&#39;</span><span class="p">,</span> <span class="s1">&#39;Dallas&#39;</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">remover</span> <span class="o">=</span> <span class="n">DropNearConstantColumns</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">remover</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;city&#39;]</span>
+</pre></div>
+</div>
+<p><strong>Example 3: Handle NaN values (with include_na=True)</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;mostly_null&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;varying&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">remover</span> <span class="o">=</span> <span class="n">DropNearConstantColumns</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">include_na</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">remover</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;varying&#39;]</span>
+</pre></div>
+</div>
+<p><strong>Example 4: Handle NaN values (with include_na=False)</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;same_non_null&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;varying&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">remover</span> <span class="o">=</span> <span class="n">DropNearConstantColumns</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">include_na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">remover</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;varying&#39;]</span>
+</pre></div>
+</div>
+<p><strong>Example 5: Subset of columns</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">+</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;col2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">+</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;col3&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">remover</span> <span class="o">=</span> <span class="n">DropNearConstantColumns</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">remover</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;col3&#39;]</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.data_cleaning.DropNearConstantColumns.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.DropNearConstantColumns" title="gators.data_cleaning.drop_near_constant_columns.DropNearConstantColumns"><span class="pre">gators.data_cleaning.drop_near_constant_columns.DropNearConstantColumns</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_near_constant_columns.html#DropNearConstantColumns.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropNearConstantColumns.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by identifying near-constant columns.</p>
+<p>A column is near-constant when its number of unique values does not
+exceed <code class="docutils literal notranslate"><span class="pre">threshold</span> <span class="pre">*</span> <span class="pre">len(X)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for API compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.data_cleaning.DropNearConstantColumns" title="gators.data_cleaning.DropNearConstantColumns">DropNearConstantColumns</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.data_cleaning.DropNearConstantColumns.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/drop_near_constant_columns.html#DropNearConstantColumns.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.DropNearConstantColumns.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the DataFrame by removing near-constant columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed DataFrame with near-constant columns removed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="gators.data_cleaning.HighCardinalityFilter">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">HighCardinalityFilter</span></span><a class="reference internal" href="_modules/gators/data_cleaning/high_cardinality_filter.html#HighCardinalityFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.HighCardinalityFilter" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
@@ -2123,6 +2244,44 @@ the rounding computation; the output columns therefore have dtype
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.data_cleaning.RoundDigits">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.data_cleaning.</span></span><span class="sig-name descname"><span class="pre">RoundDigits</span></span><a class="reference internal" href="_modules/gators/data_cleaning/round_digits.html#RoundDigits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RoundDigits" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Round selected numeric columns to a fixed number of decimal places.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_digits</strong> (int) – Number of decimal places to keep. Must be &gt;= 0.</p></li>
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – Columns to round. When <code class="docutils literal notranslate"><span class="pre">None</span></code>, all numeric columns in the
+DataFrame are rounded automatically.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the original columns are replaced in-place.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, new columns named <code class="docutils literal notranslate"><span class="pre">{col}__round_{n_digits}digits</span></code> are
+added alongside the originals.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – Relevant only when <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the original
+columns are dropped after the new rounded columns are added.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.data_cleaning.RoundDigits.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.data_cleaning.RoundDigits" title="gators.data_cleaning.round_digits.RoundDigits"><span class="pre">gators.data_cleaning.round_digits.RoundDigits</span></a></span></span><a class="reference internal" href="_modules/gators/data_cleaning/round_digits.html#RoundDigits.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RoundDigits.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by recording which columns to round.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.data_cleaning.RoundDigits.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/data_cleaning/round_digits.html#RoundDigits.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.data_cleaning.RoundDigits.transform" title="Link to this definition">#</a></dt>
+<dd><p>Round the selected columns to the configured number of decimal places.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
@@ -2211,6 +2370,11 @@ the rounding computation; the output columns therefore have dtype
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.DropConstantColumns.transform"><code class="docutils literal notranslate"><span class="pre">DropConstantColumns.transform()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.DropNearConstantColumns"><code class="docutils literal notranslate"><span class="pre">DropNearConstantColumns</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.DropNearConstantColumns.fit"><code class="docutils literal notranslate"><span class="pre">DropNearConstantColumns.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.DropNearConstantColumns.transform"><code class="docutils literal notranslate"><span class="pre">DropNearConstantColumns.transform()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.HighCardinalityFilter"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.HighCardinalityFilter.fit"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.HighCardinalityFilter.transform"><code class="docutils literal notranslate"><span class="pre">HighCardinalityFilter.transform()</span></code></a></li>
@@ -2219,6 +2383,11 @@ the rounding computation; the output columns therefore have dtype
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundSignificantDigits"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundSignificantDigits.fit"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundSignificantDigits.transform"><code class="docutils literal notranslate"><span class="pre">RoundSignificantDigits.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundDigits"><code class="docutils literal notranslate"><span class="pre">RoundDigits</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundDigits.fit"><code class="docutils literal notranslate"><span class="pre">RoundDigits.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.data_cleaning.RoundDigits.transform"><code class="docutils literal notranslate"><span class="pre">RoundDigits.transform()</span></code></a></li>
 </ul>
 </li>
 </ul>

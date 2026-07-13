@@ -515,7 +515,7 @@
 <h2>1. Import Libraries<a class="headerlink" href="#1.-Import-Libraries" title="Link to this heading">#</a></h2>
 <p>Import the necessary libraries including gators transformers for comprehensive feature engineering.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
@@ -533,7 +533,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">IsNull</span><span class="p">,</span>
     <span class="n">ComparisonFeatures</span><span class="p">,</span>
-    <span class="n">GroupScalingFeatures</span>
+    <span class="n">GroupStatisticsFeatures</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_dt</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">TimeBinFeatures</span><span class="p">,</span>
@@ -562,12 +562,12 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load transaction and identity datasets</span>
-<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/fraud/train_transaction.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
-<span class="n">identity_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/fraud/train_identity.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/fraud/train_transaction.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">identity_train</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/fraud/train_identity.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">identity_train</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;TransactionID&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
 
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/fraud/test_transaction.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
-<span class="n">identity_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../kaggle/fraud/test_identity.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/fraud/test_transaction.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+<span class="n">identity_test</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/fraud/test_identity.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
 <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">identity_test</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;TransactionID&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
 
 <span class="c1"># Separate target variable and IDs</span>
@@ -632,8 +632,8 @@ Features: 432
 <li><p><strong>ComparisonFeatures</strong>: Compare purchaser vs recipient email domains (mismatches indicate potential fraud)</p></li>
 </ul>
 </section>
-<section id="Group-Aggregation-Features:">
-<h3>Group Aggregation Features:<a class="headerlink" href="#Group-Aggregation-Features:" title="Link to this heading">#</a></h3>
+<section id="Group-Statistics-Features:">
+<h3>Group Statistics Features:<a class="headerlink" href="#Group-Statistics-Features:" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>GroupRatioFeatures</strong>: Calculate ratio of each transaction to group statistics</p>
 <ul>
@@ -747,8 +747,8 @@ Features: 432
         <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)),</span>
 
-    <span class="c1"># 7. Group aggregation features (velocity features)</span>
-    <span class="p">(</span><span class="s1">&#39;GroupScalingFeatures&#39;</span><span class="p">,</span> <span class="n">GroupScalingFeatures</span><span class="p">(</span>
+    <span class="c1"># 7. Group statistics features</span>
+    <span class="p">(</span><span class="s1">&#39;GroupStatisticsFeatures&#39;</span><span class="p">,</span> <span class="n">GroupStatisticsFeatures</span><span class="p">(</span>
         <span class="n">subset</span><span class="o">=</span><span class="n">subset_numeric</span><span class="p">,</span>
         <span class="n">by</span><span class="o">=</span><span class="n">string_columns</span><span class="p">,</span>
         <span class="n">func</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;minmax&#39;</span><span class="p">]</span>
@@ -792,49 +792,49 @@ Features: 432
 Building feature engineering pipeline...
 
 Fitting and transforming training data...
-[Pipeline] Fitting and transforming step 1/18: IsNull
-[Pipeline] Fitting and transforming step 2/18: DurationToDatetime
-[Pipeline] Fitting and transforming step 3/18: dt_timebin
-[Pipeline] Fitting and transforming step 4/18: dt_cyclic
-[Pipeline] Fitting and transforming step 5/18: dt_business
-[Pipeline] Fitting and transforming step 6/18: dt_holiday
-[Pipeline] Fitting and transforming step 7/18: dt_ordinal
-[Pipeline] Fitting and transforming step 8/18: NumericImputer
-[Pipeline] Fitting and transforming step 9/18: StringImputer
-[Pipeline] Fitting and transforming step 10/18: RareCategoryEncoder
-[Pipeline] Fitting and transforming step 11/18: Split
-[Pipeline] Fitting and transforming step 12/18: ComparisonFeatures
-[Pipeline] Fitting and transforming step 13/18: GeometricDiscretizer
-[Pipeline] Fitting and transforming step 14/18: GroupScalingFeatures
-[Pipeline] Fitting and transforming step 15/18: InteractionFeatures
-[Pipeline] Fitting and transforming step 16/18: WOEEncoder
-[Pipeline] Fitting and transforming step 17/18: DropConstantColumns
-[Pipeline] Fitting and transforming step 18/18: CorrelationFilter
+[Pipeline] fit+transform   1/18 · IsNull  |  in: rows=590540  cols=432  nulls=115523073  →  out: rows=590540  cols=864  nulls=115523073  (0.003s)
+[Pipeline] fit+transform   2/18 · DurationToDatetime  |  in: rows=590540  cols=864  nulls=115523073  →  out: rows=590540  cols=864  nulls=115523073  (0.002s)
+[Pipeline] fit+transform   3/18 · dt_timebin  |  in: rows=590540  cols=864  nulls=115523073  →  out: rows=590540  cols=866  nulls=115523073  (0.031s)
+[Pipeline] fit+transform   4/18 · dt_cyclic  |  in: rows=590540  cols=866  nulls=115523073  →  out: rows=590540  cols=898  nulls=115523073  (0.020s)
+[Pipeline] fit+transform   5/18 · dt_business  |  in: rows=590540  cols=898  nulls=115523073  →  out: rows=590540  cols=901  nulls=115523073  (0.023s)
+[Pipeline] fit+transform   6/18 · dt_holiday  |  in: rows=590540  cols=901  nulls=115523073  →  out: rows=590540  cols=904  nulls=115523073  (0.128s)
+[Pipeline] fit+transform   7/18 · dt_ordinal  |  in: rows=590540  cols=904  nulls=115523073  →  out: rows=590540  cols=907  nulls=115523073  (0.008s)
+[Pipeline] fit+transform   8/18 · NumericImputer  |  in: rows=590540  cols=907  nulls=115523073  →  out: rows=590540  cols=907  nulls=11344179  (0.071s)
+[Pipeline] fit+transform   9/18 · StringImputer  |  in: rows=590540  cols=907  nulls=11344179  →  out: rows=590540  cols=907  nulls=0  (0.014s)
+[Pipeline] fit+transform   10/18 · RareCategoryEncoder  |  in: rows=590540  cols=907  nulls=0  →  out: rows=590540  cols=907  nulls=0  (0.283s)
+[Pipeline] fit+transform   11/18 · Split  |  in: rows=590540  cols=907  nulls=0  →  out: rows=590540  cols=913  nulls=0  (0.030s)
+[Pipeline] fit+transform   12/18 · ComparisonFeatures  |  in: rows=590540  cols=913  nulls=0  →  out: rows=590540  cols=917  nulls=0  (0.003s)
+[Pipeline] fit+transform   13/18 · GeometricDiscretizer  |  in: rows=590540  cols=917  nulls=0  →  out: rows=590540  cols=917  nulls=0  (0.011s)
+[Pipeline] fit+transform   14/18 · GroupStatisticsFeatures  |  in: rows=590540  cols=917  nulls=0  →  out: rows=590540  cols=2051  nulls=0  (10.469s)
+[Pipeline] fit+transform   15/18 · InteractionFeatures  |  in: rows=590540  cols=2051  nulls=0  →  out: rows=590540  cols=2402  nulls=0  (6.207s)
+[Pipeline] fit+transform   16/18 · WOEEncoder  |  in: rows=590540  cols=2402  nulls=0  →  out: rows=590540  cols=2402  nulls=0  (30.095s)
+[Pipeline] fit+transform   17/18 · DropConstantColumns  |  in: rows=590540  cols=2402  nulls=0  →  out: rows=590540  cols=2349  nulls=0  (4.650s)
+[Pipeline] fit+transform   18/18 · CorrelationFilter  |  in: rows=590540  cols=2349  nulls=0  →  out: rows=590540  cols=249  nulls=0  (7.314s)
 
 Transforming test data...
-[Pipeline] Transforming step 1/18: IsNull
-[Pipeline] Transforming step 2/18: DurationToDatetime
-[Pipeline] Transforming step 3/18: dt_timebin
-[Pipeline] Transforming step 4/18: dt_cyclic
-[Pipeline] Transforming step 5/18: dt_business
-[Pipeline] Transforming step 6/18: dt_holiday
-[Pipeline] Transforming step 7/18: dt_ordinal
-[Pipeline] Transforming step 8/18: NumericImputer
-[Pipeline] Transforming step 9/18: StringImputer
-[Pipeline] Transforming step 10/18: RareCategoryEncoder
-[Pipeline] Transforming step 11/18: Split
-[Pipeline] Transforming step 12/18: ComparisonFeatures
-[Pipeline] Transforming step 13/18: GeometricDiscretizer
-[Pipeline] Transforming step 14/18: GroupScalingFeatures
-[Pipeline] Transforming step 15/18: InteractionFeatures
-[Pipeline] Transforming step 16/18: WOEEncoder
-[Pipeline] Transforming step 17/18: DropConstantColumns
-[Pipeline] Transforming step 18/18: CorrelationFilter
+[Pipeline] transform   1/18 · IsNull  |  in: rows=506691  cols=432  nulls=90186908  →  out: rows=506691  cols=864  nulls=90186908  (0.006s)
+[Pipeline] transform   2/18 · DurationToDatetime  |  in: rows=506691  cols=864  nulls=90186908  →  out: rows=506691  cols=864  nulls=90186908  (0.005s)
+[Pipeline] transform   3/18 · dt_timebin  |  in: rows=506691  cols=864  nulls=90186908  →  out: rows=506691  cols=866  nulls=90186908  (0.024s)
+[Pipeline] transform   4/18 · dt_cyclic  |  in: rows=506691  cols=866  nulls=90186908  →  out: rows=506691  cols=898  nulls=90186908  (0.021s)
+[Pipeline] transform   5/18 · dt_business  |  in: rows=506691  cols=898  nulls=90186908  →  out: rows=506691  cols=901  nulls=90186908  (0.017s)
+[Pipeline] transform   6/18 · dt_holiday  |  in: rows=506691  cols=901  nulls=90186908  →  out: rows=506691  cols=904  nulls=90186908  (0.036s)
+[Pipeline] transform   7/18 · dt_ordinal  |  in: rows=506691  cols=904  nulls=90186908  →  out: rows=506691  cols=907  nulls=90186908  (0.009s)
+[Pipeline] transform   8/18 · NumericImputer  |  in: rows=506691  cols=907  nulls=90186908  →  out: rows=506691  cols=907  nulls=9162775  (0.071s)
+[Pipeline] transform   9/18 · StringImputer  |  in: rows=506691  cols=907  nulls=9162775  →  out: rows=506691  cols=907  nulls=0  (0.016s)
+[Pipeline] transform   10/18 · RareCategoryEncoder  |  in: rows=506691  cols=907  nulls=0  →  out: rows=506691  cols=907  nulls=0  (0.018s)
+[Pipeline] transform   11/18 · Split  |  in: rows=506691  cols=907  nulls=0  →  out: rows=506691  cols=913  nulls=0  (0.027s)
+[Pipeline] transform   12/18 · ComparisonFeatures  |  in: rows=506691  cols=913  nulls=0  →  out: rows=506691  cols=917  nulls=0  (0.002s)
+[Pipeline] transform   13/18 · GeometricDiscretizer  |  in: rows=506691  cols=917  nulls=0  →  out: rows=506691  cols=917  nulls=0  (0.011s)
+[Pipeline] transform   14/18 · GroupStatisticsFeatures  |  in: rows=506691  cols=917  nulls=0  →  out: rows=506691  cols=2051  nulls=0  (8.775s)
+[Pipeline] transform   15/18 · InteractionFeatures  |  in: rows=506691  cols=2051  nulls=0  →  out: rows=506691  cols=2402  nulls=0  (4.965s)
+[Pipeline] transform   16/18 · WOEEncoder  |  in: rows=506691  cols=2402  nulls=0  →  out: rows=506691  cols=2402  nulls=0  (0.633s)
+[Pipeline] transform   17/18 · DropConstantColumns  |  in: rows=506691  cols=2402  nulls=0  →  out: rows=506691  cols=2349  nulls=0  (0.003s)
+[Pipeline] transform   18/18 · CorrelationFilter  |  in: rows=506691  cols=2349  nulls=0  →  out: rows=506691  cols=249  nulls=0  (0.003s)
 
 ============================================================
 Original features: 432
-Engineered features: 229
-Feature increase: +-203 features
+Engineered features: 249
+Feature increase: +-183 features
 ============================================================
 </pre></div></div>
 </div>
@@ -895,7 +895,7 @@ Fraud rate: 3.50%
 
 Training LightGBM model...
 ============================================================
-Training accuracy: 0.9801
+Training accuracy: 0.9802
 ============================================================
 
 Model training completed successfully!
@@ -958,7 +958,7 @@ Top 20 Most Important Features for Fraud Detection:
   white-space: pre-wrap;
 }
 </style>
-<small>shape: (20, 5)</small><table border="1" class="dataframe"><thead><tr><th>rank</th><th>feature</th><th>importance</th><th>importance_norm</th><th>is_engineered</th></tr><tr><td>u32</td><td>str</td><td>i32</td><td>f64</td><td>bool</td></tr></thead><tbody><tr><td>1</td><td>&quot;card1&quot;</td><td>1625</td><td>1.0</td><td>false</td></tr><tr><td>2</td><td>&quot;card2&quot;</td><td>1353</td><td>0.832615</td><td>false</td></tr><tr><td>3</td><td>&quot;addr1&quot;</td><td>1148</td><td>0.706462</td><td>false</td></tr><tr><td>4</td><td>&quot;C1&quot;</td><td>1072</td><td>0.659692</td><td>false</td></tr><tr><td>5</td><td>&quot;D1&quot;</td><td>912</td><td>0.561231</td><td>false</td></tr><tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr><tr><td>16</td><td>&quot;P_emaildomain__TransactionAmt_…</td><td>353</td><td>0.217231</td><td>true</td></tr><tr><td>17</td><td>&quot;id_03__minmax_R_emaildomain&quot;</td><td>325</td><td>0.2</td><td>true</td></tr><tr><td>18</td><td>&quot;C5&quot;</td><td>320</td><td>0.196923</td><td>false</td></tr><tr><td>19</td><td>&quot;card6&quot;</td><td>309</td><td>0.190154</td><td>false</td></tr><tr><td>20</td><td>&quot;id_20&quot;</td><td>304</td><td>0.187077</td><td>false</td></tr></tbody></table></div></div>
+<small>shape: (20, 5)</small><table border="1" class="dataframe"><thead><tr><th>rank</th><th>feature</th><th>importance</th><th>importance_norm</th><th>is_engineered</th></tr><tr><td>u32</td><td>str</td><td>i32</td><td>f64</td><td>bool</td></tr></thead><tbody><tr><td>1</td><td>&quot;card1&quot;</td><td>1567</td><td>1.0</td><td>false</td></tr><tr><td>2</td><td>&quot;card2&quot;</td><td>1262</td><td>0.805361</td><td>false</td></tr><tr><td>3</td><td>&quot;C1&quot;</td><td>1162</td><td>0.741544</td><td>false</td></tr><tr><td>4</td><td>&quot;addr1&quot;</td><td>1149</td><td>0.733248</td><td>false</td></tr><tr><td>5</td><td>&quot;D1&quot;</td><td>884</td><td>0.564135</td><td>false</td></tr><tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr><tr><td>16</td><td>&quot;P_emaildomain__TransactionAmt_…</td><td>324</td><td>0.206765</td><td>true</td></tr><tr><td>17</td><td>&quot;D3&quot;</td><td>321</td><td>0.20485</td><td>false</td></tr><tr><td>18</td><td>&quot;D11&quot;</td><td>303</td><td>0.193363</td><td>false</td></tr><tr><td>19</td><td>&quot;id_20&quot;</td><td>299</td><td>0.19081</td><td>false</td></tr><tr><td>20</td><td>&quot;C5&quot;</td><td>288</td><td>0.183791</td><td>false</td></tr></tbody></table></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -967,8 +967,8 @@ Top 20 Most Important Features for Fraud Detection:
 <div class="highlight"><pre>
 
 ==========================================================================================
-Engineered features in top 20: 4
-Original features in top 20: 16
+Engineered features in top 20: 3
+Original features in top 20: 17
 
 Top 10 Engineered Features:
 ==========================================================================================
@@ -985,7 +985,7 @@ Top 10 Engineered Features:
   white-space: pre-wrap;
 }
 </style>
-<small>shape: (10, 5)</small><table border="1" class="dataframe"><thead><tr><th>rank</th><th>feature</th><th>importance</th><th>importance_norm</th><th>is_engineered</th></tr><tr><td>u32</td><td>str</td><td>i32</td><td>f64</td><td>bool</td></tr></thead><tbody><tr><td>7</td><td>&quot;TransactionDT__datetime__days_…</td><td>820</td><td>0.504615</td><td>true</td></tr><tr><td>8</td><td>&quot;TransactionDT__datetime__days_…</td><td>738</td><td>0.454154</td><td>true</td></tr><tr><td>16</td><td>&quot;P_emaildomain__TransactionAmt_…</td><td>353</td><td>0.217231</td><td>true</td></tr><tr><td>17</td><td>&quot;id_03__minmax_R_emaildomain&quot;</td><td>325</td><td>0.2</td><td>true</td></tr><tr><td>22</td><td>&quot;id_09__minmax_P_emaildomain&quot;</td><td>268</td><td>0.164923</td><td>true</td></tr><tr><td>23</td><td>&quot;id_07__minmax_P_emaildomain&quot;</td><td>255</td><td>0.156923</td><td>true</td></tr><tr><td>26</td><td>&quot;TransactionDT__datetime__hour_…</td><td>238</td><td>0.146462</td><td>true</td></tr><tr><td>27</td><td>&quot;TransactionDT__datetime__hour_…</td><td>232</td><td>0.142769</td><td>true</td></tr><tr><td>35</td><td>&quot;id_05__minmax_P_emaildomain&quot;</td><td>167</td><td>0.102769</td><td>true</td></tr><tr><td>38</td><td>&quot;card4__P_emaildomain__split_._…</td><td>146</td><td>0.089846</td><td>true</td></tr></tbody></table></div></div>
+<small>shape: (10, 5)</small><table border="1" class="dataframe"><thead><tr><th>rank</th><th>feature</th><th>importance</th><th>importance_norm</th><th>is_engineered</th></tr><tr><td>u32</td><td>str</td><td>i32</td><td>f64</td><td>bool</td></tr></thead><tbody><tr><td>7</td><td>&quot;TransactionDT__datetime__days_…</td><td>797</td><td>0.508615</td><td>true</td></tr><tr><td>8</td><td>&quot;TransactionDT__datetime__days_…</td><td>782</td><td>0.499043</td><td>true</td></tr><tr><td>16</td><td>&quot;P_emaildomain__TransactionAmt_…</td><td>324</td><td>0.206765</td><td>true</td></tr><tr><td>21</td><td>&quot;minmax_id_07__per_P_emaildomai…</td><td>257</td><td>0.164008</td><td>true</td></tr><tr><td>22</td><td>&quot;TransactionDT__datetime__hour_…</td><td>251</td><td>0.160179</td><td>true</td></tr><tr><td>24</td><td>&quot;minmax_id_09__per_P_emaildomai…</td><td>237</td><td>0.151244</td><td>true</td></tr><tr><td>25</td><td>&quot;TransactionDT__datetime__hour_…</td><td>221</td><td>0.141034</td><td>true</td></tr><tr><td>33</td><td>&quot;card4__P_emaildomain__split_._…</td><td>167</td><td>0.106573</td><td>true</td></tr><tr><td>35</td><td>&quot;minmax_id_03__per_TransactionA…</td><td>158</td><td>0.10083</td><td>true</td></tr><tr><td>39</td><td>&quot;zscore_id_02__per_id_31&quot;</td><td>142</td><td>0.090619</td><td>true</td></tr></tbody></table></div></div>
 </div>
 </section>
 <section id="Summary">
@@ -1016,7 +1016,7 @@ Top 10 Engineered Features:
 <li><p>Mismatches are strong fraud indicators</p></li>
 </ul>
 </li>
-<li><p><strong>Group Aggregation Features</strong> (Velocity Features):</p>
+<li><p><strong>Group Statistics Features</strong> (Velocity Features):</p>
 <ul class="simple">
 <li><p>Calculated ratios to card/device/email group statistics</p></li>
 <li><p>Example: “transaction amount / mean amount for this card”</p></li>
@@ -1043,7 +1043,7 @@ Top 10 Engineered Features:
 <h3>Feature Engineering Impact:<a class="headerlink" href="#Feature-Engineering-Impact:" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Original features</strong>: 434</p></li>
-<li><p><strong>Engineered features</strong>: ~1,500+ (after datetime, group aggregations, interactions)</p></li>
+<li><p><strong>Engineered features</strong>: ~1,500+ (after datetime, group statistics, interactions)</p></li>
 <li><p><strong>After feature selection</strong>: ~800 features</p></li>
 <li><p><strong>Feature increase</strong>: ~85% more predictive features</p></li>
 </ul>
@@ -1065,7 +1065,7 @@ Top 10 Engineered Features:
 <h3>Key Insights:<a class="headerlink" href="#Key-Insights:" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Engineered features (with <code class="docutils literal notranslate"><span class="pre">__</span></code> separator) comprise a significant portion of top features</p></li>
-<li><p>Group aggregation features (velocity features) are highly predictive</p></li>
+<li><p>Group statistics features are highly predictive</p></li>
 <li><p>Missing value patterns are strong fraud signals</p></li>
 <li><p>Temporal patterns (hour, day) indicate fraud behavior</p></li>
 <li><p>Email and device mismatches flag suspicious transactions</p></li>
@@ -1129,7 +1129,7 @@ Top 10 Engineered Features:
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#DateTime-Features:">DateTime Features:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Transaction-Amount-Features:">Transaction Amount Features:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Email-Domain-Features:">Email Domain Features:</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Group-Aggregation-Features:">Group Aggregation Features:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Group-Statistics-Features:">Group Statistics Features:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Data-Cleaning:">Data Cleaning:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Encoding:">Encoding:</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Feature-Selection:">Feature Selection:</a></li>
