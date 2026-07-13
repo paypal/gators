@@ -10,6 +10,7 @@ from .drop_near_constant_columns import DropNearConstantColumns
 from .high_cardinality_filter import HighCardinalityFilter
 from .rename_columns import RenameColumns
 from .replace import Replace
+from .round_digits import RoundDigits
 from .round_significant_digits import RoundSignificantDigits
 from .variance_filter import VarianceFilter
 
@@ -28,4 +29,5 @@ __all__ = [
     "DropNearConstantColumns",
     "HighCardinalityFilter",
     "RoundSignificantDigits",
+    "RoundDigits",
 ]
