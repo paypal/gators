@@ -37,7 +37,9 @@ class RoundDigits(_BaseTransformer):
         if self.subset is None:
             self.subset = [col for col in X.columns if X[col].dtype.is_numeric()]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__round_{self.n_digits}digits" for col in self.subset}
+            self._column_mapping = {
+                col: f"{col}__round_{self.n_digits}digits" for col in self.subset
+            }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
