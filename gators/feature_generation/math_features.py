@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -30,9 +28,9 @@ class MathFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    groups : List[List[str]]
+    groups : list[list[str]]
         List of groups of column names to apply operations on.
-    operations : List[str]
+    func : list[str]
         List of operations to apply to each group of columns. Available operations:
 
         - 'sum': Sum of all columns
@@ -55,7 +53,7 @@ class MathFeatures(_BaseTransformer):
         division with automatic handling of division by zero and null values.
     drop_columns : bool, optional
         Whether to drop the original columns after creating the new features, by default False.
-    new_column_names : Optional[List[str]], optional
+    new_column_names : list[str]], optional
         List of new column names for the created features, by default None.
 
     Examples
@@ -70,9 +68,9 @@ class MathFeatures(_BaseTransformer):
 
     **Example 1: drop_columns=False**
 
-    >>> transformer = MathFeatures(groups=[['A', 'B'], ['B', 'C']], operations=['sum', 'mean'])
+    >>> transformer = MathFeatures(groups=[['A', 'B'], ['B', 'C']], func=['sum', 'mean'])
     >>> transformer.fit(X)
-    MathFeatures(groups=[['A', 'B'], ['B', 'C']], operations=['sum', 'mean'])
+    MathFeatures(groups=[['A', 'B'], ['B', 'C']], func=['sum', 'mean'])
     >>> result = transformer.transform(X)
     >>> result
     shape: (4, 6)
@@ -88,9 +86,9 @@ class MathFeatures(_BaseTransformer):
 
     **Example 2: drop_columns=True**
 
-    >>> transformer = MathFeatures(groups=[['A', 'B'], ['B', 'C']], operations=['sum'], drop_columns=True)
+    >>> transformer = MathFeatures(groups=[['A', 'B'], ['B', 'C']], func=['sum'], drop_columns=True)
     >>> transformer.fit(X)
-    MathFeatures(groups=[['A', 'B'], ['B', 'C']], operations=['sum'], drop_columns=True)
+    MathFeatures(groups=[['A', 'B'], ['B', 'C']], func=['sum'], drop_columns=True)
     >>> result = transformer.transform(X)
     >>> result
     shape: (4, 2)
@@ -105,29 +103,27 @@ class MathFeatures(_BaseTransformer):
     └────────┴────────┘
     """
 
-    groups: List[List[str]]
-    operations: List[str]
+    groups: list[list[str]]
+    func: list[str]
     drop_columns: bool = False
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = {}
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = {}
 
-    @field_validator("operations")
-    def check_operators(cls, operations):
-        for operation in operations:
-            if operation not in list(OPERATION_FUNCTIONS.keys()):
-                raise ValueError(
-                    f"{operation} is not in the predefined list of datetime functions."
-                )
-        return operations
+    @field_validator("func")
+    def check_func(cls, func):
+        for f in func:
+            if f not in list(OPERATION_FUNCTIONS.keys()):
+                raise ValueError(f"{f} is not in the predefined list of datetime functions.")
+        return func
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "MathFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "MathFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns
@@ -158,7 +154,7 @@ class MathFeatures(_BaseTransformer):
         new_columns = []
         for group in self.groups:
             name = f"{'_'.join(group)}"
-            for op in self.operations:
+            for op in self.func:
                 new = f"{self._column_mapping[name]}_{op}"
                 new_columns.append(
                     OPERATION_FUNCTIONS[op]([pl.col(col) for col in group]).alias(new)

@@ -1,5 +1,3 @@
-from typing import Dict, Optional
-
 import polars as pl
 from pydantic import PrivateAttr
 
@@ -12,7 +10,7 @@ class RenameColumns(_BaseTransformer):
 
     Parameters
     ----------
-    column_mapping : Dict[str, str]
+    column_mapping : dict[str, str]
         Dictionary mapping original column names to new column names.
 
     Examples
@@ -43,17 +41,17 @@ class RenameColumns(_BaseTransformer):
     └────────┴────────┴────────┘
     """
 
-    column_mapping: Dict[str, str]
-    _column_mapping: Dict[str, str] = PrivateAttr()
+    column_mapping: dict[str, str]
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "RenameColumns":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RenameColumns":
         """Fit the transformer by storing the column mapping.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

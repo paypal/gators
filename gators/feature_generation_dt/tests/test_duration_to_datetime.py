@@ -320,3 +320,28 @@ def test_fit_transform_consistency():
     result2 = transformer2.fit(X).transform(X)
 
     assert_frame_equal(result1, result2)
+
+
+def test_check_unit_invalid_raises_value_error():
+    """check_unit validator raises ValueError for unsupported unit."""
+    with pytest.raises(ValueError, match="not supported"):
+        DurationToDatetime.check_unit("invalid")
+
+
+def test_check_reference_date_invalid_raises_value_error():
+    """check_reference_date validator raises ValueError for non-str/datetime value."""
+    with pytest.raises(ValueError, match="must be a datetime object or string"):
+        DurationToDatetime.check_reference_date(12345)
+
+
+def test_fit_invalid_reference_date_type_raises():
+    """fit() raises ValueError when reference_date is not str or datetime (bypassing Pydantic)."""
+    transformer = DurationToDatetime.model_construct(
+        subset=["offset"],
+        reference_date=999,
+        unit="d",
+        drop_columns=False,
+    )
+    X = pl.DataFrame({"offset": [1.0]})
+    with pytest.raises(ValueError, match="must be a datetime object or string"):
+        transformer.fit(X)

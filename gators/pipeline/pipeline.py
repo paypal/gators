@@ -6,12 +6,18 @@ with Polars DataFrames. Unlike sklearn's Pipeline, it doesn't perform type
 conversion or validation that can cause issues with Polars DataFrames.
 """
 
-from typing import Any, List, Optional, Tuple
+import time
+from typing import Any
 
 import polars as pl
-from pydantic import ConfigDict
 
 from ..transformer._base_transformer import _BaseTransformer
+
+
+def _step_stats(X: pl.DataFrame) -> str:
+    """Return a compact stats string for a DataFrame (used by verbose mode)."""
+    n_nulls = sum(X.null_count().row(0))
+    return f"rows={len(X)}  cols={len(X.columns)}  nulls={n_nulls}"
 
 
 class Pipeline(_BaseTransformer):
@@ -24,11 +30,13 @@ class Pipeline(_BaseTransformer):
 
     Parameters
     ----------
-    steps : List[Tuple[str, Any]]
+    steps : list[tuple[ str, Any]]
         List of (name, transform) tuples that are chained in the order they
         are specified. Each transform must implement fit and transform methods.
     verbose : bool, default=False
-        If True, prints the name of each step as it's being executed.
+        If True, emits a one-line summary per step to stdout showing the step
+        name, row count, column count, total null count, and wall-clock time.
+        When ``False`` there is zero measurement overhead.
 
     Examples
     --------
@@ -46,10 +54,8 @@ class Pipeline(_BaseTransformer):
     >>> X_transformed = pipe.transform(X_train)
     """
 
-    steps: List[Tuple[str, Any]]
+    steps: list[tuple[str, Any]]
     verbose: bool = False
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def model_post_init(self, __context: Any) -> None:
         """Called after Pydantic model initialization to validate steps."""
@@ -116,7 +122,7 @@ class Pipeline(_BaseTransformer):
         name, transformer = self.steps[ind]
         return transformer
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Pipeline":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Pipeline":
         """Fit all transformers in the pipeline.
 
         Fits each transformer sequentially, transforming the data before
@@ -127,7 +133,7 @@ class Pipeline(_BaseTransformer):
         ----------
         X : pl.DataFrame
             Input DataFrame to fit.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series for supervised transformers (e.g., WOEEncoder).
 
         Returns
@@ -139,7 +145,8 @@ class Pipeline(_BaseTransformer):
 
         for step_idx, (name, transformer) in enumerate(self.steps):
             if self.verbose:
-                print(f"[Pipeline] Fitting step {step_idx + 1}/{len(self.steps)}: {name}")
+                t0 = time.perf_counter()
+                in_stats = _step_stats(X_transformed)
 
             # Fit the transformer
             transformer.fit(X_transformed, y=y)
@@ -147,6 +154,13 @@ class Pipeline(_BaseTransformer):
             # Transform for the next step (except for the last step in fit)
             if step_idx < len(self.steps) - 1:
                 X_transformed = transformer.transform(X_transformed)
+
+            if self.verbose:
+                elapsed = time.perf_counter() - t0
+                print(
+                    f"[Pipeline] fit   {step_idx + 1}/{len(self.steps)} · {name}"
+                    f"  |  {in_stats}  ({elapsed:.3f}s)"
+                )
 
         return self
 
@@ -167,13 +181,22 @@ class Pipeline(_BaseTransformer):
 
         for step_idx, (name, transformer) in enumerate(self.steps):
             if self.verbose:
-                print(f"[Pipeline] Transforming step {step_idx + 1}/{len(self.steps)}: {name}")
+                t0 = time.perf_counter()
+                in_stats = _step_stats(X_transformed)
 
             X_transformed = transformer.transform(X_transformed)
 
+            if self.verbose:
+                elapsed = time.perf_counter() - t0
+                out_stats = _step_stats(X_transformed)
+                print(
+                    f"[Pipeline] transform   {step_idx + 1}/{len(self.steps)} · {name}"
+                    f"  |  in: {in_stats}  →  out: {out_stats}  ({elapsed:.3f}s)"
+                )
+
         return X_transformed
 
-    def fit_transform(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> pl.DataFrame:
+    def fit_transform(self, X: pl.DataFrame, y: pl.Series | None = None) -> pl.DataFrame:
         """Fit all transformers and transform the data.
 
         Fits and transforms each transformer sequentially. This is more
@@ -183,7 +206,7 @@ class Pipeline(_BaseTransformer):
         ----------
         X : pl.DataFrame
             Input DataFrame to fit and transform.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series for supervised transformers.
 
         Returns
@@ -195,15 +218,19 @@ class Pipeline(_BaseTransformer):
 
         for step_idx, (name, transformer) in enumerate(self.steps):
             if self.verbose:
+                t0 = time.perf_counter()
+                in_stats = _step_stats(X_transformed)
+
+            # Fit and transform the data, honouring any custom fit_transform
+            X_transformed = transformer.fit_transform(X_transformed, y=y)
+
+            if self.verbose:
+                elapsed = time.perf_counter() - t0
+                out_stats = _step_stats(X_transformed)
                 print(
-                    f"[Pipeline] Fitting and transforming step {step_idx + 1}/{len(self.steps)}: {name}"
+                    f"[Pipeline] fit+transform   {step_idx + 1}/{len(self.steps)} · {name}"
+                    f"  |  in: {in_stats}  →  out: {out_stats}  ({elapsed:.3f}s)"
                 )
-
-            # Fit the transformer
-            transformer.fit(X_transformed, y=y)
-
-            # Transform the data
-            X_transformed = transformer.transform(X_transformed)
 
         return X_transformed
 
@@ -248,6 +275,45 @@ class Pipeline(_BaseTransformer):
                 out[f"{name}__{key}"] = value
 
         return out
+
+    def clone(self) -> "Pipeline":
+        """Return a new unfitted pipeline with the same hyperparameters.
+
+        Each transformer is re-instantiated using only its public constructor
+        parameters (obtained via ``get_params()``).  Private attributes that
+        hold fitted state (e.g. ``_statistics``, ``mapping_``) are not copied,
+        so the returned pipeline is guaranteed to be unfitted.
+
+        This is the recommended alternative to ``copy.deepcopy`` for
+        cross-validation workflows where you need multiple independent copies
+        of the same pipeline configuration.
+
+        Returns
+        -------
+        Pipeline
+            A new, unfitted ``Pipeline`` instance with identical hyperparameters.
+
+        Examples
+        --------
+        >>> from gators.pipeline import Pipeline
+        >>> from gators.imputers import NumericImputer
+        >>> from gators.scalers import StandardScaler
+
+        >>> pipe = Pipeline(steps=[
+        ...     ('impute', NumericImputer(strategy='median')),
+        ...     ('scale', StandardScaler()),
+        ... ])
+        >>> pipe_clone = pipe.clone()
+        >>> pipe_clone is pipe
+        False
+        >>> pipe_clone.named_steps['impute'] is pipe.named_steps['impute']
+        False
+        """
+        cloned_steps = [
+            (name, type(transformer)(**transformer.get_params()))
+            for name, transformer in self.steps
+        ]
+        return Pipeline(steps=cloned_steps, verbose=self.verbose)
 
     def set_params(self, **params):
         """Set parameters for this estimator.

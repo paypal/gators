@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Union
-
 import numpy as np
 import polars as pl
 from pydantic import PositiveInt, field_validator
@@ -18,12 +16,12 @@ class QuantileDiscretizer(_BaseDiscretizer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to discretize. If None, all numeric columns are selected.
     num_bins : PositiveInt, default=5
         Number of quantile-based bins to create (used if quantiles not specified).
         Ignored if quantiles parameter is provided.
-    quantiles : Optional[List[float]], default=None
+    quantiles : list[float]], default=None
         Explicit list of quantiles (0.0-1.0) to use as bin boundaries.
         If None, equally-spaced quantiles are generated based on num_bins.
         Example: [0.25, 0.5, 0.75] creates quartile bins.
@@ -31,7 +29,7 @@ class QuantileDiscretizer(_BaseDiscretizer):
         Decimal places to round bin edges for labels.
     inplace : bool, default=True
         If True, replace original columns with discretized values.
-        If False, create new columns with suffix '__dic_quantile'.
+        If False, create new columns with suffix '__discretize_quant'.
     drop_columns : bool, default=True
         If inplace=False, whether to drop the original columns after discretizing.
         Ignored when inplace=True.
@@ -104,7 +102,7 @@ class QuantileDiscretizer(_BaseDiscretizer):
     >>> transformed = discretizer_tertile.transform(X)
     """
 
-    quantiles: Optional[List[float]] = None
+    quantiles: list[float] | None = None
     handle_duplicates: str = "drop"
 
     @field_validator("quantiles")
@@ -124,14 +122,14 @@ class QuantileDiscretizer(_BaseDiscretizer):
             raise ValueError("handle_duplicates must be 'drop' or 'raise'")
         return handle_duplicates
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "QuantileDiscretizer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "QuantileDiscretizer":
         """Fit the discretizer by computing quantile-based bin boundaries.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -199,6 +197,6 @@ class QuantileDiscretizer(_BaseDiscretizer):
         self._labels = generate_labels(self._bins, self.rounding)
 
         # Create column mapping
-        self._column_mapping = {col: f"{col}__dic_quantile" for col in self.subset}
+        self._column_mapping = {col: f"{col}__discretize_quant" for col in self.subset}
 
         return self

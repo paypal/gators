@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import Literal
 
 import polars as pl
 from pydantic import field_validator
@@ -26,12 +26,12 @@ class ComparisonFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset_a : List[str]
+    subset_a : list[str]
         List of column names for the left side of comparisons (or the only column for unary operators).
-    subset_b : List[str]
+    subset_b : list[str]
         List of column names for the right side of comparisons.
         For unary operators ('is_null', 'is_not_null'), these values are ignored.
-    operators : List[Literal[">", "<", ">=", "<=", "==", "!=", "is_null", "is_not_null"]]
+    operators : list[Literal[">", "<", ">=", "<=", "==", "!=", "is_null", "is_not_null"]]
         List of comparison operators to apply. Must match length of columns.
         Unary operators: 'is_null', 'is_not_null' (only use subset_a)
         Binary operators: '>', '<', '>=', '<=', '==', '!=' (use both subset_a and subset_b)
@@ -136,9 +136,9 @@ class ComparisonFeatures(_BaseTransformer):
     └──────┴─────────┘
     """
 
-    subset_a: List[str]
-    subset_b: List[str]
-    operators: List[Literal[">", "<", ">=", "<=", "==", "!=", "is_null", "is_not_null"]]
+    subset_a: list[str]
+    subset_b: list[str]
+    operators: list[Literal[">", "<", ">=", "<=", "==", "!=", "is_null", "is_not_null"]]
     drop_columns: bool = False
 
     @field_validator("operators")
@@ -170,14 +170,14 @@ class ComparisonFeatures(_BaseTransformer):
 
         return operators
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "ComparisonFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ComparisonFeatures":
         """Fit the transformer (no-op, but required for sklearn compatibility).
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

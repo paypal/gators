@@ -276,3 +276,13 @@ class TestPatternDetector:
         transformer2.fit(X)
         result2 = transformer2.transform(X)
         assert result.equals(result2)
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    import polars as pl
+    from polars.testing import assert_frame_equal
+
+    X = pl.DataFrame({"text": ["hello@world.com", "noemail"]})
+    transformer = PatternDetector(patterns=["is_email"])
+    assert_frame_equal(transformer.transform(X), X)

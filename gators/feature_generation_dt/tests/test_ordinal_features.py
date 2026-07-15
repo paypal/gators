@@ -333,3 +333,10 @@ def test_date_type_conversion():
     assert "date_col__month" in result.columns
     assert result["date_col__year"].to_list() == [2024, 2024]
     assert result["date_col__month"].to_list() == [1, 6]
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"ts": [datetime(2024, 1, 15)]})
+    transformer = OrdinalFeatures(components=["year"])
+    assert_frame_equal(transformer.transform(X), X)

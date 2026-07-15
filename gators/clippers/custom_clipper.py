@@ -1,5 +1,3 @@
-from typing import Dict, Optional
-
 import polars as pl
 import polars.selectors as cs
 from pydantic import Field, field_validator
@@ -116,8 +114,8 @@ class CustomClipper(_BaseClipper):
     IQRClipper : Clip values based on interquartile range.
     """
 
-    lower_bounds: Optional[Dict[str, float]] = Field(default=None)
-    upper_bounds: Optional[Dict[str, float]] = Field(default=None)
+    lower_bounds: dict[str, float] | None = Field(default=None)
+    upper_bounds: dict[str, float] | None = Field(default=None)
 
     @field_validator("lower_bounds", "upper_bounds")
     @classmethod
@@ -132,7 +130,7 @@ class CustomClipper(_BaseClipper):
                 raise TypeError("All values in bounds must be numeric")
         return v
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CustomClipper":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CustomClipper":
         """Fit the clipper by identifying columns to clip.
 
         Parameters

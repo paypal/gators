@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -15,10 +13,10 @@ class CharacterStatistics(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of string columns to extract features from. If None, all string columns
         will be used.
-    features : List[str], default=["n_digits", "n_letters", "n_uppercase", "n_lowercase", "n_spaces", "n_special"]
+    features : list[str], default=["n_digits", "n_letters", "n_uppercase", "n_lowercase", "n_spaces", "n_special"]
         Character statistics to generate. Options:
 
         - "n_digits": Count of digit characters (0-9)
@@ -83,8 +81,8 @@ class CharacterStatistics(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    subset: Optional[List[str]] = None
-    features: List[str] = [
+    subset: list[str] | None = None
+    features: list[str] = [
         "n_digits",
         "n_letters",
         "n_uppercase",
@@ -116,14 +114,14 @@ class CharacterStatistics(_BaseTransformer):
                 )
         return features
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CharacterStatistics":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CharacterStatistics":
         """Fit the transformer by identifying string columns if not specified.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

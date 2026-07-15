@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import PrivateAttr, field_validator
 
@@ -57,11 +55,11 @@ class TimeWindowFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : List[str]
+    subset : list[str]
         List of numerical column names to aggregate over time windows.
     time_column : str
         Name of the datetime column to use for time-based windowing.
-    windows : List[str]
+    windows : list[str]
         List of time window strings. Supported formats:
 
         - '30m' = 30 minutes
@@ -70,10 +68,10 @@ class TimeWindowFeatures(_BaseTransformer):
         - '7d' = 7 days
         - '1M' = 1 month (30 days)
         - '1Y' = 1 year (365 days)
-    by : Optional[List[str]], default=None
+    by : list[str], default=None
         Optional list of columns to group by. Windows are computed within each group.
         Example: ['card1'] computes "transactions in last 24h for this card"
-    func : List[str], default=['count', 'mean']
+    func : list[str], default=['count', 'mean']
         List of aggregation functions to apply. Available options:
 
         - 'count': Count of rows in window
@@ -85,7 +83,7 @@ class TimeWindowFeatures(_BaseTransformer):
         - 'max': Maximum value in window
     drop_columns : bool, default=False
         Whether to drop the original numerical columns after creating features.
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         List of custom names for the window columns. If None, uses default naming pattern.
 
     Examples
@@ -155,15 +153,15 @@ class TimeWindowFeatures(_BaseTransformer):
     - Useful for velocity features, spending patterns, anomaly detection
     """
 
-    subset: List[str]
+    subset: list[str]
     time_column: str
-    windows: List[str]
-    by: Optional[List[str]] = None
-    func: List[str] = ["count", "mean"]
+    windows: list[str]
+    by: list[str] | None = None
+    func: list[str] = ["count", "mean"]
     drop_columns: bool = False
-    new_column_names: Optional[List[str]] = None
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
-    _converted_windows: Dict[str, str] = PrivateAttr(default_factory=dict)
+    new_column_names: list[str] | None = None
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _converted_windows: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("windows")
     def check_windows(cls, windows):
@@ -197,14 +195,14 @@ class TimeWindowFeatures(_BaseTransformer):
                 )
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "TimeWindowFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "TimeWindowFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

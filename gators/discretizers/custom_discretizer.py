@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from gators.discretizers._base_discretizer import _BaseDiscretizer, generate_labels
@@ -11,9 +9,9 @@ class CustomDiscretizer(_BaseDiscretizer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to discretize. If None, uses all columns in the bins dictionary.
-    bins : Dict[str, List[float]]
+    bins : dict[str, list[float]]
         Dictionary specifying bin edges for each column. Keys are column names, values are lists of bin boundaries.
         Use -np.inf and np.inf for open-ended bins.
     num_bins : PositiveInt, default=5
@@ -106,20 +104,18 @@ class CustomDiscretizer(_BaseDiscretizer):
     └─────┴─────┴───────────────┘
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     drop_columns: bool = True
-    bins: Dict[str, List[float]]
-    _labels: Dict[str, List[str]]
-    _column_mapping: Dict[str, str]
+    bins: dict[str, list[float]]
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CustomDiscretizer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CustomDiscretizer":
         """Fit the discretizer using predefined custom bins.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

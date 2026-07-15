@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 
 import polars as pl
 import pytest
@@ -29,7 +29,7 @@ def expected_X() -> pl.DataFrame:
 
 
 def test_contains_transform(sample_data, expected_X):
-    contains_dict: Dict[str, List[str]] = {
+    contains_dict: dict[str, list[str]] = {
         "column1": ["substring1", "substring2"],
         "column2": ["substring3"],
     }

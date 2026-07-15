@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import polars as pl
 from pydantic import ConfigDict, field_validator
@@ -47,7 +47,7 @@ class ScalarMathFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    operations : List[Dict[str, Any]]
+    operations : list[dict[str, Any]]
         List of operation dictionaries. Each operation creates one new feature column.
 
         Each operation dictionary must contain:
@@ -65,7 +65,7 @@ class ScalarMathFeatures(_BaseTransformer):
                 {'column': 'Temperature', 'op': '+', 'scalar': 273.15}
             ]
 
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         Names for the resulting feature columns. If provided, must have the same
         length as ``operations``. If None, column names are auto-generated in the format:
         ``{column}_{op_name}_{scalar}`` (e.g., 'Age_div_365', 'Price_mul_1.1')
@@ -198,11 +198,9 @@ class ScalarMathFeatures(_BaseTransformer):
     ConditionFeatures : For creating boolean features from conditions
     """
 
-    operations: List[Dict[str, Any]]
-    new_column_names: Optional[List[str]] = None
-    _generated_column_names: List[str] = []
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    operations: list[dict[str, Any]]
+    new_column_names: list[str] | None = None
+    _generated_column_names: list[str] = []
 
     @field_validator("operations")
     def validate_operations(cls, operations):
@@ -263,14 +261,14 @@ class ScalarMathFeatures(_BaseTransformer):
 
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[Any] = None) -> "ScalarMathFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ScalarMathFeatures":
         """Fit the transformer by generating column names if not provided.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[Any], default=None
+        y : pl.Series , default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

@@ -1,7 +1,7 @@
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, cast
 
 import polars as pl
-from pydantic import ConfigDict, field_validator
+from pydantic import field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -50,7 +50,7 @@ class ConditionFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    conditions : List[Dict[str, Any]]
+    conditions : list[dict[str, Any]]
         List of condition dictionaries. Each condition creates one boolean output column.
 
         Each condition dictionary must contain:
@@ -86,7 +86,7 @@ class ConditionFeatures(_BaseTransformer):
                 {'column': 'email', 'op': 'is_not_null'}
             ]
 
-    new_column_names : Optional[List[str]], default=None
+    new_column_names : list[str], default=None
         Names for the resulting boolean feature columns. If provided, must have the same
         length as ``conditions``. If None, column names are auto-generated in the format:
 
@@ -282,11 +282,9 @@ class ConditionFeatures(_BaseTransformer):
     RuleFeatures : For combining multiple conditions with AND/OR logic
     """
 
-    conditions: List[Dict[str, Any]]
-    new_column_names: Optional[List[str]] = None
-    _generated_column_names: List[str] = []
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    conditions: list[dict[str, Any]]
+    new_column_names: list[str] | None = None
+    _generated_column_names: list[str] = []
 
     @field_validator("conditions")
     def validate_conditions(cls, conditions):
@@ -360,14 +358,14 @@ class ConditionFeatures(_BaseTransformer):
 
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[Any] = None) -> "ConditionFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ConditionFeatures":
         """Fit the transformer by generating column names if not provided.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[Any], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

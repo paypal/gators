@@ -1,4 +1,4 @@
-from typing import Dict, List, Literal, Optional, Union
+from typing import Literal
 
 import polars as pl
 from pydantic import PrivateAttr
@@ -25,9 +25,9 @@ class NumericImputer(_BaseTransformer):
         - 'backward': Fill with the next non-null value (backward fill)
         - 'zero': Fill missing values with 0
         - 'one': Fill missing values with 1
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric columns to impute. If None, all numeric columns are selected.
-    value : Optional[Union[int, float]], default=None
+    value : int | float | None, default=None
         Value to use when strategy is 'constant'. Required when strategy='constant', ignored otherwise.
     inplace : bool, default=True
         If True, impute values in the original columns.
@@ -133,21 +133,21 @@ class NumericImputer(_BaseTransformer):
         "zero",
         "one",
     ]
-    subset: Optional[List[str]] = None
-    value: Optional[Union[int, float]] = None
+    subset: list[str] | None = None
+    value: int | float | None = None
     drop_columns: bool = True
     inplace: bool = True
-    _statistics: Dict[str, Union[int, float]] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _statistics: dict[str, int | float] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "NumericImputer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "NumericImputer":
         """Fit the transformer by computing imputation statistics.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -172,7 +172,7 @@ class NumericImputer(_BaseTransformer):
         elif self.strategy == "median":
             # Compute all medians in single pass
             median_results = X.select([pl.col(c).median() for c in self.subset]).row(0)
-            self._statistics: Dict[str, Union[int, float]] = {}
+            self._statistics: dict[str, int | float] = {}
             for i, col in enumerate(self.subset):
                 if median_results[i] is not None:
                     self._statistics[col] = median_results[i]  # type: ignore[assignment]

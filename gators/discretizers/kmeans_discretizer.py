@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import numpy as np
 import polars as pl
 from pydantic import PositiveInt, field_validator
@@ -18,7 +16,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to discretize. If None, all numeric columns are selected.
     num_bins : PositiveInt, default=5
         Number of clusters (bins) to create using k-means.
@@ -32,7 +30,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
         Ignored when inplace=True.
     as_numerics : bool, default=False
         If True, create numeric labels (0, 1, 2, ...) instead of interval strings.
-    random_state : Optional[int], default=None
+    random_state : int, default=None
         Random state for reproducibility of k-means clustering.
     max_iter : int, default=300
         Maximum number of iterations for k-means algorithm.
@@ -87,10 +85,10 @@ class KMeansDiscretizer(_BaseDiscretizer):
     └───────┴──────────┴─────────────────┴──────────────────┘
     """
 
-    random_state: Optional[int] = None
+    random_state: int = None
     max_iter: int = 300
     n_init: int = 10
-    _centroids: Dict[str, np.ndarray] = {}
+    _centroids: dict[str, np.ndarray] = {}
 
     @field_validator("max_iter")
     def check_max_iter(cls, max_iter):
@@ -104,14 +102,14 @@ class KMeansDiscretizer(_BaseDiscretizer):
             raise ValueError("n_init must be at least 1")
         return n_init
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "KMeansDiscretizer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "KMeansDiscretizer":
         """Fit the discretizer by learning cluster boundaries using k-means.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

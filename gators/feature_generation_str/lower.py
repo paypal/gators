@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from ..transformer._base_transformer import _BaseTransformer
@@ -48,19 +46,19 @@ class Lower(_BaseTransformer):
 
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     drop_columns: bool = True
     inplace: bool = True
-    _column_mapping: Dict[str, str] = {}
+    _column_mapping: dict[str, str] = {}
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Lower":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Lower":
         """Fit the transformer by identifying categorical columns and generating column mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

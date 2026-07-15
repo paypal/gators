@@ -1,12 +1,10 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from ._base_discretizer import _BaseDiscretizer, generate_labels
 
 
 def compute_geometric_bins(
-    X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None
+    X: pl.DataFrame, num_bins: int, subset: list[str] | None = None
 ) -> dict[str, list[float]]:
     """
     Computes geometric progression bins for discretization.
@@ -23,7 +21,7 @@ def compute_geometric_bins(
         Input DataFrame containing the data to discretize.
     num_bins : int
         Number of bins to divide each numeric column into.
-    subset : Optional[list[str]], default=None
+    subset : list[str], default=None
         List of column names to compute bins for. If None, uses all columns in X.
 
     Returns
@@ -51,7 +49,7 @@ def compute_geometric_bins(
         + [pl.col(col_name).max().alias(f"{col_name}_max") for col_name in cols_to_process]
     ).to_dict(as_series=False)
 
-    bins: Dict[str, List[float]] = {}
+    bins: dict[str, list[float]] = {}
     for col in cols_to_process:
         col_min = min_max[f"{col}_min"][0]
         col_max = min_max[f"{col}_max"][0]
@@ -101,7 +99,7 @@ class GeometricDiscretizer(_BaseDiscretizer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to discretize. If None, all numeric columns are selected.
     num_bins : PositiveInt, default=5
         Number of geometric bins to create.
@@ -179,14 +177,14 @@ class GeometricDiscretizer(_BaseDiscretizer):
     └─────────────┘
     """
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GeometricDiscretizer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "GeometricDiscretizer":
         """Fit the discretizer by computing geometric progression bin boundaries.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

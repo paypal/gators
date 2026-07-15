@@ -1,4 +1,3 @@
-import numpy as np
 import polars as pl
 import pytest
 
@@ -319,3 +318,47 @@ class TestTreeBasedDiscretizer:
         # Using y parameter instead of target
         result = discretizer.fit_transform(X, y)
         assert "feature__dic_tree" in result.columns
+
+    def test_check_min_samples_leaf_invalid_raises_value_error(self):
+        """Validator body raises ValueError when called directly with value < 1."""
+        with pytest.raises(ValueError, match="min_samples_leaf must be at least 1"):
+            TreeBasedDiscretizer.check_min_samples_leaf(0)
+
+    def test_all_null_column_hits_else_empty_bins(self):
+        """All-null column: no thresholds + min/max None triggers else branch."""
+        X = pl.DataFrame(
+            {
+                "null_feature": pl.Series([None, None, None, None, None], dtype=pl.Float64),
+            }
+        )
+        y = pl.Series("target", [0, 0, 1, 1, 1])
+        discretizer = TreeBasedDiscretizer(
+            subset=["null_feature"],
+            num_bins=3,
+            task="classification",
+            random_state=42,
+        )
+        result = discretizer.fit_transform(X, y)
+        assert "null_feature" in result.columns
+
+    def test_as_numerics_true(self):
+        """Test that as_numerics=True converts labels to numeric strings."""
+        X = pl.DataFrame(
+            {
+                "feature": [1, 2, 3, 4, 5, 6, 7, 8],
+            }
+        )
+        y = pl.Series("target", [0, 0, 0, 0, 1, 1, 1, 1])
+        discretizer = TreeBasedDiscretizer(
+            subset=["feature"],
+            num_bins=2,
+            task="classification",
+            as_numerics=True,
+            random_state=42,
+        )
+        discretizer.fit(X, y)
+        # Labels should be numeric strings ("0", "1", ...)
+        assert all(
+            label.lstrip("-").isdigit() or label == "constant"
+            for label in discretizer._labels["feature"]
+        )

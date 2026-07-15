@@ -1,5 +1,3 @@
-from typing import Optional
-
 import numpy as np
 import polars as pl
 
@@ -7,7 +5,7 @@ from ._base_discretizer import _BaseDiscretizer, generate_labels
 
 
 def compute_equal_length_bins(
-    X: pl.DataFrame, num_bins: int, subset: Optional[list[str]] = None
+    X: pl.DataFrame, num_bins: int, subset: list[str] | None = None
 ) -> dict[str, list[float]]:
     """
     Computes equal-length bins for discretization.
@@ -18,7 +16,7 @@ def compute_equal_length_bins(
         Input DataFrame containing the data to discretize.
     num_bins : int
         Number of bins to divide each numeric column into.
-    subset : Optional[list[str]], default=None
+    subset : list[str], default=None
         List of column names to compute bins for. If None, uses all columns in X.
 
     Returns
@@ -68,7 +66,7 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to discretize. If None, all numeric columns are selected.
     num_bins : PositiveInt, default=5
         Number of equal-length bins to create.
@@ -154,14 +152,14 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
     └─────┴─────┴───────────────┘
     """
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "EqualLengthDiscretizer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "EqualLengthDiscretizer":
         """Fit the discretizer by computing equal-length bin boundaries.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

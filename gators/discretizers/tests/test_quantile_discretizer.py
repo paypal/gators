@@ -39,14 +39,14 @@ class TestQuantileDiscretizer:
         result = discretizer.fit_transform(X)
 
         # Should have discretized columns
-        assert "age__dic_quantile" in result.columns
-        assert "income__dic_quantile" in result.columns
+        assert "age__discretize_quant" in result.columns
+        assert "income__discretize_quant" in result.columns
         assert "age" not in result.columns
         assert "income" not in result.columns
 
         # Should have string labels
-        # assert result["age__dic_quantile"].dtype == pl.Enum
-        # assert result["income__dic_quantile"].dtype == pl.Enum
+        # assert result["age__discretize_quant"].dtype == pl.Enum
+        # assert result["income__discretize_quant"].dtype == pl.Enum
 
     def test_custom_quantiles(self):
         """Test with custom quantile specifications."""
@@ -61,7 +61,7 @@ class TestQuantileDiscretizer:
         )
         result = discretizer.fit_transform(X)
 
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns
 
     def test_tertiles(self):
         """Test tertile discretization."""
@@ -75,7 +75,7 @@ class TestQuantileDiscretizer:
         )
         result = discretizer.fit_transform(X)
 
-        assert "score__dic_quantile" in result.columns
+        assert "score__discretize_quant" in result.columns
 
     def test_asymmetric_quantiles(self):
         """Test with asymmetric quantiles (focus on tail)."""
@@ -90,7 +90,7 @@ class TestQuantileDiscretizer:
         )
         result = discretizer.fit_transform(X)
 
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns
 
     def test_auto_detect_numeric_columns(self):
         """Test automatic detection of numeric columns."""
@@ -106,8 +106,8 @@ class TestQuantileDiscretizer:
         result = discretizer.fit_transform(X)
 
         # Should discretize numeric columns only
-        assert "num1__dic_quantile" in result.columns
-        assert "num2__dic_quantile" in result.columns
+        assert "num1__discretize_quant" in result.columns
+        assert "num2__discretize_quant" in result.columns
         assert "text" in result.columns
 
     def test_drop_columns_false(self):
@@ -120,7 +120,7 @@ class TestQuantileDiscretizer:
         result = discretizer.fit_transform(X)
 
         assert "feature" in result.columns
-        assert "feature__dic_quantile" in result.columns
+        assert "feature__discretize_quant" in result.columns
 
     def test_duplicate_quantiles_drop(self):
         """Test handling of duplicate quantile values with drop strategy."""
@@ -136,7 +136,7 @@ class TestQuantileDiscretizer:
         result = discretizer.fit_transform(X)
 
         # Should handle duplicates by dropping them
-        assert "feature__dic_quantile" in result.columns
+        assert "feature__discretize_quant" in result.columns
 
     def test_duplicate_quantiles_raise(self):
         """Test handling of duplicate quantile values with raise strategy."""
@@ -181,7 +181,7 @@ class TestQuantileDiscretizer:
         result = discretizer.fit_transform(X)
 
         # Should handle nulls
-        assert "feature__dic_quantile" in result.columns
+        assert "feature__discretize_quant" in result.columns
         assert len(result) == len(X)
 
     def test_skewed_distribution(self):
@@ -194,7 +194,7 @@ class TestQuantileDiscretizer:
         result = discretizer.fit_transform(X)
 
         # Quantile-based discretization should handle skewness well
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns
 
     def test_uniform_distribution(self):
         """Test with uniform distribution."""
@@ -203,7 +203,7 @@ class TestQuantileDiscretizer:
         discretizer = QuantileDiscretizer(subset=["value"], num_bins=5, inplace=False)
         result = discretizer.fit_transform(X)
 
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns
 
     def test_sklearn_compatibility(self):
         """Test sklearn-compatible API."""
@@ -242,9 +242,9 @@ class TestQuantileDiscretizer:
         )
         result = discretizer.fit_transform(X)
 
-        assert "col1__dic_quantile" in result.columns
-        assert "col2__dic_quantile" in result.columns
-        assert "col3__dic_quantile" in result.columns
+        assert "col1__discretize_quant" in result.columns
+        assert "col2__discretize_quant" in result.columns
+        assert "col3__discretize_quant" in result.columns
         assert "col1" not in result.columns
 
     def test_single_value(self):
@@ -257,7 +257,7 @@ class TestQuantileDiscretizer:
         result = discretizer.fit_transform(X)
 
         # Should handle constant feature without error
-        assert "constant__dic_quantile" in result.columns
+        assert "constant__discretize_quant" in result.columns
 
     def test_median_split(self):
         """Test median split (2 bins)."""
@@ -266,7 +266,7 @@ class TestQuantileDiscretizer:
         discretizer = QuantileDiscretizer(subset=["value"], quantiles=[0.5], inplace=False)
         result = discretizer.fit_transform(X)
 
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns
         # Should have 2 bins
 
     def test_quintiles(self):
@@ -276,7 +276,7 @@ class TestQuantileDiscretizer:
         discretizer = QuantileDiscretizer(subset=["value"], num_bins=5, inplace=False)
         result = discretizer.fit_transform(X)
 
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns
 
     def test_percentiles(self):
         """Test specific percentiles."""
@@ -288,7 +288,7 @@ class TestQuantileDiscretizer:
         )
         result = discretizer.fit_transform(X)
 
-        assert "score__dic_quantile" in result.columns
+        assert "score__discretize_quant" in result.columns
 
     def test_extreme_quantiles(self):
         """Test extreme quantiles near boundaries."""
@@ -302,7 +302,7 @@ class TestQuantileDiscretizer:
         )
         result = discretizer.fit_transform(X)
 
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns
 
     def test_repeated_values(self):
         """Test with many repeated values."""
@@ -313,7 +313,7 @@ class TestQuantileDiscretizer:
         )
         result = discretizer.fit_transform(X)
 
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns
 
     def test_empty_dataframe(self):
         """Test with empty DataFrame."""
@@ -323,7 +323,7 @@ class TestQuantileDiscretizer:
         result = discretizer.fit_transform(X)
 
         assert len(result) == 0
-        assert "feature__dic_quantile" in result.columns
+        assert "feature__discretize_quant" in result.columns
 
     def test_comparison_with_num_bins(self):
         """Test that custom quantiles override num_bins."""
@@ -338,4 +338,4 @@ class TestQuantileDiscretizer:
         )
         result = discretizer.fit_transform(X)
 
-        assert "value__dic_quantile" in result.columns
+        assert "value__discretize_quant" in result.columns

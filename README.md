@@ -71,7 +71,7 @@ Create powerful numeric features:
 - `IsNull` - Generate null indicator features
 - `MathFeatures` - Apply mathematical operations (add, subtract, multiply, divide)
 - `RatioFeatures` - Create ratio features between columns
-- `PlaneRotationFeatures` - Rotate features in feature space
+- `PlanRotationFeatures` - Rotate features in feature space
 - `PolynomialFeatures` - Generate polynomial combinations
 - `ScalarMathFeatures` - Apply scalar operations
 
@@ -139,7 +139,7 @@ Normalize your features:
 - `ArcsinSquarerootScaler` - Arcsine square root transformation
 - `ArcsinhScaler` - Inverse hyperbolic sine transformation
 - `BoxCox` - Box-Cox power transformation
-- `LogScaler` - Logarithmic scaling
+- `Log1pScaler` - Log1p scaling (log(1+x))
 - `MinmaxScaler` - Min-max normalization
 - `PowerScaler` - Power transformation
 - `StandardScaler` - Standardization (z-score normalization)

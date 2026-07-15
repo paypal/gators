@@ -299,3 +299,18 @@ class TestKMeansDiscretizer:
 
         assert len(result) == 0
         assert "feature__dic_kmeans" in result.columns
+
+    def test_as_numerics_true(self):
+        """Test that as_numerics=True converts labels to numeric strings."""
+        X = pl.DataFrame({"value": [1.0, 2.0, 3.0, 10.0, 20.0, 30.0]})
+        discretizer = KMeansDiscretizer(
+            subset=["value"], num_bins=3, as_numerics=True, random_state=42
+        )
+        result = discretizer.fit_transform(X)
+        # Labels should be numeric strings ("0", "1", "2", ...)
+        assert result["value"].dtype in (pl.Int32, pl.String, pl.Categorical, pl.Enum)
+        # Verify _labels were set as numeric strings during fit
+        assert all(
+            label.lstrip("-").isdigit() or label == "constant"
+            for label in discretizer._labels["value"]
+        )

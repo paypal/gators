@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -15,7 +13,7 @@ class NGram(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of string columns to extract n-grams from. If None, all string columns
         will be used.
     n : int, default=2
@@ -91,7 +89,7 @@ class NGram(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     n: int = 2
     ngram_type: str = "char"
     max_features: int = 10
@@ -99,7 +97,7 @@ class NGram(_BaseTransformer):
     drop_columns: bool = False
 
     # Fitted attributes (not part of initialization)
-    top_ngrams_: Dict[str, List[str]] = {}
+    top_ngrams_: dict[str, list[str]] = {}
 
     @field_validator("n")
     def check_n(cls, n):
@@ -127,14 +125,14 @@ class NGram(_BaseTransformer):
             raise ValueError("min_count must be at least 1")
         return min_count
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "NGram":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "NGram":
         """Fit the transformer by identifying top-k n-grams for each column.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

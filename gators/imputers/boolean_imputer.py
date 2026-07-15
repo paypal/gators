@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, cast
-
 import polars as pl
 from pydantic import PrivateAttr
 from typing_extensions import Literal
@@ -18,9 +16,9 @@ class BooleanImputer(_BaseTransformer):
 
         - "constant": Fill with a constant value specified by `value`
         - "most_frequent": Fill with the mode (most frequent value)
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of boolean columns to impute. If None, all boolean columns are selected.
-    value : Optional[bool], default=None
+    value : bool, default=None
         Value to use when strategy is 'constant'. Must be True or False.
         Required when strategy='constant', ignored otherwise.
     inplace : bool, default=True
@@ -99,21 +97,21 @@ class BooleanImputer(_BaseTransformer):
     """
 
     strategy: Literal["constant", "most_frequent"]
-    subset: Optional[List[str]] = None
-    value: Optional[bool] = None
+    subset: list[str] | None = None
+    value: bool = None
     drop_columns: bool = True
     inplace: bool = True
-    _statistics: Dict[str, bool] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _statistics: dict[str, bool] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "BooleanImputer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "BooleanImputer":
         """Fit the transformer by computing imputation statistics.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with boolean columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

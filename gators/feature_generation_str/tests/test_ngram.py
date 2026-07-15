@@ -283,3 +283,27 @@ class TestNGram:
         features1 = [col for col in result1.columns if col.startswith("text__ng_")]
         features2 = [col for col in result2.columns if col.startswith("text__ng_")]
         assert set(features1) == set(features2)
+
+    def test_transform_without_fit_returns_x_unchanged(self):
+        """transform() before fit() returns X unchanged when subset is None."""
+        import polars as pl
+        from polars.testing import assert_frame_equal
+
+        X = pl.DataFrame({"text": ["hello", "world"]})
+        transformer = NGram(n=2, ngram_type="char", max_features=5)
+        assert_frame_equal(transformer.transform(X), X)
+
+    def test_long_ngram_truncated_to_20_chars(self):
+        """Word bigram longer than 20 chars after sanitization is truncated."""
+        import polars as pl
+
+        # "abcdefghijk" (11) + " " + "klmnopqrstu" (11) joined = 23 chars > 20
+        X = pl.DataFrame({"text": ["abcdefghijk klmnopqrstu"] * 5})
+        transformer = NGram(subset=["text"], n=2, ngram_type="word", max_features=5)
+        result = transformer.fit_transform(X)
+        new_features = [col for col in result.columns if col.startswith("text__ng_")]
+        assert len(new_features) > 0
+        # Feature name suffix must be at most 20 chars (after 'text__ng_' prefix)
+        for col in new_features:
+            suffix = col[len("text__ng_") :]
+            assert len(suffix) <= 20

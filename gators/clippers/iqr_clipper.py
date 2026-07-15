@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Tuple
-
 import polars as pl
 from pydantic import Field
 
@@ -22,7 +20,7 @@ class IQRClipper(_BaseClipper):
         Must be a positive number. Common values:
         - 1.5: Standard box plot outlier threshold
         - 3.0: Extreme outlier threshold
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric columns to clip. If None, all numeric columns are selected.
     inplace : bool, default=True
         If True, clip values in the original columns.
@@ -96,17 +94,16 @@ class IQRClipper(_BaseClipper):
     """
 
     n_iqrs: float = Field(default=1.5, gt=0.0)
-    subset: Optional[List[str]] = None
-    # _clip_bounds: Dict[str, Tuple[float, float]] = PrivateAttr(default_factory=dict)
+    subset: list[str] | None = None
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "IQRClipper":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "IQRClipper":
         """Fit the transformer by computing IQR-based clipping bounds.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

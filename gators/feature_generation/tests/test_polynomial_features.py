@@ -60,3 +60,9 @@ def test_interaction_only(sample_data):
     )
 
     assert_frame_equal(transformed_X, expected_X)
+
+
+def test_transform_without_fit_returns_x_unchanged(sample_data):
+    """transform() before fit() returns X unchanged when subset is None."""
+    transformer = PolynomialFeatures()
+    assert_frame_equal(transformer.transform(sample_data), sample_data)

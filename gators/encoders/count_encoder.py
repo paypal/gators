@@ -1,5 +1,3 @@
-from typing import Optional
-
 import polars as pl
 
 from ._base_encoder import _BaseEncoder
@@ -11,9 +9,9 @@ class CountEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
-    min_count : Union[int, float], default=1
+    min_count : int | float, default=1
         Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     inplace : bool, default=True
         If True, replace original columns with encoded values.
@@ -109,14 +107,14 @@ class CountEncoder(_BaseEncoder):
     └──────────┴───────┴────────┴────────────────────────┴─────────────────────┘
     """
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CountEncoder":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CountEncoder":
         """Fit the transformer by computing count statistics for each category.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with categorical columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -128,7 +126,7 @@ class CountEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Enum]
+                if dtype.base_type() in self._CAT_DTYPES
             ]
         self.mapping_ = {
             col: dict(zip(d[col].to_list(), d["count"].to_list()))

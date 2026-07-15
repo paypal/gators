@@ -17,6 +17,9 @@ Quality Filters
 * :class:`~gators.data_cleaning.drop_duplicate_rows.DropDuplicateRows` - Remove duplicate rows
 * :class:`~gators.data_cleaning.drop_high_nan_ratio.DropHighNaNRatio` - Drop columns with high missing ratio
 * :class:`~gators.data_cleaning.drop_low_cardinality.DropLowCardinality` - Drop low cardinality columns
+* :class:`~gators.data_cleaning.drop_near_constant_columns.DropNearConstantColumns` - Drop near-constant columns
 * :class:`~gators.data_cleaning.high_cardinality_filter.HighCardinalityFilter` - Filter high cardinality features
 * :class:`~gators.data_cleaning.replace.Replace` - Replace values in columns
+* :class:`~gators.data_cleaning.round_digits.RoundDigits` - Round numeric columns to a fixed number of decimal places
+* :class:`~gators.data_cleaning.round_significant_digits.RoundSignificantDigits` - Round numeric columns to a fixed number of significant figures
 * :class:`~gators.data_cleaning.variance_filter.VarianceFilter` - Remove low variance features

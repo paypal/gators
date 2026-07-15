@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Optional
+from typing import Annotated
 
 import polars as pl
 from pydantic import Field
@@ -14,7 +14,7 @@ class DropHighNaNRatio(_BaseTransformer):
     ----------
     max_ratio : float
         Maximum allowed ratio of NaN values (0.0-1.0). Columns with NaN ratio >= max_ratio will be dropped.
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of columns to check for high NaN ratio. If None, all columns are checked.
 
     Examples
@@ -102,18 +102,18 @@ class DropHighNaNRatio(_BaseTransformer):
     """
 
     max_ratio: Annotated[float, Field(ge=0.0, le=1.0)]
-    subset: Optional[List[str]] = None
-    _to_drop: List[str]
-    _column_mapping = Dict[str, str]
+    subset: list[str] | None = None
+    _to_drop: list[str]
+    _column_mapping = dict[str, str]
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropHighNaNRatio":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DropHighNaNRatio":
         """Fit the transformer by identifying columns with high NaN ratios.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

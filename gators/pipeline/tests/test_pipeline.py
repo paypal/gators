@@ -136,44 +136,101 @@ def test_pipeline_validation_missing_transform():
         Pipeline(steps=steps)
 
 
-def test_pipeline_verbose_fit():
-    """Test verbose mode during fit."""
-    X = pl.DataFrame({"num_col": [1.0, 2.0, 3.0]})
+def test_pipeline_verbose_fit(capsys):
+    """Verbose fit emits row count, col count, null count and elapsed time."""
+    X = pl.DataFrame({"num_col": [1.0, None, 3.0]})
 
-    steps = [
-        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
-    ]
-
-    pipe = Pipeline(steps=steps, verbose=True)
+    pipe = Pipeline(
+        steps=[("numeric_imputer", NumericImputer(strategy="median", inplace=True))],
+        verbose=True,
+    )
     pipe.fit(X)
-    assert True
+
+    out = capsys.readouterr().out
+    assert "[Pipeline] fit" in out
+    assert "1/1" in out
+    assert "numeric_imputer" in out
+    assert "rows=3" in out
+    assert "cols=1" in out
+    assert "nulls=1" in out
+    # timing suffix like (0.001s)
+    assert "s)" in out
 
 
-def test_pipeline_verbose_transform():
-    """Test verbose mode during transform."""
-    X = pl.DataFrame({"num_col": [1.0, 2.0, 3.0]})
+def test_pipeline_verbose_transform(capsys):
+    """Verbose transform emits before/after stats and elapsed time."""
+    X = pl.DataFrame({"num_col": [1.0, None, 3.0]})
 
-    steps = [
-        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
-    ]
-
-    pipe = Pipeline(steps=steps, verbose=True)
+    pipe = Pipeline(
+        steps=[("numeric_imputer", NumericImputer(strategy="median", inplace=True))],
+        verbose=True,
+    )
     pipe.fit(X)
+    capsys.readouterr()  # discard fit output
+
     result = pipe.transform(X)
     assert isinstance(result, pl.DataFrame)
 
+    out = capsys.readouterr().out
+    assert "[Pipeline] transform" in out
+    assert "1/1" in out
+    assert "numeric_imputer" in out
+    assert "in:" in out
+    assert "out:" in out
+    assert "→" in out
+    assert "rows=3" in out
+    assert "s)" in out
 
-def test_pipeline_verbose_fit_transform():
-    """Test verbose mode during fit_transform."""
-    X = pl.DataFrame({"num_col": [1.0, 2.0, 3.0]})
 
-    steps = [
-        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
-    ]
+def test_pipeline_verbose_fit_transform(capsys):
+    """Verbose fit_transform emits before/after stats and elapsed time."""
+    X = pl.DataFrame({"num_col": [1.0, None, 3.0]})
 
-    pipe = Pipeline(steps=steps, verbose=True)
+    pipe = Pipeline(
+        steps=[("numeric_imputer", NumericImputer(strategy="median", inplace=True))],
+        verbose=True,
+    )
     result = pipe.fit_transform(X)
     assert isinstance(result, pl.DataFrame)
+
+    out = capsys.readouterr().out
+    assert "[Pipeline] fit+transform" in out
+    assert "1/1" in out
+    assert "numeric_imputer" in out
+    assert "in:" in out
+    assert "out:" in out
+    assert "→" in out
+    assert "rows=3" in out
+    assert "s)" in out
+
+
+def test_pipeline_verbose_false_no_output(capsys):
+    """verbose=False must produce zero stdout output."""
+    X = pl.DataFrame({"num_col": [1.0, None, 3.0]})
+    pipe = Pipeline(
+        steps=[("numeric_imputer", NumericImputer(strategy="median", inplace=True))],
+        verbose=False,
+    )
+    pipe.fit_transform(X)
+    assert capsys.readouterr().out == ""
+
+
+def test_pipeline_verbose_multi_step(capsys):
+    """Each step emits its own line; null counts reflect intermediate state."""
+    X = pl.DataFrame({"num_col": [1.0, None, 3.0], "str_col": ["a", None, "c"]})
+    pipe = Pipeline(
+        steps=[
+            ("num", NumericImputer(strategy="median", inplace=True)),
+            ("str", StringImputer(strategy="constant", value="MISSING", inplace=True)),
+        ],
+        verbose=True,
+    )
+    pipe.fit_transform(X)
+    out = capsys.readouterr().out
+    lines = [l for l in out.splitlines() if l.strip()]
+    assert len(lines) == 2
+    assert "num" in lines[0]
+    assert "str" in lines[1]
 
 
 def test_pipeline_get_params_shallow():
@@ -383,5 +440,66 @@ def test_pipeline_set_params_attribute_error():
     assert pipe.named_steps["attr_err"].param1 == "modified"
 
 
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+def test_clone_returns_new_pipeline():
+    """clone() must return a distinct Pipeline object."""
+    pipe = Pipeline(
+        steps=[
+            ("impute", NumericImputer(strategy="median", inplace=True)),
+            ("impute_str", StringImputer(strategy="constant", value="MISSING")),
+        ]
+    )
+    cloned = pipe.clone()
+    assert cloned is not pipe
+
+
+def test_clone_steps_are_new_instances():
+    """Each transformer in the clone must be a new object, not the same reference."""
+    pipe = Pipeline(
+        steps=[
+            ("impute", NumericImputer(strategy="median", inplace=True)),
+        ]
+    )
+    cloned = pipe.clone()
+    assert cloned.named_steps["impute"] is not pipe.named_steps["impute"]
+
+
+def test_clone_preserves_hyperparameters():
+    """Clone must carry over all constructor parameters."""
+    pipe = Pipeline(
+        steps=[
+            ("impute", NumericImputer(strategy="mean", inplace=False)),
+            ("impute_str", StringImputer(strategy="constant", value="N/A")),
+        ],
+        verbose=True,
+    )
+    cloned = pipe.clone()
+    assert cloned.named_steps["impute"].strategy == "mean"
+    assert cloned.named_steps["impute"].inplace is False
+    assert cloned.named_steps["impute_str"].value == "N/A"
+    assert cloned.verbose is True
+
+
+def test_clone_is_unfitted():
+    """After cloning a fitted pipeline, the clone must be unfitted."""
+    X = pl.DataFrame({"a": [1.0, None, 3.0], "b": [None, 2.0, 3.0]})
+    pipe = Pipeline(steps=[("impute", NumericImputer(strategy="median", inplace=True))])
+    pipe.fit(X)
+
+    cloned = pipe.clone()
+    # The original has computed _statistics; the clone must not
+    imputer_clone = cloned.named_steps["impute"]
+    # _statistics is a PrivateAttr initialised to {}; after clone it stays empty
+    assert imputer_clone._statistics == {}
+
+
+def test_clone_can_be_fitted_independently():
+    """The cloned pipeline can be fitted independently from the original."""
+    X = pl.DataFrame({"a": [1.0, None, 3.0, 4.0, 5.0]})
+    pipe = Pipeline(steps=[("impute", NumericImputer(strategy="median", inplace=True))])
+    pipe.fit(X)
+
+    cloned = pipe.clone()
+    cloned.fit(X)  # must not raise
+
+    result = cloned.transform(X)
+    assert result.null_count().sum_horizontal()[0] == 0

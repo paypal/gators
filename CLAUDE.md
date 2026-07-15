@@ -36,7 +36,7 @@ All transformers inherit from `_BaseTransformer` which provides:
 class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
     model_config = ConfigDict(extra="forbid")
     
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None):
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None):
         # Compute statistics, build mappings
         return self
     
@@ -127,24 +127,24 @@ for col in self.subset:
 ### ✅ DO: Preserve Type Hints & Pydantic Validation
 
 ```python
-from typing import Dict, List, Literal, Optional, Union
+from typing import Literal
 from pydantic import PrivateAttr, Field
 
 class MyTransformer(_BaseTransformer):
     # Public parameters - Pydantic fields
     strategy: Literal['mean', 'median', 'mode']
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     inplace: bool = True
     
     # Private attributes - not in __init__
-    _statistics: Dict[str, float] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _statistics: dict[str, float] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 ```
 
 ### ✅ DO: Maintain Sklearn API Compatibility
 
 ```python
-def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "TransformerName":
+def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "TransformerName":
     """Always return self from fit()"""
     # Compute statistics here
     return self
@@ -218,27 +218,17 @@ X.select([pl.col(c).median() for c in cols])
 - `.cast()` - Type conversion
 - `.alias()` - Rename expressions
 
-### Pydantic Models
-
-**Configuration**:
-```python
-model_config = ConfigDict(
-    extra="forbid",  # No unexpected parameters
-    arbitrary_types_allowed=True  # For Pipeline steps
-)
-```
-
 **Private attributes** (not constructor parameters):
 ```python
-_statistics: Dict[str, float] = PrivateAttr(default_factory=dict)
+_statistics: dict[str, float] = PrivateAttr(default_factory=dict)
 ```
 
 **Field validation**:
 ```python
 from pydantic import Field, PositiveInt, PositiveFloat
 
-min_count: Union[PositiveInt, PositiveFloat] = 1
-mapping_: Dict[str, Dict[str, float]] = Field(default_factory=dict)
+min_count: PositiveInt | PositiveFloat = 1
+mapping_: dict[str, dict[str, float]] = Field(default_factory=dict)
 ```
 
 ### Testing with Pytest
@@ -281,7 +271,7 @@ def test_transformer_basic(sample_dataframe):
    class MyTransformer(_BaseTransformer):
        # Define parameters as Pydantic fields
        strategy: Literal['option1', 'option2']
-       subset: Optional[List[str]] = None
+       subset: list[str] | None = None
        
        # Private attributes
        _stats: Dict = PrivateAttr(default_factory=dict)
@@ -339,7 +329,7 @@ X = X.with_columns(transformations)
 ### 1. Python 3.14 Compatibility
 - Ensure all code works with Python 3.14 features
 - Check compatibility of dependencies (Polars, Pydantic, etc.)
-- Use modern type hints (e.g., `list[str]` instead of `List[str]` where appropriate)
+- Use modern type hints (e.g., `list[str]` instead of `list[str]` where appropriate)
 
 ### 2. Minimal `X.with_columns()` Calls
 **Critical performance consideration**: Each `X.with_columns()` call creates a new DataFrame. Always batch expressions:
@@ -359,7 +349,7 @@ if X[col].dtype == pl.Boolean:
 ### 4. Pydantic Private Attributes
 Private attributes must use `PrivateAttr()` and won't appear in `__init__`:
 ```python
-_statistics: Dict[str, float] = PrivateAttr(default_factory=dict)
+_statistics: dict[str, float] = PrivateAttr(default_factory=dict)
 ```
 
 ### 5. Pipeline vs sklearn Pipeline
@@ -494,7 +484,6 @@ X_transformed = pipe.transform(X_test)
 
 ### Example 3: Custom Transformer Template
 ```python
-from typing import Dict, List, Optional
 import polars as pl
 from pydantic import PrivateAttr
 from ..transformer._base_transformer import _BaseTransformer
@@ -506,18 +495,18 @@ class CustomTransformer(_BaseTransformer):
     ----------
     param1 : type
         Description.
-    subset : Optional[List[str]], default=None
-        Columns to transform.
+    subset : list[str]
+        Columns to transform. Default to None.
     inplace : bool, default=True
         Whether to modify columns in-place.
     """
     
     param1: str
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     inplace: bool = True
     _computed_stats: Dict = PrivateAttr(default_factory=dict)
     
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CustomTransformer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CustomTransformer":
         if not self.subset:
             self.subset = X.columns
         

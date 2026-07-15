@@ -1,4 +1,4 @@
-from typing import Optional, cast
+from typing import cast
 
 import polars as pl
 from pydantic import Field, PositiveFloat
@@ -17,9 +17,9 @@ class CatBoostEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
-    min_count : Union[int, float], default=1
+    min_count : int | float, default=1
         Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     smoothing : float, default=1.0
         Smoothing parameter for regularization toward the global mean. Higher values increase regularization.
@@ -64,14 +64,14 @@ class CatBoostEncoder(_BaseEncoder):
     smoothing: PositiveFloat = Field(default=1.0)
     global_mean_: float = 0.0
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CatBoostEncoder":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CatBoostEncoder":
         """Fit the transformer by computing CatBoost ordered target statistics.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with categorical columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (binary or continuous). Required for CatBoostEncoder.
 
         Returns
@@ -91,7 +91,7 @@ class CatBoostEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Enum]
+                if dtype.base_type() in self._CAT_DTYPES
             ]
 
         # Calculate global mean

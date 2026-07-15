@@ -261,3 +261,29 @@ def test_imputer_mean_inplace_true(sample_dataframe):
     )
 
     assert_frame_equal(transformed, expected)
+
+
+def test_imputer_constant_default_value(sample_dataframe):
+    """constant strategy with value=None defaults value to 0 during fit."""
+    imputer = NumericImputer(strategy="constant")  # value not specified
+    imputer.fit(sample_dataframe)
+    assert imputer.value == 0
+    assert imputer._statistics["A"] == 0
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"A": [1.0, None], "B": [2.0, 3.0]})
+    imputer = NumericImputer(strategy="mean")
+    result = imputer.transform(X)
+    assert_frame_equal(result, X)
+
+
+def test_imputer_constant_inplace_true(sample_dataframe):
+    """constant strategy with inplace=True fills nulls in-place (else/inplace branch)."""
+    imputer = NumericImputer(strategy="constant", value=0, inplace=True)
+    imputer.fit(sample_dataframe)
+    result = imputer.transform(sample_dataframe)
+    assert result["A"].null_count() == 0
+    assert result["B"].null_count() == 0
+    assert result["D"].null_count() == 0

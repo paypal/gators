@@ -1,5 +1,4 @@
 from abc import ABCMeta
-from typing import Dict, List, Optional
 
 import polars as pl
 from pydantic import PositiveInt, PrivateAttr
@@ -9,20 +8,20 @@ from ..transformer._base_transformer import _BaseTransformer
 __all__ = ["_BaseDiscretizer", "generate_labels"]
 
 
-def generate_labels(bins: Dict[str, List[float]], rounding=3) -> Dict[str, List[str]]:
+def generate_labels(bins: dict[str, list[float]], rounding=3) -> dict[str, list[str]]:
     """
     Generate labels for equal-length discretizer bins.
 
     Parameters
     ----------
-    bins : Dict[str, List[float]]
+    bins : dict[str, list[float]]
         Dictionary where keys are column names and values are lists of bin edges.
     rounding : int, optional
         Number of decimal places to round the bin edges for the labels. Default is 3.
 
     Returns
     -------
-    Dict[str, List[str]]
+    dict[str, list[str]]
         Dictionary where keys are column names and values are lists of string labels
         for the bins.
 
@@ -62,7 +61,7 @@ class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of column names to discretize. If None, all numeric columns are used.
     num_bins : PositiveInt, default=5
         Number of bins to divide each numeric column into.
@@ -142,15 +141,15 @@ class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
     └─────┴─────┴───────────────┘
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     num_bins: PositiveInt = 5
     rounding: PositiveInt = 3
     as_numerics: bool = False
     drop_columns: bool = True
     inplace: bool = True
-    _bins: Dict[str, List[float]] = PrivateAttr(default_factory=dict)
-    _labels: Dict[str, List[str]] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _bins: dict[str, list[float]] = PrivateAttr(default_factory=dict)
+    _labels: dict[str, list[str]] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting specified components.

@@ -275,3 +275,23 @@ def test_hours_conversion():
     result = transformer.fit_transform(X)
 
     assert result["end_minus_start__hours"].to_list() == [3]
+
+
+def test_check_units_invalid_raises_value_error():
+    """check_units validator raises ValueError for unsupported unit."""
+    with pytest.raises(ValueError, match="not supported"):
+        DiffFeatures.check_units(["invalid"])
+
+
+def test_fit_invalid_reference_date_type_raises():
+    """fit() raises ValueError when reference_date value is not str or datetime."""
+    transformer = DiffFeatures.model_construct(
+        column_pairs=None,
+        reference_dates={"start": 999},
+        units=["d"],
+        drop_columns=False,
+    )
+    transformer._parsed_reference_dates = {}
+    X = pl.DataFrame({"start": [datetime(2024, 1, 1)], "end": [datetime(2024, 1, 2)]})
+    with pytest.raises(ValueError, match="must be string or datetime"):
+        transformer.fit(X)

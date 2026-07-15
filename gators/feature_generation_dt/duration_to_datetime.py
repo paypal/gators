@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Literal, Optional, Union
+from typing import Literal
 
 import polars as pl
 from pydantic import field_validator
@@ -17,9 +17,9 @@ class DurationToDatetime(_BaseTransformer):
 
     Parameters
     ----------
-    subset : List[str]
+    subset : list[str]
         List of column names containing numeric time offsets to convert.
-    reference_date : Union[datetime, str]
+    reference_date : datetime | str
         Reference date to add offsets to. Can be:
 
         - A datetime object: Same reference date for all rows
@@ -115,11 +115,11 @@ class DurationToDatetime(_BaseTransformer):
     >>> result = transformer2.fit_transform(result)
     """
 
-    subset: List[str]
-    reference_date: Union[datetime, str]
+    subset: list[str]
+    reference_date: datetime | str
     unit: Literal["s", "m", "h", "d", "ms", "us"] = "s"
     drop_columns: bool = False
-    _reference_expr: Optional[pl.Expr] = None
+    _reference_expr: pl.Expr | None = None
     _is_column_reference: bool = False
 
     @field_validator("unit")
@@ -138,14 +138,14 @@ class DurationToDatetime(_BaseTransformer):
             )
         return reference_date
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DurationToDatetime":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DurationToDatetime":
         """Fit the transformer by preparing the reference date expression.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

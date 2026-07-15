@@ -1,4 +1,4 @@
-from typing import Dict, List, Literal, Optional, Union
+from typing import Literal
 
 import polars as pl
 from pydantic import PrivateAttr
@@ -20,7 +20,7 @@ class GroupByImputer(_BaseTransformer):
 
         - 'median': Fill with the median of each group
         - 'mean': Fill with the mean of each group
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric columns to impute. If None, all numeric columns (except group_by_column) are selected.
     inplace : bool, default=True
         If True, impute values in the original columns.
@@ -86,20 +86,20 @@ class GroupByImputer(_BaseTransformer):
 
     group_by_column: str
     strategy: Literal["median", "mean"]
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     drop_columns: bool = True
     inplace: bool = True
-    _statistics: Dict[str, Dict[str, Union[int, float]]] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _statistics: dict[str, dict[str, int | float]] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "GroupByImputer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "GroupByImputer":
         """Fit the transformer by computing group-wise imputation statistics.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with numeric columns and a grouping column.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

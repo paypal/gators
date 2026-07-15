@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 
 import polars as pl
 import pytest
@@ -30,7 +30,7 @@ def expected_X() -> pl.DataFrame:
 
 @pytest.fixture
 def endswith_instance() -> Endswith:
-    endswith_dict: Dict[str, List[str]] = {
+    endswith_dict: dict[str, list[str]] = {
         "column1": ["with1", "with2"],
         "column2": ["with3"],
     }

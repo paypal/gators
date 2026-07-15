@@ -1,5 +1,4 @@
 from abc import ABCMeta
-from typing import Dict, List, Optional, Union
 
 import polars as pl
 from pydantic import ConfigDict, Field, PositiveFloat, PositiveInt
@@ -15,7 +14,7 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
     ----------
     subset : list of str, default=None
         List of columns to encode. If None, all applicable columns are encoded.
-    min_count : Union[int, float], default=1
+    min_count : PositiveInt, PositiveFloat, default=1
         Minimum count or frequency for encoding categories.
     drop_columns : bool, default=True
         If True, the original columns are dropped after encoding.
@@ -29,14 +28,14 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
 
     """
 
-    subset: Optional[List[str]] = None
-    mapping_: Dict[str, Dict[str, float]] = Field(default_factory=dict)
-    column_mapping_: Dict[str, str] = Field(default_factory=dict)
-    min_count: Union[PositiveInt, PositiveFloat] = 1
+    subset: list[str] | None = None
+    mapping_: dict[str, dict[str, float]] = Field(default_factory=dict)
+    column_mapping_: dict[str, str] = Field(default_factory=dict)
+    min_count: PositiveInt | PositiveFloat = 1
     drop_columns: bool = True
     inplace: bool = True
 
-    model_config = ConfigDict(arbitrary_types_allowed=True, extra="forbid")
+    _CAT_DTYPES: set = {pl.String, pl.Categorical, pl.Enum, pl.Boolean}
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting specified components.

@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, cast
+from typing import cast
 
 import polars as pl
 from pydantic import PrivateAttr
@@ -12,7 +12,7 @@ class CastColumns(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of column names to cast. If None, all columns will be cast.
     dtype : type
         Target Polars data type (e.g., pl.Float64, pl.String, pl.Int64, pl.Datetime, pl.Date).
@@ -105,20 +105,20 @@ class CastColumns(_BaseTransformer):
     - When inplace=True, the drop_columns parameter is ignored as original columns are replaced
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     dtype: type
     inplace: bool = True
     drop_columns: bool = True
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "CastColumns":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CastColumns":
         """Fit the transformer by identifying columns to cast.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -137,14 +137,14 @@ class CastColumns(_BaseTransformer):
             }
         return self
 
-    def transform(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> pl.DataFrame:
+    def transform(self, X: pl.DataFrame, y: pl.Series | None = None) -> pl.DataFrame:
         """Transform the DataFrame by casting columns to the target type.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame to transform.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -153,7 +153,7 @@ class CastColumns(_BaseTransformer):
             DataFrame with cast columns.
         """
         # Ensure columns is set (should be set during fit)
-        columns = cast(List[str], self.subset)
+        columns = cast(list[str], self.subset)
 
         if self.inplace:
             transformations = []

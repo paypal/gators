@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import PrivateAttr
 
@@ -12,7 +10,7 @@ class Replace(_BaseTransformer):
 
     Parameters
     ----------
-    to_replace : Dict[str, Dict[str, any]]
+    to_replace : dict[str, dict[str, any]]
         Nested dictionary specifying replacement mappings. Outer keys are column names,
         inner dictionaries map old values to new values.
     inplace : bool, default=True
@@ -104,20 +102,20 @@ class Replace(_BaseTransformer):
     └─────────────────┴──────────────────────┴─────────────────────┴─────────────────────────┘
     """
 
-    to_replace: Dict[str, Dict[str, str]]
+    to_replace: dict[str, dict[str, str]]
     inplace: bool = True
     drop_columns: bool = True
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
-    _columns: List[str] = PrivateAttr(default_factory=list)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _columns: list[str] = PrivateAttr(default_factory=list)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Replace":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Replace":
         """Fit the transformer.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Name of the target column (if needed).
 
         Returns

@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+import polars as pl
 from pydantic import BaseModel, ConfigDict
 from sklearn.base import BaseEstimator, TransformerMixin
 
@@ -12,7 +13,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
 
     """
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(arbitrary_types_allowed=True, extra="forbid")
 
     def __init__(self, *args, **kwargs):
         """Initialize transformer with clear error message for positional arguments.
@@ -31,7 +32,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
             )
         super().__init__(**kwargs)
 
-    def get_params(self, deep: bool = True) -> Dict[str, Any]:
+    def get_params(self, deep: bool = True) -> dict[str, Any]:
         """Get parameters for this estimator.
 
         This overrides sklearn's BaseEstimator.get_params() to work with
@@ -82,3 +83,20 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
             setattr(self, key, value)
 
         return self
+
+    def fit_transform(self, X: pl.DataFrame, y: pl.Series | None = None) -> pl.DataFrame:
+        """Fit to data, then transform it.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            Input DataFrame.
+        y : pl.Series or None, default=None
+            Target series for supervised transformers.
+
+        Returns
+        -------
+        pl.DataFrame
+            Transformed DataFrame.
+        """
+        return self.fit(X, y).transform(X)

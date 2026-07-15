@@ -2,7 +2,6 @@
 from math import cos
 from math import pi as PI
 from math import sin
-from typing import List, Optional
 
 import polars as pl
 from pydantic import model_validator
@@ -10,18 +9,18 @@ from pydantic import model_validator
 from ..transformer._base_transformer import _BaseTransformer
 
 
-class PlaneRotationFeatures(_BaseTransformer):
+class PlanRotationFeatures(_BaseTransformer):
     """Create new columns based on the plan rotation mapping.
 
     The data should be composed of numerical columns only.
     Use `gators.encoders` to replace the categorical columns by
-    numerical ones before using `PlaneRotationFeatures`.
+    numerical ones before using `PlanRotationFeatures`.
 
     Parameters
     ----------
-    subset : List[List[str]]
+    subset : list[list[str]]
         List of pair-wise columns.
-    angles : List[float]
+    angles : list[float]
         List of rotation angles.
 
     Examples
@@ -30,8 +29,8 @@ class PlaneRotationFeatures(_BaseTransformer):
 
     Imports and initialization:
 
-    >>> from gators.feature_generation import PlaneRotationFeatures
-    >>> obj = PlaneRotationFeatures(
+    >>> from gators.feature_generation import PlanRotationFeatures
+    >>> obj = PlanRotationFeatures(
     ... subset=[['X', 'Y'], ['X', 'Z']] , angles=[45.0, 60.0])
 
     The `fit`, `transform`, and `fit_transform` methods accept `polars` dataframes:
@@ -55,12 +54,10 @@ class PlaneRotationFeatures(_BaseTransformer):
 
     """
 
-    columns: List[List[str]]
-    angles: List[float]
-    column_names: List[str] = []
-    flatten_columns: List[str] = []
-
-    model_config = {"arbitrary_types_allowed": True}
+    columns: list[list[str]]
+    angles: list[float]
+    column_names: list[str] = []
+    flatten_columns: list[str] = []
 
     @model_validator(mode="after")
     def compute_column_names(self):
@@ -76,19 +73,19 @@ class PlaneRotationFeatures(_BaseTransformer):
         self.column_names = [c for cols in column_names for c in cols]
         return self
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "PlaneRotationFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PlanRotationFeatures":
         """Fit the transformer by identifying columns to flatten.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input dataframe.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns
         -------
-        PlaneRotationFeatures
+        PlanRotationFeatures
             Fitted transformer instance.
         """
         self.flatten_columns = [c for cols in self.columns for c in cols]

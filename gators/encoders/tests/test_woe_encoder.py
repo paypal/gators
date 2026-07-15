@@ -67,3 +67,11 @@ def test_woe_unseen_categories(sample_data, sample_target):
     )
     result = woe_encoder.transform(sample_data_new)
     assert_frame_equal(result, expected_X, check_column_order=False)
+
+
+def test_fit_without_y_raises_value_error():
+    """fit() raises ValueError when y is None."""
+    X = pl.DataFrame({"A": ["a", "b", "c"]})
+    encoder = WOEEncoder(subset=["A"])
+    with pytest.raises(ValueError, match="requires a target variable"):
+        encoder.fit(X, y=None)

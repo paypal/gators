@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import Literal
 
 import polars as pl
 
@@ -14,7 +14,7 @@ class DropDuplicateRows(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of columns to consider for identifying duplicates. If None, all
         columns are used.
     keep : str, default='first'
@@ -111,17 +111,17 @@ class DropDuplicateRows(_BaseTransformer):
     └─────┴─────┴─────┘
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     keep: Literal["first", "last", "none"] = "first"
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropDuplicateRows":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DropDuplicateRows":
         """Fit the transformer by validating parameters.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

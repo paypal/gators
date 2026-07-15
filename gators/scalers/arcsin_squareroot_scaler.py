@@ -1,6 +1,5 @@
-from typing import Dict, List, Optional
-
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -25,7 +24,7 @@ class ArcSinSquareRootScaler(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of numeric column names to transform. If None, all numeric columns
         (Float64, Int64, Float32, Int32) are automatically selected.
     drop_columns : bool, default=True
@@ -70,18 +69,18 @@ class ArcSinSquareRootScaler(_BaseTransformer):
     The transformation maps [0, 1] to [0, π/2] (0 to ~1.571).
     """
 
-    subset: Optional[List[str]] = None
-    _column_mapping: Dict[str, str]
+    subset: list[str] | None = None
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
     drop_columns: bool = True
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "ArcSinSquareRootScaler":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ArcSinSquareRootScaler":
         """Fit the transformer by storing column names.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame to fit.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

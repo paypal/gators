@@ -277,5 +277,11 @@ def test_invalid_operator_raises_error():
         ComparisonFeatures(subset_a=["A"], subset_b=["B"], operators=["invalid_op"])
 
 
+def test_check_operators_invalid_raises_value_error():
+    """check_operators validator raises ValueError for unsupported operator."""
+    with pytest.raises(ValueError, match="not supported"):
+        ComparisonFeatures.check_operators(["invalid"])
+
+
 if __name__ == "__main__":
     pytest.main()

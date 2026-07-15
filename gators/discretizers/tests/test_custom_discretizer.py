@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
@@ -83,7 +81,6 @@ def test_transform_columns_none(sample_dataframe: pl.DataFrame):
     custom_discretizer = CustomDiscretizer(
         subset=None,
         bins={"feature1": [2, 3]},
-        num_bins=5,
         rounding=3,
         drop_columns=True,
         inplace=False,
@@ -114,7 +111,6 @@ def test_transform_as_numerics(sample_dataframe: pl.DataFrame):
     custom_discretizer = CustomDiscretizer(
         subset=["feature1"],
         bins={"feature1": [2, 3]},
-        num_bins=5,
         rounding=3,
         drop_columns=True,
         inplace=False,

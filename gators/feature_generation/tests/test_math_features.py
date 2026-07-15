@@ -24,7 +24,7 @@ def test_transform_default():
 
     transformer = MathFeatures(
         groups=[["col1", "col2"], ["col1", "col2", "col3"]],
-        operations=["sum", "mean", "min"],
+        func=["sum", "mean", "min"],
     )
     _ = transformer.fit(X)
     result_X = transformer.transform(X)
@@ -47,7 +47,7 @@ def test_transform_with_new_column_names():
 
     transformer = MathFeatures(
         groups=[["col1", "col2"], ["col1", "col2", "col3"]],
-        operations=["sum", "mean", "min"],
+        func=["sum", "mean", "min"],
         new_column_names=["12", "123"],
     )
     _ = transformer.fit(X)
@@ -73,7 +73,7 @@ def test_transform_with_drop_columns():
     ).drop(["col1", "col2", "col3"])
     transformer = MathFeatures(
         groups=[["col1", "col2"], ["col1", "col2", "col3"]],
-        operations=["sum", "mean", "min"],
+        func=["sum", "mean", "min"],
         drop_columns=True,
     )
     _ = transformer.fit(X)
@@ -84,8 +84,8 @@ def test_transform_with_drop_columns():
 def test_check_operators_valid():
     # Test with valid operations
     valid_operations = ["sum", "mean", "mul", "min", "max"]
-    transformer = MathFeatures(groups=[["A", "B"]], operations=valid_operations)
-    assert transformer.operations == valid_operations
+    transformer = MathFeatures(groups=[["A", "B"]], func=valid_operations)
+    assert transformer.func == valid_operations
 
 
 def test_check_operators_invalid():
@@ -95,7 +95,7 @@ def test_check_operators_invalid():
         ValidationError,
         match="invalid_op is not in the predefined list of datetime functions.",
     ):
-        MathFeatures(groups=[["A", "B"]], operations=invalid_operations)
+        MathFeatures(groups=[["A", "B"]], func=invalid_operations)
 
 
 def test_check_operators_mixed():
@@ -105,7 +105,7 @@ def test_check_operators_mixed():
         ValidationError,
         match="invalid_op is not in the predefined list of datetime functions.",
     ):
-        MathFeatures(groups=[["A", "B"]], operations=mixed_operations)
+        MathFeatures(groups=[["A", "B"]], func=mixed_operations)
 
 
 if __name__ == "__main__":

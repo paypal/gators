@@ -405,3 +405,16 @@ def test_single_row():
 
     assert result["timestamp__part_of_day"].to_list() == ["afternoon"]
     assert result["timestamp__season"].to_list() == ["summer"]
+
+
+def test_check_bin_types_invalid_raises_value_error():
+    """check_bin_types validator raises ValueError for unsupported bin type."""
+    with pytest.raises(ValueError, match="not supported"):
+        TimeBinFeatures.check_bin_types(["invalid"])
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"ts": [datetime(2024, 6, 15, 14, 0)]})
+    transformer = TimeBinFeatures()
+    assert_frame_equal(transformer.transform(X), X)

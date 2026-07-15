@@ -1,5 +1,4 @@
 from itertools import combinations_with_replacement
-from typing import List, Optional
 
 import polars as pl
 from pydantic import Field
@@ -13,7 +12,7 @@ class PolynomialFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         Subset of columns to transform. If None, all columns
         except strings and booleans.
     degree : int, default=2
@@ -68,19 +67,19 @@ class PolynomialFeatures(_BaseTransformer):
     └─────┴─────┴─────┴
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     degree: int = Field(default=2, gt=1)
     interaction_only: bool = False
     include_bias: bool = False
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "PolynomialFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PolynomialFeatures":
         """Fit the transformer by identifying columns to transform.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

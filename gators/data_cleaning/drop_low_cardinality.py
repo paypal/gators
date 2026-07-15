@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Optional
+from typing import Annotated
 
 import polars as pl
 from pydantic import Field, PrivateAttr
@@ -15,7 +15,7 @@ class DropLowCardinality(_BaseTransformer):
     min_count : int
         Minimum number of unique values for a column to be retained. Must be >= 1.
         Columns with unique count < min_count will be dropped.
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of columns to check for low cardinality. If None, all string, boolean, and categorical columns are checked.
 
     Examples
@@ -101,18 +101,18 @@ class DropLowCardinality(_BaseTransformer):
     """
 
     min_count: Annotated[int, Field(ge=1)]
-    subset: Optional[List[str]] = None
-    _to_drop: List[str] = PrivateAttr()
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    subset: list[str] | None = None
+    _to_drop: list[str] = PrivateAttr(default_factory=list)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "DropLowCardinality":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DropLowCardinality":
         """Fit the transformer by identifying columns with low cardinality.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns
@@ -124,6 +124,10 @@ class DropLowCardinality(_BaseTransformer):
             self.subset = [
                 col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
+
+        if not self.subset:
+            self._to_drop = []
+            return self
 
         counts = X[self.subset].with_columns(pl.all().n_unique()).row(0, named=True)
         self._to_drop = [col for col, val in counts.items() if val < self.min_count]

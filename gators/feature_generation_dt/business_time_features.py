@@ -1,5 +1,3 @@
-from typing import List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -15,16 +13,16 @@ class BusinessTimeFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of datetime columns to extract features from. If None, all datetime columns
         will be used.
     business_hours_start : int, default=9
         Start hour for business hours (24-hour format, 0-23).
     business_hours_end : int, default=17
         End hour for business hours (24-hour format, 0-23).
-    weekend_days : List[int], default=[5, 6]
+    weekend_days : list[int], default=[5, 6]
         Days of week considered weekend (0=Monday, 6=Sunday). Default is Saturday and Sunday.
-    features : List[str], default=["is_business_hour", "is_business_day", "time_of_business_day"]
+    features : list[str], default=["is_business_hour", "is_business_day", "time_of_business_day"]
         List of features to generate. Options:
 
         - "is_business_hour": Boolean for whether time is during business hours
@@ -105,11 +103,11 @@ class BusinessTimeFeatures(_BaseTransformer):
     >>> result = transformer.fit_transform(X)
     """
 
-    subset: Optional[List[str]] = None
+    subset: list[str] | None = None
     business_hours_start: int = 9
     business_hours_end: int = 17
-    weekend_days: List[int] = [5, 6]
-    features: List[str] = [
+    weekend_days: list[int] = [5, 6]
+    features: list[str] = [
         "is_business_hour",
         "is_business_day",
         "time_of_business_day",
@@ -145,14 +143,14 @@ class BusinessTimeFeatures(_BaseTransformer):
                 )
         return features
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "BusinessTimeFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "BusinessTimeFeatures":
         """Fit the transformer by identifying datetime columns if not specified.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

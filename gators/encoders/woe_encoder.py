@@ -1,6 +1,5 @@
-from typing import Annotated, List, Optional, Union
+from typing import Annotated
 
-import numpy as np
 import polars as pl
 from pydantic import Field, PositiveFloat, PositiveInt
 
@@ -10,7 +9,7 @@ from ._base_encoder import _BaseEncoder
 def compute_woe_iv(
     X: pl.DataFrame,
     y: pl.Series,
-    regularization: Optional[Annotated[float, Field(ge=0.0, le=1.0)]] = 0.01,
+    regularization: Annotated[float, Field(ge=0.0, le=1.0)] = 0.01,
 ):
     # Pre-compute target statistics for better performance
     reg = regularization if regularization is not None else 0.01
@@ -50,13 +49,13 @@ class WOEEncoder(_BaseEncoder):
 
     Parameters
     ----------
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
-    regularization : Optional[float], default=0.01
+    regularization : float, default=0.01
         Regularization term (0.0-1.0) to prevent division by zero in WOE calculation.
     default : float, default=0.0
         Default WOE value for categories with insufficient counts or unseen categories.
-    min_count : Union[PositiveInt, PositiveFloat], default=1
+    min_count : PositiveInt | PositiveFloat, default=1
         Minimum count threshold for categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     inplace : bool, default=True
         If True, replace original columns with encoded values.
@@ -131,10 +130,10 @@ class WOEEncoder(_BaseEncoder):
     └─────┴───────┴───────────────┴───────────────┘
     """
 
-    subset: Optional[List[str]] = None
-    regularization: Optional[Annotated[float, Field(ge=0.0, le=1.0)]] = 0.01
+    subset: list[str] | None = None
+    regularization: Annotated[float, Field(ge=0.0, le=1.0)] = 0.01
     default: float = 0.0
-    min_count: Union[PositiveInt, PositiveFloat] = 1
+    min_count: PositiveInt | PositiveFloat = 1
     drop_columns: bool = True
 
     def fit(self, X: pl.DataFrame, y: pl.Series) -> "WOEEncoder":
@@ -164,7 +163,7 @@ class WOEEncoder(_BaseEncoder):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.String, pl.Boolean, pl.Enum]
+                if dtype.base_type() in self._CAT_DTYPES
             ]
         X = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
         stats = compute_woe_iv(

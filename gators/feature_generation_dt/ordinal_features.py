@@ -1,11 +1,11 @@
-from typing import Callable, Dict, List, Optional
+from typing import Callable
 
 import polars as pl
 from pydantic import ValidationInfo, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
-COMPONENT_FUNCTIONS: Dict[str, Callable] = {
+COMPONENT_FUNCTIONS: dict[str, Callable] = {
     "century": lambda x: x.dt.century(),
     "year": lambda x: x.dt.year(),
     "semester": lambda x: pl.when(x.dt.quarter() <= 2).then(1).otherwise(2),
@@ -32,10 +32,10 @@ class OrdinalFeatures(_BaseTransformer):
 
     Parameters
     ----------
-    subset : Optional[List[str]], optional
+    subset : list[str]], optional
         List of datetime columns to extract features from. If None, all datetime columns
         in the dataframe will be used, by default None.
-    components : List[str]
+    components : list[str]
         List of date and time components to extract.
         Valid values: 'century', 'year', 'semester', 'quarter', 'month', 'week',
         'day_of_week', 'day_of_month', 'day_of_year', 'weekend', 'leap_year',
@@ -90,8 +90,8 @@ class OrdinalFeatures(_BaseTransformer):
     └────────────┴─────────────────────┴──────────────┴───────────────┘
     """
 
-    subset: Optional[List[str]] = None
-    components: List[str]
+    subset: list[str] | None = None
+    components: list[str]
     drop_columns: bool = False
 
     @field_validator("components")
@@ -104,14 +104,14 @@ class OrdinalFeatures(_BaseTransformer):
                 )
         return components
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "OrdinalFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "OrdinalFeatures":
         """Fit the transformer.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 
 from ..transformer._base_transformer import _BaseTransformer
@@ -40,16 +38,16 @@ class Contains(_BaseTransformer):
     ╰─────────────┴───────────────┴──────────────┴──────────────┴──────────────╯
     """
 
-    contains_dict: Dict[str, List[str]]
+    contains_dict: dict[str, list[str]]
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "Contains":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Contains":
         """Fit the transformer (no-op, but required for sklearn compatibility).
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns

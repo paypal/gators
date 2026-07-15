@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Union
-
 import polars as pl
 from pydantic import PrivateAttr
 
@@ -21,7 +19,7 @@ class BoxCox(_BaseTransformer):
 
     Parameters
     ----------
-    lambdas : Dict[str, Union[int, float]]
+    lambdas : dict[str, int | float]
         Dictionary mapping column names to their lambda (power) parameters.
         Lambda values typically range from -2 to 2.
     drop_columns : bool, default=True
@@ -62,19 +60,19 @@ class BoxCox(_BaseTransformer):
     to handle zero or negative values.
     """
 
-    lambdas: Dict[str, Union[int, float]]
+    lambdas: dict[str, int | float]
     drop_columns: bool = True
-    _columns: List[str] = PrivateAttr()
-    _column_mapping: Dict[str, str] = PrivateAttr()
+    _columns: list[str] = PrivateAttr(default_factory=list)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "BoxCox":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "BoxCox":
         """Fit the transformer by storing column names.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame to fit. All values in specified columns must be positive.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, cast
-
 import polars as pl
 from pydantic import PrivateAttr
 from typing_extensions import Literal
@@ -18,9 +16,9 @@ class StringImputer(_BaseTransformer):
 
         - "constant": Fill with a constant value specified by `value`
         - "most_frequent": Fill with the mode (most frequent value)
-    subset : Optional[List[str]], default=None
+    subset : list[str], default=None
         List of string columns to impute. If None, all string columns are selected.
-    value : Optional[str], default=None
+    value : str, default=None
         Value to use when strategy is 'constant'. Required when strategy='constant', ignored otherwise.
     inplace : bool, default=True
         If True, impute values in the original columns.
@@ -73,21 +71,21 @@ class StringImputer(_BaseTransformer):
     """
 
     strategy: Literal["constant", "most_frequent"]
-    subset: Optional[List[str]] = None
-    value: Optional[str] = None
+    subset: list[str] | None = None
+    value: str = None
     drop_columns: bool = True
     inplace: bool = True
-    _statistics: Dict[str, Optional[str]] = PrivateAttr(default_factory=dict)
-    _column_mapping: Dict[str, str] = PrivateAttr(default_factory=dict)
+    _statistics: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "StringImputer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "StringImputer":
         """Fit the transformer by computing imputation statistics.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame with string columns.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target series (not used, present for sklearn compatibility).
 
         Returns

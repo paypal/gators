@@ -198,3 +198,12 @@ class TestCharacterStatistics:
         transformer2.fit(X)
         result2 = transformer2.transform(X)
         assert result.equals(result2)
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    from polars.testing import assert_frame_equal
+
+    X = pl.DataFrame({"text": ["hello", "world123"]})
+    transformer = CharacterStatistics(features=["n_digits"])
+    assert_frame_equal(transformer.transform(X), X)

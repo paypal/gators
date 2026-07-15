@@ -129,6 +129,14 @@ def test_groupby_imputer_specific_columns(sample_dataframe):
     assert "value1" not in transformed.columns  # Original dropped
 
 
+def test_groupby_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"district": ["A", "B"], "value": [1.0, None]})
+    imputer = GroupByImputer(group_by_column="district", strategy="mean")
+    result = imputer.transform(X)
+    assert_frame_equal(result, X)
+
+
 def test_groupby_imputer_auto_detect_numeric():
     """Test that GroupByImputer auto-detects numeric columns."""
     X = pl.DataFrame(

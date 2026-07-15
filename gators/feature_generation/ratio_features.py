@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional
-
 import polars as pl
 from pydantic import field_validator
 
@@ -8,23 +6,32 @@ from ..transformer._base_transformer import _BaseTransformer
 
 class RatioFeatures(_BaseTransformer):
     """
-    Generates ratio features by dividing numerator columns by denominator columns.
+    Generates ratio features by dividing numerator columns by denominator columns
+    with Laplace smoothing applied to the denominator.
 
-    This transformer creates ratio features in a 1-to-1 pairing between numerator and denominator
-    columns. Division by zero is handled by replacing the result with null values.
+    Each feature is computed as:
+
+        ``numerator / (denominator + 1)``
+
+    Adding ``1`` to the denominator (Laplace smoothing) prevents division-by-zero
+    and avoids extreme values when the denominator is small or zero. This is
+    particularly useful for count-based features such as event/trial ratios in
+    fraud detection or click-through rates.
 
     Parameters
     ----------
-    numerator_columns : List[str]
+    numerator_columns : list[str]
         List of column names to use as numerators.
-    denominator_columns : List[str]
-        List of column names to use as denominators. Must have the same length as numerator_columns.
-    new_column_names : Optional[List[str]], optional
-        List of custom names for the ratio features. If None, names will be automatically
-        generated as '{numerator}__div__{denominator}', by default None.
+    denominator_columns : list[str]
+        List of column names to use as denominators. Must have the same length as
+        ``numerator_columns``.
+    new_column_names : list[str], optional
+        List of custom names for the ratio features. If ``None``, names will be
+        automatically generated as ``'{numerator}__div__{denominator}'``,
+        by default ``None``.
     drop_columns : bool, optional
-        Whether to drop the original numerator and denominator columns after creating ratios,
-        by default False.
+        Whether to drop the original numerator and denominator columns after
+        creating ratios, by default ``False``.
 
     Examples
     --------
@@ -32,102 +39,128 @@ class RatioFeatures(_BaseTransformer):
     >>> import polars as pl
 
     >>> X = pl.DataFrame({
-    ...     'revenue': [100, 200, 300, 400],
-    ...     'cost': [80, 100, 150, 0],
-    ...     'clicks': [1000, 2000, 3000, 4000],
-    ...     'impressions': [10000, 20000, 30000, 40000]
+    ...     'events': [10, 20, 0, 5],
+    ...     'trials': [1, 3, 0, 9],
     ... })
 
-    **Example 1: Basic ratio features**
+    **Example 1: Basic ratio with Laplace smoothing**
+
+    Zero trials are smoothed to 1, producing ``events / 1`` instead of null.
 
     >>> transformer = RatioFeatures(
-    ...     numerator_columns=['revenue', 'clicks'],
-    ...     denominator_columns=['cost', 'impressions']
+    ...     numerator_columns=['events'],
+    ...     denominator_columns=['trials']
     ... )
     >>> transformer.fit(X)
-    RatioFeatures(numerator_columns=['revenue', 'clicks'], denominator_columns=['cost', 'impressions'])
+    RatioFeatures(numerator_columns=['events'], denominator_columns=['trials'])
     >>> result = transformer.transform(X)
     >>> result
-    shape: (4, 6)
-    ┌─────────┬──────┬────────┬─────────────┬────────────────────┬─────────────────────────┐
-    │ revenue │ cost │ clicks │ impressions │ revenue__div__cost │ clicks__div__impressions│
-    │ i64     │ i64  │ i64    │ i64         │ f64                │ f64                     │
-    ├─────────┼──────┼────────┼─────────────┼────────────────────┼─────────────────────────┤
-    │ 100     │ 80   │ 1000   │ 10000       │ 1.25               │ 0.1                     │
-    │ 200     │ 100  │ 2000   │ 20000       │ 2.0                │ 0.1                     │
-    │ 300     │ 150  │ 3000   │ 30000       │ 2.0                │ 0.1                     │
-    │ 400     │ 0    │ 4000   │ 40000       │ null               │ 0.1                     │
-    └─────────┴──────┴────────┴─────────────┴────────────────────┴─────────────────────────┘
+    shape: (4, 3)
+    ┌────────┬────────┬─────────────────────┐
+    │ events │ trials │ events__div__trials │
+    │ i64    │ i64    │ f64                 │
+    ├────────┼────────┼─────────────────────┤
+    │ 10     │ 1      │ 5.0                 │
+    │ 20     │ 3      │ 5.0                 │
+    │ 0      │ 0      │ 0.0                 │
+    │ 5      │ 9      │ 0.5                 │
+    └────────┴────────┴─────────────────────┘
 
-    **Example 2: Custom column names**
+    **Example 2: Multiple ratio features**
 
+    >>> X2 = pl.DataFrame({
+    ...     'hits_a': [9, 19, 0],
+    ...     'hits_b': [4, 9, 9],
+    ...     'views_a': [2, 4, 0],
+    ...     'views_b': [1, 4, 9],
+    ... })
     >>> transformer = RatioFeatures(
-    ...     numerator_columns=['revenue'],
-    ...     denominator_columns=['cost'],
-    ...     new_column_names=['profit_margin']
+    ...     numerator_columns=['hits_a', 'hits_b'],
+    ...     denominator_columns=['views_a', 'views_b']
     ... )
-    >>> result = transformer.fit_transform(X)
+    >>> result = transformer.fit_transform(X2)
     >>> result
-    shape: (4, 5)
-    ┌─────────┬──────┬────────┬─────────────┬───────────────┐
-    │ revenue │ cost │ clicks │ impressions │ profit_margin │
-    │ i64     │ i64  │ i64    │ i64         │ f64           │
-    ├─────────┼──────┼────────┼─────────────┼───────────────┤
-    │ 100     │ 80   │ 1000   │ 10000       │ 1.25          │
-    │ 200     │ 100  │ 2000   │ 20000       │ 2.0           │
-    │ 300     │ 150  │ 3000   │ 30000       │ 2.0           │
-    │ 400     │ 0    │ 4000   │ 40000       │ null          │
-    └─────────┴──────┴────────┴─────────────┴───────────────┘
+    shape: (3, 6)
+    ┌────────┬────────┬─────────┬─────────┬──────────────────────┬──────────────────────┐
+    │ hits_a │ hits_b │ views_a │ views_b │ hits_a__div__views_a │ hits_b__div__views_b │
+    │ i64    │ i64    │ i64     │ i64     │ f64                  │ f64                  │
+    ├────────┼────────┼─────────┼─────────┼──────────────────────┼──────────────────────┤
+    │ 9      │ 4      │ 2       │ 1       │ 3.0                  │ 2.0                  │
+    │ 19     │ 9      │ 4       │ 4       │ 3.8                  │ 1.8                  │
+    │ 0      │ 9      │ 0       │ 9       │ 0.0                  │ 0.9                  │
+    └────────┴────────┴─────────┴─────────┴──────────────────────┴──────────────────────┘
 
-    **Example 3: With drop_columns=True**
+    **Example 3: Custom column names**
 
     >>> transformer = RatioFeatures(
-    ...     numerator_columns=['revenue'],
-    ...     denominator_columns=['cost'],
-    ...     drop_columns=True
+    ...     numerator_columns=['events'],
+    ...     denominator_columns=['trials'],
+    ...     new_column_names=['smoothed_rate']
     ... )
     >>> result = transformer.fit_transform(X)
     >>> result
     shape: (4, 3)
-    ┌────────┬─────────────┬────────────────────┐
-    │ clicks │ impressions │ revenue__div__cost │
-    │ i64    │ i64         │ f64                │
-    ├────────┼─────────────┼────────────────────┤
-    │ 1000   │ 10000       │ 1.25               │
-    │ 2000   │ 20000       │ 2.0                │
-    │ 3000   │ 30000       │ 2.0                │
-    │ 4000   │ 40000       │ null               │
-    └────────┴─────────────┴────────────────────┘
+    ┌────────┬────────┬───────────────┐
+    │ events │ trials │ smoothed_rate │
+    │ i64    │ i64    │ f64           │
+    ├────────┼────────┼───────────────┤
+    │ 10     │ 1      │ 5.0           │
+    │ 20     │ 3      │ 5.0           │
+    │ 0      │ 0      │ 0.0           │
+    │ 5      │ 9      │ 0.5           │
+    └────────┴────────┴───────────────┘
 
-    **Example 4: Handling null values**
+    **Example 4: With drop_columns=True**
 
-    >>> X_with_nulls = pl.DataFrame({
-    ...     'A': [10, None, 30, 40],
-    ...     'B': [2, 5, None, 0]
+    >>> transformer = RatioFeatures(
+    ...     numerator_columns=['events'],
+    ...     denominator_columns=['trials'],
+    ...     drop_columns=True
+    ... )
+    >>> result = transformer.fit_transform(X)
+    >>> result
+    shape: (4, 1)
+    ┌─────────────────────┐
+    │ events__div__trials │
+    │ f64                 │
+    ├─────────────────────┤
+    │ 5.0                 │
+    │ 5.0                 │
+    │ 0.0                 │
+    │ 0.5                 │
+    └─────────────────────┘
+
+    **Example 5: Null propagation**
+
+    Input nulls still propagate through the ratio; only zero denominators are
+    smoothed, not missing ones.
+
+    >>> X_nulls = pl.DataFrame({
+    ...     'A': [10, None, 30],
+    ...     'B': [1, 3, None]
     ... })
     >>> transformer = RatioFeatures(
     ...     numerator_columns=['A'],
     ...     denominator_columns=['B']
     ... )
-    >>> result = transformer.fit_transform(X_with_nulls)
+    >>> result = transformer.fit_transform(X_nulls)
     >>> result
-    shape: (4, 3)
-    ┌──────┬──────┬──────────────┐
-    │ A    │ B    │ A__div__B    │
-    │ i64  │ i64  │ f64          │
-    ├──────┼──────┼──────────────┤
-    │ 10   │ 2    │ 5.0          │
-    │ null │ 5    │ null         │
-    │ 30   │ null │ null         │
-    │ 40   │ 0    │ null         │
-    └──────┴──────┴──────────────┘
+    shape: (3, 3)
+    ┌──────┬──────┬────────────┐
+    │ A    │ B    │ A__div__B  │
+    │ i64  │ i64  │ f64        │
+    ├──────┼──────┼────────────┤
+    │ 10   │ 1    │ 5.0        │
+    │ null │ 3    │ null       │
+    │ 30   │ null │ null       │
+    └──────┴──────┴────────────┘
     """
 
-    numerator_columns: List[str]
-    denominator_columns: List[str]
-    new_column_names: Optional[List[str]] = None
+    numerator_columns: list[str]
+    denominator_columns: list[str]
+    new_column_names: list[str] | None = None
     drop_columns: bool = False
-    _column_mapping: Dict[str, str] = {}
+    _column_mapping: dict[str, str] = {}
 
     @field_validator("denominator_columns", mode="after")
     def check_lengths_match(cls, denominator_columns, info):
@@ -153,14 +186,14 @@ class RatioFeatures(_BaseTransformer):
 
         return new_column_names
 
-    def fit(self, X: pl.DataFrame, y: Optional[pl.Series] = None) -> "RatioFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RatioFeatures":
         """Fit the transformer by generating column name mappings.
 
         Parameters
         ----------
         X : pl.DataFrame
             Input DataFrame.
-        y : Optional[pl.Series], default=None
+        y : pl.Series, default=None
             Target variable. Not used, present here for compatibility.
 
         Returns
@@ -199,13 +232,7 @@ class RatioFeatures(_BaseTransformer):
             default_name = f"{num_col}__div__{denom_col}"
             new_col_name = self._column_mapping[default_name]
 
-            # Create ratio with division by zero handling
-            ratio_expr = (
-                pl.when(pl.col(denom_col) == 0)
-                .then(None)
-                .otherwise(pl.col(num_col) / pl.col(denom_col))
-                .alias(new_col_name)
-            )
+            ratio_expr = (pl.col(num_col) / (pl.col(denom_col) + 1)).alias(new_col_name)
 
             new_columns.append(ratio_expr)
 

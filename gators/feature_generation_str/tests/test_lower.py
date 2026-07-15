@@ -77,3 +77,12 @@ def test_lower_transform_inplace_false_with_drop(sample_data):
     # New columns should exist
     assert "column1__lower" in transformed_X.columns
     assert "column2__lower" in transformed_X.columns
+
+
+def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() returns X unchanged when subset is None."""
+    X = pl.DataFrame({"col": ["Hello", "World"]})
+    transformer = Lower()
+    from polars.testing import assert_frame_equal
+
+    assert_frame_equal(transformer.transform(X), X)
