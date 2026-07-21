@@ -10,11 +10,13 @@ class GroupLagFeatures(_BaseTransformer):
 
     This transformer creates features like:
 
-    - Previous transaction amount for this card
-    - Next transaction amount for this card
-    - Value N periods ago within group
+    - Value N periods ago within the same group
+    - Historical behavior patterns within groups
+    - Sequential dependencies in grouped data
 
     Useful for time-series analysis and detecting changes in behavior patterns.
+    Lag features are suitable for real-time scoring; lead features are only useful
+    for historical analysis and backtesting.
 
     Parameters
     ----------
@@ -111,8 +113,10 @@ class GroupLagFeatures(_BaseTransformer):
     Notes
     -----
     - Data should be sorted by by and time before transformation
-    - Lag features look backwards: lag_1 is the previous row within the group
-    - Lead features look forwards: lead_1 is the next row within the group
+    - Lag features look backwards: lag_1 is the previous row within the group.
+      These are suitable for real-time scoring.
+    - Lead features look forwards: lead_1 is the next row within the group.
+      These are useful only for historical analysis and backtesting, not real-time scoring.
     - First rows in each group will have null (or fill_value) for lag features
     - Last rows in each group will have null (or fill_value) for lead features
     """

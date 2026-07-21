@@ -9,6 +9,7 @@ Mathematical Operations
 * :class:`~gators.feature_generation.concentration_index_features.ConcentrationIndexFeatures` - Generate concentration index features
 * :class:`~gators.feature_generation.distance_features.DistanceFeatures` - Calculate distance between columns
 * :class:`~gators.feature_generation.generalized_ratio_features.GeneralizedRatioFeatures` - Generate generalized ratio features
+* :class:`~gators.feature_generation.hhi_features.HHIFeatures` - Generate Herfindahl-Hirschman index features
 * :class:`~gators.feature_generation.math_features.MathFeatures` - Mathematical operations between columns
 * :class:`~gators.feature_generation.ratio_features.RatioFeatures` - Calculate ratio between columns
 * :class:`~gators.feature_generation.plan_rotation_features.PlanRotationFeatures` - Rotate features in space

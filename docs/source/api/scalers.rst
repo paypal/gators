@@ -1,7 +1,7 @@
 Scalers
 =======
 
-Feature Scaling
+Feature Scalers
 ---------------
 
 * :class:`~gators.scalers.arcsin_squareroot_scaler.ArcSinSquareRootScaler` - Arcsinh square root transformation

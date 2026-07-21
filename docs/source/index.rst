@@ -83,7 +83,8 @@ What Can Gators Do?
 * 📅 :doc:`DateTime Features <api/feature_generation_dt>` - Temporal patterns, cyclical encoding, holidays, and more
 * 🔄 :doc:`Imputation <api/imputers>` - Numeric, string, boolean, and group-based strategies
 * 📊 :doc:`Discretization <api/discretizers>` - Equal-width, quantile, tree-based binning, and more
-* ⚖️ :doc:`Scaling <api/scalers>` - Standard, min-max, Box-Cox, and more
+* ⚖️ :doc:`Scalers <api/scalers>` - Standard, min-max, Box-Cox, and more
+* ✨ :doc:`Feature Selection <api/feature_selection>` - Correlation, stability, information value, and more
 * 🔗 :doc:`Pipeline <api/pipeline>` - Chain transformers seamlessly
   
 

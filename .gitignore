@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.pypirc
 
 # C extensions
 *.so
@@ -137,4 +138,13 @@ benchmarks/
 
 tst*/
 
+dist/dist/
+build/
 dist/
+build/
+htmlcov/
+docs/build/
+
+# Data files for examples
+docs/source/examples/*.csv
+docs/source/examples/*.zip

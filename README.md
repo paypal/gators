@@ -68,24 +68,25 @@ Transform categorical variables with advanced encoding techniques:
 Create powerful numeric features:
 **Mathematical Operations:**
 - `DistanceFeatures` - Calculate distance features
+- `HHIFeatures` - Herfindahl–Hirschman Indexfeatures from groups of columns
 - `IsNull` - Generate null indicator features
 - `MathFeatures` - Apply mathematical operations (add, subtract, multiply, divide)
 - `RatioFeatures` - Create ratio features between columns
 - `PlanRotationFeatures` - Rotate features in feature space
 - `PolynomialFeatures` - Generate polynomial combinations
 - `ScalarMathFeatures` - Apply scalar operations
+- `WeigtedSumFeatures` - Weighted sum of features from groups of columns
+
 
 **Aggregation & Statistics:**
 - `GroupLagFeatures` - Generate lag features by group
-- `GroupScalingFeatures` - Scale features within groups
-- `GroupStatisticsFeatures` - Calculate group statistics
-- `RowStatisticsFeatures` - Calculate row-wise statistics
+- `GroupStatisticsFeatures` - Scale features within groups
+- `RowStatisticsFeatures` - Calculate statistics
 
 **Rule-based**  
 - `ComparisonFeatures` - Generate comparison features
 - `ConditionFeatures` - Create conditional features
 - `RuleFeatures` - Apply custom business rules
-
 
 
 ### 📝 Feature Generation - String
@@ -134,7 +135,7 @@ Convert continuous variables into bins:
 - `QuantileDiscretizer` - Quantile-based binning
 - `TreeBasedDiscretizer` - Decision tree-based binning
 
-### ⚖️ Feature Scaling
+### ⚖️ Feature Scalers
 Normalize your features:
 - `ArcsinSquarerootScaler` - Arcsine square root transformation
 - `ArcsinhScaler` - Inverse hyperbolic sine transformation
@@ -144,6 +145,15 @@ Normalize your features:
 - `PowerScaler` - Power transformation
 - `StandardScaler` - Standardization (z-score normalization)
 - `YeoJohnson` - Yeo-Johnson power transformation
+
+### ✨ Feature Selection
+Select the most important features for your models:
+- `CorrelationSelector` - Select features based on correlation analysis
+- `FeatureStabilitySelector` - Select stable features across data splits
+- `InformationValueSelector` - Select features by information value
+- `PermutationImportanceSelector` - Select features by permutation importance
+- `PSIFilter` - Filter features by Population Stability Index
+- `select_k_best_stable_features` - Select K most stable features
 
 ### 🔗 Pipeline
 Chain all transformers together:
