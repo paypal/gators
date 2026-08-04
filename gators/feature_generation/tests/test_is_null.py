@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation.is_null import IsNull
+from gators.exceptions import NotFittedError
 
 
 def test_transform_no_nulls():
@@ -128,10 +129,14 @@ def test_transform_with_none_subset():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"col": [1, None, 3]})
     transformer = IsNull()
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)
 
 
 if __name__ == "__main__":

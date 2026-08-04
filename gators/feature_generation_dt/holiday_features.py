@@ -173,7 +173,7 @@ class HolidayFeatures(_BaseTransformer):
             Transformed DataFrame with holiday features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 

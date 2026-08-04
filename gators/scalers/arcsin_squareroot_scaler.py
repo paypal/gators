@@ -119,3 +119,27 @@ class ArcSinSquareRootScaler(_BaseTransformer):
         if self.drop_columns and self.subset is not None:
             return X.drop(self.subset)
         return X
+
+    def inverse_transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Reverse the arcsin-sqrt transformation via sin(x)^2.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            DataFrame with transformed columns (output of ``transform``).
+
+        Returns
+        -------
+        pl.DataFrame
+            DataFrame with columns restored to their original [0, 1] scale.
+        """
+        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        exprs = [
+            (pl.col(new).sin() ** 2).alias(orig)
+            for new, orig in reverse_map.items()
+            if new in X.columns
+        ]
+        X = X.with_columns(exprs)
+        if self.drop_columns:
+            return X.drop([c for c in reverse_map if c in X.columns])
+        return X

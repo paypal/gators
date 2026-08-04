@@ -5,7 +5,7 @@ from pydantic import PositiveInt, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
-__all__ = ["_BaseDiscretizer", "generate_labels"]
+__all__ = ["_BaseDiscretizer", "generate_labels", "deduplicate_bins"]
 
 
 def generate_labels(bins: dict[str, list[float]], rounding=3) -> dict[str, list[str]]:
@@ -53,6 +53,34 @@ def generate_labels(bins: dict[str, list[float]], rounding=3) -> dict[str, list[
         if labels[col][-1].endswith("inf]"):
             labels[col][-1] = labels[col][-1].replace("]", ")")
     return labels
+
+
+def deduplicate_bins(bins: dict[str, list[float]], rounding: int) -> dict[str, list[float]]:
+    """Remove consecutive break points that are indistinguishable at the given rounding precision.
+
+    Parameters
+    ----------
+    bins : dict[str, list[float]]
+        Dictionary where keys are column names and values are lists of bin edges.
+    rounding : int
+        Number of decimal places used to compare bin edges.
+
+    Returns
+    -------
+    dict[str, list[float]]
+        Dictionary with deduplicated bin edges per column.
+    """
+    result = {}
+    for col, breaks in bins.items():
+        if len(breaks) <= 1:
+            result[col] = breaks
+            continue
+        cleaned = [breaks[0]]
+        for b in breaks[1:]:
+            if round(b, rounding) != round(cleaned[-1], rounding):
+                cleaned.append(b)
+        result[col] = cleaned
+    return result
 
 
 class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
@@ -165,7 +193,7 @@ class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
             Transformed DataFrame.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         if self.inplace:
             # subset is guaranteed to be set during fit

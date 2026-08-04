@@ -1,9 +1,8 @@
 import numpy as np
 import polars as pl
-from lightgbm import LGBMClassifier, LGBMRegressor
 from pydantic import PositiveInt, field_validator
 
-from ._base_discretizer import _BaseDiscretizer, generate_labels
+from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels
 
 
 class TreeBasedDiscretizer(_BaseDiscretizer):
@@ -129,6 +128,14 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
                 "discretizer.fit(X, y=y_train) or pipeline.fit_transform(X, y=y_train)"
             )
 
+        try:
+            from lightgbm import LGBMClassifier, LGBMRegressor
+        except ImportError as exc:
+            raise ImportError(
+                "lightgbm is required for TreeBasedDiscretizer. "
+                "Install it with: pip install 'gators[tree]'"
+            ) from exc
+
         if not self.subset:
             self.subset = [
                 col
@@ -191,6 +198,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
                 else:
                     self._bins[col] = []
 
+        self._bins = deduplicate_bins(self._bins, self.rounding)
         # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, self.rounding)
 

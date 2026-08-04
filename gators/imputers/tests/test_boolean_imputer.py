@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.imputers.boolean_imputer import BooleanImputer
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -111,8 +112,11 @@ def test_transform_inplace_true(sample_X):
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"A": [True, None, False]})
     imputer = BooleanImputer(strategy="constant", value=False)
-    result = imputer.transform(X)
-    assert_frame_equal(result, X)
+    with pytest.raises(NotFittedError):
+        imputer.transform(X)

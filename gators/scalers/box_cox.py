@@ -113,3 +113,32 @@ class BoxCox(_BaseTransformer):
         if self.drop_columns:
             return X.drop(self._columns)
         return X
+
+    def inverse_transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Reverse the Box-Cox transformation.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            DataFrame with Box-Cox-transformed columns (output of ``transform``).
+
+        Returns
+        -------
+        pl.DataFrame
+            DataFrame with columns restored to their original scale.
+        """
+        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        exprs = []
+        for new_col, orig_col in reverse_map.items():
+            if new_col not in X.columns:
+                continue
+            lmbda = self.lambdas[orig_col]
+            if lmbda == 0:
+                expr = pl.col(new_col).exp().alias(orig_col)
+            else:
+                expr = ((pl.col(new_col) * lmbda + 1) ** (1.0 / lmbda)).alias(orig_col)
+            exprs.append(expr)
+        X = X.with_columns(exprs)
+        if self.drop_columns:
+            return X.drop([c for c in reverse_map if c in X.columns])
+        return X

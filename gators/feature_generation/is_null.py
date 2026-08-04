@@ -78,7 +78,7 @@ class IsNull(_BaseTransformer):
             Transformed DataFrame with additional is_null columns.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
         new_columns = [
             pl.col(col).is_null().alias(self._column_mapping[col]) for col in self.subset
         ]

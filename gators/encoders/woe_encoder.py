@@ -18,6 +18,11 @@ def compute_woe_iv(
     denom_1 = num_1s + 2 * reg
     denom_0 = num_0s + 2 * reg
 
+    # Cast Enum/Categorical columns to String so unpivot can find a common supertype
+    enum_cols = [c for c, d in X.schema.items() if isinstance(d, (pl.Enum, pl.Categorical))]
+    if enum_cols:
+        X = X.with_columns([pl.col(c).cast(pl.String) for c in enum_cols])
+
     # Compute WOE and IV statistics in optimized chain
     stats = (
         X.with_columns(y.alias("__target__"))

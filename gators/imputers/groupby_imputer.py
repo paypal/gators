@@ -155,7 +155,7 @@ class GroupByImputer(_BaseTransformer):
         # Join all group statistics to the dataframe first
         temp_columns = []
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         for col in self.subset:
             # Create temporary column name for group statistics

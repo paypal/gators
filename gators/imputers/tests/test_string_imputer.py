@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.imputers.string_imputer import StringImputer
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -96,11 +97,14 @@ def test_drop_columns(sample_X_drop):
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"A": ["a", None, "b"]})
     imputer = StringImputer(strategy="constant", value="missing")
-    result = imputer.transform(X)
-    assert_frame_equal(result, X)
+    with pytest.raises(NotFittedError):
+        imputer.transform(X)
 
 
 def test_transform_inplace_true():

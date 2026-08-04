@@ -88,7 +88,7 @@ class Lower(_BaseTransformer):
             Transformed DataFrame.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         if self.inplace:
             transformations = [

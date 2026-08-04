@@ -5,6 +5,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.encoders import BinaryEncoder
+from gators.exceptions import NotFittedError
 
 
 class TestBinaryEncoder:
@@ -374,9 +375,13 @@ class TestBinaryEncoder:
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"cat": ["a", "b", "c"]})
     encoder = BinaryEncoder()
     from polars.testing import assert_frame_equal
 
-    assert_frame_equal(encoder.transform(X), X)
+    with pytest.raises(NotFittedError):
+        encoder.transform(X)

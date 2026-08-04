@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.discretizers._base_discretizer import _BaseDiscretizer
+from gators.exceptions import NotFittedError
 
 
 class ExampleDiscretizer(_BaseDiscretizer):
@@ -120,6 +121,7 @@ def test_inplace_true():
     discretizer = ExampleDiscretizer(subset=["A", "B"], inplace=True)
     discretizer._bins = {"A": [0.5], "B": [20]}
     discretizer._labels = {"A": ["low", "high"], "B": ["small", "large"]}
+    discretizer._is_fitted = True
 
     result = discretizer.transform(X)
 
@@ -143,6 +145,7 @@ def test_as_numerics_true():
     discretizer._column_mapping = {"A": "A__disc", "B": "B__disc"}
     discretizer._bins = {"A": [0.5], "B": [20]}
     discretizer._labels = {"A": ["low", "high"], "B": ["small", "large"]}
+    discretizer._is_fitted = True
 
     result = discretizer.transform(X)
 
@@ -163,6 +166,7 @@ def test_inplace_with_as_numerics():
     discretizer = ExampleDiscretizer(subset=["A"], inplace=True, as_numerics=True)
     discretizer._bins = {"A": [0.5]}
     discretizer._labels = {"A": ["low", "high"]}
+    discretizer._is_fitted = True
 
     result = discretizer.transform(X)
 
@@ -202,11 +206,11 @@ def test_generate_labels_empty_bins():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged (subset is None)."""
+    """transform() before fit() raises NotFittedError."""
     X = pl.DataFrame({"A": [1.0, 2.0, 3.0], "B": [4.0, 5.0, 6.0]})
     discretizer = ExampleDiscretizer()
-    result = discretizer.transform(X)
-    assert_frame_equal(result, X)
+    with pytest.raises(NotFittedError):
+        discretizer.transform(X)
 
 
 if __name__ == "__main__":

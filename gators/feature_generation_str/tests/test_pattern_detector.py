@@ -2,6 +2,7 @@ import polars as pl
 import pytest
 
 from gators.feature_generation_str import PatternDetector
+from gators.exceptions import NotFittedError
 
 
 class TestPatternDetector:
@@ -279,10 +280,14 @@ class TestPatternDetector:
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     import polars as pl
     from polars.testing import assert_frame_equal
 
     X = pl.DataFrame({"text": ["hello@world.com", "noemail"]})
     transformer = PatternDetector(patterns=["is_email"])
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

@@ -118,6 +118,11 @@ class TargetEncoder(_BaseEncoder):
                 for col, dtype in zip(X.columns, X.dtypes)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
+        # Cast Enum/Categorical columns to String so unpivot can find a common supertype
+        enum_cols = [c for c, d in X.schema.items() if isinstance(d, (pl.Enum, pl.Categorical))]
+        if enum_cols:
+            X = X.with_columns([pl.col(c).cast(pl.String) for c in enum_cols])
+
         # Add target as a temporary column for unpivoting
         X_with_target = X.select(self.subset).with_columns(y.alias("__target__"))
         melted = X_with_target.unpivot(index="__target__")

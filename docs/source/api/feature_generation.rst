@@ -8,6 +8,7 @@ Mathematical Operations
 * :class:`~gators.feature_generation.comparison_features.ComparisonFeatures` - Compare columns
 * :class:`~gators.feature_generation.concentration_index_features.ConcentrationIndexFeatures` - Generate concentration index features
 * :class:`~gators.feature_generation.distance_features.DistanceFeatures` - Calculate distance between columns
+* :class:`~gators.feature_generation.fourier_features.FourierFeatures` - Generate Fourier basis features
 * :class:`~gators.feature_generation.generalized_ratio_features.GeneralizedRatioFeatures` - Generate generalized ratio features
 * :class:`~gators.feature_generation.hhi_features.HHIFeatures` - Generate Herfindahl-Hirschman index features
 * :class:`~gators.feature_generation.math_features.MathFeatures` - Mathematical operations between columns
@@ -29,5 +30,5 @@ Group Features
 
 * :class:`~gators.feature_generation.group_statistics_features.GroupStatisticsFeatures` - Generate group-based statistics
 * :class:`~gators.feature_generation.group_lag_features.GroupLagFeatures` - Generate group-based lag features
-* :class:`~gators.feature_generation.hhi_features.HHIFeatures` - Generate Herfindahl-Hirschman index features
+* :class:`~gators.feature_generation.rolling_statistics_features.RollingStatisticsFeatures` - Generate rolling window statistics features
 * :class:`~gators.feature_generation.row_statistics_features.RowStatisticsFeatures` - Generate row-based statistics features

@@ -144,7 +144,7 @@ class OneHotEncoder(_BaseTransformer):
             DataFrame with one-hot encoded columns (one binary column per category).
         """
         if self.column_categories is None:
-            return X
+            return X  # pragma: no cover
 
         # Use native Polars to_dummies - single efficient call
         cols_to_encode = list(self.column_categories.keys())
@@ -178,7 +178,7 @@ class OneHotEncoder(_BaseTransformer):
         dummies = dummies.select(pl.all().cast(pl.Float64))
 
         # Concatenate with original dataframe
-        X = pl.concat([X, dummies], how="horizontal")
+        X = pl.concat([X, dummies], how="horizontal_extend")
 
         # Drop original columns if requested
         if self.drop_columns and self.subset:

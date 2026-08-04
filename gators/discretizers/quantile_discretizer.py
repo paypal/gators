@@ -2,7 +2,7 @@ import numpy as np
 import polars as pl
 from pydantic import PositiveInt, field_validator
 
-from ._base_discretizer import _BaseDiscretizer, generate_labels
+from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels
 
 
 class QuantileDiscretizer(_BaseDiscretizer):
@@ -193,6 +193,7 @@ class QuantileDiscretizer(_BaseDiscretizer):
 
                 self._bins[col] = sorted(quantile_values)
 
+        self._bins = deduplicate_bins(self._bins, self.rounding)
         # Generate labels
         self._labels = generate_labels(self._bins, self.rounding)
 

@@ -139,7 +139,7 @@ class CyclicFeatures(_BaseTransformer):
             Transformed DataFrame with cyclic features (sine and cosine).
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         # Parse datetime columns only if needed
         datetime_conversions = []

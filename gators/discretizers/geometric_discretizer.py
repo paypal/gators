@@ -1,6 +1,6 @@
 import polars as pl
 
-from ._base_discretizer import _BaseDiscretizer, generate_labels
+from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels
 
 
 def compute_geometric_bins(
@@ -202,6 +202,7 @@ class GeometricDiscretizer(_BaseDiscretizer):
 
         # Compute geometric bins - pass subset to avoid creating intermediate DataFrame
         self._bins = compute_geometric_bins(X, self.num_bins, subset=self.subset)
+        self._bins = deduplicate_bins(self._bins, self.rounding)
 
         # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, rounding=self.rounding)

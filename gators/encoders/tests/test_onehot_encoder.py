@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.encoders import OneHotEncoder
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -185,7 +186,11 @@ def test_transform_categorical_dtype():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when categories is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"cat": ["a", "b", "c"]})
     encoder = OneHotEncoder()
-    assert_frame_equal(encoder.transform(X), X)
+    with pytest.raises(NotFittedError):
+        encoder.transform(X)

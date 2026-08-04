@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation import PolynomialFeatures
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -63,6 +64,7 @@ def test_interaction_only(sample_data):
 
 
 def test_transform_without_fit_returns_x_unchanged(sample_data):
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
     transformer = PolynomialFeatures()
-    assert_frame_equal(transformer.transform(sample_data), sample_data)
+    with pytest.raises(NotFittedError):
+        transformer.transform(sample_data)

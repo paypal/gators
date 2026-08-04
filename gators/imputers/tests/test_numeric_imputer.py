@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.imputers.numeric_imputer import NumericImputer
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -272,11 +273,14 @@ def test_imputer_constant_default_value(sample_dataframe):
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"A": [1.0, None], "B": [2.0, 3.0]})
     imputer = NumericImputer(strategy="mean")
-    result = imputer.transform(X)
-    assert_frame_equal(result, X)
+    with pytest.raises(NotFittedError):
+        imputer.transform(X)
 
 
 def test_imputer_constant_inplace_true(sample_dataframe):

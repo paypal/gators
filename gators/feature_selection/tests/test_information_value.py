@@ -298,6 +298,26 @@ class TestComputeIV:
         features_in_X = set(X.columns)
         assert features_in_result == features_in_X
 
+    def test_enum_columns(self):
+        """Enum columns are handled correctly via compute_woe_iv cast path."""
+        X = pl.DataFrame(
+            {
+                "bin_a": pl.Series(["[0,1)", "[1,2)", "[0,1)", "[1,2)", "[0,1)", "[1,2)"]).cast(
+                    pl.Enum(["[0,1)", "[1,2)"])
+                ),
+                "bin_b": pl.Series(["[0,5)", "[5,10)", "[5,10)", "[0,5)", "[0,5)", "[5,10)"]).cast(
+                    pl.Enum(["[0,5)", "[5,10)"])
+                ),
+            }
+        )
+        y = pl.Series("target", [1, 0, 1, 1, 0, 0])
+        result = compute_iv(X, y)
+
+        assert isinstance(result, pl.DataFrame)
+        assert result.columns == ["feature", "iv"]
+        assert set(result["feature"].to_list()) == {"bin_a", "bin_b"}
+        assert all(result["iv"] >= 0)
+
     def test_result_is_dataframe(self, sample_data_string):
         """Test that result is always a DataFrame, not a dict or other type."""
         X, y = sample_data_string

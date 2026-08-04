@@ -119,7 +119,7 @@ class StringImputer(_BaseTransformer):
             DataFrame with imputed string columns.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         if self.inplace:
             transformations = [pl.col(col).fill_null(val) for col, val in self._statistics.items()]

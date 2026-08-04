@@ -162,7 +162,7 @@ class BinaryEncoder(_BaseEncoder):
         default_value = 0.0
         expressions = []
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
         for col in self.subset:
             if col not in self.n_bits_:
                 continue

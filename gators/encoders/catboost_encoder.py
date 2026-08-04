@@ -116,7 +116,7 @@ class CatBoostEncoder(_BaseEncoder):
                         pl.col("__target__").cum_count().alias("cumcount"),
                     ]
                 )
-                .explode(["cumsum", "cumcount"])
+                .explode(["cumsum", "cumcount"], empty_as_null=True)
             )
 
             X_with_stats = X_indexed.join(cumsum_expr, on=col, how="left").sort("__row_idx")

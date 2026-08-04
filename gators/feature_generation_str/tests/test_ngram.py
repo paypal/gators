@@ -2,6 +2,7 @@ import polars as pl
 import pytest
 
 from gators.feature_generation_str import NGram
+from gators.exceptions import NotFittedError
 
 
 class TestNGram:
@@ -285,13 +286,16 @@ class TestNGram:
         assert set(features1) == set(features2)
 
     def test_transform_without_fit_returns_x_unchanged(self):
-        """transform() before fit() returns X unchanged when subset is None."""
+        """transform() before fit() raises NotFittedError."""
+
+    def test_transform_without_fit_returns_x_unchanged(self):
         import polars as pl
         from polars.testing import assert_frame_equal
 
         X = pl.DataFrame({"text": ["hello", "world"]})
         transformer = NGram(n=2, ngram_type="char", max_features=5)
-        assert_frame_equal(transformer.transform(X), X)
+        with pytest.raises(NotFittedError):
+            transformer.transform(X)
 
     def test_long_ngram_truncated_to_20_chars(self):
         """Word bigram longer than 20 chars after sanitization is truncated."""

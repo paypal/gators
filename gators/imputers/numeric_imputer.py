@@ -199,7 +199,7 @@ class NumericImputer(_BaseTransformer):
             DataFrame with imputed numeric columns.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
         # Build all transformations at once based on strategy
         if self.strategy in [
             "mean",

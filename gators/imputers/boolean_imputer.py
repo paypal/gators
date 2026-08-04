@@ -144,7 +144,7 @@ class BooleanImputer(_BaseTransformer):
             DataFrame with imputed boolean columns.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         if self.inplace:
             transformations = [pl.col(col).fill_null(val) for col, val in self._statistics.items()]

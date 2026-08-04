@@ -114,7 +114,7 @@ class PolynomialFeatures(_BaseTransformer):
             transformations.append(pl.lit(1).alias("bias"))
 
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         for i in range(2, self.degree + 1):
             for combination in combinations_with_replacement(self.subset, i):

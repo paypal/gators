@@ -179,7 +179,7 @@ class BusinessTimeFeatures(_BaseTransformer):
             Transformed DataFrame with business time features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 

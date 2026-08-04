@@ -140,7 +140,7 @@ class OrdinalFeatures(_BaseTransformer):
             Transformed DataFrame with ordinal features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         # Parse datetime columns only if needed
         datetime_conversions = []

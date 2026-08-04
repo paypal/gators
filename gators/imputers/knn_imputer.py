@@ -161,7 +161,7 @@ class KNNImputer(_BaseTransformer):
             DataFrame with nulls in ``subset`` columns filled.
         """
         if not self.subset:
-            return X
+            return X  # pragma: no cover
 
         has_null = pl.any_horizontal([pl.col(c).is_null() for c in self.subset])
         X_indexed = X.with_row_index("__row_idx__")

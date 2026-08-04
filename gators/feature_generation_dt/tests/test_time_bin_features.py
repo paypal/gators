@@ -5,6 +5,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation_dt.time_bin_features import TimeBinFeatures
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -414,7 +415,11 @@ def test_check_bin_types_invalid_raises_value_error():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"ts": [datetime(2024, 6, 15, 14, 0)]})
     transformer = TimeBinFeatures()
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

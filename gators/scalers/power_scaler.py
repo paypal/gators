@@ -127,3 +127,34 @@ class PowerScaler(_BaseTransformer):
         if self.drop_columns and self.subset is not None:
             return X.drop(self.subset)
         return X
+
+    def inverse_transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Reverse the power transformation.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            DataFrame with power-transformed columns (output of ``transform``).
+
+        Returns
+        -------
+        pl.DataFrame
+            DataFrame with columns restored to their original scale.
+
+        Raises
+        ------
+        ValueError
+            If ``power`` is 0 (transformation is not invertible).
+        """
+        if self.power == 0:
+            raise ValueError("Cannot invert PowerScaler with power=0.")
+        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        exprs = [
+            (pl.col(new) ** (1.0 / self.power)).alias(orig)
+            for new, orig in reverse_map.items()
+            if new in X.columns
+        ]
+        X = X.with_columns(exprs)
+        if self.drop_columns:
+            return X.drop([c for c in reverse_map if c in X.columns])
+        return X

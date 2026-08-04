@@ -185,7 +185,7 @@ class AsymmetryIndexFeatures(_BaseTransformer):
             Transformed DataFrame with asymmetry index features appended.
         """
         if not self._column_mapping:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 

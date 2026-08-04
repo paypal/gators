@@ -28,6 +28,7 @@ def test_default_parameters(sample_X):
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},
         column_mapping_={"category": "category_encoded"},
     )
+    encoder._is_fitted = True
     transformed_X = encoder.transform(sample_X)
 
     expected_X = pl.DataFrame(
@@ -48,6 +49,7 @@ def test_columns_subset_drop_columns_false(sample_X):
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},
         column_mapping_={"category": "category_encoded"},
     )
+    encoder._is_fitted = True
     transformed_X = encoder.transform(sample_X)
 
     expected_X = sample_X.with_columns(
@@ -77,6 +79,7 @@ def test_inplace_true():
             "cat2": {"X": 10.0, "Y": 20.0, "Z": 30.0},
         },
     )
+    encoder._is_fitted = True
     result = encoder.transform(X)
 
     # When inplace=True, columns should be replaced in place
@@ -99,6 +102,7 @@ def test_boolean_column_encoding():
         mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
         column_mapping_={"bool_col": "bool_col_encoded"},
     )
+    encoder._is_fitted = True
     result = encoder.transform(X)
 
     assert "bool_col_encoded" in result.columns
@@ -115,6 +119,7 @@ def test_boolean_column_inplace():
         inplace=True,
         mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
     )
+    encoder._is_fitted = True
     result = encoder.transform(X)
 
     assert "bool_col" in result.columns
@@ -135,6 +140,7 @@ def test_missing_category_default_value():
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},  # No "D"
         column_mapping_={"category": "category_encoded"},
     )
+    encoder._is_fitted = True
     result = encoder.transform(X)
 
     assert result["category_encoded"].to_list() == [1.0, 2.0, 0.0, 3.0]  # D -> 0.0

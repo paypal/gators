@@ -135,7 +135,7 @@ class Occurrences(_BaseTransformer):
             Transformed DataFrame with substring count features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 

@@ -100,7 +100,7 @@ class Length(_BaseTransformer):
             Transformed DataFrame.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         transformations = [
             pl.col(col).str.len_chars().cast(pl.Int64).alias(self._column_mapping[col])

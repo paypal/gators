@@ -125,7 +125,7 @@ class InteractionFeatures(_BaseTransformer):
             Transformed DataFrame.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         transformations = []
         for i in range(2, self.degree + 1):

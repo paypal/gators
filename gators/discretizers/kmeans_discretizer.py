@@ -3,7 +3,7 @@ import polars as pl
 from pydantic import PositiveInt, field_validator
 from sklearn.cluster import KMeans
 
-from ._base_discretizer import _BaseDiscretizer, generate_labels
+from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels
 
 
 class KMeansDiscretizer(_BaseDiscretizer):
@@ -165,6 +165,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
 
             self._bins[col] = boundaries
 
+        self._bins = deduplicate_bins(self._bins, self.rounding)
         # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, self.rounding)
 

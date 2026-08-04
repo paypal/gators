@@ -149,7 +149,7 @@ class CharacterStatistics(_BaseTransformer):
             Transformed DataFrame with character statistics features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 
