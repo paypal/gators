@@ -550,6 +550,125 @@ If None, all columns in the DataFrame are used.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="gators.feature_generation.FourierFeatures">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">FourierFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/fourier_features.html#FourierFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.FourierFeatures" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Append sine and cosine Fourier features to numeric columns.</p>
+<p>For each column <em>c</em> in <code class="docutils literal notranslate"><span class="pre">subset</span></code>, each period <em>T</em> in the column’s
+period list, and each harmonic <em>k</em> from 1 to <code class="docutils literal notranslate"><span class="pre">n_harmonics</span></code>, two new
+columns are created:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}c\_\text{fourier\_sin}\_p{T}\_k{k} &amp;= \sin\!\left(\frac{2\pi k \cdot c}{T}\right)\\c\_\text{fourier\_cos}\_p{T}\_k{k} &amp;= \cos\!\left(\frac{2\pi k \cdot c}{T}\right)\end{aligned}\end{align} \]</div>
+<p>Fourier features are useful for encoding cyclic patterns when the period
+is known (e.g. day-of-week with T=7, month with T=12, or arbitrary
+numerical cycles).  Unlike simple trigonometric encoding, using multiple
+harmonics captures non-sinusoidal shapes in the cycle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em>) – Numeric columns to transform.</p></li>
+<li><p><strong>periods</strong> (list<em>[</em>float<em>] </em><em>| </em>dict<em>[</em>str<em>, </em>list<em>[</em>float<em>]</em><em>]</em>) – <p>Periods to apply.</p>
+<ul>
+<li><p><strong>list[float]</strong>: the same list of periods is applied to <em>every</em>
+column in <code class="docutils literal notranslate"><span class="pre">subset</span></code>.</p></li>
+<li><p><strong>dict[str, list[float]]</strong>: maps each column name to its own list
+of periods.  Every column in <code class="docutils literal notranslate"><span class="pre">subset</span></code> must appear as a key.</p></li>
+</ul>
+</p></li>
+<li><p><strong>n_harmonics</strong> (<em>PositiveInt</em><em>, </em><em>default=1</em>) – Number of harmonics per period.  <code class="docutils literal notranslate"><span class="pre">n_harmonics=1</span></code> gives only the
+fundamental frequency; <code class="docutils literal notranslate"><span class="pre">n_harmonics=2</span></code> adds the first overtone, etc.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Drop the original <code class="docutils literal notranslate"><span class="pre">subset</span></code> columns after appending Fourier features.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gators.feature_generation.FourierFeatures.column_periods_">
+<span class="sig-name descname"><span class="pre">column_periods_</span></span><a class="headerlink" href="#gators.feature_generation.FourierFeatures.column_periods_" title="Link to this definition">#</a></dt>
+<dd><p>Resolved per-column period mapping (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, list[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">FourierFeatures</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">FourierFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">periods</span><span class="o">=</span><span class="p">[</span><span class="mf">7.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">n_harmonics</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">FourierFeatures(subset=[&#39;day&#39;], periods=[7.0], n_harmonics=1, drop_columns=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;day&#39;, &#39;day__fourier_sin_p7_k1&#39;, &#39;day__fourier_cos_p7_k1&#39;]</span>
+</pre></div>
+</div>
+<p>With per-column periods:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer2</span> <span class="o">=</span> <span class="n">FourierFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">periods</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">7.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">]},</span>
+<span class="gp">... </span>    <span class="n">n_harmonics</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">FourierFeatures(subset=[&#39;day&#39;], periods={&#39;day&#39;: [7.0, 30.0]}, n_harmonics=2, drop_columns=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result2</span> <span class="o">=</span> <span class="n">transformer2</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result2</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;day&#39;, &#39;day__fourier_sin_p7_k1&#39;, &#39;day__fourier_cos_p7_k1&#39;,</span>
+<span class="go"> &#39;day__fourier_sin_p7_k2&#39;, &#39;day__fourier_cos_p7_k2&#39;,</span>
+<span class="go"> &#39;day__fourier_sin_p30_k1&#39;, &#39;day__fourier_cos_p30_k1&#39;,</span>
+<span class="go"> &#39;day__fourier_sin_p30_k2&#39;, &#39;day__fourier_cos_p30_k2&#39;]</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation.FourierFeatures.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.FourierFeatures" title="gators.feature_generation.fourier_features.FourierFeatures"><span class="pre">gators.feature_generation.fourier_features.FourierFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/fourier_features.html#FourierFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.FourierFeatures.fit" title="Link to this definition">#</a></dt>
+<dd><p>Resolve per-column periods from the <code class="docutils literal notranslate"><span class="pre">periods</span></code> parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame (not used for computation).</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Ignored; present for sklearn compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.FourierFeatures" title="gators.feature_generation.FourierFeatures">FourierFeatures</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation.FourierFeatures.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/fourier_features.html#FourierFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.FourierFeatures.transform" title="Link to this definition">#</a></dt>
+<dd><p>Append Fourier feature columns to <em>X</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with sin/cos Fourier columns appended.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.PolynomialFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">PolynomialFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/polynomial_features.html#PolynomialFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.PolynomialFeatures" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
@@ -853,6 +972,196 @@ division with automatic handling of division by zero and null values.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">RatioFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Generates ratio features by dividing numerator columns by denominator columns
+with Laplace smoothing applied to the denominator.</p>
+<p>Each feature is computed as:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">numerator</span> <span class="pre">/</span> <span class="pre">(denominator</span> <span class="pre">+</span> <span class="pre">1)</span></code></p>
+</div></blockquote>
+<p>Adding <code class="docutils literal notranslate"><span class="pre">1</span></code> to the denominator (Laplace smoothing) prevents division-by-zero
+and avoids extreme values when the denominator is small or zero. This is
+particularly useful for count-based features such as event/trial ratios in
+fraud detection or click-through rates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numerator_columns</strong> (list<em>[</em>str<em>]</em>) – List of column names to use as numerators.</p></li>
+<li><p><strong>denominator_columns</strong> (list<em>[</em>str<em>]</em>) – List of column names to use as denominators. Must have the same length as
+<code class="docutils literal notranslate"><span class="pre">numerator_columns</span></code>.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>optional</em>) – List of custom names for the ratio features. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, names will be
+automatically generated as <code class="docutils literal notranslate"><span class="pre">'{numerator}__div__{denominator}'</span></code>,
+by default <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>optional</em>) – Whether to drop the original numerator and denominator columns after
+creating ratios, by default <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">RatioFeatures</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;events&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;trials&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+</pre></div>
+</div>
+<p><strong>Example 1: Basic ratio with Laplace smoothing</strong></p>
+<p>Zero trials are smoothed to 1, producing <code class="docutils literal notranslate"><span class="pre">events</span> <span class="pre">/</span> <span class="pre">1</span></code> instead of null.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;trials&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">RatioFeatures(numerator_columns=[&#39;events&#39;], denominator_columns=[&#39;trials&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">shape: (4, 3)</span>
+<span class="go">┌────────┬────────┬─────────────────────┐</span>
+<span class="go">│ events │ trials │ events__div__trials │</span>
+<span class="go">│ i64    │ i64    │ f64                 │</span>
+<span class="go">├────────┼────────┼─────────────────────┤</span>
+<span class="go">│ 10     │ 1      │ 5.0                 │</span>
+<span class="go">│ 20     │ 3      │ 5.0                 │</span>
+<span class="go">│ 0      │ 0      │ 0.0                 │</span>
+<span class="go">│ 5      │ 9      │ 0.5                 │</span>
+<span class="go">└────────┴────────┴─────────────────────┘</span>
+</pre></div>
+</div>
+<p><strong>Example 2: Multiple ratio features</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X2</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;hits_a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;hits_b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;views_a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;views_b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;hits_a&#39;</span><span class="p">,</span> <span class="s1">&#39;hits_b&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;views_a&#39;</span><span class="p">,</span> <span class="s1">&#39;views_b&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">shape: (3, 6)</span>
+<span class="go">┌────────┬────────┬─────────┬─────────┬──────────────────────┬──────────────────────┐</span>
+<span class="go">│ hits_a │ hits_b │ views_a │ views_b │ hits_a__div__views_a │ hits_b__div__views_b │</span>
+<span class="go">│ i64    │ i64    │ i64     │ i64     │ f64                  │ f64                  │</span>
+<span class="go">├────────┼────────┼─────────┼─────────┼──────────────────────┼──────────────────────┤</span>
+<span class="go">│ 9      │ 4      │ 2       │ 1       │ 3.0                  │ 2.0                  │</span>
+<span class="go">│ 19     │ 9      │ 4       │ 4       │ 3.8                  │ 1.8                  │</span>
+<span class="go">│ 0      │ 9      │ 0       │ 9       │ 0.0                  │ 0.9                  │</span>
+<span class="go">└────────┴────────┴─────────┴─────────┴──────────────────────┴──────────────────────┘</span>
+</pre></div>
+</div>
+<p><strong>Example 3: Custom column names</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;trials&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;smoothed_rate&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">shape: (4, 3)</span>
+<span class="go">┌────────┬────────┬───────────────┐</span>
+<span class="go">│ events │ trials │ smoothed_rate │</span>
+<span class="go">│ i64    │ i64    │ f64           │</span>
+<span class="go">├────────┼────────┼───────────────┤</span>
+<span class="go">│ 10     │ 1      │ 5.0           │</span>
+<span class="go">│ 20     │ 3      │ 5.0           │</span>
+<span class="go">│ 0      │ 0      │ 0.0           │</span>
+<span class="go">│ 5      │ 9      │ 0.5           │</span>
+<span class="go">└────────┴────────┴───────────────┘</span>
+</pre></div>
+</div>
+<p><strong>Example 4: With drop_columns=True</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;trials&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">shape: (4, 1)</span>
+<span class="go">┌─────────────────────┐</span>
+<span class="go">│ events__div__trials │</span>
+<span class="go">│ f64                 │</span>
+<span class="go">├─────────────────────┤</span>
+<span class="go">│ 5.0                 │</span>
+<span class="go">│ 5.0                 │</span>
+<span class="go">│ 0.0                 │</span>
+<span class="go">│ 0.5                 │</span>
+<span class="go">└─────────────────────┘</span>
+</pre></div>
+</div>
+<p><strong>Example 5: Null propagation</strong></p>
+<p>Input nulls still propagate through the ratio; only zero denominators are
+smoothed, not missing ones.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X_nulls</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_nulls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">shape: (3, 3)</span>
+<span class="go">┌──────┬──────┬────────────┐</span>
+<span class="go">│ A    │ B    │ A__div__B  │</span>
+<span class="go">│ i64  │ i64  │ f64        │</span>
+<span class="go">├──────┼──────┼────────────┤</span>
+<span class="go">│ 10   │ 1    │ 5.0        │</span>
+<span class="go">│ null │ 3    │ null       │</span>
+<span class="go">│ 30   │ null │ null       │</span>
+<span class="go">└──────┴──────┴────────────┘</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.RatioFeatures" title="gators.feature_generation.ratio_features.RatioFeatures"><span class="pre">gators.feature_generation.ratio_features.RatioFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by generating column name mappings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.RatioFeatures" title="gators.feature_generation.RatioFeatures">RatioFeatures</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input DataFrame by creating ratio features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed DataFrame with ratio features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pl.DataFrame</p>
@@ -1828,6 +2137,118 @@ Coordinates are paired sequentially: (lats[0], longs[0]) to (lats[1], longs[1]),
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="gators.feature_generation.RollingStatisticsFeatures">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">RollingStatisticsFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/rolling_statistics_features.html#RollingStatisticsFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RollingStatisticsFeatures" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Compute rolling window statistics for numeric columns.</p>
+<p>For each column in <code class="docutils literal notranslate"><span class="pre">subset</span></code> and each function in <code class="docutils literal notranslate"><span class="pre">func</span></code> a new feature
+column is appended with the naming pattern
+<code class="docutils literal notranslate"><span class="pre">'{col}__rolling_{func}_{window_size}'</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">by</span></code> is provided the rolling computation is performed
+independently within each group (rows already present in that group
+define the window order).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em>) – Numeric columns to apply rolling statistics to.</p></li>
+<li><p><strong>window_size</strong> (<em>PositiveInt</em>) – Number of rows in the rolling window.</p></li>
+<li><p><strong>func</strong> (list<em>[</em>str<em>]</em>) – One or more statistics to compute.  Valid values:
+<code class="docutils literal notranslate"><span class="pre">'mean'</span></code>, <code class="docutils literal notranslate"><span class="pre">'std'</span></code>, <code class="docutils literal notranslate"><span class="pre">'min'</span></code>, <code class="docutils literal notranslate"><span class="pre">'max'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sum'</span></code>.</p></li>
+<li><p><strong>by</strong> (list<em>[</em>str<em>] or </em><em>None</em><em>, </em><em>default=None</em>) – Optional grouping columns.  When set, each statistic is computed
+independently within each group using Polars’ <code class="docutils literal notranslate"><span class="pre">over()</span></code> expression.
+Ensure the DataFrame is sorted by group (and time, if applicable)
+before calling <code class="docutils literal notranslate"><span class="pre">transform</span></code>.</p></li>
+<li><p><strong>min_periods</strong> (<em>PositiveInt</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Minimum number of non-null observations required to produce a value.
+Defaults to <code class="docutils literal notranslate"><span class="pre">window_size</span></code> when <code class="docutils literal notranslate"><span class="pre">None</span></code> (standard behaviour).</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – When <code class="docutils literal notranslate"><span class="pre">True</span></code>, drop the original <code class="docutils literal notranslate"><span class="pre">subset</span></code> columns after appending
+the new features.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gators.feature_generation.RollingStatisticsFeatures.new_column_names_">
+<span class="sig-name descname"><span class="pre">new_column_names_</span></span><a class="headerlink" href="#gators.feature_generation.RollingStatisticsFeatures.new_column_names_" title="Link to this definition">#</a></dt>
+<dd><p>Names of the generated feature columns (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">RollingStatisticsFeatures</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;count&quot;</span><span class="p">:</span>  <span class="p">[</span><span class="mi">10</span><span class="p">,</span>  <span class="mi">20</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">40</span><span class="p">,</span>  <span class="mi">50</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RollingStatisticsFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;amount&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">window_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">func</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">RollingStatisticsFeatures(subset=[&#39;amount&#39;, &#39;count&#39;], window_size=3, func=[&#39;mean&#39;, &#39;sum&#39;], by=None, min_periods=None, drop_columns=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">shape: (5, 6)</span>
+<span class="go">┌────────┬───────┬──────────────────────────┬───────────────────────────┬──────────────────────────┬───────────────────────────┐</span>
+<span class="go">│ amount ┆ count ┆ amount__rolling_mean_3   ┆ amount__rolling_sum_3    ┆ count__rolling_mean_3    ┆ count__rolling_sum_3      │</span>
+<span class="go">│ ---    ┆ ---   ┆ ---                      ┆ ---                      ┆ ---                      ┆ ---                       │</span>
+<span class="go">│ f64    ┆ i64   ┆ f64                      ┆ f64                      ┆ f64                      ┆ i64                       │</span>
+<span class="go">╞════════╪═══════╪══════════════════════════╪══════════════════════════╪══════════════════════════╪═══════════════════════════╡</span>
+<span class="go">│ 1.0    ┆ 10    ┆ null                     ┆ null                     ┆ null                     ┆ null                      │</span>
+<span class="go">│ 2.0    ┆ 20    ┆ null                     ┆ null                     ┆ null                     ┆ null                      │</span>
+<span class="go">│ 3.0    ┆ 30    ┆ 2.0                      ┆ 6.0                      ┆ 20.0                     ┆ 60                        │</span>
+<span class="go">│ 4.0    ┆ 40    ┆ 3.0                      ┆ 9.0                      ┆ 30.0                     ┆ 90                        │</span>
+<span class="go">│ 5.0    ┆ 50    ┆ 4.0                      ┆ 12.0                     ┆ 40.0                     ┆ 120                       │</span>
+<span class="go">└────────┴───────┴──────────────────────────┴──────────────────────────┴──────────────────────────┴───────────────────────────┘</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation.RollingStatisticsFeatures.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.RollingStatisticsFeatures" title="gators.feature_generation.rolling_statistics_features.RollingStatisticsFeatures"><span class="pre">gators.feature_generation.rolling_statistics_features.RollingStatisticsFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/rolling_statistics_features.html#RollingStatisticsFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RollingStatisticsFeatures.fit" title="Link to this definition">#</a></dt>
+<dd><p>Record the names of the output feature columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame (used only to confirm <code class="docutils literal notranslate"><span class="pre">subset</span></code> columns exist).</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Ignored; present for sklearn compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.RollingStatisticsFeatures" title="gators.feature_generation.RollingStatisticsFeatures">RollingStatisticsFeatures</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation.RollingStatisticsFeatures.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/rolling_statistics_features.html#RollingStatisticsFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RollingStatisticsFeatures.transform" title="Link to this definition">#</a></dt>
+<dd><p>Append rolling statistics columns to <em>X</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with rolling feature columns appended.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation.ScalarMathFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">ScalarMathFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/scalar_math_features.html#ScalarMathFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.ScalarMathFeatures" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
@@ -2409,196 +2830,6 @@ auto-generated as <code class="docutils literal notranslate"><span class="pre">'
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame with row-level aggregation features appended.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pl.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">RatioFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
-<p>Generates ratio features by dividing numerator columns by denominator columns
-with Laplace smoothing applied to the denominator.</p>
-<p>Each feature is computed as:</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">numerator</span> <span class="pre">/</span> <span class="pre">(denominator</span> <span class="pre">+</span> <span class="pre">1)</span></code></p>
-</div></blockquote>
-<p>Adding <code class="docutils literal notranslate"><span class="pre">1</span></code> to the denominator (Laplace smoothing) prevents division-by-zero
-and avoids extreme values when the denominator is small or zero. This is
-particularly useful for count-based features such as event/trial ratios in
-fraud detection or click-through rates.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>numerator_columns</strong> (list<em>[</em>str<em>]</em>) – List of column names to use as numerators.</p></li>
-<li><p><strong>denominator_columns</strong> (list<em>[</em>str<em>]</em>) – List of column names to use as denominators. Must have the same length as
-<code class="docutils literal notranslate"><span class="pre">numerator_columns</span></code>.</p></li>
-<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>optional</em>) – List of custom names for the ratio features. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, names will be
-automatically generated as <code class="docutils literal notranslate"><span class="pre">'{numerator}__div__{denominator}'</span></code>,
-by default <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>optional</em>) – Whether to drop the original numerator and denominator columns after
-creating ratios, by default <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition-examples admonition">
-<p class="admonition-title">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">RatioFeatures</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>    <span class="s1">&#39;events&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s1">&#39;trials&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-</pre></div>
-</div>
-<p><strong>Example 1: Basic ratio with Laplace smoothing</strong></p>
-<p>Zero trials are smoothed to 1, producing <code class="docutils literal notranslate"><span class="pre">events</span> <span class="pre">/</span> <span class="pre">1</span></code> instead of null.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;trials&#39;</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">RatioFeatures(numerator_columns=[&#39;events&#39;], denominator_columns=[&#39;trials&#39;])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
-<span class="go">shape: (4, 3)</span>
-<span class="go">┌────────┬────────┬─────────────────────┐</span>
-<span class="go">│ events │ trials │ events__div__trials │</span>
-<span class="go">│ i64    │ i64    │ f64                 │</span>
-<span class="go">├────────┼────────┼─────────────────────┤</span>
-<span class="go">│ 10     │ 1      │ 5.0                 │</span>
-<span class="go">│ 20     │ 3      │ 5.0                 │</span>
-<span class="go">│ 0      │ 0      │ 0.0                 │</span>
-<span class="go">│ 5      │ 9      │ 0.5                 │</span>
-<span class="go">└────────┴────────┴─────────────────────┘</span>
-</pre></div>
-</div>
-<p><strong>Example 2: Multiple ratio features</strong></p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X2</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>    <span class="s1">&#39;hits_a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s1">&#39;hits_b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s1">&#39;views_a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s1">&#39;views_b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;hits_a&#39;</span><span class="p">,</span> <span class="s1">&#39;hits_b&#39;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;views_a&#39;</span><span class="p">,</span> <span class="s1">&#39;views_b&#39;</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
-<span class="go">shape: (3, 6)</span>
-<span class="go">┌────────┬────────┬─────────┬─────────┬──────────────────────┬──────────────────────┐</span>
-<span class="go">│ hits_a │ hits_b │ views_a │ views_b │ hits_a__div__views_a │ hits_b__div__views_b │</span>
-<span class="go">│ i64    │ i64    │ i64     │ i64     │ f64                  │ f64                  │</span>
-<span class="go">├────────┼────────┼─────────┼─────────┼──────────────────────┼──────────────────────┤</span>
-<span class="go">│ 9      │ 4      │ 2       │ 1       │ 3.0                  │ 2.0                  │</span>
-<span class="go">│ 19     │ 9      │ 4       │ 4       │ 3.8                  │ 1.8                  │</span>
-<span class="go">│ 0      │ 9      │ 0       │ 9       │ 0.0                  │ 0.9                  │</span>
-<span class="go">└────────┴────────┴─────────┴─────────┴──────────────────────┴──────────────────────┘</span>
-</pre></div>
-</div>
-<p><strong>Example 3: Custom column names</strong></p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;trials&#39;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;smoothed_rate&#39;</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
-<span class="go">shape: (4, 3)</span>
-<span class="go">┌────────┬────────┬───────────────┐</span>
-<span class="go">│ events │ trials │ smoothed_rate │</span>
-<span class="go">│ i64    │ i64    │ f64           │</span>
-<span class="go">├────────┼────────┼───────────────┤</span>
-<span class="go">│ 10     │ 1      │ 5.0           │</span>
-<span class="go">│ 20     │ 3      │ 5.0           │</span>
-<span class="go">│ 0      │ 0      │ 0.0           │</span>
-<span class="go">│ 5      │ 9      │ 0.5           │</span>
-<span class="go">└────────┴────────┴───────────────┘</span>
-</pre></div>
-</div>
-<p><strong>Example 4: With drop_columns=True</strong></p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;events&#39;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;trials&#39;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
-<span class="go">shape: (4, 1)</span>
-<span class="go">┌─────────────────────┐</span>
-<span class="go">│ events__div__trials │</span>
-<span class="go">│ f64                 │</span>
-<span class="go">├─────────────────────┤</span>
-<span class="go">│ 5.0                 │</span>
-<span class="go">│ 5.0                 │</span>
-<span class="go">│ 0.0                 │</span>
-<span class="go">│ 0.5                 │</span>
-<span class="go">└─────────────────────┘</span>
-</pre></div>
-</div>
-<p><strong>Example 5: Null propagation</strong></p>
-<p>Input nulls still propagate through the ratio; only zero denominators are
-smoothed, not missing ones.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X_nulls</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">... </span>    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">]</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_nulls</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
-<span class="go">shape: (3, 3)</span>
-<span class="go">┌──────┬──────┬────────────┐</span>
-<span class="go">│ A    │ B    │ A__div__B  │</span>
-<span class="go">│ i64  │ i64  │ f64        │</span>
-<span class="go">├──────┼──────┼────────────┤</span>
-<span class="go">│ 10   │ 1    │ 5.0        │</span>
-<span class="go">│ null │ 3    │ null       │</span>
-<span class="go">│ 30   │ null │ null       │</span>
-<span class="go">└──────┴──────┴────────────┘</span>
-</pre></div>
-</div>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.RatioFeatures" title="gators.feature_generation.ratio_features.RatioFeatures"><span class="pre">gators.feature_generation.ratio_features.RatioFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures.fit" title="Link to this definition">#</a></dt>
-<dd><p>Fit the transformer by generating column name mappings.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
-<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Fitted transformer instance.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.RatioFeatures" title="gators.feature_generation.RatioFeatures">RatioFeatures</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gators.feature_generation.RatioFeatures.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/ratio_features.html#RatioFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.RatioFeatures.transform" title="Link to this definition">#</a></dt>
-<dd><p>Transform the input DataFrame by creating ratio features.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Transformed DataFrame with ratio features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pl.DataFrame</p>
@@ -3471,6 +3702,12 @@ by default <code class="docutils literal notranslate"><span class="pre">False</s
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.IsNull.transform"><code class="docutils literal notranslate"><span class="pre">IsNull.transform()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.FourierFeatures"><code class="docutils literal notranslate"><span class="pre">FourierFeatures</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.FourierFeatures.column_periods_"><code class="docutils literal notranslate"><span class="pre">FourierFeatures.column_periods_</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.FourierFeatures.fit"><code class="docutils literal notranslate"><span class="pre">FourierFeatures.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.FourierFeatures.transform"><code class="docutils literal notranslate"><span class="pre">FourierFeatures.transform()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.PolynomialFeatures"><code class="docutils literal notranslate"><span class="pre">PolynomialFeatures</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.PolynomialFeatures.fit"><code class="docutils literal notranslate"><span class="pre">PolynomialFeatures.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.PolynomialFeatures.transform"><code class="docutils literal notranslate"><span class="pre">PolynomialFeatures.transform()</span></code></a></li>
@@ -3485,6 +3722,11 @@ by default <code class="docutils literal notranslate"><span class="pre">False</s
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.MathFeatures"><code class="docutils literal notranslate"><span class="pre">MathFeatures</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.MathFeatures.fit"><code class="docutils literal notranslate"><span class="pre">MathFeatures.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.MathFeatures.transform"><code class="docutils literal notranslate"><span class="pre">MathFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RatioFeatures"><code class="docutils literal notranslate"><span class="pre">RatioFeatures</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RatioFeatures.fit"><code class="docutils literal notranslate"><span class="pre">RatioFeatures.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RatioFeatures.transform"><code class="docutils literal notranslate"><span class="pre">RatioFeatures.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.GroupStatisticsFeatures"><code class="docutils literal notranslate"><span class="pre">GroupStatisticsFeatures</span></code></a><ul class="nav section-nav flex-column">
@@ -3512,6 +3754,12 @@ by default <code class="docutils literal notranslate"><span class="pre">False</s
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.DistanceFeatures.transform"><code class="docutils literal notranslate"><span class="pre">DistanceFeatures.transform()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RollingStatisticsFeatures"><code class="docutils literal notranslate"><span class="pre">RollingStatisticsFeatures</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RollingStatisticsFeatures.new_column_names_"><code class="docutils literal notranslate"><span class="pre">RollingStatisticsFeatures.new_column_names_</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RollingStatisticsFeatures.fit"><code class="docutils literal notranslate"><span class="pre">RollingStatisticsFeatures.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RollingStatisticsFeatures.transform"><code class="docutils literal notranslate"><span class="pre">RollingStatisticsFeatures.transform()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.ScalarMathFeatures"><code class="docutils literal notranslate"><span class="pre">ScalarMathFeatures</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.ScalarMathFeatures.fit"><code class="docutils literal notranslate"><span class="pre">ScalarMathFeatures.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.ScalarMathFeatures.transform"><code class="docutils literal notranslate"><span class="pre">ScalarMathFeatures.transform()</span></code></a></li>
@@ -3525,11 +3773,6 @@ by default <code class="docutils literal notranslate"><span class="pre">False</s
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RowStatisticsFeatures"><code class="docutils literal notranslate"><span class="pre">RowStatisticsFeatures</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RowStatisticsFeatures.fit"><code class="docutils literal notranslate"><span class="pre">RowStatisticsFeatures.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RowStatisticsFeatures.transform"><code class="docutils literal notranslate"><span class="pre">RowStatisticsFeatures.transform()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RatioFeatures"><code class="docutils literal notranslate"><span class="pre">RatioFeatures</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RatioFeatures.fit"><code class="docutils literal notranslate"><span class="pre">RatioFeatures.fit()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.RatioFeatures.transform"><code class="docutils literal notranslate"><span class="pre">RatioFeatures.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.ConcentrationIndexFeatures"><code class="docutils literal notranslate"><span class="pre">ConcentrationIndexFeatures</span></code></a><ul class="nav section-nav flex-column">

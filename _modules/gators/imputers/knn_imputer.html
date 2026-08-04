@@ -622,7 +622,7 @@
 <span class="sd">            DataFrame with nulls in ``subset`` columns filled.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">X</span>
+            <span class="k">return</span> <span class="n">X</span>  <span class="c1"># pragma: no cover</span>
 
         <span class="n">has_null</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">any_horizontal</span><span class="p">([</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">is_null</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">])</span>
         <span class="n">X_indexed</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_row_index</span><span class="p">(</span><span class="s2">&quot;__row_idx__&quot;</span><span class="p">)</span>

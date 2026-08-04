@@ -466,11 +466,13 @@
 
 <span class="sd">    This transformer creates features like:</span>
 
-<span class="sd">    - Previous transaction amount for this card</span>
-<span class="sd">    - Next transaction amount for this card</span>
-<span class="sd">    - Value N periods ago within group</span>
+<span class="sd">    - Value N periods ago within the same group</span>
+<span class="sd">    - Historical behavior patterns within groups</span>
+<span class="sd">    - Sequential dependencies in grouped data</span>
 
 <span class="sd">    Useful for time-series analysis and detecting changes in behavior patterns.</span>
+<span class="sd">    Lag features are suitable for real-time scoring; lead features are only useful</span>
+<span class="sd">    for historical analysis and backtesting.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -567,8 +569,10 @@
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    - Data should be sorted by by and time before transformation</span>
-<span class="sd">    - Lag features look backwards: lag_1 is the previous row within the group</span>
-<span class="sd">    - Lead features look forwards: lead_1 is the next row within the group</span>
+<span class="sd">    - Lag features look backwards: lag_1 is the previous row within the group.</span>
+<span class="sd">      These are suitable for real-time scoring.</span>
+<span class="sd">    - Lead features look forwards: lead_1 is the next row within the group.</span>
+<span class="sd">      These are useful only for historical analysis and backtesting, not real-time scoring.</span>
 <span class="sd">    - First rows in each group will have null (or fill_value) for lag features</span>
 <span class="sd">    - Last rows in each group will have null (or fill_value) for lead features</span>
 <span class="sd">    &quot;&quot;&quot;</span>

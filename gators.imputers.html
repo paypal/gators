@@ -726,6 +726,150 @@ Ignored when inplace=True.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="gators.imputers.IterativeImputer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.imputers.</span></span><span class="sig-name descname"><span class="pre">IterativeImputer</span></span><a class="reference internal" href="_modules/gators/imputers/iterative_imputer.html#IterativeImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.IterativeImputer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Impute missing numeric values using a MICE-style iterative algorithm.</p>
+<p>For each numeric column that contains missing values, a linear regression
+model is fitted using all other numeric columns as predictors.  The
+algorithm repeats for <code class="docutils literal notranslate"><span class="pre">max_iter</span></code> rounds; on each round the imputed
+values from the previous round are used as predictors for the next,
+gradually refining the estimates.</p>
+<section id="algorithm-fit">
+<h3>Algorithm (fit)<a class="headerlink" href="#algorithm-fit" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Compute the initial fill statistic (mean or median) for every numeric
+column.</p></li>
+<li><p>Replace all <code class="docutils literal notranslate"><span class="pre">null</span></code> values in the training data with those initial
+statistics.</p></li>
+<li><p>For each of <code class="docutils literal notranslate"><span class="pre">max_iter</span></code> rounds:
+a. For every column in <code class="docutils literal notranslate"><span class="pre">subset</span></code> (processed in ascending order of</p>
+<blockquote>
+<div><p>null count):</p>
+<ul class="simple">
+<li><p>Select rows where the column was <em>originally</em> non-null as the
+training set.</p></li>
+<li><p>Fit OLS (<code class="docutils literal notranslate"><span class="pre">numpy.linalg.lstsq</span></code>) using all other numeric columns
+as features.</p></li>
+<li><p>Predict the imputed values and update those rows in the working
+copy of the data.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Store the final regression coefficients.</p></li>
+</ol>
+</section>
+<section id="algorithm-transform">
+<h3>Algorithm (transform)<a class="headerlink" href="#algorithm-transform" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Initialize nulls with training statistics.</p></li>
+<li><p>For each of <code class="docutils literal notranslate"><span class="pre">max_iter</span></code> rounds apply the stored regression models to
+predict and update every null position.</p></li>
+<li><p>Return the DataFrame with imputed values.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">param max_iter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of full passes over the imputable columns.</p>
+</dd>
+<dt class="field-even">type max_iter<span class="colon">:</span></dt>
+<dd class="field-even"><p>PositiveInt, default=10</p>
+</dd>
+<dt class="field-odd">param subset<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numeric columns to impute.  If <code class="docutils literal notranslate"><span class="pre">None</span></code>, all numeric columns that
+contain at least one null in the training data are selected.</p>
+</dd>
+<dt class="field-even">type subset<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str] or None, default=None</p>
+</dd>
+<dt class="field-odd">param initial_strategy<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Statistic used to initialize missing values before the first pass.</p>
+</dd>
+<dt class="field-even">type initial_strategy<span class="colon">:</span></dt>
+<dd class="field-even"><p>{‘mean’, ‘median’}, default=’mean’</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gators.imputers.IterativeImputer.statistics_">
+<span class="sig-name descname"><span class="pre">statistics_</span></span><a class="headerlink" href="#gators.imputers.IterativeImputer.statistics_" title="Link to this definition">#</a></dt>
+<dd><p>Per-column initialisation statistics (set after <code class="docutils literal notranslate"><span class="pre">fit</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">IterativeImputer</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;age&quot;</span><span class="p">:</span>    <span class="p">[</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">30.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">35.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;salary&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">50.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>  <span class="mf">70.0</span><span class="p">,</span> <span class="mf">80.0</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s2">&quot;score&quot;</span><span class="p">:</span>  <span class="p">[</span> <span class="mf">5.0</span><span class="p">,</span>  <span class="mf">8.0</span><span class="p">,</span>   <span class="mf">7.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>  <span class="mf">6.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span> <span class="o">=</span> <span class="n">IterativeImputer</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">IterativeImputer(max_iter=5, subset=[&#39;age&#39;, &#39;salary&#39;, &#39;score&#39;], initial_strategy=&#39;mean&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">shape: (5, 3)</span>
+<span class="go">┌──────────┬──────────┬──────────┐</span>
+<span class="go">│ age      ┆ salary   ┆ score    │</span>
+<span class="go">│ ---      ┆ ---      ┆ ---      │</span>
+<span class="go">│ f64      ┆ f64      ┆ f64      │</span>
+<span class="go">╞══════════╪══════════╪══════════╡</span>
+<span class="go">│ 25.0     ┆ 50.0     ┆ 5.0      │</span>
+<span class="go">│ 30.0     ┆ ...      ┆ 8.0      │</span>
+<span class="go">│ ...      ┆ 70.0     ┆ 7.0      │</span>
+<span class="go">│ 40.0     ┆ 80.0     ┆ ...      │</span>
+<span class="go">│ 35.0     ┆ 60.0     ┆ 6.0      │</span>
+<span class="go">└──────────┴──────────┴──────────┘</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.imputers.IterativeImputer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.imputers.IterativeImputer" title="gators.imputers.iterative_imputer.IterativeImputer"><span class="pre">gators.imputers.iterative_imputer.IterativeImputer</span></a></span></span><a class="reference internal" href="_modules/gators/imputers/iterative_imputer.html#IterativeImputer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.IterativeImputer.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit regression models for each imputable column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Training DataFrame with numeric columns.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Ignored; present for sklearn compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.imputers.IterativeImputer" title="gators.imputers.IterativeImputer">IterativeImputer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.imputers.IterativeImputer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/imputers/iterative_imputer.html#IterativeImputer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.IterativeImputer.transform" title="Link to this definition">#</a></dt>
+<dd><p>Impute missing values using the fitted regression models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame; numeric columns may contain nulls.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame with imputed numeric columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="gators.imputers.KNNImputer">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.imputers.</span></span><span class="sig-name descname"><span class="pre">KNNImputer</span></span><a class="reference internal" href="_modules/gators/imputers/knn_imputer.html#KNNImputer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.imputers.KNNImputer" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
@@ -1179,6 +1323,12 @@ Ignored when inplace=True.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.GroupByImputer"><code class="docutils literal notranslate"><span class="pre">GroupByImputer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.GroupByImputer.fit"><code class="docutils literal notranslate"><span class="pre">GroupByImputer.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.GroupByImputer.transform"><code class="docutils literal notranslate"><span class="pre">GroupByImputer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.IterativeImputer"><code class="docutils literal notranslate"><span class="pre">IterativeImputer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.IterativeImputer.statistics_"><code class="docutils literal notranslate"><span class="pre">IterativeImputer.statistics_</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.IterativeImputer.fit"><code class="docutils literal notranslate"><span class="pre">IterativeImputer.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.IterativeImputer.transform"><code class="docutils literal notranslate"><span class="pre">IterativeImputer.transform()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.imputers.KNNImputer"><code class="docutils literal notranslate"><span class="pre">KNNImputer</span></code></a><ul class="nav section-nav flex-column">

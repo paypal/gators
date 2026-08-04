@@ -455,18 +455,23 @@
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrivateAttr</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..discretizers._base_discretizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseDiscretizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._base_selector</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseSelector</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.information_value</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_iv</span>
 
 
 <div class="viewcode-block" id="InformationValueSelector">
 <a class="viewcode-back" href="../../../gators.feature_selection.html#gators.feature_selection.InformationValueSelector">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">InformationValueSelector</span><span class="p">(</span><span class="n">_BaseTransformer</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InformationValueSelector</span><span class="p">(</span><span class="n">_BaseSelector</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Drop columns whose Information Value falls below a threshold.</span>
 
 <span class="sd">    Computes the IV for each categorical (String/Categorical/Enum) column</span>
-<span class="sd">    and drops those whose IV is below ``threshold``.  Numeric columns are</span>
-<span class="sd">    always kept untouched; they are not considered for IV computation.</span>
+<span class="sd">    and drops those whose IV is below ``threshold``.  When a ``discretizer``</span>
+<span class="sd">    is provided, numeric columns are first binned by the discretizer before</span>
+<span class="sd">    IV computation; the discretized values are used only for scoring and are</span>
+<span class="sd">    **not** applied during ``transform`` — numeric columns that survive the</span>
+<span class="sd">    threshold remain numeric in the output.  Without a discretizer, numeric</span>
+<span class="sd">    columns are excluded from IV computation and are always kept.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -475,13 +480,19 @@
 <span class="sd">        below this value are dropped.</span>
 <span class="sd">    regularization : float, default=0.01</span>
 <span class="sd">        Regularization applied to WOE/IV calculation to avoid division by zero.</span>
+<span class="sd">    discretizer : _BaseDiscretizer or None, default=None</span>
+<span class="sd">        Optional discretizer used to bin numeric columns before computing IV.</span>
+<span class="sd">        When ``None``, numeric columns are excluded from IV computation and</span>
+<span class="sd">        always kept (backward-compatible behaviour).</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    selected_features_ : list[str]</span>
 <span class="sd">        All column names that survive the threshold (set after ``fit``).</span>
 <span class="sd">    columns_to_drop_ : list[str]</span>
-<span class="sd">        Categorical column names dropped because their IV was too low.</span>
+<span class="sd">        Column names dropped because their IV was too low (set after ``fit``).</span>
+<span class="sd">    iv_values_ : dict[str, float]</span>
+<span class="sd">        Mapping of feature name to its computed IV value (set after ``fit``).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -497,26 +508,32 @@
 <span class="sd">    &gt;&gt;&gt; selector = InformationValueSelector(threshold=0.02)</span>
 <span class="sd">    &gt;&gt;&gt; selector.fit(X, y)</span>
 <span class="sd">    &gt;&gt;&gt; X_transformed = selector.transform(X)</span>
+
+<span class="sd">    With a discretizer to score numeric columns:</span>
+
+<span class="sd">    &gt;&gt;&gt; from gators.discretizers import EqualSizeDiscretizer</span>
+<span class="sd">    &gt;&gt;&gt; selector = InformationValueSelector(</span>
+<span class="sd">    ...     threshold=0.02,</span>
+<span class="sd">    ...     discretizer=EqualSizeDiscretizer(num_bins=7),</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; selector.fit(X, y)</span>
+<span class="sd">    &gt;&gt;&gt; X_transformed = selector.transform(X)  # numeric columns remain numeric</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.02</span>
     <span class="n">regularization</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">discretizer</span><span class="p">:</span> <span class="n">_BaseDiscretizer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">_selected_features</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">_columns_to_drop</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">selected_features_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_selected_features</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">columns_to_drop_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns_to_drop</span>
+    <span class="n">_iv_values</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
 <div class="viewcode-block" id="InformationValueSelector.fit">
 <a class="viewcode-back" href="../../../gators.feature_selection.html#gators.feature_selection.InformationValueSelector.fit">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;InformationValueSelector&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute IV for each categorical column and record which to drop.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute IV for each applicable column and record which to drop.</span>
+
+<span class="sd">        Categorical columns are always scored.  Numeric columns are scored</span>
+<span class="sd">        only when a ``discretizer`` is provided; the discretizer is fitted and</span>
+<span class="sd">        applied to ``X`` internally and its output is passed to ``compute_iv``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -533,33 +550,17 @@
         <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;y must be provided for InformationValueSelector.fit()&quot;</span><span class="p">)</span>
 
-        <span class="n">iv_df</span> <span class="o">=</span> <span class="n">compute_iv</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">regularization</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">regularization</span><span class="p">)</span>
+        <span class="n">X_for_iv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discretizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">discretizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">X</span>
+
+        <span class="n">iv_df</span> <span class="o">=</span> <span class="n">compute_iv</span><span class="p">(</span><span class="n">X_for_iv</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">regularization</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">regularization</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iv_values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">iv_df</span><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">iv_df</span><span class="p">[</span><span class="s2">&quot;iv&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()))</span>
 
         <span class="n">below_threshold</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">iv_df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;iv&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">)[</span><span class="s2">&quot;feature&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_columns_to_drop</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">below_threshold</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_selected_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">below_threshold</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span></div>
-
-
-<div class="viewcode-block" id="InformationValueSelector.transform">
-<a class="viewcode-back" href="../../../gators.feature_selection.html#gators.feature_selection.InformationValueSelector.transform">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Drop low-IV columns from the DataFrame.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        X : pl.DataFrame</span>
-<span class="sd">            Input DataFrame to transform.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        pl.DataFrame</span>
-<span class="sd">            DataFrame with low-IV categorical columns removed.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns_to_drop</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">X</span>
-        <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_columns_to_drop</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

@@ -457,111 +457,169 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
 
-<span class="n">AGGREGATION_FUNCTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">]</span>
+<span class="n">AGGREGATION_FUNCTIONS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;std&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;median&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;min&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;count&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;range&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mean_ratio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;median_ratio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;minmax&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="GroupStatisticsFeatures">
 <a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">GroupStatisticsFeatures</span><span class="p">(</span><span class="n">_BaseTransformer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generates statistical aggregation features based on group-level computations.</span>
+<span class="sd">    Generates group-level feature columns for numerical columns.</span>
 
-<span class="sd">    Unlike GroupRatioFeatures which divides values by group stats, this transformer</span>
-<span class="sd">    directly adds the group statistics as new columns.</span>
+<span class="sd">    Two categories of output are supported:</span>
+
+<span class="sd">    **Absolute statistics** — the raw group aggregate is appended as a new column:</span>
+
+<span class="sd">    - ``&#39;mean&#39;``: group mean</span>
+<span class="sd">    - ``&#39;std&#39;``: group standard deviation</span>
+<span class="sd">    - ``&#39;median&#39;``: group median</span>
+<span class="sd">    - ``&#39;min&#39;``: group minimum</span>
+<span class="sd">    - ``&#39;max&#39;``: group maximum</span>
+<span class="sd">    - ``&#39;sum&#39;``: group sum</span>
+<span class="sd">    - ``&#39;count&#39;``: group count (nulls excluded)</span>
+<span class="sd">    - ``&#39;range&#39;``: group range (max − min)</span>
+
+<span class="sd">    **Relative statistics** — each row is scaled by its group aggregate:</span>
+
+<span class="sd">    - ``&#39;mean_ratio&#39;``: value / group_mean</span>
+<span class="sd">    - ``&#39;median_ratio&#39;``: value / group_median</span>
+<span class="sd">    - ``&#39;zscore&#39;``: (value − group_mean) / group_std</span>
+<span class="sd">    - ``&#39;minmax&#39;``: (value − group_min) / (group_max − group_min)</span>
+
+<span class="sd">    Both categories can be combined freely in a single transformer call.</span>
+<span class="sd">    All generated columns follow the naming pattern</span>
+<span class="sd">    ``&#39;{func}_{num_col}__per_{groupby_col}&#39;``.</span>
+
+<span class="sd">    Importance for Fraud Detection</span>
+<span class="sd">    --------------------------------</span>
+<span class="sd">    Group features are particularly valuable in fraud detection because they capture</span>
+<span class="sd">    how a transaction compares to the typical behaviour of its segment (merchant,</span>
+<span class="sd">    customer, time-of-day, geography, etc.).</span>
+
+<span class="sd">    - **Absolute stats** provide context: &quot;the average transaction for merchant A is $183&quot;.</span>
+<span class="sd">    - **Relative stats** expose anomalies: &quot;this transaction is 10× the group average&quot;</span>
+<span class="sd">      (``mean_ratio``), &quot;3σ above the group mean&quot; (``zscore``), or &quot;at the very top of</span>
+<span class="sd">      the observed range&quot; (``minmax``).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    subset : list[str]</span>
 <span class="sd">        List of numerical column names to aggregate.</span>
 <span class="sd">    by : list[str]</span>
-<span class="sd">        List of column names to use for groupby operations. Each column will be used</span>
-<span class="sd">        for a separate groupby operation (e.g., [&#39;cat1&#39;, &#39;cat2&#39;] creates features</span>
-<span class="sd">        grouped by cat1 and separate features grouped by cat2).</span>
+<span class="sd">        List of column names to use for groupby operations. Each column is used</span>
+<span class="sd">        for a *separate* groupby (e.g., ``[&#39;cat1&#39;, &#39;cat2&#39;]`` creates features</span>
+<span class="sd">        grouped by ``cat1`` and separate features grouped by ``cat2``).</span>
 <span class="sd">    func : list[str]</span>
-<span class="sd">        List of aggregation functions to apply. Available options:</span>
-<span class="sd">        - &#39;mean&#39;: Group mean</span>
-<span class="sd">        - &#39;std&#39;: Group standard deviation</span>
-<span class="sd">        - &#39;median&#39;: Group median</span>
-<span class="sd">        - &#39;min&#39;: Group minimum</span>
-<span class="sd">        - &#39;max&#39;: Group maximum</span>
-<span class="sd">        - &#39;sum&#39;: Group sum</span>
-<span class="sd">        - &#39;count&#39;: Group count</span>
-<span class="sd">        - &#39;range&#39;: Group range (max - min)</span>
+<span class="sd">        List of functions to apply. Any mix of absolute and relative functions</span>
+<span class="sd">        listed above is valid.</span>
+<span class="sd">    fill_value : float, default=0.0</span>
+<span class="sd">        Value used when the denominator is zero or null for relative statistics</span>
+<span class="sd">        (``&#39;mean_ratio&#39;``, ``&#39;median_ratio&#39;``, ``&#39;zscore&#39;``, ``&#39;minmax&#39;``).</span>
+<span class="sd">        Has no effect on absolute statistics.</span>
 <span class="sd">    drop_columns : bool, default=False</span>
-<span class="sd">        Whether to drop the original numerical columns after creating statistics.</span>
+<span class="sd">        Whether to drop the original numerical columns after creating features.</span>
 <span class="sd">    new_column_names : list[str], default=None</span>
-<span class="sd">        List of custom names for the statistic columns. If None, uses default naming pattern</span>
-<span class="sd">        &#39;{agg}_{num_col}__per_{groupby_col}&#39;. Must have same length as the total number</span>
-<span class="sd">        of features created (subset × by × func).</span>
+<span class="sd">        Custom names for the generated columns. If ``None``, names are</span>
+<span class="sd">        auto-generated as ``&#39;{func}_{num_col}__per_{groupby_col}&#39;``. Must have</span>
+<span class="sd">        the same length as ``subset × by × func``.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; from gators.feature_generation import GroupStatisticsFeatures</span>
 <span class="sd">    &gt;&gt;&gt; import polars as pl</span>
 
-<span class="sd">    &gt;&gt;&gt; X ={</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
 <span class="sd">    ...     &#39;amount&#39;: [100, 200, 150, 300, 250],</span>
 <span class="sd">    ...     &#39;cat1&#39;: [&#39;A&#39;, &#39;A&#39;, &#39;B&#39;, &#39;B&#39;, &#39;A&#39;],</span>
-<span class="sd">    ...     &#39;cat2&#39;: [&#39;X&#39;, &#39;Y&#39;, &#39;X&#39;, &#39;X&#39;, &#39;X&#39;]</span>
-<span class="sd">    ... }</span>
-<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame(X)</span>
+<span class="sd">    ...     &#39;cat2&#39;: [&#39;X&#39;, &#39;Y&#39;, &#39;X&#39;, &#39;X&#39;, &#39;X&#39;],</span>
+<span class="sd">    ... })</span>
 
-<span class="sd">    **Example 1: Basic group statistics**</span>
+<span class="sd">    **Example 1: Absolute statistics**</span>
 
 <span class="sd">    &gt;&gt;&gt; transformer = GroupStatisticsFeatures(</span>
 <span class="sd">    ...     subset=[&#39;amount&#39;],</span>
 <span class="sd">    ...     by=[&#39;cat1&#39;],</span>
-<span class="sd">    ...     func=[&#39;mean&#39;, &#39;count&#39;]</span>
+<span class="sd">    ...     func=[&#39;mean&#39;, &#39;count&#39;],</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
 <span class="sd">    &gt;&gt;&gt; result</span>
 <span class="sd">    shape: (5, 5)</span>
-<span class="sd">    ┌────────┬───────┬───────┬───────────────────────┬────────────────────────┐</span>
-<span class="sd">    │ amount ┆ cat1  ┆ cat2  ┆ mean_amount__per_cat1 ┆ count_amount__per_cat1 │</span>
-<span class="sd">    │ ---    ┆ ---   ┆ ---   ┆ ---                   ┆ ---                    │</span>
-<span class="sd">    │ i64    ┆ str   ┆ str   ┆ f64                   ┆ u32                    │</span>
-<span class="sd">    ╞════════╪═══════╪═══════╪═══════════════════════╪════════════════════════╡</span>
-<span class="sd">    │ 100    ┆ A     ┆ X     ┆ 183.333333            ┆ 3                      │</span>
-<span class="sd">    │ 200    ┆ A     ┆ Y     ┆ 183.333333            ┆ 3                      │</span>
-<span class="sd">    │ 150    ┆ B     ┆ X     ┆ 225.0                 ┆ 2                      │</span>
-<span class="sd">    │ 300    ┆ B     ┆ X     ┆ 225.0                 ┆ 2                      │</span>
-<span class="sd">    │ 250    ┆ A     ┆ X     ┆ 183.333333            ┆ 3                      │</span>
-<span class="sd">    └────────┴───────┴───────┴───────────────────────┴────────────────────────┘</span>
+<span class="sd">    ┌────────┬──────┬──────┬───────────────────────┬────────────────────────┐</span>
+<span class="sd">    │ amount ┆ cat1 ┆ cat2 ┆ mean_amount__per_cat1 ┆ count_amount__per_cat1 │</span>
+<span class="sd">    │ ---    ┆ ---  ┆ ---  ┆ ---                   ┆ ---                    │</span>
+<span class="sd">    │ i64    ┆ str  ┆ str  ┆ f64                   ┆ u32                    │</span>
+<span class="sd">    ╞════════╪══════╪══════╪═══════════════════════╪════════════════════════╡</span>
+<span class="sd">    │ 100    ┆ A    ┆ X    ┆ 183.333333            ┆ 3                      │</span>
+<span class="sd">    │ 200    ┆ A    ┆ Y    ┆ 183.333333            ┆ 3                      │</span>
+<span class="sd">    │ 150    ┆ B    ┆ X    ┆ 225.0                 ┆ 2                      │</span>
+<span class="sd">    │ 300    ┆ B    ┆ X    ┆ 225.0                 ┆ 2                      │</span>
+<span class="sd">    │ 250    ┆ A    ┆ X    ┆ 183.333333            ┆ 3                      │</span>
+<span class="sd">    └────────┴──────┴──────┴───────────────────────┴────────────────────────┘</span>
 
-<span class="sd">    **Example 2: Multiple groupby columns**</span>
-
-<span class="sd">    &gt;&gt;&gt; X ={</span>
-<span class="sd">    ...     &#39;amount&#39;: [100, 200, 150, 300],</span>
-<span class="sd">    ...     &#39;cat1&#39;: [&#39;A&#39;, &#39;A&#39;, &#39;B&#39;, &#39;B&#39;],</span>
-<span class="sd">    ...     &#39;cat2&#39;: [&#39;X&#39;, &#39;Y&#39;, &#39;X&#39;, &#39;Y&#39;]</span>
-<span class="sd">    ... }</span>
-<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame(X)</span>
-<span class="sd">    &gt;&gt;&gt; transformer = GroupStatisticsFeatures(</span>
-<span class="sd">    ...     subset=[&#39;amount&#39;],</span>
-<span class="sd">    ...     by=[&#39;cat1&#39;, &#39;cat2&#39;],</span>
-<span class="sd">    ...     func=[&#39;mean&#39;]</span>
-<span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
-<span class="sd">    &gt;&gt;&gt; result.columns</span>
-<span class="sd">    [&#39;amount&#39;, &#39;cat1&#39;, &#39;cat2&#39;, &#39;mean_amount__per_cat1&#39;, &#39;mean_amount__per_cat2&#39;]</span>
-<span class="sd">    # Creates separate features grouped by cat1 and grouped by cat2</span>
-
-<span class="sd">    **Example 3: Multiple func**</span>
+<span class="sd">    **Example 2: Relative statistics**</span>
 
 <span class="sd">    &gt;&gt;&gt; transformer = GroupStatisticsFeatures(</span>
 <span class="sd">    ...     subset=[&#39;amount&#39;],</span>
 <span class="sd">    ...     by=[&#39;cat1&#39;],</span>
-<span class="sd">    ...     func=[&#39;mean&#39;, &#39;std&#39;, &#39;min&#39;, &#39;max&#39;]</span>
+<span class="sd">    ...     func=[&#39;mean_ratio&#39;, &#39;zscore&#39;],</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
 <span class="sd">    &gt;&gt;&gt; result.columns</span>
-<span class="sd">    [&#39;amount&#39;, &#39;cat1&#39;, &#39;cat2&#39;, &#39;mean_amount__per_cat1&#39;, &#39;std_amount__per_cat1&#39;,</span>
-<span class="sd">     &#39;min_amount__per_cat1&#39;, &#39;max_amount__per_cat1&#39;]</span>
+<span class="sd">    [&#39;amount&#39;, &#39;cat1&#39;, &#39;cat2&#39;, &#39;mean_ratio_amount__per_cat1&#39;, &#39;zscore_amount__per_cat1&#39;]</span>
+
+<span class="sd">    **Example 3: Mixing absolute and relative**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = GroupStatisticsFeatures(</span>
+<span class="sd">    ...     subset=[&#39;amount&#39;],</span>
+<span class="sd">    ...     by=[&#39;cat1&#39;],</span>
+<span class="sd">    ...     func=[&#39;mean&#39;, &#39;zscore&#39;, &#39;minmax&#39;],</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.columns</span>
+<span class="sd">    [&#39;amount&#39;, &#39;cat1&#39;, &#39;cat2&#39;, &#39;mean_amount__per_cat1&#39;, &#39;zscore_amount__per_cat1&#39;, &#39;minmax_amount__per_cat1&#39;]</span>
+
+<span class="sd">    **Example 4: Multiple groupby columns**</span>
+
+<span class="sd">    &gt;&gt;&gt; transformer = GroupStatisticsFeatures(</span>
+<span class="sd">    ...     subset=[&#39;amount&#39;],</span>
+<span class="sd">    ...     by=[&#39;cat1&#39;, &#39;cat2&#39;],</span>
+<span class="sd">    ...     func=[&#39;mean&#39;],</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
+<span class="sd">    &gt;&gt;&gt; result.columns</span>
+<span class="sd">    [&#39;amount&#39;, &#39;cat1&#39;, &#39;cat2&#39;, &#39;mean_amount__per_cat1&#39;, &#39;mean_amount__per_cat2&#39;]</span>
+
+<span class="sd">    **Example 5: Zero denominator handling (relative statistics)**</span>
+
+<span class="sd">    &gt;&gt;&gt; X_zero = pl.DataFrame({&#39;v&#39;: [0, 0, 5, 10], &#39;g&#39;: [&#39;A&#39;, &#39;A&#39;, &#39;B&#39;, &#39;B&#39;]})</span>
+<span class="sd">    &gt;&gt;&gt; transformer = GroupStatisticsFeatures(</span>
+<span class="sd">    ...     subset=[&#39;v&#39;],</span>
+<span class="sd">    ...     by=[&#39;g&#39;],</span>
+<span class="sd">    ...     func=[&#39;mean_ratio&#39;],</span>
+<span class="sd">    ...     fill_value=-1.0,</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X_zero)</span>
+<span class="sd">    &gt;&gt;&gt; result[&#39;mean_ratio_v__per_g&#39;][0]  # group A mean=0 -&gt; fill_value</span>
+<span class="sd">    -1.0</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">subset</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">by</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">func</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">fill_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">new_column_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
@@ -633,7 +691,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        pl.DataFrame</span>
-<span class="sd">            Transformed DataFrame with group statistic features.</span>
+<span class="sd">            Transformed DataFrame with group statistic features appended.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_columns</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -643,22 +701,58 @@
                     <span class="n">default_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fun</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num_col</span><span class="si">}</span><span class="s2">__per_</span><span class="si">{</span><span class="n">groupby_col</span><span class="si">}</span><span class="s2">&quot;</span>
                     <span class="n">new_col_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="p">[</span><span class="n">default_name</span><span class="p">]</span>
 
-                    <span class="c1"># Compute group aggregation for single column</span>
-                    <span class="n">agg_functions</span> <span class="o">=</span> <span class="p">{</span>
-                        <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
-                        <span class="s2">&quot;std&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
-                        <span class="s2">&quot;median&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
-                        <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
-                        <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
-                        <span class="s2">&quot;sum&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
-                        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
-                        <span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="p">(</span>
-                            <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
-                            <span class="o">-</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
-                        <span class="p">),</span>
-                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;mean_ratio&quot;</span><span class="p">:</span>
+                        <span class="n">denominator</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
+                        <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">((</span><span class="n">denominator</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="n">denominator</span><span class="o">.</span><span class="n">is_null</span><span class="p">())</span>
+                            <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;median_ratio&quot;</span><span class="p">:</span>
+                        <span class="n">denominator</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
+                        <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">((</span><span class="n">denominator</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="n">denominator</span><span class="o">.</span><span class="n">is_null</span><span class="p">())</span>
+                            <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;zscore&quot;</span><span class="p">:</span>
+                        <span class="n">group_mean</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
+                        <span class="n">group_std</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
+                        <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">((</span><span class="n">group_std</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="n">group_std</span><span class="o">.</span><span class="n">is_null</span><span class="p">())</span>
+                            <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">otherwise</span><span class="p">((</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="o">-</span> <span class="n">group_mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">group_std</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">fun</span> <span class="o">==</span> <span class="s2">&quot;minmax&quot;</span><span class="p">:</span>
+                        <span class="n">group_min</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
+                        <span class="n">group_max</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
+                        <span class="n">range_val</span> <span class="o">=</span> <span class="n">group_max</span> <span class="o">-</span> <span class="n">group_min</span>
+                        <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">((</span><span class="n">range_val</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="n">range_val</span><span class="o">.</span><span class="n">is_null</span><span class="p">())</span>
+                            <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">otherwise</span><span class="p">((</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="o">-</span> <span class="n">group_min</span><span class="p">)</span> <span class="o">/</span> <span class="n">range_val</span><span class="p">)</span>
+                            <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">absolute_agg</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
+                            <span class="s2">&quot;std&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
+                            <span class="s2">&quot;median&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
+                            <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
+                            <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
+                            <span class="s2">&quot;sum&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
+                            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">),</span>
+                            <span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="p">(</span>
+                                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
+                                <span class="o">-</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">num_col</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">over</span><span class="p">(</span><span class="n">groupby_col</span><span class="p">)</span>
+                            <span class="p">),</span>
+                        <span class="p">}</span>
+                        <span class="n">expr</span> <span class="o">=</span> <span class="n">absolute_agg</span><span class="p">[</span><span class="n">fun</span><span class="p">]</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
 
-                    <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agg_functions</span><span class="p">[</span><span class="n">fun</span><span class="p">]</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">))</span>
+                    <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
 
         <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">new_columns</span><span class="p">)</span>
 

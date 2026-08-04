@@ -454,7 +454,11 @@
   <h1>Source code for gators.discretizers.custom_discretizer</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">gators.discretizers._base_discretizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseDiscretizer</span><span class="p">,</span> <span class="n">generate_labels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.discretizers._base_discretizer</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_BaseDiscretizer</span><span class="p">,</span>
+    <span class="n">deduplicate_bins</span><span class="p">,</span>
+    <span class="n">generate_labels</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="CustomDiscretizer">
@@ -586,10 +590,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
         <span class="c1"># Store bins (already provided by user)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_bins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bins</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bins</span> <span class="o">=</span> <span class="n">deduplicate_bins</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rounding</span><span class="p">)</span>
 
         <span class="c1"># Generate labels with proper rounding</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">generate_labels</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">,</span> <span class="n">rounding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rounding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">generate_labels</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_bins</span><span class="p">,</span> <span class="n">rounding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rounding</span><span class="p">)</span>
 
         <span class="c1"># Convert to numeric labels if requested</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_numerics</span><span class="p">:</span>

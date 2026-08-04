@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gators.feature_generation.plane_rotation_features &#8212; Gators - Lightning Fast ML Preprocessing with Polars</title>
+    <title>gators.feature_generation.plan_rotation_features &#8212; Gators - Lightning Fast ML Preprocessing with Polars</title>
   
   
   
@@ -55,9 +55,9 @@
                 gtag('js', new Date());
                 gtag('config', 'G-Z5TR8D9VTQ');
             </script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/feature_generation/plane_rotation_features';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/feature_generation/plan_rotation_features';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
-    <link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/feature_generation/plane_rotation_features.html" />
+    <link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/feature_generation/plan_rotation_features.html" />
     <link rel="icon" href="../../../_static/gators_logo1.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -103,18 +103,18 @@
 <meta name="description" content="Gators is a high-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API.">
 <meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline">
 <meta name="author" content="Charles Poli, PayPal">
-<link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/feature_generation/plane_rotation_features.html" />
+<link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/feature_generation/plan_rotation_features.html" />
 
 <!-- Open Graph -->
-<meta property="og:title" content="gators.feature_generation.plane_rotation_features - Gators Documentation">
+<meta property="og:title" content="gators.feature_generation.plan_rotation_features - Gators Documentation">
 <meta property="og:description" content="High-performance ML preprocessing with 75+ Polars-powered transformers">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://paypal.github.io/gators/_modules/gators/feature_generation/plane_rotation_features.html">
+<meta property="og:url" content="https://paypal.github.io/gators/_modules/gators/feature_generation/plan_rotation_features.html">
 <meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="gators.feature_generation.plane_rotation_features - Gators">
+<meta name="twitter:title" content="gators.feature_generation.plan_rotation_features - Gators">
 <meta name="twitter:description" content="Lightning-fast ML preprocessing with Polars">
 <meta name="twitter:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
 
@@ -434,7 +434,7 @@
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.feature_generation.plane_rotation_features</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.feature_generation.plan_rotation_features</span></li>
   </ul>
 </nav>
 </div>
@@ -451,7 +451,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for gators.feature_generation.plane_rotation_features</h1><div class="highlight"><pre>
+  <h1>Source code for gators.feature_generation.plan_rotation_features</h1><div class="highlight"><pre>
 <span></span><span class="c1"># License: Apache-2.0</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">cos</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span> <span class="k">as</span> <span class="n">PI</span>
@@ -463,14 +463,14 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
 
 
-<div class="viewcode-block" id="PlaneRotationFeatures">
-<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">PlaneRotationFeatures</span><span class="p">(</span><span class="n">_BaseTransformer</span><span class="p">):</span>
+<div class="viewcode-block" id="PlanRotationFeatures">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlanRotationFeatures</span><span class="p">(</span><span class="n">_BaseTransformer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create new columns based on the plan rotation mapping.</span>
 
 <span class="sd">    The data should be composed of numerical columns only.</span>
 <span class="sd">    Use `gators.encoders` to replace the categorical columns by</span>
-<span class="sd">    numerical ones before using `PlaneRotationFeatures`.</span>
+<span class="sd">    numerical ones before using `PlanRotationFeatures`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -485,8 +485,8 @@
 
 <span class="sd">    Imports and initialization:</span>
 
-<span class="sd">    &gt;&gt;&gt; from gators.feature_generation import PlaneRotationFeatures</span>
-<span class="sd">    &gt;&gt;&gt; obj = PlaneRotationFeatures(</span>
+<span class="sd">    &gt;&gt;&gt; from gators.feature_generation import PlanRotationFeatures</span>
+<span class="sd">    &gt;&gt;&gt; obj = PlanRotationFeatures(</span>
 <span class="sd">    ... subset=[[&#39;X&#39;, &#39;Y&#39;], [&#39;X&#39;, &#39;Z&#39;]] , angles=[45.0, 60.0])</span>
 
 <span class="sd">    The `fit`, `transform`, and `fit_transform` methods accept `polars` dataframes:</span>
@@ -515,8 +515,8 @@
     <span class="n">column_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">flatten_columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="PlaneRotationFeatures.compute_column_names">
-<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures.compute_column_names">[docs]</a>
+<div class="viewcode-block" id="PlanRotationFeatures.compute_column_names">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.compute_column_names">[docs]</a>
     <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_column_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute column names after initialization.&quot;&quot;&quot;</span>
@@ -532,9 +532,9 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-<div class="viewcode-block" id="PlaneRotationFeatures.fit">
-<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PlaneRotationFeatures&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="PlanRotationFeatures.fit">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PlanRotationFeatures&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by identifying columns to flatten.</span>
 
 <span class="sd">        Parameters</span>
@@ -546,15 +546,15 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        PlaneRotationFeatures</span>
+<span class="sd">        PlanRotationFeatures</span>
 <span class="sd">            Fitted transformer instance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flatten_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">cols</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-<div class="viewcode-block" id="PlaneRotationFeatures.transform">
-<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures.transform">[docs]</a>
+<div class="viewcode-block" id="PlanRotationFeatures.transform">
+<a class="viewcode-back" href="../../../gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.transform">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the dataframe `X`.</span>
 

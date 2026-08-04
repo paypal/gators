@@ -487,6 +487,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.scalers.html#gators.scalers.ArcSinSquareRootScaler">ArcSinSquareRootScaler (class in gators.scalers)</a>
 </li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.AsymmetryIndexFeatures">AsymmetryIndexFeatures (class in gators.feature_generation)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -517,21 +519,41 @@
 </li>
       <li><a href="gators.pipeline.html#gators.pipeline.Pipeline.clone">clone() (gators.pipeline.Pipeline method)</a>
 </li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.FourierFeatures.column_periods_">column_periods_ (gators.feature_generation.FourierFeatures attribute)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.CorrelationSelector.columns_to_drop_">columns_to_drop_ (gators.feature_selection.CorrelationSelector attribute)</a>
+
+      <ul>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.FeatureStabilitySelector.columns_to_drop_">(gators.feature_selection.FeatureStabilitySelector attribute)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.InformationValueSelector.columns_to_drop_">(gators.feature_selection.InformationValueSelector attribute)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.MutualInformationSelector.columns_to_drop_">(gators.feature_selection.MutualInformationSelector attribute)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.PermutationImportanceSelector.columns_to_drop_">(gators.feature_selection.PermutationImportanceSelector attribute)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.PSIFilter.columns_to_drop_">(gators.feature_selection.PSIFilter attribute)</a>
+</li>
+      </ul></li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.CombineFeatures">CombineFeatures (class in gators.feature_generation_str)</a>
-</li>
-      <li><a href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures">ComparisonFeatures (class in gators.feature_generation)</a>
-</li>
-      <li><a href="gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures.compute_column_names">compute_column_names() (gators.feature_generation.PlaneRotationFeatures method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.feature_selection.html#gators.feature_selection.information_value.compute_iv">compute_iv() (in module gators.feature_selection.information_value)</a>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures">ComparisonFeatures (class in gators.feature_generation)</a>
+</li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.compute_column_names">compute_column_names() (gators.feature_generation.PlanRotationFeatures method)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.compute_iv">compute_iv() (in module gators.feature_selection)</a>
+</li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.ConcentrationIndexFeatures">ConcentrationIndexFeatures (class in gators.feature_generation)</a>
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.ConditionFeatures">ConditionFeatures (class in gators.feature_generation)</a>
 </li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Contains">Contains (class in gators.feature_generation_str)</a>
 </li>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.CorrelationFilter">CorrelationFilter (class in gators.data_cleaning)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.CorrelationSelector">CorrelationSelector (class in gators.feature_selection)</a>
 </li>
       <li><a href="gators.encoders.html#gators.encoders.CountEncoder">CountEncoder (class in gators.encoders)</a>
 </li>
@@ -555,15 +577,17 @@
 </li>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropConstantColumns">DropConstantColumns (class in gators.data_cleaning)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateColumns">DropDuplicateColumns (class in gators.data_cleaning)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropDuplicateRows">DropDuplicateRows (class in gators.data_cleaning)</a>
 </li>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropHighNaNRatio">DropHighNaNRatio (class in gators.data_cleaning)</a>
 </li>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropLowCardinality">DropLowCardinality (class in gators.data_cleaning)</a>
+</li>
+      <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropNearConstantColumns">DropNearConstantColumns (class in gators.data_cleaning)</a>
 </li>
       <li><a href="gators.feature_generation_dt.html#gators.feature_generation_dt.DurationToDatetime">DurationToDatetime (class in gators.feature_generation_dt)</a>
 </li>
@@ -589,7 +613,9 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.feature_selection.html#gators.feature_selection.feature_stability_index.feature_stability_index">feature_stability_index() (in module gators.feature_selection.feature_stability_index)</a>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.feature_stability_index">feature_stability_index() (in module gators.feature_selection)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.FeatureStabilitySelector">FeatureStabilitySelector (class in gators.feature_selection)</a>
 </li>
       <li><a href="gators.clippers.html#gators.clippers.CustomClipper.fit">fit() (gators.clippers.CustomClipper method)</a>
 
@@ -618,11 +644,15 @@
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropLowCardinality.fit">(gators.data_cleaning.DropLowCardinality method)</a>
 </li>
+        <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropNearConstantColumns.fit">(gators.data_cleaning.DropNearConstantColumns method)</a>
+</li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter.fit">(gators.data_cleaning.HighCardinalityFilter method)</a>
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.RenameColumns.fit">(gators.data_cleaning.RenameColumns method)</a>
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.Replace.fit">(gators.data_cleaning.Replace method)</a>
+</li>
+        <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundDigits.fit">(gators.data_cleaning.RoundDigits method)</a>
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits.fit">(gators.data_cleaning.RoundSignificantDigits method)</a>
 </li>
@@ -662,33 +692,45 @@
 </li>
         <li><a href="gators.encoders.html#gators.encoders.WOEEncoder.fit">(gators.encoders.WOEEncoder method)</a>
 </li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.AsymmetryIndexFeatures.fit">(gators.feature_generation.AsymmetryIndexFeatures method)</a>
+</li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures.fit">(gators.feature_generation.ComparisonFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.ConcentrationIndexFeatures.fit">(gators.feature_generation.ConcentrationIndexFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.ConditionFeatures.fit">(gators.feature_generation.ConditionFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.DistanceFeatures.fit">(gators.feature_generation.DistanceFeatures method)</a>
 </li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.FourierFeatures.fit">(gators.feature_generation.FourierFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.GeneralizedRatioFeatures.fit">(gators.feature_generation.GeneralizedRatioFeatures method)</a>
+</li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.GroupLagFeatures.fit">(gators.feature_generation.GroupLagFeatures method)</a>
 </li>
-        <li><a href="gators.feature_generation.html#gators.feature_generation.GroupScalingFeatures.fit">(gators.feature_generation.GroupScalingFeatures method)</a>
-</li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures.fit">(gators.feature_generation.GroupStatisticsFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.HHIFeatures.fit">(gators.feature_generation.HHIFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.IsNull.fit">(gators.feature_generation.IsNull method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.MathFeatures.fit">(gators.feature_generation.MathFeatures method)</a>
 </li>
-        <li><a href="gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures.fit">(gators.feature_generation.PlaneRotationFeatures method)</a>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.fit">(gators.feature_generation.PlanRotationFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.PolynomialFeatures.fit">(gators.feature_generation.PolynomialFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.RatioFeatures.fit">(gators.feature_generation.RatioFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.RollingStatisticsFeatures.fit">(gators.feature_generation.RollingStatisticsFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.RowStatisticsFeatures.fit">(gators.feature_generation.RowStatisticsFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.RuleFeatures.fit">(gators.feature_generation.RuleFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures.fit">(gators.feature_generation.ScalarMathFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.WeightedSumFeatures.fit">(gators.feature_generation.WeightedSumFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation_dt.html#gators.feature_generation_dt.BusinessTimeFeatures.fit">(gators.feature_generation_dt.BusinessTimeFeatures method)</a>
 </li>
@@ -728,17 +770,35 @@
 </li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.PatternDetector.fit">(gators.feature_generation_str.PatternDetector method)</a>
 </li>
+        <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.RegexExtractFeatures.fit">(gators.feature_generation_str.RegexExtractFeatures method)</a>
+</li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Split.fit">(gators.feature_generation_str.Split method)</a>
 </li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.SplitExtract.fit">(gators.feature_generation_str.SplitExtract method)</a>
 </li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Startswith.fit">(gators.feature_generation_str.Startswith method)</a>
 </li>
+        <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.TfidfFeatures.fit">(gators.feature_generation_str.TfidfFeatures method)</a>
+</li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Upper.fit">(gators.feature_generation_str.Upper method)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.CorrelationSelector.fit">(gators.feature_selection.CorrelationSelector method)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.FeatureStabilitySelector.fit">(gators.feature_selection.FeatureStabilitySelector method)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.InformationValueSelector.fit">(gators.feature_selection.InformationValueSelector method)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.MutualInformationSelector.fit">(gators.feature_selection.MutualInformationSelector method)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.PermutationImportanceSelector.fit">(gators.feature_selection.PermutationImportanceSelector method)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.PSIFilter.fit">(gators.feature_selection.PSIFilter method)</a>
 </li>
         <li><a href="gators.imputers.html#gators.imputers.BooleanImputer.fit">(gators.imputers.BooleanImputer method)</a>
 </li>
         <li><a href="gators.imputers.html#gators.imputers.GroupByImputer.fit">(gators.imputers.GroupByImputer method)</a>
+</li>
+        <li><a href="gators.imputers.html#gators.imputers.IterativeImputer.fit">(gators.imputers.IterativeImputer method)</a>
 </li>
         <li><a href="gators.imputers.html#gators.imputers.KNNImputer.fit">(gators.imputers.KNNImputer method)</a>
 </li>
@@ -754,7 +814,7 @@
 </li>
         <li><a href="gators.scalers.html#gators.scalers.BoxCox.fit">(gators.scalers.BoxCox method)</a>
 </li>
-        <li><a href="gators.scalers.html#gators.scalers.LogScaler.fit">(gators.scalers.LogScaler method)</a>
+        <li><a href="gators.scalers.html#gators.scalers.Log1pScaler.fit">(gators.scalers.Log1pScaler method)</a>
 </li>
         <li><a href="gators.scalers.html#gators.scalers.MinmaxScaler.fit">(gators.scalers.MinmaxScaler method)</a>
 </li>
@@ -771,19 +831,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.pipeline.html#gators.pipeline.Pipeline.fit_transform">fit_transform() (gators.pipeline.Pipeline method)</a>
 </li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.FourierFeatures">FourierFeatures (class in gators.feature_generation)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.FeatureStabilitySelector.fsi_scores_">fsi_scores_ (gators.feature_selection.FeatureStabilitySelector attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    gators
-
-      <ul>
-        <li><a href="gators.html#module-gators">module</a>
-</li>
-      </ul></li>
       <li>
     gators.clippers
 
@@ -836,17 +893,10 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    gators.feature_selection.feature_stability_index
+    gators.feature_selection
 
       <ul>
-        <li><a href="gators.feature_selection.html#module-gators.feature_selection.feature_stability_index">module</a>
-</li>
-      </ul></li>
-      <li>
-    gators.feature_selection.information_value
-
-      <ul>
-        <li><a href="gators.feature_selection.html#module-gators.feature_selection.information_value">module</a>
+        <li><a href="gators.feature_selection.html#module-gators.feature_selection">module</a>
 </li>
       </ul></li>
       <li>
@@ -865,15 +915,17 @@
       </ul></li>
       <li><a href="gators.clippers.html#gators.clippers.GaussianClipper">GaussianClipper (class in gators.clippers)</a>
 </li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.GeneralizedRatioFeatures">GeneralizedRatioFeatures (class in gators.feature_generation)</a>
+</li>
       <li><a href="gators.discretizers.html#gators.discretizers.GeometricDiscretizer">GeometricDiscretizer (class in gators.discretizers)</a>
 </li>
       <li><a href="gators.pipeline.html#gators.pipeline.Pipeline.get_params">get_params() (gators.pipeline.Pipeline method)</a>
 </li>
+      <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.RegexExtractFeatures.group_names_">group_names_ (gators.feature_generation_str.RegexExtractFeatures attribute)</a>
+</li>
       <li><a href="gators.imputers.html#gators.imputers.GroupByImputer">GroupByImputer (class in gators.imputers)</a>
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.GroupLagFeatures">GroupLagFeatures (class in gators.feature_generation)</a>
-</li>
-      <li><a href="gators.feature_generation.html#gators.feature_generation.GroupScalingFeatures">GroupScalingFeatures (class in gators.feature_generation)</a>
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures">GroupStatisticsFeatures (class in gators.feature_generation)</a>
 </li>
@@ -884,6 +936,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.encoders.html#gators.encoders.HashEncoder">HashEncoder (class in gators.encoders)</a>
+</li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.HHIFeatures">HHIFeatures (class in gators.feature_generation)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -897,13 +951,43 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.TfidfFeatures.idf_">idf_ (gators.feature_generation_str.TfidfFeatures attribute)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.PermutationImportanceSelector.importances_">importances_ (gators.feature_selection.PermutationImportanceSelector attribute)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.InformationValueSelector">InformationValueSelector (class in gators.feature_selection)</a>
+</li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.InteractionFeatures">InteractionFeatures (class in gators.feature_generation_str)</a>
 </li>
+      <li><a href="gators.scalers.html#gators.scalers.ArcSinhScaler.inverse_transform">inverse_transform() (gators.scalers.ArcSinhScaler method)</a>
+
+      <ul>
+        <li><a href="gators.scalers.html#gators.scalers.ArcSinSquareRootScaler.inverse_transform">(gators.scalers.ArcSinSquareRootScaler method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.BoxCox.inverse_transform">(gators.scalers.BoxCox method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.Log1pScaler.inverse_transform">(gators.scalers.Log1pScaler method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.MinmaxScaler.inverse_transform">(gators.scalers.MinmaxScaler method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.PowerScaler.inverse_transform">(gators.scalers.PowerScaler method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.RobustScaler.inverse_transform">(gators.scalers.RobustScaler method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.StandardScaler.inverse_transform">(gators.scalers.StandardScaler method)</a>
+</li>
+        <li><a href="gators.scalers.html#gators.scalers.YeoJohnson.inverse_transform">(gators.scalers.YeoJohnson method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.clippers.html#gators.clippers.IQRClipper">IQRClipper (class in gators.clippers)</a>
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.IsNull">IsNull (class in gators.feature_generation)</a>
+</li>
+      <li><a href="gators.imputers.html#gators.imputers.IterativeImputer">IterativeImputer (class in gators.imputers)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.InformationValueSelector.iv_values_">iv_values_ (gators.feature_selection.InformationValueSelector attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -929,7 +1013,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.scalers.html#gators.scalers.LogScaler">LogScaler (class in gators.scalers)</a>
+      <li><a href="gators.scalers.html#gators.scalers.Log1pScaler">Log1pScaler (class in gators.scalers)</a>
 </li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Lower">Lower (class in gators.feature_generation_str)</a>
 </li>
@@ -943,14 +1027,14 @@
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.MathFeatures">MathFeatures (class in gators.feature_generation)</a>
 </li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.MutualInformationSelector.mi_values_">mi_values_ (gators.feature_selection.MutualInformationSelector attribute)</a>
+</li>
       <li><a href="gators.scalers.html#gators.scalers.MinmaxScaler">MinmaxScaler (class in gators.scalers)</a>
 </li>
       <li>
     module
 
       <ul>
-        <li><a href="gators.html#module-gators">gators</a>
-</li>
         <li><a href="gators.clippers.html#module-gators.clippers">gators.clippers</a>
 </li>
         <li><a href="gators.data_cleaning.html#module-gators.data_cleaning">gators.data_cleaning</a>
@@ -965,9 +1049,7 @@
 </li>
         <li><a href="gators.feature_generation_str.html#module-gators.feature_generation_str">gators.feature_generation_str</a>
 </li>
-        <li><a href="gators.feature_selection.html#module-gators.feature_selection.feature_stability_index">gators.feature_selection.feature_stability_index</a>
-</li>
-        <li><a href="gators.feature_selection.html#module-gators.feature_selection.information_value">gators.feature_selection.information_value</a>
+        <li><a href="gators.feature_selection.html#module-gators.feature_selection">gators.feature_selection</a>
 </li>
         <li><a href="gators.imputers.html#module-gators.imputers">gators.imputers</a>
 </li>
@@ -975,15 +1057,21 @@
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.MutualInformationSelector">MutualInformationSelector (class in gators.feature_selection)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.NGram">NGram (class in gators.feature_generation_str)</a>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.RollingStatisticsFeatures.new_column_names_">new_column_names_ (gators.feature_generation.RollingStatisticsFeatures attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.NGram">NGram (class in gators.feature_generation_str)</a>
+</li>
       <li><a href="gators.imputers.html#gators.imputers.NumericImputer">NumericImputer (class in gators.imputers)</a>
 </li>
   </ul></td>
@@ -1010,15 +1098,21 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.PatternDetector">PatternDetector (class in gators.feature_generation_str)</a>
 </li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.PermutationImportanceSelector">PermutationImportanceSelector (class in gators.feature_selection)</a>
+</li>
       <li><a href="gators.pipeline.html#gators.pipeline.Pipeline">Pipeline (class in gators.pipeline)</a>
+</li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures">PlanRotationFeatures (class in gators.feature_generation)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures">PlaneRotationFeatures (class in gators.feature_generation)</a>
-</li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.PolynomialFeatures">PolynomialFeatures (class in gators.feature_generation)</a>
 </li>
       <li><a href="gators.scalers.html#gators.scalers.PowerScaler">PowerScaler (class in gators.scalers)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.PSIFilter.psi_scores_">psi_scores_ (gators.feature_selection.PSIFilter attribute)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.PSIFilter">PSIFilter (class in gators.feature_selection)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1042,6 +1136,8 @@
 </li>
       <li><a href="gators.feature_generation.html#gators.feature_generation.RatioFeatures">RatioFeatures (class in gators.feature_generation)</a>
 </li>
+      <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.RegexExtractFeatures">RegexExtractFeatures (class in gators.feature_generation_str)</a>
+</li>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.RenameColumns">RenameColumns (class in gators.data_cleaning)</a>
 </li>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.Replace">Replace (class in gators.data_cleaning)</a>
@@ -1049,6 +1145,10 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.scalers.html#gators.scalers.RobustScaler">RobustScaler (class in gators.scalers)</a>
+</li>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.RollingStatisticsFeatures">RollingStatisticsFeatures (class in gators.feature_generation)</a>
+</li>
+      <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundDigits">RoundDigits (class in gators.data_cleaning)</a>
 </li>
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits">RoundSignificantDigits (class in gators.data_cleaning)</a>
 </li>
@@ -1064,17 +1164,35 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures">ScalarMathFeatures (class in gators.feature_generation)</a>
 </li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.select_k_best_stable_features">select_k_best_stable_features() (in module gators.feature_selection)</a>
+</li>
+      <li><a href="gators.feature_selection.html#gators.feature_selection.CorrelationSelector.selected_features_">selected_features_ (gators.feature_selection.CorrelationSelector attribute)</a>
+
+      <ul>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.FeatureStabilitySelector.selected_features_">(gators.feature_selection.FeatureStabilitySelector attribute)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.InformationValueSelector.selected_features_">(gators.feature_selection.InformationValueSelector attribute)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.MutualInformationSelector.selected_features_">(gators.feature_selection.MutualInformationSelector attribute)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.PermutationImportanceSelector.selected_features_">(gators.feature_selection.PermutationImportanceSelector attribute)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.PSIFilter.selected_features_">(gators.feature_selection.PSIFilter attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.pipeline.html#gators.pipeline.Pipeline.set_params">set_params() (gators.pipeline.Pipeline method)</a>
 </li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Split">Split (class in gators.feature_generation_str)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.SplitExtract">SplitExtract (class in gators.feature_generation_str)</a>
 </li>
       <li><a href="gators.scalers.html#gators.scalers.StandardScaler">StandardScaler (class in gators.scalers)</a>
 </li>
       <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Startswith">Startswith (class in gators.feature_generation_str)</a>
+</li>
+      <li><a href="gators.imputers.html#gators.imputers.IterativeImputer.statistics_">statistics_ (gators.imputers.IterativeImputer attribute)</a>
 </li>
       <li><a href="gators.imputers.html#gators.imputers.StringImputer">StringImputer (class in gators.imputers)</a>
 </li>
@@ -1085,6 +1203,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.encoders.html#gators.encoders.TargetEncoder">TargetEncoder (class in gators.encoders)</a>
+</li>
+      <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.TfidfFeatures">TfidfFeatures (class in gators.feature_generation_str)</a>
 </li>
       <li><a href="gators.feature_generation_dt.html#gators.feature_generation_dt.TimeBinFeatures">TimeBinFeatures (class in gators.feature_generation_dt)</a>
 </li>
@@ -1109,11 +1229,15 @@
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropLowCardinality.transform">(gators.data_cleaning.DropLowCardinality method)</a>
 </li>
+        <li><a href="gators.data_cleaning.html#gators.data_cleaning.DropNearConstantColumns.transform">(gators.data_cleaning.DropNearConstantColumns method)</a>
+</li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.HighCardinalityFilter.transform">(gators.data_cleaning.HighCardinalityFilter method)</a>
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.RenameColumns.transform">(gators.data_cleaning.RenameColumns method)</a>
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.Replace.transform">(gators.data_cleaning.Replace method)</a>
+</li>
+        <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundDigits.transform">(gators.data_cleaning.RoundDigits method)</a>
 </li>
         <li><a href="gators.data_cleaning.html#gators.data_cleaning.RoundSignificantDigits.transform">(gators.data_cleaning.RoundSignificantDigits method)</a>
 </li>
@@ -1131,33 +1255,45 @@
 </li>
         <li><a href="gators.encoders.html#gators.encoders.RareCategoryEncoder.transform">(gators.encoders.RareCategoryEncoder method)</a>
 </li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.AsymmetryIndexFeatures.transform">(gators.feature_generation.AsymmetryIndexFeatures method)</a>
+</li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.ComparisonFeatures.transform">(gators.feature_generation.ComparisonFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.ConcentrationIndexFeatures.transform">(gators.feature_generation.ConcentrationIndexFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.ConditionFeatures.transform">(gators.feature_generation.ConditionFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.DistanceFeatures.transform">(gators.feature_generation.DistanceFeatures method)</a>
 </li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.FourierFeatures.transform">(gators.feature_generation.FourierFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.GeneralizedRatioFeatures.transform">(gators.feature_generation.GeneralizedRatioFeatures method)</a>
+</li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.GroupLagFeatures.transform">(gators.feature_generation.GroupLagFeatures method)</a>
 </li>
-        <li><a href="gators.feature_generation.html#gators.feature_generation.GroupScalingFeatures.transform">(gators.feature_generation.GroupScalingFeatures method)</a>
-</li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.GroupStatisticsFeatures.transform">(gators.feature_generation.GroupStatisticsFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.HHIFeatures.transform">(gators.feature_generation.HHIFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.IsNull.transform">(gators.feature_generation.IsNull method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.MathFeatures.transform">(gators.feature_generation.MathFeatures method)</a>
 </li>
-        <li><a href="gators.feature_generation.html#gators.feature_generation.PlaneRotationFeatures.transform">(gators.feature_generation.PlaneRotationFeatures method)</a>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.PlanRotationFeatures.transform">(gators.feature_generation.PlanRotationFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.PolynomialFeatures.transform">(gators.feature_generation.PolynomialFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.RatioFeatures.transform">(gators.feature_generation.RatioFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.RollingStatisticsFeatures.transform">(gators.feature_generation.RollingStatisticsFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.RowStatisticsFeatures.transform">(gators.feature_generation.RowStatisticsFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.RuleFeatures.transform">(gators.feature_generation.RuleFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation.html#gators.feature_generation.ScalarMathFeatures.transform">(gators.feature_generation.ScalarMathFeatures method)</a>
+</li>
+        <li><a href="gators.feature_generation.html#gators.feature_generation.WeightedSumFeatures.transform">(gators.feature_generation.WeightedSumFeatures method)</a>
 </li>
         <li><a href="gators.feature_generation_dt.html#gators.feature_generation_dt.BusinessTimeFeatures.transform">(gators.feature_generation_dt.BusinessTimeFeatures method)</a>
 </li>
@@ -1197,17 +1333,25 @@
 </li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.PatternDetector.transform">(gators.feature_generation_str.PatternDetector method)</a>
 </li>
+        <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.RegexExtractFeatures.transform">(gators.feature_generation_str.RegexExtractFeatures method)</a>
+</li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Split.transform">(gators.feature_generation_str.Split method)</a>
 </li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.SplitExtract.transform">(gators.feature_generation_str.SplitExtract method)</a>
 </li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Startswith.transform">(gators.feature_generation_str.Startswith method)</a>
 </li>
+        <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.TfidfFeatures.transform">(gators.feature_generation_str.TfidfFeatures method)</a>
+</li>
         <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.Upper.transform">(gators.feature_generation_str.Upper method)</a>
+</li>
+        <li><a href="gators.feature_selection.html#gators.feature_selection.PSIFilter.transform">(gators.feature_selection.PSIFilter method)</a>
 </li>
         <li><a href="gators.imputers.html#gators.imputers.BooleanImputer.transform">(gators.imputers.BooleanImputer method)</a>
 </li>
         <li><a href="gators.imputers.html#gators.imputers.GroupByImputer.transform">(gators.imputers.GroupByImputer method)</a>
+</li>
+        <li><a href="gators.imputers.html#gators.imputers.IterativeImputer.transform">(gators.imputers.IterativeImputer method)</a>
 </li>
         <li><a href="gators.imputers.html#gators.imputers.KNNImputer.transform">(gators.imputers.KNNImputer method)</a>
 </li>
@@ -1223,7 +1367,7 @@
 </li>
         <li><a href="gators.scalers.html#gators.scalers.BoxCox.transform">(gators.scalers.BoxCox method)</a>
 </li>
-        <li><a href="gators.scalers.html#gators.scalers.LogScaler.transform">(gators.scalers.LogScaler method)</a>
+        <li><a href="gators.scalers.html#gators.scalers.Log1pScaler.transform">(gators.scalers.Log1pScaler method)</a>
 </li>
         <li><a href="gators.scalers.html#gators.scalers.MinmaxScaler.transform">(gators.scalers.MinmaxScaler method)</a>
 </li>
@@ -1257,10 +1401,18 @@
       <li><a href="gators.data_cleaning.html#gators.data_cleaning.VarianceFilter">VarianceFilter (class in gators.data_cleaning)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.feature_generation_str.html#gators.feature_generation_str.TfidfFeatures.vocabulary_">vocabulary_ (gators.feature_generation_str.TfidfFeatures attribute)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gators.feature_generation.html#gators.feature_generation.WeightedSumFeatures">WeightedSumFeatures (class in gators.feature_generation)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gators.encoders.html#gators.encoders.WOEEncoder">WOEEncoder (class in gators.encoders)</a>
 </li>

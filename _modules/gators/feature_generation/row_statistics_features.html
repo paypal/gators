@@ -457,7 +457,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
 
-<span class="n">AGGREGATION_FUNCTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">]</span>
+<span class="n">AGGREGATION_FUNCTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="RowStatisticsFeatures">
@@ -466,49 +466,37 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates row-level aggregation features across groups of columns.</span>
 
-<span class="sd">    This transformer computes statistics (min, max, mean, median, std, range)</span>
+<span class="sd">    This transformer computes statistics (min, max, mean, median, std, range, sum, count)</span>
 <span class="sd">    horizontally across specified column groups for each row. Unlike</span>
-<span class="sd">    GroupRatioFeatures which aggregates vertically (across rows within groups),</span>
+<span class="sd">    GroupStatisticsFeatures which aggregates vertically (across rows within groups),</span>
 <span class="sd">    this computes statistics across columns within each row.</span>
 
-<span class="sd">    Importance for Fraud Detection</span>
-<span class="sd">    -------------------------------</span>
-<span class="sd">    Row-level aggregation features are valuable in fraud detection because they</span>
-<span class="sd">    capture relationships and patterns across related features within individual</span>
-<span class="sd">    transactions. For example:</span>
-
-<span class="sd">    - Computing statistics across multiple transaction amounts can reveal unusual</span>
-<span class="sd">      patterns (e.g., all amounts being identical might indicate scripted fraud)</span>
-<span class="sd">    - Aggregating across card verification fields can identify inconsistencies</span>
-<span class="sd">    - Statistics across temporal features can detect velocity anomalies</span>
-<span class="sd">    - Range calculations can flag suspiciously uniform or extreme value spreads</span>
-
-<span class="sd">    These features help models identify transactions where the distribution of</span>
-<span class="sd">    values across related fields deviates from normal patterns, which is often</span>
-<span class="sd">    indicative of fraudulent behavior.</span>
+<span class="sd">    Auto-generated column names follow the pattern ``&#39;{group_name}__{func}&#39;``.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    column_groups : dict[str, list[str]]</span>
 <span class="sd">        Dictionary mapping group names to lists of column names. Each group defines</span>
-<span class="sd">        a set of columns over which to compute row-level statistics.</span>
-<span class="sd">        Example: {&#39;card_fields&#39;: [&#39;card1&#39;, &#39;card2&#39;, &#39;card3&#39;]}</span>
+<span class="sd">        a set of columns over which to compute row-level statistics. Every list must</span>
+<span class="sd">        contain at least 2 columns.</span>
+<span class="sd">        Example: ``{&#39;card_fields&#39;: [&#39;card1&#39;, &#39;card2&#39;, &#39;card3&#39;]}``</span>
 <span class="sd">    func : list[str]</span>
-<span class="sd">        List of aggregation functions to apply. Available options:</span>
+<span class="sd">        Aggregation functions to apply to every group. Available options:</span>
 
-<span class="sd">        - &#39;min&#39;: Row-wise minimum value</span>
-<span class="sd">        - &#39;max&#39;: Row-wise maximum value</span>
-<span class="sd">        - &#39;mean&#39;: Row-wise mean (average)</span>
-<span class="sd">        - &#39;median&#39;: Row-wise median</span>
-<span class="sd">        - &#39;std&#39;: Row-wise standard deviation</span>
-<span class="sd">        - &#39;range&#39;: Row-wise range (max - min)</span>
-<span class="sd">        - &#39;sum&#39;: Row-wise sum</span>
+<span class="sd">        - ``&#39;min&#39;``: Row-wise minimum</span>
+<span class="sd">        - ``&#39;max&#39;``: Row-wise maximum</span>
+<span class="sd">        - ``&#39;mean&#39;``: Row-wise mean</span>
+<span class="sd">        - ``&#39;median&#39;``: Row-wise median</span>
+<span class="sd">        - ``&#39;std&#39;``: Row-wise standard deviation</span>
+<span class="sd">        - ``&#39;range&#39;``: Row-wise range (max − min)</span>
+<span class="sd">        - ``&#39;sum&#39;``: Row-wise sum</span>
+<span class="sd">        - ``&#39;count&#39;``: Row-wise count of non-null values</span>
 <span class="sd">    drop_columns : bool, default=False</span>
 <span class="sd">        Whether to drop the original columns after creating aggregation features.</span>
 <span class="sd">    new_column_names : list[str], default=None</span>
-<span class="sd">        List of custom names for the aggregation columns. If None, uses default</span>
-<span class="sd">        naming pattern &#39;{group_name}__{func}&#39;. Must have same length as the total</span>
-<span class="sd">        number of features created (len(column_groups) × len(func)).</span>
+<span class="sd">        Custom names for the generated columns. If ``None``, names are</span>
+<span class="sd">        auto-generated as ``&#39;{group_name}__{func}&#39;``. Must have the same length as</span>
+<span class="sd">        ``len(column_groups) × len(func)``.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -517,110 +505,65 @@
 
 <span class="sd">    **Example 1: Single group with multiple aggregations**</span>
 
-<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
-<span class="sd">    ...     &#39;A&#39;: [9, 9, 7],</span>
-<span class="sd">    ...     &#39;B&#39;: [3, 4, 5],</span>
-<span class="sd">    ...     &#39;C&#39;: [6, 7, 8]</span>
-<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({&#39;A&#39;: [9, 9, 7], &#39;B&#39;: [3, 4, 5], &#39;C&#39;: [6, 7, 8]})</span>
 <span class="sd">    &gt;&gt;&gt; transformer = RowStatisticsFeatures(</span>
 <span class="sd">    ...     column_groups={&#39;cluster_1&#39;: [&#39;A&#39;, &#39;B&#39;]},</span>
-<span class="sd">    ...     func=[&#39;mean&#39;, &#39;std&#39;]</span>
+<span class="sd">    ...     func=[&#39;mean&#39;, &#39;std&#39;],</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
-<span class="sd">    &gt;&gt;&gt; result</span>
-<span class="sd">    shape: (3, 5)</span>
-<span class="sd">    ┌─────┬─────┬─────┬───────────────────┬──────────────────┐</span>
-<span class="sd">    │ A   ┆ B   ┆ C   ┆ cluster_1__mean   ┆ cluster_1__std   │</span>
-<span class="sd">    │ --- ┆ --- ┆ --- ┆ ---               ┆ ---              │</span>
-<span class="sd">    │ i64 ┆ i64 ┆ i64 ┆ f64               ┆ f64              │</span>
-<span class="sd">    ╞═════╪═════╪═════╪═══════════════════╪══════════════════╡</span>
-<span class="sd">    │ 9   ┆ 3   ┆ 6   ┆ 6.0               ┆ 4.242641         │</span>
-<span class="sd">    │ 9   ┆ 4   ┆ 7   ┆ 6.5               ┆ 3.535534         │</span>
-<span class="sd">    │ 7   ┆ 5   ┆ 8   ┆ 6.0               ┆ 1.414214         │</span>
-<span class="sd">    └─────┴─────┴─────┴───────────────────┴──────────────────┘</span>
+<span class="sd">    &gt;&gt;&gt; result.select([&#39;cluster_1__mean&#39;, &#39;cluster_1__std&#39;])</span>
+<span class="sd">    shape: (3, 2)</span>
+<span class="sd">    ┌─────────────────┬────────────────┐</span>
+<span class="sd">    │ cluster_1__mean ┆ cluster_1__std │</span>
+<span class="sd">    │ ---             ┆ ---            │</span>
+<span class="sd">    │ f64             ┆ f64            │</span>
+<span class="sd">    ╞═════════════════╪════════════════╡</span>
+<span class="sd">    │ 6.0             ┆ 4.242641       │</span>
+<span class="sd">    │ 6.5             ┆ 3.535534       │</span>
+<span class="sd">    │ 6.0             ┆ 1.414214       │</span>
+<span class="sd">    └─────────────────┴────────────────┘</span>
 
-<span class="sd">    **Example 2: Multiple groups with different columns**</span>
+<span class="sd">    **Example 2: Multiple groups**</span>
 
-<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
-<span class="sd">    ...     &#39;A&#39;: [9, 9, 7],</span>
-<span class="sd">    ...     &#39;B&#39;: [3, 4, 5],</span>
-<span class="sd">    ...     &#39;C&#39;: [6, 7, 8],</span>
-<span class="sd">    ...     &#39;D&#39;: [1, 2, 3]</span>
-<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({&#39;A&#39;: [9, 9, 7], &#39;B&#39;: [3, 4, 5], &#39;C&#39;: [6, 7, 8], &#39;D&#39;: [1, 2, 3]})</span>
 <span class="sd">    &gt;&gt;&gt; transformer = RowStatisticsFeatures(</span>
-<span class="sd">    ...     column_groups={</span>
-<span class="sd">    ...         &#39;cluster_1&#39;: [&#39;A&#39;, &#39;B&#39;],</span>
-<span class="sd">    ...         &#39;cluster_2&#39;: [&#39;C&#39;, &#39;D&#39;]</span>
-<span class="sd">    ...     },</span>
-<span class="sd">    ...     func=[&#39;min&#39;, &#39;max&#39;, &#39;range&#39;]</span>
+<span class="sd">    ...     column_groups={&#39;cluster_1&#39;: [&#39;A&#39;, &#39;B&#39;], &#39;cluster_2&#39;: [&#39;C&#39;, &#39;D&#39;]},</span>
+<span class="sd">    ...     func=[&#39;min&#39;, &#39;max&#39;],</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
-<span class="sd">    &gt;&gt;&gt; result</span>
-<span class="sd">    shape: (3, 10)</span>
-<span class="sd">    ┌─────┬─────┬─────┬─────┬──────────────┬──────────────┬─────────────────┬──────────────┬──────────────┬─────────────────┐</span>
-<span class="sd">    │ A   ┆ B   ┆ C   ┆ D   ┆ cluster_1__… ┆ cluster_1__… ┆ cluster_1__ran… ┆ cluster_2__… ┆ cluster_2__… ┆ cluster_2__ran… │</span>
-<span class="sd">    │ --- ┆ --- ┆ --- ┆ --- ┆ ---          ┆ ---          ┆ ---             ┆ ---          ┆ ---          ┆ ---             │</span>
-<span class="sd">    │ i64 ┆ i64 ┆ i64 ┆ i64 ┆ i64          ┆ i64          ┆ i64             ┆ i64          ┆ i64          ┆ i64             │</span>
-<span class="sd">    ╞═════╪═════╪═════╪═════╪══════════════╪══════════════╪═════════════════╪══════════════╪══════════════╪═════════════════╡</span>
-<span class="sd">    │ 9   ┆ 3   ┆ 6   ┆ 1   ┆ 3            ┆ 9            ┆ 6               ┆ 1            ┆ 6            ┆ 5               │</span>
-<span class="sd">    │ 9   ┆ 4   ┆ 7   ┆ 2   ┆ 4            ┆ 9            ┆ 5               ┆ 2            ┆ 7            ┆ 5               │</span>
-<span class="sd">    │ 7   ┆ 5   ┆ 8   ┆ 3   ┆ 5            ┆ 7            ┆ 2               ┆ 3            ┆ 8            ┆ 5               │</span>
-<span class="sd">    └─────┴─────┴─────┴─────┴──────────────┴──────────────┴─────────────────┴──────────────┴──────────────┴─────────────────┘</span>
+<span class="sd">    &gt;&gt;&gt; result.columns</span>
+<span class="sd">    [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;cluster_1__min&#39;, &#39;cluster_1__max&#39;, &#39;cluster_2__min&#39;, &#39;cluster_2__max&#39;]</span>
 
-<span class="sd">    **Example 3: Using custom column names**</span>
+<span class="sd">    **Example 3: Custom column names**</span>
 
-<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
-<span class="sd">    ...     &#39;amount1&#39;: [100, 200, 150],</span>
-<span class="sd">    ...     &#39;amount2&#39;: [50, 100, 75],</span>
-<span class="sd">    ...     &#39;amount3&#39;: [25, 50, 30]</span>
-<span class="sd">    ... })</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({&#39;amount1&#39;: [100, 200, 150], &#39;amount2&#39;: [50, 100, 75], &#39;amount3&#39;: [25, 50, 30]})</span>
 <span class="sd">    &gt;&gt;&gt; transformer = RowStatisticsFeatures(</span>
 <span class="sd">    ...     column_groups={&#39;amounts&#39;: [&#39;amount1&#39;, &#39;amount2&#39;, &#39;amount3&#39;]},</span>
 <span class="sd">    ...     func=[&#39;mean&#39;, &#39;std&#39;],</span>
-<span class="sd">    ...     new_column_names=[&#39;avg_amount&#39;, &#39;std_amount&#39;]</span>
+<span class="sd">    ...     new_column_names=[&#39;avg_amount&#39;, &#39;std_amount&#39;],</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
-<span class="sd">    &gt;&gt;&gt; result</span>
-<span class="sd">    shape: (3, 5)</span>
-<span class="sd">    ┌──────────┬──────────┬──────────┬────────────┬────────────┐</span>
-<span class="sd">    │ amount1  ┆ amount2  ┆ amount3  ┆ avg_amount ┆ std_amount │</span>
-<span class="sd">    │ ---      ┆ ---      ┆ ---      ┆ ---        ┆ ---        │</span>
-<span class="sd">    │ i64      ┆ i64      ┆ i64      ┆ f64        ┆ f64        │</span>
-<span class="sd">    ╞══════════╪══════════╪══════════╪════════════╪════════════╡</span>
-<span class="sd">    │ 100      ┆ 50       ┆ 25       ┆ 58.333333  ┆ 30.957...  │</span>
-<span class="sd">    │ 200      ┆ 100      ┆ 50       ┆ 116.666... ┆ 61.914...  │</span>
-<span class="sd">    │ 150      ┆ 75       ┆ 30       ┆ 85.0       ┆ 49.606...  │</span>
-<span class="sd">    └──────────┴──────────┴──────────┴────────────┴────────────┘</span>
+<span class="sd">    &gt;&gt;&gt; &#39;avg_amount&#39; in result.columns</span>
+<span class="sd">    True</span>
 
-<span class="sd">    **Example 4: Fraud detection use case - card verification fields**</span>
+<span class="sd">    **Example 4: Fraud detection — card verification fields**</span>
 
 <span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
-<span class="sd">    ...     &#39;card_cvv_match&#39;: [1, 0, 1, 1],</span>
+<span class="sd">    ...     &#39;card_cvv_match&#39;:  [1, 0, 1, 1],</span>
 <span class="sd">    ...     &#39;card_addr_match&#39;: [1, 1, 0, 1],</span>
-<span class="sd">    ...     &#39;card_zip_match&#39;: [1, 1, 1, 0],</span>
-<span class="sd">    ...     &#39;is_fraud&#39;: [0, 1, 1, 1]</span>
+<span class="sd">    ...     &#39;card_zip_match&#39;:  [1, 1, 1, 0],</span>
+<span class="sd">    ...     &#39;is_fraud&#39;:        [0, 1, 1, 1],</span>
 <span class="sd">    ... })</span>
-<span class="sd">    &gt;&gt;&gt; # Aggregate verification fields to detect inconsistencies</span>
 <span class="sd">    &gt;&gt;&gt; transformer = RowStatisticsFeatures(</span>
 <span class="sd">    ...     column_groups={&#39;verification&#39;: [&#39;card_cvv_match&#39;, &#39;card_addr_match&#39;, &#39;card_zip_match&#39;]},</span>
 <span class="sd">    ...     func=[&#39;mean&#39;, &#39;std&#39;],</span>
-<span class="sd">    ...     drop_columns=False</span>
+<span class="sd">    ...     new_column_names=[&#39;verif__mean&#39;, &#39;verif__std&#39;],</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; result = transformer.fit_transform(X)</span>
-<span class="sd">    &gt;&gt;&gt; result.select([&#39;verification__mean&#39;, &#39;verification__std&#39;, &#39;is_fraud&#39;])</span>
-<span class="sd">    shape: (4, 3)</span>
-<span class="sd">    ┌─────────────────────┬────────────────────┬──────────┐</span>
-<span class="sd">    │ verification__mean  ┆ verification__std  ┆ is_fraud │</span>
-<span class="sd">    │ ---                 ┆ ---                ┆ ---      │</span>
-<span class="sd">    │ f64                 ┆ f64                ┆ i64      │</span>
-<span class="sd">    ╞═════════════════════╪════════════════════╪══════════╡</span>
-<span class="sd">    │ 1.0                 ┆ 0.0                ┆ 0        │</span>
-<span class="sd">    │ 0.666667            ┆ 0.471405           ┆ 1        │</span>
-<span class="sd">    │ 0.666667            ┆ 0.471405           ┆ 1        │</span>
-<span class="sd">    │ 0.666667            ┆ 0.471405           ┆ 1        │</span>
-<span class="sd">    └─────────────────────┴────────────────────┴──────────┘</span>
-<span class="sd">    # Notice: legitimate transaction has perfect verification (mean=1, std=0)</span>
-<span class="sd">    # Fraudulent transactions show inconsistent verification patterns</span>
+<span class="sd">    &gt;&gt;&gt; result[&#39;verif__mean&#39;][0]   # legitimate: all checks pass</span>
+<span class="sd">    1.0</span>
+<span class="sd">    &gt;&gt;&gt; result[&#39;verif__std&#39;][0]    # legitimate: no variance</span>
+<span class="sd">    0.0</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">column_groups</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
@@ -628,15 +571,6 @@
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">new_column_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;func&quot;</span><span class="p">)</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">check_func</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">func</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">AGGREGATION_FUNCTIONS</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2"> is not in the predefined list of aggregation functions: </span><span class="si">{</span><span class="n">AGGREGATION_FUNCTIONS</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
-        <span class="k">return</span> <span class="n">func</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;column_groups&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_column_groups</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">column_groups</span><span class="p">):</span>
@@ -650,6 +584,15 @@
                     <span class="sa">f</span><span class="s2">&quot;column_groups[&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;] must contain at least 2 columns for row-level aggregation&quot;</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">column_groups</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;func&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_func</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">func</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">AGGREGATION_FUNCTIONS</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2"> is not in the predefined list of aggregation functions: </span><span class="si">{</span><span class="n">AGGREGATION_FUNCTIONS</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;new_column_names&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_new_column_names_length</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_column_names</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
@@ -681,10 +624,9 @@
 <span class="sd">        RowStatisticsFeatures</span>
 <span class="sd">            Fitted transformer instance.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">default_names</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">group_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_groups</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">:</span>
-                <span class="n">default_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">default_names</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">group_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_groups</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span>
+        <span class="p">]</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span> <span class="o">=</span> <span class="n">default_names</span>
@@ -706,7 +648,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        pl.DataFrame</span>
-<span class="sd">            Transformed DataFrame with row-level aggregation features.</span>
+<span class="sd">            Transformed DataFrame with row-level aggregation features appended.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_columns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">columns_to_drop</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -716,7 +658,6 @@
                 <span class="n">default_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="n">new_col_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="p">[</span><span class="n">default_name</span><span class="p">]</span>
 
-                <span class="c1"># Create row-wise aggregation expression</span>
                 <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
                     <span class="n">expr</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">concat_list</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">f</span> <span class="o">==</span> <span class="s2">&quot;std&quot;</span><span class="p">:</span>
@@ -733,6 +674,8 @@
                     <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">f</span> <span class="o">==</span> <span class="s2">&quot;sum&quot;</span><span class="p">:</span>
                     <span class="n">expr</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">concat_list</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">f</span> <span class="o">==</span> <span class="s2">&quot;count&quot;</span><span class="p">:</span>
+                    <span class="n">expr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">concat_list</span><span class="p">(</span><span class="n">cols</span><span class="p">)</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">drop_nulls</span><span class="p">()</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">len</span><span class="p">())</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
 
                 <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
 

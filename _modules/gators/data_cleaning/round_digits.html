@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gators.scalers.log_scaler &#8212; Gators - Lightning Fast ML Preprocessing with Polars</title>
+    <title>gators.data_cleaning.round_digits &#8212; Gators - Lightning Fast ML Preprocessing with Polars</title>
   
   
   
@@ -55,9 +55,9 @@
                 gtag('js', new Date());
                 gtag('config', 'G-Z5TR8D9VTQ');
             </script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/scalers/log_scaler';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/data_cleaning/round_digits';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
-    <link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/scalers/log_scaler.html" />
+    <link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/data_cleaning/round_digits.html" />
     <link rel="icon" href="../../../_static/gators_logo1.png"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -103,18 +103,18 @@
 <meta name="description" content="Gators is a high-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API.">
 <meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline">
 <meta name="author" content="Charles Poli, PayPal">
-<link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/scalers/log_scaler.html" />
+<link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/data_cleaning/round_digits.html" />
 
 <!-- Open Graph -->
-<meta property="og:title" content="gators.scalers.log_scaler - Gators Documentation">
+<meta property="og:title" content="gators.data_cleaning.round_digits - Gators Documentation">
 <meta property="og:description" content="High-performance ML preprocessing with 75+ Polars-powered transformers">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://paypal.github.io/gators/_modules/gators/scalers/log_scaler.html">
+<meta property="og:url" content="https://paypal.github.io/gators/_modules/gators/data_cleaning/round_digits.html">
 <meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="gators.scalers.log_scaler - Gators">
+<meta name="twitter:title" content="gators.data_cleaning.round_digits - Gators">
 <meta name="twitter:description" content="Lightning-fast ML preprocessing with Polars">
 <meta name="twitter:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
 
@@ -434,7 +434,7 @@
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.scalers.log_scaler</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.data_cleaning.round_digits</span></li>
   </ul>
 </nav>
 </div>
@@ -451,193 +451,71 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for gators.scalers.log_scaler</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+  <h1>Source code for gators.data_cleaning.round_digits</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">PrivateAttr</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
 
 
-<div class="viewcode-block" id="LogScaler">
-<a class="viewcode-back" href="../../../gators.scalers.html#gators.scalers.LogScaler">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">LogScaler</span><span class="p">(</span><span class="n">_BaseTransformer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Applies logarithm transformation with choice of base.</span>
-
-<span class="sd">    Log transformation is useful for:</span>
-
-<span class="sd">    - Reducing right skewness in data</span>
-<span class="sd">    - Stabilizing variance</span>
-<span class="sd">    - Converting multiplicative relationships to additive</span>
-<span class="sd">    - Compressing large value ranges</span>
-
-<span class="sd">    Supports three bases:</span>
-
-<span class="sd">    - &#39;e&#39;: Natural logarithm ln(X) / log_e(X)</span>
-<span class="sd">    - &#39;10&#39;: Base-10 logarithm</span>
-<span class="sd">    - &#39;2&#39;: Base-2 logarithm</span>
-
-<span class="sd">    Note: Only positive values can be transformed. Zero and negative values</span>
-<span class="sd">    will result in null/inf values.</span>
+<div class="viewcode-block" id="RoundDigits">
+<a class="viewcode-back" href="../../../gators.data_cleaning.html#gators.data_cleaning.RoundDigits">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RoundDigits</span><span class="p">(</span><span class="n">_BaseTransformer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Round selected numeric columns to a fixed number of decimal places.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    n_digits : int</span>
+<span class="sd">        Number of decimal places to keep. Must be &gt;= 0.</span>
 <span class="sd">    subset : list[str], default=None</span>
-<span class="sd">        List of numeric column names to transform. If None, all numeric columns</span>
-<span class="sd">        (Float64, Int64, Float32, Int32) are automatically selected.</span>
-<span class="sd">    base : Literal[&#39;e&#39;, &#39;10&#39;, &#39;2&#39;], default=&#39;e&#39;</span>
-<span class="sd">        The logarithm base to use:</span>
-<span class="sd">        - &#39;e&#39;: ln(X)</span>
-<span class="sd">        - &#39;10&#39;: log10(X)</span>
-<span class="sd">        - &#39;2&#39;: log2(X)</span>
+<span class="sd">        Columns to round. When ``None``, all numeric columns in the</span>
+<span class="sd">        DataFrame are rounded automatically.</span>
+<span class="sd">    inplace : bool, default=True</span>
+<span class="sd">        If ``True``, the original columns are replaced in-place.</span>
+<span class="sd">        If ``False``, new columns named ``{col}__round_{n_digits}digits`` are</span>
+<span class="sd">        added alongside the originals.</span>
 <span class="sd">    drop_columns : bool, default=True</span>
-<span class="sd">        If True, drop the original columns after transformation.</span>
-<span class="sd">        If False, keep both original and transformed columns.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Create an instance of the LogScaler class with natural log:</span>
-
-<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
-<span class="sd">    &gt;&gt;&gt; from gators.scalers import LogScaler</span>
-<span class="sd">    &gt;&gt;&gt; scaler = LogScaler(subset=[&quot;sales&quot;, &quot;revenue&quot;], base=&quot;e&quot;)</span>
-
-<span class="sd">    Fit the transformer:</span>
-
-<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({</span>
-<span class="sd">    ...     &quot;sales&quot;: [1, 10, 100, 1000],</span>
-<span class="sd">    ...     &quot;revenue&quot;: [10, 100, 1000, 10000]</span>
-<span class="sd">    ... })</span>
-<span class="sd">    &gt;&gt;&gt; scaler.fit(X)</span>
-
-<span class="sd">    Transform the DataFrame:</span>
-
-<span class="sd">    &gt;&gt;&gt; transformed_X = scaler.transform(X)</span>
-<span class="sd">    &gt;&gt;&gt; print(transformed_X)</span>
-<span class="sd">    shape: (4, 2)</span>
-<span class="sd">    ┌───────────────┬──────────────────┐</span>
-<span class="sd">    │ sales__log_ln ┆ revenue__log_ln  │</span>
-<span class="sd">    │ ---           ┆ ---              │</span>
-<span class="sd">    │ f64           ┆ f64              │</span>
-<span class="sd">    ├───────────────┼──────────────────┤</span>
-<span class="sd">    │ 0.0           ┆ 2.303            │</span>
-<span class="sd">    │ 2.303         ┆ 4.605            │</span>
-<span class="sd">    │ 4.605         ┆ 6.908            │</span>
-<span class="sd">    │ 6.908         ┆ 9.210            │</span>
-<span class="sd">    └───────────────┴──────────────────┘</span>
-
-<span class="sd">    &gt;&gt;&gt; # Using log10</span>
-<span class="sd">    &gt;&gt;&gt; scaler10 = LogScaler(subset=[&quot;count&quot;], base=&quot;10&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; X2 = pl.DataFrame({&quot;count&quot;: [1, 10, 100, 1000]})</span>
-<span class="sd">    &gt;&gt;&gt; scaler10.fit(X2)</span>
-<span class="sd">    &gt;&gt;&gt; scaler10.transform(X2)</span>
-<span class="sd">    shape: (4, 1)</span>
-<span class="sd">    ┌─────────────────┐</span>
-<span class="sd">    │ count__log_10   │</span>
-<span class="sd">    │ ---             │</span>
-<span class="sd">    │ f64             │</span>
-<span class="sd">    ├─────────────────┤</span>
-<span class="sd">    │ 0.0             │</span>
-<span class="sd">    │ 1.0             │</span>
-<span class="sd">    │ 2.0             │</span>
-<span class="sd">    │ 3.0             │</span>
-<span class="sd">    └─────────────────┘</span>
-
-<span class="sd">    &gt;&gt;&gt; # Using log2</span>
-<span class="sd">    &gt;&gt;&gt; scaler2 = LogScaler(subset=[&quot;size&quot;], base=&quot;2&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; X3 = pl.DataFrame({&quot;size&quot;: [1, 2, 4, 8, 16]})</span>
-<span class="sd">    &gt;&gt;&gt; scaler2.fit(X3)</span>
-<span class="sd">    &gt;&gt;&gt; scaler2.transform(X3)</span>
-<span class="sd">    shape: (5, 1)</span>
-<span class="sd">    ┌──────────────┐</span>
-<span class="sd">    │ size__log_2  │</span>
-<span class="sd">    │ ---          │</span>
-<span class="sd">    │ f64          │</span>
-<span class="sd">    ├──────────────┤</span>
-<span class="sd">    │ 0.0          │</span>
-<span class="sd">    │ 1.0          │</span>
-<span class="sd">    │ 2.0          │</span>
-<span class="sd">    │ 3.0          │</span>
-<span class="sd">    │ 4.0          │</span>
-<span class="sd">    └──────────────┘</span>
+<span class="sd">        Relevant only when ``inplace=False``. If ``True``, the original</span>
+<span class="sd">        columns are dropped after the new rounded columns are added.</span>
+<span class="sd">        Ignored when ``inplace=True``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">n_digits</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span>
     <span class="n">subset</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">base</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;10&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;e&quot;</span>
-    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="n">inplace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
-<div class="viewcode-block" id="LogScaler.fit">
-<a class="viewcode-back" href="../../../gators.scalers.html#gators.scalers.LogScaler.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;LogScaler&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by storing column names.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        X : pl.DataFrame</span>
-<span class="sd">            Input DataFrame to fit.</span>
-<span class="sd">        y : pl.Series, default=None</span>
-<span class="sd">            Target series (not used, present for sklearn compatibility).</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        LogScaler</span>
-<span class="sd">            The fitted transformer instance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
-            <span class="c1"># Use set for O(1) dtype lookup instead of list O(n) lookup</span>
-            <span class="n">numeric_dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Int64</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float32</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Int32</span><span class="p">}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span> <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">numeric_dtypes</span>
-            <span class="p">]</span>
-
-        <span class="c1"># Create suffix based on base</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">==</span> <span class="s2">&quot;e&quot;</span><span class="p">:</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;log_ln&quot;</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">==</span> <span class="s2">&quot;10&quot;</span><span class="p">:</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;log_10&quot;</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c1"># &#39;2&#39;</span>
-            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;log_2&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">}</span>
+<div class="viewcode-block" id="RoundDigits.fit">
+<a class="viewcode-back" href="../../../gators.data_cleaning.html#gators.data_cleaning.RoundDigits.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RoundDigits&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the transformer by recording which columns to round.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">X</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">is_numeric</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__round_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_digits</span><span class="si">}</span><span class="s2">digits&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span>
+            <span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-<div class="viewcode-block" id="LogScaler.transform">
-<a class="viewcode-back" href="../../../gators.scalers.html#gators.scalers.LogScaler.transform">[docs]</a>
+<div class="viewcode-block" id="RoundDigits.transform">
+<a class="viewcode-back" href="../../../gators.data_cleaning.html#gators.data_cleaning.RoundDigits.transform">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform the input DataFrame by applying logarithm.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Round the selected columns to the configured number of decimal places.&quot;&quot;&quot;</span>
+        <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="ow">or</span> <span class="p">[]</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        X : pl.DataFrame</span>
-<span class="sd">            Input DataFrame to transform. Values should be positive.</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_round_expr</span><span class="p">(</span><span class="n">col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alias</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">Expr</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_digits</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        pl.DataFrame</span>
-<span class="sd">            Transformed DataFrame with log-transformed columns.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span><span class="n">_round_expr</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">])</span>
 
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Zero and negative values will result in null or -inf values.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Pre-select log function once (avoid repeated conditionals in loop)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">==</span> <span class="s2">&quot;e&quot;</span><span class="p">:</span>
-            <span class="n">log_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">==</span> <span class="s2">&quot;10&quot;</span><span class="p">:</span>
-            <span class="n">log_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">log10</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c1"># &#39;2&#39;</span>
-            <span class="n">log_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="c1"># Build all transformations using pre-selected function</span>
-        <span class="n">transformations</span> <span class="o">=</span> <span class="p">[</span><span class="n">log_func</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
-
-        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">transformations</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_columns</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span><span class="n">_round_expr</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">X</span></div>
 </div>
 
