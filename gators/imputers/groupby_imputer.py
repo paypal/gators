@@ -120,22 +120,14 @@ class GroupByImputer(_BaseTransformer):
                 col: f"{col}__impute_groupby_{self.strategy}" for col in self.subset
             }
 
-        # Compute group statistics for each column
+        # Compute group statistics for all columns in a single group_by pass
+        agg_fn = pl.Expr.median if self.strategy == "median" else pl.Expr.mean
+        group_stats = X.group_by(self.group_by_column).agg(
+            [agg_fn(pl.col(col)).alias(col) for col in self.subset]
+        )
+        groups = group_stats[self.group_by_column].to_list()
         for col in self.subset:
-            if self.strategy == "median":
-                group_stats = X.group_by(self.group_by_column).agg(
-                    pl.col(col).median().alias("stat")
-                )
-            else:  # mean
-                group_stats = X.group_by(self.group_by_column).agg(pl.col(col).mean().alias("stat"))
-
-            # Convert to dictionary for fast lookup
-            self._statistics[col] = dict(
-                zip(
-                    group_stats[self.group_by_column].to_list(),
-                    group_stats["stat"].to_list(),
-                )
-            )
+            self._statistics[col] = dict(zip(groups, group_stats[col].to_list()))
 
         return self
 

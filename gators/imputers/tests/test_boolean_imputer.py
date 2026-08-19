@@ -120,3 +120,12 @@ def test_transform_without_fit_returns_x_unchanged():
     imputer = BooleanImputer(strategy="constant", value=False)
     with pytest.raises(NotFittedError):
         imputer.transform(X)
+
+
+def test_most_frequent_all_null_defaults_to_false():
+    X = pl.DataFrame({"A": pl.Series([None, None, None], dtype=pl.Boolean)})
+    imputer = BooleanImputer(strategy="most_frequent")
+    imputer.fit(X)
+    assert imputer._statistics["A"] is False
+    result = imputer.transform(X)
+    assert result["A"].to_list() == [False, False, False]

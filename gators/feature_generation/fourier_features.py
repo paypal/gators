@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 
 import polars as pl
-from pydantic import PositiveInt, PrivateAttr, field_validator, model_validator
+from pydantic import PositiveInt, PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 

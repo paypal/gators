@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Literal
-
 import polars as pl
 from pydantic import PositiveInt, PrivateAttr, field_validator
 

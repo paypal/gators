@@ -29,7 +29,7 @@ class GaussianClipper(_BaseClipper):
     Examples
     --------
     >>> import polars as pl
-    >>> from gators.clipping import GaussianClipper
+    >>> from gators.clippers import GaussianClipper
 
     >>> # Sample DataFrame with outliers
     >>> X = pl.DataFrame({

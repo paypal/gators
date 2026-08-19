@@ -44,7 +44,7 @@ Gators is perfect for:
 * **Customer Analytics** - Transform complex customer data
 * **Time Series** - Rich datetime feature engineering
 * **NLP Tasks** - String feature extraction and encoding
-* **Production ML** - Deploy preprocessing pipelines without rewriting code
+* **Production ML** - Export preprocessing to ONNX and run anywhere
 
 Key Features
 ------------
@@ -52,8 +52,9 @@ Key Features
 * 🚀 **Lightning Fast**: Built on Polars for multi-core parallel processing
 * 🔄 **Unified API**: Consistent sklearn-style ``.fit()`` and ``.transform()`` interface
 * 📦 **Production Ready**: Deploy the same Python code from notebook to production
-* 🎯 **Comprehensive**: 60+ preprocessing transformers covering every use case
+* 🎯 **Comprehensive**: 105 preprocessing transformers across 11 categories
 * 🔗 **Pipeline Support**: Chain transformers seamlessly with the Pipeline class
+* 📤 **ONNX Export**: Export any fitted pipeline to ONNX for low-latency, language-agnostic inference
 * 🎓 **Easy to Learn**: If you know sklearn, you already know Gators
 
 Credits

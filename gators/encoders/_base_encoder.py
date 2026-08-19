@@ -1,7 +1,7 @@
 from abc import ABCMeta
 
 import polars as pl
-from pydantic import ConfigDict, Field, PositiveFloat, PositiveInt
+from pydantic import Field, PositiveFloat, PositiveInt
 
 from ..transformer._base_transformer import _BaseTransformer
 

@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -160,7 +160,7 @@ class RatioFeatures(_BaseTransformer):
     denominator_columns: list[str]
     new_column_names: list[str] | None = None
     drop_columns: bool = False
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("denominator_columns", mode="after")
     def check_lengths_match(cls, denominator_columns, info):

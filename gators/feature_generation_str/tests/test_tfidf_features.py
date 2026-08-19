@@ -85,8 +85,8 @@ class TestTfidfFeatures:
         )
         t = TfidfFeatures(subset=["text"], min_df=2)
         t.fit(X)
-        # "rare" only appears in 1 document, should be excluded
-        assert "rare" not in t.vocabulary_.get("text", [])
+        # "__RARE__" only appears in 1 document, should be excluded
+        assert "__RARE__" not in t.vocabulary_.get("text", [])
         assert "common" in t.vocabulary_.get("text", [])
 
     def test_lowercase_true(self):

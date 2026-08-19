@@ -27,9 +27,12 @@ class ArcSinSquareRootScaler(_BaseTransformer):
     subset : list[str], default=None
         List of numeric column names to transform. If None, all numeric columns
         (Float64, Int64, Float32, Int32) are automatically selected.
+    inplace : bool, default=True
+        If True, transform values in the original columns (keep original column names).
+        If False, create new columns with suffix ``__arcsin``.
     drop_columns : bool, default=True
-        If True, drop the original columns after transformation.
-        If False, keep both original and transformed columns.
+        If ``inplace=False``, whether to drop the original columns after transformation.
+        Ignored when ``inplace=True``.
 
     Examples
     --------
@@ -70,8 +73,9 @@ class ArcSinSquareRootScaler(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    inplace: bool = True
     drop_columns: bool = True
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ArcSinSquareRootScaler":
         """Fit the transformer by storing column names.
@@ -89,12 +93,12 @@ class ArcSinSquareRootScaler(_BaseTransformer):
             The fitted transformer instance.
         """
         if not self.subset:
-            numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
-                col for col, dtype in zip(X.columns, X.dtypes) if dtype in numeric_dtypes
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype.is_numeric()
             ]
 
-        self._column_mapping = {col: f"{col}__arcsin" for col in self.subset}
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__arcsin" for col in self.subset}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -110,13 +114,17 @@ class ArcSinSquareRootScaler(_BaseTransformer):
         pl.DataFrame
             Transformed DataFrame with arcsin-transformed columns.
         """
+        if self.inplace:
+            transformations = [
+                pl.col(col).sqrt().arcsin().alias(col) for col in self.subset
+            ]
+            return X.with_columns(transformations)
+
         transformations = [
             pl.col(col).sqrt().arcsin().alias(new) for col, new in self._column_mapping.items()
         ]
-
         X = X.with_columns(transformations)
-
-        if self.drop_columns and self.subset is not None:
+        if self.drop_columns:
             return X.drop(self.subset)
         return X
 
@@ -133,6 +141,9 @@ class ArcSinSquareRootScaler(_BaseTransformer):
         pl.DataFrame
             DataFrame with columns restored to their original [0, 1] scale.
         """
+        if self.inplace:
+            exprs = [(pl.col(col).sin() ** 2).alias(col) for col in self.subset]
+            return X.with_columns(exprs)
         reverse_map = {v: k for k, v in self._column_mapping.items()}
         exprs = [
             (pl.col(new).sin() ** 2).alias(orig)

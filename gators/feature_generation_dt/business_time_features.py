@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -113,6 +113,8 @@ class BusinessTimeFeatures(_BaseTransformer):
         "time_of_business_day",
     ]
     drop_columns: bool = False
+    # Maps column name → Polars time unit ('us', 'ms', 'ns', 'date')
+    _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("business_hours_start", "business_hours_end")
     def check_hours(cls, hour):
@@ -162,6 +164,15 @@ class BusinessTimeFeatures(_BaseTransformer):
             self.subset = [
                 col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
+
+        for col in self.subset:
+            dtype = X.schema[col]
+            if hasattr(dtype, 'time_unit'):
+                self._dt_units[col] = dtype.time_unit  # 'us', 'ms', or 'ns'
+            elif dtype == pl.Date:
+                self._dt_units[col] = 'date'
+            else:  # pragma: no cover
+                self._dt_units[col] = 'us'
 
         return self
 

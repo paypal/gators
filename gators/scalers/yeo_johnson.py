@@ -25,9 +25,12 @@ class YeoJohnson(_BaseTransformer):
     lambdas : dict[str, int | float]
         Dictionary mapping column names to their lambda (power) parameters.
         Lambda values typically range from -2 to 2.
+    inplace : bool, default=True
+        If True, transform values in the original columns (keep original column names).
+        If False, create new columns with suffix ``__yeojonhson``.
     drop_columns : bool, default=True
-        If True, drop the original columns after transformation.
-        If False, keep both original and transformed columns.
+        If ``inplace=False``, whether to drop the original columns after transformation.
+        Ignored when ``inplace=True``.
 
     Examples
     --------
@@ -60,6 +63,7 @@ class YeoJohnson(_BaseTransformer):
 
     lambdas: dict[str, int | float]
     _scale: dict[str, float] = PrivateAttr(default_factory=dict)
+    inplace: bool = True
     drop_columns: bool = True
     _columns: list[str] = PrivateAttr(default_factory=list)
     _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
@@ -80,7 +84,8 @@ class YeoJohnson(_BaseTransformer):
             The fitted transformer instance.
         """
         self._columns = list(self.lambdas.keys())
-        self._column_mapping = {col: f"{col}__yeojonhson" for col in self._columns}
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__yeojonhson" for col in self._columns}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -96,10 +101,9 @@ class YeoJohnson(_BaseTransformer):
         pl.DataFrame
             Transformed DataFrame with power-transformed columns.
         """
-        # Build all transformation expressions
         exprs = []
         for col, lmbda in self.lambdas.items():
-            new = self._column_mapping[col]
+            new = self._column_mapping.get(col, col)  # inplace uses original name
             if lmbda == 0:
                 expr = (
                     pl.when(pl.col(col) >= 0)
@@ -125,7 +129,7 @@ class YeoJohnson(_BaseTransformer):
 
         X = X.with_columns(exprs)
 
-        if self.drop_columns:
+        if not self.inplace and self.drop_columns:
             return X.drop(self._columns)
         return X
 
@@ -142,6 +146,23 @@ class YeoJohnson(_BaseTransformer):
         pl.DataFrame
             DataFrame with columns restored to their original scale.
         """
+        if self.inplace:
+            exprs = []
+            for col, lmbda in self.lambdas.items():
+                if col not in X.columns:
+                    continue
+                y = pl.col(col)
+                if lmbda == 0:
+                    pos_branch = y.exp() - 1
+                    neg_branch = 1 - (1 - 2 * y).sqrt()
+                elif lmbda == 2:
+                    pos_branch = (2 * y + 1).sqrt() - 1
+                    neg_branch = 1 - (-y).exp()
+                else:
+                    pos_branch = (y * lmbda + 1) ** (1.0 / lmbda) - 1
+                    neg_branch = 1 - (1 - y * (2 - lmbda)) ** (1.0 / (2 - lmbda))
+                exprs.append(pl.when(y >= 0).then(pos_branch).otherwise(neg_branch).alias(col))
+            return X.with_columns(exprs)
         reverse_map = {v: k for k, v in self._column_mapping.items()}
         exprs = []
         for new_col, orig_col in reverse_map.items():

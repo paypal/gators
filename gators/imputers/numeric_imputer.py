@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import math
 from typing import Literal
 
 import polars as pl
@@ -27,8 +30,8 @@ class NumericImputer(_BaseTransformer):
         - 'one': Fill missing values with 1
     subset : list[str], default=None
         List of numeric columns to impute. If None, all numeric columns are selected.
-    value : int | float | None, default=None
-        Value to use when strategy is 'constant'. Required when strategy='constant', ignored otherwise.
+    value : int | float, default=0
+        Value to use when strategy is 'constant'.
     inplace : bool, default=True
         If True, impute values in the original columns.
         If False, create new columns with suffix '__impute_{strategy}'.
@@ -51,7 +54,7 @@ class NumericImputer(_BaseTransformer):
     >>> # Impute using the mean strategy
     >>> imputer = NumericImputer(strategy='mean', inplace=False)
     >>> imputer.fit(X)
-    NumericImputer(strategy='mean', subset=['A', 'B', 'C'], value=None, drop_columns=True, inplace=False)
+    NumericImputer(strategy='mean', subset=['A', 'B', 'C'], value=0.0, drop_columns=True, inplace=False)
     >>> transformed_X = imputer.transform(X)
     >>> print(transformed_X)
     shape: (4, 3)
@@ -87,7 +90,7 @@ class NumericImputer(_BaseTransformer):
     >>> # Impute with drop_columns=False
     >>> imputer_no_drop = NumericImputer(strategy='mean', drop_columns=False, inplace=False)
     >>> imputer_no_drop.fit(X)
-    NumericImputer(strategy='mean', subset=['A', 'B', 'C'], value=None, drop_columns=False, inplace=False)
+    NumericImputer(strategy='mean', subset=['A', 'B', 'C'], value=0.0, drop_columns=False, inplace=False)
     >>> transformed_X_no_drop = imputer_no_drop.transform(X)
     >>> print(transformed_X_no_drop)
     shape: (4, 6)
@@ -105,7 +108,7 @@ class NumericImputer(_BaseTransformer):
     >>> # Impute with a subset of columns
     >>> imputer_subset = NumericImputer(strategy='mean', subset=['A'], inplace=False)
     >>> imputer_subset.fit(X)
-    NumericImputer(strategy='mean', subset=['A'], value=None, drop_columns=True, inplace=False)
+    NumericImputer(strategy='mean', subset=['A'], value=0.0, drop_columns=True, inplace=False)
     >>> transformed_X_subset = imputer_subset.transform(X)
     >>> print(transformed_X_subset)
     shape: (4, 3)
@@ -134,7 +137,7 @@ class NumericImputer(_BaseTransformer):
         "one",
     ]
     subset: list[str] | None = None
-    value: int | float | None = None
+    value: int | float = 0.0
     drop_columns: bool = True
     inplace: bool = True
     _statistics: dict[str, int | float] = PrivateAttr(default_factory=dict)
@@ -166,22 +169,30 @@ class NumericImputer(_BaseTransformer):
 
         # Only compute statistics for strategies that need them
         if self.strategy == "constant":
-            if self.value is None:
-                self.value = 0
             self._statistics = {col: self.value for col in self.subset}
         elif self.strategy == "median":
             # Compute all medians in single pass
             median_results = X.select([pl.col(c).median() for c in self.subset]).row(0)
             self._statistics: dict[str, int | float] = {}
             for i, col in enumerate(self.subset):
-                if median_results[i] is not None:
-                    self._statistics[col] = median_results[i]  # type: ignore[assignment]
-        elif self.strategy == "most_frequent":
-            # Compute all modes in single pass, handle ties by taking smallest value
+                val = median_results[i]
+                self._statistics[col] = 0 if (val is None or (isinstance(val, float) and math.isnan(val))) else val  # type: ignore[assignment]
+        elif self.strategy in ("mean", "min", "max"):
+            results = X.select([getattr(pl.col(c), self.strategy)() for c in self.subset]).row(0)
             self._statistics = {
-                col: X[col].drop_nulls().drop_nans().mode().sort()[0] for col in self.subset
+                col: (0 if (val is None or (isinstance(val, float) and math.isnan(val))) else val)
+                for col, val in zip(self.subset, results)
             }
-        # No statistics needed for mean, min, max, forward, backward, zero, one
+        elif self.strategy == "most_frequent":
+            self._statistics = {
+                col: (
+                    X[col].drop_nulls().drop_nans().mode().sort()[0]
+                    if X[col].drop_nulls().drop_nans().len() > 0
+                    else 0
+                )
+                for col in self.subset
+            }
+        # No statistics needed for forward, backward, zero, one
 
         return self
 
@@ -200,38 +211,40 @@ class NumericImputer(_BaseTransformer):
         """
         if self.subset is None:
             return X  # pragma: no cover
+        _float_dtypes = {pl.Float32, pl.Float64}
         # Build all transformations at once based on strategy
-        if self.strategy in [
-            "mean",
-            "min",
-            "max",
-            "forward",
-            "backward",
-            "zero",
-            "one",
-        ]:
+        if self.strategy in ["forward", "backward", "zero", "one"]:
             if self.inplace:
                 transformations = [
-                    pl.col(col).fill_null(strategy=self.strategy)  # type: ignore[arg-type]
+                    (pl.col(col).fill_nan(None) if X.schema[col] in _float_dtypes else pl.col(col)).fill_null(strategy=self.strategy)  # type: ignore[arg-type]
                     for col in self.subset
                 ]
             else:
                 transformations = [
-                    pl.col(col).fill_null(strategy=self.strategy).alias(new)  # type: ignore[arg-type]
+                    (pl.col(col).fill_nan(None) if X.schema[col] in _float_dtypes else pl.col(col)).fill_null(strategy=self.strategy).alias(new)  # type: ignore[arg-type]
                     for col, new in self._column_mapping.items()
                 ]
         else:
-            # Use pre-computed statistics (constant, median, most_frequent)
-            # subset is guaranteed to be set during fit
+            # Use pre-computed statistics (constant, median, most_frequent, mean, min, max).
+            # For integer columns: round stat to int for strategies where an integer result is expected,
+            # but allow Float64 promotion for median (which can be non-integer).
+            _int_dtypes = {pl.Int8, pl.Int16, pl.Int32, pl.Int64, pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64}
+            _round_for_int = {"mean", "min", "max", "constant", "most_frequent"}
+
+            def _stat_expr(col: str) -> pl.Expr:
+                stat = self._statistics[col]
+                dtype = X.schema[col]
+                if dtype in _int_dtypes and self.strategy in _round_for_int:
+                    stat = int(round(stat))
+                expr = pl.col(col)
+                if dtype in _float_dtypes:
+                    expr = expr.fill_nan(stat)
+                return expr.fill_null(stat)
+
             if self.inplace:
-                transformations = [
-                    pl.col(col).fill_null(self._statistics[col]) for col in self.subset
-                ]
+                transformations = [_stat_expr(col) for col in self.subset]
             else:
-                transformations = [
-                    pl.col(col).fill_null(self._statistics[col]).alias(new)
-                    for col, new in self._column_mapping.items()
-                ]
+                transformations = [_stat_expr(col).alias(new) for col, new in self._column_mapping.items()]
 
         X = X.with_columns(transformations)
 

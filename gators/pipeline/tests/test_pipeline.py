@@ -8,14 +8,13 @@ import pytest
 from gators.imputers import NumericImputer, StringImputer
 from gators.pipeline import Pipeline
 
-
 def test_pipeline_creation():
     """Test that a Pipeline can be created."""
     steps = [
         ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
         (
             "string_imputer",
-            StringImputer(strategy="constant", value="MISSING", inplace=True),
+            StringImputer(strategy="constant", value="__NULL__", inplace=True),
         ),
     ]
     pipe = Pipeline(steps=steps)
@@ -33,7 +32,7 @@ def test_pipeline_fit_transform():
         ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
         (
             "string_imputer",
-            StringImputer(strategy="constant", value="MISSING", inplace=True),
+            StringImputer(strategy="constant", value="__NULL__", inplace=True),
         ),
     ]
 
@@ -57,7 +56,7 @@ def test_pipeline_fit_then_transform():
         ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
         (
             "string_imputer",
-            StringImputer(strategy="constant", value="MISSING", inplace=True),
+            StringImputer(strategy="constant", value="__NULL__", inplace=True),
         ),
     ]
 
@@ -94,7 +93,7 @@ def test_pipeline_indexing():
         ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
         (
             "string_imputer",
-            StringImputer(strategy="constant", value="MISSING", inplace=True),
+            StringImputer(strategy="constant", value="__NULL__", inplace=True),
         ),
     ]
 
@@ -221,7 +220,7 @@ def test_pipeline_verbose_multi_step(capsys):
     pipe = Pipeline(
         steps=[
             ("num", NumericImputer(strategy="median", inplace=True)),
-            ("str", StringImputer(strategy="constant", value="MISSING", inplace=True)),
+            ("str", StringImputer(strategy="constant", value="__NULL__", inplace=True)),
         ],
         verbose=True,
     )
@@ -276,7 +275,7 @@ def test_pipeline_repr():
     """Test string representation of pipeline."""
     steps = [
         ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
-        ("string_imputer", StringImputer(strategy="constant", value="MISSING", inplace=True)),
+        ("string_imputer", StringImputer(strategy="constant", value="__NULL__", inplace=True)),
     ]
 
     pipe = Pipeline(steps=steps)
@@ -445,7 +444,7 @@ def test_clone_returns_new_pipeline():
     pipe = Pipeline(
         steps=[
             ("impute", NumericImputer(strategy="median", inplace=True)),
-            ("impute_str", StringImputer(strategy="constant", value="MISSING")),
+            ("impute_str", StringImputer(strategy="constant", value="__NULL__")),
         ]
     )
     cloned = pipe.clone()
@@ -503,3 +502,113 @@ def test_clone_can_be_fitted_independently():
 
     result = cloned.transform(X)
     assert result.null_count().sum_horizontal()[0] == 0
+
+
+# ── get_initial_features ──────────────────────────────────────────────────────
+
+def test_get_initial_features_select():
+    """Only the selected columns are traced back to the initial input."""
+    from gators.data_cleaning import SelectColumns
+    X = pl.DataFrame({"A": [1.0, 2.0], "B": [3.0, 4.0], "C": [5.0, 6.0]})
+    pipe = Pipeline(steps=[
+        ("imp", NumericImputer(strategy="median")),
+        ("sel", SelectColumns(subset=["A", "B"])),
+    ])
+    pipe.fit(X)
+    assert pipe.get_initial_features() == ["A", "B"]
+
+
+def test_get_initial_features_drop():
+    """Dropped columns are excluded from the result."""
+    from gators.data_cleaning import DropColumns
+    X = pl.DataFrame({"A": [1.0, 2.0], "B": [3.0, 4.0], "C": [5.0, 6.0]})
+    pipe = Pipeline(steps=[("drop", DropColumns(subset=["C"]))])
+    pipe.fit(X)
+    assert pipe.get_initial_features() == ["A", "B"]
+
+
+def test_get_initial_features_feature_gen_source_traced():
+    """Source column used for feature generation is included even after SelectColumns drops it."""
+    from gators.data_cleaning import SelectColumns
+    from gators.feature_generation import ScalarMathFeatures
+    X = pl.DataFrame({"A": [1.0, 2.0], "B": [3.0, 4.0]})
+    pipe = Pipeline(steps=[
+        ("gen", ScalarMathFeatures(operations=[{"column": "A", "op": "+", "scalar": 1.0}])),
+        ("sel", SelectColumns(subset=["A_plus_1"])),
+    ])
+    pipe.fit(X)
+    assert pipe.get_initial_features() == ["A"]
+
+
+def test_get_initial_features_passthrough_all():
+    """When nothing is dropped or generated the full initial set is returned."""
+    X = pl.DataFrame({"A": [1.0, None], "B": [2.0, 3.0]})
+    pipe = Pipeline(steps=[("imp", NumericImputer(strategy="median"))])
+    pipe.fit(X)
+    assert pipe.get_initial_features() == ["A", "B"]
+
+
+def test_get_initial_features_not_fitted():
+    from gators.exceptions import NotFittedError
+    pipe = Pipeline(steps=[("imp", NumericImputer(strategy="median"))])
+    with pytest.raises(NotFittedError):
+        pipe.get_initial_features()
+
+
+def test_get_initial_features_diff_features_column_pairs():
+    """column_pairs sources are included in the lineage (covers the column_pairs branch)."""
+    from gators.data_cleaning import SelectColumns
+    from gators.feature_generation_dt import DiffFeatures
+    X = pl.DataFrame({
+        "a": ["2024-01-15"], "b": ["2024-01-10"], "extra": [42.0],
+    }).with_columns([
+        pl.col("a").str.strptime(pl.Datetime, "%Y-%m-%d"),
+        pl.col("b").str.strptime(pl.Datetime, "%Y-%m-%d"),
+    ])
+    pipe = Pipeline(steps=[
+        ("diff", DiffFeatures(column_pairs=[("a", "b")], units=["d"])),
+        ("sel",  SelectColumns(subset=["a_minus_b__days"])),
+    ])
+    pipe.fit(X)
+    assert pipe.get_initial_features() == ["a", "b"]
+
+
+def test_get_initial_features_group_statistics_by():
+    """by-columns are included in the lineage (covers the by branch)."""
+    from gators.data_cleaning import SelectColumns
+    from gators.feature_generation import GroupStatisticsFeatures
+    X = pl.DataFrame({"v": [1.0, 2.0, 3.0, 4.0], "g": ["A", "A", "B", "B"], "extra": [0.0]*4})
+    pipe = Pipeline(steps=[
+        ("gsf", GroupStatisticsFeatures(subset=["v"], by=["g"], func=["mean"])),
+        ("sel", SelectColumns(subset=["mean_v__per_g"])),
+    ])
+    pipe.fit(X)
+    assert "v" in pipe.get_initial_features()
+    assert "g" in pipe.get_initial_features()
+
+
+def test_get_initial_features_groupby_imputer():
+    """group_by_column is included in the lineage (covers the group_by_column branch)."""
+    from gators.data_cleaning import SelectColumns
+    from gators.imputers import GroupByImputer
+    X = pl.DataFrame({"grp": ["A", "A", "B", "B"], "val": [1.0, None, 3.0, None], "extra": [0.0]*4})
+    pipe = Pipeline(steps=[
+        ("imp", GroupByImputer(group_by_column="grp", strategy="mean")),
+        ("sel", SelectColumns(subset=["grp", "val"])),
+    ])
+    pipe.fit(X)
+    assert "grp" in pipe.get_initial_features()
+    assert "val" in pipe.get_initial_features()
+
+
+def test_get_initial_features_renamed_column():
+    """Renamed column (inplace=False) has its source traced (covers the reverse-map branch)."""
+    from gators.data_cleaning import SelectColumns
+    from gators.scalers import StandardScaler
+    X = pl.DataFrame({"A": [1.0, 2.0, 3.0], "B": [4.0, 5.0, 6.0]})
+    pipe = Pipeline(steps=[
+        ("scale", StandardScaler(inplace=False, drop_columns=True)),
+        ("sel",   SelectColumns(subset=["A__standard_scale"])),
+    ])
+    pipe.fit(X)
+    assert pipe.get_initial_features() == ["A"]

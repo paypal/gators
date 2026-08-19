@@ -1,6 +1,7 @@
+from typing import Literal
+
 import polars as pl
 from pydantic import PrivateAttr
-from typing_extensions import Literal
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -18,9 +19,8 @@ class BooleanImputer(_BaseTransformer):
         - "most_frequent": Fill with the mode (most frequent value)
     subset : list[str], default=None
         List of boolean columns to impute. If None, all boolean columns are selected.
-    value : bool, default=None
-        Value to use when strategy is 'constant'. Must be True or False.
-        Required when strategy='constant', ignored otherwise.
+    value : bool, default=False
+        Value to use when strategy is 'constant'.
     inplace : bool, default=True
         If True, impute values in the original columns.
         If False, create new columns with suffix '__impute_{strategy}'.
@@ -98,7 +98,7 @@ class BooleanImputer(_BaseTransformer):
 
     strategy: Literal["constant", "most_frequent"]
     subset: list[str] | None = None
-    value: bool = None
+    value: bool = False
     drop_columns: bool = True
     inplace: bool = True
     _statistics: dict[str, bool] = PrivateAttr(default_factory=dict)
@@ -124,7 +124,11 @@ class BooleanImputer(_BaseTransformer):
         if not self.inplace:
             self._column_mapping = {col: f"{col}__impute_{self.strategy}" for col in self.subset}
         strategies = {
-            "most_frequent": lambda col: bool(X[col].drop_nulls().mode()[0]),
+            "most_frequent": lambda col: (
+                bool(X[col].drop_nulls().mode()[0])
+                if X[col].drop_nulls().len() > 0
+                else False
+            ),
             "constant": lambda col: bool(self.value),
         }
         self._statistics = {col: strategies[self.strategy](col) for col in self.subset}

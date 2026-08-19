@@ -1,4 +1,5 @@
-import numpy as np
+import math
+
 import polars as pl
 
 from ._base_encoder import _BaseEncoder
@@ -126,7 +127,7 @@ class BinaryEncoder(_BaseEncoder):
 
             # Calculate number of bits needed
             n_categories = len(valid_categories)
-            n_bits = int(np.ceil(np.log2(n_categories))) if n_categories > 1 else 1
+            n_bits = math.ceil(math.log2(n_categories)) if n_categories > 1 else 1
             self.n_bits_[col] = n_bits
 
             # Create binary encoding for each category

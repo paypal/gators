@@ -1,4 +1,3 @@
-import numpy as np
 import polars as pl
 
 from ._base_encoder import _BaseEncoder
@@ -113,7 +112,7 @@ class OrdinalEncoder(_BaseEncoder):
             else:
                 counts = counts.filter(pl.col("count") / n >= self.min_count)
 
-            values = np.arange(1, len(counts) + 1, dtype=float)
+            values = [float(i) for i in range(1, len(counts) + 1)]
             self.mapping_[col] = dict(zip(counts[col], values))
         self.column_mapping_ = {col: f"{col}__ordinal_enc" for col in self.subset}
 

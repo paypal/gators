@@ -167,6 +167,8 @@ class GroupStatisticsFeatures(_BaseTransformer):
     drop_columns: bool = False
     new_column_names: list[str] | None = None
     _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    # Keyed (num_col, groupby_col) → {stat_name: {group_value: float}}
+    _group_stats: dict = PrivateAttr(default_factory=dict)
 
     @field_validator("func")
     def check_func(cls, func):
@@ -216,6 +218,36 @@ class GroupStatisticsFeatures(_BaseTransformer):
         if not self.new_column_names:
             self.new_column_names = default_names
         self._column_mapping = dict(zip(default_names, self.new_column_names))
+
+        # Compute and store group stats needed by all requested functions.
+        _NEEDED: dict[str, list[str]] = {
+            "mean": ["mean"], "std": ["std"], "median": ["median"],
+            "min": ["min"], "max": ["max"], "sum": ["sum"], "count": ["count"],
+            "range": ["min", "max"],
+            "mean_ratio": ["mean"], "median_ratio": ["median"],
+            "zscore": ["mean", "std"], "minmax": ["min", "max"],
+        }
+        _POLARS_AGG = {
+            "mean": lambda c: pl.col(c).mean(),
+            "std":  lambda c: pl.col(c).std(),
+            "median": lambda c: pl.col(c).median(),
+            "min":  lambda c: pl.col(c).min(),
+            "max":  lambda c: pl.col(c).max(),
+            "sum":  lambda c: pl.col(c).sum(),
+            "count": lambda c: pl.col(c).count().cast(pl.Float64),
+        }
+        for num_col in self.subset:
+            for groupby_col in self.by:
+                needed = set(s for f in self.func for s in _NEEDED[f])
+                aggs = [_POLARS_AGG[s](num_col).alias(s) for s in needed]
+                gdf = X.group_by(groupby_col).agg(aggs)
+                self._group_stats[(num_col, groupby_col)] = {
+                    s: {
+                        str(row[groupby_col]): float(row[s]) if row[s] is not None else float("nan")
+                        for row in gdf.iter_rows(named=True)
+                    }
+                    for s in needed
+                }
 
         return self
 

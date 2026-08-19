@@ -12,7 +12,7 @@ class RareCategoryEncoder(_BaseTransformer):
     ----------
     subset : list[str], default=None
         List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
-    default : str, default="RARE"
+    default : str, default="__RARE__"
         Value to replace rare categories with.
     min_count : PositiveInt | PositiveFloat, default=2
         Minimum count threshold for categories. Categories below this threshold are replaced with `default`. If >= 1, treated as absolute count; if < 1, treated as frequency.
@@ -89,7 +89,7 @@ class RareCategoryEncoder(_BaseTransformer):
 
     subset: list[str] | None = None
     mapping_: dict[str, dict[str, str]] = Field(default_factory=dict)
-    default: str = "RARE"
+    default: str = "__RARE__"
     column_mapping_: dict[str, str] = Field(default_factory=dict)
     min_count: PositiveInt | PositiveFloat = 2
     drop_columns: bool = True

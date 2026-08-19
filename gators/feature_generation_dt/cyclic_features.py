@@ -2,7 +2,7 @@ from math import pi
 from typing import Any, Callable
 
 import polars as pl
-from pydantic import ValidationInfo, field_validator
+from pydantic import PrivateAttr, ValidationInfo, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -91,6 +91,7 @@ class CyclicFeatures(_BaseTransformer):
     components: list[str]
     angles: list[float]
     drop_columns: bool = False
+    _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("components")
     def check_components(cls, components, info: ValidationInfo):
@@ -122,6 +123,10 @@ class CyclicFeatures(_BaseTransformer):
             self.subset = [
                 col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
+
+        for col in self.subset:
+            dtype = X.schema[col]
+            self._dt_units[col] = dtype.time_unit if hasattr(dtype, 'time_unit') else 'date'
 
         return self
 

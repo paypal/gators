@@ -30,7 +30,7 @@ class QuantileClipper(_BaseClipper):
     Examples
     --------
     >>> import polars as pl
-    >>> from gators.clipping import QuantileClipper
+    >>> from gators.clippers import QuantileClipper
 
     >>> # Sample DataFrame with outliers
     >>> X = pl.DataFrame({

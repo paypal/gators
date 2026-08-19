@@ -265,8 +265,8 @@ def test_imputer_mean_inplace_true(sample_dataframe):
 
 
 def test_imputer_constant_default_value(sample_dataframe):
-    """constant strategy with value=None defaults value to 0 during fit."""
-    imputer = NumericImputer(strategy="constant")  # value not specified
+    """constant strategy uses the default value=0.0 when no value is specified."""
+    imputer = NumericImputer(strategy="constant")  # value defaults to 0.0
     imputer.fit(sample_dataframe)
     assert imputer.value == 0
     assert imputer._statistics["A"] == 0
@@ -291,3 +291,38 @@ def test_imputer_constant_inplace_true(sample_dataframe):
     assert result["A"].null_count() == 0
     assert result["B"].null_count() == 0
     assert result["D"].null_count() == 0
+
+
+@pytest.mark.parametrize("strategy", ["mean", "median", "min", "max"])
+def test_all_null_column_statistics_defaults_to_zero(strategy):
+    # _statistics fallback to 0 is used by the ONNX exporter; transform uses Polars native for mean/min/max
+    X = pl.DataFrame({"A": pl.Series([None, None, None], dtype=pl.Float64)})
+    imputer = NumericImputer(strategy=strategy)
+    imputer.fit(X)
+    assert imputer._statistics["A"] == 0
+
+
+def test_all_null_column_median_fills_zero():
+    # median uses _statistics in transform, so all-null → 0
+    X = pl.DataFrame({"A": pl.Series([None, None, None], dtype=pl.Float64)})
+    imputer = NumericImputer(strategy="median")
+    imputer.fit(X)
+    result = imputer.transform(X)
+    assert result["A"].to_list() == [0.0, 0.0, 0.0]
+
+
+@pytest.mark.parametrize("strategy", ["mean", "median", "min", "max"])
+def test_all_nan_column_defaults_to_zero(strategy):
+    X = pl.DataFrame({"A": pl.Series([float("nan"), float("nan")], dtype=pl.Float64)})
+    imputer = NumericImputer(strategy=strategy)
+    imputer.fit(X)
+    assert imputer._statistics["A"] == 0
+
+
+def test_most_frequent_all_null_defaults_to_zero():
+    X = pl.DataFrame({"A": pl.Series([None, None, None], dtype=pl.Float64)})
+    imputer = NumericImputer(strategy="most_frequent")
+    imputer.fit(X)
+    assert imputer._statistics["A"] == 0
+    result = imputer.transform(X)
+    assert result["A"].to_list() == [0.0, 0.0, 0.0]

@@ -66,6 +66,7 @@ class HashEncoder(_BaseTransformer):
 
     _CAT_DTYPES = {pl.String, pl.Categorical, pl.Enum}
     _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _hash_mapping_: dict[str, dict[str, float]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "HashEncoder":
         """Detect the subset of categorical columns (no statistics are learnt).
@@ -90,6 +91,14 @@ class HashEncoder(_BaseTransformer):
             ]
 
         self._column_mapping = {col: f"{col}__hash" for col in self.subset}
+
+        # Pre-compute bucket for each unique training value using Polars (exact parity at inference).
+        # Unknown values at ONNX inference time fall back to bucket 0.
+        for col in self.subset:
+            unique = X[col].cast(pl.String).drop_nulls().unique()
+            buckets = (unique.hash(seed=0) % self.n_features).cast(pl.Float64)
+            self._hash_mapping_[col] = dict(zip(unique.to_list(), buckets.to_list()))
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

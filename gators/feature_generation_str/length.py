@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -15,7 +16,7 @@ class Length(_BaseTransformer):
     Examples
     --------
     >>> import polars as pl
-    >>> from gators.discretizers import Length
+    >>> from gators.feature_generation_str import Length
 
     >>> # Sample data
     >>> X =pl.DataFrame({
@@ -62,7 +63,7 @@ class Length(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Length":
         """Fit the transformer by identifying categorical columns and generating column mappings.

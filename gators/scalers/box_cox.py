@@ -22,9 +22,12 @@ class BoxCox(_BaseTransformer):
     lambdas : dict[str, int | float]
         Dictionary mapping column names to their lambda (power) parameters.
         Lambda values typically range from -2 to 2.
+    inplace : bool, default=True
+        If True, transform values in the original columns (keep original column names).
+        If False, create new columns with suffix ``__boxcox``.
     drop_columns : bool, default=True
-        If True, drop the original columns after transformation.
-        If False, keep both original and transformed columns.
+        If ``inplace=False``, whether to drop the original columns after transformation.
+        Ignored when ``inplace=True``.
 
     Examples
     --------
@@ -61,6 +64,7 @@ class BoxCox(_BaseTransformer):
     """
 
     lambdas: dict[str, int | float]
+    inplace: bool = True
     drop_columns: bool = True
     _columns: list[str] = PrivateAttr(default_factory=list)
     _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
@@ -81,7 +85,8 @@ class BoxCox(_BaseTransformer):
             The fitted transformer instance.
         """
         self._columns = list(self.lambdas.keys())
-        self._column_mapping = {col: f"{col}__boxcox" for col in self._columns}
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__boxcox" for col in self._columns}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -98,6 +103,17 @@ class BoxCox(_BaseTransformer):
         pl.DataFrame
             Transformed DataFrame with power-transformed columns.
         """
+        if self.inplace:
+            exprs = [
+                (
+                    pl.col(col).log().alias(col)
+                    if lmbda == 0
+                    else ((pl.col(col) ** lmbda - 1) / lmbda).alias(col)
+                )
+                for col, lmbda in self.lambdas.items()
+            ]
+            return X.with_columns(exprs)
+
         # Build all transformation expressions
         exprs = [
             (
@@ -107,9 +123,7 @@ class BoxCox(_BaseTransformer):
             )
             for col, lmbda in self.lambdas.items()
         ]
-
         X = X.with_columns(exprs)
-
         if self.drop_columns:
             return X.drop(self._columns)
         return X
@@ -127,6 +141,17 @@ class BoxCox(_BaseTransformer):
         pl.DataFrame
             DataFrame with columns restored to their original scale.
         """
+        if self.inplace:
+            exprs = []
+            for col, lmbda in self.lambdas.items():
+                if col not in X.columns:
+                    continue
+                if lmbda == 0:
+                    expr = pl.col(col).exp().alias(col)
+                else:
+                    expr = ((pl.col(col) * lmbda + 1) ** (1.0 / lmbda)).alias(col)
+                exprs.append(expr)
+            return X.with_columns(exprs)
         reverse_map = {v: k for k, v in self._column_mapping.items()}
         exprs = []
         for new_col, orig_col in reverse_map.items():

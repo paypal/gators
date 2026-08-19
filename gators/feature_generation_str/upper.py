@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -17,7 +18,7 @@ class Upper(_BaseTransformer):
     Examples
     --------
     >>> import polars as pl
-    >>> from gators.discretizers import Upper
+    >>> from gators.feature_generation_str import Upper
 
     >>> # Sample data
     >>> X =pl.DataFrame({
@@ -84,7 +85,7 @@ class Upper(_BaseTransformer):
     subset: list[str] | None = None
     drop_columns: bool = True
     inplace: bool = True
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Upper":
         """Fit the transformer by identifying categorical columns and generating column mappings.

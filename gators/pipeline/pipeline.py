@@ -232,6 +232,10 @@ class Pipeline(_BaseTransformer):
                     f"  |  in: {in_stats}  →  out: {out_stats}  ({elapsed:.3f}s)"
                 )
 
+        self._is_fitted = True
+        if hasattr(X, "columns"):
+            self._input_columns = list(X.columns)
+            self._input_dtypes = dict(zip(X.columns, X.dtypes))
         return X_transformed
 
     def get_params(self, deep: bool = True) -> dict:
@@ -375,6 +379,112 @@ class Pipeline(_BaseTransformer):
                     setattr(transformer, param_name, param_value)
 
         return self
+
+    def get_initial_features(self) -> list[str]:
+        """Return the initial input columns that contribute to the pipeline output.
+
+        Traces forward through each step's column evolution and then resolves
+        which of the original input columns are actually needed, accounting for:
+
+        - **Passthrough** columns that survive unchanged to the final output.
+        - **Source** columns whose values were used to build new features (even
+          if the source column itself was later dropped).
+        - **Dropped** columns that neither survive nor produce any final output
+          column — these are *excluded* from the result.
+
+        The returned list preserves the original column order from the DataFrame
+        passed to ``fit()``.
+
+        Returns
+        -------
+        list[str]
+            Initial input column names required to produce the current output.
+
+        Raises
+        ------
+        NotFittedError
+            If the pipeline has not been fitted yet.
+
+        Examples
+        --------
+        >>> import polars as pl
+        >>> from gators.pipeline import Pipeline
+        >>> from gators.imputers import NumericImputer
+        >>> from gators.data_cleaning import SelectColumns
+        >>> from gators.scalers import StandardScaler
+
+        >>> X = pl.DataFrame({"A": [1.0, None], "B": [2.0, 3.0], "C": [4.0, 5.0]})
+        >>> pipe = Pipeline(steps=[
+        ...     ("impute", NumericImputer(strategy="median")),
+        ...     ("select", SelectColumns(subset=["A", "B"])),
+        ...     ("scale",  StandardScaler()),
+        ... ])
+        >>> pipe.fit(X)
+        >>> pipe.get_initial_features()
+        ['A', 'B']
+        """
+        self.check_is_fitted()
+
+        try:
+            from ..onnx_converters import get_output_columns as _get_output_columns
+        except ImportError:  # pragma: no cover
+            # Fallback when onnx is not installed: return all initial columns
+            return list(self._input_columns)
+
+        # ── Phase 1: forward simulation ──────────────────────────────────────
+        # Compute the column list at each step boundary [0=initial, 1=after step 0, …]
+        col_at: list[list[str]] = [list(self._input_columns)]
+        current = list(self._input_columns)
+        for _, transformer in self.steps:
+            current = _get_output_columns(transformer, current)
+            col_at.append(current)
+
+        # ── Phase 2: build column lineage (forward) ───────────────────────────
+        # lineage[col] = set of initial input columns that contributed to col
+        lineage: dict[str, set[str]] = {c: {c} for c in self._input_columns}
+
+        for step_idx, (_, transformer) in enumerate(self.steps):
+            col_map: dict[str, str] = dict(getattr(transformer, "_column_mapping", {}) or {})
+            # Reverse map: generated_name → source_name (for renamed/encoded cols)
+            reverse: dict[str, str] = {v: k for k, v in col_map.items()}
+            # Collect all column names this transformer uses as source inputs
+            subset: list[str] = list(getattr(transformer, "subset", None) or [])
+            for op in getattr(transformer, "operations", None) or []:
+                if isinstance(op, dict) and "column" in op:
+                    subset.append(op["column"])
+            for pair in getattr(transformer, "column_pairs", None) or []:
+                subset.extend(pair)
+            for col in getattr(transformer, "by", None) or []:
+                subset.append(col)
+            group_by = getattr(transformer, "group_by_column", None)
+            if group_by:
+                subset.append(group_by)
+
+            new_lineage: dict[str, set[str]] = {}
+            for out_col in col_at[step_idx + 1]:
+                if out_col in lineage:
+                    # Passthrough: column existed before this step
+                    new_lineage[out_col] = lineage[out_col]
+                elif out_col in reverse and reverse[out_col] in lineage:
+                    # Renamed / encoded: inherits lineage of its source column
+                    new_lineage[out_col] = lineage[reverse[out_col]]
+                else:
+                    # New column from a feature generator: collect lineage of
+                    # all source columns in subset (conservative union)
+                    src: set[str] = set()
+                    for s in subset:
+                        if s in lineage:
+                            src.update(lineage[s])
+                    new_lineage[out_col] = src
+
+            lineage = new_lineage
+
+        # ── Phase 3: collect required initial columns ─────────────────────────
+        needed: set[str] = set()
+        for sources in lineage.values():
+            needed.update(sources)
+
+        return [c for c in self._input_columns if c in needed]
 
     def __repr__(self):
         """String representation of the pipeline.

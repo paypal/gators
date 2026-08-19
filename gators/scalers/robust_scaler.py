@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import PrivateAttr, field_validator, model_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -25,10 +25,12 @@ class RobustScaler(_BaseTransformer):
     subset : list[str] or None, default=None
         Numeric columns to scale.  When ``None`` all Float64, Float32, Int64,
         and Int32 columns are selected automatically.
+    inplace : bool, default=True
+        If True, scale values in the original columns (keep original column names).
+        If False, create new columns with suffix ``__robust_quantile_scale``.
     drop_columns : bool, default=True
-        If ``True`` the original columns are dropped and only the scaled
-        columns are kept.  If ``False`` both original and scaled columns are
-        present in the output.
+        If ``inplace=False``, whether to drop the original columns after scaling.
+        Ignored when ``inplace=True``.
 
     Attributes
     ----------
@@ -57,6 +59,7 @@ class RobustScaler(_BaseTransformer):
 
     quantile_range: tuple[float, float] = (0.25, 0.75)
     subset: list[str] | None = None
+    inplace: bool = True
     drop_columns: bool = True
 
     _median: dict[str, float] = PrivateAttr(default_factory=dict)
@@ -90,10 +93,11 @@ class RobustScaler(_BaseTransformer):
             self.subset = [
                 col
                 for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+                if dtype.is_numeric()
             ]
 
-        self._column_mapping = {col: f"{col}__robust_quantile_scale" for col in self.subset}
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__robust_quantile_scale" for col in self.subset}
 
         q_low, q_high = self.quantile_range
         stat_exprs = []
@@ -129,14 +133,19 @@ class RobustScaler(_BaseTransformer):
         pl.DataFrame
             DataFrame with robust-scaled columns.
         """
+        if self.inplace:
+            transformations = [
+                (self._scale[col] * (pl.col(col) - self._median[col])).alias(col)
+                for col in self.subset
+            ]
+            return X.with_columns(transformations)
+
         transformations = [
             (self._scale[col] * (pl.col(col) - self._median[col])).alias(new_col)
             for col, new_col in self._column_mapping.items()
         ]
-
         X = X.with_columns(transformations)
-
-        if self.drop_columns and self.subset is not None:
+        if self.drop_columns:
             return X.drop(self.subset)
         return X
 
@@ -153,12 +162,18 @@ class RobustScaler(_BaseTransformer):
         pl.DataFrame
             DataFrame with columns restored to their original scale.
         """
+        def _inv_expr(scaled_col: str, orig_col: str) -> pl.Expr:
+            scale = self._scale[orig_col]
+            median = self._median[orig_col]
+            if scale == 0.0:
+                return pl.lit(median).alias(orig_col)
+            return (pl.col(scaled_col) / scale + median).alias(orig_col)
+
+        if self.inplace:
+            exprs = [_inv_expr(col, col) for col in self.subset]
+            return X.with_columns(exprs)
         reverse_map = {v: k for k, v in self._column_mapping.items()}
-        exprs = [
-            (pl.col(new) / self._scale[orig] + self._median[orig]).alias(orig)
-            for new, orig in reverse_map.items()
-            if new in X.columns
-        ]
+        exprs = [_inv_expr(new, orig) for new, orig in reverse_map.items() if new in X.columns]
         X = X.with_columns(exprs)
         if self.drop_columns:
             return X.drop([c for c in reverse_map if c in X.columns])

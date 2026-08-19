@@ -99,7 +99,7 @@ class WOEEncoder(_BaseEncoder):
     └────────────────┴────────────────┘
 
     >>> # Encoding with drop_columns=False
-    >>> encoder = WOEEncoder(inplace=False, inplace=False, drop_columns=False)
+    >>> encoder = WOEEncoder(inplace=False, drop_columns=False)
     >>> encoder.fit(X, y)
     >>> transformed_X =encoder.transform(X)
     >>> print(transformed_X)
@@ -178,12 +178,15 @@ class WOEEncoder(_BaseEncoder):
         )
         self.mapping_ = {}
         min_count_threshold = self.min_count if self.min_count >= 1 else len(X) * self.min_count
+        raw_mapping: dict = {}
         for key, group_df in stats.group_by("variable"):
             col = key[0] if isinstance(key, tuple) else key
-            self.mapping_[col] = {
+            raw_mapping[col] = {
                 str(cat): float(val)
                 for cat, val, count in group_df[["value", "woe", "N"]].iter_rows()
                 if count >= min_count_threshold
             }
+        # Preserve subset order so transform() adds columns in a deterministic sequence
+        self.mapping_ = {col: raw_mapping.get(col, {}) for col in self.subset}
         self.column_mapping_ = {col: f"{col}__encode_woe" for col in self.subset}
         return self

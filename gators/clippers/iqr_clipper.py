@@ -32,7 +32,7 @@ class IQRClipper(_BaseClipper):
     Examples
     --------
     >>> import polars as pl
-    >>> from gators.clipping import IQRClipper
+    >>> from gators.clippers import IQRClipper
 
     >>> # Sample DataFrame with outliers
     >>> X = pl.DataFrame({

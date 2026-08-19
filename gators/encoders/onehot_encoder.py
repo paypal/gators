@@ -1,7 +1,11 @@
+import re
+
 import polars as pl
 from pydantic import PositiveFloat, PositiveInt
 
 from ..transformer._base_transformer import _BaseTransformer
+
+_norm_col = re.compile(r'_{3,}')
 
 
 class OneHotEncoder(_BaseTransformer):
@@ -153,10 +157,12 @@ class OneHotEncoder(_BaseTransformer):
         if cat_cols:
             X_encode = X_encode.with_columns([pl.col(c).cast(pl.String) for c in cat_cols])
         dummies = X_encode.to_dummies(separator="__")
+        # Normalize 3+ consecutive underscores to __ (e.g. col____MISSING__ → col____MISSING__ → col__MISSING__)
+        dummies = dummies.rename({c: _norm_col.sub('__', c) for c in dummies.columns})
 
         # Build expected columns list (pre-computed for efficiency)
         expected_cols = [
-            f"{col}__{cat}" for col, cat_list in self.column_categories.items() for cat in cat_list
+            _norm_col.sub('__', f"{col}__{cat}") for col, cat_list in self.column_categories.items() for cat in cat_list
         ]
         expected_cols_set = set(expected_cols)
 
@@ -171,8 +177,9 @@ class OneHotEncoder(_BaseTransformer):
                 [pl.lit(0.0).alias(col_name) for col_name in sorted(missing_cols)]
             )
         else:
-            # Just select existing columns
             dummies = dummies.select(existing_cols)
+        # Enforce column_categories order so Python and ONNX output identical column sequences
+        dummies = dummies.select(expected_cols)
 
         # Cast all to Float64 in single operation
         dummies = dummies.select(pl.all().cast(pl.Float64))

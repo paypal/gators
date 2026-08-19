@@ -26,7 +26,7 @@ class PolynomialFeatures(_BaseTransformer):
     --------
     **Example 1: Degree 2 polynomial with bias term**
 
-    >>> from gators.discretizers import PolynomialFeatures
+    >>> from gators.feature_generation import PolynomialFeatures
     >>> import polars as pl
     >>> X = pl.DataFrame({'A': [1, 2], 'B': [3, 4]})
     >>> transformer = PolynomialFeatures(degree=2, include_bias=True)

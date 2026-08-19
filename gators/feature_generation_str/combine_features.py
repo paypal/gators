@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -129,7 +129,7 @@ class CombineFeatures(_BaseTransformer):
     separator: str = "_"
     drop_columns: bool = False
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("new_column_names")
     def check_new_column_names_length(cls, new_column_names, info):

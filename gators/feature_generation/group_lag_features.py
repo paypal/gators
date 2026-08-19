@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import field_validator, model_validator
+from pydantic import PrivateAttr, field_validator, model_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -128,7 +128,7 @@ class GroupLagFeatures(_BaseTransformer):
     fill_value: float = None
     drop_columns: bool = False
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("lags")
     def check_lags(cls, lags):

@@ -15,7 +15,7 @@ def test_arcsin_scaler_default():
         }
     )
 
-    scaler = ArcSinSquareRootScaler()
+    scaler = ArcSinSquareRootScaler(inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -39,7 +39,7 @@ def test_arcsin_scaler_subset_columns():
         }
     )
 
-    scaler = ArcSinSquareRootScaler(subset=["col1", "col2"], drop_columns=False)
+    scaler = ArcSinSquareRootScaler(subset=["col1", "col2"], drop_columns=False, inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -61,7 +61,7 @@ def test_arcsin_scaler_proportions():
         }
     )
 
-    scaler = ArcSinSquareRootScaler()
+    scaler = ArcSinSquareRootScaler(inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -85,7 +85,7 @@ def test_arcsin_scaler_boundary_values():
         }
     )
 
-    scaler = ArcSinSquareRootScaler()
+    scaler = ArcSinSquareRootScaler(inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -102,7 +102,7 @@ def test_arcsin_scaler_fit_transform():
         }
     )
 
-    scaler = ArcSinSquareRootScaler()
+    scaler = ArcSinSquareRootScaler(inplace=False)
     result = scaler.fit_transform(X)
 
     expected = X.with_columns(pl.col("col1").sqrt().arcsin().alias("col1__arcsin")).drop("col1")
@@ -118,7 +118,7 @@ def test_arcsin_scaler_drop_columns_false():
         }
     )
 
-    scaler = ArcSinSquareRootScaler(drop_columns=False)
+    scaler = ArcSinSquareRootScaler(drop_columns=False, inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -136,7 +136,7 @@ def test_arcsin_scaler_range():
         }
     )
 
-    scaler = ArcSinSquareRootScaler()
+    scaler = ArcSinSquareRootScaler(inplace=False)
     result = scaler.fit_transform(X)
 
     # All values should be between 0 and π/2
@@ -146,3 +146,47 @@ def test_arcsin_scaler_range():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+def test_arcsin_scaler_inplace_true_default():
+    X = pl.DataFrame(
+        {
+            "col1": [0.0, 0.25, 0.5, 0.75, 1.0],
+            "col2": [0.1, 0.2, 0.3, 0.4, 0.5],
+        }
+    )
+    scaler = ArcSinSquareRootScaler().fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["col1", "col2"]
+    assert "col1__arcsin" not in result.columns
+    import math
+    assert result["col1"].to_list()[2] == pytest.approx(math.asin(math.sqrt(0.5)), rel=1e-5)
+
+
+def test_arcsin_scaler_inplace_true_subset():
+    X = pl.DataFrame(
+        {
+            "col1": [0.0, 0.25, 0.5],
+            "col2": [0.1, 0.5, 0.9],
+            "cat": ["a", "b", "c"],
+        }
+    )
+    scaler = ArcSinSquareRootScaler(subset=["col1"]).fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["col1", "col2", "cat"]
+    assert result["col2"].to_list() == [0.1, 0.5, 0.9]
+
+
+def test_arcsin_scaler_inverse_transform_inplace_true():
+    X = pl.DataFrame({"a": [0.0, 0.25, 0.5, 0.75, 1.0]})
+    scaler = ArcSinSquareRootScaler().fit(X)
+    X_t = scaler.transform(X)
+    X_r = scaler.inverse_transform(X_t)
+    assert (X_r["a"].cast(pl.Float64) - X["a"].cast(pl.Float64)).abs().max() < 1e-5
+
+
+def test_arcsin_scaler_get_params_includes_inplace():
+    scaler = ArcSinSquareRootScaler()
+    params = scaler.get_params()
+    assert "inplace" in params
+    assert params["inplace"] is True

@@ -15,7 +15,7 @@ def test_transform_default():
     )
 
     lambdas = {"A": 0, "B": 2}
-    scaler = YeoJohnson(lambdas=lambdas).fit(X)
+    scaler = YeoJohnson(lambdas=lambdas, inplace=False).fit(X)
     transformed_X = scaler.transform(X)
 
     expected_X = X.with_columns(
@@ -44,7 +44,7 @@ def test_transform_subset_columns():
     )
 
     lambdas = {"A": 0}
-    scaler = YeoJohnson(lambdas=lambdas).fit(X)
+    scaler = YeoJohnson(lambdas=lambdas, inplace=False).fit(X)
     transformed_X = scaler.transform(X)
 
     expected_X = X.with_columns(
@@ -69,7 +69,7 @@ def test_transform_drop_columns_false():
     )
 
     lambdas = {"A": 0, "B": 2}
-    scaler = YeoJohnson(lambdas=lambdas, drop_columns=False).fit(X)
+    scaler = YeoJohnson(lambdas=lambdas, drop_columns=False, inplace=False).fit(X)
     transformed_X = scaler.transform(X)
 
     expected_X = X.with_columns(
@@ -94,7 +94,7 @@ def sample_data():
 
 
 def test_transform_lambda_zero(sample_data):
-    transformer = YeoJohnson(lambdas={"A": 0}, drop_columns=False)
+    transformer = YeoJohnson(lambdas={"A": 0}, drop_columns=False, inplace=False)
     transformer.fit(sample_data)
     transformed_X = transformer.transform(sample_data)
     expected_X = sample_data.with_columns(
@@ -109,7 +109,7 @@ def test_transform_lambda_zero(sample_data):
 
 
 def test_transform_lambda_two(sample_data):
-    transformer = YeoJohnson(lambdas={"A": 2}, drop_columns=False)
+    transformer = YeoJohnson(lambdas={"A": 2}, drop_columns=False, inplace=False)
     transformer.fit(sample_data)
     transformed_X = transformer.transform(sample_data)
     expected_X = sample_data.with_columns(
@@ -124,7 +124,7 @@ def test_transform_lambda_two(sample_data):
 
 
 def test_transform_lambda_non_zero_non_two(sample_data):
-    transformer = YeoJohnson(lambdas={"A": 1.5}, drop_columns=False)
+    transformer = YeoJohnson(lambdas={"A": 1.5}, drop_columns=False, inplace=False)
     transformer.fit(sample_data)
     transformed_X = transformer.transform(sample_data)
     expected_X = sample_data.with_columns(
@@ -140,3 +140,61 @@ def test_transform_lambda_non_zero_non_two(sample_data):
 
 if __name__ == "__main__":
     pytest.main()
+
+
+def test_yeojohnson_inplace_true_default():
+    X = pl.DataFrame({"A": [0, 1, 2], "B": [-1, 0, 1], "C": ["a", "b", "c"]})
+    scaler = YeoJohnson(lambdas={"A": 0.5, "B": 1.5}).fit(X)
+    result = scaler.transform(X)
+    assert "A" in result.columns
+    assert "B" in result.columns
+    assert "A__yeojonhson" not in result.columns
+
+
+def test_yeojohnson_inplace_true_lambda_zero():
+    X = pl.DataFrame({"A": [-1, 0, 1, 2]})
+    scaler = YeoJohnson(lambdas={"A": 0}).fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["A"]
+    assert "A__yeojonhson" not in result.columns
+
+
+def test_yeojohnson_inplace_true_lambda_two():
+    X = pl.DataFrame({"A": [-2, -1, 0, 1, 2]})
+    scaler = YeoJohnson(lambdas={"A": 2}).fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["A"]
+
+
+def test_yeojohnson_inplace_true_inverse_transform():
+    X = pl.DataFrame({"A": [0.0, 1.0, 2.0, 5.0]})
+    scaler = YeoJohnson(lambdas={"A": 0.5}).fit(X)
+    X_t = scaler.transform(X)
+    X_r = scaler.inverse_transform(X_t)
+    assert (X_r["A"].cast(pl.Float64) - X["A"].cast(pl.Float64)).abs().max() < 1e-5
+
+
+def test_yeojohnson_inplace_true_inverse_transform_negative():
+    X = pl.DataFrame({"A": [-3.0, -1.0, 0.0, 1.0]})
+    scaler = YeoJohnson(lambdas={"A": 0.5}).fit(X)
+    X_t = scaler.transform(X)
+    X_r = scaler.inverse_transform(X_t)
+    assert (X_r["A"].cast(pl.Float64) - X["A"].cast(pl.Float64)).abs().max() < 1e-5
+
+
+def test_yeojohnson_get_params_includes_inplace():
+    scaler = YeoJohnson(lambdas={"A": 0.5})
+    params = scaler.get_params()
+    assert "inplace" in params
+    assert params["inplace"] is True
+
+
+def test_yeojohnson_inplace_true_inverse_transform_missing_column_skipped():
+    """Test that missing columns are silently skipped in inplace=True inverse_transform."""
+    import polars as pl
+    X = pl.DataFrame({"A": [1.0, 2.0], "B": [3.0, 4.0]})
+    scaler = YeoJohnson(lambdas={"A": 0.5, "B": 0.5}).fit(X)
+    X_partial = pl.DataFrame({"A": [0.5, 1.0]})  # only A, missing B
+    result = scaler.inverse_transform(X_partial)
+    assert "A" in result.columns
+    assert "B" not in result.columns

@@ -62,7 +62,11 @@ notebook = [
     "jupyter-server>=2.0.0",
     "matplotlib>=3.5.0",
 ]
-all = ["gators[dev,notebook,tree]"]
+onnx = [
+    "onnx>=1.14.0",
+    "onnxruntime>=1.16.0",
+]
+all = ["gators[dev,notebook,tree,onnx]"]
 
 [project.urls]
 Homepage = "https://github.com/paypal/Gators/"

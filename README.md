@@ -30,13 +30,14 @@ Built by the PSP Data Team at PayPal, Gators makes data preprocessing and featur
 - **🚀 Lightning Fast**: Built on Polars for multi-core parallel processing
 - **🔄 Unified API**: Consistent sklearn-style `.fit()` and `.transform()` interface
 - **📦 Production Ready**: Deploy the same Python code from notebook to production
-- **🎯 Comprehensive**: 75+ preprocessing transformers covering every use case
+- **🎯 Comprehensive**: 105 preprocessing transformers across 11 categories
 - **🔗 Pipeline Support**: Chain transformers seamlessly with the Pipeline class
+- **📤 ONNX Export**: Export any fitted pipeline to ONNX for low-latency inference
 - **🎓 Easy to Learn**: If you know sklearn, you already know Gators
 
 ## 🛠️ What Can Gators Do?
 
-### 🧹 Data Cleaning
+### 🧹 Data Cleaning (16)
 Clean and prepare your data with powerful transformers:
 - `CastColumns` - Convert column data types
 - `CorrelationFilter` - Remove highly correlated features
@@ -45,119 +46,151 @@ Clean and prepare your data with powerful transformers:
 - `DropDuplicateColumns` - Remove duplicate columns
 - `DropDuplicateRows` - Remove duplicate rows
 - `DropHighNaNRatio` - Remove columns with high missing value ratio
-- `DropLowCardinality` - Remove low cardinality columns
-- `HighCardinalityFilter` - Filter high cardinality features
-- `OutlierFilter` - Detect and filter outliers
+- `DropLowCardinality` - Remove low-cardinality columns
+- `DropNearConstantColumns` - Remove near-constant columns
+- `HighCardinalityFilter` - Filter high-cardinality features
 - `RenameColumns` - Rename columns
 - `Replace` - Replace values in data
-- `VarianceFilter` - Remove low variance features
+- `RoundDigits` - Round numeric columns to a fixed number of decimal places
+- `RoundSignificantDigits` - Round numeric columns to a fixed number of significant figures
+- `SelectColumns` - Keep only specified columns
+- `VarianceFilter` - Remove low-variance features
 
-### 🔢 Categorical Encoding
+### ✂️ Clippers (5)
+Detect and clip outliers:
+- `CustomClipper` - Custom min/max bounds per column
+- `GaussianClipper` - Clip based on mean ± n standard deviations
+- `IQRClipper` - Clip based on interquartile range
+- `MADClipper` - Clip based on median absolute deviation
+- `QuantileClipper` - Clip based on quantile thresholds
+
+### 🔢 Categorical Encoding (10)
 Transform categorical variables with advanced encoding techniques:
 - `BinaryEncoder` - Binary representation encoding
-- `CatBoostEncoder` - CatBoost-style encoding
+- `CatBoostEncoder` - CatBoost-style target encoding
 - `CountEncoder` - Frequency-based encoding
-- `LeaveOneOutEncoder` - Leave-one-out encoding
+- `HashEncoder` - Hashing trick for high-cardinality features
+- `LeaveOneOutEncoder` - Leave-one-out target encoding
 - `OneHotEncoder` - Classic one-hot encoding
-- `OrdinalEncoder` - Order-based encoding
-- `RareCategoryEncoder` -  Replace rare/infrequent categories by a single category
-- `TargetEncoder` - Target-based encoding for supervised learning
+- `OrdinalEncoder` - Frequency-ordered ordinal encoding
+- `RareCategoryEncoder` - Replace rare/infrequent categories with a single label
+- `TargetEncoder` - Target mean encoding for supervised learning
 - `WOEEncoder` - Weight of Evidence encoding
 
-### 🎯 Feature Generation - Numeric
+### 🎯 Feature Generation - Numeric (20)
 Create powerful numeric features:
-**Mathematical Operations:**
-- `DistanceFeatures` - Calculate distance features
-- `HHIFeatures` - Herfindahl–Hirschman Indexfeatures from groups of columns
-- `IsNull` - Generate null indicator features
-- `MathFeatures` - Apply mathematical operations (add, subtract, multiply, divide)
-- `RatioFeatures` - Create ratio features between columns
-- `PlanRotationFeatures` - Rotate features in feature space
-- `PolynomialFeatures` - Generate polynomial combinations
-- `ScalarMathFeatures` - Apply scalar operations
-- `WeigtedSumFeatures` - Weighted sum of features from groups of columns
 
+**Mathematical Operations:**
+- `AsymmetryIndexFeatures` - Generate asymmetry index features
+- `ConcentrationIndexFeatures` - Generate concentration index features
+- `DistanceFeatures` - Calculate distance features
+- `FourierFeatures` - Generate Fourier basis features
+- `GeneralizedRatioFeatures` - Generate generalized ratio features
+- `HHIFeatures` - Herfindahl–Hirschman Index features
+- `IsNull` - Generate null-indicator features
+- `MathFeatures` - Apply mathematical operations between column groups
+- `PlanRotationFeatures` - Rotate features in feature space
+- `PolynomialFeatures` - Generate polynomial and interaction features
+- `RatioFeatures` - Create ratio features between columns
+- `ScalarMathFeatures` - Apply scalar operations to columns
+- `WeightedSumFeatures` - Weighted sum of features
 
 **Aggregation & Statistics:**
 - `GroupLagFeatures` - Generate lag features by group
-- `GroupStatisticsFeatures` - Scale features within groups
-- `RowStatisticsFeatures` - Calculate statistics
+- `GroupStatisticsFeatures` - Generate group-based statistics
+- `RollingStatisticsFeatures` - Generate rolling-window statistics
+- `RowStatisticsFeatures` - Generate row-level statistics
 
-**Rule-based**  
+**Rule-based:**
 - `ComparisonFeatures` - Generate comparison features
 - `ConditionFeatures` - Create conditional features
 - `RuleFeatures` - Apply custom business rules
 
 
-### 📝 Feature Generation - String
+### 📝 Feature Generation - String (17)
 Extract insights from text data:
 - `CharacterStatistics` - Extract character-level statistics
-- `CombineFeatures` - Combine string features
-- `Contains` - Check if string contains pattern
-- `Endswith` - Check if string ends with pattern
-- `ExtractSubstring` - Extract substring from text
-- `InteractionFeatures` - Generate string interaction features
-- `Length` - Calculate string length
-- `Lower` - Convert text to lowercase
-- `NGram` - Generate n-gram features
+- `CombineFeatures` - Concatenate selected string columns
+- `Contains` - Binary indicator: string contains pattern
+- `Endswith` - Binary indicator: string ends with pattern
+- `ExtractSubstring` - Extract a fixed-position substring
+- `InteractionFeatures` - Exhaustive pairwise string concatenation
+- `Length` - String length
+- `Lower` - Convert to lowercase
+- `NGram` - Generate character or word n-gram features
 - `Occurrences` - Count pattern occurrences
-- `PatternDetector` - Detect patterns in text
-- `Split` - Split strings
-- `SplitExtract` - Split and extract from strings
-- `Startswith` - Check if string starts with pattern
-- `Upper` - Convert text to uppercase
+- `PatternDetector` - Detect regex patterns
+- `RegexExtractFeatures` - Extract named groups via regex
+- `Split` - Split strings on a delimiter
+- `SplitExtract` - Split and extract the nth token
+- `Startswith` - Binary indicator: string starts with pattern
+- `TfidfFeatures` - Generate TF-IDF features
+- `Upper` - Convert to uppercase
 
-### 📅 Feature Generation - DateTime
+### 📅 Feature Generation - DateTime (8)
 Unlock temporal patterns:
 - `BusinessTimeFeatures` - Business hours/days calculations
 - `CyclicFeatures` - Circular encoding for cyclical time features
-- `DiffFeatures` - Calculate time differences
-- `DurationToDatetime` - Convert duration to datetime
-- `HolidayFeatures` - Detect and encode holidays
+- `DiffFeatures` - Calculate time differences between columns
+- `DurationToDatetime` - Convert duration to datetime components
+- `HolidayFeatures` - Detect and encode public holidays
 - `OrdinalFeatures` - Extract year, month, day, hour, etc.
-- `TimeBinFeatures` - Bin times into categories
-- `TimeWindowFeatures` - Generate time window features
+- `TimeBinFeatures` - Bin times into categorical buckets
+- `TimeWindowFeatures` - Generate time-window aggregation features
 
-### 🔄 Missing Value Imputation
+### 🔄 Missing Value Imputation (6)
 Handle missing data intelligently:
-- `BooleanImputer` - Impute boolean columns
-- `GroupByImputer` - Group-based imputation strategies
-- `NumericImputer` - Impute numeric columns (mean, median, mode, constant)
-- `StringImputer` - Impute string columns (mode, constant)
+- `BooleanImputer` - Impute boolean columns (constant or most-frequent)
+- `GroupByImputer` - Group-based imputation (median/mean per group)
+- `IterativeImputer` - Multivariate iterative imputation
+- `KNNImputer` - K-nearest neighbours imputation
+- `NumericImputer` - Impute numeric columns (mean, median, mode, constant, forward/backward fill)
+- `StringImputer` - Impute string columns (mode or constant)
 
-### 📊 Discretization
+### 📊 Discretization (7)
 Convert continuous variables into bins:
-- `CustomDiscretizer` - Custom bin edges
+- `CustomDiscretizer` - User-defined bin edges
 - `EqualLengthDiscretizer` - Equal-width binning
 - `EqualSizeDiscretizer` - Equal-frequency binning
 - `GeometricDiscretizer` - Geometric progression binning
 - `KMeansDiscretizer` - K-means clustering-based binning
 - `QuantileDiscretizer` - Quantile-based binning
-- `TreeBasedDiscretizer` - Decision tree-based binning
+- `TreeBasedDiscretizer` - Decision tree-based optimal binning
 
-### ⚖️ Feature Scalers
-Normalize your features:
-- `ArcsinSquarerootScaler` - Arcsine square root transformation
-- `ArcsinhScaler` - Inverse hyperbolic sine transformation
+### ⚖️ Feature Scalers (9)
+Normalize and transform your features:
+- `ArcSinSquareRootScaler` - Arcsine square-root transformation
+- `ArcSinhScaler` - Inverse hyperbolic sine transformation
 - `BoxCox` - Box-Cox power transformation
-- `Log1pScaler` - Log1p scaling (log(1+x))
-- `MinmaxScaler` - Min-max normalization
+- `Log1pScaler` - Log1p scaling — log(1 + x)
+- `MinmaxScaler` - Min-max normalization to [0, 1]
 - `PowerScaler` - Power transformation
-- `StandardScaler` - Standardization (z-score normalization)
+- `RobustScaler` - Median/IQR-based robust scaling
+- `StandardScaler` - Z-score standardization
 - `YeoJohnson` - Yeo-Johnson power transformation
 
-### ✨ Feature Selection
-Select the most important features for your models:
-- `CorrelationSelector` - Select features based on correlation analysis
-- `FeatureStabilitySelector` - Select stable features across data splits
-- `InformationValueSelector` - Select features by information value
-- `PermutationImportanceSelector` - Select features by permutation importance
-- `PSIFilter` - Filter features by Population Stability Index
-- `select_k_best_stable_features` - Select K most stable features
+### ✨ Feature Selection (6)
+Select the most informative features:
+- `CorrelationSelector` - Drop features by pairwise Pearson correlation
+- `FeatureStabilitySelector` - Keep features stable across data splits
+- `InformationValueSelector` - Filter by Information Value (IV)
+- `MutualInformationSelector` - Filter by mutual information with target
+- `PermutationImportanceSelector` - Filter by permutation feature importance
+- `PSIFilter` - Filter by Population Stability Index
 
-### 🔗 Pipeline
+### 🔗 Pipeline (1)
 Chain all transformers together:
 - `Pipeline` - sklearn-compatible pipeline for chaining transformers
+
+### 📤 ONNX Export
+Export any fitted `Pipeline` or single transformer to a validated ONNX graph for low-latency, language-agnostic inference:
+
+```python
+from gators.onnx_converters import pipeline_to_onnx
+
+model = pipeline_to_onnx(fitted_pipeline)  # → onnx.ModelProto
+# Run with onnxruntime, Triton, or any ONNX-compatible runtime
+```
 
 ## 🚀 Quick Start
 
@@ -174,17 +207,20 @@ X = pl.read_csv("data.csv")
 
 # Build a preprocessing pipeline
 pipeline = Pipeline(steps=[
-    ('drop_nan', DropHighNaNRatio(max_ratio=0.5)),
-    ('impute', NumericImputer(strategy='median')),
-    ('variance', VarianceFilter(min_var=0.01)),
-    ('encode', OneHotEncoder()),  # One-hot encode ALL the String or Categorical columns    
-    ('scale', StandardScaler())
+    ('drop_nan',  DropHighNaNRatio(max_ratio=0.5)),  # drop columns with >50% missing values
+    ('impute',    NumericImputer(strategy='median')), # fill numeric nulls with column median
+    ('variance',  VarianceFilter(min_var=0.01)),      # remove near-zero-variance columns
+    ('encode',    OneHotEncoder()),                   # one-hot encode all string/categorical columns
+    ('scale',     StandardScaler()),                  # z-score standardize numeric columns
 ])
 
-# Fit and transform
-X_processed = pipeline.fit_transform(X)
+# Fit on training data, transform train + test
+X_train_processed = pipeline.fit_transform(X_train)
+X_test_processed  = pipeline.transform(X_test)
 
-# Serialize the pipeline with pickle/joblib for production deployment
+# Export to ONNX for production inference
+from gators.onnx_converters import pipeline_to_onnx
+onnx_model = pipeline_to_onnx(pipeline)
 ```
 
 ## 📦 Installation
@@ -192,7 +228,13 @@ X_processed = pipeline.fit_transform(X)
 Requires Python 3.10 or higher.
 
 ```bash
-pip3 install gators
+pip install gators
+```
+
+With ONNX export support:
+
+```bash
+pip install "gators[onnx]"
 ```
 
 Or install from source:
@@ -200,7 +242,7 @@ Or install from source:
 ```bash
 git clone https://github.com/paypal/gators.git
 cd gators
-pip3 install -e .    # Install in editable/development mode
+pip install -e .
 ```
 
 ## 📚 Documentation
@@ -218,6 +260,7 @@ Gators is perfect for:
 - **Customer Analytics** - Transform complex customer data
 - **Time Series** - Rich datetime feature engineering
 - **NLP Tasks** - String feature extraction and encoding
+- **Production ML** - Export preprocessing to ONNX and run anywhere
 
 ## 🏢 Used By
 

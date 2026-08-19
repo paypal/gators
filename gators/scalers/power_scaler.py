@@ -21,9 +21,12 @@ class PowerScaler(_BaseTransformer):
         (Float64, Int64, Float32, Int32) are automatically selected.
     power : float, default=0.5
         The power exponent to apply. Default is 0.5 (square root).
+    inplace : bool, default=True
+        If True, transform values in the original columns (keep original column names).
+        If False, create new columns with suffix ``__power_{power}``.
     drop_columns : bool, default=True
-        If True, drop the original columns after transformation.
-        If False, keep both original and transformed columns.
+        If ``inplace=False``, whether to drop the original columns after transformation.
+        Ignored when ``inplace=True``.
 
     Examples
     --------
@@ -75,8 +78,9 @@ class PowerScaler(_BaseTransformer):
 
     subset: list[str] | None = None
     power: float = 0.5
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    inplace: bool = True
     drop_columns: bool = True
+    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PowerScaler":
         """Fit the transformer by storing column names.
@@ -95,14 +99,14 @@ class PowerScaler(_BaseTransformer):
         """
         if not self.subset:
             # Use set for O(1) dtype lookup instead of list O(n) lookup
-            numeric_dtypes = {pl.Float64, pl.Int64, pl.Float32, pl.Int32}
             self.subset = [
-                col for col, dtype in zip(X.columns, X.dtypes) if dtype in numeric_dtypes
+                col for col, dtype in zip(X.columns, X.dtypes) if dtype.is_numeric()
             ]
 
         # Format power value for column naming
         power_str = str(self.power).replace(".", "_")
-        self._column_mapping = {col: f"{col}__power_{power_str}" for col in self.subset}
+        if not self.inplace:
+            self._column_mapping = {col: f"{col}__power_{power_str}" for col in self.subset}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -118,13 +122,17 @@ class PowerScaler(_BaseTransformer):
         pl.DataFrame
             Transformed DataFrame with power-transformed columns.
         """
+        if self.inplace:
+            transformations = [
+                (pl.col(col) ** self.power).alias(col) for col in self.subset
+            ]
+            return X.with_columns(transformations)
+
         transformations = [
             (pl.col(col) ** self.power).alias(new) for col, new in self._column_mapping.items()
         ]
-
         X = X.with_columns(transformations)
-
-        if self.drop_columns and self.subset is not None:
+        if self.drop_columns:
             return X.drop(self.subset)
         return X
 
@@ -148,6 +156,11 @@ class PowerScaler(_BaseTransformer):
         """
         if self.power == 0:
             raise ValueError("Cannot invert PowerScaler with power=0.")
+        if self.inplace:
+            exprs = [
+                (pl.col(col) ** (1.0 / self.power)).alias(col) for col in self.subset
+            ]
+            return X.with_columns(exprs)
         reverse_map = {v: k for k, v in self._column_mapping.items()}
         exprs = [
             (pl.col(new) ** (1.0 / self.power)).alias(orig)

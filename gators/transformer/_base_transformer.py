@@ -1,7 +1,7 @@
 import functools
 import pickle
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import polars as pl
 from pydantic import BaseModel, ConfigDict, PrivateAttr
@@ -22,6 +22,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
 
     _is_fitted: bool = PrivateAttr(default=False)
     _input_columns: list[str] = PrivateAttr(default_factory=list)
+    _input_dtypes: dict[str, Any] = PrivateAttr(default_factory=dict)
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
@@ -41,6 +42,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
                 self._is_fitted = True
                 if X is not None and hasattr(X, "columns"):
                     self._input_columns = list(X.columns)
+                    self._input_dtypes = dict(zip(X.columns, X.dtypes))
                 return result
 
             cls.fit = wrapped_fit  # type: ignore[method-assign]

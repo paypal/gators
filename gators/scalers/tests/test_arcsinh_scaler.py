@@ -15,7 +15,7 @@ def test_arcsinh_scaler_default():
         }
     )
 
-    scaler = ArcSinhScaler()
+    scaler = ArcSinhScaler(inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -39,7 +39,7 @@ def test_arcsinh_scaler_subset_columns():
         }
     )
 
-    scaler = ArcSinhScaler(subset=["col1", "col2"], drop_columns=False)
+    scaler = ArcSinhScaler(subset=["col1", "col2"], drop_columns=False, inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -61,7 +61,7 @@ def test_arcsinh_scaler_symmetry():
         }
     )
 
-    scaler = ArcSinhScaler()
+    scaler = ArcSinhScaler(inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -81,7 +81,7 @@ def test_arcsinh_scaler_zero():
         }
     )
 
-    scaler = ArcSinhScaler()
+    scaler = ArcSinhScaler(inplace=False)
     result = scaler.fit_transform(X)
 
     # asinh(0) = 0
@@ -96,7 +96,7 @@ def test_arcsinh_scaler_large_values():
         }
     )
 
-    scaler = ArcSinhScaler()
+    scaler = ArcSinhScaler(inplace=False)
     result = scaler.fit_transform(X)
 
     # For large x, asinh(x) ≈ log(2x)
@@ -119,7 +119,7 @@ def test_arcsinh_scaler_negative_values():
         }
     )
 
-    scaler = ArcSinhScaler()
+    scaler = ArcSinhScaler(inplace=False)
     result = scaler.fit_transform(X)
 
     # Verify all values are finite (no NaN or inf)
@@ -135,7 +135,7 @@ def test_arcsinh_scaler_fit_transform():
         }
     )
 
-    scaler = ArcSinhScaler()
+    scaler = ArcSinhScaler(inplace=False)
     result = scaler.fit_transform(X)
 
     expected = X.with_columns(pl.col("col1").arcsinh().alias("col1__arcsinh")).drop("col1")
@@ -151,7 +151,7 @@ def test_arcsinh_scaler_drop_columns_false():
         }
     )
 
-    scaler = ArcSinhScaler(drop_columns=False)
+    scaler = ArcSinhScaler(drop_columns=False, inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -169,7 +169,7 @@ def test_arcsinh_scaler_near_zero():
         }
     )
 
-    scaler = ArcSinhScaler()
+    scaler = ArcSinhScaler(inplace=False)
     result = scaler.fit_transform(X)
 
     # For small x, asinh(x) ≈ x
@@ -183,3 +183,37 @@ def test_arcsinh_scaler_near_zero():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+def test_arcsinh_scaler_inplace_true_default():
+    X = pl.DataFrame({"col1": [-10.0, 0.0, 10.0], "col2": [-5.0, 0.0, 5.0]})
+    scaler = ArcSinhScaler().fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["col1", "col2"]
+    assert "col1__arcsinh" not in result.columns
+    assert result["col1"].to_list()[1] == pytest.approx(0.0, abs=1e-10)
+
+
+def test_arcsinh_scaler_inplace_true_subset():
+    X = pl.DataFrame(
+        {"col1": [-5.0, 0.0, 5.0], "col2": [1.0, 2.0, 3.0], "cat": ["a", "b", "c"]}
+    )
+    scaler = ArcSinhScaler(subset=["col1"]).fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["col1", "col2", "cat"]
+    assert result["col2"].to_list() == [1.0, 2.0, 3.0]
+
+
+def test_arcsinh_scaler_inverse_transform_inplace_true():
+    X = pl.DataFrame({"a": [-100.0, 0.0, 100.0]})
+    scaler = ArcSinhScaler().fit(X)
+    X_t = scaler.transform(X)
+    X_r = scaler.inverse_transform(X_t)
+    assert (X_r["a"].cast(pl.Float64) - X["a"].cast(pl.Float64)).abs().max() < 1e-5
+
+
+def test_arcsinh_scaler_get_params_includes_inplace():
+    scaler = ArcSinhScaler()
+    params = scaler.get_params()
+    assert "inplace" in params
+    assert params["inplace"] is True

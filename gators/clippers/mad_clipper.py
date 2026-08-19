@@ -32,7 +32,7 @@ class MADClipper(_BaseClipper):
     Examples
     --------
     >>> import polars as pl
-    >>> from gators.clipping import MADClipper
+    >>> from gators.clippers import MADClipper
 
     >>> # Sample DataFrame with outliers
     >>> X = pl.DataFrame({

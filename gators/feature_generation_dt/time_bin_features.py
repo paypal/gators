@@ -1,7 +1,7 @@
 from typing import Literal
 
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -107,6 +107,7 @@ class TimeBinFeatures(_BaseTransformer):
     ] = ["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
     hemisphere: Literal["northern", "southern"] = "northern"
     drop_columns: bool = False
+    _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("bin_types")
     def check_bin_types(cls, bin_types):
@@ -143,6 +144,9 @@ class TimeBinFeatures(_BaseTransformer):
             self.subset = [
                 col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
+        for col in self.subset:
+            dtype = X.schema[col]
+            self._dt_units[col] = dtype.time_unit if hasattr(dtype, 'time_unit') else 'date'
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

@@ -37,8 +37,9 @@ Key Features
 * 🚀 **Lightning Fast**: Built on Polars for multi-core parallel processing
 * 🔄 **Unified API**: Consistent sklearn-style ``.fit()`` and ``.transform()`` interface
 * 📦 **Production Ready**: Deploy the same Python code from notebook to production
-* 🎯 **Comprehensive**: 60+ preprocessing transformers covering every use case
+* 🎯 **Comprehensive**: 105 preprocessing transformers across 11 categories
 * 🔗 **Pipeline Support**: Chain transformers seamlessly with the Pipeline class
+* 📤 **ONNX Export**: Export any fitted pipeline to ONNX for low-latency inference
 * 🎓 **Easy to Learn**: If you know sklearn, you already know Gators
 
 Quick Start
@@ -75,17 +76,18 @@ What Can Gators Do?
 
 **70+ transformers across 8 categories:**
 
-* 🧹 :doc:`Data Cleaning <api/data_cleaning>` - Quality filters, deduplication, and more
-* ✂️ :doc:`Clippers <api/clippers>` - Custom min/max bounds, Gaussian, IQR, MAD, Quantile, and more
-* 🧩 :doc:`Encoders <api/encoders>` - OneHot, Target, WOE, CatBoost, and more   
-* 🎯 :doc:`Numeric Features <api/feature_generation>` - Polynomial, rule-based features, and more
-* 📝 :doc:`String Features <api/feature_generation_str>` - Text properties, pattern detection, n-grams, and more
-* 📅 :doc:`DateTime Features <api/feature_generation_dt>` - Temporal patterns, cyclical encoding, holidays, and more
-* 🔄 :doc:`Imputation <api/imputers>` - Numeric, string, boolean, and group-based strategies
-* 📊 :doc:`Discretization <api/discretizers>` - Equal-width, quantile, tree-based binning, and more
-* ⚖️ :doc:`Scalers <api/scalers>` - Standard, min-max, Box-Cox, and more
-* ✨ :doc:`Feature Selection <api/feature_selection>` - Correlation, stability, information value, and more
-* 🔗 :doc:`Pipeline <api/pipeline>` - Chain transformers seamlessly
+* 🧹 :doc:`Data Cleaning <api/data_cleaning>` - Quality filters, deduplication, rounding, and type casting (16)
+* ✂️ :doc:`Clippers <api/clippers>` - Custom, Gaussian, IQR, MAD, and Quantile outlier clipping (5)
+* 🧩 :doc:`Encoders <api/encoders>` - OneHot, Target, WOE, CatBoost, Binary, Hash, and more (10)
+* 🎯 :doc:`Numeric Features <api/feature_generation>` - Polynomial, ratio, Fourier, aggregation, rule-based (20)
+* 📝 :doc:`String Features <api/feature_generation_str>` - Length, patterns, n-grams, TF-IDF, regex extraction (17)
+* 📅 :doc:`DateTime Features <api/feature_generation_dt>` - Cyclical encoding, holidays, business hours, time windows (8)
+* 🔄 :doc:`Imputation <api/imputers>` - Numeric, string, boolean, KNN, iterative, and group-based strategies (6)
+* 📊 :doc:`Discretization <api/discretizers>` - Equal-width, quantile, tree-based binning, and more (7)
+* ⚖️ :doc:`Scalers <api/scalers>` - Standard, min-max, robust, Box-Cox, Yeo-Johnson, and more (9)
+* ✨ :doc:`Feature Selection <api/feature_selection>` - Correlation, stability, IV, mutual information, permutation (6)
+* 🔗 :doc:`Pipeline <api/pipeline>` - Chain transformers seamlessly (1)
+* 📤 **ONNX Export** - Export any fitted pipeline to ONNX for language-agnostic inference
   
 
 Credits
