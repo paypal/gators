@@ -65,7 +65,7 @@ class HashEncoder(_BaseTransformer):
     drop_columns: bool = True
 
     _CAT_DTYPES = {pl.String, pl.Categorical, pl.Enum}
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
     _hash_mapping_: dict[str, dict[str, float]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "HashEncoder":
@@ -86,18 +86,21 @@ class HashEncoder(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
 
-        self._column_mapping = {col: f"{col}__hash" for col in self.subset}
+        self._column_mapping = {col: [f"{col}__hash"] for col in self.subset}
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
 
         # Pre-compute bucket for each unique training value using Polars (exact parity at inference).
         # Unknown values at ONNX inference time fall back to bucket 0.
         for col in self.subset:
             unique = X[col].cast(pl.String).drop_nulls().unique()
             buckets = (unique.hash(seed=0) % self.n_features).cast(pl.Float64)
-            self._hash_mapping_[col] = dict(zip(unique.to_list(), buckets.to_list()))
+            self._hash_mapping_[col] = dict(zip(unique.to_list(), buckets.to_list(), strict=False))
 
         return self
 
@@ -114,7 +117,7 @@ class HashEncoder(_BaseTransformer):
         pl.DataFrame
             DataFrame with hash-encoded columns.
         """
-        dtypes = dict(zip(X.columns, X.dtypes))
+        dtypes = dict(zip(X.columns, X.dtypes, strict=False))
 
         def _hash_expr(col: str) -> pl.Expr:
             base = (
@@ -125,10 +128,11 @@ class HashEncoder(_BaseTransformer):
             hashed = (base.hash(seed=0) % self.n_features).cast(pl.Float64)
             return hashed
 
+        assert self.subset is not None
         if self.inplace:
             return X.with_columns([_hash_expr(col) for col in self.subset])
 
-        new_col_exprs = [_hash_expr(col).alias(self._column_mapping[col]) for col in self.subset]
+        new_col_exprs = [_hash_expr(col).alias(self._column_mapping[col][0]) for col in self.subset]
         X = X.with_columns(new_col_exprs)
 
         if self.drop_columns and self.subset:

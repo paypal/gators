@@ -145,6 +145,7 @@ class CustomDiscretizer(_BaseDiscretizer):
 
         # Set column mapping for non-inplace mode
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__discretize_custom" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__discretize_custom"] for col in self.subset}
 
+        self._set_output_dtypes()
         return self

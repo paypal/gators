@@ -102,7 +102,7 @@ class BooleanImputer(_BaseTransformer):
     drop_columns: bool = True
     inplace: bool = True
     _statistics: dict[str, bool] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "BooleanImputer":
         """Fit the transformer by computing imputation statistics.
@@ -120,9 +120,10 @@ class BooleanImputer(_BaseTransformer):
             The fitted transformer instance.
         """
         if not self.subset:
-            self.subset = [col for col, dtype in zip(X.columns, X.dtypes) if dtype in [pl.Boolean]]
+            self.subset = [col for col, dtype in zip(X.columns, X.dtypes, strict=False) if dtype in [pl.Boolean]]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__impute_{self.strategy}" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__impute_{self.strategy}"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
         strategies = {
             "most_frequent": lambda col: (
                 bool(X[col].drop_nulls().mode()[0])
@@ -156,7 +157,7 @@ class BooleanImputer(_BaseTransformer):
 
         transformations = [
             pl.col(col).fill_null(self._statistics[col]).alias(new)
-            for col, new in self._column_mapping.items()
+            for col, [new] in self._column_mapping.items()
         ]
         X = X.with_columns(transformations)
         if self.drop_columns:

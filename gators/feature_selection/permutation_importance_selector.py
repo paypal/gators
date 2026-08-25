@@ -91,8 +91,8 @@ class PermutationImportanceSelector(_BaseSelector):
         X_array = X.to_numpy()
         y_array = y.to_numpy()
 
-        self.estimator.fit(X_array, y_array)  # type: ignore[union-attr]
-        baseline_score = self.estimator.score(X_array, y_array)  # type: ignore[union-attr]
+        self.estimator.fit(X_array, y_array)  # type: ignore[attr-defined]
+        baseline_score = self.estimator.score(X_array, y_array)  # type: ignore[attr-defined]
 
         rng = np.random.default_rng(0)
         mean_importances = np.zeros(X_array.shape[1])
@@ -102,7 +102,7 @@ class PermutationImportanceSelector(_BaseSelector):
             for repeat in range(self.n_repeats):
                 X_permuted = X_array.copy()
                 X_permuted[:, col_idx] = rng.permutation(X_permuted[:, col_idx])
-                scores[repeat] = self.estimator.score(X_permuted, y_array)  # type: ignore[union-attr]
+                scores[repeat] = self.estimator.score(X_permuted, y_array)  # type: ignore[attr-defined]
             mean_importances[col_idx] = baseline_score - scores.mean()
 
         self._importances = {col: float(mean_importances[i]) for i, col in enumerate(X.columns)}

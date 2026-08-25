@@ -120,7 +120,7 @@ class AsymmetryIndexFeatures(_BaseTransformer):
     smoothing: bool = True
     new_column_names: list[str] | None = None
     drop_columns: bool = False
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("y_columns", mode="after")
     @classmethod
@@ -161,14 +161,17 @@ class AsymmetryIndexFeatures(_BaseTransformer):
             Fitted transformer instance.
         """
         default_names = [
-            f"{x_col}__asym__{y_col}" for x_col, y_col in zip(self.x_columns, self.y_columns)
+            f"{x_col}__asym__{y_col}" for x_col, y_col in zip(self.x_columns, self.y_columns, strict=False)
         ]
 
         if self.new_column_names is None:
             self.new_column_names = default_names
 
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -189,9 +192,9 @@ class AsymmetryIndexFeatures(_BaseTransformer):
 
         new_columns = []
 
-        for x_col, y_col in zip(self.x_columns, self.y_columns):
+        for x_col, y_col in zip(self.x_columns, self.y_columns, strict=False):
             default_name = f"{x_col}__asym__{y_col}"
-            new_col_name = self._column_mapping[default_name]
+            new_col_name = self._column_mapping[default_name][0]
 
             if self.smoothing:
                 x_expr = pl.col(x_col).cast(pl.Float64) + 1
@@ -210,7 +213,7 @@ class AsymmetryIndexFeatures(_BaseTransformer):
             columns_to_drop = list(
                 {
                     col
-                    for x_col, y_col in zip(self.x_columns, self.y_columns)
+                    for x_col, y_col in zip(self.x_columns, self.y_columns, strict=False)
                     for col in [x_col, y_col]
                 }
             )

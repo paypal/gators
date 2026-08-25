@@ -95,6 +95,7 @@ class TfidfFeatures(_BaseTransformer):
 
     _vocabulary: dict[str, list[str]] = PrivateAttr(default_factory=dict)
     _idf: dict[str, dict[str, float]] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @property
     def vocabulary_(self) -> dict[str, list[str]]:
@@ -106,7 +107,7 @@ class TfidfFeatures(_BaseTransformer):
         """IDF weights per column and token."""
         return self._idf
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "TfidfFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> TfidfFeatures:
         """Learn the vocabulary and IDF weights from *X*.
 
         Parameters
@@ -122,7 +123,7 @@ class TfidfFeatures(_BaseTransformer):
             The fitted transformer instance.
         """
         if self.subset is None:
-            self.subset = [col for col, dt in zip(X.columns, X.dtypes) if dt == pl.String]
+            self.subset = [col for col, dt in zip(X.columns, X.dtypes, strict=False) if dt == pl.String]
 
         for col in self.subset:
             docs = X[col].drop_nulls()
@@ -152,9 +153,16 @@ class TfidfFeatures(_BaseTransformer):
             df_values = df_freq["df"].to_list()
             self._idf[col] = {
                 token: math.log((1 + n_docs) / (1 + int(df_val))) + 1.0
-                for token, df_val in zip(vocabulary, df_values)
+                for token, df_val in zip(vocabulary, df_values, strict=False)
             }
 
+        self._column_mapping = {
+            col: [f"{col}__tfidf_{token}" for token in vocab]
+            for col, vocab in self._vocabulary.items()
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

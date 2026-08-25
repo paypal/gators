@@ -5,8 +5,9 @@ What is Gators?
 ---------------
 
 Gators is a high-performance machine learning preprocessing library built on top of `Polars <https://pola.rs/>`_, 
-designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging Polars' 
-blazing-fast multi-core processing, Gators makes data preprocessing and feature engineering both **faster** and **simpler**.
+designed to streamline your entire ML workflow from raw data to production-ready models — benchmarked faster than
+scikit-learn and feature-engine across common preprocessing tasks. Gators makes data preprocessing and feature
+engineering both **faster** and **simpler**.
 
 Built by the PSP Data Team at PayPal, Gators solves a critical pain point: bridging the gap between Python-based 
 model development and production deployment. With Gators, you can **develop and deploy using only Python** — no more 
@@ -52,7 +53,7 @@ Key Features
 * 🚀 **Lightning Fast**: Built on Polars for multi-core parallel processing
 * 🔄 **Unified API**: Consistent sklearn-style ``.fit()`` and ``.transform()`` interface
 * 📦 **Production Ready**: Deploy the same Python code from notebook to production
-* 🎯 **Comprehensive**: 105 preprocessing transformers across 11 categories
+* 🎯 **Comprehensive**: 108 preprocessing transformers across 11 categories
 * 🔗 **Pipeline Support**: Chain transformers seamlessly with the Pipeline class
 * 📤 **ONNX Export**: Export any fitted pipeline to ONNX for low-latency, language-agnostic inference
 * 🎓 **Easy to Learn**: If you know sklearn, you already know Gators

@@ -1,7 +1,19 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
+
+
+def _safe_substring_name(substring: str) -> str:
+    """Sanitize a substring into a safe column-name suffix."""
+    return (
+        substring.replace("#", "hash")
+        .replace("@", "at")
+        .replace(".", "dot")
+        .replace(" ", "_")
+        .replace("-", "_")
+        .replace("/", "_")
+    )
 
 
 class Occurrences(_BaseTransformer):
@@ -81,6 +93,7 @@ class Occurrences(_BaseTransformer):
     substrings: dict[str, list[str]]
     case_sensitive: bool = False
     drop_columns: bool = False
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("substrings")
     def check_substrings(cls, substrings):
@@ -119,6 +132,18 @@ class Occurrences(_BaseTransformer):
                 raise ValueError(
                     f"Columns {missing} are specified but not found in substrings dictionary"
                 )
+
+        self._column_mapping = {}
+        for col in self.subset:
+            safe_names: list[str] = []
+            for substring in self.substrings.get(col, []):
+                safe_name = _safe_substring_name(substring)
+                if safe_name not in safe_names:
+                    safe_names.append(safe_name)
+            self._column_mapping[col] = [f"{col}__{safe_name}" for safe_name in safe_names]
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -149,14 +174,7 @@ class Occurrences(_BaseTransformer):
             safe_name_to_substrings: dict[str, list[str]] = {}
             for substring in self.substrings[col]:
                 # Create safe feature name by replacing special chars
-                safe_substring = (
-                    substring.replace("#", "hash")
-                    .replace("@", "at")
-                    .replace(".", "dot")
-                    .replace(" ", "_")
-                    .replace("-", "_")
-                    .replace("/", "_")
-                )
+                safe_substring = _safe_substring_name(substring)
 
                 if safe_substring not in safe_name_to_substrings:
                     safe_name_to_substrings[safe_substring] = []
@@ -171,13 +189,13 @@ class Occurrences(_BaseTransformer):
                         count_exprs.append(col_expr.str.count_matches(substring, literal=True))
                     # Sum all the counts
                     if len(count_exprs) == 1:
-                        count_expr = count_exprs[0].alias(f"{col}__{safe_substring}")
+                        count_expr = count_exprs[0].cast(pl.Float64).alias(f"{col}__{safe_substring}")
                     else:
                         # Use fold to sum multiple expressions
                         total = count_exprs[0]
                         for expr in count_exprs[1:]:
                             total = total + expr
-                        count_expr = total.alias(f"{col}__{safe_substring}")
+                        count_expr = total.cast(pl.Float64).alias(f"{col}__{safe_substring}")
                 else:
                     # Count case-insensitive matches
                     import re
@@ -189,13 +207,13 @@ class Occurrences(_BaseTransformer):
                         count_exprs.append(col_expr.str.count_matches(pattern))
                     # Sum all the counts
                     if len(count_exprs) == 1:
-                        count_expr = count_exprs[0].alias(f"{col}__{safe_substring}")
+                        count_expr = count_exprs[0].cast(pl.Float64).alias(f"{col}__{safe_substring}")
                     else:
                         # Use fold to sum multiple expressions
                         total = count_exprs[0]
                         for expr in count_exprs[1:]:
                             total = total + expr
-                        count_expr = total.alias(f"{col}__{safe_substring}")
+                        count_expr = total.cast(pl.Float64).alias(f"{col}__{safe_substring}")
 
                 new_columns.append(count_expr)
 

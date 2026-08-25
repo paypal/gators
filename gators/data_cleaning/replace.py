@@ -105,7 +105,7 @@ class Replace(_BaseTransformer):
     to_replace: dict[str, dict[str, str]]
     inplace: bool = True
     drop_columns: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
     _columns: list[str] = PrivateAttr(default_factory=list)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Replace":
@@ -126,7 +126,7 @@ class Replace(_BaseTransformer):
         available_columns = X.columns
         self._columns = [col for col in list(self.to_replace.keys()) if col in available_columns]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__replace" for col in self._columns}
+            self._column_mapping = {col: [f"{col}__replace"] for col in self._columns}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -156,7 +156,7 @@ class Replace(_BaseTransformer):
             expr = pl.col(col)
             for old_val, new_val in self.to_replace[col].items():
                 expr = expr.str.replace_all(old_val, new_val)
-            transformations.append(expr.alias(self._column_mapping[col]))
+            transformations.append(expr.alias(self._column_mapping[col][0]))
         X = X.with_columns(transformations)
         if self.drop_columns:
             return X.drop(self._columns)

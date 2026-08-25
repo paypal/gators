@@ -13,8 +13,10 @@ from .regex_extract_features import RegexExtractFeatures
 from .split import Split
 from .split_extract import SplitExtract
 from .startswith import Startswith
+from .string_similarity import StringSimilarity
 from .tfidf_features import TfidfFeatures
 from .upper import Upper
+from .word_statistics import WordStatistics
 
 __all__ = [
     "CharacterStatistics",
@@ -32,6 +34,8 @@ __all__ = [
     "Split",
     "SplitExtract",
     "Startswith",
+    "StringSimilarity",
     "TfidfFeatures",
     "Upper",
+    "WordStatistics",
 ]

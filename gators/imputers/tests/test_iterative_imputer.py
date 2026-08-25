@@ -148,3 +148,16 @@ class TestIterativeImputer:
         result = imputer.transform(simple_df)
         # Should still return a DataFrame without error
         assert isinstance(result, pl.DataFrame)
+
+    def test_integer_column_rounded_and_cast_back(self):
+        """Integer columns must be rounded and cast back to their original dtype."""
+        X = pl.DataFrame(
+            {
+                "a": pl.Series([1, 2, None, 4, 5], dtype=pl.Int64),
+                "b": [10.0, 20.0, 30.0, 40.0, 50.0],
+            }
+        )
+        imputer = IterativeImputer(max_iter=2)
+        result = imputer.fit_transform(X)
+        assert result["a"].dtype == pl.Int64
+        assert result["a"].null_count() == 0

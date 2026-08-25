@@ -66,7 +66,7 @@ class YeoJohnson(_BaseTransformer):
     inplace: bool = True
     drop_columns: bool = True
     _columns: list[str] = PrivateAttr(default_factory=list)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "YeoJohnson":
         """Fit the transformer by storing column names.
@@ -85,7 +85,8 @@ class YeoJohnson(_BaseTransformer):
         """
         self._columns = list(self.lambdas.keys())
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__yeojonhson" for col in self._columns}
+            self._column_mapping = {col: [f"{col}__yeojonhson"] for col in self._columns}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -103,7 +104,7 @@ class YeoJohnson(_BaseTransformer):
         """
         exprs = []
         for col, lmbda in self.lambdas.items():
-            new = self._column_mapping.get(col, col)  # inplace uses original name
+            new = self._column_mapping.get(col, [col])[0]  # inplace uses original name
             if lmbda == 0:
                 expr = (
                     pl.when(pl.col(col) >= 0)
@@ -163,7 +164,7 @@ class YeoJohnson(_BaseTransformer):
                     neg_branch = 1 - (1 - y * (2 - lmbda)) ** (1.0 / (2 - lmbda))
                 exprs.append(pl.when(y >= 0).then(pos_branch).otherwise(neg_branch).alias(col))
             return X.with_columns(exprs)
-        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        reverse_map = {v: k for k, values in self._column_mapping.items() for v in values}
         exprs = []
         for new_col, orig_col in reverse_map.items():
             if new_col not in X.columns:

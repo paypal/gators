@@ -114,7 +114,7 @@ class LeaveOneOutEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
 
@@ -188,7 +188,7 @@ class LeaveOneOutEncoder(_BaseEncoder):
                 cat: mean_val
                 for cat, mean_val in zip(
                     category_means[col].to_list(),
-                    category_means[f"{col}__loo_enc"].to_list(),
+                    category_means[f"{col}__loo_enc"].to_list(), strict=False,
                 )
                 if mean_val is not None  # Extra safety check
             }
@@ -196,7 +196,13 @@ class LeaveOneOutEncoder(_BaseEncoder):
             if mapping_dict:
                 self.mapping_[col] = mapping_dict
 
-        self.column_mapping_ = {col: f"{col}__loo_enc" for col in self.mapping_.keys()}
+        self._column_mapping = {col: [f"{col}__loo_enc"] for col in self.mapping_.keys()}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = {col: pl.Float64 for col in targeted}
 
         return self
 
@@ -219,7 +225,7 @@ class LeaveOneOutEncoder(_BaseEncoder):
         expressions = [
             pl.col(col)
             .replace_strict(mapping, default=default_value, return_dtype=pl.Float64)
-            .alias(self.column_mapping_[col])
+            .alias(self._column_mapping[col][0])
             for col, mapping in self.mapping_.items()
         ]
 

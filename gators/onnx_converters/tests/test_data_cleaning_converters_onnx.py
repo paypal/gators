@@ -263,6 +263,51 @@ def test_cast_columns_unsupported_dtype_coerce(df):
     assert set(onnx_out.keys()) == set(df.columns)
 
 
+def test_cast_columns_int_to_string_not_inplace_output_type():
+    """pipeline_to_onnx calls get_output_onnx_type for a renamed Int->String CastColumns output."""
+    X = pl.DataFrame({"A": pl.Series([1, 2, 3], dtype=pl.Int64)})
+    pipe = Pipeline(steps=[
+        ("cast", CastColumns(subset=["A"], dtype=pl.String, inplace=False, drop_columns=True)),
+    ])
+    pipe.fit(X)
+    model = pipeline_to_onnx(pipe)
+    onnx_out = run_onnx(model, X)
+    expected = pipe.transform(X)
+    assert list(onnx_out["A__cast_string"]) == expected["A__cast_string"].to_list()
+
+
+def test_cast_columns_unsupported_target_dtype_output_type():
+    """pipeline_to_onnx calls get_output_onnx_type for an unsupported target dtype (e.g. Categorical)."""
+    X = pl.DataFrame({"A": ["x", "y", "z"]})
+    pipe = Pipeline(steps=[("cast", CastColumns(subset=["A"], dtype=pl.Categorical, inplace=True))])
+    pipe.fit(X)
+    model = pipeline_to_onnx(pipe, errors="coerce")
+    onnx_out = run_onnx(model, X)
+    assert list(onnx_out["A"]) == ["x", "y", "z"]
+
+
+def test_cast_columns_float_to_string_output_type():
+    """pipeline_to_onnx calls get_output_onnx_type for a Float->String CastColumns column (coerced)."""
+    X = pl.DataFrame({"A": [1.5, 2.5, 3.5]})
+    pipe = Pipeline(steps=[("cast", CastColumns(subset=["A"], dtype=pl.String, inplace=True))])
+    pipe.fit(X)
+    model = pipeline_to_onnx(pipe, errors="coerce")
+    onnx_out = run_onnx(model, X)
+    np.testing.assert_allclose(onnx_out["A"].astype(float), X["A"].to_numpy(allow_copy=True), atol=1e-5)
+
+
+def test_cast_columns_int_to_string_not_inplace_keep_original():
+    """inplace=False, drop_columns=False: the original Int source column also passes through unchanged."""
+    X = pl.DataFrame({"A": pl.Series([1, 2, 3], dtype=pl.Int64)})
+    t = CastColumns(subset=["A"], dtype=pl.String, inplace=False, drop_columns=False)
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    expected = t.transform(X)
+    np.testing.assert_array_equal(onnx_out["A"], expected["A"].to_numpy(allow_copy=True))
+    assert list(onnx_out["A__cast_string"]) == expected["A__cast_string"].to_list()
+
+
 def test_cast_columns_datetime_dtype_passthrough(df):
     """CastColumns(dtype=pl.Date/Datetime) is a no-op in ONNX — int64 IS the physical form."""
     t = CastColumns(subset=["A"], dtype=pl.Date, inplace=True)
@@ -271,6 +316,15 @@ def test_cast_columns_datetime_dtype_passthrough(df):
     onnx_out = run_onnx(model, df)
     # Column passes through unchanged (its int64 values are the datetime physical representation)
     assert set(onnx_out.keys()) == set(df.columns)
+
+
+def test_cast_columns_string_to_datetime_raises():
+    """CastColumns(dtype=pl.Datetime) on a raw String source has no ONNX date-parse equivalent."""
+    X = pl.DataFrame({"ts_str": ["2015-05-13 23:53:00", "2015-05-14 12:00:00"]})
+    t = CastColumns(subset=["ts_str"], dtype=pl.Datetime, inplace=True)
+    t.fit(X)
+    with pytest.raises(OnnxNotSupportedError, match="no ONNX equivalent"):
+        to_onnx_graph(t)
 
 
 def test_cast_columns_bool_to_string():

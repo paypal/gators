@@ -280,3 +280,35 @@ def test_str_passthrough_float_int_bool():
     np.testing.assert_array_equal(onnx_out["float64_pass"], X["float64_pass"].to_numpy(allow_copy=True))
     np.testing.assert_array_equal(onnx_out["int_pass"].astype(np.int64),  X["int_pass"].to_numpy(allow_copy=True))
     np.testing.assert_array_equal(onnx_out["bool_pass"].astype(bool),     X["bool_pass"].to_numpy(allow_copy=True))
+
+
+# ── ExtractSubstring: no ONNX string-slice op, always coerces/raises ─────────
+
+def test_extract_substring_raises():
+    from gators.feature_generation_str import ExtractSubstring
+    X = pl.DataFrame({"text": ["hello", "world"]})
+    t = ExtractSubstring(subset=["text"], start=0, end=3)
+    t.fit(X)
+    with pytest.raises(OnnxNotSupportedError):
+        to_onnx_graph(t)
+
+
+def test_extract_substring_coerce_identity_passthrough():
+    from gators.feature_generation_str import ExtractSubstring
+    from gators.onnx_converters import get_output_columns, get_input_onnx_type, get_output_onnx_type
+    from onnx import TensorProto
+
+    X = pl.DataFrame({"text": ["hello", "world"], "other": ["a", "b"]})
+    t = ExtractSubstring(subset=["text"], start=0, end=3)
+    t.fit(X)
+
+    assert get_output_columns(t, list(X.columns)) == ["text", "other", "text__start0_end3"]
+    assert get_input_onnx_type(t, "text") == TensorProto.STRING
+    assert get_output_onnx_type(t, "text__start0_end3") == TensorProto.STRING
+    assert get_output_onnx_type(t, "other") == TensorProto.STRING  # passthrough, not declared
+
+    model = to_onnx_graph(t, errors="coerce")
+    onnx_out = run_onnx(model, X)
+    # Coerced to Identity: the "extracted" column is just the original string, unsliced.
+    np.testing.assert_array_equal(onnx_out["text__start0_end3"], X["text"].to_numpy(allow_copy=True))
+    np.testing.assert_array_equal(onnx_out["other"], X["other"].to_numpy(allow_copy=True))

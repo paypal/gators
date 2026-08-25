@@ -200,7 +200,7 @@ def test_column_mapping_generation():
 
     assert len(transformer._column_mapping) == 1
     assert "col1__col2" in transformer._column_mapping
-    assert transformer._column_mapping["col1__col2"] == "custom_name"
+    assert transformer._column_mapping["col1__col2"] == ["custom_name"]
 
 
 def test_empty_dataframe():

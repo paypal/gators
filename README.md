@@ -11,7 +11,7 @@
 | Package | [![PyPI version](https://img.shields.io/pypi/v/gators)](https://pypi.org/project/gators/) [![Python versions](https://img.shields.io/pypi/pyversions/gators)](https://pypi.org/project/gators/) |
 | Quality | [![License](https://img.shields.io/github/license/paypal/gators)](https://github.com/paypal/gators/blob/main/LICENSE) [![Coverage](https://img.shields.io/codecov/c/github/paypal/gators)](https://codecov.io/gh/paypal/gators) |
 | Documentation | [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://paypal.github.io/gators/) |
-| Code style | [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/) |
+| Code style | [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) |
 | Downloads | [![Downloads](https://static.pepy.tech/badge/gators)](https://pepy.tech/project/gators) [![Downloads/Month](https://static.pepy.tech/badge/gators/month)](https://pepy.tech/project/gators) |
 | Community | [![GitHub Stars](https://img.shields.io/github/stars/paypal/gators?style=social)](https://github.com/paypal/gators) [![GitHub Forks](https://img.shields.io/github/forks/paypal/gators?style=social)](https://github.com/paypal/gators) [![Contributors](https://img.shields.io/github/contributors/paypal/gators)](https://github.com/paypal/gators/graphs/contributors) [![Last Commit](https://img.shields.io/github/last-commit/paypal/gators)](https://github.com/paypal/gators/commits/main) |
 
@@ -21,21 +21,49 @@
 
 ## What is Gators?
 
-Gators is a library built on top of Polars, designed to streamline your entire ML workflow from raw data to production-ready models, leveraging **Polars' blazing-fast multi-core processing**.
+Gators is a library built on top of Polars, designed to streamline your entire ML workflow from raw data to production-ready models — benchmarked faster than scikit-learn and feature-engine across common preprocessing tasks (see Benchmarks below).
 
 Built by the PSP Data Team at PayPal, Gators makes data preprocessing and feature engineering both **faster and simpler**.
 
 ## ⚡ Key Features
 
-- **🚀 Lightning Fast**: Built on Polars for multi-core parallel processing
+- **🚀 Lightning Fast**: Benchmarked faster than scikit-learn and feature-engine on common preprocessing tasks
 - **🔄 Unified API**: Consistent sklearn-style `.fit()` and `.transform()` interface
 - **📦 Production Ready**: Deploy the same Python code from notebook to production
-- **🎯 Comprehensive**: 105 preprocessing transformers across 11 categories
+- **🎯 Comprehensive**: 108 preprocessing transformers across 11 categories
 - **🔗 Pipeline Support**: Chain transformers seamlessly with the Pipeline class
-- **📤 ONNX Export**: Export any fitted pipeline to ONNX for low-latency inference
+- **📤 ONNX Export**: Export fitted pipelines to ONNX for low-latency inference (most transformers supported; a handful of `feature_generation_str` transformers can't convert due to ONNX's limited string-tensor op support)
 - **🎓 Easy to Learn**: If you know sklearn, you already know Gators
 
-## 🛠️ What Can Gators Do?
+## 📊 Benchmarks
+
+Gators transformers are timed head-to-head against their closest `scikit-learn`
+and `feature-engine` equivalents (same algorithm, `fit` + `transform`, best-of-3
+runs) on a 500,000-row synthetic dataset:
+
+| Transformer | gators (s) | scikit-learn (s) | feature-engine (s) | speedup vs sklearn | speedup vs feature-engine |
+|---|---:|---:|---:|---:|---:|
+| NumericImputer (mean) | 0.005 | 0.025 | 0.012 | 5.2x | 2.4x |
+| StandardScaler | 0.002 | 0.009 | n/a | 3.8x | n/a |
+| QuantileClipper | 0.005 | n/a | 0.056 | n/a | 12.3x |
+| EqualSizeDiscretizer (5 bins) | 0.025 | 0.112 | 0.182 | 4.5x | 7.3x |
+| OneHotEncoder | 0.045 | 0.283 | 0.320 | 6.2x | 7.0x |
+| OrdinalEncoder | 0.029 | 0.267 | 0.127 | 9.1x | 4.3x |
+| TargetEncoder | 0.029 | 0.442 | 0.163 | 15.0x | 5.5x |
+| WOEEncoder | 0.028 | n/a | 0.181 | n/a | 6.5x |
+
+`n/a` = no equivalent implementation exists in that library. Measured on an
+Apple M3 Max; hardware, dataset shape, and library versions all affect
+absolute numbers, so results are fully reproducible with one command:
+
+```bash
+pip install -e ".[benchmarks]"
+python benchmarks/run_benchmarks.py
+```
+
+See [`benchmarks/`](benchmarks/) for full methodology, caveats, and raw results.
+
+## �🛠️ What Can Gators Do?
 
 ### 🧹 Data Cleaning (16)
 Clean and prepare your data with powerful transformers:
@@ -77,13 +105,14 @@ Transform categorical variables with advanced encoding techniques:
 - `TargetEncoder` - Target mean encoding for supervised learning
 - `WOEEncoder` - Weight of Evidence encoding
 
-### 🎯 Feature Generation - Numeric (20)
+### 🎯 Feature Generation - Numeric (21)
 Create powerful numeric features:
 
 **Mathematical Operations:**
 - `AsymmetryIndexFeatures` - Generate asymmetry index features
 - `ConcentrationIndexFeatures` - Generate concentration index features
 - `DistanceFeatures` - Calculate distance features
+- `EntropyFeatures` - Generate Shannon entropy features
 - `FourierFeatures` - Generate Fourier basis features
 - `GeneralizedRatioFeatures` - Generate generalized ratio features
 - `HHIFeatures` - Herfindahl–Hirschman Index features
@@ -107,7 +136,7 @@ Create powerful numeric features:
 - `RuleFeatures` - Apply custom business rules
 
 
-### 📝 Feature Generation - String (17)
+### 📝 Feature Generation - String (19)
 Extract insights from text data:
 - `CharacterStatistics` - Extract character-level statistics
 - `CombineFeatures` - Concatenate selected string columns
@@ -124,8 +153,10 @@ Extract insights from text data:
 - `Split` - Split strings on a delimiter
 - `SplitExtract` - Split and extract the nth token
 - `Startswith` - Binary indicator: string starts with pattern
+- `StringSimilarity` - Fuzzy string similarity (Levenshtein / Jaro-Winkler)
 - `TfidfFeatures` - Generate TF-IDF features
 - `Upper` - Convert to uppercase
+- `WordStatistics` - Extract word-level statistics
 
 ### 📅 Feature Generation - DateTime (8)
 Unlock temporal patterns:
@@ -183,7 +214,7 @@ Chain all transformers together:
 - `Pipeline` - sklearn-compatible pipeline for chaining transformers
 
 ### 📤 ONNX Export
-Export any fitted `Pipeline` or single transformer to a validated ONNX graph for low-latency, language-agnostic inference:
+Export a fitted `Pipeline` or single transformer to a validated ONNX graph for low-latency, language-agnostic inference:
 
 ```python
 from gators.onnx_converters import pipeline_to_onnx
@@ -191,6 +222,14 @@ from gators.onnx_converters import pipeline_to_onnx
 model = pipeline_to_onnx(fitted_pipeline)  # → onnx.ModelProto
 # Run with onnxruntime, Triton, or any ONNX-compatible runtime
 ```
+
+Most transformers are supported, but a handful of `feature_generation_str` transformers
+(`CharacterStatistics`, `NGram`, `Occurrences`, `PatternDetector`, `RegexExtractFeatures`,
+`StringSimilarity`, `WordStatistics`) have no ONNX converter: they rely on variable-length
+tokenization, list aggregates, or fuzzy string distance that ONNX's string-tensor op set
+cannot express. Use `check_pipeline_onnx_compatibility(pipeline)` to audit a pipeline before
+exporting - unsupported steps raise `OnnxNotSupportedError` (or pass through unchanged with
+`errors="coerce"`).
 
 ## 🚀 Quick Start
 

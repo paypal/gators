@@ -3,6 +3,7 @@ from .comparison_features import ComparisonFeatures
 from .concentration_index_features import ConcentrationIndexFeatures
 from .condition_features import ConditionFeatures
 from .distance_features import DistanceFeatures
+from .entropy_features import EntropyFeatures
 from .fourier_features import FourierFeatures
 from .generalized_ratio_features import GeneralizedRatioFeatures
 from .group_lag_features import GroupLagFeatures
@@ -40,4 +41,5 @@ __all__ = [
     "GeneralizedRatioFeatures",
     "HHIFeatures",
     "WeightedSumFeatures",
+    "EntropyFeatures",
 ]

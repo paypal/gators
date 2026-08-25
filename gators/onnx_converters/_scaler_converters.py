@@ -15,10 +15,10 @@ BoxCox                 : (X^λ - 1) / λ  (or Log(X) when λ=0)
 YeoJohnson             : two-branch power transform; lambda fixed at fit time
 """
 from __future__ import annotations
+
 import math
 from typing import Any
 
-from ._converters import _onnx_type_to_numpy, col_out_name, get_input_onnx_type, to_onnx_nodes
 from ..scalers.arcsin_squareroot_scaler import ArcSinSquareRootScaler
 from ..scalers.arcsinh_scaler import ArcSinhScaler
 from ..scalers.box_cox import BoxCox
@@ -28,6 +28,7 @@ from ..scalers.power_scaler import PowerScaler
 from ..scalers.robust_scaler import RobustScaler
 from ..scalers.standard_scaler import StandardScaler
 from ..scalers.yeo_johnson import YeoJohnson
+from ._converters import _onnx_type_to_numpy, col_out_name, get_input_onnx_type, to_onnx_nodes
 
 try:
     import numpy as np

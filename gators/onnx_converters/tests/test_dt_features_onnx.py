@@ -5,6 +5,8 @@ Only components/bins that require pure integer arithmetic are supported.
 """
 from __future__ import annotations
 
+from datetime import datetime
+
 import numpy as np
 import polars as pl
 import pytest
@@ -88,20 +90,27 @@ def test_ordinal_all_easy(X):
         assert _int_ok(out[c], exp[c])
 
 
-def test_ordinal_hard_component_raises(X):
+def test_ordinal_month(X):
     t = OrdinalFeatures(subset=["ts"], components=["month"])
     t.fit(X)
-    with pytest.raises(OnnxNotSupportedError, match="calendar arithmetic"):
-        to_onnx_graph(t, errors="raise")
+    out = run_onnx(to_onnx_graph(t), X)
+    assert _int_ok(out["ts__month"], t.transform(X)["ts__month"])
 
 
-def test_ordinal_hard_component_coerce(X):
-    """errors='coerce' skips hard components (covers the continue branch)."""
-    t = OrdinalFeatures(subset=["ts"], components=["hour", "month"])
+def test_ordinal_calendar_components(X):
+    """All nine calendar components from the Richards algorithm."""
+    comps = ["year", "quarter", "semester", "century", "month",
+             "day_of_month", "day_of_year", "week", "leap_year"]
+    t = OrdinalFeatures(subset=["ts"], components=comps)
     t.fit(X)
-    model = to_onnx_graph(t, errors="coerce")
-    out = run_onnx(model, X)
-    assert "ts__hour" in out and "ts__month" not in out
+    out = run_onnx(to_onnx_graph(t), X)
+    exp = t.transform(X)
+    for c in comps:
+        col = f"ts__{c}"
+        if c == "leap_year":
+            assert out[col].tolist() == exp[col].to_list(), f"{c} mismatch"
+        else:
+            assert _int_ok(out[col], exp[col]), f"{c} mismatch"
 
 
 def test_ordinal_drop_columns(X):
@@ -147,20 +156,24 @@ def test_cyclic_day_of_week(X):
     assert _float_ok(out["ts__day_of_week__sin0"], exp["ts__day_of_week__sin0"])
 
 
-def test_cyclic_hard_component_raises(X):
+def test_cyclic_month(X):
     t = CyclicFeatures(subset=["ts"], components=["month"], angles=[0])
     t.fit(X)
-    with pytest.raises(OnnxNotSupportedError, match="calendar arithmetic"):
-        to_onnx_graph(t, errors="raise")
+    out = run_onnx(to_onnx_graph(t), X)
+    assert _float_ok(out["ts__month__sin0"], t.transform(X)["ts__month__sin0"])
 
 
-def test_cyclic_hard_component_coerce(X):
-    """errors='coerce' skips hard components (covers the continue branch)."""
-    t = CyclicFeatures(subset=["ts"], components=["hour", "month"], angles=[0])
+def test_cyclic_calendar_components(X):
+    """All six new cyclic calendar components."""
+    comps = ["month", "quarter", "semester", "week", "day_of_month", "day_of_year"]
+    t = CyclicFeatures(subset=["ts"], components=comps, angles=[0, 90])
     t.fit(X)
-    model = to_onnx_graph(t, errors="coerce")
-    out = run_onnx(model, X)
-    assert "ts__hour__sin0" in out and "ts__month__sin0" not in out
+    out = run_onnx(to_onnx_graph(t), X)
+    exp = t.transform(X)
+    for c in comps:
+        for a in [0, 90]:
+            col = f"ts__{c}__sin{a}"
+            assert _float_ok(out[col], exp[col]), f"{col} mismatch"
 
 
 # ── DiffFeatures ──────────────────────────────────────────────────────────────
@@ -223,6 +236,15 @@ def test_timebin_part_of_day(X):
     np.testing.assert_array_equal(out["ts__part_of_day"], exp["ts__part_of_day"].to_numpy(allow_copy=True).astype(str))
 
 
+def test_timebin_day(X):
+    """'day' bin_type: ISO weekday name, computed via ((date_days + 3) % 7) + 1 -> LabelEncoder."""
+    t = TimeBinFeatures(subset=["ts"], bin_types=["day"])
+    t.fit(X)
+    out = run_onnx(to_onnx_graph(t), X)
+    exp = t.transform(X)
+    np.testing.assert_array_equal(out["ts__day"], exp["ts__day"].to_numpy(allow_copy=True).astype(str))
+
+
 def test_timebin_rush_hour(X):
     X_rush = pl.DataFrame({"ts": [
         "2024-01-15 08:00:00",   # morning rush
@@ -239,11 +261,86 @@ def test_timebin_rush_hour(X):
     assert out["ts__rush_hour"][2] == "off_peak"
 
 
-def test_timebin_hard_bin_raises(X):
-    t = TimeBinFeatures(subset=["ts"], bin_types=["season"])
-    t.fit(X)
-    with pytest.raises(OnnxNotSupportedError, match="calendar arithmetic"):
-        to_onnx_graph(t, errors="raise")
+def test_timebin_season_northern(X):
+    X_s = pl.DataFrame({"ts": [
+        datetime(2024,  1, 15, 12, 0),  # winter
+        datetime(2024,  4,  1, 12, 0),  # spring
+        datetime(2024,  7,  4, 12, 0),  # summer
+        datetime(2024, 10, 31, 12, 0),  # fall
+        datetime(2024, 12,  1, 12, 0),  # winter (December)
+    ]})
+    t = TimeBinFeatures(subset=["ts"], bin_types=["season"], hemisphere="northern")
+    t.fit(X_s)
+    out = run_onnx(to_onnx_graph(t), X_s)
+    exp = t.transform(X_s)
+    np.testing.assert_array_equal(out["ts__season"], exp["ts__season"].to_numpy(allow_copy=True).astype(str))
+    assert list(out["ts__season"]) == ["winter", "spring", "summer", "fall", "winter"]
+
+
+def test_timebin_season_southern(X):
+    X_s = pl.DataFrame({"ts": [
+        datetime(2024,  1, 15, 12, 0),  # summer (southern)
+        datetime(2024,  7,  4, 12, 0),  # winter (southern)
+    ]})
+    t = TimeBinFeatures(subset=["ts"], bin_types=["season"], hemisphere="southern")
+    t.fit(X_s)
+    out = run_onnx(to_onnx_graph(t), X_s)
+    exp = t.transform(X_s)
+    np.testing.assert_array_equal(out["ts__season"], exp["ts__season"].to_numpy(allow_copy=True).astype(str))
+    assert list(out["ts__season"]) == ["summer", "winter"]
+
+
+def test_timebin_time_of_month():
+    X_m = pl.DataFrame({"ts": [
+        datetime(2024,  3,  5, 12, 0),  # beginning
+        datetime(2024,  3, 15, 12, 0),  # middle
+        datetime(2024,  3, 25, 12, 0),  # end
+        datetime(2024,  2, 29, 12, 0),  # end (leap day)
+    ]})
+    t = TimeBinFeatures(subset=["ts"], bin_types=["time_of_month"])
+    t.fit(X_m)
+    out = run_onnx(to_onnx_graph(t), X_m)
+    exp = t.transform(X_m)
+    np.testing.assert_array_equal(out["ts__time_of_month"], exp["ts__time_of_month"].to_numpy(allow_copy=True).astype(str))
+    assert list(out["ts__time_of_month"]) == ["beginning", "middle", "end", "end"]
+
+
+def test_timebin_time_of_year():
+    X_y = pl.DataFrame({"ts": [
+        datetime(2024,  2, 15, 12, 0),  # early
+        datetime(2024,  6, 15, 12, 0),  # mid
+        datetime(2024, 11, 15, 12, 0),  # late
+    ]})
+    t = TimeBinFeatures(subset=["ts"], bin_types=["time_of_year"])
+    t.fit(X_y)
+    out = run_onnx(to_onnx_graph(t), X_y)
+    exp = t.transform(X_y)
+    np.testing.assert_array_equal(out["ts__time_of_year"], exp["ts__time_of_year"].to_numpy(allow_copy=True).astype(str))
+    assert list(out["ts__time_of_year"]) == ["early", "mid", "late"]
+
+
+def test_timebin_all_five_bins_leap_day():
+    """All bin types including Richards edge case (2024-02-29 is a leap day)."""
+    X_l = pl.DataFrame({"ts": [datetime(2024, 2, 29, 8, 30)]})
+    t = TimeBinFeatures(subset=["ts"], bin_types=["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"])
+    t.fit(X_l)
+    out = run_onnx(to_onnx_graph(t), X_l)
+    exp = t.transform(X_l)
+    for b in t.bin_types:
+        col = f"ts__{b}"
+        np.testing.assert_array_equal(out[col], exp[col].to_numpy(allow_copy=True).astype(str))
+
+
+def test_timebin_date_column_calendar_bins():
+    """pl.Date column (physical=days): exercises unit=='date' branch in _get_date_days."""
+    X_d = pl.DataFrame({"d": pl.Series([datetime(2024, 1, 15), datetime(2024, 7, 4)]).dt.date()})
+    t = TimeBinFeatures(subset=["d"], bin_types=["season", "time_of_month", "time_of_year"])
+    t.fit(X_d)
+    out = run_onnx(to_onnx_graph(t), X_d)
+    exp = t.transform(X_d)
+    for b in t.bin_types:
+        col = f"d__{b}"
+        np.testing.assert_array_equal(out[col], exp[col].to_numpy(allow_copy=True).astype(str))
 
 
 def test_timebin_drop_columns(X):
@@ -257,10 +354,11 @@ def test_timebin_drop_columns(X):
 
 def test_ordinal_in_pipeline(X):
     """pipeline_to_onnx calls get_input/output_onnx_type for OrdinalFeatures."""
-    pipe = Pipeline(steps=[("of", OrdinalFeatures(subset=["ts"], components=["hour", "minute"]))])
+    pipe = Pipeline(steps=[("of", OrdinalFeatures(subset=["ts"], components=["hour", "minute", "weekend", "leap_year", "month"]))])
     pipe.fit(X)
     out = run_onnx(pipeline_to_onnx(pipe), X)
-    assert "ts__hour" in out and "ts__minute" in out
+    assert "ts__hour" in out and "ts__minute" in out and "ts__weekend" in out
+    assert "ts__leap_year" in out and "ts__month" in out
     np.testing.assert_allclose(out["val"].astype(float), X["val"].to_numpy(allow_copy=True))
     np.testing.assert_array_equal(out["cat"], X["cat"].to_numpy(allow_copy=True).astype(str))
 

@@ -113,7 +113,13 @@ class OrdinalEncoder(_BaseEncoder):
                 counts = counts.filter(pl.col("count") / n >= self.min_count)
 
             values = [float(i) for i in range(1, len(counts) + 1)]
-            self.mapping_[col] = dict(zip(counts[col], values))
-        self.column_mapping_ = {col: f"{col}__ordinal_enc" for col in self.subset}
+            self.mapping_[col] = dict(zip(counts[col], values, strict=False))
+        self._column_mapping = {col: [f"{col}__ordinal_enc"] for col in self.subset}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = {col: pl.Float64 for col in targeted}
 
         return self

@@ -116,7 +116,7 @@ class Log1pScaler(_BaseTransformer):
     base: Literal["e", "10", "2"] = "e"
     inplace: bool = True
     drop_columns: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Log1pScaler":
         """Fit the transformer by storing column names.
@@ -136,7 +136,7 @@ class Log1pScaler(_BaseTransformer):
         if not self.subset:
             # Use set for O(1) dtype lookup instead of list O(n) lookup
             self.subset = [
-                col for col, dtype in zip(X.columns, X.dtypes) if dtype.is_numeric()
+                col for col, dtype in zip(X.columns, X.dtypes, strict=False) if dtype.is_numeric()
             ]
 
         # Create suffix based on base
@@ -148,7 +148,8 @@ class Log1pScaler(_BaseTransformer):
             suffix = "log1p_2"
 
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__{suffix}" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__{suffix}"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -169,20 +170,28 @@ class Log1pScaler(_BaseTransformer):
         Zero and negative values will result in null or -inf values.
         """
         if self.base == "e":
-            log_func = lambda col: (pl.col(col) + 1).log()
+
+            def log_func(col):
+                return (pl.col(col) + 1).log()
         elif self.base == "10":
-            log_func = lambda col: (pl.col(col) + 1).log(base=10)
+
+            def log_func(col):
+                return (pl.col(col) + 1).log(base=10)
         else:  # '2'
-            log_func = lambda col: (pl.col(col) + 1).log(base=2)
+
+            def log_func(col):
+                return (pl.col(col) + 1).log(base=2)
 
         if self.inplace:
+            assert self.subset is not None
             transformations = [log_func(col).alias(col) for col in self.subset]
             return X.with_columns(transformations)
 
         # Build all transformations using pre-selected function
-        transformations = [log_func(col).alias(new) for col, new in self._column_mapping.items()]
+        transformations = [log_func(col).alias(new) for col, [new] in self._column_mapping.items()]
         X = X.with_columns(transformations)
         if self.drop_columns:
+            assert self.subset is not None
             return X.drop(self.subset)
         return X
 
@@ -200,6 +209,7 @@ class Log1pScaler(_BaseTransformer):
             DataFrame with columns restored to their original scale.
         """
         if self.inplace:
+            assert self.subset is not None
             if self.base == "e":
                 exprs = [(pl.col(col).exp() - 1).alias(col) for col in self.subset]
             elif self.base == "10":
@@ -207,7 +217,7 @@ class Log1pScaler(_BaseTransformer):
             else:  # "2"
                 exprs = [(pl.lit(2.0) ** pl.col(col) - 1).alias(col) for col in self.subset]
             return X.with_columns(exprs)
-        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        reverse_map = {v: k for k, values in self._column_mapping.items() for v in values}
         if self.base == "e":
             exprs = [
                 (pl.col(new).exp() - 1).alias(orig)

@@ -218,3 +218,15 @@ def test_numeric_imputer_passthrough_float_int_bool():
     np.testing.assert_array_equal(onnx_out["float64_pass"], X["float64_pass"].to_numpy(allow_copy=True))
     np.testing.assert_array_equal(onnx_out["int_pass"].astype(np.int64),  X["int_pass"].to_numpy(allow_copy=True))
     np.testing.assert_array_equal(onnx_out["bool_pass"].astype(bool),     X["bool_pass"].to_numpy(allow_copy=True))
+
+
+def test_numeric_imputer_int_column_in_subset_is_noop():
+    """An Int64 column IN the subset is a no-op Identity pass-through: ONNX IsNaN only
+    accepts float tensors, and integer columns carry no null representation once exported."""
+    X = pl.DataFrame({"A": pl.Series([1, 2, 3], dtype=pl.Int64)})
+    t = NumericImputer(strategy="mean", subset=["A"])
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    np.testing.assert_array_equal(onnx_out["A"].astype(np.int64), X["A"].to_numpy(allow_copy=True))
+

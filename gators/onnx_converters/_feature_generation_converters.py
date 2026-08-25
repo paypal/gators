@@ -23,8 +23,11 @@ PlanRotationFeatures     : x·cos(θ) ± y·sin(θ) per angle
 DistanceFeatures         : euclidean, manhattan, haversine
 
 HHIFeatures              : sum of squared market-share terms
-GroupStatisticsFeatures  : LabelEncoder group-stat lookup + arithmetic for all 12 functions
-                           Uses training-time group statistics (not batch-time .over()).
+EntropyFeatures          : -sum(share * ln(share)), 0*ln(0):=0 (Shannon entropy)
+GroupStatisticsFeatures  : LabelEncoder(group->int64 index) + Gather(float64 table) lookup,
+                           then arithmetic for mean/std/median/min/max/sum/count/count_null/
+                           range/mean_ratio/median_ratio/zscore/minmax. Uses training-time
+                           group statistics (not batch-time .over()).
 
 Not supported (require window/partition ops absent from ONNX)
 ------------------------------------------------------------
@@ -33,6 +36,9 @@ GroupLagFeatures, RollingStatisticsFeatures
 Partial support
 ---------------
 RowStatisticsFeatures : 'median' raises OnnxNotSupportedError (no ONNX median op)
+GroupStatisticsFeatures : 'rank'/'pct_rank' raise OnnxNotSupportedError (order statistics
+                          are computed live relative to a whole batch, not a frozen
+                          per-group lookup, and have no meaning for single-row inference)
 """
 from __future__ import annotations
 
@@ -41,13 +47,12 @@ from itertools import combinations_with_replacement
 
 import polars as pl
 
-from ._converters import _onnx_type_to_numpy, _POLARS_TO_ONNX, get_input_onnx_type, get_output_columns, get_output_onnx_type, to_onnx_nodes
-from ._exceptions import OnnxNotSupportedError
 from ..feature_generation.asymmetry_index_features import AsymmetryIndexFeatures
 from ..feature_generation.comparison_features import ComparisonFeatures
 from ..feature_generation.concentration_index_features import ConcentrationIndexFeatures
 from ..feature_generation.condition_features import ConditionFeatures
-from ..feature_generation.distance_features import DistanceFeatures, EARTH_RADIUS
+from ..feature_generation.distance_features import EARTH_RADIUS, DistanceFeatures
+from ..feature_generation.entropy_features import EntropyFeatures
 from ..feature_generation.fourier_features import FourierFeatures
 from ..feature_generation.generalized_ratio_features import GeneralizedRatioFeatures
 from ..feature_generation.group_statistics_features import GroupStatisticsFeatures
@@ -61,6 +66,15 @@ from ..feature_generation.row_statistics_features import RowStatisticsFeatures
 from ..feature_generation.rule_features import RuleFeatures
 from ..feature_generation.scalar_math_features import ScalarMathFeatures
 from ..feature_generation.weighted_sum_features import WeightedSumFeatures
+from ._converters import (
+    _POLARS_TO_ONNX,
+    _onnx_type_to_numpy,
+    get_input_onnx_type,
+    get_output_columns,
+    get_output_onnx_type,
+    to_onnx_nodes,
+)
+from ._exceptions import OnnxNotSupportedError
 
 try:
     import numpy as np
@@ -105,6 +119,18 @@ def _smf_output_cols(transformer: ScalarMathFeatures, input_columns: list[str]) 
     return list(input_columns) + list(new)
 
 
+@get_output_onnx_type.register(ScalarMathFeatures)
+def _smf_output_onnx_type(transformer: ScalarMathFeatures, col: str) -> int:
+    # Not using _output_dtypes here: it declares a fixed Float64, but the Add/Sub/Mul/...
+    # node always inherits the SOURCE column's actual current onnx type (see _smf_to_onnx).
+    # Report that instead, so pipeline type-tracking stays accurate.
+    out_cols = transformer.new_column_names or transformer._generated_column_names
+    for op_dict, out_col in zip(transformer.operations, out_cols, strict=False):
+        if out_col == col:
+            return get_input_onnx_type(transformer, op_dict["column"])
+    return get_input_onnx_type(transformer, col)
+
+
 @to_onnx_nodes.register(ScalarMathFeatures)
 def _smf_to_onnx(
     transformer: ScalarMathFeatures,
@@ -118,7 +144,7 @@ def _smf_to_onnx(
 
     out_cols = transformer.new_column_names or transformer._generated_column_names
 
-    for op_dict, out_col in zip(transformer.operations, out_cols):
+    for op_dict, out_col in zip(transformer.operations, out_cols, strict=False):
         col = op_dict["column"]
         op = op_dict["op"]
         scalar = float(op_dict["scalar"])
@@ -162,7 +188,7 @@ def _smf_to_onnx(
 
 @get_output_columns.register(IsNull)
 def _isnull_output_cols(transformer: IsNull, input_columns: list[str]) -> list[str]:
-    return list(input_columns) + list(transformer._column_mapping.values())
+    return list(input_columns) + [name for names in transformer._column_mapping.values() for name in names]
 
 
 @get_input_onnx_type.register(IsNull)
@@ -175,8 +201,9 @@ def _isnull_input_onnx_type(transformer: IsNull, col: str) -> int:
 
 @get_output_onnx_type.register(IsNull)
 def _isnull_output_onnx_type(transformer: IsNull, col: str) -> int:
-    # Null indicators are always FLOAT (0.0 / 1.0) regardless of source column type.
-    if col in transformer._column_mapping.values():
+    # Not using _output_dtypes here: null indicators are hardcoded to FLOAT (0.0/1.0)
+    # regardless of float_datatype, while _output_dtypes declares Float64.
+    if col in {name for names in transformer._column_mapping.values() for name in names}:
         return TensorProto.FLOAT
     return _isnull_input_onnx_type(transformer, col)
 
@@ -190,13 +217,14 @@ def _isnull_to_onnx(
 ) -> tuple[list, list]:
     """is_null(): string columns use LabelEncoder(""→1) → Cast(FLOAT); numeric use IsNaN → Cast(FLOAT)."""
     nodes = _passthrough(input_names, output_names)
-    for orig_col, null_col in transformer._column_mapping.items():
+    for orig_col, [null_col] in transformer._column_mapping.items():
         if orig_col not in input_names:  # pragma: no cover
             continue
         in_name = input_names[orig_col]
         out_name = output_names.get(null_col, null_col)
         bool_name = f"{in_name}__IsNull__bool"
-        if get_input_onnx_type(transformer, orig_col) == TensorProto.STRING:
+        onnx_type = get_input_onnx_type(transformer, orig_col)
+        if onnx_type == TensorProto.STRING:
             # Null strings arrive as "" after fill_null(""); map "" → 1, others → 0
             nodes.append(
                 oh.make_node(
@@ -209,9 +237,14 @@ def _isnull_to_onnx(
                     default_int64=0,
                 )
             )
-        else:
+        elif onnx_type in (TensorProto.FLOAT, TensorProto.DOUBLE):
             nodes.append(oh.make_node("IsNaN", inputs=[in_name], outputs=[bool_name]))
-        onnx_type = get_input_onnx_type(transformer, orig_col)
+        else:
+            # ONNX IsNaN only accepts float tensors; integer columns carry no null
+            # representation once exported, so cast first (always evaluates to False).
+            float_name = f"{in_name}__IsNull__f32"
+            nodes.append(oh.make_node("Cast", inputs=[in_name], outputs=[float_name], to=TensorProto.FLOAT))
+            nodes.append(oh.make_node("IsNaN", inputs=[float_name], outputs=[bool_name]))
         # null indicator is always FLOAT (0/1); cast_type must never be STRING or DOUBLE
         nodes.append(_cast_numeric(bool_name, out_name, TensorProto.FLOAT))
     return nodes, []
@@ -221,11 +254,24 @@ def _isnull_to_onnx(
 
 @get_output_columns.register(RatioFeatures)
 def _ratio_output_cols(transformer: RatioFeatures, input_columns: list[str]) -> list[str]:
-    new = list(transformer._column_mapping.values())
+    new = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
         dropped = set(transformer.numerator_columns) | set(transformer.denominator_columns)
         return [c for c in input_columns if c not in dropped] + new
     return list(input_columns) + new
+
+
+@get_output_onnx_type.register(RatioFeatures)
+def _ratio_output_onnx_type(transformer: RatioFeatures, col: str) -> int:
+    # Not using _output_dtypes here: it declares a fixed Float64, but the Div node always
+    # inherits the denominator column's actual current onnx type (see _ratio_to_onnx, which
+    # casts the numerator to match it). Report that instead, so pipeline type-tracking
+    # stays accurate.
+    out_cols = [name for names in transformer._column_mapping.values() for name in names]
+    for denom_col, out_col in zip(transformer.denominator_columns, out_cols, strict=False):
+        if out_col == col:
+            return get_input_onnx_type(transformer, denom_col)
+    return get_input_onnx_type(transformer, col)
 
 
 @to_onnx_nodes.register(RatioFeatures)
@@ -242,7 +288,7 @@ def _ratio_to_onnx(
     for num_col, denom_col, out_col in zip(
         transformer.numerator_columns,
         transformer.denominator_columns,
-        transformer._column_mapping.values(),
+        [name for names in transformer._column_mapping.values() for name in names], strict=False,
     ):
         if num_col not in input_names or denom_col not in input_names:  # pragma: no cover
             continue
@@ -252,8 +298,15 @@ def _ratio_to_onnx(
         p = f"{num_name}__Ratio__{den_name}"
         one_init = f"{p}__one"
         den_p1 = f"{p}__dep1"
-        initializers.append(_make_init(one_init, 1.0, get_input_onnx_type(transformer, denom_col)))
+        denom_type = get_input_onnx_type(transformer, denom_col)
+        initializers.append(_make_init(one_init, 1.0, denom_type))
         nodes.append(oh.make_node("Add", inputs=[den_name, one_init], outputs=[den_p1]))
+        # Div requires both operands to share a type; cast the numerator to the
+        # denominator's type if they differ (e.g. one Int64, the other Float).
+        if get_input_onnx_type(transformer, num_col) != denom_type:
+            num_cast = f"{p}__numcast"
+            nodes.append(oh.make_node("Cast", inputs=[num_name], outputs=[num_cast], to=denom_type))
+            num_name = num_cast
         nodes.append(oh.make_node("Div", inputs=[num_name, den_p1], outputs=[out_name]))
 
     return nodes, initializers
@@ -263,7 +316,7 @@ def _ratio_to_onnx(
 
 @get_output_columns.register(WeightedSumFeatures)
 def _wsum_output_cols(transformer: WeightedSumFeatures, input_columns: list[str]) -> list[str]:
-    new = list(transformer._column_mapping.values())
+    new = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
         dropped = {c for group in transformer.column_groups for c in group}
         return [c for c in input_columns if c not in dropped] + new
@@ -281,18 +334,19 @@ def _wsum_to_onnx(
     nodes = _passthrough(input_names, output_names)
     initializers: list[onnx.TensorProto] = []
 
+    assert transformer.coefficients is not None and transformer.biases is not None
     for group, coeffs, bias, out_col in zip(
         transformer.column_groups,
         transformer.coefficients,
         transformer.biases,
-        transformer._column_mapping.values(),
+        [name for names in transformer._column_mapping.values() for name in names], strict=False,
     ):
         out_name = output_names.get(out_col, out_col)
         p = f"WSum__{'_'.join(group)}"
 
         # Compute each weighted term: col_i * coeff_i
         term_names: list[str] = []
-        for col, coeff in zip(group, coeffs):
+        for col, coeff in zip(group, coeffs, strict=False):
             if col not in input_names:  # pragma: no cover
                 continue
             in_name = input_names[col]
@@ -324,7 +378,7 @@ def _wsum_to_onnx(
 
 @get_output_columns.register(AsymmetryIndexFeatures)
 def _asym_output_cols(transformer: AsymmetryIndexFeatures, input_columns: list[str]) -> list[str]:
-    new = list(transformer._column_mapping.values())
+    new = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
         dropped = set(transformer.x_columns) | set(transformer.y_columns)
         return [c for c in input_columns if c not in dropped] + new
@@ -343,7 +397,8 @@ def _asym_to_onnx(
     initializers: list[onnx.TensorProto] = []
 
     for x_col, y_col, out_col in zip(
-        transformer.x_columns, transformer.y_columns, transformer._column_mapping.values()
+        transformer.x_columns, transformer.y_columns,
+        [name for names in transformer._column_mapping.values() for name in names], strict=False,
     ):
         if x_col not in input_names or y_col not in input_names:  # pragma: no cover
             continue
@@ -525,12 +580,23 @@ def _cmp_col_name(col_a: str, col_b: str, op: str) -> str:
 def _cmp_output_cols(transformer: ComparisonFeatures, input_columns: list[str]) -> list[str]:
     new = [
         _cmp_col_name(a, b, op)
-        for a, b, op in zip(transformer.subset_a, transformer.subset_b, transformer.operators)
+        for a, b, op in zip(transformer.subset_a, transformer.subset_b, transformer.operators, strict=False)
     ]
     if transformer.drop_columns:
         dropped = set(transformer.subset_a) | set(transformer.subset_b)
         return [c for c in input_columns if c not in dropped] + new
     return list(input_columns) + new
+
+
+@get_output_onnx_type.register(ComparisonFeatures)
+def _cmp_output_onnx_type(transformer: ComparisonFeatures, col: str) -> int:
+    # The comparison result is always Cast to FLOAT (see _cmp_to_onnx), regardless of the
+    # source columns' type (e.g. STRING columns being compared). Report that so pipeline
+    # type-tracking stays accurate instead of falling through to the UNDEFINED default.
+    for a, b, op in zip(transformer.subset_a, transformer.subset_b, transformer.operators, strict=False):
+        if _cmp_col_name(a, b, op) == col:
+            return TensorProto.FLOAT
+    return get_input_onnx_type(transformer, col)
 
 
 @to_onnx_nodes.register(ComparisonFeatures)
@@ -544,7 +610,7 @@ def _cmp_to_onnx(
     nodes = _passthrough(input_names, output_names)
 
     for col_a, col_b, op in zip(
-        transformer.subset_a, transformer.subset_b, transformer.operators
+        transformer.subset_a, transformer.subset_b, transformer.operators, strict=False
     ):
         if col_a not in input_names:  # pragma: no cover
             continue
@@ -556,12 +622,12 @@ def _cmp_to_onnx(
 
         if op == "is_null":
             nodes.append(oh.make_node("IsNaN", inputs=[in_a], outputs=[bool_out]))
-            nodes.append(_cast_numeric(bool_out, out_name, get_input_onnx_type(transformer, col_a)))
+            nodes.append(_cast_numeric(bool_out, out_name, TensorProto.FLOAT))
         elif op == "is_not_null":
             isnan_out = f"{p}__isnan"
             nodes.append(oh.make_node("IsNaN", inputs=[in_a], outputs=[isnan_out]))
             nodes.append(oh.make_node("Not", inputs=[isnan_out], outputs=[bool_out]))
-            nodes.append(_cast_numeric(bool_out, out_name, get_input_onnx_type(transformer, col_a)))
+            nodes.append(_cast_numeric(bool_out, out_name, TensorProto.FLOAT))
         elif op == "!=":
             if col_b not in input_names:  # pragma: no cover
                 continue
@@ -569,14 +635,14 @@ def _cmp_to_onnx(
             eq_out = f"{p}__eq"
             nodes.append(oh.make_node("Equal", inputs=[in_a, in_b], outputs=[eq_out]))
             nodes.append(oh.make_node("Not", inputs=[eq_out], outputs=[bool_out]))
-            nodes.append(_cast_numeric(bool_out, out_name, get_input_onnx_type(transformer, col_a)))
+            nodes.append(_cast_numeric(bool_out, out_name, TensorProto.FLOAT))
         else:
             if col_b not in input_names:  # pragma: no cover
                 continue
             in_b = input_names[col_b]
             onnx_op = _CMP_ONNX_OPS[op]
             nodes.append(oh.make_node(onnx_op, inputs=[in_a, in_b], outputs=[bool_out]))
-            nodes.append(_cast_numeric(bool_out, out_name, get_input_onnx_type(transformer, col_a)))
+            nodes.append(_cast_numeric(bool_out, out_name, TensorProto.FLOAT))
 
     return nodes, []
 
@@ -586,6 +652,17 @@ def _cmp_to_onnx(
 @get_output_columns.register(ConditionFeatures)
 def _cond_output_cols(transformer: ConditionFeatures, input_columns: list[str]) -> list[str]:
     return list(input_columns) + list(transformer._generated_column_names)
+
+
+@get_output_onnx_type.register(ConditionFeatures)
+def _cond_output_onnx_type(transformer: ConditionFeatures, col: str) -> int:
+    # Not using _output_dtypes here: it declares a fixed Float64, but _cond_to_onnx always
+    # Casts the bool result to the SOURCE column's actual current onnx type. Report that
+    # instead, so pipeline type-tracking stays accurate.
+    for cond, out_col in zip(transformer.conditions, transformer._generated_column_names, strict=False):
+        if out_col == col:
+            return get_input_onnx_type(transformer, cond["column"])
+    return get_input_onnx_type(transformer, col)
 
 
 @to_onnx_nodes.register(ConditionFeatures)
@@ -603,7 +680,7 @@ def _cond_to_onnx(
     nodes = _passthrough(input_names, output_names)
     initializers: list[onnx.TensorProto] = []
 
-    for cond, out_col in zip(transformer.conditions, transformer._generated_column_names):
+    for cond, out_col in zip(transformer.conditions, transformer._generated_column_names, strict=False):
         col = cond["column"]
         op = cond["op"]
         if col not in input_names:  # pragma: no cover
@@ -683,7 +760,7 @@ def _hhi_to_onnx_nodes(
         elif col in source_cols and not transformer.drop_columns and col in output_names:
             nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
 
-    for group, hhi_col in zip(transformer.column_groups, transformer.new_column_names or []):
+    for group, hhi_col in zip(transformer.column_groups, transformer.new_column_names or [], strict=False):
         if not all(c in input_names for c in group):  # pragma: no cover
             continue
         out_name = output_names.get(hhi_col, hhi_col)
@@ -721,6 +798,93 @@ def _hhi_to_onnx_nodes(
                 add_out = out_name if is_last else f"{p}__hhi{i}"
                 nodes.append(oh.make_node("Add", inputs=[running_hhi, sq], outputs=[add_out]))
                 running_hhi = add_out
+
+    return nodes, initializers
+
+
+# ── EntropyFeatures ───────────────────────────────────────────────────────────
+
+@get_output_columns.register(EntropyFeatures)
+def _entropy_output_cols(transformer: EntropyFeatures, input_columns: list[str]) -> list[str]:
+    new = list(transformer.new_column_names or [])
+    if transformer.drop_columns:
+        dropped = {c for group in transformer.column_groups for c in group}
+        return [c for c in input_columns if c not in dropped] + new
+    return list(input_columns) + new
+
+
+@to_onnx_nodes.register(EntropyFeatures)
+def _entropy_to_onnx_nodes(
+    transformer: EntropyFeatures,
+    input_names: dict[str, str],
+    output_names: dict[str, str],
+    errors: str = "raise",
+) -> tuple[list, list]:
+    """Shannon entropy: -sum(share_i * ln(share_i)), share_i = col_i / (sum(group) + ε).
+
+    Mirrors HHIFeatures' converter exactly except the per-term computation is
+    ``share * Log(share)`` (guarded to 0 when ``share <= 0``) instead of ``share²``,
+    and the final reduction is negated.
+    """
+    nodes: list = []
+    initializers: list = []
+    source_cols = {c for group in transformer.column_groups for c in group}
+
+    for col, in_name in input_names.items():
+        if col not in source_cols and col in output_names:
+            nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
+        elif col in source_cols and not transformer.drop_columns and col in output_names:
+            nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
+
+    for group, entropy_col in zip(transformer.column_groups, transformer.new_column_names or [], strict=False):
+        if not all(c in input_names for c in group):  # pragma: no cover
+            continue
+        out_name = output_names.get(entropy_col, entropy_col)
+        p = f"Entropy__{out_name}"  # unique per output — groups may share identical column sets
+        eps_init = f"{p}__eps"
+        initializers.append(_make_init(eps_init, float(transformer.epsilon), get_input_onnx_type(transformer, group[0])))
+
+        # Sum all group columns
+        running = input_names[group[0]]
+        for i, col in enumerate(group[1:]):
+            add_out = f"{p}__gsum{i}"
+            nodes.append(oh.make_node("Add", inputs=[running, input_names[col]], outputs=[add_out]))
+            running = add_out
+
+        # Add epsilon → total
+        total_out = f"{p}__total"
+        nodes.append(oh.make_node("Add", inputs=[running, eps_init], outputs=[total_out]))
+
+        # Compute share_i * ln(share_i), guarded to 0 when share_i <= 0 (0*ln(0):=0)
+        onnx_type = get_input_onnx_type(transformer, group[0])
+        zero_init = f"{p}__zero"
+        initializers.append(_make_init(zero_init, 0.0, onnx_type))
+        terms: list[str] = []
+        for i, col in enumerate(group):
+            share_out = f"{p}__share{i}"
+            log_out = f"{p}__log{i}"
+            term_out = f"{p}__term{i}"
+            pos_out = f"{p}__pos{i}"
+            guarded_out = f"{p}__guarded{i}"
+            nodes.append(oh.make_node("Div", inputs=[input_names[col], total_out], outputs=[share_out]))
+            nodes.append(oh.make_node("Log", inputs=[share_out], outputs=[log_out]))
+            nodes.append(oh.make_node("Mul", inputs=[share_out, log_out], outputs=[term_out]))
+            nodes.append(oh.make_node("Greater", inputs=[share_out, zero_init], outputs=[pos_out]))
+            nodes.append(oh.make_node("Where", inputs=[pos_out, term_out, zero_init], outputs=[guarded_out]))
+            terms.append(guarded_out)
+
+        # Sum the terms then negate → entropy output
+        if len(terms) == 1:  # pragma: no cover  (column_groups requires ≥2 cols)
+            sum_out = terms[0]
+        else:
+            running_sum = terms[0]
+            for i, term in enumerate(terms[1:]):
+                is_last = i == len(terms) - 2
+                add_out = f"{p}__sum" if is_last else f"{p}__sum{i}"
+                nodes.append(oh.make_node("Add", inputs=[running_sum, term], outputs=[add_out]))
+                running_sum = add_out
+            sum_out = running_sum
+        nodes.append(oh.make_node("Neg", inputs=[sum_out], outputs=[out_name]))
 
     return nodes, initializers
 
@@ -951,7 +1115,7 @@ def _math_output_cols(transformer: MathFeatures, input_columns: list[str]) -> li
     new = []
     for group in transformer.groups:
         group_key = "_".join(group)
-        mapped = transformer._column_mapping.get(group_key, group_key)
+        mapped = transformer._column_mapping.get(group_key, [group_key])[0]
         for op in transformer.func:
             new.append(f"{mapped}_{op}")
     if transformer.drop_columns:
@@ -962,17 +1126,15 @@ def _math_output_cols(transformer: MathFeatures, input_columns: list[str]) -> li
 
 @get_output_onnx_type.register(MathFeatures)
 def _math_output_onnx_type(transformer: MathFeatures, col: str) -> int:
-    # Report the widest input type for generated columns so pipeline type-tracking stays accurate.
+    # gators' transform() always casts every generated column to Float64 regardless of op,
+    # so the ONNX node output is always DOUBLE (see _math_to_onnx). Pass-through columns
+    # keep their own input type.
     for group in transformer.groups:
         group_key = "_".join(group)
-        mapped = transformer._column_mapping.get(group_key, group_key)
+        mapped = transformer._column_mapping.get(group_key, [group_key])[0]
         for op in transformer.func:
             if f"{mapped}_{op}" == col:
-                return (
-                    TensorProto.DOUBLE
-                    if any(get_input_onnx_type(transformer, c) == TensorProto.DOUBLE for c in group)
-                    else TensorProto.FLOAT
-                )
+                return TensorProto.DOUBLE
     return get_input_onnx_type(transformer, col)
 
 
@@ -991,13 +1153,9 @@ def _math_to_onnx(
         if not all(c in input_names for c in group):  # pragma: no cover
             continue
         group_key = "_".join(group)
-        mapped = transformer._column_mapping.get(group_key, group_key)
-        # Use widest type across the group; DOUBLE wins over FLOAT.
-        onnx_type = (
-            TensorProto.DOUBLE
-            if any(get_input_onnx_type(transformer, c) == TensorProto.DOUBLE for c in group)
-            else TensorProto.FLOAT
-        )
+        mapped = transformer._column_mapping.get(group_key, [group_key])[0]
+        # gators' transform() always casts the result to Float64; match that in the graph.
+        onnx_type = TensorProto.DOUBLE
         # Cast any mismatched group inputs to onnx_type so binary ops see a uniform type.
         group_input_names = dict(input_names)
         for col in group:
@@ -1043,7 +1201,7 @@ def _rowstats_to_onnx(
         onnx_type = get_input_onnx_type(transformer, cols[0])
         for f in transformer.func:
             default_col = f"{group_name}__{f}"
-            out_col = col_map.get(default_col, default_col)
+            out_col = col_map.get(default_col, [default_col])[0]
             out_name = output_names.get(out_col, out_col)
             prefix = f"RowStats__{group_name}__{f}"
             _emit_row_agg(f, cols, input_names, out_name, prefix, onnx_type, nodes, initializers)
@@ -1059,7 +1217,7 @@ def _conc_output_cols(transformer: ConcentrationIndexFeatures, input_columns: li
     if transformer.drop_columns:
         dropped = {
             col
-            for num, denoms in zip(transformer.numerator_columns, transformer.denominator_columns)
+            for num, denoms in zip(transformer.numerator_columns, transformer.denominator_columns, strict=False)
             for col in [num] + denoms
         }
         return [c for c in input_columns if c not in dropped] + new
@@ -1080,7 +1238,7 @@ def _conc_to_onnx(
     for num_col, denom_cols, out_col in zip(
         transformer.numerator_columns,
         transformer.denominator_columns,
-        transformer.new_column_names or [],
+        transformer.new_column_names or [], strict=False,
     ):
         if num_col not in input_names or not all(d in input_names for d in denom_cols):  # pragma: no cover
             continue
@@ -1132,13 +1290,18 @@ def _gratio_to_onnx(
     nodes = _passthrough(input_names, output_names)
     initializers: list[onnx.TensorProto] = []
 
+    assert (
+        transformer.numerator_coefficients is not None
+        and transformer.denominator_coefficients is not None
+        and transformer.numerator_biases is not None
+    )
     for num_cols, denom_cols, num_coeffs, denom_coeffs, bias, out_col in zip(
         transformer.numerator_columns,
         transformer.denominator_columns,
         transformer.numerator_coefficients,
         transformer.denominator_coefficients,
         transformer.numerator_biases,
-        transformer.new_column_names or [],
+        transformer.new_column_names or [], strict=False,
     ):
         if not all(c in input_names for c in denom_cols):  # pragma: no cover
             continue
@@ -1151,7 +1314,7 @@ def _gratio_to_onnx(
             if not all(c in input_names for c in num_cols):  # pragma: no cover
                 continue
             num_terms: list[str] = []
-            for i, (col, coeff) in enumerate(zip(num_cols, num_coeffs)):
+            for i, (col, coeff) in enumerate(zip(num_cols, num_coeffs, strict=False)):
                 if coeff == 1.0:
                     num_terms.append(input_names[col])
                 else:
@@ -1182,7 +1345,7 @@ def _gratio_to_onnx(
 
         # ── denominator ──
         denom_terms: list[str] = []
-        for i, (col, coeff) in enumerate(zip(denom_cols, denom_coeffs)):
+        for i, (col, coeff) in enumerate(zip(denom_cols, denom_coeffs, strict=False)):
             if coeff == 1.0:
                 denom_terms.append(input_names[col])
             else:
@@ -1291,7 +1454,7 @@ def _dist_to_onnx(
             continue
 
         default_name = f"distance__{lat1_col}_to_{lat2_col}__{transformer.method}_{transformer.unit}"
-        out_col = (transformer._column_mapping or {}).get(default_name, default_name)
+        out_col = (transformer._column_mapping or {}).get(default_name, [default_name])[0]
         out_name = output_names.get(out_col, out_col)
         p = f"Dist__{lat1_col}_{lat2_col}"
         onnx_type = get_input_onnx_type(transformer, lat1_col)
@@ -1386,7 +1549,7 @@ def _rule_to_onnx(
 
     logic_op = "And" if transformer.rule_logic == "and" else "Or"
 
-    for rule_idx, (rule, out_col) in enumerate(zip(transformer.rules, transformer.new_column_names)):
+    for rule_idx, (rule, out_col) in enumerate(zip(transformer.rules, transformer.new_column_names, strict=False)):
         first_col = rule[0]["column"]
         if first_col not in input_names:  # pragma: no cover
             continue
@@ -1457,7 +1620,7 @@ def _rule_to_onnx(
 
 @get_output_columns.register(GroupStatisticsFeatures)
 def _gsf_output_columns(transformer: GroupStatisticsFeatures, input_columns: list[str]) -> list[str]:
-    new_cols = list(transformer._column_mapping.values())
+    new_cols = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
         dropped = set(transformer.subset)
         return [c for c in input_columns if c not in dropped] + new_cols
@@ -1476,7 +1639,16 @@ def _gsf_input_onnx_type(transformer: GroupStatisticsFeatures, col: str) -> int:
 
 @get_output_onnx_type.register(GroupStatisticsFeatures)
 def _gsf_output_onnx_type(transformer: GroupStatisticsFeatures, col: str) -> int:
-    if col in transformer._column_mapping.values():
+    # Not using _output_dtypes here: _output_dtypes declares a fixed Float64, but the
+    # ONNX node casts the float64 Gather-table lookup to match the subset column's input
+    # precision instead.
+    if col in {name for names in transformer._column_mapping.values() for name in names}:
+        # The converter casts the DOUBLE Gather output to the numeric input type when
+        # onnx_type != DOUBLE, so stat columns match the input precision.
+        for num_col in (transformer.subset or []):
+            t = _gsf_input_onnx_type(transformer, num_col)
+            if t != TensorProto.STRING:
+                return t
         return TensorProto.FLOAT
     return _gsf_input_onnx_type(transformer, col)
 
@@ -1488,16 +1660,20 @@ def _gsf_to_onnx_nodes(
     output_names: dict[str, str],
     errors: str = "raise",
 ) -> tuple[list, list]:
-    """LabelEncoder group-stat lookup + arithmetic for all 12 aggregation functions.
+    """LabelEncoder(group->int64 index) + Gather(float64 table) lookup, then arithmetic
+    for all 12 aggregation functions.
 
-    Uses training-time group statistics stored in _group_stats.  Unknown groups
-    at inference time fall back to 0.0 for absolute stats and to fill_value for
-    relative stats (matching the zero-denominator behaviour of Polars transform).
+    Uses training-time group statistics stored in _group_stats. The lookup is int64-indexed
+    into a float64 Gather table rather than ai.onnx.ml LabelEncoder's values_floats (which the
+    ONNX spec defines as float32-only), so full double precision is preserved end-to-end.
+    Unknown groups at inference time fall back to NaN for absolute stats (matching the
+    native transform()'s left-join null fallback) and to fill_value for relative stats
+    (matching the zero/null-denominator behaviour of the Polars transform).
     """
     nodes: list[onnx.NodeProto] = []
     initializers: list[onnx.TensorProto] = []
 
-    generated = set(transformer._column_mapping.values())
+    generated = {name for names in transformer._column_mapping.values() for name in names}
     subset_set = set(transformer.subset or [])
     by_set = set(transformer.by)
 
@@ -1531,35 +1707,49 @@ def _gsf_to_onnx_nodes(
 
             for fun in transformer.func:
                 default_name = f"{fun}_{num_col}__per_{groupby_col}"
-                out_col = transformer._column_mapping[default_name]
+                out_col = transformer._column_mapping[default_name][0]
                 out_name = output_names.get(out_col, out_col)
                 p = f"{num_in}__GSF__{groupby_col}__{fun}"
 
-                def _lookup(stat_name: str, suffix: str = "") -> str:
+                def _lookup(stat_name: str, suffix: str = "", stats=stats, p=p, grp_in=grp_in, onnx_type=onnx_type) -> str:
                     stat_map = stats.get(stat_name, {})
-                    f32 = f"{p}__{stat_name}{suffix}_f32"
+                    keys = list(stat_map.keys())
+                    values = [float(v) for v in stat_map.values()]
+                    idx_name = f"{p}__{stat_name}{suffix}_idx"
+                    # LabelEncoder maps group string -> int64 row index; unseen groups map to
+                    # a sentinel index one past the table (default_int64=len(keys)).
                     nodes.append(oh.make_node(
                         "LabelEncoder", domain="ai.onnx.ml",
-                        inputs=[grp_in], outputs=[f32],
-                        keys_strings=list(stat_map.keys()),
-                        values_floats=[float(v) for v in stat_map.values()],
-                        default_float=0.0,
+                        inputs=[grp_in], outputs=[idx_name],
+                        keys_strings=keys,
+                        values_int64s=list(range(len(keys))),
+                        default_int64=len(keys),
                     ))
-                    if onnx_type != TensorProto.FLOAT:
+                    table_name = f"{p}__{stat_name}{suffix}_table"
+                    # NaN padding row for unseen groups — matches the native transform()'s
+                    # left-join null fallback for absolute stats. Relative stats (ratio/
+                    # zscore/minmax) already guard on IsNaN(denom) below, so this correctly
+                    # routes unseen groups to fill_value there too.
+                    initializers.append(onnx.numpy_helper.from_array(
+                        np.array(values + [np.nan], dtype=np.float64), name=table_name
+                    ))
+                    f64 = f"{p}__{stat_name}{suffix}_f64"
+                    nodes.append(oh.make_node("Gather", inputs=[table_name, idx_name], outputs=[f64], axis=0))
+                    if onnx_type != TensorProto.DOUBLE:
                         casted = f"{p}__{stat_name}{suffix}"
-                        nodes.append(oh.make_node("Cast", inputs=[f32], outputs=[casted], to=onnx_type))
+                        nodes.append(oh.make_node("Cast", inputs=[f64], outputs=[casted], to=onnx_type))
                         return casted
-                    return f32
+                    return f64
 
-                def _zero_init(name: str) -> str:
+                def _zero_init(name: str, np_dtype=np_dtype) -> str:
                     initializers.append(onnx.numpy_helper.from_array(np.array([0.0], dtype=np_dtype), name=name))
                     return name
 
-                def _fill_init(name: str) -> str:
+                def _fill_init(name: str, np_dtype=np_dtype) -> str:
                     initializers.append(onnx.numpy_helper.from_array(np.array([transformer.fill_value], dtype=np_dtype), name=name))
                     return name
 
-                def _guard(denom: str) -> str:
+                def _guard(denom: str, p=p) -> str:
                     zero = _zero_init(f"{p}__zero")
                     eq_out, nan_out, or_out = f"{p}__eq", f"{p}__nan", f"{p}__guard"
                     nodes.append(oh.make_node("Equal", inputs=[denom, zero], outputs=[eq_out]))
@@ -1567,7 +1757,15 @@ def _gsf_to_onnx_nodes(
                     nodes.append(oh.make_node("Or", inputs=[eq_out, nan_out], outputs=[or_out]))
                     return or_out
 
-                if fun in {"mean", "std", "median", "min", "max", "sum", "count"}:
+                if fun in {"rank", "pct_rank"}:
+                    raise OnnxNotSupportedError(
+                        f"func='{fun}' is not supported in ONNX: order statistics are computed "
+                        "live relative to the whole batch passed to transform(), not looked up "
+                        "from a frozen per-group table, and have no well-defined meaning for "
+                        "single-row inference."
+                    )
+
+                if fun in {"mean", "std", "median", "min", "max", "sum", "count", "count_null"}:
                     nodes.append(oh.make_node("Identity", inputs=[_lookup(fun)], outputs=[out_name]))
 
                 elif fun == "range":

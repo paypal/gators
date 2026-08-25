@@ -1,3 +1,5 @@
+from typing import Any
+
 import polars as pl
 from pydantic import PrivateAttr, field_validator
 
@@ -11,11 +13,14 @@ AGGREGATION_FUNCTIONS = [
     "max",
     "sum",
     "count",
+    "count_null",
     "range",
     "mean_ratio",
     "median_ratio",
     "zscore",
     "minmax",
+    "rank",
+    "pct_rank",
 ]
 
 
@@ -34,6 +39,7 @@ class GroupStatisticsFeatures(_BaseTransformer):
     - ``'max'``: group maximum
     - ``'sum'``: group sum
     - ``'count'``: group count (nulls excluded)
+    - ``'count_null'``: group count of null values
     - ``'range'``: group range (max − min)
 
     **Relative statistics** — each row is scaled by its group aggregate:
@@ -42,6 +48,15 @@ class GroupStatisticsFeatures(_BaseTransformer):
     - ``'median_ratio'``: value / group_median
     - ``'zscore'``: (value − group_mean) / group_std
     - ``'minmax'``: (value − group_min) / (group_max − group_min)
+
+    **Order statistics** — a row's position within its group. Unlike the two
+    categories above, these are computed *live* on the batch passed to
+    ``transform()`` (via Polars' ``.rank().over()``) rather than looked up from
+    statistics frozen at ``fit()`` time, since a rank is inherently relative to
+    every other row in the same call, not a fixed group aggregate:
+
+    - ``'rank'``: average-tie rank of the value within its group (1-based)
+    - ``'pct_rank'``: rank divided by the (non-null) group size, in ``(0, 1]``
 
     Both categories can be combined freely in a single transformer call.
     All generated columns follow the naming pattern
@@ -166,7 +181,7 @@ class GroupStatisticsFeatures(_BaseTransformer):
     fill_value: float = 0.0
     drop_columns: bool = False
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
     # Keyed (num_col, groupby_col) → {stat_name: {group_value: float}}
     _group_stats: dict = PrivateAttr(default_factory=dict)
 
@@ -217,15 +232,17 @@ class GroupStatisticsFeatures(_BaseTransformer):
 
         if not self.new_column_names:
             self.new_column_names = default_names
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
         # Compute and store group stats needed by all requested functions.
         _NEEDED: dict[str, list[str]] = {
             "mean": ["mean"], "std": ["std"], "median": ["median"],
             "min": ["min"], "max": ["max"], "sum": ["sum"], "count": ["count"],
+            "count_null": ["count_null"],
             "range": ["min", "max"],
             "mean_ratio": ["mean"], "median_ratio": ["median"],
             "zscore": ["mean", "std"], "minmax": ["min", "max"],
+            "rank": [], "pct_rank": [],
         }
         _POLARS_AGG = {
             "mean": lambda c: pl.col(c).mean(),
@@ -235,10 +252,11 @@ class GroupStatisticsFeatures(_BaseTransformer):
             "max":  lambda c: pl.col(c).max(),
             "sum":  lambda c: pl.col(c).sum(),
             "count": lambda c: pl.col(c).count().cast(pl.Float64),
+            "count_null": lambda c: pl.col(c).is_null().sum().cast(pl.Float64),
         }
         for num_col in self.subset:
             for groupby_col in self.by:
-                needed = set(s for f in self.func for s in _NEEDED[f])
+                needed = {s for f in self.func for s in _NEEDED[f]}
                 aggs = [_POLARS_AGG[s](num_col).alias(s) for s in needed]
                 gdf = X.group_by(groupby_col).agg(aggs)
                 self._group_stats[(num_col, groupby_col)] = {
@@ -249,10 +267,18 @@ class GroupStatisticsFeatures(_BaseTransformer):
                     for s in needed
                 }
 
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by creating group statistic features.
+
+        Applies the group statistics learned during ``fit()`` (via a left join on the
+        groupby column) rather than recomputing statistics live from ``X`` - this keeps
+        train/test behavior consistent (mirroring the ONNX export's frozen lookup) and
+        correctly falls back to ``fill_value``/null for groups unseen during ``fit()``.
 
         Parameters
         ----------
@@ -264,16 +290,56 @@ class GroupStatisticsFeatures(_BaseTransformer):
         pl.DataFrame
             Transformed DataFrame with group statistic features appended.
         """
+        _NEEDED: dict[str, list[str]] = {
+            "mean": ["mean"], "std": ["std"], "median": ["median"],
+            "min": ["min"], "max": ["max"], "sum": ["sum"], "count": ["count"],
+            "count_null": ["count_null"],
+            "range": ["min", "max"],
+            "mean_ratio": ["mean"], "median_ratio": ["median"],
+            "zscore": ["mean", "std"], "minmax": ["min", "max"],
+            "rank": [], "pct_rank": [],
+        }
+
+        # Join the fitted group statistics onto X (one join per num_col x groupby_col pair).
+        # 'rank'/'pct_rank' need no join (they're computed live below), so pairs whose
+        # func list only contains those are skipped here entirely.
+        join_columns: list[str] = []
+        stat_col_name: dict[tuple[str, str, str], str] = {}
+        for num_col in self.subset:
+            for groupby_col in self.by:
+                needed = sorted({s for f in self.func for s in _NEEDED[f]})
+                if not needed:
+                    continue
+                stats = self._group_stats.get((num_col, groupby_col), {})
+                key_col = f"__gsf_key__{num_col}__{groupby_col}"
+                keys = list(next(iter(stats.values()), {}).keys())
+                lookup_data: dict[str, Any] = {key_col: pl.Series(key_col, keys, dtype=pl.String)}
+                for s in needed:
+                    helper_col = f"__gsf__{num_col}__{groupby_col}__{s}"
+                    stat_col_name[(num_col, groupby_col, s)] = helper_col
+                    mapping = stats.get(s, {})
+                    lookup_data[helper_col] = pl.Series(
+                        helper_col, [mapping.get(k, float("nan")) for k in keys], dtype=pl.Float64
+                    )
+                    join_columns.append(helper_col)
+                lookup = pl.DataFrame(lookup_data)
+                X = X.join(
+                    lookup,
+                    left_on=pl.col(groupby_col).cast(pl.String),
+                    right_on=key_col,
+                    how="left",
+                )
+
         new_columns = []
 
         for num_col in self.subset:
             for groupby_col in self.by:
                 for fun in self.func:
                     default_name = f"{fun}_{num_col}__per_{groupby_col}"
-                    new_col_name = self._column_mapping[default_name]
+                    new_col_name = self._column_mapping[default_name][0]
 
                     if fun == "mean_ratio":
-                        denominator = pl.col(num_col).mean().over(groupby_col)
+                        denominator = pl.col(stat_col_name[(num_col, groupby_col, "mean")])
                         expr = (
                             pl.when((denominator == 0) | denominator.is_null())
                             .then(self.fill_value)
@@ -281,7 +347,7 @@ class GroupStatisticsFeatures(_BaseTransformer):
                             .alias(new_col_name)
                         )
                     elif fun == "median_ratio":
-                        denominator = pl.col(num_col).median().over(groupby_col)
+                        denominator = pl.col(stat_col_name[(num_col, groupby_col, "median")])
                         expr = (
                             pl.when((denominator == 0) | denominator.is_null())
                             .then(self.fill_value)
@@ -289,8 +355,8 @@ class GroupStatisticsFeatures(_BaseTransformer):
                             .alias(new_col_name)
                         )
                     elif fun == "zscore":
-                        group_mean = pl.col(num_col).mean().over(groupby_col)
-                        group_std = pl.col(num_col).std().over(groupby_col)
+                        group_mean = pl.col(stat_col_name[(num_col, groupby_col, "mean")])
+                        group_std = pl.col(stat_col_name[(num_col, groupby_col, "std")])
                         expr = (
                             pl.when((group_std == 0) | group_std.is_null())
                             .then(self.fill_value)
@@ -298,8 +364,8 @@ class GroupStatisticsFeatures(_BaseTransformer):
                             .alias(new_col_name)
                         )
                     elif fun == "minmax":
-                        group_min = pl.col(num_col).min().over(groupby_col)
-                        group_max = pl.col(num_col).max().over(groupby_col)
+                        group_min = pl.col(stat_col_name[(num_col, groupby_col, "min")])
+                        group_max = pl.col(stat_col_name[(num_col, groupby_col, "max")])
                         range_val = group_max - group_min
                         expr = (
                             pl.when((range_val == 0) | range_val.is_null())
@@ -307,25 +373,36 @@ class GroupStatisticsFeatures(_BaseTransformer):
                             .otherwise((pl.col(num_col).cast(pl.Float64) - group_min) / range_val)
                             .alias(new_col_name)
                         )
+                    elif fun == "rank":
+                        # Order statistic: computed live on the current batch, not looked up
+                        # from fit()-time stats (a rank only makes sense relative to the
+                        # other rows actually present in this call).
+                        expr = (
+                            pl.col(num_col)
+                            .cast(pl.Float64)
+                            .rank(method="average")
+                            .over(groupby_col)
+                            .alias(new_col_name)
+                        )
+                    elif fun == "pct_rank":
+                        rank_expr = (
+                            pl.col(num_col).cast(pl.Float64).rank(method="average").over(groupby_col)
+                        )
+                        group_size = pl.col(num_col).count().over(groupby_col).cast(pl.Float64)
+                        expr = (rank_expr / group_size).alias(new_col_name)
                     else:
-                        absolute_agg = {
-                            "mean": pl.col(num_col).mean().over(groupby_col),
-                            "std": pl.col(num_col).std().over(groupby_col),
-                            "median": pl.col(num_col).median().over(groupby_col),
-                            "min": pl.col(num_col).min().over(groupby_col),
-                            "max": pl.col(num_col).max().over(groupby_col),
-                            "sum": pl.col(num_col).sum().over(groupby_col),
-                            "count": pl.col(num_col).count().over(groupby_col),
-                            "range": (
-                                pl.col(num_col).max().over(groupby_col)
-                                - pl.col(num_col).min().over(groupby_col)
-                            ),
-                        }
-                        expr = absolute_agg[fun].alias(new_col_name)
+                        if fun == "range":
+                            expr = (
+                                pl.col(stat_col_name[(num_col, groupby_col, "max")])
+                                - pl.col(stat_col_name[(num_col, groupby_col, "min")])
+                            ).alias(new_col_name)
+                        else:
+                            expr = pl.col(stat_col_name[(num_col, groupby_col, fun)]).alias(new_col_name)
 
                     new_columns.append(expr)
 
         X = X.with_columns(new_columns)
+        X = X.drop(join_columns)
 
         if self.drop_columns:
             X = X.drop(self.subset)

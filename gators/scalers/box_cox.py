@@ -67,7 +67,7 @@ class BoxCox(_BaseTransformer):
     inplace: bool = True
     drop_columns: bool = True
     _columns: list[str] = PrivateAttr(default_factory=list)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "BoxCox":
         """Fit the transformer by storing column names.
@@ -86,7 +86,8 @@ class BoxCox(_BaseTransformer):
         """
         self._columns = list(self.lambdas.keys())
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__boxcox" for col in self._columns}
+            self._column_mapping = {col: [f"{col}__boxcox"] for col in self._columns}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -117,9 +118,9 @@ class BoxCox(_BaseTransformer):
         # Build all transformation expressions
         exprs = [
             (
-                pl.col(col).log().alias(self._column_mapping[col])
+                pl.col(col).log().alias(self._column_mapping[col][0])
                 if lmbda == 0
-                else ((pl.col(col) ** lmbda - 1) / lmbda).alias(self._column_mapping[col])
+                else ((pl.col(col) ** lmbda - 1) / lmbda).alias(self._column_mapping[col][0])
             )
             for col, lmbda in self.lambdas.items()
         ]
@@ -152,7 +153,7 @@ class BoxCox(_BaseTransformer):
                     expr = ((pl.col(col) * lmbda + 1) ** (1.0 / lmbda)).alias(col)
                 exprs.append(expr)
             return X.with_columns(exprs)
-        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        reverse_map = {v: k for k, values in self._column_mapping.items() for v in values}
         exprs = []
         for new_col, orig_col in reverse_map.items():
             if new_col not in X.columns:

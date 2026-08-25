@@ -31,8 +31,8 @@ class TestConditionFeatures:
         result = transformer.fit_transform(sample_data)
 
         assert "is_adult" in result.columns
-        assert result["is_adult"].dtype == pl.Boolean
-        assert result["is_adult"].to_list() == [False, True, True, False, True]
+        assert result["is_adult"].dtype == pl.Float64
+        assert result["is_adult"].to_list() == [0.0, 1.0, 1.0, 0.0, 1.0]
 
     def test_multiple_conditions_scalar(self, sample_data):
         """Test with multiple independent scalar comparisons."""
@@ -270,7 +270,7 @@ class TestConditionFeaturesEdgeCases:
         result = transformer.fit_transform(X)
 
         # Nulls in comparisons should result in null/false
-        assert result["is_adult"][0] is True
+        assert result["is_adult"][0] == 1.0
         assert result["is_adult"][1] is None
         assert result["is_high_amount"][2] is None
 

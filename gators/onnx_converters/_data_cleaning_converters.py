@@ -28,11 +28,12 @@ DropLowCardinality : similar API instability.
 """
 from __future__ import annotations
 
+from typing import Any
+
 import polars as pl
 
-from ._converters import _onnx_type_to_numpy, _POLARS_TO_ONNX, get_input_onnx_type, get_output_columns, get_output_onnx_type, to_onnx_nodes
-from ._exceptions import OnnxNotSupportedError
 from ..data_cleaning.cast_columns import CastColumns
+from ..data_cleaning.correlation_filter import CorrelationFilter
 from ..data_cleaning.drop_columns import DropColumns
 from ..data_cleaning.drop_constant_columns import DropConstantColumns
 from ..data_cleaning.drop_duplicate_columns import DropDuplicateColumns
@@ -43,7 +44,15 @@ from ..data_cleaning.round_digits import RoundDigits
 from ..data_cleaning.round_significant_digits import RoundSignificantDigits
 from ..data_cleaning.select_columns import SelectColumns
 from ..data_cleaning.variance_filter import VarianceFilter
-from ..data_cleaning.correlation_filter import CorrelationFilter
+from ._converters import (
+    _POLARS_TO_ONNX,
+    _onnx_type_to_numpy,
+    get_input_onnx_type,
+    get_output_columns,
+    get_output_onnx_type,
+    to_onnx_nodes,
+)
+from ._exceptions import OnnxNotSupportedError
 
 try:
     import numpy as np
@@ -160,14 +169,14 @@ def _(transformer: CorrelationFilter, input_names, output_names, errors="coerce"
 
 @get_input_onnx_type.register(RenameColumns)
 def _rename_input_onnx_type(transformer: RenameColumns, col: str) -> int:
-    # Use original fitted dtypes when pipeline_to_onnx has overridden _input_dtypes.
-    orig = transformer.__dict__.get('_onnx_orig_input_dtypes')
-    dtype = (orig or getattr(transformer, "_input_dtypes", {})).get(col)
+    # RenameColumns is a pure Identity/rename op: always report the column's CURRENT
+    # graph tensor type (_input_dtypes), not the originally-fitted dtype. The two can
+    # diverge (e.g. IsNull's null-indicator columns are hardcoded FLOAT in the graph
+    # but declared Float64 at fit time), and using the stale fitted dtype here would
+    # produce a type mismatch against the real upstream tensor.
+    dtype = getattr(transformer, "_input_dtypes", {}).get(col)
     if dtype in (pl.String, pl.Utf8):
         return TensorProto.STRING
-    # bool→string: INT64 with -1=null, 0=false, 1=true for null-safe encoding
-    if dtype == pl.Boolean and transformer.dtype == pl.String:  # pragma: no cover
-        return TensorProto.INT64
     return _POLARS_TO_ONNX.get(dtype, TensorProto.FLOAT)
 
 
@@ -233,7 +242,7 @@ def _round_digits_to_onnx_nodes(transformer: RoundDigits, input_names, output_na
 # ── CastColumns ───────────────────────────────────────────────────────────────
 
 # Polars numeric/boolean dtypes that map cleanly to ONNX primitive types.
-_CAST_DTYPE_TO_ONNX: dict = {
+_CAST_DTYPE_TO_ONNX: dict[Any, int] = {
     pl.Float32: TensorProto.FLOAT,
     pl.Float64: TensorProto.DOUBLE,
     pl.Int8: TensorProto.INT8,
@@ -252,7 +261,7 @@ _CAST_DTYPE_TO_ONNX: dict = {
 def _cast_output_cols(transformer: CastColumns, input_columns: list[str]) -> list[str]:
     if transformer.inplace or not transformer._column_mapping:
         return list(input_columns)
-    new_cols = list(transformer._column_mapping.values())
+    new_cols = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
         dropped = set(transformer._column_mapping)
         return [c for c in input_columns if c not in dropped] + new_cols
@@ -261,9 +270,18 @@ def _cast_output_cols(transformer: CastColumns, input_columns: list[str]) -> lis
 
 @get_input_onnx_type.register(CastColumns)
 def _cast_input_onnx_type(transformer: CastColumns, col: str) -> int:
-    # Use original fitted dtypes when pipeline_to_onnx has overridden _input_dtypes.
-    orig = transformer.__dict__.get('_onnx_orig_input_dtypes')
-    dtype = (orig or getattr(transformer, "_input_dtypes", {})).get(col)
+    # Only the CAST TARGET columns need the ORIGINAL fitted dtype (to correctly decide
+    # cast behavior, e.g. bool→string special-casing). Any other (pass-through) column
+    # must report its CURRENT graph tensor type instead - using the stale original dtype
+    # there can diverge from the real upstream tensor (e.g. IsNull's null-indicator
+    # columns are hardcoded FLOAT in the graph but declared Float64 at fit time),
+    # producing an invalid/mismatched ONNX graph.
+    subset = set(transformer.subset or [])
+    if col in subset:
+        orig = transformer.__dict__.get('_onnx_orig_input_dtypes')
+        dtype = (orig or getattr(transformer, "_input_dtypes", {})).get(col)
+    else:
+        dtype = getattr(transformer, "_input_dtypes", {}).get(col)
     if dtype in (pl.String, pl.Utf8):
         return TensorProto.STRING
     # bool→string: INT64 with -1=null, 0=false, 1=true for null-safe encoding
@@ -274,14 +292,35 @@ def _cast_input_onnx_type(transformer: CastColumns, col: str) -> int:
 
 @get_output_onnx_type.register(CastColumns)
 def _cast_output_onnx_type(transformer: CastColumns, col: str) -> int:
+    # Not using _output_dtypes here: for float sources cast to String, the ONNX node
+    # coerces to Identity (preserving the original float type) since ONNX can't match
+    # Polars' float-to-string formatting, which diverges from the true Polars output dtype.
     subset = set(transformer.subset or [])
-    renamed_vals = set(transformer._column_mapping.values())
+    renamed_vals = {name for names in transformer._column_mapping.values() for name in names}
     if (transformer.inplace and col in subset) or col in renamed_vals:
         if transformer.dtype == pl.String:
-            return TensorProto.STRING
-        # Datetime/Date/Duration: physical representation stays INT64
-        if transformer.dtype.base_type() in (pl.Datetime, pl.Date, pl.Duration, pl.Time):
-            return TensorProto.INT64
+            check_dtypes = (transformer.__dict__.get('_onnx_orig_input_dtypes')
+                            or getattr(transformer, "_input_dtypes", {}))
+            src_col = col if transformer.inplace else {
+                v: k for k, values in (transformer._column_mapping or {}).items() for v in values
+            }.get(col, col)
+            src_dtype = check_dtypes.get(src_col)
+            if src_dtype == pl.Boolean:
+                return TensorProto.STRING
+            # Integer sources: Cast(→INT64)→Cast(→STRING) — properly supported
+            _int_types = {pl.Int8, pl.Int16, pl.Int32, pl.Int64,
+                          pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64}
+            if src_dtype in _int_types:
+                return TensorProto.STRING
+            # Float sources: coerce to Identity — output type equals input type
+            return get_input_onnx_type(transformer, col)
+        # Datetime/Date/Duration: converter emits Identity (pass-through); output type = input type.
+        # transformer.dtype is a polars dtype class at runtime (typed as plain `type` on the model).
+        if transformer.dtype.base_type() in (pl.Datetime, pl.Date, pl.Duration, pl.Time):  # type: ignore[attr-defined]
+            return get_input_onnx_type(transformer, col)
+        # Unsupported dtype (e.g. Categorical): coerce path also uses Identity; output type = input type.
+        if transformer.dtype not in _CAST_DTYPE_TO_ONNX:
+            return get_input_onnx_type(transformer, col)
         return _CAST_DTYPE_TO_ONNX.get(transformer.dtype, TensorProto.FLOAT)
     return get_input_onnx_type(transformer, col)
 
@@ -302,41 +341,73 @@ def _cast_columns_to_onnx_nodes(
     target_onnx_type = _CAST_DTYPE_TO_ONNX.get(transformer.dtype)
     if target_onnx_type is None:
         # Datetime/Date/Duration: int64 IS the physical form — passthrough unchanged.
-        if transformer.dtype.base_type() in (pl.Datetime, pl.Date, pl.Duration, pl.Time):
+        # EXCEPT when the source is a raw string (e.g. "2015-05-13 23:53:00"): that requires
+        # an actual date-string parse, which has no ONNX equivalent (no generic strptime op).
+        # transformer.dtype is a polars dtype class at runtime (typed as plain `type` on the model).
+        if transformer.dtype.base_type() in (pl.Datetime, pl.Date, pl.Duration, pl.Time):  # type: ignore[attr-defined]
+            check_dtypes = transformer.__dict__.get('_onnx_orig_input_dtypes') or getattr(transformer, "_input_dtypes", {})
+            string_sources = [
+                c for c in (transformer.subset or [])
+                if check_dtypes.get(c) in (pl.String, pl.Utf8)
+            ]
+            if string_sources:
+                raise OnnxNotSupportedError(
+                    f"CastColumns with dtype={transformer.dtype!r} cannot be exported to ONNX "
+                    f"for string source columns {string_sources}: parsing a date/time string "
+                    "has no ONNX equivalent (no generic string-to-datetime parse operator)."
+                )
             return _identity_passthrough(input_names, output_names)
         if transformer.dtype == pl.String:
-            # bool→string is safe via LabelEncoder; numeric→string has format mismatches
-            # Use original fitted dtypes (pipeline override may have changed _input_dtypes).
+            # bool→string: safe via LabelEncoder ("false"/"true")
+            # int→string:  Cast(→INT64)→Cast(→STRING) gives "1","2","3" format matching Polars
+            # float→string: format mismatch ("1.0" vs "1") — coerce to Identity
             check_dtypes = transformer.__dict__.get('_onnx_orig_input_dtypes') or getattr(transformer, "_input_dtypes", {})
-            non_bool = [c for c in (transformer.subset or []) if check_dtypes.get(c) != pl.Boolean]
-            if non_bool:
+            _int_types = {pl.Int8, pl.Int16, pl.Int32, pl.Int64,
+                          pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64}
+            non_bool_non_int = [c for c in (transformer.subset or [])
+                                if check_dtypes.get(c) not in {pl.Boolean} | _int_types]
+            if non_bool_non_int:
                 msg = (
                     f"CastColumns with dtype=String cannot be exported to ONNX for "
-                    f"non-boolean source columns {non_bool}. "
-                    "ONNX Cast→STRING format differs from Polars for numeric types."
+                    f"float source columns {non_bool_non_int}. "
+                    "ONNX Cast\u2192STRING format differs from Polars for float types."
                 )
                 if errors == "raise":
                     raise OnnxNotSupportedError(msg)
                 return _identity_passthrough(input_names, output_names)
-            # INT64 input: -1=null → "" (empty-string null sentinel), 0=false → "false", 1=true → "true"
-            # StringImputer's ONNX convention: "" represents null, which it fills with the target value.
             nodes: list[onnx.NodeProto] = []
-            subset = set(transformer.subset or [])
+            subset_set = set(transformer.subset or [])
             for col, in_name in input_names.items():
-                if col not in subset and col in output_names:
+                if col not in subset_set and col in output_names:
                     nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
+            if not transformer.inplace and not transformer.drop_columns:
+                for col in (transformer.subset or []):
+                    if col in input_names and col in output_names:
+                        nodes.append(oh.make_node("Identity", inputs=[input_names[col]], outputs=[output_names[col]]))
             for col in (transformer.subset or []):
                 if col not in input_names:  # pragma: no cover
                     continue
                 in_name = input_names[col]
-                out_name = output_names.get(col, col)
-                nodes.append(oh.make_node(
-                    "LabelEncoder", inputs=[in_name], outputs=[out_name],
-                    domain="ai.onnx.ml",
-                    keys_int64s=[-1, 0, 1],
-                    values_strings=["", "false", "true"],
-                    default_string="",
-                ))
+                if transformer.inplace:
+                    out_name = output_names.get(col, col)
+                else:
+                    new_col = transformer._column_mapping.get(col, [col])[0]
+                    out_name = output_names.get(new_col, new_col)
+                src_dtype = check_dtypes.get(col)
+                if src_dtype == pl.Boolean:
+                    # Boolean: INT64 sentinel (-1=null, 0=false, 1=true) → string
+                    nodes.append(oh.make_node(
+                        "LabelEncoder", inputs=[in_name], outputs=[out_name],
+                        domain="ai.onnx.ml",
+                        keys_int64s=[-1, 0, 1],
+                        values_strings=["", "false", "true"],
+                        default_string="",
+                    ))
+                else:
+                    # Integer: Cast(any → INT64) → Cast(INT64 → STRING)
+                    int_name = f"{in_name}__CastToInt64"
+                    nodes.append(oh.make_node("Cast", inputs=[in_name], outputs=[int_name], to=TensorProto.INT64))
+                    nodes.append(oh.make_node("Cast", inputs=[int_name], outputs=[out_name], to=TensorProto.STRING))
             return nodes, []
         msg = (
             f"CastColumns with dtype={transformer.dtype!r} cannot be exported to ONNX. "
@@ -346,7 +417,7 @@ def _cast_columns_to_onnx_nodes(
             raise OnnxNotSupportedError(msg)
         return _identity_passthrough(input_names, output_names)
 
-    nodes: list[onnx.NodeProto] = []
+    nodes = []
     subset = set(transformer.subset or [])
 
     for col, in_name in input_names.items():
@@ -365,7 +436,7 @@ def _cast_columns_to_onnx_nodes(
         if transformer.inplace:
             out_name = output_names.get(col, col)
         else:
-            new_col = transformer._column_mapping.get(col, col)
+            new_col = transformer._column_mapping.get(col, [col])[0]
             out_name = output_names.get(new_col, new_col)
         nodes.append(oh.make_node("Cast", inputs=[in_name], outputs=[out_name], to=target_onnx_type))
 
@@ -379,7 +450,7 @@ def _rsd_output_columns(transformer: RoundSignificantDigits, input_columns: list
     if transformer.inplace:
         return list(input_columns)
     subset = set(transformer.subset or [])
-    new_cols = [transformer._column_mapping[c] for c in (transformer.subset or [])]
+    new_cols = [transformer._column_mapping[c][0] for c in (transformer.subset or [])]
     if transformer.drop_columns:
         return [c for c in input_columns if c not in subset] + new_cols
     return list(input_columns) + new_cols
@@ -429,7 +500,7 @@ def _rsd_to_onnx_nodes(
         if transformer.inplace:
             out_name = output_names.get(col, col)
         else:
-            new_col = transformer._column_mapping.get(col, col)
+            new_col = transformer._column_mapping.get(col, [col])[0]
             out_name = output_names.get(new_col, new_col)
 
         p = f"{in_name}__rsd"

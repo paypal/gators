@@ -251,10 +251,10 @@ class TestCatBoostEncoder:
         assert "cat2" in encoder.mapping_
         assert isinstance(encoder.mapping_["cat1"], dict)
 
-        # Check column_mapping_
-        assert encoder.column_mapping_ == {
-            "cat1": "cat1__catboost_enc",
-            "cat2": "cat2__catboost_enc",
+        # Check _column_mapping
+        assert encoder._column_mapping == {
+            "cat1": ["cat1__catboost_enc"],
+            "cat2": ["cat2__catboost_enc"],
         }
 
     def test_numeric_target(self):
@@ -298,11 +298,11 @@ class TestCatBoostEncoder:
         assert all(abs(v - 1.0) < 0.5 for v in values)
 
     def test_column_mapping_attribute(self):
-        """Test that column_mapping_ attribute is set correctly."""
+        """Test that _column_mapping attribute is set correctly."""
         X = pl.DataFrame({"cat1": ["A", "B"], "cat2": ["X", "Y"]})
         target = pl.Series("target", [1, 0])
         encoder = CatBoostEncoder(subset=["cat1", "cat2"], inplace=False)
         encoder.fit(X, y=target)
 
-        expected_mapping = {"cat1": "cat1__catboost_enc", "cat2": "cat2__catboost_enc"}
-        assert encoder.column_mapping_ == expected_mapping
+        expected_mapping = {"cat1": ["cat1__catboost_enc"], "cat2": ["cat2__catboost_enc"]}
+        assert encoder._column_mapping == expected_mapping

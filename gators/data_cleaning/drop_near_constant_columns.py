@@ -126,7 +126,7 @@ class DropNearConstantColumns(_BaseTransformer):
 
         self._to_drop = [
             col
-            for col, n_unique in zip(columns_to_check, n_unique_values)
+            for col, n_unique in zip(columns_to_check, n_unique_values, strict=False)
             if n_unique <= max_unique
         ]
         return self

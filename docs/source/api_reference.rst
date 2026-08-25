@@ -18,11 +18,12 @@ Complete reference for all Gators transformers, organized by functionality.
    api/scalers
    api/pipeline
    api/feature_selection
+   api/onnx_converters
 
 Overview
 --------
 
-Gators provides **105 transformers** across 11 categories, all with a consistent sklearn-compatible API.
+Gators provides **108 transformers** across 11 categories, all with a consistent sklearn-compatible API.
 Each transformer implements ``.fit()`` and ``.transform()`` methods and works seamlessly with Polars DataFrames.
 
 
@@ -50,14 +51,14 @@ Categorical encoding: Binary, CatBoost, Count, Hash, LeaveOneOut, OneHot, Ordina
 Feature Generation
 ~~~~~~~~~~~~~~~~~~
 
-Create numeric features: polynomial, ratios, Fourier, group aggregations, rolling windows, and custom rules. **(20 transformers)**
+Create numeric features: polynomial, ratios, Fourier, group aggregations, rolling windows, and custom rules. **(21 transformers)**
 
 :doc:`View Feature Generation API <api/feature_generation>`
 
 String Features
 ~~~~~~~~~~~~~~~
 
-Extract information from text: length, patterns, n-grams, TF-IDF, regex extraction, and text statistics. **(17 transformers)**
+Extract information from text: length, patterns, n-grams, TF-IDF, regex extraction, fuzzy similarity, and text statistics. **(19 transformers)**
 
 :doc:`View String Features API <api/feature_generation_str>`
 
@@ -118,4 +119,9 @@ Export any fitted ``Pipeline`` or single transformer to a validated ONNX graph f
     # Export a single transformer
     onnx_model = to_onnx_graph(fitted_transformer)
 
-All 105 transformer classes are covered by ONNX converters.
+All transformer classes are covered by ONNX converters, with the exception of a small set of
+transformers whose operations have no ONNX-representable equivalent (e.g. window/partition
+aggregations, fuzzy string distance, and variable-length tokenization) - see each transformer's
+docstring for ONNX support notes.
+
+:doc:`View ONNX Export API <api/onnx_converters>`

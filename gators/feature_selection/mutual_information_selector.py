@@ -86,7 +86,7 @@ class MutualInformationSelector(_BaseSelector):
         """Computed MI score for each evaluated feature."""
         return self._mi_values
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "MutualInformationSelector":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> MutualInformationSelector:
         """Compute MI for each feature and record which columns to drop.
 
         Parameters
@@ -185,5 +185,9 @@ class MutualInformationSelector(_BaseSelector):
         x_max = x.drop_nulls().max()
         if x_min is None or x_max is None or x_min == x_max:
             return pl.Series([0] * len(x), dtype=pl.Int32)
+        # Series.min()/.max() are typed as the broad polars `PythonLiteral | None`;
+        # this method is only ever called on numeric columns (see caller), so narrow explicitly.
+        x_min = float(x_min)  # type: ignore[arg-type]
+        x_max = float(x_max)  # type: ignore[arg-type]
         bin_width = (x_max - x_min) / self.n_bins
         return ((x - x_min) / bin_width).cast(pl.Int32).clip(0, self.n_bins - 1)

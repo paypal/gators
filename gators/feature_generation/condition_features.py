@@ -392,7 +392,7 @@ class ConditionFeatures(_BaseTransformer):
                     # Scalar comparison
                     value = cond["value"]
                     # Format value to avoid unnecessary decimals
-                    if isinstance(value, (int, float)) and value == int(value):
+                    if isinstance(value, int | float) and value == int(value):
                         formatted_value = int(value)
                     else:
                         formatted_value = value
@@ -402,6 +402,7 @@ class ConditionFeatures(_BaseTransformer):
         else:
             self._generated_column_names = self.new_column_names
 
+        self._output_dtypes = {col: pl.Float64 for col in self._generated_column_names}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -420,7 +421,7 @@ class ConditionFeatures(_BaseTransformer):
         new_columns = []
 
         # Process each condition
-        for cond, output_col_name in zip(self.conditions, self._generated_column_names):
+        for cond, output_col_name in zip(self.conditions, self._generated_column_names, strict=False):
             column = cond["column"]
             op = cond["op"]
 
@@ -437,7 +438,7 @@ class ConditionFeatures(_BaseTransformer):
                 value = cond["value"]
                 expr = self._build_scalar_comparison(column, op, value)
 
-            new_columns.append(expr.alias(output_col_name))
+            new_columns.append(expr.cast(pl.Float64).alias(output_col_name))
 
         # Add all new columns at once
         X = X.with_columns(new_columns)

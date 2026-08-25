@@ -21,9 +21,9 @@ def expected_X() -> pl.DataFrame:
     X = {
         "column1": ["ends_with1", None, "also_ends_with2"],
         "column2": [None, "does_end_with3", "another_no_match"],
-        "column1__endswith_with1": [True, None, False],
-        "column1__endswith_with2": [False, None, True],
-        "column2__endswith_with3": [None, True, False],
+        "column1__endswith_with1": [1.0, None, 0.0],
+        "column1__endswith_with2": [0.0, None, 1.0],
+        "column2__endswith_with3": [None, 1.0, 0.0],
     }
     return pl.DataFrame(X)
 

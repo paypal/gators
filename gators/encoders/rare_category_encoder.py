@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import Field, PositiveFloat, PositiveInt
+from pydantic import Field, PositiveFloat, PositiveInt, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -90,7 +90,7 @@ class RareCategoryEncoder(_BaseTransformer):
     subset: list[str] | None = None
     mapping_: dict[str, dict[str, str]] = Field(default_factory=dict)
     default: str = "__RARE__"
-    column_mapping_: dict[str, str] = Field(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
     min_count: PositiveInt | PositiveFloat = 2
     drop_columns: bool = True
     inplace: bool = True
@@ -114,12 +114,12 @@ class RareCategoryEncoder(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
 
         self.mapping_ = {
-            col: dict(zip(d[col].to_list(), d["count"].to_list()))
+            col: dict(zip(d[col].to_list(), d["count"].to_list(), strict=False))
             for col in self.subset
             if not (d := X[col].value_counts()).is_empty()
         }
@@ -132,7 +132,10 @@ class RareCategoryEncoder(_BaseTransformer):
         }
 
         if not self.inplace:
-            self.column_mapping_ = {col: f"{col}__encode_rare" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__encode_rare"] for col in self.subset}
+            self._output_dtypes = {
+                new: pl.String for names in self._column_mapping.values() for new in names
+            }
 
         return self
 
@@ -156,7 +159,7 @@ class RareCategoryEncoder(_BaseTransformer):
             return X.with_columns(transformations)
 
         transformations = [
-            pl.col(col).replace(mapping).alias(self.column_mapping_[col])
+            pl.col(col).replace(mapping).alias(self._column_mapping[col][0])
             for col, mapping in self.mapping_.items()
         ]
         X = X.with_columns(transformations)

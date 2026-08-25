@@ -260,3 +260,16 @@ class TestSklearnAPI:
         imp = KNNImputer(n_neighbors=2)
         with pytest.raises(NotFittedError):
             imp.transform(X)
+
+    def test_integer_column_rounded_and_cast_back(self):
+        """Integer columns must be rounded and cast back to their original dtype."""
+        X = pl.DataFrame(
+            {
+                "A": pl.Series([1, 2, 3, 4, None], dtype=pl.Int64),
+                "B": [10.0, 20.0, 30.0, 40.0, 35.0],
+            }
+        )
+        imp = KNNImputer(n_neighbors=2, subset=["A"])
+        result = imp.fit_transform(X)
+        assert result["A"].dtype == pl.Int64
+        assert result["A"].null_count() == 0

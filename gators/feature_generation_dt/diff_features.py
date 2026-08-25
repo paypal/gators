@@ -6,6 +6,8 @@ from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
+_UNIT_NAMES = {"d": "days", "h": "hours", "m": "minutes", "s": "seconds"}
+
 
 class DiffFeatures(_BaseTransformer):
     """
@@ -97,6 +99,7 @@ class DiffFeatures(_BaseTransformer):
     # Physical int64 epoch values for ONNX export
     _reference_dates_physical: dict[str, int] = PrivateAttr(default_factory=dict)
     _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("units")
     def check_units(cls, units):
@@ -154,6 +157,19 @@ class DiffFeatures(_BaseTransformer):
             dtype = X.schema.get(col, pl.Datetime)
             self._dt_units[col] = dtype.time_unit if hasattr(dtype, 'time_unit') else 'date'
 
+        self._column_mapping = {}
+        if self.column_pairs:
+            for col_a, col_b in self.column_pairs:
+                key = f"{col_a}_minus_{col_b}"
+                self._column_mapping[key] = [f"{key}__{_UNIT_NAMES[unit]}" for unit in self.units]
+        if self.reference_dates:
+            for col in self.reference_dates:
+                key = f"{col}_since_ref"
+                self._column_mapping[key] = [f"{key}__{_UNIT_NAMES[unit]}" for unit in self.units]
+        self._output_dtypes = {
+            new: pl.Int64 for names in self._column_mapping.values() for new in names
+        }
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -181,12 +197,7 @@ class DiffFeatures(_BaseTransformer):
         }
 
         # Unit names for column suffixes
-        unit_names = {
-            "d": "days",
-            "h": "hours",
-            "m": "minutes",
-            "s": "seconds",
-        }
+        unit_names = _UNIT_NAMES
 
         # Pairwise column differences
         if self.column_pairs:

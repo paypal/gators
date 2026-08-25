@@ -134,9 +134,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Benchmarks (development tools, not tracked)
-benchmarks/
-
 tst*/
 
 dist/dist/

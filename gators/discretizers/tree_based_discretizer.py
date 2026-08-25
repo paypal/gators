@@ -86,7 +86,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
 
     task: str = "classification"
     min_samples_leaf: PositiveInt = 10
-    random_state: int = None
+    random_state: int | None = None
 
     @field_validator("task")
     def check_task(cls, task):
@@ -210,6 +210,7 @@ class TreeBasedDiscretizer(_BaseDiscretizer):
 
         # Set column mapping for non-inplace mode
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__dic_tree" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__dic_tree"] for col in self.subset}
 
+        self._set_output_dtypes()
         return self

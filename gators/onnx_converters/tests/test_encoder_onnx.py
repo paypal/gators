@@ -202,6 +202,19 @@ def test_ohe_basic(df_str):
     assert_onnx_close(onnx_out, expected, atol=1e-5)
 
 
+def test_ohe_drop_columns_false(df_str):
+    """drop_columns=False keeps the original subset column as an unchanged pass-through."""
+    enc = OneHotEncoder(subset=["cat"], drop_columns=False)
+    enc.fit(df_str)
+    model = to_onnx_graph(enc)
+
+    onnx_out = run_onnx(model, df_str)
+    expected = enc.transform(df_str)
+
+    np.testing.assert_array_equal(onnx_out["cat"], df_str["cat"].to_numpy(allow_copy=True).astype(str))
+    assert_onnx_close({k: v for k, v in onnx_out.items() if k != "cat"}, expected.drop("cat"), atol=1e-5)
+
+
 # ── OrdinalEncoder inplace=False ──────────────────────────────────────────────
 
 def test_ordinal_encoder_inplace_false_drop(df_str):
@@ -229,6 +242,23 @@ def test_ordinal_encoder_inplace_false_keep(df_str):
         atol=1e-5,
     )
     np.testing.assert_array_equal(onnx_out["cat"], df_str["cat"].to_numpy(allow_copy=True).astype(str))
+
+
+def test_pipeline_ordinal_encoder_non_inplace_keep(df_str):
+    """Base-encoder pass-through fallback (inplace=False, drop_columns=False, no custom
+    get_output_onnx_type override) is exercised via pipeline_to_onnx for the original column."""
+    pipe = Pipeline(steps=[("ord_enc", OrdinalEncoder(subset=["cat"], inplace=False, drop_columns=False))])
+    pipe.fit(df_str)
+    model = pipeline_to_onnx(pipe)
+
+    onnx_out = run_onnx(model, df_str)
+    expected = pipe.transform(df_str)
+
+    np.testing.assert_array_equal(onnx_out["cat"], df_str["cat"].to_numpy(allow_copy=True).astype(str))
+    np.testing.assert_allclose(
+        onnx_out["cat__ordinal_enc"].astype(float),
+        expected["cat__ordinal_enc"].to_numpy(allow_copy=True),
+    )
 
 
 # ── RareCategoryEncoder via pipeline (exercises get_output_onnx_type) ─────────

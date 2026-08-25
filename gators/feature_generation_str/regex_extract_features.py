@@ -66,6 +66,7 @@ class RegexExtractFeatures(_BaseTransformer):
     drop_columns: bool = False
 
     _group_names: list[str] = PrivateAttr(default_factory=list)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("pattern")
     @classmethod
@@ -83,7 +84,7 @@ class RegexExtractFeatures(_BaseTransformer):
         """Named groups discovered in the pattern."""
         return self._group_names
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RegexExtractFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> RegexExtractFeatures:
         """Parse group names from ``pattern``.
 
         Parameters
@@ -99,6 +100,12 @@ class RegexExtractFeatures(_BaseTransformer):
             The fitted transformer instance.
         """
         self._group_names = re.findall(r"\(\?P<([^>]+)>", self.pattern)
+        self._column_mapping = {
+            col: [f"{col}__{group}" for group in self._group_names] for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.String for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

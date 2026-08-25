@@ -46,7 +46,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
 ```
 
 **Key Subclasses**:
-- `_BaseEncoder` - For categorical encoding (adds `mapping_`, `column_mapping_`)
+- `_BaseEncoder` - For categorical encoding (adds `mapping_`, `_column_mapping`)
 - Individual transformers (e.g., `NumericImputer`, `WOEEncoder`, `OneHotEncoder`)
 
 ### 2. Module Organization
@@ -536,7 +536,7 @@ class CustomTransformer(_BaseTransformer):
 ## Questions & Answers
 
 **Q: When should I use `_BaseEncoder` vs `_BaseTransformer`?**  
-A: Use `_BaseEncoder` for categorical encoding tasks that need `mapping_` and `column_mapping_` attributes. Use `_BaseTransformer` for all other transformations.
+A: Use `_BaseEncoder` for categorical encoding tasks that need `mapping_` and `_column_mapping` attributes. Use `_BaseTransformer` for all other transformations.
 
 **Q: How do I handle parameters that shouldn't be in `__init__`?**  
 A: Use Pydantic's `PrivateAttr()` for computed/fitted attributes that are set during `fit()`.

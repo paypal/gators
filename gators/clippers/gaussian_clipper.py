@@ -155,12 +155,13 @@ class GaussianClipper(_BaseClipper):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype not in [pl.String, pl.Boolean]
             ]
 
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__clip_gaussian" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__clip_gaussian"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         # Compute mean and std for each column in a single pass
         stats = X.select(
@@ -176,7 +177,7 @@ class GaussianClipper(_BaseClipper):
         # Compute clipping bounds: [mean - n*std, mean + n*std]
         self._clip_bounds = {
             col: (mean - self.n_sigmas * std, mean + self.n_sigmas * std)
-            for col, mean, std in zip(self.subset, means, stds)
+            for col, mean, std in zip(self.subset, means, stds, strict=False)
         }
 
         return self

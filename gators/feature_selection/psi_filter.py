@@ -38,7 +38,8 @@ def _compute_psi(reference: pl.Series, current: pl.Series, n_bins: int = 10) -> 
 
     # Derive bin edges from quantiles of the reference distribution
     quantiles = [i / n_bins for i in range(n_bins + 1)]
-    breaks = sorted(set(float(reference.quantile(q)) for q in quantiles))
+    raw_breaks = [reference.quantile(q) for q in quantiles]
+    breaks = sorted({float(q) for q in raw_breaks if q is not None})
 
     if len(breaks) < 2:
         return 0.0

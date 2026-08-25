@@ -281,6 +281,7 @@ class RuleFeatures(_BaseTransformer):
         RuleFeatures
             Fitted transformer instance.
         """
+        self._output_dtypes = {col: pl.Float64 for col in self.new_column_names}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -300,7 +301,7 @@ class RuleFeatures(_BaseTransformer):
             # Optimize: build combined expressions directly, skipping intermediate columns
             output_exprs = []
 
-            for rule, output_col_name in zip(self.rules, self.new_column_names):
+            for rule, output_col_name in zip(self.rules, self.new_column_names, strict=False):
                 # Build condition expressions
                 condition_exprs = []
                 for cond in rule:
@@ -326,7 +327,7 @@ class RuleFeatures(_BaseTransformer):
                     for expr in condition_exprs[1:]:
                         combined_expr = combined_expr | expr
 
-                output_exprs.append(combined_expr.alias(output_col_name))
+                output_exprs.append(combined_expr.cast(pl.Float64).alias(output_col_name))
 
             # Apply all output columns in one operation
             return X.with_columns(output_exprs)
@@ -338,7 +339,7 @@ class RuleFeatures(_BaseTransformer):
             output_exprs = []
 
             for rule_idx, (rule, output_col_name) in enumerate(
-                zip(self.rules, self.new_column_names)
+                zip(self.rules, self.new_column_names, strict=False)
             ):
                 condition_cols = []
 
@@ -369,7 +370,7 @@ class RuleFeatures(_BaseTransformer):
                     for col in condition_cols[1:]:
                         combined_expr = combined_expr | pl.col(col)
 
-                output_exprs.append(combined_expr.alias(output_col_name))
+                output_exprs.append(combined_expr.cast(pl.Float64).alias(output_col_name))
 
             # Apply all expressions in two batches: intermediates then outputs
             X = X.with_columns(all_exprs)

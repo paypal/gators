@@ -13,13 +13,14 @@ def compute_woe_iv(
 ):
     # Pre-compute target statistics for better performance
     reg = regularization if regularization is not None else 0.01
-    num_1s = y.sum()
+    # y.sum() is typed as the broad polars PythonLiteral union; y is always a 0/1 target here.
+    num_1s = float(y.sum())  # type: ignore[arg-type]
     num_0s = len(y) - num_1s
     denom_1 = num_1s + 2 * reg
     denom_0 = num_0s + 2 * reg
 
     # Cast Enum/Categorical columns to String so unpivot can find a common supertype
-    enum_cols = [c for c, d in X.schema.items() if isinstance(d, (pl.Enum, pl.Categorical))]
+    enum_cols = [c for c, d in X.schema.items() if isinstance(d, pl.Enum | pl.Categorical)]
     if enum_cols:
         X = X.with_columns([pl.col(c).cast(pl.String) for c in enum_cols])
 
@@ -167,7 +168,7 @@ class WOEEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
         X = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
@@ -188,5 +189,11 @@ class WOEEncoder(_BaseEncoder):
             }
         # Preserve subset order so transform() adds columns in a deterministic sequence
         self.mapping_ = {col: raw_mapping.get(col, {}) for col in self.subset}
-        self.column_mapping_ = {col: f"{col}__encode_woe" for col in self.subset}
+        self._column_mapping = {col: [f"{col}__encode_woe"] for col in self.subset}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = {col: pl.Float64 for col in targeted}
         return self

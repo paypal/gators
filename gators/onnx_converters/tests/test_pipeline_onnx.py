@@ -7,7 +7,7 @@ import pytest
 from gators.imputers import NumericImputer, BooleanImputer
 from gators.scalers import StandardScaler
 from gators.pipeline import Pipeline
-from gators.onnx_converters import pipeline_to_onnx, get_output_columns, check_pipeline_onnx_compatibility
+from gators.onnx_converters import pipeline_to_onnx, get_output_columns, check_pipeline_onnx_compatibility, create_session, run_session
 from .conftest import assert_onnx_close, run_onnx
 
 
@@ -287,3 +287,186 @@ def test_pipeline_int64_type_promotion():
     pipe.fit(X)
     out = run_onnx(pipeline_to_onnx(pipe), X)
     assert "ts_i64__is_business_hour" in out
+
+
+# ── create_session / run_session ──────────────────────────────────────────────
+
+@pytest.fixture
+def numeric_pipe_and_model(df):
+    pipe = Pipeline(steps=[
+        ("imp", NumericImputer(strategy="median")),
+        ("scale", StandardScaler()),
+    ])
+    pipe.fit(df)
+    return pipe, pipeline_to_onnx(pipe)
+
+
+def test_create_session_returns_inference_session(numeric_pipe_and_model):
+    _, model = numeric_pipe_and_model
+    sess = create_session(model)
+    import onnxruntime as ort
+    assert isinstance(sess, ort.InferenceSession)
+
+
+def test_create_session_ort_enable_all(numeric_pipe_and_model):
+    _, model = numeric_pipe_and_model
+    import onnxruntime as ort
+    sess = create_session(model)
+    assert sess.get_session_options().graph_optimization_level == ort.GraphOptimizationLevel.ORT_ENABLE_ALL
+
+
+def test_create_session_thread_counts(numeric_pipe_and_model):
+    _, model = numeric_pipe_and_model
+    sess = create_session(model, intra_op_num_threads=2, inter_op_num_threads=1)
+    opts = sess.get_session_options()
+    assert opts.intra_op_num_threads == 2
+    assert opts.inter_op_num_threads == 1
+
+
+def test_create_session_accepts_bytes(numeric_pipe_and_model):
+    _, model = numeric_pipe_and_model
+    sess = create_session(model.SerializeToString())
+    import onnxruntime as ort
+    assert isinstance(sess, ort.InferenceSession)
+
+
+def test_create_session_saves_optimized_model(tmp_path, numeric_pipe_and_model):
+    _, model = numeric_pipe_and_model
+    out_path = str(tmp_path / "opt.onnx")
+    create_session(model, optimized_model_path=out_path)
+    assert (tmp_path / "opt.onnx").exists()
+
+
+def test_run_session_single_pass(df, numeric_pipe_and_model):
+    pipe, model = numeric_pipe_and_model
+    sess = create_session(model)
+    result = run_session(sess, df)
+    expected = pipe.transform(df)
+    assert set(result.columns) == set(expected.columns)
+    assert_onnx_close(
+        {c: result[c].to_numpy(allow_copy=True) for c in result.columns},
+        expected,
+        atol=1e-4,
+    )
+
+
+def test_run_session_batched_matches_single(df, numeric_pipe_and_model):
+    _, model = numeric_pipe_and_model
+    sess = create_session(model)
+    full   = run_session(sess, df)
+    batched = run_session(sess, df, batch_size=2)
+    for col in full.columns:
+        np.testing.assert_allclose(
+            full[col].to_numpy(allow_copy=True),
+            batched[col].to_numpy(allow_copy=True),
+            atol=1e-6,
+            err_msg=f"Mismatch in column '{col}'",
+        )
+
+
+def test_run_session_batch_larger_than_data_uses_single_pass(df, numeric_pipe_and_model):
+    _, model = numeric_pipe_and_model
+    sess = create_session(model)
+    result = run_session(sess, df, batch_size=1_000_000)
+    assert len(result) == len(df)
+
+
+def test_run_session_string_column():
+    """run_session handles STRING input columns correctly."""
+    from gators.feature_generation_str import Contains
+    X = pl.DataFrame({"text": ["hello world", "foo bar", "baz"]})
+    t = Contains(contains_dict={"text": ["hello"]})
+    t.fit(X)
+    from gators.onnx_converters import to_onnx_graph
+    sess = create_session(to_onnx_graph(t))
+    result = run_session(sess, X)
+    assert result["text__contains_hello"].to_list() == [True, False, False]
+
+
+def test_create_session_from_file_path(tmp_path, numeric_pipe_and_model):
+    """create_session with a str file path exercises lines 421-422."""
+    _, model = numeric_pipe_and_model
+    onnx_path = str(tmp_path / "model.onnx")
+    with open(onnx_path, "wb") as f:
+        f.write(model.SerializeToString())
+    sess = create_session(onnx_path)
+    import onnxruntime as ort
+    assert isinstance(sess, ort.InferenceSession)
+
+
+def test_to_int64_plain_int_column():
+    """_to_int64 non-datetime branch (line 363): plain Int64 series has no time_unit."""
+    from gators.onnx_converters._export import _to_int64
+    s = pl.Series([1, 2, 3], dtype=pl.Int64)
+    arr = _to_int64(s)
+    assert arr.tolist() == [1, 2, 3]
+
+
+def test_to_int64_boolean_column_null_sentinel():
+    """_to_int64 boolean branch: nulls map to -1, matching CastColumns' bool→string
+    LabelEncoder sentinel (-1=null, 0=false, 1=true)."""
+    from gators.onnx_converters._export import _to_int64
+    s = pl.Series([True, False, None], dtype=pl.Boolean)
+    arr = _to_int64(s)
+    assert arr.tolist() == [1, 0, -1]
+
+
+def test_make_feed_unknown_type_fallback():
+    """_make_feed else-branch: unknown tensor type falls back to float32 cast.
+    Extra column 'y' is skipped (covers the `continue` branch for missing keys).
+    """
+    from gators.onnx_converters._export import _make_feed
+    import numpy as np
+    meta = {"x__in": "tensor(uint32)"}         # not in _TYPE_MAP → else branch
+    df = pl.DataFrame({"x": [1.0, 2.0], "y": [3.0, 4.0]})  # "y__in" not in meta → continue
+    feeds = _make_feed(meta, df)
+    assert "x__in" in feeds
+    assert "y__in" not in feeds
+    assert feeds["x__in"].dtype == np.float32
+
+
+def test_run_session_datetime_column():
+    """_to_int64 datetime branch (lines 482-484) via a Datetime input column."""
+    from gators.feature_generation_dt import OrdinalFeatures
+    from datetime import datetime
+    X = pl.DataFrame({"ts": [datetime(2024, 1, 1), datetime(2024, 6, 15)]})
+    t = OrdinalFeatures(subset=["ts"], components=["month"])
+    t.fit(X)
+    from gators.onnx_converters import to_onnx_graph
+    sess = create_session(to_onnx_graph(t))
+    result = run_session(sess, X)
+    assert result["ts__month"].to_list() == [1, 6]
+
+
+def test_run_session_unknown_tensor_type_uses_float32_fallback(df, numeric_pipe_and_model):
+    """The ``conv else`` fallback (line 491) fires when the session input type is not in _TYPE_MAP.
+
+    Build a float32 identity model so the fallback cast(Float32) is type-compatible,
+    then patch one input's advertised type to an unrecognised string.
+    """
+    import onnx.helper as oh, onnx.numpy_helper, onnx
+    from onnx import TensorProto
+
+    # Trivial identity model with float32 input so the fallback cast matches
+    g = oh.make_graph(
+        [oh.make_node("Identity", ["x__in"], ["x"])],
+        "id_f32",
+        [oh.make_tensor_value_info("x__in", TensorProto.FLOAT, [None])],
+        [oh.make_tensor_value_info("x", TensorProto.FLOAT, [None])],
+    )
+    m = oh.make_model(g, opset_imports=[oh.make_opsetid("", 17)])
+    sess = create_session(m)
+
+    class _FakeInput:
+        def __init__(self, inp):
+            self.name = inp.name
+            self.type = "tensor(uint32)"   # not in _TYPE_MAP → triggers else branch
+
+    original_get_inputs = sess.get_inputs
+    sess.get_inputs = lambda: [_FakeInput(inp) for inp in original_get_inputs()]  # type: ignore[method-assign]
+    try:
+        X_f32 = pl.DataFrame({"x": [1.0, 2.0, 3.0]})
+        result = run_session(sess, X_f32)
+        assert result is not None
+    finally:
+        sess.get_inputs = original_get_inputs

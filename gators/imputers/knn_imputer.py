@@ -20,6 +20,10 @@ _NUMERIC_DTYPES = frozenset(
     }
 )
 
+_INT_DTYPES = frozenset(
+    {pl.Int8, pl.Int16, pl.Int32, pl.Int64, pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64}
+)
+
 
 class KNNImputer(_BaseTransformer):
     """Impute missing values using K-Nearest Neighbors.
@@ -100,10 +104,18 @@ class KNNImputer(_BaseTransformer):
     n_neighbors: PositiveInt = 5
     subset: list[str] | None = None
     weights: Literal["uniform", "distance"] = "uniform"
+    inplace: bool = True
+    drop_columns: bool = True
 
     _train_df_: pl.DataFrame = PrivateAttr(default_factory=pl.DataFrame)
     _global_stats_: dict[str, float] = PrivateAttr(default_factory=dict)
     _feature_cols_: list[str] = PrivateAttr(default_factory=list)
+    _orig_dtypes_: dict = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
+
+    def _round_if_int(self, val: float, col: str) -> float:
+        """Round to the nearest integer when ``col``'s original dtype is an integer type."""
+        return round(val) if self._orig_dtypes_.get(col) in _INT_DTYPES else val
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "KNNImputer":
         """Fit by storing the complete training rows as the KNN reference pool.
@@ -120,7 +132,7 @@ class KNNImputer(_BaseTransformer):
         KNNImputer
             The fitted transformer instance.
         """
-        dtype_map = dict(zip(X.columns, X.dtypes))
+        dtype_map = dict(zip(X.columns, X.dtypes, strict=False))
 
         if not self.subset:
             self.subset = [
@@ -141,8 +153,15 @@ class KNNImputer(_BaseTransformer):
         # Global median fallback (used when no feature cols are available)
         source = self._train_df_ if len(self._train_df_) > 0 else X
         stats = source.select([pl.col(c).median() for c in self.subset]).row(0)
+        self._orig_dtypes_ = {col: dtype_map[col] for col in self.subset}
+        # Identity mapping: this imputer fills nulls in-place, no renaming.
+        self._column_mapping = {col: [col] for col in self.subset}
+        self._output_dtypes = {col: self._orig_dtypes_[col] for col in self.subset}
         self._global_stats_ = {
-            col: (val if val is not None else 0.0) for col, val in zip(self.subset, stats)
+            col: (
+                self._round_if_int(val if val is not None else 0.0, col)
+            )
+            for col, val in zip(self.subset, stats, strict=False)
         }
 
         return self
@@ -254,5 +273,9 @@ class KNNImputer(_BaseTransformer):
             )
 
         # Drop the null fill_cols from group, join imputed values back,
-        # then restore the original column order.
+        # then restore the original column order and dtype (mean/weighted-sum
+        # always compute Float64, so integer fill_cols must be rounded and cast back).
+        for c in fill_cols:
+            if self._orig_dtypes_.get(c) in _INT_DTYPES:
+                agg = agg.with_columns(pl.col(c).round(0).cast(self._orig_dtypes_[c]))
         return group.drop(fill_cols).join(agg, on="__row_idx__").select(group.columns)

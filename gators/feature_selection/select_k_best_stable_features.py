@@ -46,7 +46,7 @@ def select_k_best_stable_features(
 
     for train_idx, _ in skf.split(X_array, y_array):
         estimator.fit(X_array[train_idx], y_array[train_idx])
-        fold_importance = dict(zip(features, estimator.feature_importances_))
+        fold_importance = dict(zip(features, estimator.feature_importances_, strict=False))
         top_k_set = set(
             pl.DataFrame({"feature": features, "importance": estimator.feature_importances_})
             .sort("importance", descending=True)[:k]["feature"]

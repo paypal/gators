@@ -18,10 +18,10 @@ def df():
     return pl.DataFrame({"A": [1.0, 2.0, 3.0, 4.0], "B": [5.0, 6.0, 7.0, 8.0]})
 
 
-def _compare(t, df, atol=1e-4):
+def _compare(t, df, atol=1e-4, float_datatype="float64"):
     """Fit, export, run ONNX and compare against Polars transform output."""
     t.fit(df)
-    model = to_onnx_graph(t)
+    model = to_onnx_graph(t, float_datatype=float_datatype)
     onnx_out = run_onnx(model, df)
     expected = t.transform(df)
     assert_onnx_close(onnx_out, expected, atol=atol)
@@ -46,7 +46,7 @@ def test_arcsinh_scaler(df):
 
 def test_arcsinh_scaler_float32():
     X = pl.DataFrame({"A": pl.Series([1.0, 2.0, 3.0, 4.0], dtype=pl.Float32)})
-    _compare(ArcSinhScaler(), X)
+    _compare(ArcSinhScaler(), X, float_datatype="float32")
 
 
 def test_arcsin_sqrt_scaler():
@@ -57,7 +57,7 @@ def test_arcsin_sqrt_scaler():
 
 def test_arcsin_sqrt_scaler_float32():
     X = pl.DataFrame({"A": pl.Series([0.1, 0.3, 0.5, 0.9], dtype=pl.Float32)})
-    _compare(ArcSinSquareRootScaler(), X)
+    _compare(ArcSinSquareRootScaler(), X, float_datatype="float32")
 
 
 def test_power_scaler(df):

@@ -90,7 +90,7 @@ class GroupByImputer(_BaseTransformer):
     drop_columns: bool = True
     inplace: bool = True
     _statistics: dict[str, dict[str, int | float]] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "GroupByImputer":
         """Fit the transformer by computing group-wise imputation statistics.
@@ -111,14 +111,15 @@ class GroupByImputer(_BaseTransformer):
             # Auto-detect numeric columns
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype not in [pl.String, pl.Boolean] and col != self.group_by_column
             ]
 
         if not self.inplace:
             self._column_mapping = {
-                col: f"{col}__impute_groupby_{self.strategy}" for col in self.subset
+                col: [f"{col}__impute_groupby_{self.strategy}"] for col in self.subset
             }
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         # Compute group statistics for all columns in a single group_by pass
         agg_fn = pl.Expr.median if self.strategy == "median" else pl.Expr.mean
@@ -126,8 +127,15 @@ class GroupByImputer(_BaseTransformer):
             [agg_fn(pl.col(col)).alias(col) for col in self.subset]
         )
         groups = group_stats[self.group_by_column].to_list()
+        # median()/mean() always return Float64; round back to int for integer columns
+        # so the imputed dtype matches the original column dtype.
+        _int_dtypes = {pl.Int8, pl.Int16, pl.Int32, pl.Int64, pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64}
+        col_dtypes = dict(zip(X.columns, X.dtypes, strict=False))
         for col in self.subset:
-            self._statistics[col] = dict(zip(groups, group_stats[col].to_list()))
+            values = group_stats[col].to_list()
+            if col_dtypes.get(col) in _int_dtypes:
+                values = [None if v is None else int(round(v)) for v in values]
+            self._statistics[col] = dict(zip(groups, values, strict=False))
 
         return self
 
@@ -174,7 +182,7 @@ class GroupByImputer(_BaseTransformer):
             if self.inplace:
                 transformations.append(pl.col(col).fill_null(pl.col(temp_col)).alias(col))
             else:
-                new_col = self._column_mapping[col]
+                new_col = self._column_mapping[col][0]
                 transformations.append(pl.col(col).fill_null(pl.col(temp_col)).alias(new_col))
 
         # Apply all transformations at once

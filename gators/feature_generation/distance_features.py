@@ -118,7 +118,7 @@ class DistanceFeatures(_BaseTransformer):
     method: Literal["euclidean", "manhattan", "haversine"] = "haversine"
     drop_columns: bool = True
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("lats")
     def check_lats_length(cls, lats):
@@ -170,8 +170,11 @@ class DistanceFeatures(_BaseTransformer):
 
         if not self.new_column_names:
             self.new_column_names = default_names
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -194,7 +197,7 @@ class DistanceFeatures(_BaseTransformer):
             long1_col, long2_col = self.longs[i], self.longs[i + 1]
 
             default_name = f"distance__{lat1_col}_to_{lat2_col}__{self.method}_{self.unit}"
-            new_col_name = self._column_mapping[default_name]
+            new_col_name = self._column_mapping[default_name][0]
 
             if self.method == "haversine":
                 # Validate lat/long ranges for haversine

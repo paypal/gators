@@ -125,11 +125,11 @@ class CountEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
         self.mapping_ = {
-            col: dict(zip(d[col].to_list(), d["count"].to_list()))
+            col: dict(zip(d[col].to_list(), d["count"].to_list(), strict=False))
             for col in self.subset
             if not (d := X[col].value_counts()).is_empty()
         }
@@ -138,6 +138,12 @@ class CountEncoder(_BaseEncoder):
             col: {k: v for k, v in counts.items() if v >= min_threshold_count}
             for col, counts in self.mapping_.items()
         }
-        self.column_mapping_ = {col: f"{col}__count_enc" for col in self.subset}
+        self._column_mapping = {col: [f"{col}__count_enc"] for col in self.subset}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = {col: pl.Float64 for col in targeted}
 
         return self

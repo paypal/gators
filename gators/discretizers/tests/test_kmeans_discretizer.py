@@ -307,8 +307,8 @@ class TestKMeansDiscretizer:
             subset=["value"], num_bins=3, as_numerics=True, random_state=42
         )
         result = discretizer.fit_transform(X)
-        # Labels should be numeric strings ("0", "1", "2", ...)
-        assert result["value"].dtype in (pl.Int32, pl.String, pl.Categorical, pl.Enum)
+        # Labels should be numeric (bin indices as float)
+        assert result["value"].dtype == pl.Float64
         # Verify _labels were set as numeric strings during fit
         assert all(
             label.lstrip("-").isdigit() or label == "constant"

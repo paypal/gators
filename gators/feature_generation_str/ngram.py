@@ -1,7 +1,42 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
+
+
+def _safe_ngram_name(ngram: str) -> str:
+    """Sanitize an n-gram string into a safe column-name suffix."""
+    safe_ngram = (
+        ngram.replace(" ", "_")
+        .replace(".", "dot")
+        .replace(",", "comma")
+        .replace("!", "excl")
+        .replace("?", "ques")
+        .replace("#", "hash")
+        .replace("@", "at")
+        .replace("-", "_")
+        .replace("/", "_")
+        .replace("\\", "_")
+        .replace("'", "")
+        .replace('"', "")
+        .replace("(", "")
+        .replace(")", "")
+        .replace("[", "")
+        .replace("]", "")
+        .replace("{", "")
+        .replace("}", "")
+        .replace("|", "")
+        .replace("&", "and")
+        .replace("+", "plus")
+        .replace("=", "eq")
+        .replace("<", "lt")
+        .replace(">", "gt")
+        .replace(":", "")
+        .replace(";", "")
+    )
+    if len(safe_ngram) > 20:
+        safe_ngram = safe_ngram[:20]
+    return safe_ngram
 
 
 class NGram(_BaseTransformer):
@@ -98,6 +133,7 @@ class NGram(_BaseTransformer):
 
     # Fitted attributes (not part of initialization)
     top_ngrams_: dict[str, list[str]] = {}
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("n")
     def check_n(cls, n):
@@ -190,6 +226,14 @@ class NGram(_BaseTransformer):
             else:
                 self.top_ngrams_[col] = []
 
+        self._column_mapping = {
+            col: [f"{col}__ng_{_safe_ngram_name(ngram)}" for ngram in ngrams]
+            for col, ngrams in self.top_ngrams_.items()
+            if ngrams
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -218,42 +262,11 @@ class NGram(_BaseTransformer):
 
             for ngram in self.top_ngrams_[col]:
                 # Create safe feature name by replacing special chars
-                safe_ngram = (
-                    ngram.replace(" ", "_")
-                    .replace(".", "dot")
-                    .replace(",", "comma")
-                    .replace("!", "excl")
-                    .replace("?", "ques")
-                    .replace("#", "hash")
-                    .replace("@", "at")
-                    .replace("-", "_")
-                    .replace("/", "_")
-                    .replace("\\", "_")
-                    .replace("'", "")
-                    .replace('"', "")
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("[", "")
-                    .replace("]", "")
-                    .replace("{", "")
-                    .replace("}", "")
-                    .replace("|", "")
-                    .replace("&", "and")
-                    .replace("+", "plus")
-                    .replace("=", "eq")
-                    .replace("<", "lt")
-                    .replace(">", "gt")
-                    .replace(":", "")
-                    .replace(";", "")
-                )
-
-                # Truncate if too long (keep first 20 chars)
-                if len(safe_ngram) > 20:
-                    safe_ngram = safe_ngram[:20]
+                safe_ngram = _safe_ngram_name(ngram)
 
                 # Count occurrences using overlapping matches
                 # map_elements allows overlapping count by incrementing position by 1
-                def count_overlapping(text, pattern):
+                def count_overlapping(text: str, pattern: str) -> int:
                     if not text or not pattern:
                         return 0
                     count = 0
@@ -266,9 +279,12 @@ class NGram(_BaseTransformer):
                         start = pos + 1  # Move by 1 to allow overlapping
                     return count
 
+                def _count(x: object, ngram: str = ngram) -> int:
+                    return count_overlapping(str(x), ngram)
+
                 count_expr = col_expr.map_elements(
-                    lambda x: count_overlapping(str(x), ngram), return_dtype=pl.Int64
-                ).alias(f"{col}__ng_{safe_ngram}")
+                    _count, return_dtype=pl.Int64
+                ).cast(pl.Float64).alias(f"{col}__ng_{safe_ngram}")
                 new_columns.append(count_expr)
 
         X = X.with_columns(new_columns)

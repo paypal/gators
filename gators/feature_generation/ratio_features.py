@@ -160,7 +160,7 @@ class RatioFeatures(_BaseTransformer):
     denominator_columns: list[str]
     new_column_names: list[str] | None = None
     drop_columns: bool = False
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("denominator_columns", mode="after")
     def check_lengths_match(cls, denominator_columns, info):
@@ -203,14 +203,17 @@ class RatioFeatures(_BaseTransformer):
         """
         default_names = [
             f"{num}__div__{denom}"
-            for num, denom in zip(self.numerator_columns, self.denominator_columns)
+            for num, denom in zip(self.numerator_columns, self.denominator_columns, strict=False)
         ]
 
         if self.new_column_names is None:
             self.new_column_names = default_names
 
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -228,9 +231,9 @@ class RatioFeatures(_BaseTransformer):
         """
         new_columns = []
 
-        for num_col, denom_col in zip(self.numerator_columns, self.denominator_columns):
+        for num_col, denom_col in zip(self.numerator_columns, self.denominator_columns, strict=False):
             default_name = f"{num_col}__div__{denom_col}"
-            new_col_name = self._column_mapping[default_name]
+            new_col_name = self._column_mapping[default_name][0]
 
             ratio_expr = (pl.col(num_col) / (pl.col(denom_col) + 1)).alias(new_col_name)
 

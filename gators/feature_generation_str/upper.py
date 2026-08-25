@@ -85,7 +85,7 @@ class Upper(_BaseTransformer):
     subset: list[str] | None = None
     drop_columns: bool = True
     inplace: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Upper":
         """Fit the transformer by identifying categorical columns and generating column mappings.
@@ -107,7 +107,10 @@ class Upper(_BaseTransformer):
                 col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__upper" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__upper"] for col in self.subset}
+            self._output_dtypes = {
+                new: pl.String for names in self._column_mapping.values() for new in names
+            }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -134,7 +137,7 @@ class Upper(_BaseTransformer):
 
         transformations = [
             pl.col(col).cast(pl.String).str.to_uppercase().alias(new_col)
-            for col, new_col in self._column_mapping.items()
+            for col, [new_col] in self._column_mapping.items()
         ]
         X = X.with_columns(transformations)
         if self.drop_columns and self.subset is not None:

@@ -61,7 +61,7 @@ class StandardScaler(_BaseTransformer):
     drop_columns: bool = True
     _offset: dict[str, float] = PrivateAttr(default_factory=dict)
     _scale: dict[str, float] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "StandardScaler":
         """Fit the transformer by computing mean and standard deviation.
@@ -81,11 +81,12 @@ class StandardScaler(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.is_numeric()
             ]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__standard_scale" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__standard_scale"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         mean_std_exprs = []
         for col in self.subset:
@@ -118,6 +119,7 @@ class StandardScaler(_BaseTransformer):
             Transformed DataFrame with standardized columns.
         """
         if self.inplace:
+            assert self.subset is not None
             transformations = [
                 (self._scale[col] * (pl.col(col) - self._offset[col])).alias(col)
                 for col in self.subset
@@ -126,10 +128,11 @@ class StandardScaler(_BaseTransformer):
 
         transformations = [
             (self._scale[col] * (pl.col(col) - self._offset[col])).alias(new)
-            for col, new in self._column_mapping.items()
+            for col, [new] in self._column_mapping.items()
         ]
         X = X.with_columns(transformations)
         if self.drop_columns:
+            assert self.subset is not None
             return X.drop(self.subset)
         return X
 
@@ -154,9 +157,10 @@ class StandardScaler(_BaseTransformer):
             return (pl.col(scaled_col) / scale + offset).alias(orig_col)
 
         if self.inplace:
+            assert self.subset is not None
             exprs = [_inv_expr(col, col) for col in self.subset]
             return X.with_columns(exprs)
-        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        reverse_map = {v: k for k, values in self._column_mapping.items() for v in values}
         exprs = [_inv_expr(new, orig) for new, orig in reverse_map.items() if new in X.columns]
         X = X.with_columns(exprs)
         if self.drop_columns:

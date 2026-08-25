@@ -21,12 +21,18 @@ from __future__ import annotations
 
 import polars as pl
 
-from ._converters import get_input_onnx_type, get_output_columns, get_output_onnx_type, to_onnx_nodes
 from ..encoders._base_encoder import _BaseEncoder
 from ..encoders.binary_encoder import BinaryEncoder
 from ..encoders.hash_encoder import HashEncoder
-from ..encoders.onehot_encoder import OneHotEncoder, _norm_col
+from ..encoders.onehot_encoder import OneHotEncoder
 from ..encoders.rare_category_encoder import RareCategoryEncoder
+from ._converters import (
+    get_input_onnx_type,
+    get_output_columns,
+    get_output_onnx_type,
+    resolve_declared_output_dtype,
+    to_onnx_nodes,
+)
 
 try:
     import onnx
@@ -43,11 +49,11 @@ except ImportError as exc:  # pragma: no cover
 
 @get_output_columns.register(_BaseEncoder)
 def _encoder_output_columns(transformer: _BaseEncoder, input_columns: list[str]) -> list[str]:
-    if transformer.inplace or not transformer.column_mapping_:
+    if transformer.inplace or not transformer._column_mapping:
         return list(input_columns)
-    new_cols = list(transformer.column_mapping_.values())
+    new_cols = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
-        dropped = set(transformer.column_mapping_)
+        dropped = set(transformer._column_mapping)
         return [c for c in input_columns if c not in dropped] + new_cols
     return list(input_columns) + new_cols
 
@@ -69,8 +75,11 @@ def _encoder_input_onnx_type(transformer: _BaseEncoder, col: str) -> int:
 
 @get_output_onnx_type.register(_BaseEncoder)
 def _encoder_output_onnx_type(transformer: _BaseEncoder, col: str) -> int:
+    # Not using _output_dtypes here: LabelEncoder always emits float32 (values_floats=)
+    # regardless of float_datatype, so the hardcoded FLOAT below reflects ONNX reality,
+    # while _output_dtypes declares Float64 (true Polars dtype).
     # New renamed column (e.g. is_vaulted__encode_woe): always FLOAT
-    if col in (transformer.column_mapping_ or {}).values():
+    if col in {name for names in (transformer._column_mapping or {}).values() for name in names}:
         return TensorProto.FLOAT
     # Inplace-encoded column (same name, overwritten as FLOAT)
     if col in transformer.mapping_ and transformer.inplace:
@@ -84,16 +93,29 @@ def _encoder_output_onnx_type(transformer: _BaseEncoder, col: str) -> int:
 @get_output_columns.register(OneHotEncoder)
 def _ohe_output_columns(transformer: OneHotEncoder, input_columns: list[str]) -> list[str]:
     subset = set(transformer.subset or [])
-    result = [col for col in input_columns if col not in subset]
-    for col, cats in (transformer.column_categories or {}).items():
-        for cat in cats:
-            result.append(_norm_col.sub('__', f"{col}__{cat}"))
+    if transformer.drop_columns:
+        result = [col for col in input_columns if col not in subset]
+    else:
+        result = list(input_columns)
+    result += [name for names in transformer._column_mapping.values() for name in names]
     return result
 
 
 @get_input_onnx_type.register(OneHotEncoder)
 def _ohe_input_onnx_type(transformer: OneHotEncoder, col: str) -> int:
     return TensorProto.STRING if col in (transformer.subset or []) else TensorProto.FLOAT
+
+
+@get_output_onnx_type.register(OneHotEncoder)
+def _ohe_output_onnx_type(transformer: OneHotEncoder, col: str) -> int:
+    # Not using _output_dtypes here: LabelEncoder always emits float32 regardless of
+    # float_datatype, while _output_dtypes declares Float64 (true Polars dtype).
+    # Pass-through columns: defer to the input-type hook.
+    # Binary output columns: LabelEncoder with values_floats always outputs FLOAT.
+    dtypes = getattr(transformer, "_input_dtypes", {})
+    if col in dtypes:
+        return get_input_onnx_type(transformer, col)
+    return TensorProto.FLOAT
 
 
 # ── _BaseEncoder: to_onnx_nodes ───────────────────────────────────────────────
@@ -127,7 +149,7 @@ def _base_encoder_to_onnx_nodes(
         if transformer.inplace:
             actual_out = col
         else:
-            actual_out = transformer.column_mapping_.get(col, col)
+            actual_out = transformer._column_mapping.get(col, [col])[0]
             # If drop_columns=False the source col also passes through unchanged
             if not transformer.drop_columns and col in output_names:
                 nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
@@ -207,12 +229,18 @@ def _ohe_to_onnx_nodes(
         if col not in subset and col in output_names:
             nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
 
+    # drop_columns=False: the original subset column also passes through unchanged
+    if not transformer.drop_columns:
+        for col in transformer.subset or []:
+            if col in input_names and col in output_names:
+                nodes.append(oh.make_node("Identity", inputs=[input_names[col]], outputs=[output_names[col]]))
+
     for col, cats in (transformer.column_categories or {}).items():
         if col not in input_names:  # pragma: no cover
             continue
         in_name = input_names[col]
-        for cat in cats:
-            ohe_col = _norm_col.sub('__', f"{col}__{cat}")
+        ohe_cols = transformer._column_mapping.get(col, [])
+        for cat, ohe_col in zip(cats, ohe_cols, strict=False):
             out_name = output_names.get(ohe_col, ohe_col)
             nodes.append(
                 oh.make_node(
@@ -233,11 +261,11 @@ def _ohe_to_onnx_nodes(
 
 @get_output_columns.register(RareCategoryEncoder)
 def _rare_encoder_output_columns(transformer: RareCategoryEncoder, input_columns: list[str]) -> list[str]:
-    if transformer.inplace or not transformer.column_mapping_:
+    if transformer.inplace or not transformer._column_mapping:
         return list(input_columns)
-    new_cols = list(transformer.column_mapping_.values())
+    new_cols = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
-        dropped = set(transformer.column_mapping_)
+        dropped = set(transformer._column_mapping)
         return [c for c in input_columns if c not in dropped] + new_cols
     return list(input_columns) + new_cols
 
@@ -249,9 +277,10 @@ def _rare_encoder_input_onnx_type(transformer: RareCategoryEncoder, col: str) ->
 
 @get_output_onnx_type.register(RareCategoryEncoder)
 def _rare_encoder_output_onnx_type(transformer: RareCategoryEncoder, col: str) -> int:
+    declared = resolve_declared_output_dtype(transformer, col)
+    if declared is not None:
+        return declared
     if transformer.inplace and col in (transformer.subset or []):
-        return TensorProto.STRING
-    if not transformer.inplace and col in transformer.column_mapping_.values():
         return TensorProto.STRING
     return get_input_onnx_type(transformer, col)
 
@@ -285,7 +314,7 @@ def _rare_encoder_to_onnx_nodes(
         if transformer.inplace:
             actual_out = col
         else:
-            actual_out = transformer.column_mapping_.get(col, col)
+            actual_out = transformer._column_mapping.get(col, [col])[0]
             if not transformer.drop_columns and col in output_names:
                 nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
         out_name = output_names.get(actual_out, actual_out)
@@ -321,7 +350,8 @@ def _rare_encoder_to_onnx_nodes(
                     f"{col}__rare_default_val",
                     TensorProto.STRING,
                     [1],
-                    [transformer.default.encode()],
+                    # onnx's make_tensor stub types vals as int|float only; STRING tensors accept bytes at runtime.
+                    [transformer.default.encode()],  # type: ignore[list-item]
                 ),
             )
         )
@@ -337,7 +367,7 @@ def _rare_encoder_to_onnx_nodes(
 def _hash_encoder_output_columns(transformer: HashEncoder, input_columns: list[str]) -> list[str]:
     if transformer.inplace or not transformer._column_mapping:
         return list(input_columns)
-    new_cols = list(transformer._column_mapping.values())
+    new_cols = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
         dropped = set(transformer._column_mapping)
         return [c for c in input_columns if c not in dropped] + new_cols
@@ -351,7 +381,9 @@ def _hash_encoder_input_type(transformer: HashEncoder, col: str) -> int:
 
 @get_output_onnx_type.register(HashEncoder)
 def _hash_encoder_output_type(transformer: HashEncoder, col: str) -> int:
-    if col in (transformer._column_mapping or {}).values() or (
+    # Not using _output_dtypes here: LabelEncoder always emits float32 regardless of
+    # float_datatype, while _output_dtypes declares Float64 (true Polars dtype).
+    if col in {name for names in (transformer._column_mapping or {}).values() for name in names} or (
         transformer.inplace and col in (transformer.subset or [])
     ):
         return TensorProto.FLOAT
@@ -386,7 +418,7 @@ def _hash_encoder_to_onnx_nodes(
         if transformer.inplace:
             out_name = output_names.get(col, col)
         else:
-            actual_out = transformer._column_mapping.get(col, col)
+            actual_out = transformer._column_mapping.get(col, [col])[0]
             if not transformer.drop_columns and col in output_names:
                 nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
             out_name = output_names.get(actual_out, actual_out)
@@ -421,6 +453,11 @@ def _binary_encoder_input_onnx_type(transformer: BinaryEncoder, col: str) -> int
 
 @get_output_onnx_type.register(BinaryEncoder)
 def _binary_encoder_output_onnx_type(transformer: BinaryEncoder, col: str) -> int:
+    # Not using _output_dtypes here: LabelEncoder always emits float32 regardless of
+    # float_datatype, while _output_dtypes declares Float64 (true Polars dtype).
+    # Subset columns pass through as STRING when drop_columns=False; bit columns are FLOAT.
+    if col in (transformer.subset or []):
+        return TensorProto.STRING
     return TensorProto.FLOAT
 
 

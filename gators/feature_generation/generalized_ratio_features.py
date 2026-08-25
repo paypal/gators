@@ -184,7 +184,7 @@ class GeneralizedRatioFeatures(_BaseTransformer):
                     f"Length of numerator_coefficients ({len(numerator_coefficients)}) "
                     f"must match length of numerator_columns ({len(numerator_columns)})"
                 )
-            for i, (coeffs, cols) in enumerate(zip(numerator_coefficients, numerator_columns)):
+            for i, (coeffs, cols) in enumerate(zip(numerator_coefficients, numerator_columns, strict=False)):
                 if len(coeffs) != len(cols):
                     raise ValueError(
                         f"numerator_coefficients[{i}] has {len(coeffs)} entries "
@@ -202,7 +202,7 @@ class GeneralizedRatioFeatures(_BaseTransformer):
                     f"Length of denominator_coefficients ({len(denominator_coefficients)}) "
                     f"must match length of denominator_columns ({len(denominator_columns)})"
                 )
-            for i, (coeffs, cols) in enumerate(zip(denominator_coefficients, denominator_columns)):
+            for i, (coeffs, cols) in enumerate(zip(denominator_coefficients, denominator_columns, strict=False)):
                 if len(coeffs) != len(cols):
                     raise ValueError(
                         f"denominator_coefficients[{i}] has {len(coeffs)} entries "
@@ -270,7 +270,7 @@ class GeneralizedRatioFeatures(_BaseTransformer):
         if self.new_column_names is None:
             default_names = [
                 self._default_name(num_cols, denom_cols)
-                for num_cols, denom_cols in zip(self.numerator_columns, self.denominator_columns)
+                for num_cols, denom_cols in zip(self.numerator_columns, self.denominator_columns, strict=False)
             ]
 
             if len(default_names) != len(set(default_names)):
@@ -290,6 +290,7 @@ class GeneralizedRatioFeatures(_BaseTransformer):
                 f"Use new_column_names to choose different names."
             )
 
+        self._output_dtypes = {col: pl.Float64 for col in self.new_column_names}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -307,23 +308,29 @@ class GeneralizedRatioFeatures(_BaseTransformer):
         """
         new_columns = []
 
+        assert (
+            self.numerator_coefficients is not None
+            and self.denominator_coefficients is not None
+            and self.numerator_biases is not None
+            and self.new_column_names is not None
+        )
         for num_cols, denom_cols, num_coeffs, denom_coeffs, bias, new_col_name in zip(
             self.numerator_columns,
             self.denominator_columns,
             self.numerator_coefficients,
             self.denominator_coefficients,
             self.numerator_biases,
-            self.new_column_names,
+            self.new_column_names, strict=False,
         ):
 
             denom_terms = [
-                pl.col(col).cast(pl.Float64) * c for col, c in zip(denom_cols, denom_coeffs)
+                pl.col(col).cast(pl.Float64) * c for col, c in zip(denom_cols, denom_coeffs, strict=False)
             ]
             denominator_expr = pl.sum_horizontal(denom_terms) + self.epsilon
 
             if num_cols:
                 num_terms = [
-                    pl.col(col).cast(pl.Float64) * c for col, c in zip(num_cols, num_coeffs)
+                    pl.col(col).cast(pl.Float64) * c for col, c in zip(num_cols, num_coeffs, strict=False)
                 ]
                 numerator_expr = pl.sum_horizontal(num_terms) + bias
             else:

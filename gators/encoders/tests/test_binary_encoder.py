@@ -252,14 +252,15 @@ class TestBinaryEncoder:
         assert "A" in encoder.mapping_["category__binary_enc_0"]
 
     def test_column_mapping_attribute(self):
-        """Test that column_mapping_ attribute is populated."""
+        """Test that _column_mapping attribute is populated."""
         X = pl.DataFrame({"category": ["A", "B"], "value": [1, 2]})
 
         encoder = BinaryEncoder(subset=["category"], inplace=False)
         encoder.fit(X)
 
-        assert hasattr(encoder, "column_mapping_")
-        assert "category__binary_enc_0" in encoder.column_mapping_
+        assert hasattr(encoder, "_column_mapping")
+        assert "category" in encoder._column_mapping
+        assert "category__binary_enc_0" in encoder._column_mapping["category"]
 
     def test_n_bits_calculation(self):
         """Test n_bits calculation for various category counts."""

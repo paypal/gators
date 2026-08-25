@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 import numpy as np
 import polars as pl
@@ -106,19 +106,23 @@ class IterativeImputer(_BaseTransformer):
     max_iter: PositiveInt = 10
     subset: list[str] | None = None
     initial_strategy: Literal["mean", "median"] = "mean"
+    inplace: bool = True
+    drop_columns: bool = True
 
     _statistics: dict[str, float] = PrivateAttr(default_factory=dict)
     _coefs: dict[str, np.ndarray] = PrivateAttr(default_factory=dict)
     _feature_cols: list[str] = PrivateAttr(default_factory=list)
     _imputation_order: list[str] = PrivateAttr(default_factory=list)
     _feat_col_idx: dict[str, int] = PrivateAttr(default_factory=dict)
+    _orig_dtypes: dict[str, Any] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @property
     def statistics_(self) -> dict[str, float]:
         """Per-column initialisation statistics (mean or median)."""
         return self._statistics
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "IterativeImputer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> IterativeImputer:
         """Fit regression models for each imputable column.
 
         Parameters
@@ -135,9 +139,10 @@ class IterativeImputer(_BaseTransformer):
         """
         # Feature pool: all numeric columns
         self._feature_cols = [
-            col for col, dtype in zip(X.columns, X.dtypes) if dtype in _NUMERIC_DTYPES
+            col for col, dtype in zip(X.columns, X.dtypes, strict=False) if dtype in _NUMERIC_DTYPES
         ]
         self._feat_col_idx = {col: i for i, col in enumerate(self._feature_cols)}
+        self._orig_dtypes = {col: X.schema[col] for col in self._feature_cols}
 
         # Determine which columns to impute
         if self.subset is None:
@@ -146,6 +151,9 @@ class IterativeImputer(_BaseTransformer):
             impute_cols = [col for col in self.subset if col in self._feat_col_idx]
         # Store resolved subset so transform can re-use it
         self.subset = impute_cols
+        # Identity mapping: these imputers fill nulls in-place, no renaming.
+        self._column_mapping = {col: [col] for col in self.subset}
+        self._output_dtypes = {col: self._orig_dtypes[col] for col in self.subset}
 
         if not self._feature_cols:
             return self
@@ -242,12 +250,18 @@ class IterativeImputer(_BaseTransformer):
                 else:
                     X_np[pred_rows, j] = coefs[0]
 
-        # Write imputed columns back — only columns that were in subset
+        # Write imputed columns back — only columns that were in subset,
+        # restoring each column's original dtype (regression predictions are float64).
+        _int_dtypes = {pl.Int8, pl.Int16, pl.Int32, pl.Int64, pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64}
         subset_set = set(self.subset if self.subset else [])
         result = X
         for j, col in enumerate(self._feature_cols):
             if col in subset_set and null_mask[:, j].any():
-                result = result.with_columns(pl.Series(col, X_np[:, j], dtype=pl.Float64))
+                orig_dtype = self._orig_dtypes.get(col, pl.Float64)
+                values = X_np[:, j]
+                if orig_dtype in _int_dtypes:
+                    values = np.round(values)
+                result = result.with_columns(pl.Series(col, values, dtype=pl.Float64).cast(orig_dtype))
 
         return result
 

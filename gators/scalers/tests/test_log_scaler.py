@@ -217,15 +217,15 @@ def test_log_scaler_column_naming():
 
     scaler_ln = Log1pScaler(base="e", inplace=False)
     scaler_ln.fit(X)
-    assert scaler_ln._column_mapping == {"col1": "col1__log1p"}
+    assert scaler_ln._column_mapping == {"col1": ["col1__log1p"]}
 
     scaler_10 = Log1pScaler(base="10", inplace=False)
     scaler_10.fit(X)
-    assert scaler_10._column_mapping == {"col1": "col1__log1p_10"}
+    assert scaler_10._column_mapping == {"col1": ["col1__log1p_10"]}
 
     scaler_2 = Log1pScaler(base="2", inplace=False)
     scaler_2.fit(X)
-    assert scaler_2._column_mapping == {"col1": "col1__log1p_2"}
+    assert scaler_2._column_mapping == {"col1": ["col1__log1p_2"]}
 
 
 if __name__ == "__main__":

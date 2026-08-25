@@ -5,8 +5,10 @@ Tests for the Gators Pipeline class.
 import polars as pl
 import pytest
 
+import numpy as np
 from gators.imputers import NumericImputer, StringImputer
 from gators.pipeline import Pipeline
+from gators.scalers import StandardScaler
 
 def test_pipeline_creation():
     """Test that a Pipeline can be created."""
@@ -42,6 +44,25 @@ def test_pipeline_fit_transform():
     # Check no nulls remain
     assert result.null_count().sum_horizontal()[0] == 0
     assert isinstance(result, pl.DataFrame)
+
+
+def test_pipeline_fit_transform_lazyframe():
+    """Test fit_transform collects a LazyFrame input before fitting."""
+    X = pl.LazyFrame({"num_col": [1.0, 2.0, None, 4.0, 5.0], "str_col": ["a", "b", None, "d", "e"]})
+
+    steps = [
+        ("numeric_imputer", NumericImputer(strategy="median", inplace=True)),
+        (
+            "string_imputer",
+            StringImputer(strategy="constant", value="__NULL__", inplace=True),
+        ),
+    ]
+
+    pipe = Pipeline(steps=steps)
+    result = pipe.fit_transform(X)
+
+    assert isinstance(result, pl.DataFrame)
+    assert result.null_count().sum_horizontal()[0] == 0
 
 
 def test_pipeline_fit_then_transform():
@@ -612,3 +633,158 @@ def test_get_initial_features_renamed_column():
     ])
     pipe.fit(X)
     assert pipe.get_initial_features() == ["A"]
+
+
+# ---------------------------------------------------------------------------
+# trim_to() tests
+# ---------------------------------------------------------------------------
+
+@pytest.fixture
+def four_step_pipe():
+    """imp → isnull → poly → scale pipeline, pre-fitted."""
+    from gators.feature_generation import PolynomialFeatures, IsNull
+
+    X = pl.DataFrame({"A": [1.0, 2.0, None], "B": [4.0, 5.0, 6.0], "C": [7.0, 8.0, 9.0]})
+    pipe = Pipeline(steps=[
+        ("imp",    NumericImputer(strategy="mean")),
+        ("isnull", IsNull()),
+        ("poly",   PolynomialFeatures(subset=["A", "B", "C"], degree=2)),
+        ("scale",  StandardScaler()),
+    ])
+    pipe.fit(X)
+    return pipe, X
+
+
+def test_trim_to_drop_isnull_poly(four_step_pipe):
+    """Requesting only raw scaled columns drops isnull and poly."""
+    pipe, X = four_step_pipe
+    full = pipe.transform(X)
+    trimmed = pipe.trim_to(["A", "B", "C"])
+    assert [n for n, _ in trimmed.steps] == ["imp", "scale"]
+    out = trimmed.transform(X)
+    for col in ["A", "B", "C"]:
+        np.testing.assert_allclose(full[col].to_numpy(), out[col].to_numpy(), atol=1e-6)
+
+
+def test_trim_to_keep_poly(four_step_pipe):
+    """Requesting poly output columns keeps imp, poly, and scale."""
+    pipe, X = four_step_pipe
+    full = pipe.transform(X)
+    trimmed = pipe.trim_to(["A__A", "B__B", "A", "B"])
+    assert [n for n, _ in trimmed.steps] == ["imp", "poly", "scale"]
+    out = trimmed.transform(X)
+    for col in ["A__A", "B__B", "A", "B"]:
+        np.testing.assert_allclose(full[col].to_numpy(), out[col].to_numpy(), atol=1e-6)
+
+
+def test_trim_to_isnull_only(four_step_pipe):
+    """Requesting only isnull features drops poly.
+
+    IsNull now outputs Float64 (not Boolean), so StandardScaler's auto-detected
+    subset picks up A__is_null too — scale is legitimately needed here.
+    """
+    pipe, X = four_step_pipe
+    full = pipe.transform(X)
+    trimmed = pipe.trim_to(["A__is_null"])
+    assert [n for n, _ in trimmed.steps] == ["imp", "isnull", "scale"]
+    out = trimmed.transform(X)
+    np.testing.assert_array_equal(
+        full["A__is_null"].to_numpy(), out["A__is_null"].to_numpy()
+    )
+
+
+def test_trim_to_unknown_column_raises(four_step_pipe):
+    """trim_to raises ValueError for columns not produced by the pipeline."""
+    pipe, _ = four_step_pipe
+    with pytest.raises(ValueError, match="not produced"):
+        pipe.trim_to(["NOPE"])
+
+
+def test_trim_to_not_fitted_raises():
+    """trim_to raises NotFittedError when called before fit."""
+    pipe = Pipeline(steps=[("scale", StandardScaler())])
+    with pytest.raises(Exception):  # NotFittedError
+        pipe.trim_to(["A"])
+
+
+def test_trim_to_returns_fitted_pipeline(four_step_pipe):
+    """The trimmed pipeline reports is_fitted and has correct input columns."""
+    pipe, X = four_step_pipe
+    trimmed = pipe.trim_to(["A", "B", "C"])
+    assert trimmed._is_fitted
+    assert trimmed._input_columns == pipe._input_columns
+
+
+def test_trim_to_row_statistics_column_groups_dict():
+    """RowStatisticsFeatures' dict-shaped column_groups source columns are traced
+    (covers the column_groups-as-dict branch), keeping the upstream WOE step."""
+    from gators.encoders import WOEEncoder
+    from gators.feature_generation import RowStatisticsFeatures
+
+    X = pl.DataFrame({"cat": ["a", "b", "a", "b"], "num": [1.0, 2.0, 3.0, 4.0]})
+    y = pl.Series([0, 1, 0, 1])
+    pipe = Pipeline(steps=[
+        ("woe", WOEEncoder(subset=["cat"], drop_columns=True, inplace=False)),
+        ("rs",  RowStatisticsFeatures(column_groups={"g1": ["cat__encode_woe", "num"]}, func=["sum"])),
+    ])
+    pipe.fit(X, y=y)
+    assert "cat" in pipe.get_initial_features()
+    assert "num" in pipe.get_initial_features()
+
+    trimmed = pipe.trim_to(["g1__sum"])
+    assert [n for n, _ in trimmed.steps] == ["woe", "rs"]
+    np.testing.assert_array_equal(
+        trimmed.transform(X)["g1__sum"].to_numpy(), pipe.transform(X)["g1__sum"].to_numpy()
+    )
+
+
+def test_trim_to_hhi_column_groups_list():
+    """HHIFeatures' list-shaped column_groups source columns are traced
+    (covers the column_groups-as-list branch), keeping the upstream WOE step."""
+    from gators.encoders import WOEEncoder
+    from gators.feature_generation import HHIFeatures
+
+    X = pl.DataFrame({"cat": ["a", "b", "a", "b"], "num": [1.0, 2.0, 3.0, 4.0]})
+    y = pl.Series([0, 1, 0, 1])
+    pipe = Pipeline(steps=[
+        ("woe", WOEEncoder(subset=["cat"], drop_columns=True, inplace=False)),
+        ("hhi", HHIFeatures(column_groups=[["cat__encode_woe", "num"]])),
+    ])
+    pipe.fit(X, y=y)
+    assert "cat" in pipe.get_initial_features()
+    assert "num" in pipe.get_initial_features()
+
+    trimmed = pipe.trim_to(["cat__encode_woe__num__hhi"])
+    assert [n for n, _ in trimmed.steps] == ["woe", "hhi"]
+    np.testing.assert_array_equal(
+        trimmed.transform(X)["cat__encode_woe__num__hhi"].to_numpy(),
+        pipe.transform(X)["cat__encode_woe__num__hhi"].to_numpy(),
+    )
+
+
+def test_trim_to_generalized_ratio_numerator_denominator():
+    """GeneralizedRatioFeatures' numerator/denominator source columns are traced
+    (covers the numerator_columns/denominator_columns branch), keeping the upstream
+    WOE step."""
+    from gators.encoders import WOEEncoder
+    from gators.feature_generation import GeneralizedRatioFeatures
+
+    X = pl.DataFrame({"cat": ["a", "b", "a", "b"], "num": [1.0, 2.0, 3.0, 4.0]})
+    y = pl.Series([0, 1, 0, 1])
+    pipe = Pipeline(steps=[
+        ("woe", WOEEncoder(subset=["cat"], drop_columns=True, inplace=False)),
+        ("ratio", GeneralizedRatioFeatures(
+            numerator_columns=[["cat__encode_woe"]],
+            denominator_columns=[["num"]],
+            new_column_names=["ratio_feat"],
+        )),
+    ])
+    pipe.fit(X, y=y)
+    assert "cat" in pipe.get_initial_features()
+    assert "num" in pipe.get_initial_features()
+
+    trimmed = pipe.trim_to(["ratio_feat"])
+    assert [n for n, _ in trimmed.steps] == ["woe", "ratio"]
+    np.testing.assert_allclose(
+        trimmed.transform(X)["ratio_feat"].to_numpy(), pipe.transform(X)["ratio_feat"].to_numpy()
+    )

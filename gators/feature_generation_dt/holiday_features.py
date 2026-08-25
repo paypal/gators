@@ -2,9 +2,16 @@ from datetime import datetime
 
 import holidays
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
+
+_ALL_FEATURES_ORDER = [
+    "is_holiday",
+    "nearest_holiday_distance",
+    "days_to_holiday",
+    "days_from_holiday",
+]
 
 
 class HolidayFeatures(_BaseTransformer):
@@ -33,6 +40,10 @@ class HolidayFeatures(_BaseTransformer):
         - "days_to_holiday": Days until next holiday (negative if past)
         - "days_from_holiday": Days since last holiday (negative if future)
         - "nearest_holiday_distance": Absolute days to nearest holiday
+    lookahead_years : int, default=1
+        Number of additional years beyond the last training year for which
+        holidays are pre-computed.  Ensures the fitted transformer remains
+        correct when applied to data collected after the training period.
     drop_columns : bool, default=False
         Whether to drop the original datetime columns after feature extraction.
 
@@ -96,9 +107,11 @@ class HolidayFeatures(_BaseTransformer):
     country: str = "US"
     years: list[int] | None = None
     features: list[str] = ["is_holiday", "days_to_holiday", "days_from_holiday"]
+    lookahead_years: int = 1
     drop_columns: bool = False
     _holidays: dict = {}
     _years: list[int] = []
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("features")
     def check_features(cls, features):
@@ -145,17 +158,28 @@ class HolidayFeatures(_BaseTransformer):
             for col in self.subset:
                 col_years = X.select(pl.col(col).dt.year().unique()).to_series().to_list()
                 years_set.update(col_years)
-            self._years = sorted(list(years_set))
+            self._years = sorted(years_set)
 
         # Build holiday dictionary using holidays library
         try:
-            country_holidays = holidays.country_holidays(self.country, years=self._years)
-            self._holidays = {date: name for date, name in country_holidays.items()}
+            max_year = max(self._years) if self._years else datetime.now().year
+            min_year = min(self._years) if self._years else max_year
+            extended_years = list(range(min_year, max_year + 1 + self.lookahead_years))
+            country_holidays = holidays.country_holidays(self.country, years=extended_years)
+            self._holidays = dict(country_holidays.items())
         except (AttributeError, KeyError, NotImplementedError, Exception) as e:
             raise ValueError(
                 f"Country code '{self.country}' is not supported by the holidays library. "
                 f"Please check https://pypi.org/project/holidays/ for supported countries."
             ) from e
+
+        ordered_features = [f for f in _ALL_FEATURES_ORDER if f in self.features]
+        self._column_mapping = {
+            col: [f"{col}__{feature}" for feature in ordered_features] for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
 
         return self
 
@@ -187,7 +211,7 @@ class HolidayFeatures(_BaseTransformer):
 
                 # Use is_in for efficient lookup
                 is_holiday_expr = date_col.is_in(holiday_dates_list)
-                new_columns.append(is_holiday_expr.alias(f"{col}__is_holiday"))
+                new_columns.append(is_holiday_expr.cast(pl.Float64).alias(f"{col}__is_holiday"))
 
             # Calculate distance features (optimized for large datasets)
             if (
@@ -203,7 +227,7 @@ class HolidayFeatures(_BaseTransformer):
                     if "nearest_holiday_distance" in self.features:
                         # Calculate distance to each holiday and find minimum
                         distance_exprs = [
-                            (date_col - pl.lit(hdate)).dt.total_days().abs().cast(pl.Int32)
+                            (date_col - pl.lit(hdate)).dt.total_days().abs().cast(pl.Float64)
                             for hdate in holiday_dates_sorted
                         ]
                         if distance_exprs:
@@ -216,7 +240,7 @@ class HolidayFeatures(_BaseTransformer):
                         # Days to next holiday (positive values only for future dates)
                         future_distance_exprs = [
                             pl.when((date_col - pl.lit(hdate)).dt.total_days() <= 0)
-                            .then((pl.lit(hdate) - date_col).dt.total_days().cast(pl.Int32))
+                            .then((pl.lit(hdate) - date_col).dt.total_days().cast(pl.Float64))
                             .otherwise(None)
                             for hdate in holiday_dates_sorted
                         ]
@@ -228,7 +252,7 @@ class HolidayFeatures(_BaseTransformer):
                         # Days from last holiday (positive values only for past dates)
                         past_distance_exprs = [
                             pl.when((date_col - pl.lit(hdate)).dt.total_days() >= 0)
-                            .then((date_col - pl.lit(hdate)).dt.total_days().cast(pl.Int32))
+                            .then((date_col - pl.lit(hdate)).dt.total_days().cast(pl.Float64))
                             .otherwise(None)
                             for hdate in holiday_dates_sorted
                         ]

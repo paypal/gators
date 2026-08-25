@@ -26,8 +26,8 @@ def test_default_parameters(sample_X):
         drop_columns=True,
         inplace=False,
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},
-        column_mapping_={"category": "category_encoded"},
     )
+    encoder._column_mapping = {"category": ["category_encoded"]}
     encoder._is_fitted = True
     transformed_X = encoder.transform(sample_X)
 
@@ -47,8 +47,8 @@ def test_columns_subset_drop_columns_false(sample_X):
         drop_columns=False,
         inplace=False,
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},
-        column_mapping_={"category": "category_encoded"},
     )
+    encoder._column_mapping = {"category": ["category_encoded"]}
     encoder._is_fitted = True
     transformed_X = encoder.transform(sample_X)
 
@@ -100,8 +100,8 @@ def test_boolean_column_encoding():
         drop_columns=False,
         inplace=False,
         mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
-        column_mapping_={"bool_col": "bool_col_encoded"},
     )
+    encoder._column_mapping = {"bool_col": ["bool_col_encoded"]}
     encoder._is_fitted = True
     result = encoder.transform(X)
 
@@ -138,8 +138,8 @@ def test_missing_category_default_value():
         drop_columns=False,
         inplace=False,
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},  # No "D"
-        column_mapping_={"category": "category_encoded"},
     )
+    encoder._column_mapping = {"category": ["category_encoded"]}
     encoder._is_fitted = True
     result = encoder.transform(X)
 

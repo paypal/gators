@@ -8,7 +8,7 @@ from gators.exceptions import NotFittedError
 
 class ExampleDiscretizer(_BaseDiscretizer):
     def fit(self, X):
-        self._column_mapping = {"A": "A__discretize", "B": "B__discretize"}
+        self._column_mapping = {"A": ["A__discretize"], "B": ["B__discretize"]}
         self._bins = {"A": [0.5], "B": [5]}
         self._labels = {"A": ["a1", "a2"], "B": ["b1", "b2"]}
         return self
@@ -96,7 +96,11 @@ def test_default_parameters(sample_data):
     assert len(discretizer._labels) == 2
     transformed_X = discretizer.transform(sample_data)
     transformed_X = transformed_X.with_columns(
-        [pl.col(col).cast(pl.String) for col in discretizer._column_mapping.values()]
+        [
+            pl.col(new).cast(pl.String)
+            for names in discretizer._column_mapping.values()
+            for new in names
+        ]
     )
     assert_frame_equal(transformed_X, expected_data_default_parameters())
 
@@ -109,7 +113,11 @@ def test_subset_columns(sample_data):
     assert len(discretizer._labels) == 2
     transformed_X = discretizer.transform(sample_data)
     transformed_X = transformed_X.with_columns(
-        [pl.col(col).cast(pl.String) for col in discretizer._column_mapping.values()]
+        [
+            pl.col(new).cast(pl.String)
+            for names in discretizer._column_mapping.values()
+            for new in names
+        ]
     )
     assert_frame_equal(transformed_X, expected_data_drop_columns_false())
 
@@ -142,7 +150,7 @@ def test_as_numerics_true():
     discretizer = ExampleDiscretizer(
         subset=["A", "B"], as_numerics=True, drop_columns=True, inplace=False
     )
-    discretizer._column_mapping = {"A": "A__disc", "B": "B__disc"}
+    discretizer._column_mapping = {"A": ["A__disc"], "B": ["B__disc"]}
     discretizer._bins = {"A": [0.5], "B": [20]}
     discretizer._labels = {"A": ["low", "high"], "B": ["small", "large"]}
     discretizer._is_fitted = True
@@ -152,8 +160,8 @@ def test_as_numerics_true():
     # Should return numeric bins (indices of the categorical values)
     assert "A__disc" in result.columns
     assert "B__disc" in result.columns
-    assert result["A__disc"].dtype == pl.Int32
-    assert result["B__disc"].dtype == pl.Int32
+    assert result["A__disc"].dtype == pl.Float64
+    assert result["B__disc"].dtype == pl.Float64
     # Just verify the values are consistent
     assert len(set(result["A__disc"].to_list())) == 2  # Two unique values
     assert len(set(result["B__disc"].to_list())) == 2
@@ -172,7 +180,7 @@ def test_inplace_with_as_numerics():
 
     # Column A should be replaced with numeric bins
     assert "A" in result.columns
-    assert result["A"].dtype == pl.Int32
+    assert result["A"].dtype == pl.Float64
     # Just verify the values are consistent
     assert len(set(result["A"].to_list())) == 2  # Two unique values
     assert "value" in result.columns

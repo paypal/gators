@@ -171,7 +171,7 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
 
@@ -190,6 +190,7 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
 
         # Set column mapping for non-inplace mode
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__discretize_length" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__discretize_length"] for col in self.subset}
 
+        self._set_output_dtypes()
         return self

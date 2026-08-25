@@ -414,6 +414,17 @@ def test_check_bin_types_invalid_raises_value_error():
         TimeBinFeatures.check_bin_types(["invalid"])
 
 
+def test_day_bin_type(sample_timebin_data):
+    """Test 'day' binning produces the correct weekday name."""
+    transformer = TimeBinFeatures(subset=["timestamp"], bin_types=["day"])
+    result = transformer.fit_transform(sample_timebin_data)
+
+    assert "timestamp__day" in result.columns
+    assert result["timestamp__day"].to_list() == [
+        "Friday", "Monday", "Thursday", "Wednesday", "Sunday",
+    ]
+
+
 def test_transform_without_fit_returns_x_unchanged():
     """transform() before fit() raises NotFittedError."""
 

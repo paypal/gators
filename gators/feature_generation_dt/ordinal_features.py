@@ -1,4 +1,4 @@
-from typing import Callable
+from collections.abc import Callable
 
 import polars as pl
 from pydantic import PrivateAttr, ValidationInfo, field_validator
@@ -94,6 +94,7 @@ class OrdinalFeatures(_BaseTransformer):
     components: list[str]
     drop_columns: bool = False
     _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("components")
     def check_components(cls, components, info: ValidationInfo):
@@ -129,6 +130,13 @@ class OrdinalFeatures(_BaseTransformer):
             dtype = X.schema[col]
             self._dt_units[col] = dtype.time_unit if hasattr(dtype, 'time_unit') else 'date'
 
+        self._column_mapping = {
+            col: [f"{col}__{comp}" for comp in self.components] for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -150,7 +158,7 @@ class OrdinalFeatures(_BaseTransformer):
 
         # Build all features in one list to minimize with_columns calls
         all_features = [
-            COMPONENT_FUNCTIONS[comp](pl.col(col)).alias(f"{col}__{comp}")
+            COMPONENT_FUNCTIONS[comp](pl.col(col)).cast(pl.Float64).alias(f"{col}__{comp}")
             for col in self.subset
             for comp in self.components
         ]

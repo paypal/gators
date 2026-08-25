@@ -1,0 +1,195 @@
+"""Shannon entropy features for groups of columns."""
+
+from __future__ import annotations
+
+import polars as pl
+from pydantic import PositiveFloat, field_validator
+
+from ..transformer._base_transformer import _BaseTransformer
+
+
+class EntropyFeatures(_BaseTransformer):
+    """
+    Generates Shannon entropy features from groups of columns.
+
+    For each group of columns, the Shannon entropy is computed as:
+
+    .. math::
+
+        H = -\\sum_{i=1}^{n} s_i \\ln(s_i), \\quad s_i = \\frac{x_i}{\\sum_j x_j + \\varepsilon}
+
+    where :math:`s_i` is the row-wise share of column :math:`x_i` within its
+    group, and :math:`\\varepsilon` is a small constant added to the total for
+    numerical stability. Terms where :math:`s_i = 0` contribute ``0`` (the
+    standard convention :math:`0 \\ln 0 = 0`).
+
+    Entropy ranges from ``0`` (total concentration, one column dominates) to
+    :math:`\\ln(n)` (perfect equality, maximum dispersion across the :math:`n`
+    columns). It is the information-theoretic counterpart of
+    :class:`HHIFeatures`: both measure concentration/dispersion of a row-wise
+    distribution, but entropy is more sensitive to the number of non-zero
+    components while HHI weights large shares more heavily.
+
+    Parameters
+    ----------
+    column_groups : list[list[str]]
+        One inner list of column names per output feature. Each inner list must
+        contain at least two column names. One entropy value is produced per group.
+    epsilon : float, optional
+        Small positive constant added to the total sum to prevent division by zero,
+        by default ``1e-8``.
+    new_column_names : list[str], optional
+        Custom output column names. If ``None``, names are auto-generated as
+        ``'{col1}__{col2}__...__entropy'``.
+    drop_columns : bool, optional
+        Whether to drop all source columns after creating the entropy features,
+        by default ``False``.
+
+    Examples
+    --------
+    >>> from gators.feature_generation import EntropyFeatures
+    >>> import polars as pl
+
+    >>> X = pl.DataFrame({
+    ...     'brand_a': [10.0, 20.0, 0.0],
+    ...     'brand_b': [30.0, 10.0, 0.0],
+    ...     'brand_c': [60.0, 70.0, 0.0],
+    ... })
+
+    **Example 1: Single group**
+
+    >>> transformer = EntropyFeatures(
+    ...     column_groups=[['brand_a', 'brand_b', 'brand_c']],
+    ... )
+    >>> transformer.fit(X)
+    EntropyFeatures(column_groups=[['brand_a', 'brand_b', 'brand_c']])
+    >>> result = transformer.transform(X)
+    >>> 'brand_a__brand_b__brand_c__entropy' in result.columns
+    True
+
+    **Example 2: Multiple groups**
+
+    >>> X2 = pl.DataFrame({
+    ...     'a1': [10.0, 50.0],
+    ...     'a2': [90.0, 50.0],
+    ...     'b1': [25.0, 25.0],
+    ...     'b2': [25.0, 75.0],
+    ... })
+    >>> transformer = EntropyFeatures(
+    ...     column_groups=[['a1', 'a2'], ['b1', 'b2']],
+    ... )
+    >>> result = transformer.fit_transform(X2)
+    >>> 'a1__a2__entropy' in result.columns
+    True
+    >>> 'b1__b2__entropy' in result.columns
+    True
+
+    **Example 3: Custom column names**
+
+    >>> transformer = EntropyFeatures(
+    ...     column_groups=[['brand_a', 'brand_b', 'brand_c']],
+    ...     new_column_names=['market_entropy'],
+    ... )
+    >>> result = transformer.fit_transform(X)
+    >>> 'market_entropy' in result.columns
+    True
+
+    **Example 4: With drop_columns=True**
+
+    >>> transformer = EntropyFeatures(
+    ...     column_groups=[['brand_a', 'brand_b']],
+    ...     drop_columns=True,
+    ... )
+    >>> result = transformer.fit_transform(X)
+    >>> 'brand_a' in result.columns
+    False
+    >>> 'brand_b' in result.columns
+    False
+    >>> 'brand_c' in result.columns
+    True
+    """
+
+    column_groups: list[list[str]]
+    epsilon: PositiveFloat = 1e-8
+    new_column_names: list[str] | None = None
+    drop_columns: bool = False
+
+    @field_validator("column_groups", mode="after")
+    @classmethod
+    def check_groups_non_empty(cls, column_groups):
+        for i, group in enumerate(column_groups):
+            if len(group) < 2:
+                raise ValueError(f"column_groups[{i}] must contain at least two column names.")
+        return column_groups
+
+    @field_validator("new_column_names", mode="after")
+    @classmethod
+    def check_new_column_names_length(cls, new_column_names, info):
+        if new_column_names is not None:
+            column_groups = info.data.get("column_groups", [])
+            if len(new_column_names) != len(column_groups):
+                raise ValueError(
+                    f"Length of new_column_names ({len(new_column_names)}) "
+                    f"must match length of column_groups ({len(column_groups)})"
+                )
+        return new_column_names
+
+    @staticmethod
+    def _default_name(cols: list[str]) -> str:
+        return "__".join(cols) + "__entropy"
+
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> EntropyFeatures:
+        """Fit the transformer by resolving column name mappings.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            Input DataFrame.
+        y : pl.Series, default=None
+            Target variable. Not used, present here for compatibility.
+
+        Returns
+        -------
+        EntropyFeatures
+            Fitted transformer instance.
+        """
+        if self.new_column_names is None:
+            self.new_column_names = [self._default_name(group) for group in self.column_groups]
+
+        self._output_dtypes = {col: pl.Float64 for col in self.new_column_names}
+        return self
+
+    def transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Transform the input DataFrame by creating Shannon entropy features.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            Input DataFrame to transform.
+
+        Returns
+        -------
+        pl.DataFrame
+            Transformed DataFrame with entropy features appended.
+        """
+        new_columns = []
+
+        assert self.new_column_names is not None
+        for group, new_col_name in zip(self.column_groups, self.new_column_names, strict=False):
+            float_cols = [pl.col(c).cast(pl.Float64) for c in group]
+            total = pl.sum_horizontal(float_cols) + self.epsilon
+            terms = []
+            for c in group:
+                share = pl.col(c).cast(pl.Float64) / total
+                term = pl.when(share > 0).then(share * share.log()).otherwise(0.0)
+                terms.append(term)
+            entropy = -pl.sum_horizontal(terms)
+            new_columns.append(entropy.alias(new_col_name))
+
+        X = X.with_columns(new_columns)
+
+        if self.drop_columns:
+            columns_to_drop = list({col for group in self.column_groups for col in group})
+            X = X.drop(columns_to_drop)
+
+        return X

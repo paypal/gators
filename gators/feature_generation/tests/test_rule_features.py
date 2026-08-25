@@ -37,10 +37,10 @@ class TestRuleFeatures:
         result = transformer.fit_transform(sample_data)
 
         assert "high_risk" in result.columns
-        assert result["high_risk"].dtype == pl.Boolean
+        assert result["high_risk"].dtype == pl.Float64
         # Row 2: amount=1200 (>1000) AND velocity_24h=5 (>=5) -> True
         # Row 4: amount=2000 (>1000) AND velocity_24h=10 (>=5) -> True
-        assert result["high_risk"].to_list() == [False, False, True, False, True]
+        assert result["high_risk"].to_list() == [0.0, 0.0, 1.0, 0.0, 1.0]
 
     def test_single_rule_or_logic(self, sample_data):
         """Test single rule with OR logic and scalar value comparisons."""

@@ -1,7 +1,7 @@
 from abc import ABCMeta
 
 import polars as pl
-from pydantic import Field, PositiveFloat, PositiveInt
+from pydantic import Field, PositiveFloat, PositiveInt, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -30,7 +30,7 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
 
     subset: list[str] | None = None
     mapping_: dict[str, dict[str, float]] = Field(default_factory=dict)
-    column_mapping_: dict[str, str] = Field(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
     min_count: PositiveInt | PositiveFloat = 1
     drop_columns: bool = True
     inplace: bool = True
@@ -52,7 +52,7 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
         """
         default_value = 0.0
 
-        dtypes = dict(zip(X.columns, X.dtypes))
+        dtypes = dict(zip(X.columns, X.dtypes, strict=False))
         boolean_cols = {col for col in self.mapping_ if dtypes.get(col) == pl.Boolean}
 
         boolean_string_mappings = {
@@ -85,7 +85,7 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
             return X.with_columns(expressions)
 
         for col in self.mapping_:
-            new_col_name = self.column_mapping_[col]
+            new_col_name = self._column_mapping[col][0]
 
             if col in boolean_cols:
                 expr = (

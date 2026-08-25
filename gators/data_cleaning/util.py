@@ -64,6 +64,6 @@ def map_substring_replacements(X: pl.DataFrame, old: str, new: str) -> dict:
         if categories.is_empty():
             continue
         new_categories = [cat.replace(old, new) for cat in categories]
-        mapping[column] = dict(zip(categories, new_categories))
+        mapping[column] = dict(zip(categories, new_categories, strict=False))
 
     return mapping

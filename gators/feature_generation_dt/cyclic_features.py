@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from math import pi
-from typing import Any, Callable
+from typing import Any
 
 import polars as pl
 from pydantic import PrivateAttr, ValidationInfo, field_validator
@@ -92,6 +93,7 @@ class CyclicFeatures(_BaseTransformer):
     angles: list[float]
     drop_columns: bool = False
     _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("components")
     def check_components(cls, components, info: ValidationInfo):
@@ -127,6 +129,19 @@ class CyclicFeatures(_BaseTransformer):
         for col in self.subset:
             dtype = X.schema[col]
             self._dt_units[col] = dtype.time_unit if hasattr(dtype, 'time_unit') else 'date'
+
+        cyclic_comps = [comp for comp in self.components if comp in CYCLIC_FACTORS]
+        output_comps = cyclic_comps + (["day_of_month"] if "day_of_month" in self.components else [])
+        angle_ints = [
+            int(angle) if angle == int(angle) else round(angle, 2) for angle in self.angles
+        ]
+        self._column_mapping = {
+            col: [f"{col}__{comp}__sin{ai}" for comp in output_comps for ai in angle_ints]
+            for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
 
         return self
 
@@ -185,7 +200,7 @@ class CyclicFeatures(_BaseTransformer):
         # Sin features for standard cyclic components with phase shifts
         for col in self.subset:
             for comp in cyclic_comps:
-                for angle_deg, angle_rad in zip(self.angles, angles_rad):
+                for angle_deg, angle_rad in zip(self.angles, angles_rad, strict=False):
                     angle_int = (
                         int(angle_deg) if angle_deg == int(angle_deg) else round(angle_deg, 2)
                     )
@@ -201,7 +216,7 @@ class CyclicFeatures(_BaseTransformer):
             factor = 2 * pi
 
             for col in self.subset:
-                for angle_deg, angle_rad in zip(self.angles, angles_rad):
+                for angle_deg, angle_rad in zip(self.angles, angles_rad, strict=False):
                     angle_int = (
                         int(angle_deg) if angle_deg == int(angle_deg) else round(angle_deg, 2)
                     )

@@ -101,7 +101,7 @@ class BinaryEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
 
@@ -118,7 +118,7 @@ class BinaryEncoder(_BaseEncoder):
 
             valid_categories = [
                 cat
-                for cat, count in zip(value_counts[col].to_list(), value_counts["count"].to_list())
+                for cat, count in zip(value_counts[col].to_list(), value_counts["count"].to_list(), strict=False)
                 if count >= min_threshold_count
             ]
 
@@ -143,7 +143,13 @@ class BinaryEncoder(_BaseEncoder):
                     self.mapping_[bit_col][category] = float(bit)
 
         # Column mapping for drop_columns functionality
-        self.column_mapping_ = {col: col for col in self.mapping_.keys()}
+        self._column_mapping = {
+            col: [f"{col}__binary_enc_{bit_idx}" for bit_idx in range(n_bits)]
+            for col, n_bits in self.n_bits_.items()
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
 
         return self
 

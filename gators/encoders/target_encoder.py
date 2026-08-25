@@ -115,11 +115,11 @@ class TargetEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
         # Cast Enum/Categorical columns to String so unpivot can find a common supertype
-        enum_cols = [c for c, d in X.schema.items() if isinstance(d, (pl.Enum, pl.Categorical))]
+        enum_cols = [c for c, d in X.schema.items() if isinstance(d, pl.Enum | pl.Categorical)]
         if enum_cols:
             X = X.with_columns([pl.col(c).cast(pl.String) for c in enum_cols])
 
@@ -141,5 +141,11 @@ class TargetEncoder(_BaseEncoder):
                 for cat, val, count in stats_col[["value", "mean", "N"]].iter_rows()
                 if count >= min_count_threshold
             }
-        self.column_mapping_ = {col: f"{col}__target_enc" for col in self.subset}
+        self._column_mapping = {col: [f"{col}__target_enc"] for col in self.subset}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = {col: pl.Float64 for col in targeted}
         return self

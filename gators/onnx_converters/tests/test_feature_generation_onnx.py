@@ -83,6 +83,19 @@ def test_scalar_math_passthrough(df):
     np.testing.assert_allclose(onnx_out["B"].astype(float), df["B"].to_numpy(allow_copy=True), atol=1e-5)
 
 
+def test_scalar_math_output_onnx_type(df):
+    """get_output_onnx_type inherits the SOURCE column's onnx type — exercised via pipeline_to_onnx."""
+    from gators.onnx_converters import get_output_onnx_type, pipeline_to_onnx
+    from gators.pipeline import Pipeline
+
+    t = ScalarMathFeatures(operations=[{"column": "A", "op": "*", "scalar": 2.0}], new_column_names=["A_double"])
+    pipe = Pipeline(steps=[("smf", t)])
+    pipe.fit(df)
+    pipeline_to_onnx(pipe)
+    assert get_output_onnx_type(t, "A_double") == get_output_onnx_type(t, "A")
+    assert get_output_onnx_type(t, "B") == get_output_onnx_type(t, "B")
+
+
 # ── IsNull ────────────────────────────────────────────────────────────────────
 
 def test_isnull_values():
@@ -122,6 +135,34 @@ def test_ratio_drop_columns(df):
     assert "A" not in onnx_out
     assert "B" not in onnx_out
     assert "A__div__B" in onnx_out
+
+
+def test_ratio_output_onnx_type(df):
+    """get_output_onnx_type inherits the DENOMINATOR column's onnx type — via pipeline_to_onnx."""
+    from gators.onnx_converters import get_output_onnx_type, pipeline_to_onnx
+    from gators.pipeline import Pipeline
+
+    t = RatioFeatures(numerator_columns=["A"], denominator_columns=["B"])
+    pipe = Pipeline(steps=[("ratio", t)])
+    pipe.fit(df)
+    pipeline_to_onnx(pipe)
+    assert get_output_onnx_type(t, "A__div__B") == get_output_onnx_type(t, "B")
+    assert get_output_onnx_type(t, "A") == get_output_onnx_type(t, "A")
+
+
+def test_ratio_mixed_dtype_cast():
+    """Numerator (Int64) and denominator (Float64) differ in onnx type -> numerator is Cast
+    to match the denominator's type before the Div node."""
+    X = pl.DataFrame({
+        "A": pl.Series([2, 4, 8], dtype=pl.Int64),
+        "B": pl.Series([1.0, 2.0, 4.0], dtype=pl.Float64),
+    })
+    t = RatioFeatures(numerator_columns=["A"], denominator_columns=["B"])
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    expected = t.transform(X)
+    np.testing.assert_allclose(onnx_out["A__div__B"], expected["A__div__B"].to_numpy(allow_copy=True), atol=1e-5)
 
 
 # ── WeightedSumFeatures ───────────────────────────────────────────────────────
@@ -300,6 +341,20 @@ def test_comparison_drop_columns(df):
     assert "A_gt_B" in onnx_out
 
 
+def test_comparison_output_onnx_type(df):
+    """get_output_onnx_type always FLOAT for the comparison result — via pipeline_to_onnx."""
+    from onnx import TensorProto
+    from gators.onnx_converters import get_output_onnx_type, pipeline_to_onnx
+    from gators.pipeline import Pipeline
+
+    t = ComparisonFeatures(subset_a=["A"], subset_b=["B"], operators=[">"])
+    pipe = Pipeline(steps=[("cmp", t)])
+    pipe.fit(df)
+    pipeline_to_onnx(pipe)
+    assert get_output_onnx_type(t, "A_gt_B") == TensorProto.FLOAT
+    assert get_output_onnx_type(t, "A") == get_output_onnx_type(t, "A")
+
+
 # ── ConditionFeatures ─────────────────────────────────────────────────────────
 
 @pytest.mark.parametrize("op", [">", "<", ">=", "<=", "==", "!="])
@@ -356,6 +411,19 @@ def test_condition_multiple(df):
     onnx_out = run_onnx(model, df)
     expected = t.transform(df)
     assert_onnx_close(onnx_out, expected, atol=1e-5)
+
+
+def test_condition_output_onnx_type(df):
+    """get_output_onnx_type inherits the SOURCE column's onnx type — via pipeline_to_onnx."""
+    from gators.onnx_converters import get_output_onnx_type, pipeline_to_onnx
+    from gators.pipeline import Pipeline
+
+    t = ConditionFeatures(conditions=[{"column": "A", "op": ">", "value": 2.0}], new_column_names=["a_gt_2"])
+    pipe = Pipeline(steps=[("cond", t)])
+    pipe.fit(df)
+    pipeline_to_onnx(pipe)
+    assert get_output_onnx_type(t, "a_gt_2") == get_output_onnx_type(t, "A")
+    assert get_output_onnx_type(t, "B") == get_output_onnx_type(t, "B")
 
 
 # ── MathFeatures ──────────────────────────────────────────────────────────────
@@ -836,7 +904,7 @@ def test_fourier_float32():
     X = pl.DataFrame({"A": pl.Series([1.0, 2.0, 4.0], dtype=pl.Float32)})
     t = FourierFeatures(subset=["A"], periods=[4.0], n_harmonics=1)
     t.fit(X)
-    model = to_onnx_graph(t)
+    model = to_onnx_graph(t, float_datatype="float32")
     onnx_out = run_onnx(model, X)
     expected = t.transform(X)
     assert_onnx_close(onnx_out, expected, atol=1e-4)
@@ -875,6 +943,52 @@ def test_hhi_drop_columns():
     assert "A" not in onnx_out
     assert "B" not in onnx_out
     assert "hhi" in onnx_out
+
+
+# EntropyFeatures
+from gators.feature_generation import EntropyFeatures
+
+
+def test_entropy_basic():
+    X = pl.DataFrame({"A": [10.0, 20.0, 0.0], "B": [30.0, 10.0, 0.0], "C": [60.0, 70.0, 0.0]})
+    t = EntropyFeatures(column_groups=[["A", "B", "C"]], new_column_names=["entropy_abc"])
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    expected = t.transform(X)
+    assert_onnx_close(onnx_out, expected, atol=1e-5)
+
+
+def test_entropy_drop_columns():
+    X = pl.DataFrame({"A": [10.0, 20.0], "B": [30.0, 40.0]})
+    t = EntropyFeatures(column_groups=[["A", "B"]], new_column_names=["entropy"], drop_columns=True)
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    assert "A" not in onnx_out
+    assert "B" not in onnx_out
+    assert "entropy" in onnx_out
+
+
+def test_entropy_multiple_groups():
+    X = pl.DataFrame({"a1": [10.0, 50.0], "a2": [90.0, 50.0], "b1": [25.0, 25.0], "b2": [25.0, 75.0]})
+    t = EntropyFeatures(column_groups=[["a1", "a2"], ["b1", "b2"]])
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    expected = t.transform(X)
+    assert_onnx_close(onnx_out, expected, atol=1e-5)
+
+
+def test_entropy_passthrough_ungrouped_column():
+    """A column not part of any group must survive unchanged (Identity passthrough)."""
+    X = pl.DataFrame({"A": [10.0, 20.0, 0.0], "B": [30.0, 10.0, 0.0], "C": [1.0, 2.0, 3.0]})
+    t = EntropyFeatures(column_groups=[["A", "B"]], new_column_names=["entropy_ab"])
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    expected = t.transform(X)
+    assert_onnx_close(onnx_out, expected, atol=1e-5)
 
 
 # MathFeatures: reduce ops (minus, mul, div, abs_diff)
@@ -963,7 +1077,7 @@ def test_dist_haversine_float32():
     t = DistanceFeatures(lats=["lat1", "lat2"], longs=["lon1", "lon2"],
                          method="haversine", unit="km", drop_columns=False)
     t.fit(X)
-    model = to_onnx_graph(t)
+    model = to_onnx_graph(t, float_datatype="float32")
     onnx_out = run_onnx(model, X)
     expected = t.transform(X)
     assert_onnx_close(onnx_out, expected, atol=1e-1)
@@ -1012,6 +1126,17 @@ def test_isnull_output_onnx_type():
     assert get_output_onnx_type(t, "B") == TensorProto.DOUBLE            # pass-through Float64 → DOUBLE
 
 
+def test_isnull_integer_column():
+    """IsNull on an Int64 column: no null repr once exported, so IsNaN always evaluates False
+    via a Cast(FLOAT)->IsNaN fallback (integer columns carry no native ONNX null)."""
+    X = pl.DataFrame({"A": pl.Series([1, 2, 3], dtype=pl.Int64)})
+    t = IsNull(subset=["A"])
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    np.testing.assert_array_equal(onnx_out["A__is_null"], np.zeros(3, dtype=np.float32))
+
+
 # ── MathFeatures: Float64 output type and mixed-type cast (lines 963-973, 1002-1004) ─
 
 def test_math_output_type_double():
@@ -1030,17 +1155,26 @@ def test_math_output_type_double():
 
 
 def test_math_mixed_float32_float64_cast():
-    """Float32 column in a Float64 group triggers a Cast node (lines 1002-1004)."""
+    """Float32 column in a Float64 group triggers a Cast node (lines 1002-1004).
+
+    to_onnx_graph/pipeline_to_onnx normalize all float columns to the same
+    float_datatype before building nodes, so the mismatched-dtype Cast bridge
+    is only reachable by calling to_onnx_nodes directly with the transformer's
+    naturally-captured (un-normalized) per-column _input_dtypes.
+    """
+    from gators.onnx_converters._converters import to_onnx_nodes
+
     X = pl.DataFrame({
         "A": pl.Series([1.0, 2.0, 3.0], dtype=pl.Float32),
         "B": pl.Series([4.0, 5.0, 6.0], dtype=pl.Float64),
     })
     t = MathFeatures(groups=[["A", "B"]], func=["sum"])
     t.fit(X)
-    model = to_onnx_graph(t)
-    onnx_out = run_onnx(model, X)
-    expected = t.transform(X)
-    assert_onnx_close(onnx_out, expected, atol=1e-5)
+    input_names = {"A": "A__in", "B": "B__in"}
+    output_names = {"A_B_sum": "A_B_sum"}
+    nodes, _ = to_onnx_nodes(t, input_names, output_names)
+    cast_nodes = [n for n in nodes if n.op_type == "Cast"]
+    assert len(cast_nodes) == 1
 
 
 # ── Identity pass-through: non-group columns must be unchanged ────────────────

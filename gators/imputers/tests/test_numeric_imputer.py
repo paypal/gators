@@ -87,10 +87,15 @@ def test_imputer_median(sample_dataframe):
     imputer.fit(sample_dataframe)
     transformed = imputer.transform(sample_dataframe)
 
+    # Integer columns (A, B) round the median fill value to preserve the original dtype.
     expected = sample_dataframe.with_columns(
         [
-            pl.col("A").fill_null(sample_dataframe["A"].median()).alias("A__impute_median"),
-            pl.col("B").fill_null(sample_dataframe["B"].median()).alias("B__impute_median"),
+            pl.col("A")
+            .fill_null(int(round(sample_dataframe["A"].median())))
+            .alias("A__impute_median"),
+            pl.col("B")
+            .fill_null(int(round(sample_dataframe["B"].median())))
+            .alias("B__impute_median"),
             pl.col("D").fill_null(sample_dataframe["D"].median()).alias("D__impute_median"),
         ]
     ).drop(["A", "B", "D"])

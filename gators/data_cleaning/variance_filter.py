@@ -1,7 +1,7 @@
 from typing import Annotated
 
 import polars as pl
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -73,9 +73,9 @@ class VarianceFilter(_BaseTransformer):
 
     subset: list[str] | None = None
     min_var: Annotated[float, Field(ge=0.0)]
-    _to_drop: list[str]
-    _column_mapping = dict[str, str]
-    _std_devs: dict[str, float]
+    _to_drop: list[str] = PrivateAttr(default_factory=list)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
+    _std_devs: dict[str, float] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "VarianceFilter":
         """Fit the transformer by identifying low-variance columns.

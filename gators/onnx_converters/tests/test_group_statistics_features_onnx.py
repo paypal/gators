@@ -30,7 +30,7 @@ def _compare(t: GroupStatisticsFeatures, df: pl.DataFrame, *, atol: float = 1e-4
     onnx_out = run_onnx(model, df)
     expected = t.transform(df)
     # Compare generated feature columns and subset columns if retained
-    feature_cols = list(t._column_mapping.values())
+    feature_cols = [name for names in t._column_mapping.values() for name in names]
     if not t.drop_columns:
         feature_cols = [c for c in t.subset] + feature_cols
     assert_onnx_close({c: onnx_out[c] for c in feature_cols}, expected.select(feature_cols), atol=atol)
@@ -80,6 +80,29 @@ def test_zscore(X):
 
 def test_minmax(X):
     _compare(GroupStatisticsFeatures(subset=["amount"], by=["cat1"], func=["minmax"]), X)
+
+
+def test_count_null(X):
+    X_with_nulls = X.with_columns(pl.Series("amount", [100.0, None, 150.0, 300.0, None]))
+    _compare(GroupStatisticsFeatures(subset=["amount"], by=["cat1"], func=["count_null"]), X_with_nulls)
+
+
+# ── rank / pct_rank: unsupported (order statistics, no frozen per-group lookup) ──────────────
+
+def test_rank_raises_onnx_not_supported(X):
+    from gators.onnx_converters import OnnxNotSupportedError, to_onnx_graph as _to_onnx_graph
+    t = GroupStatisticsFeatures(subset=["amount"], by=["cat1"], func=["rank"])
+    t.fit(X)
+    with pytest.raises(OnnxNotSupportedError, match="rank"):
+        _to_onnx_graph(t)
+
+
+def test_pct_rank_raises_onnx_not_supported(X):
+    from gators.onnx_converters import OnnxNotSupportedError, to_onnx_graph as _to_onnx_graph
+    t = GroupStatisticsFeatures(subset=["amount"], by=["cat1"], func=["pct_rank"])
+    t.fit(X)
+    with pytest.raises(OnnxNotSupportedError, match="pct_rank"):
+        _to_onnx_graph(t)
 
 
 # ── fill_value for zero denominator ──────────────────────────────────────────
@@ -135,14 +158,20 @@ def test_drop_columns(X):
 # ── unseen group at inference time ────────────────────────────────────────────
 
 def test_unseen_group_absolute():
-    """Unseen groups fall back to 0.0 for absolute stats."""
+    """Unseen groups fall back to NaN for absolute stats, matching the native
+    transform()'s left-join null fallback (not 0.0 — a group that was never seen during
+    fit() has no computed statistic, so the value must be missing, not a real 0.0)."""
     X_train = pl.DataFrame({"v": [1.0, 2.0], "g": ["A", "A"]})
     X_test  = pl.DataFrame({"v": [5.0], "g": ["Z"]})
     t = GroupStatisticsFeatures(subset=["v"], by=["g"], func=["mean"])
     t.fit(X_train)
+
+    native_out = t.transform(X_test)
+    assert native_out["mean_v__per_g"][0] is None
+
     model = to_onnx_graph(t)
     out = run_onnx(model, X_test)
-    assert float(out["mean_v__per_g"][0]) == pytest.approx(0.0)
+    assert np.isnan(float(out["mean_v__per_g"][0]))
 
 
 # ── Pipeline + Float32 (exercise get_output_onnx_type and no-cast path) ─────────────────────
@@ -166,6 +195,18 @@ def test_gsf_float32_input():
     })
     t = GroupStatisticsFeatures(subset=["v"], by=["g"], func=["mean"])
     t.fit(X)
-    out = run_onnx(to_onnx_graph(t), X)
+    out = run_onnx(to_onnx_graph(t, float_datatype="float32"), X)
     exp = t.transform(X)
     np.testing.assert_allclose(out["mean_v__per_g"].astype(float), exp["mean_v__per_g"].cast(pl.Float64).to_numpy(), atol=1e-4)
+
+
+def test_gsf_output_onnx_type_no_numeric_subset():
+    """Fallback to FLOAT when no non-STRING dtype is found among subset columns (edge case)."""
+    from onnx import TensorProto
+    from gators.onnx_converters._feature_generation_converters import _gsf_output_onnx_type
+
+    X = pl.DataFrame({"v": [1.0, 2.0], "g": ["A", "B"]})
+    t = GroupStatisticsFeatures(subset=["v"], by=["g"], func=["mean"])
+    t.fit(X)
+    t.subset = []
+    assert _gsf_output_onnx_type(t, "mean_v__per_g") == TensorProto.FLOAT

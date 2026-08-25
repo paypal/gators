@@ -40,6 +40,7 @@ dependencies = [
     "typing-extensions>=4.0.0",
     "scikit-learn>=1.0.0",
     "holidays>=0.30",
+    "rapidfuzz>=3.0.0",
 ]
 
 [project.optional-dependencies]
@@ -66,7 +67,11 @@ onnx = [
     "onnx>=1.14.0",
     "onnxruntime>=1.16.0",
 ]
-all = ["gators[dev,notebook,tree,onnx]"]
+benchmarks = [
+    "feature-engine>=1.9.0",
+    "pandas>=2.0.0",
+]
+all = ["gators[dev,notebook,tree,onnx,benchmarks]"]
 
 [project.urls]
 Homepage = "https://github.com/paypal/Gators/"
@@ -85,6 +90,7 @@ include = ["gators/py.typed"]
 [tool.hatch.build]
 exclude = [
     "notebooks/",
+    "benchmarks/",
     "gators/*/tests/",
     "data/",
     "doc_data/",

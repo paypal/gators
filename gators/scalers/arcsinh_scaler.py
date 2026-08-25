@@ -82,7 +82,7 @@ class ArcSinhScaler(_BaseTransformer):
     subset: list[str] | None = None
     inplace: bool = True
     drop_columns: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ArcSinhScaler":
         """Fit the transformer by storing column names.
@@ -102,11 +102,12 @@ class ArcSinhScaler(_BaseTransformer):
         if not self.subset:
             # Use set for O(1) dtype lookup instead of list O(n) lookup
             self.subset = [
-                col for col, dtype in zip(X.columns, X.dtypes) if dtype.is_numeric()
+                col for col, dtype in zip(X.columns, X.dtypes, strict=False) if dtype.is_numeric()
             ]
 
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__arcsinh" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__arcsinh"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -123,14 +124,16 @@ class ArcSinhScaler(_BaseTransformer):
             Transformed DataFrame with arcsinh-transformed columns.
         """
         if self.inplace:
+            assert self.subset is not None
             transformations = [pl.col(col).arcsinh().alias(col) for col in self.subset]
             return X.with_columns(transformations)
 
         transformations = [
-            pl.col(col).arcsinh().alias(new) for col, new in self._column_mapping.items()
+            pl.col(col).arcsinh().alias(new) for col, [new] in self._column_mapping.items()
         ]
         X = X.with_columns(transformations)
         if self.drop_columns:
+            assert self.subset is not None
             return X.drop(self.subset)
         return X
 
@@ -148,9 +151,10 @@ class ArcSinhScaler(_BaseTransformer):
             DataFrame with columns restored to their original scale.
         """
         if self.inplace:
+            assert self.subset is not None
             exprs = [pl.col(col).sinh().alias(col) for col in self.subset]
             return X.with_columns(exprs)
-        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        reverse_map = {v: k for k, values in self._column_mapping.items() for v in values}
         exprs = [
             pl.col(new).sinh().alias(orig) for new, orig in reverse_map.items() if new in X.columns
         ]

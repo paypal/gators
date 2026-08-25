@@ -8,6 +8,7 @@ Mathematical Operations
 * :class:`~gators.feature_generation.comparison_features.ComparisonFeatures` - Compare columns
 * :class:`~gators.feature_generation.concentration_index_features.ConcentrationIndexFeatures` - Generate concentration index features
 * :class:`~gators.feature_generation.distance_features.DistanceFeatures` - Calculate distance between columns
+* :class:`~gators.feature_generation.entropy_features.EntropyFeatures` - Generate Shannon entropy features
 * :class:`~gators.feature_generation.fourier_features.FourierFeatures` - Generate Fourier basis features
 * :class:`~gators.feature_generation.generalized_ratio_features.GeneralizedRatioFeatures` - Generate generalized ratio features
 * :class:`~gators.feature_generation.hhi_features.HHIFeatures` - Generate Herfindahl-Hirschman index features

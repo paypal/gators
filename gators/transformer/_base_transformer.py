@@ -1,7 +1,7 @@
 import functools
 import pickle
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import polars as pl
 from pydantic import BaseModel, ConfigDict, PrivateAttr
@@ -23,6 +23,10 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
     _is_fitted: bool = PrivateAttr(default=False)
     _input_columns: list[str] = PrivateAttr(default_factory=list)
     _input_dtypes: dict[str, Any] = PrivateAttr(default_factory=dict)
+    # Declared by fit() for columns the transformer creates or changes; columns absent
+    # from this dict keep their _input_dtypes (pass-through). Consumed by ONNX export
+    # to determine output tensor types without needing a real transform() call.
+    _output_dtypes: dict[str, Any] = PrivateAttr(default_factory=dict)
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
@@ -42,7 +46,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
                 self._is_fitted = True
                 if X is not None and hasattr(X, "columns"):
                     self._input_columns = list(X.columns)
-                    self._input_dtypes = dict(zip(X.columns, X.dtypes))
+                    self._input_dtypes = dict(zip(X.columns, X.dtypes, strict=False))
                 return result
 
             cls.fit = wrapped_fit  # type: ignore[method-assign]
@@ -91,9 +95,9 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
     def get_feature_names_out(self) -> list[str]:
         """Return output column names after transformation.
 
-        Uses ``_column_mapping`` (scalers/imputers/generators) or
-        ``column_mapping_`` (encoders) to compute the output column list.
-        Feature selectors return ``selected_features_`` directly.
+        Uses ``_column_mapping`` to compute the output column list. Each source
+        column maps to a *list* of generated column names (supports both 1:1 and
+        1:many transformers). Feature selectors return ``selected_features_`` directly.
 
         Returns
         -------
@@ -112,24 +116,23 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
         if selected is not None:
             return list(selected)
 
-        col_map: dict[str, str] = dict(
-            getattr(self, "_column_mapping", None) or getattr(self, "column_mapping_", None) or {}
-        )
+        col_map: dict[str, list[str]] = dict(getattr(self, "_column_mapping", None) or {})
 
         if not col_map:
             return list(self._input_columns)
 
         inplace: bool = getattr(self, "inplace", False)
         drop_columns: bool = getattr(self, "drop_columns", True)
+        new_cols = [name for names in col_map.values() for name in names]
 
         if inplace:
             return list(self._input_columns)
 
         if drop_columns:
             dropped = set(col_map)
-            return [c for c in self._input_columns if c not in dropped] + list(col_map.values())
+            return [c for c in self._input_columns if c not in dropped] + new_cols
 
-        return list(self._input_columns) + list(col_map.values())
+        return list(self._input_columns) + new_cols
 
     def inverse_transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Reverse the transformation.
@@ -167,7 +170,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
             The loaded transformer instance.
         """
         with open(path, "rb") as f:
-            return pickle.load(f)  # noqa: S301
+            return cast("_BaseTransformer", pickle.load(f))  # noqa: S301
 
     def __init__(self, *args, **kwargs):
         """Initialize transformer with clear error message for positional arguments.
@@ -257,4 +260,4 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
         """
         if isinstance(X, pl.LazyFrame):
             X = X.collect()
-        return self.fit(X, y).transform(X)
+        return cast(pl.DataFrame, self.fit(X, y).transform(X))

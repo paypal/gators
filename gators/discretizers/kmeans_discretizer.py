@@ -1,6 +1,6 @@
 import numpy as np
 import polars as pl
-from pydantic import PositiveInt, field_validator
+from pydantic import field_validator
 from sklearn.cluster import KMeans
 
 from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels
@@ -85,7 +85,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
     └───────┴──────────┴─────────────────┴──────────────────┘
     """
 
-    random_state: int = None
+    random_state: int | None = None
     max_iter: int = 300
     n_init: int = 10
     _centroids: dict[str, np.ndarray] = {}
@@ -177,6 +177,7 @@ class KMeansDiscretizer(_BaseDiscretizer):
 
         # Set column mapping for non-inplace mode
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__dic_kmeans" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__dic_kmeans"] for col in self.subset}
 
+        self._set_output_dtypes()
         return self

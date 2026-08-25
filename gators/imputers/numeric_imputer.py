@@ -141,9 +141,9 @@ class NumericImputer(_BaseTransformer):
     drop_columns: bool = True
     inplace: bool = True
     _statistics: dict[str, int | float] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "NumericImputer":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> NumericImputer:
         """Fit the transformer by computing imputation statistics.
 
         Parameters
@@ -161,11 +161,12 @@ class NumericImputer(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype not in [pl.String, pl.Boolean]
             ]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__impute_{self.strategy}" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__impute_{self.strategy}"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         # Only compute statistics for strategies that need them
         if self.strategy == "constant":
@@ -181,7 +182,7 @@ class NumericImputer(_BaseTransformer):
             results = X.select([getattr(pl.col(c), self.strategy)() for c in self.subset]).row(0)
             self._statistics = {
                 col: (0 if (val is None or (isinstance(val, float) and math.isnan(val))) else val)
-                for col, val in zip(self.subset, results)
+                for col, val in zip(self.subset, results, strict=False)
             }
         elif self.strategy == "most_frequent":
             self._statistics = {
@@ -222,14 +223,14 @@ class NumericImputer(_BaseTransformer):
             else:
                 transformations = [
                     (pl.col(col).fill_nan(None) if X.schema[col] in _float_dtypes else pl.col(col)).fill_null(strategy=self.strategy).alias(new)  # type: ignore[arg-type]
-                    for col, new in self._column_mapping.items()
+                    for col, [new] in self._column_mapping.items()
                 ]
         else:
             # Use pre-computed statistics (constant, median, most_frequent, mean, min, max).
-            # For integer columns: round stat to int for strategies where an integer result is expected,
-            # but allow Float64 promotion for median (which can be non-integer).
+            # For integer columns: round the stat to an int so the original dtype is preserved
+            # (median/mean always compute a Float64 result even for integer input).
             _int_dtypes = {pl.Int8, pl.Int16, pl.Int32, pl.Int64, pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64}
-            _round_for_int = {"mean", "min", "max", "constant", "most_frequent"}
+            _round_for_int = {"mean", "min", "max", "constant", "most_frequent", "median"}
 
             def _stat_expr(col: str) -> pl.Expr:
                 stat = self._statistics[col]
@@ -244,7 +245,7 @@ class NumericImputer(_BaseTransformer):
             if self.inplace:
                 transformations = [_stat_expr(col) for col in self.subset]
             else:
-                transformations = [_stat_expr(col).alias(new) for col, new in self._column_mapping.items()]
+                transformations = [_stat_expr(col).alias(new) for col, [new] in self._column_mapping.items()]
 
         X = X.with_columns(transformations)
 

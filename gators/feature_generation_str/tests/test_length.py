@@ -39,7 +39,7 @@ def test_length_transform_with_columns(sample_data):
             "column1": ["short", None, "much longer string"],
             "column2": ["tiny", "bit lengthy", "even longer string"],
             "column3": [1, 2, 3],
-            "column1__length": [5, None, 18],
+            "column1__length": [5.0, None, 18.0],
         }
     )
     assert_frame_equal(transformed_X, expected_X)
@@ -54,8 +54,8 @@ def test_length_transform(sample_data):
             "column1": ["short", None, "much longer string"],
             "column2": ["tiny", "bit lengthy", "even longer string"],
             "column3": [1, 2, 3],
-            "column1__length": [5, None, 18],
-            "column2__length": [4, 11, 18],
+            "column1__length": [5.0, None, 18.0],
+            "column2__length": [4.0, 11.0, 18.0],
         }
     )
     assert_frame_equal(transformed_X, expected_X)

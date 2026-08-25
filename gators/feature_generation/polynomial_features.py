@@ -90,7 +90,7 @@ class PolynomialFeatures(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype not in [pl.String, pl.Boolean]
             ]
         return self
@@ -121,10 +121,9 @@ class PolynomialFeatures(_BaseTransformer):
                 if self.interaction_only and len(set(combination)) != i:
                     continue
                 new_col_name = "__".join(combination)
-                # Multiply columns directly to preserve dtype
                 new_col_expr = pl.col(combination[0])
                 for col in combination[1:]:
                     new_col_expr = new_col_expr * pl.col(col)
-                transformations.append(new_col_expr.alias(new_col_name))
+                transformations.append(new_col_expr.cast(pl.Float64).alias(new_col_name))
 
         return X.with_columns(transformations)

@@ -9,8 +9,8 @@ MADClipper, QuantileClipper): Clip(X, lower, upper) using fitted _clip_bounds.
 """
 from __future__ import annotations
 
-from ._converters import _onnx_type_to_numpy, get_input_onnx_type, to_onnx_nodes
 from ..clippers._base_clipper import _BaseClipper
+from ._converters import _onnx_type_to_numpy, get_input_onnx_type, to_onnx_nodes
 
 try:
     import numpy as np

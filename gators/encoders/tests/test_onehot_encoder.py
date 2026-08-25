@@ -194,3 +194,19 @@ def test_transform_without_fit_returns_x_unchanged():
     encoder = OneHotEncoder()
     with pytest.raises(NotFittedError):
         encoder.transform(X)
+
+
+def test_transform_null_maps_to_missing_category():
+    """Null values must be flagged via the MISSING__ indicator learned in fit(), not left all-zero."""
+    X = pl.DataFrame({"A": ["foo", "bar", "foo", None]})
+    encoder = OneHotEncoder(subset=["A"])
+    encoder.fit(X)
+    transformed_X = encoder.transform(X)
+    expected_X = pl.DataFrame(
+        {
+            "A__foo": [1.0, 0.0, 1.0, 0.0],
+            "A__bar": [0.0, 1.0, 0.0, 0.0],
+            "A__MISSING__": [0.0, 0.0, 0.0, 1.0],
+        }
+    )
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)

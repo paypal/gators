@@ -190,6 +190,21 @@ def test_iterative_imputer_single_feature_constant_fallback():
     assert not np.isnan(float(onnx_out["A"][1]))
 
 
+def test_iterative_imputer_int_feature_column_is_noop():
+    """An Int64 feature column is a no-op pass-through in both phase 1 (initial fill) and
+    phase 2 (regression) — ONNX IsNaN only accepts float tensors."""
+    X = pl.DataFrame({
+        "A": pl.Series([1.0, None, 3.0, 4.0], dtype=pl.Float64),
+        "B": pl.Series([1, 2, 3, 4], dtype=pl.Int64),
+        "C": pl.Series([1.0, 2.0, 3.0, 4.0], dtype=pl.Float64),
+    })
+    t = IterativeImputer(max_iter=1, subset=["A", "B", "C"])
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    np.testing.assert_array_equal(onnx_out["B"].astype(np.int64), X["B"].to_numpy(allow_copy=True))
+
+
 # ── StringImputer ─────────────────────────────────────────────────────────────
 
 def test_string_imputer_constant():
@@ -295,6 +310,21 @@ def test_string_imputer_inplace_false_no_drop_columns():
     assert onnx_out["cat__impute_constant"][1] == "MISS"
 
 
+def test_string_imputer_inplace_false_output_type():
+    """pipeline_to_onnx calls get_output_onnx_type for a renamed StringImputer output (declared _output_dtypes)."""
+    from gators.pipeline import Pipeline
+    from gators.onnx_converters import pipeline_to_onnx
+
+    X = pl.DataFrame({"cat": ["foo", None, "bar"]})
+    pipe = Pipeline(steps=[
+        ("imputer", StringImputer(strategy="constant", value="MISS", inplace=False, drop_columns=True)),
+    ])
+    pipe.fit(X)
+    model = pipeline_to_onnx(pipe)
+    onnx_out = run_onnx(model, X)
+    assert onnx_out["cat__impute_constant"][1] == "MISS"
+
+
 # ── Identity pass-through: non-subset columns must be unchanged ───────────────
 
 def test_boolean_imputer_passthrough_column():
@@ -355,7 +385,7 @@ def df_groupby():
 def test_groupby_imputer_median_inplace(df_groupby):
     t = GroupByImputer(group_by_column="district", strategy="median", inplace=True)
     t.fit(df_groupby)
-    model = to_onnx_graph(t)
+    model = to_onnx_graph(t, float_datatype="float32")
     onnx_out = run_onnx(model, df_groupby)
     expected = t.transform(df_groupby)
     numeric_cols = [c for c in expected.columns if c != "district"]
@@ -389,7 +419,7 @@ def test_groupby_imputer_inplace_false_keep(df_groupby):
     model = to_onnx_graph(t)
     onnx_out = run_onnx(model, df_groupby)
     expected = t.transform(df_groupby)
-    imputed_cols = list(t._column_mapping.values())
+    imputed_cols = [name for names in t._column_mapping.values() for name in names]
     assert_onnx_close({c: onnx_out[c] for c in imputed_cols}, expected.select(imputed_cols), atol=1e-5)
 
 
@@ -401,6 +431,20 @@ def test_groupby_imputer_subset(df_groupby):
     expected = t.transform(df_groupby)
     assert_onnx_close({"value1": onnx_out["value1"]}, expected.select(["value1"]), atol=1e-5)
     np.testing.assert_allclose(onnx_out["value2"].astype(float), df_groupby["value2"].to_numpy(allow_copy=True), atol=1e-5, equal_nan=True)
+
+
+def test_groupby_imputer_int_column_in_subset_is_noop():
+    """An Int64 column in the subset is a no-op pass-through — ONNX IsNaN only accepts
+    float tensors, and integer columns carry no null representation once exported."""
+    X = pl.DataFrame({
+        "district": ["A", "A", "B", "B"],
+        "value1":   pl.Series([1, 2, 3, 4], dtype=pl.Int64),
+    })
+    t = GroupByImputer(group_by_column="district", strategy="median", subset=["value1"])
+    t.fit(X)
+    model = to_onnx_graph(t)
+    onnx_out = run_onnx(model, X)
+    np.testing.assert_array_equal(onnx_out["value1"].astype(np.int64), X["value1"].to_numpy(allow_copy=True))
 
 
 def test_groupby_imputer_no_nulls(df_groupby):

@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -39,6 +40,7 @@ class Contains(_BaseTransformer):
     """
 
     contains_dict: dict[str, list[str]]
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Contains":
         """Fit the transformer (no-op, but required for sklearn compatibility).
@@ -55,6 +57,13 @@ class Contains(_BaseTransformer):
         Contains
             Fitted transformer instance.
         """
+        self._column_mapping = {
+            col: [f"{col}__contains_{substring}" for substring in substrings]
+            for col, substrings in self.contains_dict.items()
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -71,7 +80,7 @@ class Contains(_BaseTransformer):
             Transformed DataFrame.
         """
         transformations = [
-            pl.col(col).str.contains(substring).alias(f"{col}__contains_{substring}")
+            pl.col(col).str.contains(substring).cast(pl.Float64).alias(f"{col}__contains_{substring}")
             for col, substrings in self.contains_dict.items()
             for substring in substrings
         ]

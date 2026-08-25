@@ -119,7 +119,7 @@ class FourierFeatures(_BaseTransformer):
         """Resolved per-column period mapping."""
         return self._column_periods
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "FourierFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> FourierFeatures:
         """Resolve per-column periods from the ``periods`` parameter.
 
         Parameters

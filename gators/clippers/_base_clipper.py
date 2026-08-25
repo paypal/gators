@@ -26,8 +26,8 @@ class _BaseClipper(_BaseTransformer):
     drop_columns: bool = True
     subset: list[str] | None = None
     inplace: bool = True
-    _clip_bounds: dict[str, tuple[float, float]] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _clip_bounds: dict[str, tuple[float | None, float | None]] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by clipping values to quantile thresholds.
@@ -43,6 +43,7 @@ class _BaseClipper(_BaseTransformer):
             DataFrame with clipped numeric columns.
         """
         if self.inplace:
+            assert self.subset is not None
             transformations = [
                 pl.col(col).clip(
                     lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1]
@@ -54,11 +55,12 @@ class _BaseClipper(_BaseTransformer):
                 pl.col(col)
                 .clip(lower_bound=self._clip_bounds[col][0], upper_bound=self._clip_bounds[col][1])
                 .alias(new)
-                for col, new in self._column_mapping.items()
+                for col, [new] in self._column_mapping.items()
             ]
 
         X = X.with_columns(transformations)
 
         if not self.inplace and self.drop_columns:
+            assert self.subset is not None
             return X.drop(self.subset)
         return X

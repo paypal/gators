@@ -277,14 +277,18 @@ class ScalerLike(_BaseTransformer):
     """Transformer that uses _column_mapping and drop_columns."""
 
     drop_columns: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ScalerLike":
-        self._column_mapping = {c: f"{c}__scaled" for c in X.columns}
+        self._column_mapping = {c: [f"{c}__scaled"] for c in X.columns}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        X = X.with_columns([(pl.col(c) * 2).alias(new) for c, new in self._column_mapping.items()])
+        X = X.with_columns([
+            (pl.col(c) * 2).alias(new)
+            for c, names in self._column_mapping.items()
+            for new in names
+        ])
         if self.drop_columns:
             return X.drop(list(self._column_mapping))
         return X
@@ -294,10 +298,10 @@ class InplaceTransformer(_BaseTransformer):
     """Transformer that operates inplace (no column renaming)."""
 
     inplace: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "InplaceTransformer":
-        self._column_mapping = {c: c for c in X.columns}
+        self._column_mapping = {c: [c] for c in X.columns}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -317,21 +321,25 @@ class NoMappingTransformer(_BaseTransformer):
 class InvTransformer(_BaseTransformer):
     """Transformer with a real inverse_transform for wrapping tests."""
 
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
     drop_columns: bool = True
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "InvTransformer":
-        self._column_mapping = {c: f"{c}__doubled" for c in X.columns}
+        self._column_mapping = {c: [f"{c}__doubled"] for c in X.columns}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        X = X.with_columns([(pl.col(c) * 2).alias(new) for c, new in self._column_mapping.items()])
+        X = X.with_columns([
+            (pl.col(c) * 2).alias(new)
+            for c, names in self._column_mapping.items()
+            for new in names
+        ])
         if self.drop_columns:
             return X.drop(list(self._column_mapping))
         return X
 
     def inverse_transform(self, X: pl.DataFrame) -> pl.DataFrame:
-        reverse = {v: k for k, v in self._column_mapping.items()}
+        reverse = {v: k for k, values in self._column_mapping.items() for v in values}
         exprs = [(pl.col(new) / 2).alias(orig) for new, orig in reverse.items() if new in X.columns]
         X = X.with_columns(exprs)
         if self.drop_columns:

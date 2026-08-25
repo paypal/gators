@@ -40,7 +40,7 @@ class RobustScaler(_BaseTransformer):
         Fitted IQR-based scale (``1 / (Q_high - Q_low)``) per column.
         Columns where the quantile range is zero get a scale of ``0.0``
         (i.e. scaled output will be all zeros).
-    _column_mapping : dict[str, str]
+    _column_mapping : dict[str, list[str]]
         Mapping from original column name to scaled column name.
 
     Examples
@@ -64,7 +64,7 @@ class RobustScaler(_BaseTransformer):
 
     _median: dict[str, float] = PrivateAttr(default_factory=dict)
     _scale: dict[str, float] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("quantile_range")
     @classmethod
@@ -92,12 +92,13 @@ class RobustScaler(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.is_numeric()
             ]
 
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__robust_quantile_scale" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__robust_quantile_scale"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         q_low, q_high = self.quantile_range
         stat_exprs = []
@@ -134,6 +135,7 @@ class RobustScaler(_BaseTransformer):
             DataFrame with robust-scaled columns.
         """
         if self.inplace:
+            assert self.subset is not None
             transformations = [
                 (self._scale[col] * (pl.col(col) - self._median[col])).alias(col)
                 for col in self.subset
@@ -142,10 +144,11 @@ class RobustScaler(_BaseTransformer):
 
         transformations = [
             (self._scale[col] * (pl.col(col) - self._median[col])).alias(new_col)
-            for col, new_col in self._column_mapping.items()
+            for col, [new_col] in self._column_mapping.items()
         ]
         X = X.with_columns(transformations)
         if self.drop_columns:
+            assert self.subset is not None
             return X.drop(self.subset)
         return X
 
@@ -170,9 +173,10 @@ class RobustScaler(_BaseTransformer):
             return (pl.col(scaled_col) / scale + median).alias(orig_col)
 
         if self.inplace:
+            assert self.subset is not None
             exprs = [_inv_expr(col, col) for col in self.subset]
             return X.with_columns(exprs)
-        reverse_map = {v: k for k, v in self._column_mapping.items()}
+        reverse_map = {v: k for k, values in self._column_mapping.items() for v in values}
         exprs = [_inv_expr(new, orig) for new, orig in reverse_map.items() if new in X.columns]
         X = X.with_columns(exprs)
         if self.drop_columns:

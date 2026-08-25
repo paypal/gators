@@ -136,7 +136,7 @@ class RollingStatisticsFeatures(_BaseTransformer):
         """Names of the generated feature columns."""
         return self._new_column_names
 
-    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RollingStatisticsFeatures":
+    def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> RollingStatisticsFeatures:
         """Record the names of the output feature columns.
 
         Parameters
@@ -154,6 +154,7 @@ class RollingStatisticsFeatures(_BaseTransformer):
         self._new_column_names = [
             f"{col}__rolling_{fn}_{self.window_size}" for col in self.subset for fn in self.func
         ]
+        self._output_dtypes = {col: pl.Float64 for col in self._new_column_names}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

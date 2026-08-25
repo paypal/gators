@@ -21,13 +21,20 @@ from __future__ import annotations
 
 from typing import Any
 
-from ._converters import _onnx_type_to_numpy, get_input_onnx_type, get_output_columns, get_output_onnx_type, to_onnx_nodes
-from ._exceptions import OnnxNotSupportedError
 from ..imputers.boolean_imputer import BooleanImputer
 from ..imputers.groupby_imputer import GroupByImputer
 from ..imputers.iterative_imputer import IterativeImputer
 from ..imputers.numeric_imputer import NumericImputer
 from ..imputers.string_imputer import StringImputer
+from ._converters import (
+    _onnx_type_to_numpy,
+    get_input_onnx_type,
+    get_output_columns,
+    get_output_onnx_type,
+    resolve_declared_output_dtype,
+    to_onnx_nodes,
+)
+from ._exceptions import OnnxNotSupportedError
 
 try:
     import numpy as np
@@ -55,7 +62,7 @@ _IMPUTER_UNFIXED_STRATEGIES = frozenset({"forward", "backward"})
 def _imputer_output_cols(transformer: Any, input_columns: list[str]) -> list[str]:
     if transformer.inplace or not transformer._column_mapping:
         return list(input_columns)
-    new_cols = list(transformer._column_mapping.values())
+    new_cols = [name for names in transformer._column_mapping.values() for name in names]
     if transformer.drop_columns:
         dropped = set(transformer._column_mapping)
         return [c for c in input_columns if c not in dropped] + new_cols
@@ -123,10 +130,17 @@ def _numeric_imputer_to_onnx_nodes(
         if transformer.inplace:
             out_name = output_names.get(col, col)
         else:
-            actual_out = transformer._column_mapping.get(col, col)
+            actual_out = transformer._column_mapping.get(col, [col])[0]
             if not transformer.drop_columns and col in output_names:
                 nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
             out_name = output_names.get(actual_out, actual_out)
+
+        # ONNX IsNaN only accepts float tensor types; integer columns (e.g. Int64) carry no
+        # null representation once exported, so imputation on them is a no-op pass-through.
+        if get_input_onnx_type(transformer, col) not in (TensorProto.FLOAT, TensorProto.DOUBLE):
+            nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[out_name]))
+            continue
+
         prefix = f"{in_name}__NumericImputer"
         isnan_out = f"{prefix}__isnan"
         fill_init = f"{prefix}__fill"
@@ -152,6 +166,8 @@ def _boolean_imputer_input_type(transformer: BooleanImputer, col: str) -> int:
 
 @get_output_onnx_type.register(BooleanImputer)
 def _boolean_imputer_output_type(transformer: BooleanImputer, col: str) -> int:
+    # Not using _output_dtypes here: ONNX represents booleans as FLOAT (0.0/1.0/NaN)
+    # so IsNaN works, while _output_dtypes declares Boolean (true Polars dtype).
     return TensorProto.FLOAT
 
 
@@ -257,6 +273,13 @@ def _iterative_imputer_to_onnx_nodes(
             current_name[col] = col  # fallback; column not in graph
             continue
         in_name = input_names[col]
+
+        # ONNX IsNaN only accepts float tensor types; integer columns (e.g. Int64) carry no
+        # null representation once exported, so the initial fill is a no-op pass-through.
+        if get_input_onnx_type(transformer, col) not in (TensorProto.FLOAT, TensorProto.DOUBLE):
+            current_name[col] = in_name
+            continue
+
         p = f"{in_name}__IterImputer"
         stat_init = f"{p}__stat"
         isnan_out = f"{p}__isnan"
@@ -276,6 +299,13 @@ def _iterative_imputer_to_onnx_nodes(
         # indices of the other feature columns used as predictors
         feat_idx = [k for k in range(len(feature_cols)) if k != j]
         in_name = input_names[col]
+
+        # ONNX IsNaN only accepts float tensor types; integer columns (e.g. Int64) carry no
+        # null representation once exported, so regression-based imputation is skipped.
+        if get_input_onnx_type(transformer, col) not in (TensorProto.FLOAT, TensorProto.DOUBLE):
+            current_name[col] = in_name
+            continue
+
         p = f"{in_name}__IterImputer__reg"
         isnan_reg = f"{p}__isnan"
 
@@ -292,12 +322,20 @@ def _iterative_imputer_to_onnx_nodes(
                 other_col = feature_cols[fi]
                 if other_col not in current_name:  # pragma: no cover
                     continue
+                other_name = current_name[other_col]
+                target_type = get_input_onnx_type(transformer, col)
+                # Predictor columns may be integer-typed (e.g. Int64); Mul requires both
+                # operands to share a type, so cast to the regressed column's float type.
+                if get_input_onnx_type(transformer, other_col) != target_type:
+                    cast_name = f"{p}__predcast{term_pos}"
+                    nodes.append(oh.make_node("Cast", inputs=[other_name], outputs=[cast_name], to=target_type))
+                    other_name = cast_name
                 coef_val = float(coefs[term_pos + 1])  # coefs[0] is intercept
                 coef_init = f"{p}__coef{term_pos}"
                 term_out = f"{p}__term{term_pos}"
-                initializers.append(_make_init(coef_init, coef_val, get_input_onnx_type(transformer, col)))
+                initializers.append(_make_init(coef_init, coef_val, target_type))
                 nodes.append(
-                    oh.make_node("Mul", inputs=[current_name[other_col], coef_init], outputs=[term_out])
+                    oh.make_node("Mul", inputs=[other_name, coef_init], outputs=[term_out])
                 )
                 term_names.append(term_out)
 
@@ -361,10 +399,10 @@ def _string_imputer_input_type(transformer: StringImputer, col: str) -> int:
 
 @get_output_onnx_type.register(StringImputer)
 def _string_imputer_output_type(transformer: StringImputer, col: str) -> int:
-    col_map = transformer._column_mapping or {}
-    reverse = {v: k for k, v in col_map.items()}
-    src = reverse.get(col, col)
-    return TensorProto.STRING if src in (transformer.subset or []) else TensorProto.FLOAT
+    declared = resolve_declared_output_dtype(transformer, col)
+    if declared is not None:
+        return declared
+    return TensorProto.STRING if col in (transformer.subset or []) else TensorProto.FLOAT
 
 
 @to_onnx_nodes.register(StringImputer)
@@ -397,7 +435,7 @@ def _string_imputer_to_onnx_nodes(
         if transformer.inplace:
             out_name = output_names.get(col, col)
         else:
-            actual_out = transformer._column_mapping.get(col, col)
+            actual_out = transformer._column_mapping.get(col, [col])[0]
             if not transformer.drop_columns and col in output_names:
                 nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
             out_name = output_names.get(actual_out, actual_out)
@@ -406,7 +444,8 @@ def _string_imputer_to_onnx_nodes(
         mask_i64 = f"{prefix}__mask_i64"
         mask_bool = f"{prefix}__mask_bool"
 
-        initializers.append(oh.make_tensor(fill_init, TensorProto.STRING, [1], [fill_val.encode()]))
+        # onnx's make_tensor stub types vals as int|float only; STRING tensors accept bytes at runtime.
+        initializers.append(oh.make_tensor(fill_init, TensorProto.STRING, [1], [fill_val.encode()]))  # type: ignore[list-item]
         # onnxruntime does not support Equal on string tensors; use LabelEncoder to build the mask
         nodes.append(oh.make_node(
             "LabelEncoder", domain="ai.onnx.ml",
@@ -473,10 +512,16 @@ def _groupby_imputer_to_onnx_nodes(
         if transformer.inplace:
             out_name = output_names.get(col, col)
         else:
-            actual_out = transformer._column_mapping.get(col, col)
+            actual_out = transformer._column_mapping.get(col, [col])[0]
             if not transformer.drop_columns and col in output_names:
                 nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[output_names[col]]))
             out_name = output_names.get(actual_out, actual_out)
+
+        # ONNX IsNaN only accepts float tensor types; integer columns (e.g. Int64) carry no
+        # null representation once exported, so imputation on them is a no-op pass-through.
+        if onnx_type not in (TensorProto.FLOAT, TensorProto.DOUBLE):
+            nodes.append(oh.make_node("Identity", inputs=[in_name], outputs=[out_name]))
+            continue
 
         p = f"{in_name}__GroupByImputer"
         fill_f32_name = f"{p}__fill_f32"
