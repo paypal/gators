@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -344,6 +351,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -453,7 +467,7 @@
                   
   <h1>Source code for gators.feature_generation_str.combine_features</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrivateAttr</span><span class="p">,</span> <span class="n">field_validator</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
 
@@ -585,7 +599,7 @@
     <span class="n">separator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span>
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">new_column_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;new_column_names&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_new_column_names_length</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_column_names</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
@@ -619,8 +633,11 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span> <span class="o">=</span> <span class="n">default_names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">default_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">default_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)}</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_dtypes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">new</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">String</span> <span class="k">for</span> <span class="n">names</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">new</span> <span class="ow">in</span> <span class="n">names</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
@@ -644,7 +661,7 @@
 
         <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_groups</span><span class="p">:</span>
             <span class="n">default_name</span> <span class="o">=</span> <span class="s2">&quot;__&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
-            <span class="n">new_col_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="p">[</span><span class="n">default_name</span><span class="p">]</span>
+            <span class="n">new_col_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="p">[</span><span class="n">default_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="c1"># Concatenate columns with separator</span>
             <span class="c1"># Cast to string and handle nulls</span>

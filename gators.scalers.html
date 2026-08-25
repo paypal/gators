@@ -237,6 +237,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -356,6 +363,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -489,8 +503,10 @@ will produce NaN or complex numbers.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to transform. If None, all numeric columns
 (Float64, Int64, Float32, Int32) are automatically selected.</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after transformation.
-If False, keep both original and transformed columns.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, transform values in the original columns (keep original column names).
+If False, create new columns with suffix <code class="docutils literal notranslate"><span class="pre">__arcsin</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after transformation.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -615,8 +631,10 @@ wide dynamic range.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to transform. If None, all numeric columns
 (Float64, Int64, Float32, Int32) are automatically selected.</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after transformation.
-If False, keep both original and transformed columns.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, transform values in the original columns (keep original column names).
+If False, create new columns with suffix <code class="docutils literal notranslate"><span class="pre">__arcsinh</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after transformation.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -735,8 +753,10 @@ Box-Cox requires all values to be strictly positive (x &gt; 0).</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lambdas</strong> (dict<em>[</em>str<em>, </em>int<em> | </em>float<em>]</em>) – Dictionary mapping column names to their lambda (power) parameters.
 Lambda values typically range from -2 to 2.</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after transformation.
-If False, keep both original and transformed columns.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, transform values in the original columns (keep original column names).
+If False, create new columns with suffix <code class="docutils literal notranslate"><span class="pre">__boxcox</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after transformation.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -860,8 +880,11 @@ result in null/inf values.</p>
 - ‘e’: ln(1+X)
 - ‘10’: log10(1+X)
 - ‘2’: log2(1+X)</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after transformation.
-If False, keep both original and transformed columns.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, transform values in the original columns (keep original column names).
+If False, create new columns with a suffix based on the base
+(<code class="docutils literal notranslate"><span class="pre">__log1p</span></code>, <code class="docutils literal notranslate"><span class="pre">__log1p_10</span></code>, or <code class="docutils literal notranslate"><span class="pre">__log1p_2</span></code>).</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after transformation.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1008,8 +1031,10 @@ is given by: X_scaled = (X - X_min) / (X_max - X_min).</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to scale. If None, all numeric columns
 (Float64, Int64, Float32, Int32) are automatically selected.</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after scaling.
-If False, keep both original and scaled columns.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, scale values in the original columns (keep original column names).
+If False, create new columns with suffix <code class="docutils literal notranslate"><span class="pre">__minmax_scale</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after scaling.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1117,8 +1142,10 @@ skewness or adjusting the scale of features. Common power values:</p>
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to transform. If None, all numeric columns
 (Float64, Int64, Float32, Int32) are automatically selected.</p></li>
 <li><p><strong>power</strong> (float<em>, </em><em>default=0.5</em>) – The power exponent to apply. Default is 0.5 (square root).</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after transformation.
-If False, keep both original and transformed columns.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, transform values in the original columns (keep original column names).
+If False, create new columns with suffix <code class="docutils literal notranslate"><span class="pre">__power_{power}</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after transformation.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1251,9 +1278,10 @@ The default <code class="docutils literal notranslate"><span class="pre">(0.25,<
 robust scaler.</p></li>
 <li><p><strong>subset</strong> (list<em>[</em>str<em>] or </em><em>None</em><em>, </em><em>default=None</em>) – Numeric columns to scale.  When <code class="docutils literal notranslate"><span class="pre">None</span></code> all Float64, Float32, Int64,
 and Int32 columns are selected automatically.</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the original columns are dropped and only the scaled
-columns are kept.  If <code class="docutils literal notranslate"><span class="pre">False</span></code> both original and scaled columns are
-present in the output.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, scale values in the original columns (keep original column names).
+If False, create new columns with suffix <code class="docutils literal notranslate"><span class="pre">__robust_quantile_scale</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after scaling.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1287,7 +1315,7 @@ Columns where the quantile range is zero get a scale of <code class="docutils li
 <dd><p>Mapping from original column name to scaled column name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict[str, str]</p>
+<dd class="field-odd"><p>dict[str, list[str]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1377,8 +1405,10 @@ This is also known as z-score normalization.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric column names to standardize. If None, all numeric columns
 (Float64, Int64, Float32, Int32) are automatically selected.</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after scaling.
-If False, keep both original and scaled columns.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, standardize values in the original columns (keep original column names).
+If False, create new columns with suffix <code class="docutils literal notranslate"><span class="pre">__standard_scale</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after standardizing.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1400,8 +1430,8 @@ If False, keep both original and scaled columns.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
 <span class="go">shape: (4, 2)</span>
-<span class="go">┌────────────────────┬──────────────────────┐</span>
-<span class="go">│ age__standard_scale ┆ income__standard_scale│</span>
+<span class="go">┌─────────────────────┬──────────────────────┐</span>
+<span class="go">│ age__standard_scale  ┆ income__standard_scale │</span>
 <span class="go">│ ---                 ┆ ---                   │</span>
 <span class="go">│ f64                 ┆ f64                   │</span>
 <span class="go">├────────────────────┼──────────────────────┤</span>
@@ -1490,8 +1520,10 @@ variance.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lambdas</strong> (dict<em>[</em>str<em>, </em>int<em> | </em>float<em>]</em>) – Dictionary mapping column names to their lambda (power) parameters.
 Lambda values typically range from -2 to 2.</p></li>
-<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If True, drop the original columns after transformation.
-If False, keep both original and transformed columns.</p></li>
+<li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, transform values in the original columns (keep original column names).
+If False, create new columns with suffix <code class="docutils literal notranslate"><span class="pre">__yeojonhson</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If <code class="docutils literal notranslate"><span class="pre">inplace=False</span></code>, whether to drop the original columns after transformation.
+Ignored when <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>

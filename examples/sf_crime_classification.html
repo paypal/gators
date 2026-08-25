@@ -242,6 +242,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -359,6 +366,13 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -500,7 +514,7 @@
 <h2>1. Import Libraries<a class="headerlink" href="#1.-Import-Libraries" title="Link to this heading">#</a></h2>
 <p>Import the necessary libraries including gators transformers for feature engineering.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
@@ -538,7 +552,7 @@
 <li><p>Create a distance-to-center feature using San Francisco’s geographic center</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data</span>
@@ -574,6 +588,12 @@
     <span class="p">(((</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">sf_center_x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">sf_center_y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;distance_to_center&#39;</span><span class="p">)</span>
 <span class="p">])</span>
 
+<span class="c1"># Parse Dates into a native Datetime column up front (in Python, not inside the</span>
+<span class="c1"># exported pipeline) - ONNX has no generic string-to-datetime parse operator, so</span>
+<span class="c1"># this must happen before pipeline.fit()/transform() rather than via CastColumns.</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Dates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">())</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;Dates&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">())</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training data shape: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test data shape: </span><span class="si">{</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
@@ -593,7 +613,7 @@ Test data shape: (884262, 7)
 <h2>3. Prepare Target Variable<a class="headerlink" href="#3.-Prepare-Target-Variable" title="Link to this heading">#</a></h2>
 <p>Convert crime category labels to numeric format for model training.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define all crime categories</span>
@@ -669,7 +689,7 @@ Target shape: (878049,)
 <li><p><strong>CountEncoder</strong>: Encode categories by their frequency</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define datetime components to extract</span>
@@ -692,11 +712,11 @@ Target shape: (878049,)
         <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">]</span>
     <span class="p">)),</span>
 
-    <span class="c1"># Convert dates to datetime type</span>
-    <span class="p">(</span><span class="s2">&quot;cast&quot;</span><span class="p">,</span> <span class="n">CastColumns</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">Datetime</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
-
     <span class="c1"># Extract time-of-day bins</span>
-    <span class="p">(</span><span class="s2">&quot;dt_timebin&quot;</span><span class="p">,</span> <span class="n">TimeBinFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">])),</span>
+    <span class="p">(</span><span class="s2">&quot;dt_timebin&quot;</span><span class="p">,</span> <span class="n">TimeBinFeatures</span><span class="p">(</span>
+        <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates&#39;</span><span class="p">],</span>
+        <span class="n">bin_types</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;part_of_day&#39;</span><span class="p">,</span> <span class="s1">&#39;season&#39;</span><span class="p">,</span> <span class="s1">&#39;time_of_month&#39;</span><span class="p">,</span> <span class="s1">&#39;time_of_year&#39;</span><span class="p">,</span> <span class="s1">&#39;rush_hour&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">]</span>
+    <span class="p">)),</span>
 
     <span class="c1"># Create cyclic datetime features (captures cyclical nature of time)</span>
     <span class="p">(</span><span class="s2">&quot;dt_cyclic&quot;</span><span class="p">,</span> <span class="n">CyclicFeatures</span><span class="p">(</span>
@@ -721,7 +741,10 @@ Target shape: (878049,)
     <span class="p">(</span><span class="s2">&quot;drop&quot;</span><span class="p">,</span> <span class="n">DropColumns</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Address&quot;</span><span class="p">,</span> <span class="s2">&quot;Dates&quot;</span><span class="p">])),</span>
 
     <span class="c1"># Create interaction features</span>
-    <span class="p">(</span><span class="s2">&quot;interaction_time&quot;</span><span class="p">,</span> <span class="n">InteractionFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates__day_of_week&#39;</span><span class="p">,</span> <span class="s1">&#39;Dates__part_of_day&#39;</span><span class="p">])),</span>
+    <span class="c1"># Dates__day (string weekday name, from TimeBinFeatures) rather than the numeric</span>
+    <span class="c1"># Dates__day_of_week (OrdinalFeatures) - ONNX can&#39;t string-concatenate a numeric</span>
+    <span class="c1"># column and exactly match Polars&#39; float-to-string formatting.</span>
+    <span class="p">(</span><span class="s2">&quot;interaction_time&quot;</span><span class="p">,</span> <span class="n">InteractionFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dates__day&#39;</span><span class="p">,</span> <span class="s1">&#39;Dates__part_of_day&#39;</span><span class="p">])),</span>
     <span class="p">(</span><span class="s2">&quot;interaction_district&quot;</span><span class="p">,</span> <span class="n">InteractionFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PdDistrict&#39;</span><span class="p">,</span> <span class="s1">&#39;Dates__part_of_day&#39;</span><span class="p">])),</span>
 
     <span class="c1"># Rotate coordinates to capture spatial patterns</span>
@@ -750,37 +773,35 @@ Target shape: (878049,)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[Pipeline] fit+transform   1/14 · group_imputer  |  in: rows=878049  cols=6  nulls=201  →  out: rows=878049  cols=6  nulls=67  (0.018s)
-[Pipeline] fit+transform   2/14 · cast  |  in: rows=878049  cols=6  nulls=67  →  out: rows=878049  cols=6  nulls=67  (0.032s)
-[Pipeline] fit+transform   3/14 · dt_timebin  |  in: rows=878049  cols=6  nulls=67  →  out: rows=878049  cols=11  nulls=67  (0.044s)
-[Pipeline] fit+transform   4/14 · dt_cyclic  |  in: rows=878049  cols=11  nulls=67  →  out: rows=878049  cols=67  nulls=67  (0.089s)
-[Pipeline] fit+transform   5/14 · dt_business  |  in: rows=878049  cols=67  nulls=67  →  out: rows=878049  cols=70  nulls=67  (0.034s)
-[Pipeline] fit+transform   6/14 · dt_holiday  |  in: rows=878049  cols=70  nulls=67  →  out: rows=878049  cols=71  nulls=67  (0.113s)
-[Pipeline] fit+transform   7/14 · dt_ordinal  |  in: rows=878049  cols=71  nulls=67  →  out: rows=878049  cols=79  nulls=67  (0.012s)
-[Pipeline] fit+transform   8/14 · contains  |  in: rows=878049  cols=79  nulls=67  →  out: rows=878049  cols=83  nulls=67  (0.013s)
-[Pipeline] fit+transform   9/14 · drop  |  in: rows=878049  cols=83  nulls=67  →  out: rows=878049  cols=81  nulls=67  (0.001s)
-[Pipeline] fit+transform   10/14 · interaction_time  |  in: rows=878049  cols=81  nulls=67  →  out: rows=878049  cols=82  nulls=67  (0.023s)
-[Pipeline] fit+transform   11/14 · interaction_district  |  in: rows=878049  cols=82  nulls=67  →  out: rows=878049  cols=83  nulls=67  (0.029s)
-[Pipeline] fit+transform   12/14 · plan_rotation  |  in: rows=878049  cols=83  nulls=67  →  out: rows=878049  cols=99  nulls=67  (0.012s)
-[Pipeline] fit+transform   13/14 · onehot_encoder  |  in: rows=878049  cols=99  nulls=67  →  out: rows=878049  cols=189  nulls=67  (0.133s)
-[Pipeline] fit+transform   14/14 · count_encoder  |  in: rows=878049  cols=189  nulls=67  →  out: rows=878049  cols=189  nulls=67  (0.042s)
-[Pipeline] transform   1/14 · group_imputer  |  in: rows=884262  cols=7  nulls=228  →  out: rows=884262  cols=7  nulls=76  (0.014s)
-[Pipeline] transform   2/14 · cast  |  in: rows=884262  cols=7  nulls=76  →  out: rows=884262  cols=7  nulls=76  (0.033s)
-[Pipeline] transform   3/14 · dt_timebin  |  in: rows=884262  cols=7  nulls=76  →  out: rows=884262  cols=12  nulls=76  (0.048s)
-[Pipeline] transform   4/14 · dt_cyclic  |  in: rows=884262  cols=12  nulls=76  →  out: rows=884262  cols=68  nulls=76  (0.094s)
-[Pipeline] transform   5/14 · dt_business  |  in: rows=884262  cols=68  nulls=76  →  out: rows=884262  cols=71  nulls=76  (0.035s)
-[Pipeline] transform   6/14 · dt_holiday  |  in: rows=884262  cols=71  nulls=76  →  out: rows=884262  cols=72  nulls=76  (0.004s)
-[Pipeline] transform   7/14 · dt_ordinal  |  in: rows=884262  cols=72  nulls=76  →  out: rows=884262  cols=80  nulls=76  (0.012s)
-[Pipeline] transform   8/14 · contains  |  in: rows=884262  cols=80  nulls=76  →  out: rows=884262  cols=84  nulls=76  (0.012s)
-[Pipeline] transform   9/14 · drop  |  in: rows=884262  cols=84  nulls=76  →  out: rows=884262  cols=82  nulls=76  (0.001s)
-[Pipeline] transform   10/14 · interaction_time  |  in: rows=884262  cols=82  nulls=76  →  out: rows=884262  cols=83  nulls=76  (0.025s)
-[Pipeline] transform   11/14 · interaction_district  |  in: rows=884262  cols=83  nulls=76  →  out: rows=884262  cols=84  nulls=76  (0.031s)
-[Pipeline] transform   12/14 · plan_rotation  |  in: rows=884262  cols=84  nulls=76  →  out: rows=884262  cols=100  nulls=76  (0.005s)
-[Pipeline] transform   13/14 · onehot_encoder  |  in: rows=884262  cols=100  nulls=76  →  out: rows=884262  cols=190  nulls=76  (0.072s)
-[Pipeline] transform   14/14 · count_encoder  |  in: rows=884262  cols=190  nulls=76  →  out: rows=884262  cols=190  nulls=76  (0.023s)
+[Pipeline] fit+transform   1/13 · group_imputer  |  in: rows=878049  cols=6  nulls=201  →  out: rows=878049  cols=6  nulls=67  (0.017s)
+[Pipeline] fit+transform   2/13 · dt_timebin  |  in: rows=878049  cols=6  nulls=67  →  out: rows=878049  cols=12  nulls=67  (0.050s)
+[Pipeline] fit+transform   3/13 · dt_cyclic  |  in: rows=878049  cols=12  nulls=67  →  out: rows=878049  cols=68  nulls=67  (0.088s)
+[Pipeline] fit+transform   4/13 · dt_business  |  in: rows=878049  cols=68  nulls=67  →  out: rows=878049  cols=71  nulls=67  (0.037s)
+[Pipeline] fit+transform   5/13 · dt_holiday  |  in: rows=878049  cols=71  nulls=67  →  out: rows=878049  cols=72  nulls=67  (0.104s)
+[Pipeline] fit+transform   6/13 · dt_ordinal  |  in: rows=878049  cols=72  nulls=67  →  out: rows=878049  cols=80  nulls=67  (0.014s)
+[Pipeline] fit+transform   7/13 · contains  |  in: rows=878049  cols=80  nulls=67  →  out: rows=878049  cols=84  nulls=67  (0.022s)
+[Pipeline] fit+transform   8/13 · drop  |  in: rows=878049  cols=84  nulls=67  →  out: rows=878049  cols=82  nulls=67  (0.001s)
+[Pipeline] fit+transform   9/13 · interaction_time  |  in: rows=878049  cols=82  nulls=67  →  out: rows=878049  cols=83  nulls=67  (0.025s)
+[Pipeline] fit+transform   10/13 · interaction_district  |  in: rows=878049  cols=83  nulls=67  →  out: rows=878049  cols=84  nulls=67  (0.030s)
+[Pipeline] fit+transform   11/13 · plan_rotation  |  in: rows=878049  cols=84  nulls=67  →  out: rows=878049  cols=100  nulls=67  (0.005s)
+[Pipeline] fit+transform   12/13 · onehot_encoder  |  in: rows=878049  cols=100  nulls=67  →  out: rows=878049  cols=196  nulls=67  (0.139s)
+[Pipeline] fit+transform   13/13 · count_encoder  |  in: rows=878049  cols=196  nulls=67  →  out: rows=878049  cols=196  nulls=67  (0.000s)
+[Pipeline] transform   1/13 · group_imputer  |  in: rows=884262  cols=7  nulls=228  →  out: rows=884262  cols=7  nulls=76  (0.013s)
+[Pipeline] transform   2/13 · dt_timebin  |  in: rows=884262  cols=7  nulls=76  →  out: rows=884262  cols=13  nulls=76  (0.047s)
+[Pipeline] transform   3/13 · dt_cyclic  |  in: rows=884262  cols=13  nulls=76  →  out: rows=884262  cols=69  nulls=76  (0.086s)
+[Pipeline] transform   4/13 · dt_business  |  in: rows=884262  cols=69  nulls=76  →  out: rows=884262  cols=72  nulls=76  (0.034s)
+[Pipeline] transform   5/13 · dt_holiday  |  in: rows=884262  cols=72  nulls=76  →  out: rows=884262  cols=73  nulls=76  (0.005s)
+[Pipeline] transform   6/13 · dt_ordinal  |  in: rows=884262  cols=73  nulls=76  →  out: rows=884262  cols=81  nulls=76  (0.014s)
+[Pipeline] transform   7/13 · contains  |  in: rows=884262  cols=81  nulls=76  →  out: rows=884262  cols=85  nulls=76  (0.013s)
+[Pipeline] transform   8/13 · drop  |  in: rows=884262  cols=85  nulls=76  →  out: rows=884262  cols=83  nulls=76  (0.001s)
+[Pipeline] transform   9/13 · interaction_time  |  in: rows=884262  cols=83  nulls=76  →  out: rows=884262  cols=84  nulls=76  (0.024s)
+[Pipeline] transform   10/13 · interaction_district  |  in: rows=884262  cols=84  nulls=76  →  out: rows=884262  cols=85  nulls=76  (0.030s)
+[Pipeline] transform   11/13 · plan_rotation  |  in: rows=884262  cols=85  nulls=76  →  out: rows=884262  cols=101  nulls=76  (0.005s)
+[Pipeline] transform   12/13 · onehot_encoder  |  in: rows=884262  cols=101  nulls=76  →  out: rows=884262  cols=197  nulls=76  (0.047s)
+[Pipeline] transform   13/13 · count_encoder  |  in: rows=884262  cols=197  nulls=76  →  out: rows=884262  cols=197  nulls=76  (0.000s)
 
 Original features: 6
-Engineered features: 189
+Engineered features: 196
 </pre></div></div>
 </div>
 </section>
@@ -789,7 +810,7 @@ Engineered features: 189
 <h2>5. Train Model and Generate Predictions<a class="headerlink" href="#5.-Train-Model-and-Generate-Predictions" title="Link to this heading">#</a></h2>
 <p>Train an XGBoost classifier with the engineered features and generate predictions.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">X_test_transformed</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">X_train_transformed</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
@@ -797,7 +818,7 @@ Engineered features: 189
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -806,7 +827,7 @@ Engineered features: 189
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define model parameters</span>
@@ -855,7 +876,7 @@ Submission file created successfully!
 <h2>6. Feature Importance Analysis<a class="headerlink" href="#6.-Feature-Importance-Analysis" title="Link to this heading">#</a></h2>
 <p>Analyze which features contribute most to the model’s predictions.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract feature importances</span>
@@ -890,7 +911,191 @@ Top 20 Most Important Features:
   white-space: pre-wrap;
 }
 </style>
-<small>shape: (20, 2)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>importance</th></tr><tr><td>str</td><td>f32</td></tr></thead><tbody><tr><td>&quot;Address__contains_/&quot;</td><td>0.044727</td></tr><tr><td>&quot;Address__contains_Block&quot;</td><td>0.040278</td></tr><tr><td>&quot;Dates__minute__sin90&quot;</td><td>0.036214</td></tr><tr><td>&quot;Dates__minute__sin270&quot;</td><td>0.035519</td></tr><tr><td>&quot;Dates__minute&quot;</td><td>0.033772</td></tr><tr><td>&hellip;</td><td>&hellip;</td></tr><tr><td>&quot;Dates__rush_hour__morning_rush&quot;</td><td>0.012069</td></tr><tr><td>&quot;PdDistrict__Dates__part_of_day…</td><td>0.011952</td></tr><tr><td>&quot;PdDistrict__Dates__part_of_day…</td><td>0.011936</td></tr><tr><td>&quot;PdDistrict__Dates__part_of_day…</td><td>0.011771</td></tr><tr><td>&quot;Dates__hour__sin315&quot;</td><td>0.01068</td></tr></tbody></table></div></div>
+<small>shape: (20, 2)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>importance</th></tr><tr><td>str</td><td>f32</td></tr></thead><tbody><tr><td>&quot;Address__contains_Block&quot;</td><td>0.055322</td></tr><tr><td>&quot;Address__contains_/&quot;</td><td>0.043314</td></tr><tr><td>&quot;Dates__minute__sin270&quot;</td><td>0.041261</td></tr><tr><td>&quot;Dates__minute&quot;</td><td>0.037772</td></tr><tr><td>&quot;Dates__minute__sin90&quot;</td><td>0.034877</td></tr><tr><td>&hellip;</td><td>&hellip;</td></tr><tr><td>&quot;PdDistrict__Dates__part_of_day…</td><td>0.010086</td></tr><tr><td>&quot;PdDistrict__Dates__part_of_day…</td><td>0.009924</td></tr><tr><td>&quot;XY_y45&quot;</td><td>0.009858</td></tr><tr><td>&quot;XY_x90&quot;</td><td>0.00976</td></tr><tr><td>&quot;PdDistrict__SOUTHERN&quot;</td><td>0.009686</td></tr></tbody></table></div></div>
+</div>
+</section>
+<section id="7.-ONNX-Export">
+<h2>7. ONNX Export<a class="headerlink" href="#7.-ONNX-Export" title="Link to this heading">#</a></h2>
+<p>Convert the fitted pipeline and XGBoost classifier to ONNX for portable, runtime-independent inference.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">check_pipeline_onnx_compatibility</span></code></p></td>
+<td><p>Audit which steps have native ONNX converters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_to_onnx</span></code></p></td>
+<td><p>Export preprocessing pipeline to a self-contained ONNX graph</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_to_scoring_onnx</span></code></p></td>
+<td><p>Chain preprocessing graph with an ML model ONNX graph</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">create_session</span></code></p></td>
+<td><p>Create an <code class="docutils literal notranslate"><span class="pre">ORT_ENABLE_ALL</span></code>-optimised <code class="docutils literal notranslate"><span class="pre">InferenceSession</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">run_session</span></code></p></td>
+<td><p>Run session on a Polars DataFrame (supports batching)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.onnx_converters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">check_pipeline_onnx_compatibility</span><span class="p">,</span>
+    <span class="n">pipeline_to_onnx</span><span class="p">,</span>
+    <span class="n">pipeline_to_scoring_onnx</span><span class="p">,</span>
+    <span class="n">create_session</span><span class="p">,</span>
+    <span class="n">run_session</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">onnx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">ONNX_DIR</span> <span class="o">=</span> <span class="s2">&quot;onnx_models&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ONNX_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># ── 7.1  Audit ONNX compatibility ───────────────────────────────────</span>
+<span class="n">compat</span> <span class="o">=</span> <span class="n">check_pipeline_onnx_compatibility</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+<span class="n">supported</span>     <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ok</span> <span class="ow">in</span> <span class="n">compat</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">ok</span><span class="p">)</span>
+<span class="n">not_supported</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ok</span> <span class="ow">in</span> <span class="n">compat</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Native ONNX converters  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">supported</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">supported</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Identity pass-throughs  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">not_supported</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">not_supported</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># ── 7.2  Export preprocessing pipeline ───────────────────────────────────</span>
+<span class="n">preprocessing_onnx</span> <span class="o">=</span> <span class="n">pipeline_to_onnx</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+<span class="n">onnx</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ONNX_DIR</span><span class="si">}</span><span class="s2">/sf_crime_preprocessing.onnx&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Preprocessing graph saved.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Nodes  : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Inputs : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">input</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Outputs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Native ONNX converters  (13): [&#39;contains&#39;, &#39;count_encoder&#39;, &#39;drop&#39;, &#39;dt_business&#39;, &#39;dt_cyclic&#39;, &#39;dt_holiday&#39;, &#39;dt_ordinal&#39;, &#39;dt_timebin&#39;, &#39;group_imputer&#39;, &#39;interaction_district&#39;, &#39;interaction_time&#39;, &#39;onehot_encoder&#39;, &#39;plan_rotation&#39;]
+Identity pass-throughs  (0): []
+
+Preprocessing graph saved.
+  Nodes  : 1520
+  Inputs : 6
+  Outputs: 196
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">onnxmltools</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert_xgboost</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">onnxmltools.convert.common.data_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatTensorType</span>
+
+<span class="n">feature_columns</span> <span class="o">=</span> <span class="n">X_train_transformed</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_columns</span><span class="p">)</span>
+
+<span class="c1"># ── 7.3  Export XGBoost classifier to ONNX ───────────────────────────────────</span>
+<span class="c1"># estimator was fit() on a named Polars DataFrame, so its booster stores real column</span>
+<span class="c1"># names instead of the &quot;f0&quot;,&quot;f1&quot;,... pattern onnxmltools expects when converting a</span>
+<span class="c1"># raw Booster - clear them so the dump uses generic feature indices.</span>
+<span class="n">booster</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">get_booster</span><span class="p">()</span>
+<span class="n">booster</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">xgb_onnx</span> <span class="o">=</span> <span class="n">convert_xgboost</span><span class="p">(</span>
+    <span class="n">booster</span><span class="p">,</span>
+    <span class="n">initial_types</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="n">FloatTensorType</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_features</span><span class="p">]))],</span>
+<span class="p">)</span>
+<span class="n">onnx</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xgb_onnx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ONNX_DIR</span><span class="si">}</span><span class="s2">/sf_crime_xgb.onnx&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;XGBoost model exported  (</span><span class="si">{</span><span class="n">n_features</span><span class="si">}</span><span class="s2"> input features)&quot;</span><span class="p">)</span>
+
+<span class="c1"># ── 7.4  Build end-to-end scoring model: raw data → crime category probabilities ──</span>
+<span class="n">scoring_onnx</span> <span class="o">=</span> <span class="n">pipeline_to_scoring_onnx</span><span class="p">(</span>
+    <span class="n">pipeline</span><span class="p">,</span>
+    <span class="n">xgb_onnx</span><span class="p">,</span>
+    <span class="n">feature_columns</span><span class="o">=</span><span class="n">feature_columns</span><span class="p">,</span>
+    <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">onnx</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">scoring_onnx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ONNX_DIR</span><span class="si">}</span><span class="s2">/sf_crime_scoring.onnx&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">End-to-end scoring model saved.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Inputs : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">scoring_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">input</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Outputs: </span><span class="si">{</span><span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">scoring_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">output</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+XGBoost model exported  (196 input features)
+
+End-to-end scoring model saved.
+  Inputs : 6
+  Outputs: [&#39;label&#39;, &#39;probabilities&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ── 7.5  Create ORT sessions and run inference ────────────────────────────────</span>
+<span class="n">pre_session</span>     <span class="o">=</span> <span class="n">create_session</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="p">)</span>
+<span class="n">scoring_session</span> <span class="o">=</span> <span class="n">create_session</span><span class="p">(</span><span class="n">scoring_onnx</span><span class="p">,</span> <span class="n">optimized_model_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ONNX_DIR</span><span class="si">}</span><span class="s2">/sf_crime_scoring_opt.onnx&quot;</span><span class="p">)</span>
+
+<span class="c1"># Raw test features (no Id) → engineered features</span>
+<span class="n">X_test_raw</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)</span>
+<span class="n">X_test_onnx</span> <span class="o">=</span> <span class="n">run_session</span><span class="p">(</span><span class="n">pre_session</span><span class="p">,</span> <span class="n">X_test_raw</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ONNX preprocessing output: </span><span class="si">{</span><span class="n">X_test_onnx</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># End-to-end: raw data → crime category probabilities</span>
+<span class="n">onnx_preds</span> <span class="o">=</span> <span class="n">run_session</span><span class="p">(</span><span class="n">scoring_session</span><span class="p">,</span> <span class="n">X_test_raw</span><span class="p">)</span>
+<span class="n">onnx_probs</span> <span class="o">=</span> <span class="n">onnx_preds</span><span class="p">[</span><span class="s2">&quot;probabilities&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="c1"># ── 7.6  Compare xgb_onnx vs scoring_onnx ────────────────────────────────────</span>
+<span class="c1"># xgb_onnx expects a [N, F] float32 matrix — feed the same features used to fit()</span>
+<span class="n">xgb_session</span>     <span class="o">=</span> <span class="n">create_session</span><span class="p">(</span><span class="n">xgb_onnx</span><span class="p">)</span>
+<span class="n">xgb_input_name</span>  <span class="o">=</span> <span class="n">xgb_session</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+<span class="n">X_xgb</span>           <span class="o">=</span> <span class="n">X_train_transformed</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+<span class="n">xgb_train_probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xgb_session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="n">xgb_input_name</span><span class="p">:</span> <span class="n">X_xgb</span><span class="p">})[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">native_probs</span>    <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="p">)</span>
+<span class="n">max_diff</span>        <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xgb_train_probs</span> <span class="o">-</span> <span class="n">native_probs</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Max |xgb_onnx - native|: </span><span class="si">{</span><span class="n">max_diff</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">max_diff</span> <span class="o">&lt;</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Models diverge: </span><span class="si">{</span><span class="n">max_diff</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ONNX predictions match native predictions ✓&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+2026-08-24 10:27:54.745 Python[55744:332825] 2026-08-24 10:27:54.745931 [W:onnxruntime:, graph.cc:5337 CleanUnusedInitializersAndNodeArgs] Removing initializer &#39;__hf_big&#39;. It is not used by any node and should be removed from the model.
+2026-08-24 10:27:54.746 Python[55744:332825] 2026-08-24 10:27:54.745993 [W:onnxruntime:, graph.cc:5337 CleanUnusedInitializersAndNodeArgs] Removing initializer &#39;__hf_neg1&#39;. It is not used by any node and should be removed from the model.
+2026-08-24 10:27:54.823 Python[55744:332825] 2026-08-24 10:27:54.823361 [W:onnxruntime:, graph.cc:5337 CleanUnusedInitializersAndNodeArgs] Removing initializer &#39;__hf_big&#39;. It is not used by any node and should be removed from the model.
+2026-08-24 10:27:54.823 Python[55744:332825] 2026-08-24 10:27:54.823434 [W:onnxruntime:, graph.cc:5337 CleanUnusedInitializersAndNodeArgs] Removing initializer &#39;__hf_neg1&#39;. It is not used by any node and should be removed from the model.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ONNX preprocessing output: (884262, 196)
+
+Max |xgb_onnx - native|: 1.28e-06
+ONNX predictions match native predictions ✓
+</pre></div></div>
 </div>
 </section>
 <section id="Summary">
@@ -972,6 +1177,7 @@ Top 20 Most Important Features:
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5.-Train-Model-and-Generate-Predictions">5. Train Model and Generate Predictions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#6.-Feature-Importance-Analysis">6. Feature Importance Analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#7.-ONNX-Export">7. ONNX Export</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Takeaways:">Key Takeaways:</a></li>
 </ul>

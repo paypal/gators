@@ -1,0 +1,1139 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gators.onnx_converters._export &#8212; Gators - Lightning Fast ML Preprocessing with Polars</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gators.css?v=3bfac2a1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../../../_static/documentation_options.js?v=692d9a0e"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-Z5TR8D9VTQ"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+                gtag('js', new Date());
+                gtag('config', 'G-Z5TR8D9VTQ');
+            </script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gators/onnx_converters/_export';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/onnx_converters/_export.html" />
+    <link rel="icon" href="../../../_static/gators_logo1.png"/>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+<!-- Site Verification -->
+<meta name="msvalidate.01" content="278C9456AC3400A90623536C8A2114C1" />
+
+<!-- Structured Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Gators",
+  "description": "High-performance machine learning preprocessing and feature engineering library built on Polars with 75+ sklearn-compatible transformers",
+  "url": "https://paypal.github.io/gators/",
+  "codeRepository": "https://github.com/paypal/gators",
+  "license": "https://opensource.org/licenses/Apache-2.0",
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python 3.10+",
+  "author": {
+    "@type": "Person",
+    "name": "Charles Poli"
+  },
+  "maintainer": {
+    "@type": "Organization",
+    "name": "PayPal"
+  },
+  "keywords": ["machine learning", "preprocessing", "feature engineering", "polars", "data science", "sklearn", "python"]
+}
+</script>
+
+<!-- Additional meta tags for better SEO -->
+<meta name="description" content="Gators is a high-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API.">
+<meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline">
+<meta name="author" content="Charles Poli, PayPal">
+<link rel="canonical" href="https://paypal.github.io/gators/_modules/gators/onnx_converters/_export.html" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="gators.onnx_converters._export - Gators Documentation">
+<meta property="og:description" content="High-performance ML preprocessing with 75+ Polars-powered transformers">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://paypal.github.io/gators/_modules/gators/onnx_converters/_export.html">
+<meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="gators.onnx_converters._export - Gators">
+<meta name="twitter:description" content="Lightning-fast ML preprocessing with Polars">
+<meta name="twitter:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png">
+
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-light" alt="Gators - Lightning Fast ML Preprocessing with Polars - Home"/>
+    <img src="../../../_static/GATORS_LOGO.png" class="logo__image only-dark pst-js-only" alt="Gators - Lightning Fast ML Preprocessing with Polars - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/paypal/gators" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/gators/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quick Start
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api_reference.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/paypal/gators" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/gators/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-box fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gators.onnx_converters._export</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gators.onnx_converters._export</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..pipeline.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._converters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_FLOAT_DATATYPE_TO_PL</span><span class="p">,</span>
+    <span class="n">apply_float_dtype</span><span class="p">,</span>
+    <span class="n">get_input_onnx_type</span><span class="p">,</span>
+    <span class="n">get_output_columns</span><span class="p">,</span>
+    <span class="n">get_output_onnx_type</span><span class="p">,</span>
+    <span class="n">to_onnx_nodes</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">onnx</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">onnx.helper</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">oh</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">onnx.shape_inference</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">onnx</span><span class="w"> </span><span class="kn">import</span> <span class="n">TensorProto</span>
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+        <span class="s2">&quot;The &#39;onnx&#39; package is required for ONNX export. &quot;</span>
+        <span class="s2">&quot;Install it with: pip install gators[onnx]&quot;</span>
+    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">onnxruntime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ort</span>
+
+<span class="n">_OPSET</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">_OPSET_V20</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># required by StringSplit and StringConcat (opset 20)</span>
+<span class="n">_ML_OPSET</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># ai.onnx.ml opset for LabelEncoder</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_opsets</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">onnx</span><span class="o">.</span><span class="n">NodeProto</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">onnx</span><span class="o">.</span><span class="n">OperatorSetIdProto</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the opset list needed for ``nodes`` (adds ai.onnx.ml when required).</span>
+
+<span class="sd">    Bumps to opset 20 when StringSplit/StringConcat or ReduceMin/ReduceMax are</span>
+<span class="sd">    present (ReduceMin/ReduceMax moved axes from attribute to input at opset 18).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_V20_OPS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;StringSplit&quot;</span><span class="p">,</span> <span class="s2">&quot;StringConcat&quot;</span><span class="p">,</span> <span class="s2">&quot;ReduceMin&quot;</span><span class="p">,</span> <span class="s2">&quot;ReduceMax&quot;</span><span class="p">}</span>
+    <span class="n">needs_v20</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s2">&quot;op_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">_V20_OPS</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">)</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="p">[</span><span class="n">oh</span><span class="o">.</span><span class="n">make_opsetid</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">_OPSET_V20</span> <span class="k">if</span> <span class="n">needs_v20</span> <span class="k">else</span> <span class="n">_OPSET</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;ai.onnx.ml&quot;</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">):</span>
+        <span class="n">base</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">oh</span><span class="o">.</span><span class="n">make_opsetid</span><span class="p">(</span><span class="s2">&quot;ai.onnx.ml&quot;</span><span class="p">,</span> <span class="n">_ML_OPSET</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">base</span>
+
+
+<div class="viewcode-block" id="to_onnx_graph">
+<a class="viewcode-back" href="../../../api/onnx_converters.html#gators.onnx_converters.to_onnx_graph">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_onnx_graph</span><span class="p">(</span>
+    <span class="n">transformer</span><span class="p">:</span> <span class="n">_BaseTransformer</span><span class="p">,</span>
+    <span class="n">errors</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;raise&quot;</span><span class="p">,</span>
+    <span class="n">float_datatype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">onnx</span><span class="o">.</span><span class="n">ModelProto</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Export a single fitted Gators transformer to a self-contained ONNX ModelProto.</span>
+
+<span class="sd">    All columns flow through the graph. Columns not in the transformer&#39;s subset</span>
+<span class="sd">    pass through via Identity nodes. The graph is validated by the ONNX checker</span>
+<span class="sd">    before being returned.</span>
+
+<span class="sd">    Input tensor naming convention : ``{col}__in``</span>
+<span class="sd">    Output tensor naming convention: ``{col}``  (original column names, inplace semantics)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    transformer :</span>
+<span class="sd">        A fitted Gators transformer instance.</span>
+<span class="sd">    errors : {&#39;coerce&#39;, &#39;raise&#39;}, default &#39;coerce&#39;</span>
+<span class="sd">        How to handle unsupported transformers or strategies.</span>
+<span class="sd">        &#39;raise&#39;  – raise OnnxNotSupportedError immediately.</span>
+<span class="sd">        &#39;coerce&#39; – emit Identity pass-through nodes so the graph stays structurally valid.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    onnx.ModelProto</span>
+<span class="sd">        Validated ONNX model.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from gators.imputers import NumericImputer</span>
+<span class="sd">    &gt;&gt;&gt; from gators.onnx import to_onnx_graph</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({&quot;A&quot;: [1.0, None, 3.0], &quot;B&quot;: [4.0, 5.0, None]})</span>
+<span class="sd">    &gt;&gt;&gt; imputer = NumericImputer(strategy=&quot;median&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; imputer.fit(X)</span>
+<span class="sd">    &gt;&gt;&gt; model = to_onnx_graph(imputer)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">transformer</span><span class="o">.</span><span class="n">check_is_fitted</span><span class="p">()</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">_input_columns</span>
+    <span class="n">output_columns</span> <span class="o">=</span> <span class="n">get_output_columns</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+    <span class="n">input_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__in&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">}</span>
+    <span class="n">output_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">output_columns</span><span class="p">}</span>
+
+    <span class="c1"># Override _input_dtypes so nodes and graph declarations use the specified float precision.</span>
+    <span class="n">orig_dtypes</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">_input_dtypes</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">float_pl</span> <span class="o">=</span> <span class="n">_FLOAT_DATATYPE_TO_PL</span><span class="p">[</span><span class="n">float_datatype</span><span class="p">]</span>
+    <span class="n">transformer</span><span class="o">.</span><span class="n">_input_dtypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">col</span><span class="p">:</span> <span class="n">float_pl</span> <span class="k">if</span> <span class="n">orig_dtypes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float32</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="k">else</span> <span class="n">orig_dtypes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span>
+    <span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">nodes</span><span class="p">,</span> <span class="n">initializers</span> <span class="o">=</span> <span class="n">to_onnx_nodes</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">input_names</span><span class="p">,</span> <span class="n">output_names</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+        <span class="n">graph_inputs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">oh</span><span class="o">.</span><span class="n">make_tensor_value_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__in&quot;</span><span class="p">,</span> <span class="n">get_input_onnx_type</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">col</span><span class="p">),</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span>
+        <span class="p">]</span>
+        <span class="c1"># Use UNDEFINED so shape inference (driven by the overridden _input_dtypes) determines</span>
+        <span class="c1"># output types from the computation graph; remaining UNDEFINED are resolved below.</span>
+        <span class="n">graph_outputs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">oh</span><span class="o">.</span><span class="n">make_tensor_value_info</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">output_columns</span>
+        <span class="p">]</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">transformer</span><span class="o">.</span><span class="n">_input_dtypes</span> <span class="o">=</span> <span class="n">orig_dtypes</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">oh</span><span class="o">.</span><span class="n">make_graph</span><span class="p">(</span>
+        <span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;GatorsTransformer&quot;</span><span class="p">,</span> <span class="n">graph_inputs</span><span class="p">,</span> <span class="n">graph_outputs</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">initializers</span>
+    <span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">oh</span><span class="o">.</span><span class="n">make_model</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">opset_imports</span><span class="o">=</span><span class="n">_opsets</span><span class="p">(</span><span class="n">nodes</span><span class="p">))</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">onnx</span><span class="o">.</span><span class="n">shape_inference</span><span class="o">.</span><span class="n">infer_shapes</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="c1"># Resolve any UNDEFINED that shape inference could not determine.</span>
+    <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">output</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">tensor_type</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">tensor_type</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="n">apply_float_dtype</span><span class="p">(</span><span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">,</span> <span class="n">float_datatype</span><span class="p">)</span>
+    <span class="n">onnx</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">check_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+
+<div class="viewcode-block" id="pipeline_to_onnx">
+<a class="viewcode-back" href="../../../api/onnx_converters.html#gators.onnx_converters.pipeline_to_onnx">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pipeline_to_onnx</span><span class="p">(</span>
+    <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">,</span>
+    <span class="n">errors</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;raise&quot;</span><span class="p">,</span>
+    <span class="n">float_datatype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">onnx</span><span class="o">.</span><span class="n">ModelProto</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Export a fitted Gators Pipeline to a single ONNX ModelProto.</span>
+
+<span class="sd">    Each pipeline step contributes its nodes to the same graph, chained via</span>
+<span class="sd">    intermediate tensor names.  Column additions (IsNull, MathFeatures, …),</span>
+<span class="sd">    column drops (DropColumns, …), and renames (RenameColumns) are all supported.</span>
+
+<span class="sd">    Steps with ``inplace=False`` **and** ``drop_columns=True`` are rejected</span>
+<span class="sd">    (``errors=&#39;raise&#39;``) or skipped with Identity pass-throughs</span>
+<span class="sd">    (``errors=&#39;coerce&#39;``) because they would silently break the column ordering.</span>
+
+<span class="sd">    Input tensor naming convention : ``{col}__in``</span>
+<span class="sd">    Output tensor naming convention: ``{col}``</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pipeline : fitted gators.Pipeline</span>
+<span class="sd">    errors : {&#39;raise&#39;, &#39;coerce&#39;}, default &#39;raise&#39;</span>
+<span class="sd">        How to handle unsupported steps or strategies.</span>
+<span class="sd">        ``&#39;raise&#39;`` – raise :class:`OnnxNotSupportedError` immediately.</span>
+<span class="sd">        ``&#39;coerce&#39;`` – emit Identity pass-through nodes so the graph stays valid.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    onnx.ModelProto</span>
+<span class="sd">        Validated ONNX model.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">    &gt;&gt;&gt; from gators.pipeline import Pipeline</span>
+<span class="sd">    &gt;&gt;&gt; from gators.imputers import NumericImputer</span>
+<span class="sd">    &gt;&gt;&gt; from gators.scalers import StandardScaler</span>
+<span class="sd">    &gt;&gt;&gt; from gators.onnx import pipeline_to_onnx</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({&quot;A&quot;: [1.0, None, 3.0], &quot;B&quot;: [4.0, 5.0, None]})</span>
+<span class="sd">    &gt;&gt;&gt; pipe = Pipeline(steps=[</span>
+<span class="sd">    ...     (&quot;imputer&quot;, NumericImputer(strategy=&quot;median&quot;)),</span>
+<span class="sd">    ...     (&quot;scaler&quot;, StandardScaler()),</span>
+<span class="sd">    ... ])</span>
+<span class="sd">    &gt;&gt;&gt; pipe.fit(X)</span>
+<span class="sd">    &gt;&gt;&gt; model = pipeline_to_onnx(pipe)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pipeline</span><span class="o">.</span><span class="n">check_is_fitted</span><span class="p">()</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">_input_columns</span>
+    <span class="n">n_steps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+
+    <span class="c1"># Apply float_datatype to initial types BEFORE the promotion loop so that BOOL columns</span>
+    <span class="c1"># stay BOOL (unaffected by apply_float_dtype) and are promoted to FLOAT later, not DOUBLE.</span>
+    <span class="n">graph_input_types</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">col</span><span class="p">:</span> <span class="n">apply_float_dtype</span><span class="p">(</span><span class="n">get_input_onnx_type</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">col</span><span class="p">),</span> <span class="n">float_datatype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">steps</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="n">step_type</span> <span class="o">=</span> <span class="n">get_input_onnx_type</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+            <span class="c1"># Only promote to STRING if not already a known concrete type (BOOL, INT64, etc.);</span>
+            <span class="c1"># later steps may see STRING because an earlier step cast it, not the raw input.</span>
+            <span class="c1"># Never promote FLOAT/DOUBLE graph inputs to STRING — numeric columns are never</span>
+            <span class="c1"># native string inputs (a mid-pipeline CastColumns coerces to Identity in ONNX).</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">graph_input_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">TensorProto</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span>
+                    <span class="n">TensorProto</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+                    <span class="ow">and</span> <span class="n">step_type</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">STRING</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+                <span class="n">graph_input_types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">STRING</span>  <span class="c1"># pragma: no cover</span>
+            <span class="c1"># BOOL→INT64: nullable bool→string uses INT64 with -1=null sentinel</span>
+            <span class="k">elif</span> <span class="n">graph_input_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">BOOL</span> <span class="ow">and</span> <span class="n">step_type</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+                <span class="n">graph_input_types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">INT64</span>
+            <span class="c1"># BOOL→FLOAT: BooleanImputer uses float encoding (False=0.0, True=1.0, null=NaN)</span>
+            <span class="k">elif</span> <span class="n">graph_input_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">BOOL</span> <span class="ow">and</span> <span class="n">step_type</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">:</span>
+                <span class="n">graph_input_types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span>
+            <span class="c1"># FLOAT/DOUBLE→INT64: datetime columns need INT64 (e.g. after CastColumns(Datetime))</span>
+            <span class="k">elif</span> <span class="n">step_type</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">INT64</span> <span class="ow">and</span> <span class="n">graph_input_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="n">TensorProto</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">INT64</span>
+            <span class="p">):</span>
+                <span class="n">graph_input_types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">INT64</span>
+
+    <span class="c1"># current_names tracks the ONNX tensor name for each column; current_columns tracks</span>
+    <span class="c1"># the evolving column set (changes when a step adds/removes columns, e.g. OHE).</span>
+    <span class="c1"># current_col_types tracks the actual ONNX dtype flowing through the graph; this can</span>
+    <span class="c1"># differ from _input_dtypes (e.g. encoder outputs FLOAT even when Polars stores Float64).</span>
+    <span class="n">current_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+    <span class="n">current_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__in&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">}</span>
+    <span class="n">current_col_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">graph_input_types</span><span class="p">)</span>
+    <span class="c1"># Maps ONNX type → a Polars dtype that get_input_onnx_type maps back to the same ONNX type.</span>
+    <span class="n">_onnx_to_pl</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">TensorProto</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float32</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">BOOL</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Int64</span><span class="p">}</span>
+
+    <span class="n">all_nodes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_initializers</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">transformer</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">is_last</span> <span class="o">=</span> <span class="n">step_idx</span> <span class="o">==</span> <span class="n">n_steps</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">output_cols</span> <span class="o">=</span> <span class="n">get_output_columns</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">current_columns</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_last</span><span class="p">:</span>
+            <span class="n">step_output</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">output_cols</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">step_output</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__step</span><span class="si">{</span><span class="n">step_idx</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">output_cols</span><span class="p">}</span>
+
+        <span class="c1"># Temporarily override _input_dtypes so converters create initializers that</span>
+        <span class="c1"># match the *actual ONNX tensor types* flowing through the graph rather than</span>
+        <span class="c1"># the Polars-stored types (which diverge after encoder steps).</span>
+        <span class="n">orig_dtypes</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">_input_dtypes</span>
+        <span class="c1"># Store original fitted dtypes so converters (e.g. CastColumns) can check source types.</span>
+        <span class="n">transformer</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;_onnx_orig_input_dtypes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig_dtypes</span>
+        <span class="n">transformer</span><span class="o">.</span><span class="n">_input_dtypes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">col</span><span class="p">:</span> <span class="n">_onnx_to_pl</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">current_col_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">),</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float32</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">current_columns</span>
+        <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nodes</span><span class="p">,</span> <span class="n">initializers</span> <span class="o">=</span> <span class="n">to_onnx_nodes</span><span class="p">(</span>
+                <span class="n">transformer</span><span class="p">,</span> <span class="n">current_names</span><span class="p">,</span> <span class="n">step_output</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span>
+            <span class="p">)</span>
+            <span class="c1"># Update current_col_types while _input_dtypes reflects the virtual types,</span>
+            <span class="c1"># so pass-through columns keep their upstream ONNX type correctly.</span>
+            <span class="n">new_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">output_cols</span><span class="p">:</span>
+                <span class="n">in_t</span> <span class="o">=</span> <span class="n">get_input_onnx_type</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+                <span class="n">out_t</span> <span class="o">=</span> <span class="n">get_output_onnx_type</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">in_t</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">STRING</span> <span class="ow">or</span> <span class="n">out_t</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+                    <span class="n">new_types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_t</span>
+                <span class="k">elif</span> <span class="n">out_t</span> <span class="o">==</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">:</span>
+                    <span class="c1"># New column whose type couldn&#39;t be resolved: the computation type</span>
+                    <span class="c1"># follows the input type, so apply float_datatype.</span>
+                    <span class="n">new_types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">apply_float_dtype</span><span class="p">(</span>
+                        <span class="n">current_col_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">),</span> <span class="n">float_datatype</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">in_t</span> <span class="o">!=</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span> <span class="ow">or</span> <span class="n">out_t</span> <span class="o">!=</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">:</span>
+                    <span class="n">new_types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_t</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_col_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">)</span>
+            <span class="n">current_col_types</span> <span class="o">=</span> <span class="n">new_types</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">transformer</span><span class="o">.</span><span class="n">_input_dtypes</span> <span class="o">=</span> <span class="n">orig_dtypes</span>
+            <span class="n">transformer</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_onnx_orig_input_dtypes&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">all_nodes</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="n">all_initializers</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">initializers</span><span class="p">)</span>
+        <span class="n">current_names</span> <span class="o">=</span> <span class="n">step_output</span>
+        <span class="n">current_columns</span> <span class="o">=</span> <span class="n">output_cols</span>
+
+    <span class="n">graph_inputs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">oh</span><span class="o">.</span><span class="n">make_tensor_value_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__in&quot;</span><span class="p">,</span> <span class="n">graph_input_types</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span>
+    <span class="p">]</span>
+    <span class="n">graph_outputs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">oh</span><span class="o">.</span><span class="n">make_tensor_value_info</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">current_col_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">FLOAT</span><span class="p">),</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">current_columns</span>
+    <span class="p">]</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">oh</span><span class="o">.</span><span class="n">make_graph</span><span class="p">(</span>
+        <span class="n">all_nodes</span><span class="p">,</span> <span class="s2">&quot;GatorsPipeline&quot;</span><span class="p">,</span> <span class="n">graph_inputs</span><span class="p">,</span> <span class="n">graph_outputs</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">all_initializers</span>
+    <span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">oh</span><span class="o">.</span><span class="n">make_model</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">opset_imports</span><span class="o">=</span><span class="n">_opsets</span><span class="p">(</span><span class="n">all_nodes</span><span class="p">))</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">onnx</span><span class="o">.</span><span class="n">shape_inference</span><span class="o">.</span><span class="n">infer_shapes</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">onnx</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">check_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+
+<div class="viewcode-block" id="pipeline_to_scoring_onnx">
+<a class="viewcode-back" href="../../../api/onnx_converters.html#gators.onnx_converters.pipeline_to_scoring_onnx">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pipeline_to_scoring_onnx</span><span class="p">(</span>
+    <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">,</span>
+    <span class="n">model_onnx</span><span class="p">:</span> <span class="n">onnx</span><span class="o">.</span><span class="n">ModelProto</span><span class="p">,</span>
+    <span class="n">feature_columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">errors</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;raise&quot;</span><span class="p">,</span>
+    <span class="n">float_datatype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;float64&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">onnx</span><span class="o">.</span><span class="n">ModelProto</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Chain a Gators preprocessing Pipeline with an ONNX ML model (XGBoost/LightGBM).</span>
+
+<span class="sd">    The preprocessing graph outputs one 1D ``float[N]`` tensor per column.</span>
+<span class="sd">    This function inserts a *reshape bridge* that Unsqueezes each selected column</span>
+<span class="sd">    to ``float[N, 1]`` and Concatenates them into the ``float[N, n_features]``</span>
+<span class="sd">    matrix the ML model expects, then stitches everything into a single graph.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pipeline : fitted gators.Pipeline</span>
+<span class="sd">        Preprocessing pipeline (same one used when training the ML model).</span>
+<span class="sd">    model_onnx : onnx.ModelProto</span>
+<span class="sd">        The ML model exported to ONNX (e.g. via ``onnxmltools.convert_xgboost``</span>
+<span class="sd">        or ``onnxmltools.convert_lightgbm``).</span>
+<span class="sd">    feature_columns : list[str]</span>
+<span class="sd">        Ordered list of preprocessing output column names to stack into the</span>
+<span class="sd">        feature matrix.  Must exactly match the column order seen by the model</span>
+<span class="sd">        at training time.</span>
+<span class="sd">    errors : {&#39;coerce&#39;, &#39;raise&#39;}, default &#39;coerce&#39;</span>
+<span class="sd">        Forwarded to ``pipeline_to_onnx``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    onnx.ModelProto</span>
+<span class="sd">        Single validated ONNX model: preprocessing → reshape bridge → scoring.</span>
+<span class="sd">        Inputs  : same as the preprocessing pipeline (``{col}__in`` tensors).</span>
+<span class="sd">        Outputs : same as the ML model (labels / probabilities).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import lightgbm as lgb</span>
+<span class="sd">    &gt;&gt;&gt; from onnxmltools import convert_lightgbm</span>
+<span class="sd">    &gt;&gt;&gt; from onnxmltools.utils import float_array_type</span>
+<span class="sd">    &gt;&gt;&gt; from gators.onnx_converters import pipeline_to_scoring_onnx</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; lgb_model = lgb.train(...)</span>
+<span class="sd">    &gt;&gt;&gt; n_features = len(feature_columns)</span>
+<span class="sd">    &gt;&gt;&gt; model_onnx = convert_lightgbm(lgb_model, initial_types=[</span>
+<span class="sd">    ...     (&quot;input&quot;, float_array_type([None, n_features]))</span>
+<span class="sd">    ... ])</span>
+<span class="sd">    &gt;&gt;&gt; scoring_model = pipeline_to_scoring_onnx(pipe, model_onnx, feature_columns)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># 1. Export preprocessing graph</span>
+    <span class="n">preprocessing</span> <span class="o">=</span> <span class="n">pipeline_to_onnx</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span> <span class="n">float_datatype</span><span class="o">=</span><span class="n">float_datatype</span><span class="p">)</span>
+
+    <span class="c1"># 2. Identify the ML model&#39;s first input tensor (the feature matrix)</span>
+    <span class="n">ml_input_name</span> <span class="o">=</span> <span class="n">model_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># 3. Build bridge: Unsqueeze each column [N] → [N,1] then Concat → [N, F]</span>
+    <span class="c1">#    Axes initializer: int64 scalar [1] selects axis=1</span>
+    <span class="n">axes_init</span> <span class="o">=</span> <span class="n">oh</span><span class="o">.</span><span class="n">make_tensor</span><span class="p">(</span><span class="s2">&quot;gators__bridge_axes&quot;</span><span class="p">,</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">bridge_nodes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">unsqueezed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">feature_columns</span><span class="p">:</span>
+        <span class="n">cast_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;gators__</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__cast&quot;</span>
+        <span class="n">uq_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;gators__</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__unsq&quot;</span>
+        <span class="c1"># Cast each column to the ML model&#39;s input element type before stacking</span>
+        <span class="n">ml_elem_type</span> <span class="o">=</span> <span class="n">model_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">tensor_type</span><span class="o">.</span><span class="n">elem_type</span>
+        <span class="n">bridge_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">oh</span><span class="o">.</span><span class="n">make_node</span><span class="p">(</span><span class="s2">&quot;Cast&quot;</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">cast_name</span><span class="p">],</span> <span class="n">to</span><span class="o">=</span><span class="n">ml_elem_type</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">bridge_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">oh</span><span class="o">.</span><span class="n">make_node</span><span class="p">(</span><span class="s2">&quot;Unsqueeze&quot;</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">cast_name</span><span class="p">,</span> <span class="s2">&quot;gators__bridge_axes&quot;</span><span class="p">],</span> <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">uq_name</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">unsqueezed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">uq_name</span><span class="p">)</span>
+    <span class="c1"># Concat outputs directly to the name the ML model reads as its input</span>
+    <span class="n">bridge_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">oh</span><span class="o">.</span><span class="n">make_node</span><span class="p">(</span><span class="s2">&quot;Concat&quot;</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">unsqueezed</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">ml_input_name</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 4. Merge all nodes and initializers into one graph</span>
+    <span class="n">all_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">)</span> <span class="o">+</span> <span class="n">bridge_nodes</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">model_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">)</span>
+    <span class="n">all_inits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">initializer</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">axes_init</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">model_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">initializer</span><span class="p">)</span>
+
+    <span class="c1"># Carry over intermediate tensor type annotations from the preprocessing graph so</span>
+    <span class="c1"># ORT shape inference can resolve types without re-deriving them from STRING inputs.</span>
+    <span class="c1"># preprocessing.graph.output tensors become internal tensors here, so move them to value_info.</span>
+    <span class="c1"># Filter out UNDEFINED-typed entries that shape inference didn&#39;t resolve.</span>
+    <span class="n">pre_value_info</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">vi</span> <span class="k">for</span> <span class="n">vi</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">value_info</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">vi</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">tensor_type</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">!=</span> <span class="n">TensorProto</span><span class="o">.</span><span class="n">UNDEFINED</span>
+    <span class="p">]</span>
+
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">oh</span><span class="o">.</span><span class="n">make_graph</span><span class="p">(</span>
+        <span class="n">all_nodes</span><span class="p">,</span>
+        <span class="s2">&quot;GatorsScoringPipeline&quot;</span><span class="p">,</span>
+        <span class="nb">list</span><span class="p">(</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">input</span><span class="p">),</span>   <span class="c1"># inputs: same as preprocessing</span>
+        <span class="nb">list</span><span class="p">(</span><span class="n">model_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">output</span><span class="p">),</span>     <span class="c1"># outputs: labels / probabilities from ML model</span>
+        <span class="n">initializer</span><span class="o">=</span><span class="n">all_inits</span><span class="p">,</span>
+        <span class="n">value_info</span><span class="o">=</span><span class="n">pre_value_info</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 5. Collect opsets from both models (preprocessing + ML model)</span>
+    <span class="n">opset_imports</span> <span class="o">=</span> <span class="n">_opsets</span><span class="p">(</span><span class="n">all_nodes</span><span class="p">)</span>
+    <span class="n">existing_domains</span> <span class="o">=</span> <span class="p">{</span><span class="n">o</span><span class="o">.</span><span class="n">domain</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">opset_imports</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">opset</span> <span class="ow">in</span> <span class="n">model_onnx</span><span class="o">.</span><span class="n">opset_import</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">opset</span><span class="o">.</span><span class="n">domain</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing_domains</span><span class="p">:</span>
+            <span class="n">opset_imports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">oh</span><span class="o">.</span><span class="n">make_opsetid</span><span class="p">(</span><span class="n">opset</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="n">opset</span><span class="o">.</span><span class="n">version</span><span class="p">))</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">oh</span><span class="o">.</span><span class="n">make_model</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">opset_imports</span><span class="o">=</span><span class="n">opset_imports</span><span class="p">)</span>
+    <span class="n">onnx</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">check_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+
+<span class="c1"># ── Optimised inference helpers ───────────────────────────────────────────────</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_int64</span><span class="p">(</span><span class="n">series</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a Polars series to int64 numpy array, handling datetime physical types.</span>
+
+<span class="sd">    Fills nulls with 0 before casting (matching the fill_null convention already used</span>
+<span class="sd">    for &quot;tensor(string)&quot;/&quot;tensor(bool)&quot; below) - numpy has no nullable int64</span>
+<span class="sd">    representation, so a nullable Int64 series would otherwise silently upcast to</span>
+<span class="sd">    float64 on ``.to_numpy()``, producing an array that mismatches the graph&#39;s</span>
+<span class="sd">    declared int64 input type at inference time.</span>
+
+<span class="sd">    Boolean source columns are the exception: CastColumns&#39; bool\u2192string ONNX node</span>
+<span class="sd">    expects the null-safe sentinel encoding (-1=null, 0=false, 1=true), so a plain</span>
+<span class="sd">    fill_null(0) would silently turn a null into &quot;false&quot; instead of &quot;&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">series</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Boolean</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">series</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Int64</span><span class="p">)</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">allow_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">series</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="s2">&quot;time_unit&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">series</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Date</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">series</span><span class="o">.</span><span class="n">to_physical</span><span class="p">()</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Int64</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">allow_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">series</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Int64</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">allow_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_feed</span><span class="p">(</span><span class="n">input_meta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert each matching Polars column to the numpy type the session expects.&quot;&quot;&quot;</span>
+
+    <span class="n">_TYPE_MAP</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;tensor(string)&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">allow_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+        <span class="s2">&quot;tensor(bool)&quot;</span><span class="p">:</span>   <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">allow_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="s2">&quot;tensor(int64)&quot;</span><span class="p">:</span>  <span class="n">_to_int64</span><span class="p">,</span>
+        <span class="s2">&quot;tensor(double)&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">allow_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="s2">&quot;tensor(float)&quot;</span><span class="p">:</span>  <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float32</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">allow_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="n">feeds</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__in&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">input_meta</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">conv</span> <span class="o">=</span> <span class="n">_TYPE_MAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">input_meta</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">conv</span><span class="p">:</span>
+            <span class="n">feeds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">feeds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float32</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">allow_copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">feeds</span>
+
+<div class="viewcode-block" id="create_session">
+<a class="viewcode-back" href="../../../api/onnx_converters.html#gators.onnx_converters.create_session">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_session</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">onnx</span><span class="o">.</span><span class="n">ModelProto</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">,</span>
+    <span class="n">providers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">intra_op_num_threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">inter_op_num_threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">optimized_model_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ort</span><span class="o">.</span><span class="n">InferenceSession</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an optimised OnnxRuntime InferenceSession from a Gators ONNX model.</span>
+
+<span class="sd">    Applies ``ORT_ENABLE_ALL`` graph optimisations (constant folding, op fusion,</span>
+<span class="sd">    layout transformations) and optionally saves the pre-optimised graph to disk</span>
+<span class="sd">    so subsequent loads skip the optimisation pass entirely.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : onnx.ModelProto | str | bytes</span>
+<span class="sd">        The ONNX model — a ``ModelProto`` object, a serialised byte string, or a</span>
+<span class="sd">        file path to a ``.onnx`` file.</span>
+<span class="sd">    providers : list[str] or None, default None</span>
+<span class="sd">        Execution provider priority list.  ``None`` delegates to ORT&#39;s default</span>
+<span class="sd">        (``[&quot;CPUExecutionProvider&quot;]``).  Pass</span>
+<span class="sd">        ``[&quot;CoreMLExecutionProvider&quot;, &quot;CPUExecutionProvider&quot;]`` on macOS or</span>
+<span class="sd">        ``[&quot;CUDAExecutionProvider&quot;, &quot;CPUExecutionProvider&quot;]`` on CUDA hosts for</span>
+<span class="sd">        hardware acceleration.</span>
+<span class="sd">    intra_op_num_threads : int, default 0</span>
+<span class="sd">        Thread count within a single operator (0 = use all available cores).</span>
+<span class="sd">    inter_op_num_threads : int, default 1</span>
+<span class="sd">        Thread count for executing operators in parallel (1 = sequential, best</span>
+<span class="sd">        for single-request latency).</span>
+<span class="sd">    optimized_model_path : str or None, default None</span>
+<span class="sd">        When set, ORT writes the pre-optimised ONNX graph to this path.  On</span>
+<span class="sd">        subsequent runs you can load that file directly and skip re-optimisation.</span>
+<span class="sd">        Saved graphs are capped at ``ORT_ENABLE_EXTENDED`` (skipping the</span>
+<span class="sd">        hardware-specific NCHWc layout transformer) so the file stays portable</span>
+<span class="sd">        across machines; in-memory-only sessions (no path given) still get the</span>
+<span class="sd">        full ``ORT_ENABLE_ALL`` optimisations.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ort.InferenceSession</span>
+<span class="sd">        A ready-to-use session with all graph optimisations applied.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from gators.onnx_converters import pipeline_to_onnx, create_session, run_session</span>
+<span class="sd">    &gt;&gt;&gt; model = pipeline_to_onnx(fitted_pipeline)</span>
+<span class="sd">    &gt;&gt;&gt; sess = create_session(model, optimized_model_path=&quot;pipeline_opt.onnx&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; result = run_session(sess, X_test, batch_size=10_000)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">onnxruntime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ort</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+            <span class="s2">&quot;The &#39;onnxruntime&#39; package is required for inference. &quot;</span>
+            <span class="s2">&quot;Install it with: pip install onnxruntime&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
+
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">ort</span><span class="o">.</span><span class="n">SessionOptions</span><span class="p">()</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">intra_op_num_threads</span> <span class="o">=</span> <span class="n">intra_op_num_threads</span>
+    <span class="n">opts</span><span class="o">.</span><span class="n">inter_op_num_threads</span> <span class="o">=</span> <span class="n">inter_op_num_threads</span>
+    <span class="k">if</span> <span class="n">optimized_model_path</span><span class="p">:</span>
+        <span class="c1"># ORT_ENABLE_ALL enables the NCHWc layout transformer, which bakes</span>
+        <span class="c1"># hardware-specific optimizations into the serialized graph; cap at</span>
+        <span class="c1"># ORT_ENABLE_EXTENDED so the saved file stays portable across machines.</span>
+        <span class="n">opts</span><span class="o">.</span><span class="n">graph_optimization_level</span> <span class="o">=</span> <span class="n">ort</span><span class="o">.</span><span class="n">GraphOptimizationLevel</span><span class="o">.</span><span class="n">ORT_ENABLE_EXTENDED</span>
+        <span class="n">opts</span><span class="o">.</span><span class="n">optimized_model_filepath</span> <span class="o">=</span> <span class="n">optimized_model_path</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">opts</span><span class="o">.</span><span class="n">graph_optimization_level</span> <span class="o">=</span> <span class="n">ort</span><span class="o">.</span><span class="n">GraphOptimizationLevel</span><span class="o">.</span><span class="n">ORT_ENABLE_ALL</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">onnx</span><span class="o">.</span><span class="n">ModelProto</span><span class="p">):</span>
+        <span class="n">model_bytes</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">model_bytes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model_bytes</span> <span class="o">=</span> <span class="n">model</span>
+
+    <span class="k">return</span> <span class="n">ort</span><span class="o">.</span><span class="n">InferenceSession</span><span class="p">(</span>
+        <span class="n">model_bytes</span><span class="p">,</span>
+        <span class="n">sess_options</span><span class="o">=</span><span class="n">opts</span><span class="p">,</span>
+        <span class="n">providers</span><span class="o">=</span><span class="n">providers</span> <span class="ow">or</span> <span class="p">[</span><span class="s2">&quot;CPUExecutionProvider&quot;</span><span class="p">],</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="run_session">
+<a class="viewcode-back" href="../../../api/onnx_converters.html#gators.onnx_converters.run_session">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_session</span><span class="p">(</span>
+    <span class="n">session</span><span class="p">:</span> <span class="n">ort</span><span class="o">.</span><span class="n">InferenceSession</span><span class="p">,</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run an ORT session on a Polars DataFrame, with optional batching.</span>
+
+<span class="sd">    Automatically converts each Polars column to the tensor type declared by the</span>
+<span class="sd">    session&#39;s input metadata, runs inference (in chunks of ``batch_size`` rows</span>
+<span class="sd">    when requested), and returns a Polars DataFrame matching the session&#39;s output</span>
+<span class="sd">    column names.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    session : ort.InferenceSession</span>
+<span class="sd">        A session created by :func:`create_session` or any ``ort.InferenceSession``.</span>
+<span class="sd">    X : pl.DataFrame</span>
+<span class="sd">        Input DataFrame.  Column names must match ``{col}__in`` for each input</span>
+<span class="sd">        tensor declared by the session (the Gators ONNX naming convention).</span>
+<span class="sd">    batch_size : int, default 0</span>
+<span class="sd">        Number of rows per inference call.  ``0`` (or any value ≥ ``len(X)``)</span>
+<span class="sd">        runs the whole DataFrame in a single call — best when memory allows.</span>
+<span class="sd">        Use a positive value to cap peak memory usage on very large datasets.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pl.DataFrame</span>
+<span class="sd">        DataFrame whose columns correspond to the session&#39;s output tensors.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; sess  = create_session(pipeline_to_onnx(pipe))</span>
+<span class="sd">    &gt;&gt;&gt; result = run_session(sess, X_test)                    # single pass</span>
+<span class="sd">    &gt;&gt;&gt; result = run_session(sess, X_test, batch_size=50_000) # batched</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+    <span class="n">input_meta</span> <span class="o">=</span> <span class="p">{</span><span class="n">inp</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">inp</span><span class="o">.</span><span class="n">type</span> <span class="k">for</span> <span class="n">inp</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()}</span>
+    <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">out</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">out</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">get_outputs</span><span class="p">()]</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">effective_batch</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">batch_size</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="k">else</span> <span class="n">n</span>
+
+    <span class="k">if</span> <span class="n">effective_batch</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">_make_feed</span><span class="p">(</span><span class="n">input_meta</span><span class="p">,</span> <span class="n">X</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)))</span>
+
+    <span class="c1"># Batched path: collect per-batch arrays then concatenate</span>
+    <span class="n">batches</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">output_names</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">effective_batch</span><span class="p">):</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">effective_batch</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">_make_feed</span><span class="p">(</span><span class="n">input_meta</span><span class="p">,</span> <span class="n">chunk</span><span class="p">))):</span>
+            <span class="n">batches</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">parts</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">output_names</span><span class="p">,</span> <span class="n">batches</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">})</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mozilla Public License (MPL) 2.0.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

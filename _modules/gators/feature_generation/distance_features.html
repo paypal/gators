@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -341,6 +348,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -574,7 +588,7 @@
     <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="s2">&quot;manhattan&quot;</span><span class="p">,</span> <span class="s2">&quot;haversine&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;haversine&quot;</span>
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">new_column_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;lats&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_lats_length</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">lats</span><span class="p">):</span>
@@ -628,8 +642,11 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span> <span class="o">=</span> <span class="n">default_names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">default_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">default_names</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)}</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_dtypes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">new</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span> <span class="k">for</span> <span class="n">names</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">new</span> <span class="ow">in</span> <span class="n">names</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
@@ -655,7 +672,7 @@
             <span class="n">long1_col</span><span class="p">,</span> <span class="n">long2_col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">longs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
             <span class="n">default_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;distance__</span><span class="si">{</span><span class="n">lat1_col</span><span class="si">}</span><span class="s2">_to_</span><span class="si">{</span><span class="n">lat2_col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">new_col_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="p">[</span><span class="n">default_name</span><span class="p">]</span>
+            <span class="n">new_col_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="p">[</span><span class="n">default_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;haversine&quot;</span><span class="p">:</span>
                 <span class="c1"># Validate lat/long ranges for haversine</span>

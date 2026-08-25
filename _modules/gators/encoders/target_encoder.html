@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -341,6 +348,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -518,11 +532,11 @@
 <span class="sd">    │ str         │ bool        │ f64           │ f64           │</span>
 <span class="sd">    ╞═════════════╪═════════════╪═══════════════╪═══════════════╡</span>
 <span class="sd">    │ foo         │ true        │ 1.0           │ 1.0           │</span>
-<span class="sd">    │ bar         │ false       │ 1.0           │ 0.0           │</span>
+<span class="sd">    │ bar         │ false       │ 0.5           │ 0.0           │</span>
 <span class="sd">    │ foo         │ true        │ 1.0           │ 1.0           │</span>
-<span class="sd">    │ bar         │ true        │ 1.0           │ 1.0           │</span>
+<span class="sd">    │ bar         │ true        │ 0.5           │ 1.0           │</span>
 <span class="sd">    │ baz         │ false       │ 0.0           │ 0.0           │</span>
-<span class="sd">    └─────────────┴─────────────┴───────────────┴─────────────┘</span>
+<span class="sd">    └─────────────┴─────────────┴───────────────┴───────────────┘</span>
 
 <span class="sd">    Subset of columns:</span>
 
@@ -573,11 +587,11 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">col</span>
-                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">dtype</span><span class="o">.</span><span class="n">base_type</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CAT_DTYPES</span>
             <span class="p">]</span>
         <span class="c1"># Cast Enum/Categorical columns to String so unpivot can find a common supertype</span>
-        <span class="n">enum_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Enum</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Categorical</span><span class="p">))]</span>
+        <span class="n">enum_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Enum</span> <span class="o">|</span> <span class="n">pl</span><span class="o">.</span><span class="n">Categorical</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">enum_cols</span><span class="p">:</span>
             <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">enum_cols</span><span class="p">])</span>
 
@@ -599,7 +613,13 @@
                 <span class="k">for</span> <span class="n">cat</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">stats_col</span><span class="p">[[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">iter_rows</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="n">min_count_threshold</span>
             <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">column_mapping_</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__target_enc&quot;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__target_enc&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">}</span>
+        <span class="n">targeted</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span>
+            <span class="k">else</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">names</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">targeted</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 </div>
 

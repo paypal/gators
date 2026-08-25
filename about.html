@@ -237,6 +237,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -359,6 +366,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -468,8 +482,9 @@
 <section id="what-is-gators">
 <h2>What is Gators?<a class="headerlink" href="#what-is-gators" title="Link to this heading">#</a></h2>
 <p>Gators is a high-performance machine learning preprocessing library built on top of <a class="reference external" href="https://pola.rs/">Polars</a>,
-designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging Polars’
-blazing-fast multi-core processing, Gators makes data preprocessing and feature engineering both <strong>faster</strong> and <strong>simpler</strong>.</p>
+designed to streamline your entire ML workflow from raw data to production-ready models — benchmarked faster than
+scikit-learn and feature-engine across common preprocessing tasks. Gators makes data preprocessing and feature
+engineering both <strong>faster</strong> and <strong>simpler</strong>.</p>
 <p>Built by the PSP Data Team at PayPal, Gators solves a critical pain point: bridging the gap between Python-based
 model development and production deployment. With Gators, you can <strong>develop and deploy using only Python</strong> — no more
 reimplementing preprocessing logic in other languages for production!</p>
@@ -505,7 +520,7 @@ often needs to be reimplemented in faster languages (C++, Java, Scala) for produ
 <li><p><strong>Customer Analytics</strong> - Transform complex customer data</p></li>
 <li><p><strong>Time Series</strong> - Rich datetime feature engineering</p></li>
 <li><p><strong>NLP Tasks</strong> - String feature extraction and encoding</p></li>
-<li><p><strong>Production ML</strong> - Deploy preprocessing pipelines without rewriting code</p></li>
+<li><p><strong>Production ML</strong> - Export preprocessing to ONNX and run anywhere</p></li>
 </ul>
 </section>
 <section id="key-features">
@@ -514,8 +529,9 @@ often needs to be reimplemented in faster languages (C++, Java, Scala) for produ
 <li><p>🚀 <strong>Lightning Fast</strong>: Built on Polars for multi-core parallel processing</p></li>
 <li><p>🔄 <strong>Unified API</strong>: Consistent sklearn-style <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">.transform()</span></code> interface</p></li>
 <li><p>📦 <strong>Production Ready</strong>: Deploy the same Python code from notebook to production</p></li>
-<li><p>🎯 <strong>Comprehensive</strong>: 60+ preprocessing transformers covering every use case</p></li>
+<li><p>🎯 <strong>Comprehensive</strong>: 108 preprocessing transformers across 11 categories</p></li>
 <li><p>🔗 <strong>Pipeline Support</strong>: Chain transformers seamlessly with the Pipeline class</p></li>
+<li><p>📤 <strong>ONNX Export</strong>: Export any fitted pipeline to ONNX for low-latency, language-agnostic inference</p></li>
 <li><p>🎓 <strong>Easy to Learn</strong>: If you know sklearn, you already know Gators</p></li>
 </ul>
 </section>

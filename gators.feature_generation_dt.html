@@ -237,6 +237,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -356,6 +363,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -652,16 +666,8 @@ Valid values: ‘century’, ‘year’, ‘semester’, ‘quarter’, ‘month
 <dt class="sig sig-object py" id="gators.feature_generation_dt.OrdinalFeatures.transform">
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_dt/ordinal_features.html#OrdinalFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_dt.OrdinalFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by extracting ordinal features.</p>
+<p>Parameters</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Transformed DataFrame with ordinal features.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pl.DataFrame</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -1093,13 +1099,14 @@ tree-based models to capture non-linear temporal patterns.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of datetime columns to extract features from. If None, all datetime columns
 will be used.</p></li>
-<li><p><strong>bin_types</strong> (list<em>[</em><em>Literal</em><em>[</em><em>&quot;part_of_day&quot;</em><em>, </em><em>&quot;season&quot;</em><em>, </em><em>&quot;time_of_month&quot;</em><em>, </em><em>&quot;time_of_year&quot;</em><em>, </em><em>&quot;rush_hour&quot;</em><em>]</em><em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;part_of_day&quot;</em><em>, </em><em>&quot;season&quot;</em><em>, </em><em>&quot;time_of_month&quot;</em><em>, </em><em>&quot;time_of_year&quot;</em><em>, </em><em>&quot;rush_hour&quot;</em><em>]</em>) – <p>Types of time bins to generate. Options:</p>
+<li><p><strong>bin_types</strong> (list<em>[</em><em>Literal</em><em>[</em><em>&quot;part_of_day&quot;</em><em>, </em><em>&quot;season&quot;</em><em>, </em><em>&quot;time_of_month&quot;</em><em>, </em><em>&quot;time_of_year&quot;</em><em>, </em><em>&quot;rush_hour&quot;</em><em>, </em><em>&quot;day&quot;</em><em>]</em><em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;part_of_day&quot;</em><em>, </em><em>&quot;season&quot;</em><em>, </em><em>&quot;time_of_month&quot;</em><em>, </em><em>&quot;time_of_year&quot;</em><em>, </em><em>&quot;rush_hour&quot;</em><em>]</em>) – <p>Types of time bins to generate. Options:</p>
 <ul>
 <li><p>”part_of_day”: night, morning, afternoon, evening</p></li>
 <li><p>”season”: spring, summer, fall, winter</p></li>
 <li><p>”time_of_month”: beginning, middle, end</p></li>
 <li><p>”time_of_year”: early, mid, late</p></li>
 <li><p>”rush_hour”: morning_rush, evening_rush, off_peak</p></li>
+<li><p>”day”: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</p></li>
 </ul>
 </p></li>
 <li><p><strong>hemisphere</strong> (<em>Literal</em><em>[</em><em>&quot;northern&quot;</em><em>, </em><em>&quot;southern&quot;</em><em>]</em><em>, </em><em>default=&quot;northern&quot;</em>) – Hemisphere for season calculation.</p></li>
@@ -1393,6 +1400,9 @@ See <a class="reference external" href="https://pypi.org/project/holidays/">http
 <li><p>”nearest_holiday_distance”: Absolute days to nearest holiday</p></li>
 </ul>
 </p></li>
+<li><p><strong>lookahead_years</strong> (int<em>, </em><em>default=1</em>) – Number of additional years beyond the last training year for which
+holidays are pre-computed.  Ensures the fitted transformer remains
+correct when applied to data collected after the training period.</p></li>
 <li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original datetime columns after feature extraction.</p></li>
 </ul>
 </dd>

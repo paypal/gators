@@ -239,6 +239,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -358,6 +365,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -687,7 +701,7 @@ except strings and booleans.</p></li>
 <div class="admonition-examples admonition">
 <p class="admonition-title">Examples</p>
 <p><strong>Example 1: Degree 2 polynomial with bias term</strong></p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.discretizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialFeatures</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialFeatures</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1186,6 +1200,7 @@ smoothed, not missing ones.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">'max'</span></code>: group maximum</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'sum'</span></code>: group sum</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'count'</span></code>: group count (nulls excluded)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'count_null'</span></code>: group count of null values</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'range'</span></code>: group range (max − min)</p></li>
 </ul>
 <p><strong>Relative statistics</strong> — each row is scaled by its group aggregate:</p>
@@ -1194,6 +1209,15 @@ smoothed, not missing ones.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">'median_ratio'</span></code>: value / group_median</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'zscore'</span></code>: (value − group_mean) / group_std</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">'minmax'</span></code>: (value − group_min) / (group_max − group_min)</p></li>
+</ul>
+<p><strong>Order statistics</strong> — a row’s position within its group. Unlike the two
+categories above, these are computed <em>live</em> on the batch passed to
+<code class="docutils literal notranslate"><span class="pre">transform()</span></code> (via Polars’ <code class="docutils literal notranslate"><span class="pre">.rank().over()</span></code>) rather than looked up from
+statistics frozen at <code class="docutils literal notranslate"><span class="pre">fit()</span></code> time, since a rank is inherently relative to
+every other row in the same call, not a fixed group aggregate:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'rank'</span></code>: average-tie rank of the value within its group (1-based)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'pct_rank'</span></code>: rank divided by the (non-null) group size, in <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1]</span></code></p></li>
 </ul>
 <p>Both categories can be combined freely in a single transformer call.
 All generated columns follow the naming pattern
@@ -1360,6 +1384,10 @@ the same length as <code class="docutils literal notranslate"><span class="pre">
 <dt class="sig sig-object py" id="gators.feature_generation.GroupStatisticsFeatures.transform">
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/group_statistics_features.html#GroupStatisticsFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.GroupStatisticsFeatures.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the input DataFrame by creating group statistic features.</p>
+<p>Applies the group statistics learned during <code class="docutils literal notranslate"><span class="pre">fit()</span></code> (via a left join on the
+groupby column) rather than recomputing statistics live from <code class="docutils literal notranslate"><span class="pre">X</span></code> - this keeps
+train/test behavior consistent (mirroring the ONNX export’s frozen lookup) and
+correctly falls back to <code class="docutils literal notranslate"><span class="pre">fill_value</span></code>/null for groups unseen during <code class="docutils literal notranslate"><span class="pre">fit()</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
@@ -3664,6 +3692,143 @@ by default <code class="docutils literal notranslate"><span class="pre">False</s
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.feature_generation.EntropyFeatures">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation.</span></span><span class="sig-name descname"><span class="pre">EntropyFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation/entropy_features.html#EntropyFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.EntropyFeatures" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Generates Shannon entropy features from groups of columns.</p>
+<p>For each group of columns, the Shannon entropy is computed as:</p>
+<div class="math notranslate nohighlight">
+\[H = -\sum_{i=1}^{n} s_i \ln(s_i), \quad s_i = \frac{x_i}{\sum_j x_j + \varepsilon}\]</div>
+<p>where <span class="math notranslate nohighlight">\(s_i\)</span> is the row-wise share of column <span class="math notranslate nohighlight">\(x_i\)</span> within its
+group, and <span class="math notranslate nohighlight">\(\varepsilon\)</span> is a small constant added to the total for
+numerical stability. Terms where <span class="math notranslate nohighlight">\(s_i = 0\)</span> contribute <code class="docutils literal notranslate"><span class="pre">0</span></code> (the
+standard convention <span class="math notranslate nohighlight">\(0 \ln 0 = 0\)</span>).</p>
+<p>Entropy ranges from <code class="docutils literal notranslate"><span class="pre">0</span></code> (total concentration, one column dominates) to
+<span class="math notranslate nohighlight">\(\ln(n)\)</span> (perfect equality, maximum dispersion across the <span class="math notranslate nohighlight">\(n\)</span>
+columns). It is the information-theoretic counterpart of
+<a class="reference internal" href="#gators.feature_generation.HHIFeatures" title="gators.feature_generation.HHIFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">HHIFeatures</span></code></a>: both measure concentration/dispersion of a row-wise
+distribution, but entropy is more sensitive to the number of non-zero
+components while HHI weights large shares more heavily.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>column_groups</strong> (list<em>[</em>list<em>[</em>str<em>]</em><em>]</em>) – One inner list of column names per output feature. Each inner list must
+contain at least two column names. One entropy value is produced per group.</p></li>
+<li><p><strong>epsilon</strong> (float<em>, </em><em>optional</em>) – Small positive constant added to the total sum to prevent division by zero,
+by default <code class="docutils literal notranslate"><span class="pre">1e-8</span></code>.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>optional</em>) – Custom output column names. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, names are auto-generated as
+<code class="docutils literal notranslate"><span class="pre">'{col1}__{col2}__...__entropy'</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>optional</em>) – Whether to drop all source columns after creating the entropy features,
+by default <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">EntropyFeatures</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;brand_a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;brand_b&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">30.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;brand_c&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">60.0</span><span class="p">,</span> <span class="mf">70.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+</pre></div>
+</div>
+<p><strong>Example 1: Single group</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">EntropyFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">column_groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;brand_a&#39;</span><span class="p">,</span> <span class="s1">&#39;brand_b&#39;</span><span class="p">,</span> <span class="s1">&#39;brand_c&#39;</span><span class="p">]],</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="go">EntropyFeatures(column_groups=[[&#39;brand_a&#39;, &#39;brand_b&#39;, &#39;brand_c&#39;]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;brand_a__brand_b__brand_c__entropy&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p><strong>Example 2: Multiple groups</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X2</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;a1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;a2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">90.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;b1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;b2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">75.0</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">EntropyFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">column_groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="s1">&#39;a2&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;b1&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">]],</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;a1__a2__entropy&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;b1__b2__entropy&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p><strong>Example 3: Custom column names</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">EntropyFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">column_groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;brand_a&#39;</span><span class="p">,</span> <span class="s1">&#39;brand_b&#39;</span><span class="p">,</span> <span class="s1">&#39;brand_c&#39;</span><span class="p">]],</span>
+<span class="gp">... </span>    <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;market_entropy&#39;</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;market_entropy&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p><strong>Example 4: With drop_columns=True</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">EntropyFeatures</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">column_groups</span><span class="o">=</span><span class="p">[[</span><span class="s1">&#39;brand_a&#39;</span><span class="p">,</span> <span class="s1">&#39;brand_b&#39;</span><span class="p">]],</span>
+<span class="gp">... </span>    <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;brand_a&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;brand_b&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;brand_c&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation.EntropyFeatures.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation.EntropyFeatures" title="gators.feature_generation.entropy_features.EntropyFeatures"><span class="pre">gators.feature_generation.entropy_features.EntropyFeatures</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation/entropy_features.html#EntropyFeatures.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.EntropyFeatures.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by resolving column name mappings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation.EntropyFeatures" title="gators.feature_generation.EntropyFeatures">EntropyFeatures</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation.EntropyFeatures.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation/entropy_features.html#EntropyFeatures.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation.EntropyFeatures.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input DataFrame by creating Shannon entropy features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed DataFrame with entropy features appended.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
@@ -3798,6 +3963,11 @@ by default <code class="docutils literal notranslate"><span class="pre">False</s
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.WeightedSumFeatures"><code class="docutils literal notranslate"><span class="pre">WeightedSumFeatures</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.WeightedSumFeatures.fit"><code class="docutils literal notranslate"><span class="pre">WeightedSumFeatures.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.WeightedSumFeatures.transform"><code class="docutils literal notranslate"><span class="pre">WeightedSumFeatures.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.EntropyFeatures"><code class="docutils literal notranslate"><span class="pre">EntropyFeatures</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.EntropyFeatures.fit"><code class="docutils literal notranslate"><span class="pre">EntropyFeatures.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation.EntropyFeatures.transform"><code class="docutils literal notranslate"><span class="pre">EntropyFeatures.transform()</span></code></a></li>
 </ul>
 </li>
 </ul>

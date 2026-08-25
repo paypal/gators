@@ -11,10 +11,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://paypal.github.io/gators/installation.html" />
 <meta property="og:site_name" content="Gators - High-Performance ML Preprocessing Library" />
-<meta property="og:description" content="Requirements: Python &gt;= 3.10, Polars &gt;= 0.18.0. Installing from PyPI: The easiest way to install Gators is via pip: Installing from Source: To install ..." />
+<meta property="og:description" content="Requirements: Python &gt;= 3.10. Installing from PyPI: The easiest way to install Gators is via pip: With ONNX export support: With tree-based discretizer su..." />
 <meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png" />
 <meta property="og:image:alt" content="Gators - High-Performance ML Preprocessing Library" />
-<meta name="description" content="Requirements: Python &gt;= 3.10, Polars &gt;= 0.18.0. Installing from PyPI: The easiest way to install Gators is via pip: Installing from Source: To install ..." />
+<meta name="description" content="Requirements: Python &gt;= 3.10. Installing from PyPI: The easiest way to install Gators is via pip: With ONNX export support: With tree-based discretizer su..." />
 <meta name="description" content="High-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API." />
 <meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline" />
 
@@ -239,6 +239,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -359,6 +366,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -476,13 +490,24 @@
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Python &gt;= 3.10</p></li>
-<li><p>Polars &gt;= 0.18.0</p></li>
 </ul>
 </section>
 <section id="installing-from-pypi">
 <h2>Installing from PyPI<a class="headerlink" href="#installing-from-pypi" title="Link to this heading">#</a></h2>
 <p>The easiest way to install Gators is via pip:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>gators
+</pre></div>
+</div>
+<p>With ONNX export support:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;gators[onnx]&quot;</span>
+</pre></div>
+</div>
+<p>With tree-based discretizer support (LightGBM):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;gators[tree]&quot;</span>
+</pre></div>
+</div>
+<p>With all optional dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;gators[all]&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -494,7 +519,7 @@
 pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
 </div>
-<p>For development (includes testing dependencies):</p>
+<p>For development (includes testing and documentation dependencies):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
 </pre></div>
 </div>
@@ -508,33 +533,22 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </div>
 <p>You should see the version number printed without any errors.</p>
 </section>
-<section id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h2>
+<section id="core-dependencies">
+<h2>Core Dependencies<a class="headerlink" href="#core-dependencies" title="Link to this heading">#</a></h2>
 <p>Gators automatically installs the following core dependencies:</p>
 <ul class="simple">
-<li><p><strong>polars</strong> - High-performance DataFrame library</p></li>
-<li><p><strong>pyarrow</strong> - For efficient data serialization</p></li>
-<li><p><strong>pandas</strong> - Data manipulation and analysis</p></li>
-<li><p><strong>pydantic</strong> - Data validation and settings management</p></li>
-<li><p><strong>numpy</strong> - Numerical computing</p></li>
-<li><p><strong>scikit-learn</strong> - For model building and evaluation</p></li>
+<li><p><strong>polars</strong> &gt;= 1.0 - High-performance DataFrame library</p></li>
+<li><p><strong>pydantic</strong> &gt;= 2.0 - Data validation and settings management</p></li>
+<li><p><strong>pyarrow</strong> &gt;= 12.0 - Efficient data serialization</p></li>
+<li><p><strong>scikit-learn</strong> &gt;= 1.0 - Base estimator classes and sklearn API compatibility</p></li>
+<li><p><strong>holidays</strong> &gt;= 0.30 - Public holiday detection for <a class="reference internal" href="gators.feature_generation_dt.html#gators.feature_generation_dt.HolidayFeatures" title="gators.feature_generation_dt.HolidayFeatures"><code class="xref py py-class docutils literal notranslate"><span class="pre">HolidayFeatures</span></code></a></p></li>
 </ul>
-<p>Optional dependencies for specific features:</p>
-<ul>
-<li><p><strong>lightgbm</strong> - For Tree-based discretization</p></li>
-<li><p><strong>holidays</strong> - For holiday feature generation</p></li>
-<li><p><strong>pytest</strong> - For running tests (development only)</p>
-<blockquote>
-<div><p>“pandas&gt;=2.0.0”,
-“polars&gt;=0.19.0”,
-“pydantic&gt;=2.12.0”,
-“pyarrow&gt;=20.0.0”,
-“typing-extensions&gt;=4.15.0”,
-“scikit-learn&gt;=1.3.0”,
-“lightgbm&gt;=4.0.0”,
-“holidays&gt;=0.92”,</p>
-</div></blockquote>
-</li>
+</section>
+<section id="optional-dependencies">
+<h2>Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>onnx</strong> &gt;= 1.14 + <strong>onnxruntime</strong> &gt;= 1.16 — ONNX export (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;gators[onnx]&quot;</span></code>)</p></li>
+<li><p><strong>lightgbm</strong> &gt;= 4.0 — <a class="reference internal" href="gators.discretizers.html#gators.discretizers.TreeBasedDiscretizer" title="gators.discretizers.TreeBasedDiscretizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">TreeBasedDiscretizer</span></code></a> (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;gators[tree]&quot;</span></code>)</p></li>
 </ul>
 </section>
 </section>
@@ -590,7 +604,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-from-pypi">Installing from PyPI</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-from-source">Installing from Source</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verifying-installation">Verifying Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dependencies">Core Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-dependencies">Optional Dependencies</a></li>
 </ul>
   </nav></div>
 

@@ -237,6 +237,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -356,6 +363,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -482,8 +496,7 @@
 </ul>
 </p></li>
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of boolean columns to impute. If None, all boolean columns are selected.</p></li>
-<li><p><strong>value</strong> (bool<em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Must be True or False.
-Required when strategy=’constant’, ignored otherwise.</p></li>
+<li><p><strong>value</strong> (bool<em>, </em><em>default=False</em>) – Value to use when strategy is ‘constant’.</p></li>
 <li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, impute values in the original columns.
 If False, create new columns with suffix ‘__impute_{strategy}’.</p></li>
 <li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
@@ -1037,7 +1050,7 @@ available to compute distances.</p>
 </ul>
 </p></li>
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of numeric columns to impute. If None, all numeric columns are selected.</p></li>
-<li><p><strong>value</strong> (int<em> | </em>float<em> | </em><em>None</em><em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Required when strategy=’constant’, ignored otherwise.</p></li>
+<li><p><strong>value</strong> (int<em> | </em>float<em>, </em><em>default=0</em>) – Value to use when strategy is ‘constant’.</p></li>
 <li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, impute values in the original columns.
 If False, create new columns with suffix ‘__impute_{strategy}’.</p></li>
 <li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
@@ -1062,7 +1075,7 @@ Ignored when inplace=True.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Impute using the mean strategy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span> <span class="o">=</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">NumericImputer(strategy=&#39;mean&#39;, subset=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], value=None, drop_columns=True, inplace=False)</span>
+<span class="go">NumericImputer(strategy=&#39;mean&#39;, subset=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], value=0.0, drop_columns=True, inplace=False)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>
 <span class="go">shape: (4, 3)</span>
@@ -1100,7 +1113,7 @@ Ignored when inplace=True.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Impute with drop_columns=False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">imputer_no_drop</span> <span class="o">=</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">drop_columns</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">imputer_no_drop</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">NumericImputer(strategy=&#39;mean&#39;, subset=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], value=None, drop_columns=False, inplace=False)</span>
+<span class="go">NumericImputer(strategy=&#39;mean&#39;, subset=[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;], value=0.0, drop_columns=False, inplace=False)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_no_drop</span> <span class="o">=</span> <span class="n">imputer_no_drop</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_no_drop</span><span class="p">)</span>
 <span class="go">shape: (4, 6)</span>
@@ -1119,7 +1132,7 @@ Ignored when inplace=True.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Impute with a subset of columns</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">imputer_subset</span> <span class="o">=</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">imputer_subset</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">NumericImputer(strategy=&#39;mean&#39;, subset=[&#39;A&#39;], value=None, drop_columns=True, inplace=False)</span>
+<span class="go">NumericImputer(strategy=&#39;mean&#39;, subset=[&#39;A&#39;], value=0.0, drop_columns=True, inplace=False)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X_subset</span> <span class="o">=</span> <span class="n">imputer_subset</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X_subset</span><span class="p">)</span>
 <span class="go">shape: (4, 3)</span>
@@ -1190,7 +1203,7 @@ Ignored when inplace=True.</p></li>
 </ul>
 </p></li>
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of string columns to impute. If None, all string columns are selected.</p></li>
-<li><p><strong>value</strong> (str<em>, </em><em>default=None</em>) – Value to use when strategy is ‘constant’. Required when strategy=’constant’, ignored otherwise.</p></li>
+<li><p><strong>value</strong> (str<em>, </em><em>default='__NULL__'</em>) – Value to use when strategy is ‘constant’.</p></li>
 <li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, impute values in the original columns.
 If False, create new columns with suffix ‘__impute_{strategy}’.</p></li>
 <li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=True</em>) – If inplace=False, whether to drop the original columns after imputation.
@@ -1209,7 +1222,7 @@ Ignored when inplace=True.</p></li>
 <span class="gp">... </span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span> <span class="o">=</span> <span class="n">StringImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">StringImputer(strategy=&#39;most_frequent&#39;, subset=[&#39;col1&#39;, &#39;col2&#39;, &#39;col3&#39;], value=None, drop_columns=True, inplace=False)</span>
+<span class="go">StringImputer(strategy=&#39;most_frequent&#39;, subset=[&#39;col1&#39;, &#39;col2&#39;, &#39;col3&#39;], value=&#39;__NULL__&#39;, drop_columns=True, inplace=False)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X_imputed</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">X_imputed</span><span class="p">)</span>
 <span class="go">shape: (4, 3)</span>

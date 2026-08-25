@@ -239,6 +239,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -356,6 +363,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -477,29 +491,31 @@
 <h2>Basic Example<a class="headerlink" href="#basic-example" title="Link to this heading">#</a></h2>
 <p>Here’s a simple example showing the core Gators workflow:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropHighNaNRatio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropHighNaNRatio</span><span class="p">,</span> <span class="n">VarianceFilter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NumericImputer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.scalers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
 
 <span class="c1"># Load your data</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data.csv&quot;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data.csv&quot;</span><span class="p">)</span>
 
 <span class="c1"># Build a preprocessing pipeline</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
-    <span class="p">(</span><span class="s1">&#39;drop_nan&#39;</span><span class="p">,</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s1">&#39;impute&#39;</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s1">&#39;encode&#39;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">()),</span>
-    <span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">(</span><span class="s1">&#39;drop_nan&#39;</span><span class="p">,</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>   <span class="c1"># drop columns with &gt;50% nulls</span>
+    <span class="p">(</span><span class="s1">&#39;impute&#39;</span><span class="p">,</span>   <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)),</span> <span class="c1"># fill numeric nulls with column median</span>
+    <span class="p">(</span><span class="s1">&#39;variance&#39;</span><span class="p">,</span> <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">min_var</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)),</span>      <span class="c1"># remove near-zero-variance columns</span>
+    <span class="p">(</span><span class="s1">&#39;encode&#39;</span><span class="p">,</span>   <span class="n">OneHotEncoder</span><span class="p">()),</span>                   <span class="c1"># one-hot encode all string/categorical columns</span>
+    <span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span>    <span class="n">StandardScaler</span><span class="p">()),</span>                  <span class="c1"># z-score standardize numeric columns</span>
 <span class="p">])</span>
 
 <span class="c1"># Fit and transform in one step</span>
 <span class="n">X_processed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Or fit and transform separately</span>
-<span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="n">X_processed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Or fit and transform separately (e.g. train / test split)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_train_processed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test_processed</span>  <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -507,11 +523,12 @@
 <h2>Understanding the API<a class="headerlink" href="#understanding-the-api" title="Link to this heading">#</a></h2>
 <p>All Gators transformers follow the sklearn-style API:</p>
 <dl class="simple">
-<dt><strong>fit(X)</strong></dt><dd><p>Learn parameters from the data (e.g., mean for imputation, categories for encoding)</p>
+<dt><strong>fit(X, y=None)</strong></dt><dd><p>Learn parameters from the data (e.g., mean for imputation, categories for encoding).
+Supervised transformers (e.g. <a class="reference internal" href="gators.encoders.html#gators.encoders.WOEEncoder" title="gators.encoders.WOEEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">WOEEncoder</span></code></a>) also accept <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
 </dd>
-<dt><strong>transform(X)</strong></dt><dd><p>Apply the transformation using learned parameters</p>
+<dt><strong>transform(X)</strong></dt><dd><p>Apply the learned transformation to <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
 </dd>
-<dt><strong>fit_transform(X)</strong></dt><dd><p>Convenience method that calls fit() then transform()</p>
+<dt><strong>fit_transform(X, y=None)</strong></dt><dd><p>Convenience method that calls <code class="docutils literal notranslate"><span class="pre">fit()</span></code> then <code class="docutils literal notranslate"><span class="pre">transform()</span></code>.</p>
 </dd>
 </dl>
 </section>
@@ -519,43 +536,62 @@
 <h2>Example: Data Cleaning<a class="headerlink" href="#example-data-cleaning" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">DropHighNaNRatio</span><span class="p">,</span>
+    <span class="n">DropConstantColumns</span><span class="p">,</span>
+    <span class="n">DropNearConstantColumns</span><span class="p">,</span>
     <span class="n">VarianceFilter</span><span class="p">,</span>
-    <span class="n">CorrelationFilter</span>
+    <span class="n">CorrelationFilter</span><span class="p">,</span>
+    <span class="n">RoundSignificantDigits</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># Remove columns with &gt;50% missing values</span>
-<span class="n">drop_nan</span> <span class="o">=</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">drop_nan</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Drop columns with more than 50% missing values</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Remove low-variance features</span>
-<span class="n">var_filter</span> <span class="o">=</span> <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">min_var</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">var_filter</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Drop constant and near-constant columns</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">DropConstantColumns</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">DropNearConstantColumns</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Remove highly correlated features</span>
-<span class="n">corr_filter</span> <span class="o">=</span> <span class="n">CorrelationFilter</span><span class="p">(</span><span class="n">max_corr</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">corr_filter</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Remove low-variance numeric features</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">min_var</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Round to 3 significant figures for cleaner downstream processing</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">RoundSignificantDigits</span><span class="p">(</span><span class="n">n_digits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Remove highly correlated features, keeping the more important one</span>
+<span class="n">importance</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;feature_a&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s2">&quot;feature_b&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span> <span class="s2">&quot;feature_c&quot;</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">}</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">CorrelationFilter</span><span class="p">(</span><span class="n">max_corr</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-missing-value-imputation">
+<h2>Example: Missing Value Imputation<a class="headerlink" href="#example-missing-value-imputation" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NumericImputer</span><span class="p">,</span> <span class="n">StringImputer</span><span class="p">,</span> <span class="n">BooleanImputer</span>
+
+<span class="c1"># Impute numeric columns with column median</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Impute string columns with most frequent value</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">StringImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Impute boolean columns with False</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">BooleanImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="example-encoding">
 <h2>Example: Encoding<a class="headerlink" href="#example-encoding" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">OneHotEncoder</span><span class="p">,</span>
-    <span class="n">TargetEncoder</span><span class="p">,</span>
-    <span class="n">OrdinalEncoder</span>
-<span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">OrdinalEncoder</span><span class="p">,</span> <span class="n">TargetEncoder</span><span class="p">,</span> <span class="n">WOEEncoder</span>
 
-<span class="c1"># One-hot encoding</span>
-<span class="n">ohe</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;category_col&#39;</span><span class="p">])</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">ohe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># One-hot encode all string/categorical columns</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Ordinal encoding</span>
-<span class="n">ordinal</span> <span class="o">=</span> <span class="n">OrdinalEncoder</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;category_col&#39;</span><span class="p">])</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">ordinal</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Ordinal encode a subset of columns</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">OrdinalEncoder</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Target encoding (for supervised learning)</span>
-<span class="n">target_encoder</span> <span class="o">=</span> <span class="n">TargetEncoder</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;category_col&#39;</span><span class="p">])</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">target_encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+<span class="c1"># Target mean encoding (supervised — requires y)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">TargetEncoder</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;category_col&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+
+<span class="c1"># Weight of Evidence encoding (supervised — requires binary y)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">WOEEncoder</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;category_col&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">binary_target</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -564,68 +600,92 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">PolynomialFeatures</span><span class="p">,</span>
     <span class="n">RatioFeatures</span><span class="p">,</span>
+    <span class="n">MathFeatures</span><span class="p">,</span>
+    <span class="n">GroupStatisticsFeatures</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_dt</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatetimeOrdinalFeatures</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_dt</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrdinalFeatures</span><span class="p">,</span> <span class="n">CyclicFeatures</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_str</span><span class="w"> </span><span class="kn">import</span> <span class="n">Length</span><span class="p">,</span> <span class="n">NGram</span>
 
-<span class="c1"># Create polynomial features</span>
-<span class="n">poly</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feature1&#39;</span><span class="p">,</span> <span class="s1">&#39;feature2&#39;</span><span class="p">],</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">poly</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Polynomial and interaction features (degree 2)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;amount&#39;</span><span class="p">,</span> <span class="s1">&#39;balance&#39;</span><span class="p">],</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Create ratio features</span>
-<span class="n">ratios</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span><span class="n">column_pairs</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;numerator&#39;</span><span class="p">,</span> <span class="s1">&#39;denominator&#39;</span><span class="p">)])</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">ratios</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Ratio features: amount / balance</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">RatioFeatures</span><span class="p">(</span>
+    <span class="n">numerator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;amount&#39;</span><span class="p">],</span>
+    <span class="n">denominator_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;balance&#39;</span><span class="p">],</span>
+    <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;amount_to_balance_ratio&#39;</span><span class="p">],</span>
+<span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-<span class="c1"># Extract datetime features</span>
-<span class="n">dt_features</span> <span class="o">=</span> <span class="n">DatetimeOrdinalFeatures</span><span class="p">(</span>
-    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">],</span>
-    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span>  <span class="n">dt_features</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="c1"># Group statistics: mean of &#39;amount&#39; per &#39;merchant_category&#39;</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">GroupStatisticsFeatures</span><span class="p">(</span>
+    <span class="n">group_column</span><span class="o">=</span><span class="s1">&#39;merchant_category&#39;</span><span class="p">,</span>
+    <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;amount&#39;</span><span class="p">],</span>
+    <span class="n">func</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Datetime: extract year, month, day of week</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">OrdinalFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;transaction_ts&#39;</span><span class="p">],</span> <span class="n">components</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day_of_week&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Datetime: cyclical encoding for hour-of-day</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">CyclicFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;transaction_ts&#39;</span><span class="p">],</span> <span class="n">components</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># String: length of description field</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">Length</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># String: 2-gram features from category name</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">NGram</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;category_name&#39;</span><span class="p">],</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-<section id="example-complete-pipeline">
-<h2>Example: Complete Pipeline<a class="headerlink" href="#example-complete-pipeline" title="Link to this heading">#</a></h2>
-<p>Putting it all together in a production-ready pipeline:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropHighNaNRatio</span><span class="p">,</span> <span class="n">VarianceFilter</span>
+<section id="example-scalers-and-clippers">
+<h2>Example: Scalers and Clippers<a class="headerlink" href="#example-scalers-and-clippers" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.scalers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">RobustScaler</span><span class="p">,</span> <span class="n">MinmaxScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.clippers</span><span class="w"> </span><span class="kn">import</span> <span class="n">IQRClipper</span><span class="p">,</span> <span class="n">QuantileClipper</span>
+
+<span class="c1"># Clip extreme values beyond 1st–99th percentiles before scaling</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">QuantileClipper</span><span class="p">(</span><span class="n">lower_quantile</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">upper_quantile</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Robust scaling (unaffected by remaining outliers)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">RobustScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-complete-production-pipeline">
+<h2>Example: Complete Production Pipeline<a class="headerlink" href="#example-complete-production-pipeline" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.data_cleaning</span><span class="w"> </span><span class="kn">import</span> <span class="n">DropHighNaNRatio</span><span class="p">,</span> <span class="n">DropConstantColumns</span><span class="p">,</span> <span class="n">VarianceFilter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.imputers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NumericImputer</span><span class="p">,</span> <span class="n">StringImputer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneHotEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.encoders</span><span class="w"> </span><span class="kn">import</span> <span class="n">WOEEncoder</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialFeatures</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gators.scalers</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
 
-<span class="c1"># Define the complete pipeline</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
-    <span class="c1"># Step 1: Clean data</span>
-    <span class="p">(</span><span class="s1">&#39;drop_high_nan&#39;</span><span class="p">,</span> <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s1">&#39;variance_filter&#39;</span><span class="p">,</span> <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">min_var</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)),</span>
-
-    <span class="c1"># Step 2: Handle missing values</span>
-    <span class="p">(</span><span class="s1">&#39;impute_numeric&#39;</span><span class="p">,</span> <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s1">&#39;impute_string&#39;</span><span class="p">,</span> <span class="n">StringImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;mode&#39;</span><span class="p">)),</span>
-
-    <span class="c1"># Step 3: Feature engineering</span>
-    <span class="p">(</span><span class="s1">&#39;polynomial&#39;</span><span class="p">,</span> <span class="n">PolynomialFeatures</span><span class="p">(</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;feature1&#39;</span><span class="p">,</span> <span class="s1">&#39;feature2&#39;</span><span class="p">],</span>
-        <span class="n">degree</span><span class="o">=</span><span class="mi">2</span>
-    <span class="p">)),</span>
-
-    <span class="c1"># Step 4: Encode categorical variables</span>
-    <span class="p">(</span><span class="s1">&#39;encode&#39;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">()),</span>
-
-    <span class="c1"># Step 5: Scale features</span>
-    <span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+    <span class="p">(</span><span class="s1">&#39;drop_nan&#39;</span><span class="p">,</span>    <span class="n">DropHighNaNRatio</span><span class="p">(</span><span class="n">max_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;drop_const&#39;</span><span class="p">,</span>  <span class="n">DropConstantColumns</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;variance&#39;</span><span class="p">,</span>    <span class="n">VarianceFilter</span><span class="p">(</span><span class="n">min_var</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;impute_num&#39;</span><span class="p">,</span>  <span class="n">NumericImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;impute_str&#39;</span><span class="p">,</span>  <span class="n">StringImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;polynomial&#39;</span><span class="p">,</span>  <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;amount&#39;</span><span class="p">,</span> <span class="s1">&#39;balance&#39;</span><span class="p">],</span> <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;encode&#39;</span><span class="p">,</span>      <span class="n">WOEEncoder</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span>       <span class="n">StandardScaler</span><span class="p">()),</span>
 <span class="p">])</span>
 
 <span class="c1"># Fit on training data</span>
-<span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_X</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
 
-<span class="c1"># Transform training and test data</span>
-<span class="n">train_processed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_X</span><span class="p">)</span>
-<span class="n">test_processed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_X</span><span class="p">)</span>
+<span class="c1"># Transform any dataset</span>
+<span class="n">X_train_processed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test_processed</span>  <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="c1"># Deploy the same pipeline in production!</span>
-<span class="n">prod_data_processed</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">prod_data</span><span class="p">)</span>
+<span class="c1"># Export the fitted pipeline to ONNX for production inference</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gators.onnx_converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">pipeline_to_onnx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">onnxruntime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ort</span>
+
+<span class="n">onnx_model</span> <span class="o">=</span> <span class="n">pipeline_to_onnx</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+
+<span class="n">sess</span> <span class="o">=</span> <span class="n">ort</span><span class="o">.</span><span class="n">InferenceSession</span><span class="p">(</span><span class="n">onnx_model</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">())</span>
+<span class="c1"># run sess.run(...) on any ONNX-compatible runtime</span>
 </pre></div>
 </div>
 </section>
@@ -681,9 +741,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-example">Basic Example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-the-api">Understanding the API</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-data-cleaning">Example: Data Cleaning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-missing-value-imputation">Example: Missing Value Imputation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-encoding">Example: Encoding</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-feature-generation">Example: Feature Generation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-complete-pipeline">Example: Complete Pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-scalers-and-clippers">Example: Scalers and Clippers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-complete-production-pipeline">Example: Complete Production Pipeline</a></li>
 </ul>
   </nav></div>
 

@@ -238,6 +238,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -360,6 +367,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -447,20 +461,108 @@
 </div>
 <div class="toctree-wrapper compound">
 </div>
+<div class="toctree-wrapper compound">
+</div>
 <p>Gators is a <strong>lightning-fast data preprocessing and feature engineering</strong> library built on top of <a class="reference external" href="https://pola.rs/">Polars</a>,
-designed to streamline your entire ML workflow from raw data to production-ready models. Leveraging Polars’
-blazing-fast multi-core processing.</p>
+designed to streamline your entire ML workflow from raw data to production-ready models — benchmarked faster than
+scikit-learn and feature-engine across common preprocessing tasks (see Benchmarks below).</p>
 <p>Built by the PSP Data Team at PayPal, Gators makes data preprocessing and feature engineering both <strong>faster</strong> and <strong>simpler</strong>.</p>
 <section id="key-features">
 <h1>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h1>
 <ul class="simple">
-<li><p>🚀 <strong>Lightning Fast</strong>: Built on Polars for multi-core parallel processing</p></li>
+<li><p>🚀 <strong>Lightning Fast</strong>: Benchmarked faster than scikit-learn and feature-engine on common preprocessing tasks</p></li>
 <li><p>🔄 <strong>Unified API</strong>: Consistent sklearn-style <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">.transform()</span></code> interface</p></li>
 <li><p>📦 <strong>Production Ready</strong>: Deploy the same Python code from notebook to production</p></li>
-<li><p>🎯 <strong>Comprehensive</strong>: 60+ preprocessing transformers covering every use case</p></li>
+<li><p>🎯 <strong>Comprehensive</strong>: 108 preprocessing transformers across 11 categories</p></li>
 <li><p>🔗 <strong>Pipeline Support</strong>: Chain transformers seamlessly with the Pipeline class</p></li>
+<li><p>📤 <strong>ONNX Export</strong>: Export fitted pipelines to ONNX for low-latency inference (most transformers supported; a handful of <code class="docutils literal notranslate"><span class="pre">feature_generation_str</span></code> transformers can’t convert due to ONNX’s limited string-tensor op support)</p></li>
 <li><p>🎓 <strong>Easy to Learn</strong>: If you know sklearn, you already know Gators</p></li>
 </ul>
+</section>
+<section id="benchmarks">
+<h1>Benchmarks<a class="headerlink" href="#benchmarks" title="Link to this heading">#</a></h1>
+<p>Gators transformers are timed head-to-head against their closest scikit-learn and feature-engine
+equivalents (same algorithm, <code class="docutils literal notranslate"><span class="pre">fit</span></code> + <code class="docutils literal notranslate"><span class="pre">transform</span></code>, best-of-3 runs) on a 500,000-row synthetic dataset:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 26.0%" />
+<col style="width: 12.0%" />
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+<col style="width: 14.0%" />
+<col style="width: 16.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Transformer</p></th>
+<th class="head"><p>gators (s)</p></th>
+<th class="head"><p>scikit-learn (s)</p></th>
+<th class="head"><p>feature-engine (s)</p></th>
+<th class="head"><p>speedup vs sklearn</p></th>
+<th class="head"><p>speedup vs feature-engine</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NumericImputer (mean)</p></td>
+<td><p>0.005</p></td>
+<td><p>0.025</p></td>
+<td><p>0.012</p></td>
+<td><p>5.2x</p></td>
+<td><p>2.4x</p></td>
+</tr>
+<tr class="row-odd"><td><p>StandardScaler</p></td>
+<td><p>0.002</p></td>
+<td><p>0.009</p></td>
+<td><p>n/a</p></td>
+<td><p>3.8x</p></td>
+<td><p>n/a</p></td>
+</tr>
+<tr class="row-even"><td><p>QuantileClipper</p></td>
+<td><p>0.005</p></td>
+<td><p>n/a</p></td>
+<td><p>0.056</p></td>
+<td><p>n/a</p></td>
+<td><p>12.3x</p></td>
+</tr>
+<tr class="row-odd"><td><p>EqualSizeDiscretizer (5 bins)</p></td>
+<td><p>0.025</p></td>
+<td><p>0.112</p></td>
+<td><p>0.182</p></td>
+<td><p>4.5x</p></td>
+<td><p>7.3x</p></td>
+</tr>
+<tr class="row-even"><td><p>OneHotEncoder</p></td>
+<td><p>0.045</p></td>
+<td><p>0.283</p></td>
+<td><p>0.320</p></td>
+<td><p>6.2x</p></td>
+<td><p>7.0x</p></td>
+</tr>
+<tr class="row-odd"><td><p>OrdinalEncoder</p></td>
+<td><p>0.029</p></td>
+<td><p>0.267</p></td>
+<td><p>0.127</p></td>
+<td><p>9.1x</p></td>
+<td><p>4.3x</p></td>
+</tr>
+<tr class="row-even"><td><p>TargetEncoder</p></td>
+<td><p>0.029</p></td>
+<td><p>0.442</p></td>
+<td><p>0.163</p></td>
+<td><p>15.0x</p></td>
+<td><p>5.5x</p></td>
+</tr>
+<tr class="row-odd"><td><p>WOEEncoder</p></td>
+<td><p>0.028</p></td>
+<td><p>n/a</p></td>
+<td><p>0.181</p></td>
+<td><p>n/a</p></td>
+<td><p>6.5x</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">n/a</span></code> means no equivalent implementation exists in that library. Measured on an Apple M3 Max; see
+<a class="reference internal" href="benchmarking.html"><span class="doc">Benchmarking</span></a> for full methodology, environment details, and reproduction instructions.</p>
 </section>
 <section id="quick-start">
 <h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h1>
@@ -492,19 +594,20 @@ blazing-fast multi-core processing.</p>
 </section>
 <section id="what-can-gators-do">
 <h1>What Can Gators Do?<a class="headerlink" href="#what-can-gators-do" title="Link to this heading">#</a></h1>
-<p><strong>70+ transformers across 8 categories:</strong></p>
+<p><strong>108 transformers across 11 categories:</strong></p>
 <ul class="simple">
-<li><p>🧹 <a class="reference internal" href="api/data_cleaning.html"><span class="doc">Data Cleaning</span></a> - Quality filters, deduplication, and more</p></li>
-<li><p>✂️ <a class="reference internal" href="api/clippers.html"><span class="doc">Clippers</span></a> - Custom min/max bounds, Gaussian, IQR, MAD, Quantile, and more</p></li>
-<li><p>🧩 <a class="reference internal" href="api/encoders.html"><span class="doc">Encoders</span></a> - OneHot, Target, WOE, CatBoost, and more</p></li>
-<li><p>🎯 <a class="reference internal" href="api/feature_generation.html"><span class="doc">Numeric Features</span></a> - Polynomial, rule-based features, and more</p></li>
-<li><p>📝 <a class="reference internal" href="api/feature_generation_str.html"><span class="doc">String Features</span></a> - Text properties, pattern detection, n-grams, and more</p></li>
-<li><p>📅 <a class="reference internal" href="api/feature_generation_dt.html"><span class="doc">DateTime Features</span></a> - Temporal patterns, cyclical encoding, holidays, and more</p></li>
-<li><p>🔄 <a class="reference internal" href="api/imputers.html"><span class="doc">Imputation</span></a> - Numeric, string, boolean, and group-based strategies</p></li>
-<li><p>📊 <a class="reference internal" href="api/discretizers.html"><span class="doc">Discretization</span></a> - Equal-width, quantile, tree-based binning, and more</p></li>
-<li><p>⚖️ <a class="reference internal" href="api/scalers.html"><span class="doc">Scalers</span></a> - Standard, min-max, Box-Cox, and more</p></li>
-<li><p>✨ <a class="reference internal" href="api/feature_selection.html"><span class="doc">Feature Selection</span></a> - Correlation, stability, information value, and more</p></li>
-<li><p>🔗 <a class="reference internal" href="api/pipeline.html"><span class="doc">Pipeline</span></a> - Chain transformers seamlessly</p></li>
+<li><p>🧹 <a class="reference internal" href="api/data_cleaning.html"><span class="doc">Data Cleaning</span></a> - Quality filters, deduplication, rounding, and type casting (16)</p></li>
+<li><p>✂️ <a class="reference internal" href="api/clippers.html"><span class="doc">Clippers</span></a> - Custom, Gaussian, IQR, MAD, and Quantile outlier clipping (5)</p></li>
+<li><p>🧩 <a class="reference internal" href="api/encoders.html"><span class="doc">Encoders</span></a> - OneHot, Target, WOE, CatBoost, Binary, Hash, and more (10)</p></li>
+<li><p>🎯 <a class="reference internal" href="api/feature_generation.html"><span class="doc">Numeric Features</span></a> - Polynomial, ratio, Fourier, aggregation, rule-based (21)</p></li>
+<li><p>📝 <a class="reference internal" href="api/feature_generation_str.html"><span class="doc">String Features</span></a> - Length, patterns, n-grams, TF-IDF, regex extraction (19)</p></li>
+<li><p>📅 <a class="reference internal" href="api/feature_generation_dt.html"><span class="doc">DateTime Features</span></a> - Cyclical encoding, holidays, business hours, time windows (8)</p></li>
+<li><p>🔄 <a class="reference internal" href="api/imputers.html"><span class="doc">Imputation</span></a> - Numeric, string, boolean, KNN, iterative, and group-based strategies (6)</p></li>
+<li><p>📊 <a class="reference internal" href="api/discretizers.html"><span class="doc">Discretization</span></a> - Equal-width, quantile, tree-based binning, and more (7)</p></li>
+<li><p>⚖️ <a class="reference internal" href="api/scalers.html"><span class="doc">Scalers</span></a> - Standard, min-max, robust, Box-Cox, Yeo-Johnson, and more (9)</p></li>
+<li><p>✨ <a class="reference internal" href="api/feature_selection.html"><span class="doc">Feature Selection</span></a> - Correlation, stability, IV, mutual information, permutation (6)</p></li>
+<li><p>🔗 <a class="reference internal" href="api/pipeline.html"><span class="doc">Pipeline</span></a> - Chain transformers seamlessly (1)</p></li>
+<li><p>📤 <strong>ONNX Export</strong> - Export most fitted pipelines to ONNX for language-agnostic inference (a handful of <code class="docutils literal notranslate"><span class="pre">feature_generation_str</span></code> transformers aren’t convertible)</p></li>
 </ul>
 <section id="credits">
 <h2>Credits<a class="headerlink" href="#credits" title="Link to this heading">#</a></h2>
@@ -572,6 +675,7 @@ blazing-fast multi-core processing.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Key Features</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmarks">Benchmarks</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-can-gators-do">What Can Gators Do?</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#credits">Credits</a></li>

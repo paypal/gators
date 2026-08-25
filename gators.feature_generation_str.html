@@ -239,6 +239,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -358,6 +365,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -1081,7 +1095,7 @@ at the end of the original column values.</p>
 <div class="admonition-examples admonition">
 <p class="admonition-title">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.discretizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Length</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_str</span><span class="w"> </span><span class="kn">import</span> <span class="n">Length</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Sample data</span>
@@ -1985,6 +1999,115 @@ original columns start with specified substrings.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="gators.feature_generation_str.StringSimilarity">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_str.</span></span><span class="sig-name descname"><span class="pre">StringSimilarity</span></span><a class="reference internal" href="_modules/gators/feature_generation_str/string_similarity.html#StringSimilarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_str.StringSimilarity" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Generates fuzzy string similarity features between pairs of string columns.</p>
+<p>Computes a normalized similarity score (<code class="docutils literal notranslate"><span class="pre">0.0</span></code> = completely different,
+<code class="docutils literal notranslate"><span class="pre">1.0</span></code> = identical) between each pair of columns using either Levenshtein
+(edit-distance based) or Jaro-Winkler similarity. This is particularly
+useful in fraud detection for identity matching, e.g. comparing the
+cardholder name against the shipping name, or the billing address against
+the shipping address.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subset_a</strong> (list<em>[</em>str<em>]</em>) – List of column names for the left side of each comparison.</p></li>
+<li><p><strong>subset_b</strong> (list<em>[</em>str<em>]</em>) – List of column names for the right side of each comparison. Must have
+the same length as <code class="docutils literal notranslate"><span class="pre">subset_a</span></code>; pairs are formed element-wise
+(<code class="docutils literal notranslate"><span class="pre">subset_a[i]</span></code> compared to <code class="docutils literal notranslate"><span class="pre">subset_b[i]</span></code>).</p></li>
+<li><p><strong>method</strong> (<em>Literal</em><em>[</em><em>&quot;levenshtein&quot;</em><em>, </em><em>&quot;jaro_winkler&quot;</em><em>]</em><em>, </em><em>default=&quot;levenshtein&quot;</em>) – <p>Similarity algorithm to use:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'levenshtein'</span></code>: Normalized indel/edit-distance similarity.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'jaro_winkler'</span></code>: Jaro-Winkler similarity, which favors strings
+that share a common prefix (well suited to names).</p></li>
+</ul>
+</p></li>
+<li><p><strong>case_sensitive</strong> (bool<em>, </em><em>default=False</em>) – Whether comparisons are case sensitive.</p></li>
+<li><p><strong>new_column_names</strong> (list<em>[</em>str<em>]</em><em>, </em><em>optional</em>) – Custom names for the similarity features. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, names are
+auto-generated as <code class="docutils literal notranslate"><span class="pre">'{col_a}__{col_b}__{method}_similarity'</span></code>.</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original <code class="docutils literal notranslate"><span class="pre">subset_a</span></code>/<code class="docutils literal notranslate"><span class="pre">subset_b</span></code> columns after
+creating the similarity features.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_str</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringSimilarity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;billing_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;John Smith&#39;</span><span class="p">,</span> <span class="s1">&#39;Jane Doe&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="s1">&#39;shipping_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Jon Smith&#39;</span><span class="p">,</span> <span class="s1">&#39;Robert Jones&#39;</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+</pre></div>
+</div>
+<p><strong>Example 1: Levenshtein similarity</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">StringSimilarity</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">subset_a</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;billing_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">subset_b</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;shipping_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;levenshtein&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;billing_name&#39;, &#39;shipping_name&#39;, &#39;billing_name__shipping_name__levenshtein_similarity&#39;]</span>
+</pre></div>
+</div>
+<p><strong>Example 2: Custom column names and drop_columns</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">StringSimilarity</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">subset_a</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;billing_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">subset_b</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;shipping_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;jaro_winkler&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">new_column_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name_similarity&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;name_similarity&#39;]</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation_str.StringSimilarity.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_str.StringSimilarity" title="gators.feature_generation_str.string_similarity.StringSimilarity"><span class="pre">gators.feature_generation_str.string_similarity.StringSimilarity</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_str/string_similarity.html#StringSimilarity.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_str.StringSimilarity.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by generating column name mappings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_str.StringSimilarity" title="gators.feature_generation_str.StringSimilarity">StringSimilarity</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation_str.StringSimilarity.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_str/string_similarity.html#StringSimilarity.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_str.StringSimilarity.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input DataFrame by creating string similarity features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed DataFrame with similarity features appended.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="gators.feature_generation_str.TfidfFeatures">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_str.</span></span><span class="sig-name descname"><span class="pre">TfidfFeatures</span></span><a class="reference internal" href="_modules/gators/feature_generation_str/tfidf_features.html#TfidfFeatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_str.TfidfFeatures" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
@@ -2154,7 +2277,7 @@ are selected automatically during <code class="docutils literal notranslate"><sp
 <div class="admonition-examples admonition">
 <p class="admonition-title">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.discretizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Upper</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_str</span><span class="w"> </span><span class="kn">import</span> <span class="n">Upper</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Sample data</span>
@@ -2253,6 +2376,99 @@ are selected automatically during <code class="docutils literal notranslate"><sp
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Transformed DataFrame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pl.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gators.feature_generation_str.WordStatistics">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gators.feature_generation_str.</span></span><span class="sig-name descname"><span class="pre">WordStatistics</span></span><a class="reference internal" href="_modules/gators/feature_generation_str/word_statistics.html#WordStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_str.WordStatistics" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gators.transformer._base_transformer._BaseTransformer</span></code></p>
+<p>Generates word-level statistical features from string columns.</p>
+<p>Tokenizes each string on whitespace and computes summary statistics over
+the resulting words, which are useful for tree-based models to identify
+patterns in free-text fields (e.g. addresses, descriptions, names).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of string columns to extract features from. If None, all string
+columns will be used.</p></li>
+<li><p><strong>features</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=</em><em>[</em><em>&quot;n_words&quot;</em><em>, </em><em>&quot;avg_word_length&quot;</em><em>, </em><em>&quot;n_unique_words&quot;</em><em>, </em><em>&quot;max_word_length&quot;</em><em>, </em><em>&quot;min_word_length&quot;</em><em>]</em>) – <p>Word statistics to generate. Options:</p>
+<ul>
+<li><p>”n_words”: Number of whitespace-separated words</p></li>
+<li><p>”avg_word_length”: Average number of characters per word</p></li>
+<li><p>”n_unique_words”: Number of distinct words</p></li>
+<li><p>”max_word_length”: Length of the longest word</p></li>
+<li><p>”min_word_length”: Length of the shortest word</p></li>
+</ul>
+</p></li>
+<li><p><strong>drop_columns</strong> (bool<em>, </em><em>default=False</em>) – Whether to drop the original string columns after feature extraction.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-examples admonition">
+<p class="admonition-title">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.feature_generation_str</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordStatistics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;123 Main St&#39;</span><span class="p">,</span> <span class="s1">&#39;One Infinite Loop&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]})</span>
+</pre></div>
+</div>
+<p><strong>Example 1: Default features</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">WordStatistics</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;address__n_words&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+<span class="go">[3.0, 3.0, 0.0, 0.0]</span>
+</pre></div>
+</div>
+<p><strong>Example 2: Selected features with drop_columns</strong></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">WordStatistics</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;n_words&#39;</span><span class="p">,</span> <span class="s1">&#39;avg_word_length&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">drop_columns</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;address__n_words&#39;, &#39;address__avg_word_length&#39;]</span>
+</pre></div>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation_str.WordStatistics.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#gators.feature_generation_str.WordStatistics" title="gators.feature_generation_str.word_statistics.WordStatistics"><span class="pre">gators.feature_generation_str.word_statistics.WordStatistics</span></a></span></span><a class="reference internal" href="_modules/gators/feature_generation_str/word_statistics.html#WordStatistics.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_str.WordStatistics.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transformer by identifying string columns if not specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame.</p></li>
+<li><p><strong>y</strong> (<em>pl.Series</em><em>, </em><em>default=None</em>) – Target variable. Not used, present here for compatibility.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fitted transformer instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gators.feature_generation_str.WordStatistics" title="gators.feature_generation_str.WordStatistics">WordStatistics</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gators.feature_generation_str.WordStatistics.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">polars.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">polars.DataFrame</span></span></span><a class="reference internal" href="_modules/gators/feature_generation_str/word_statistics.html#WordStatistics.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gators.feature_generation_str.WordStatistics.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input DataFrame by creating word statistics features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>pl.DataFrame</em>) – Input DataFrame to transform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed DataFrame with word statistics features.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pl.DataFrame</p>
@@ -2371,6 +2587,11 @@ are selected automatically during <code class="docutils literal notranslate"><sp
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.Startswith.transform"><code class="docutils literal notranslate"><span class="pre">Startswith.transform()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.StringSimilarity"><code class="docutils literal notranslate"><span class="pre">StringSimilarity</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.StringSimilarity.fit"><code class="docutils literal notranslate"><span class="pre">StringSimilarity.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.StringSimilarity.transform"><code class="docutils literal notranslate"><span class="pre">StringSimilarity.transform()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.TfidfFeatures"><code class="docutils literal notranslate"><span class="pre">TfidfFeatures</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.TfidfFeatures.vocabulary_"><code class="docutils literal notranslate"><span class="pre">TfidfFeatures.vocabulary_</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.TfidfFeatures.idf_"><code class="docutils literal notranslate"><span class="pre">TfidfFeatures.idf_</span></code></a></li>
@@ -2381,6 +2602,11 @@ are selected automatically during <code class="docutils literal notranslate"><sp
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.Upper"><code class="docutils literal notranslate"><span class="pre">Upper</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.Upper.fit"><code class="docutils literal notranslate"><span class="pre">Upper.fit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.Upper.transform"><code class="docutils literal notranslate"><span class="pre">Upper.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.WordStatistics"><code class="docutils literal notranslate"><span class="pre">WordStatistics</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.WordStatistics.fit"><code class="docutils literal notranslate"><span class="pre">WordStatistics.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gators.feature_generation_str.WordStatistics.transform"><code class="docutils literal notranslate"><span class="pre">WordStatistics.transform()</span></code></a></li>
 </ul>
 </li>
 </ul>

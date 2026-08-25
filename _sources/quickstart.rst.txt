@@ -11,43 +11,46 @@ Here's a simple example showing the core Gators workflow:
 .. code-block:: python
 
     import polars as pl
-    from gators.data_cleaning import DropHighNaNRatio
+    from gators.data_cleaning import DropHighNaNRatio, VarianceFilter
     from gators.encoders import OneHotEncoder
     from gators.imputers import NumericImputer
     from gators.scalers import StandardScaler
     from gators.pipeline import Pipeline
 
     # Load your data
-    X =  pl.read_csv("data.csv")
+    X = pl.read_csv("data.csv")
 
     # Build a preprocessing pipeline
     pipeline = Pipeline(steps=[
-        ('drop_nan', DropHighNaNRatio(max_ratio=0.5)),
-        ('impute', NumericImputer(strategy='median')),
-        ('encode', OneHotEncoder()),
-        ('scale', StandardScaler())
+        ('drop_nan', DropHighNaNRatio(max_ratio=0.5)),   # drop columns with >50% nulls
+        ('impute',   NumericImputer(strategy='median')), # fill numeric nulls with column median
+        ('variance', VarianceFilter(min_var=0.01)),      # remove near-zero-variance columns
+        ('encode',   OneHotEncoder()),                   # one-hot encode all string/categorical columns
+        ('scale',    StandardScaler()),                  # z-score standardize numeric columns
     ])
 
     # Fit and transform in one step
     X_processed = pipeline.fit_transform(X)
 
-    # Or fit and transform separately
-    pipeline.fit(X)
-    X_processed = pipeline.transform(X)
+    # Or fit and transform separately (e.g. train / test split)
+    pipeline.fit(X_train)
+    X_train_processed = pipeline.transform(X_train)
+    X_test_processed  = pipeline.transform(X_test)
 
 Understanding the API
 ---------------------
 
 All Gators transformers follow the sklearn-style API:
 
-**fit(X)**
-    Learn parameters from the data (e.g., mean for imputation, categories for encoding)
+**fit(X, y=None)**
+    Learn parameters from the data (e.g., mean for imputation, categories for encoding).
+    Supervised transformers (e.g. :class:`~gators.encoders.WOEEncoder`) also accept ``y``.
 
 **transform(X)**
-    Apply the transformation using learned parameters
+    Apply the learned transformation to ``X``.
 
-**fit_transform(X)**
-    Convenience method that calls fit() then transform()
+**fit_transform(X, y=None)**
+    Convenience method that calls ``fit()`` then ``transform()``.
 
 Example: Data Cleaning
 ----------------------
@@ -56,44 +59,64 @@ Example: Data Cleaning
 
     from gators.data_cleaning import (
         DropHighNaNRatio,
+        DropConstantColumns,
+        DropNearConstantColumns,
         VarianceFilter,
-        CorrelationFilter
+        CorrelationFilter,
+        RoundSignificantDigits,
     )
 
-    # Remove columns with >50% missing values
-    drop_nan = DropHighNaNRatio(max_ratio=0.5)
-    X =  drop_nan.fit_transform(X)
+    # Drop columns with more than 50% missing values
+    X = DropHighNaNRatio(max_ratio=0.5).fit_transform(X)
 
-    # Remove low-variance features
-    var_filter = VarianceFilter(min_var=0.01)
-    X =  var_filter.fit_transform(X)
+    # Drop constant and near-constant columns
+    X = DropConstantColumns().fit_transform(X)
+    X = DropNearConstantColumns(max_ratio=0.99).fit_transform(X)
 
-    # Remove highly correlated features
-    corr_filter = CorrelationFilter(max_corr=0.95)
-    X =  corr_filter.fit_transform(X)
+    # Remove low-variance numeric features
+    X = VarianceFilter(min_var=0.01).fit_transform(X)
+
+    # Round to 3 significant figures for cleaner downstream processing
+    X = RoundSignificantDigits(n_digits=3).fit_transform(X)
+
+    # Remove highly correlated features, keeping the more important one
+    importance = {"feature_a": 0.8, "feature_b": 0.6, "feature_c": 0.9}
+    X = CorrelationFilter(max_corr=0.95).fit_transform(X)
+
+Example: Missing Value Imputation
+----------------------------------
+
+.. code-block:: python
+
+    from gators.imputers import NumericImputer, StringImputer, BooleanImputer
+
+    # Impute numeric columns with column median
+    X = NumericImputer(strategy='median').fit_transform(X)
+
+    # Impute string columns with most frequent value
+    X = StringImputer(strategy='most_frequent').fit_transform(X)
+
+    # Impute boolean columns with False
+    X = BooleanImputer(strategy='constant', value=False).fit_transform(X)
 
 Example: Encoding
 -----------------
 
 .. code-block:: python
 
-    from gators.encoders import (
-        OneHotEncoder,
-        TargetEncoder,
-        OrdinalEncoder
-    )
+    from gators.encoders import OneHotEncoder, OrdinalEncoder, TargetEncoder, WOEEncoder
 
-    # One-hot encoding
-    ohe = OneHotEncoder(columns=['category_col'])
-    X =  ohe.fit_transform(X)
+    # One-hot encode all string/categorical columns
+    X = OneHotEncoder().fit_transform(X)
 
-    # Ordinal encoding
-    ordinal = OrdinalEncoder(columns=['category_col'])
-    X =  ordinal.fit_transform(X)
+    # Ordinal encode a subset of columns
+    X = OrdinalEncoder(subset=['color', 'size']).fit_transform(X)
 
-    # Target encoding (for supervised learning)
-    target_encoder = TargetEncoder(columns=['category_col'])
-    X =  target_encoder.fit_transform(X, y=target)
+    # Target mean encoding (supervised — requires y)
+    X = TargetEncoder(subset=['category_col']).fit_transform(X, y=target)
+
+    # Weight of Evidence encoding (supervised — requires binary y)
+    X = WOEEncoder(subset=['category_col']).fit_transform(X, y=binary_target)
 
 Example: Feature Generation
 ----------------------------
@@ -103,67 +126,92 @@ Example: Feature Generation
     from gators.feature_generation import (
         PolynomialFeatures,
         RatioFeatures,
+        MathFeatures,
+        GroupStatisticsFeatures,
     )
-    from gators.feature_generation_dt import DatetimeOrdinalFeatures
+    from gators.feature_generation_dt import OrdinalFeatures, CyclicFeatures
+    from gators.feature_generation_str import Length, NGram
 
-    # Create polynomial features
-    poly = PolynomialFeatures(columns=['feature1', 'feature2'], degree=2)
-    X =  poly.fit_transform(X)
+    # Polynomial and interaction features (degree 2)
+    X = PolynomialFeatures(subset=['amount', 'balance'], degree=2).fit_transform(X)
 
-    # Create ratio features
-    ratios = RatioFeatures(column_pairs=[('numerator', 'denominator')])
-    X =  ratios.fit_transform(X)
+    # Ratio features: amount / balance
+    X = RatioFeatures(
+        numerator_columns=['amount'],
+        denominator_columns=['balance'],
+        new_column_names=['amount_to_balance_ratio'],
+    ).fit_transform(X)
 
-    # Extract datetime features
-    dt_features = DatetimeOrdinalFeatures(
-        columns=['timestamp'],
-        features=['year', 'month', 'day', 'hour']
-    )
-    X =  dt_features.fit_transform(X)
+    # Group statistics: mean of 'amount' per 'merchant_category'
+    X = GroupStatisticsFeatures(
+        group_column='merchant_category',
+        subset=['amount'],
+        func='mean',
+    ).fit_transform(X)
 
-Example: Complete Pipeline
----------------------------
+    # Datetime: extract year, month, day of week
+    X = OrdinalFeatures(subset=['transaction_ts'], components=['year', 'month', 'day_of_week']).fit_transform(X)
 
-Putting it all together in a production-ready pipeline:
+    # Datetime: cyclical encoding for hour-of-day
+    X = CyclicFeatures(subset=['transaction_ts'], components=['hour']).fit_transform(X)
+
+    # String: length of description field
+    X = Length(subset=['description']).fit_transform(X)
+
+    # String: 2-gram features from category name
+    X = NGram(subset=['category_name'], n=2).fit_transform(X)
+
+Example: Scalers and Clippers
+------------------------------
 
 .. code-block:: python
 
+    from gators.scalers import StandardScaler, RobustScaler, MinmaxScaler
+    from gators.clippers import IQRClipper, QuantileClipper
+
+    # Clip extreme values beyond 1st–99th percentiles before scaling
+    X = QuantileClipper(lower_quantile=0.01, upper_quantile=0.99).fit_transform(X)
+
+    # Robust scaling (unaffected by remaining outliers)
+    X = RobustScaler().fit_transform(X)
+
+Example: Complete Production Pipeline
+--------------------------------------
+
+.. code-block:: python
+
+    import polars as pl
     from gators.pipeline import Pipeline
-    from gators.data_cleaning import DropHighNaNRatio, VarianceFilter
+    from gators.data_cleaning import DropHighNaNRatio, DropConstantColumns, VarianceFilter
     from gators.imputers import NumericImputer, StringImputer
-    from gators.encoders import OneHotEncoder
+    from gators.encoders import WOEEncoder
     from gators.feature_generation import PolynomialFeatures
     from gators.scalers import StandardScaler
 
-    # Define the complete pipeline
     pipeline = Pipeline(steps=[
-        # Step 1: Clean data
-        ('drop_high_nan', DropHighNaNRatio(max_ratio=0.5)),
-        ('variance_filter', VarianceFilter(min_var=0.01)),
-        
-        # Step 2: Handle missing values
-        ('impute_numeric', NumericImputer(strategy='median')),
-        ('impute_string', StringImputer(strategy='mode')),
-        
-        # Step 3: Feature engineering
-        ('polynomial', PolynomialFeatures(
-            columns=['feature1', 'feature2'], 
-            degree=2
-        )),
-        
-        # Step 4: Encode categorical variables
-        ('encode', OneHotEncoder()),
-        
-        # Step 5: Scale features
-        ('scale', StandardScaler())
+        ('drop_nan',    DropHighNaNRatio(max_ratio=0.5)),
+        ('drop_const',  DropConstantColumns()),
+        ('variance',    VarianceFilter(min_var=0.01)),
+        ('impute_num',  NumericImputer(strategy='median')),
+        ('impute_str',  StringImputer(strategy='most_frequent')),
+        ('polynomial',  PolynomialFeatures(subset=['amount', 'balance'], degree=2)),
+        ('encode',      WOEEncoder()),
+        ('scale',       StandardScaler()),
     ])
 
     # Fit on training data
-    pipeline.fit(train_X)
+    pipeline.fit(X_train, y=y_train)
 
-    # Transform training and test data
-    train_processed = pipeline.transform(train_X)
-    test_processed = pipeline.transform(test_X)
+    # Transform any dataset
+    X_train_processed = pipeline.transform(X_train)
+    X_test_processed  = pipeline.transform(X_test)
 
-    # Deploy the same pipeline in production!
-    prod_data_processed = pipeline.transform(prod_data)
+    # Export the fitted pipeline to ONNX for production inference
+    from gators.onnx_converters import pipeline_to_onnx
+    import onnxruntime as ort
+
+    onnx_model = pipeline_to_onnx(pipeline)
+
+    sess = ort.InferenceSession(onnx_model.SerializeToString())
+    # run sess.run(...) on any ONNX-compatible runtime
+

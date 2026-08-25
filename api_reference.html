@@ -11,10 +11,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://paypal.github.io/gators/api_reference.html" />
 <meta property="og:site_name" content="Gators - High-Performance ML Preprocessing Library" />
-<meta property="og:description" content="Complete reference for all Gators transformers, organized by functionality. Overview: Gators provides 75+ transformers across 11 categories, all with a consi..." />
+<meta property="og:description" content="Complete reference for all Gators transformers, organized by functionality. Overview: Gators provides 108 transformers across 11 categories, all with a consi..." />
 <meta property="og:image" content="https://paypal.github.io/gators/_static/GATORS_LOGO.png" />
 <meta property="og:image:alt" content="Gators - High-Performance ML Preprocessing Library" />
-<meta name="description" content="Complete reference for all Gators transformers, organized by functionality. Overview: Gators provides 75+ transformers across 11 categories, all with a consi..." />
+<meta name="description" content="Complete reference for all Gators transformers, organized by functionality. Overview: Gators provides 108 transformers across 11 categories, all with a consi..." />
 <meta name="description" content="High-performance machine learning preprocessing library with 75+ transformers. Built on Polars for lightning-fast data transformation with sklearn-compatible API." />
 <meta name="keywords" content="machine learning, python, polars, preprocessing, feature engineering, sklearn, data science, transformers, ML pipeline" />
 
@@ -239,6 +239,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -359,6 +366,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -419,6 +433,7 @@
 <li class="toctree-l1"><a class="reference internal" href="api/scalers.html">Scalers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/pipeline.html">Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/feature_selection.html">Feature Selection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/onnx_converters.html">ONNX Export</a></li>
 </ul>
 </div>
 </nav></div>
@@ -490,51 +505,51 @@
 </div>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
-<p>Gators provides 75+ transformers across 11 categories, all with a consistent sklearn-compatible API.
+<p>Gators provides <strong>108 transformers</strong> across 11 categories, all with a consistent sklearn-compatible API.
 Each transformer implements <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">.transform()</span></code> methods and works seamlessly with Polars DataFrames.</p>
 <section id="data-cleaning">
 <h3>Data Cleaning<a class="headerlink" href="#data-cleaning" title="Link to this heading">#</a></h3>
-<p>Quality filters, variance detection, correlation removal, and data quality transformations.</p>
+<p>Quality filters, type casting, deduplication, rounding, and data quality transformations. <strong>(16 transformers)</strong></p>
 <p><a class="reference internal" href="api/data_cleaning.html"><span class="doc">View Data Cleaning API</span></a></p>
 </section>
 <section id="clippers">
 <h3>Clippers<a class="headerlink" href="#clippers" title="Link to this heading">#</a></h3>
-<p>Outlier detection and clipping strategies including Gaussian, IQR, MAD, and Quantile methods.</p>
+<p>Outlier detection and clipping strategies: Custom, Gaussian, IQR, MAD, and Quantile. <strong>(5 transformers)</strong></p>
 <p><a class="reference internal" href="api/clippers.html"><span class="doc">View Clippers API</span></a></p>
 </section>
 <section id="encoders">
 <h3>Encoders<a class="headerlink" href="#encoders" title="Link to this heading">#</a></h3>
-<p>Categorical encoding methods: OneHot, Target, WOE, CatBoost, Ordinal, and more.</p>
+<p>Categorical encoding: Binary, CatBoost, Count, Hash, LeaveOneOut, OneHot, Ordinal, RareCategory, Target, WOE. <strong>(10 transformers)</strong></p>
 <p><a class="reference internal" href="api/encoders.html"><span class="doc">View Encoders API</span></a></p>
 </section>
 <section id="feature-generation">
 <h3>Feature Generation<a class="headerlink" href="#feature-generation" title="Link to this heading">#</a></h3>
-<p>Create numeric features from existing columns: polynomial, ratios, aggregations, and custom transformations.</p>
+<p>Create numeric features: polynomial, ratios, Fourier, group aggregations, rolling windows, and custom rules. <strong>(21 transformers)</strong></p>
 <p><a class="reference internal" href="api/feature_generation.html"><span class="doc">View Feature Generation API</span></a></p>
 </section>
 <section id="string-features">
 <h3>String Features<a class="headerlink" href="#string-features" title="Link to this heading">#</a></h3>
-<p>Extract information from text: length, patterns, n-grams, substring extraction, and text statistics.</p>
+<p>Extract information from text: length, patterns, n-grams, TF-IDF, regex extraction, fuzzy similarity, and text statistics. <strong>(19 transformers)</strong></p>
 <p><a class="reference internal" href="api/feature_generation_str.html"><span class="doc">View String Features API</span></a></p>
 </section>
 <section id="datetime-features">
 <h3>DateTime Features<a class="headerlink" href="#datetime-features" title="Link to this heading">#</a></h3>
-<p>Temporal feature engineering: cyclic encoding, holidays, business hours, time windows, and date differences.</p>
+<p>Temporal feature engineering: cyclic encoding, holidays, business hours, time windows, and date differences. <strong>(8 transformers)</strong></p>
 <p><a class="reference internal" href="api/feature_generation_dt.html"><span class="doc">View DateTime Features API</span></a></p>
 </section>
 <section id="imputers">
 <h3>Imputers<a class="headerlink" href="#imputers" title="Link to this heading">#</a></h3>
-<p>Handle missing values with mean, median, mode, constant, or group-based imputation strategies.</p>
+<p>Handle missing values with mean, median, mode, constant, KNN, iterative, or group-based strategies. <strong>(6 transformers)</strong></p>
 <p><a class="reference internal" href="api/imputers.html"><span class="doc">View Imputers API</span></a></p>
 </section>
 <section id="discretizers">
 <h3>Discretizers<a class="headerlink" href="#discretizers" title="Link to this heading">#</a></h3>
-<p>Bin continuous variables using equal-width, quantile, k-means, tree-based, or custom strategies.</p>
+<p>Bin continuous variables using equal-width, quantile, geometric, k-means, tree-based, or custom strategies. <strong>(7 transformers)</strong></p>
 <p><a class="reference internal" href="api/discretizers.html"><span class="doc">View Discretizers API</span></a></p>
 </section>
 <section id="scalers">
 <h3>Scalers<a class="headerlink" href="#scalers" title="Link to this heading">#</a></h3>
-<p>Normalize and transform features: StandardScaler, MinMaxScaler, Box-Cox, Yeo-Johnson, and more.</p>
+<p>Normalize and transform features: Standard, MinMax, Robust, BoxCox, Yeo-Johnson, Log1p, and more. <strong>(9 transformers)</strong></p>
 <p><a class="reference internal" href="api/scalers.html"><span class="doc">View Scalers API</span></a></p>
 </section>
 <section id="pipeline">
@@ -544,8 +559,26 @@ Each transformer implements <code class="docutils literal notranslate"><span cla
 </section>
 <section id="feature-selection">
 <h3>Feature Selection<a class="headerlink" href="#feature-selection" title="Link to this heading">#</a></h3>
-<p>Select important features using Information Value, Feature Stability Index, and other metrics.</p>
+<p>Select important features using Pearson correlation, Information Value, mutual information, permutation importance, and Population Stability Index.</p>
 <p><a class="reference internal" href="api/feature_selection.html"><span class="doc">View Feature Selection API</span></a></p>
+</section>
+<section id="onnx-export">
+<h3>ONNX Export<a class="headerlink" href="#onnx-export" title="Link to this heading">#</a></h3>
+<p>Export any fitted <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> or single transformer to a validated ONNX graph for low-latency, language-agnostic inference.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.onnx_converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">pipeline_to_onnx</span><span class="p">,</span> <span class="n">to_onnx_graph</span>
+
+<span class="c1"># Export a complete pipeline</span>
+<span class="n">onnx_model</span> <span class="o">=</span> <span class="n">pipeline_to_onnx</span><span class="p">(</span><span class="n">fitted_pipeline</span><span class="p">)</span>
+
+<span class="c1"># Export a single transformer</span>
+<span class="n">onnx_model</span> <span class="o">=</span> <span class="n">to_onnx_graph</span><span class="p">(</span><span class="n">fitted_transformer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All transformer classes are covered by ONNX converters, with the exception of a small set of
+transformers whose operations have no ONNX-representable equivalent (e.g. window/partition
+aggregations, fuzzy string distance, and variable-length tokenization) - see each transformer’s
+docstring for ONNX support notes.</p>
+<p><a class="reference internal" href="api/onnx_converters.html"><span class="doc">View ONNX Export API</span></a></p>
 </section>
 </section>
 </section>
@@ -609,6 +642,7 @@ Each transformer implements <code class="docutils literal notranslate"><span cla
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalers">Scalers</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline">Pipeline</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-selection">Feature Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#onnx-export">ONNX Export</a></li>
 </ul>
 </li>
 </ul>

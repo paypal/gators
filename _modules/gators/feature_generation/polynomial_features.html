@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -341,6 +348,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -482,7 +496,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    **Example 1: Degree 2 polynomial with bias term**</span>
 
-<span class="sd">    &gt;&gt;&gt; from gators.discretizers import PolynomialFeatures</span>
+<span class="sd">    &gt;&gt;&gt; from gators.feature_generation import PolynomialFeatures</span>
 <span class="sd">    &gt;&gt;&gt; import polars as pl</span>
 <span class="sd">    &gt;&gt;&gt; X = pl.DataFrame({&#39;A&#39;: [1, 2], &#39;B&#39;: [3, 4]})</span>
 <span class="sd">    &gt;&gt;&gt; transformer = PolynomialFeatures(degree=2, include_bias=True)</span>
@@ -548,7 +562,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">col</span>
-                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">dtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">Boolean</span><span class="p">]</span>
             <span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span></div>
@@ -582,11 +596,10 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interaction_only</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">combination</span><span class="p">))</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span>
                     <span class="k">continue</span>
                 <span class="n">new_col_name</span> <span class="o">=</span> <span class="s2">&quot;__&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">combination</span><span class="p">)</span>
-                <span class="c1"># Multiply columns directly to preserve dtype</span>
                 <span class="n">new_col_expr</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">combination</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">combination</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
                     <span class="n">new_col_expr</span> <span class="o">=</span> <span class="n">new_col_expr</span> <span class="o">*</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
-                <span class="n">transformations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_col_expr</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">))</span>
+                <span class="n">transformations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_col_expr</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">transformations</span><span class="p">)</span></div>
 </div>

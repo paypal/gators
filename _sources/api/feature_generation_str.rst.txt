@@ -7,6 +7,7 @@ Text Properties
 * :class:`~gators.feature_generation_str.character_statistics.CharacterStatistics` - Character-level statistics
 * :class:`~gators.feature_generation_str.length.Length` - String length
 * :class:`~gators.feature_generation_str.occurrences.Occurrences` - Count substring occurrences
+* :class:`~gators.feature_generation_str.word_statistics.WordStatistics` - Word-level statistics
 
 Text Patterns
 -------------
@@ -33,3 +34,4 @@ Text Interaction
 
 * :class:`~gators.feature_generation_str.interaction_features.InteractionFeatures` - Exhaustive string interactions
 * :class:`~gators.feature_generation_str.combine_features.CombineFeatures` - Selected string interactions
+* :class:`~gators.feature_generation_str.string_similarity.StringSimilarity` - Fuzzy string similarity (Levenshtein / Jaro-Winkler)

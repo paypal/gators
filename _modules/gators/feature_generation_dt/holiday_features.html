@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -344,6 +351,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -456,9 +470,16 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">holidays</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrivateAttr</span><span class="p">,</span> <span class="n">field_validator</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
+
+<span class="n">_ALL_FEATURES_ORDER</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;is_holiday&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nearest_holiday_distance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;days_to_holiday&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;days_from_holiday&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="HolidayFeatures">
@@ -489,6 +510,10 @@
 <span class="sd">        - &quot;days_to_holiday&quot;: Days until next holiday (negative if past)</span>
 <span class="sd">        - &quot;days_from_holiday&quot;: Days since last holiday (negative if future)</span>
 <span class="sd">        - &quot;nearest_holiday_distance&quot;: Absolute days to nearest holiday</span>
+<span class="sd">    lookahead_years : int, default=1</span>
+<span class="sd">        Number of additional years beyond the last training year for which</span>
+<span class="sd">        holidays are pre-computed.  Ensures the fitted transformer remains</span>
+<span class="sd">        correct when applied to data collected after the training period.</span>
 <span class="sd">    drop_columns : bool, default=False</span>
 <span class="sd">        Whether to drop the original datetime columns after feature extraction.</span>
 
@@ -552,9 +577,11 @@
     <span class="n">country</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;US&quot;</span>
     <span class="n">years</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">features</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;is_holiday&quot;</span><span class="p">,</span> <span class="s2">&quot;days_to_holiday&quot;</span><span class="p">,</span> <span class="s2">&quot;days_from_holiday&quot;</span><span class="p">]</span>
+    <span class="n">lookahead_years</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">_holidays</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">_years</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_features</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">features</span><span class="p">):</span>
@@ -603,17 +630,28 @@
             <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
                 <span class="n">col_years</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
                 <span class="n">years_set</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">col_years</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_years</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">years_set</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_years</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">years_set</span><span class="p">)</span>
 
         <span class="c1"># Build holiday dictionary using holidays library</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">country_holidays</span> <span class="o">=</span> <span class="n">holidays</span><span class="o">.</span><span class="n">country_holidays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="p">,</span> <span class="n">years</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_years</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_holidays</span> <span class="o">=</span> <span class="p">{</span><span class="n">date</span><span class="p">:</span> <span class="n">name</span> <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">country_holidays</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">max_year</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_years</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_years</span> <span class="k">else</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span>
+            <span class="n">min_year</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_years</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_years</span> <span class="k">else</span> <span class="n">max_year</span>
+            <span class="n">extended_years</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">min_year</span><span class="p">,</span> <span class="n">max_year</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookahead_years</span><span class="p">))</span>
+            <span class="n">country_holidays</span> <span class="o">=</span> <span class="n">holidays</span><span class="o">.</span><span class="n">country_holidays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="p">,</span> <span class="n">years</span><span class="o">=</span><span class="n">extended_years</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_holidays</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">country_holidays</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="ne">NotImplementedError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Country code &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">country</span><span class="si">}</span><span class="s2">&#39; is not supported by the holidays library. &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;Please check https://pypi.org/project/holidays/ for supported countries.&quot;</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+        <span class="n">ordered_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_ALL_FEATURES_ORDER</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">col</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">feature</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">ordered_features</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_dtypes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">new</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span> <span class="k">for</span> <span class="n">names</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">new</span> <span class="ow">in</span> <span class="n">names</span>
+        <span class="p">}</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -648,7 +686,7 @@
 
                 <span class="c1"># Use is_in for efficient lookup</span>
                 <span class="n">is_holiday_expr</span> <span class="o">=</span> <span class="n">date_col</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">holiday_dates_list</span><span class="p">)</span>
-                <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">is_holiday_expr</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__is_holiday&quot;</span><span class="p">))</span>
+                <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">is_holiday_expr</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__is_holiday&quot;</span><span class="p">))</span>
 
             <span class="c1"># Calculate distance features (optimized for large datasets)</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -664,7 +702,7 @@
                     <span class="k">if</span> <span class="s2">&quot;nearest_holiday_distance&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
                         <span class="c1"># Calculate distance to each holiday and find minimum</span>
                         <span class="n">distance_exprs</span> <span class="o">=</span> <span class="p">[</span>
-                            <span class="p">(</span><span class="n">date_col</span> <span class="o">-</span> <span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">hdate</span><span class="p">))</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">total_days</span><span class="p">()</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Int32</span><span class="p">)</span>
+                            <span class="p">(</span><span class="n">date_col</span> <span class="o">-</span> <span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">hdate</span><span class="p">))</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">total_days</span><span class="p">()</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span>
                             <span class="k">for</span> <span class="n">hdate</span> <span class="ow">in</span> <span class="n">holiday_dates_sorted</span>
                         <span class="p">]</span>
                         <span class="k">if</span> <span class="n">distance_exprs</span><span class="p">:</span>
@@ -677,7 +715,7 @@
                         <span class="c1"># Days to next holiday (positive values only for future dates)</span>
                         <span class="n">future_distance_exprs</span> <span class="o">=</span> <span class="p">[</span>
                             <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">((</span><span class="n">date_col</span> <span class="o">-</span> <span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">hdate</span><span class="p">))</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">total_days</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
-                            <span class="o">.</span><span class="n">then</span><span class="p">((</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">hdate</span><span class="p">)</span> <span class="o">-</span> <span class="n">date_col</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">total_days</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Int32</span><span class="p">))</span>
+                            <span class="o">.</span><span class="n">then</span><span class="p">((</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">hdate</span><span class="p">)</span> <span class="o">-</span> <span class="n">date_col</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">total_days</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">))</span>
                             <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
                             <span class="k">for</span> <span class="n">hdate</span> <span class="ow">in</span> <span class="n">holiday_dates_sorted</span>
                         <span class="p">]</span>
@@ -689,7 +727,7 @@
                         <span class="c1"># Days from last holiday (positive values only for past dates)</span>
                         <span class="n">past_distance_exprs</span> <span class="o">=</span> <span class="p">[</span>
                             <span class="n">pl</span><span class="o">.</span><span class="n">when</span><span class="p">((</span><span class="n">date_col</span> <span class="o">-</span> <span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">hdate</span><span class="p">))</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">total_days</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
-                            <span class="o">.</span><span class="n">then</span><span class="p">((</span><span class="n">date_col</span> <span class="o">-</span> <span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">hdate</span><span class="p">))</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">total_days</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Int32</span><span class="p">))</span>
+                            <span class="o">.</span><span class="n">then</span><span class="p">((</span><span class="n">date_col</span> <span class="o">-</span> <span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">hdate</span><span class="p">))</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">total_days</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">))</span>
                             <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
                             <span class="k">for</span> <span class="n">hdate</span> <span class="ow">in</span> <span class="n">holiday_dates_sorted</span>
                         <span class="p">]</span>

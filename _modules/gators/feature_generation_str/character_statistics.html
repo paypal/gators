@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -344,6 +351,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -453,9 +467,22 @@
                   
   <h1>Source code for gators.feature_generation_str.character_statistics</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrivateAttr</span><span class="p">,</span> <span class="n">field_validator</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
+
+<span class="n">_ALL_FEATURES_ORDER</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;n_digits&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_letters&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_uppercase&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_lowercase&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_spaces&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_special&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;n_unique_chars&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ratio_uppercase&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ratio_digits&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ratio_special&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="CharacterStatistics">
@@ -547,6 +574,7 @@
         <span class="s2">&quot;n_special&quot;</span><span class="p">,</span>
     <span class="p">]</span>
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_features</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">features</span><span class="p">):</span>
@@ -591,6 +619,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">String</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pl</span><span class="o">.</span><span class="n">Utf8</span>
             <span class="p">]</span>
+        <span class="n">ordered_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">_ALL_FEATURES_ORDER</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">col</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ordered_features</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_dtypes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">new</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span> <span class="k">for</span> <span class="n">names</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">new</span> <span class="ow">in</span> <span class="n">names</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
@@ -619,35 +654,35 @@
 
             <span class="c1"># Count features</span>
             <span class="k">if</span> <span class="s2">&quot;n_digits&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
-                <span class="n">n_digits</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_digits&quot;</span><span class="p">)</span>
+                <span class="n">n_digits</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_digits&quot;</span><span class="p">)</span>
                 <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_digits</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="s2">&quot;n_letters&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
-                <span class="n">n_letters</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-zA-Z]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_letters&quot;</span><span class="p">)</span>
+                <span class="n">n_letters</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-zA-Z]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_letters&quot;</span><span class="p">)</span>
                 <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_letters</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="s2">&quot;n_uppercase&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
-                <span class="n">n_uppercase</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[A-Z]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_uppercase&quot;</span><span class="p">)</span>
+                <span class="n">n_uppercase</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[A-Z]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_uppercase&quot;</span><span class="p">)</span>
                 <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_uppercase</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="s2">&quot;n_lowercase&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
-                <span class="n">n_lowercase</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_lowercase&quot;</span><span class="p">)</span>
+                <span class="n">n_lowercase</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_lowercase&quot;</span><span class="p">)</span>
                 <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_lowercase</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="s2">&quot;n_spaces&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
-                <span class="n">n_spaces</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_spaces&quot;</span><span class="p">)</span>
+                <span class="n">n_spaces</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_spaces&quot;</span><span class="p">)</span>
                 <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_spaces</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="s2">&quot;n_special&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
                 <span class="c1"># Special chars: not letters, digits, or spaces</span>
-                <span class="n">n_special</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-zA-Z0-9\s]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_special&quot;</span><span class="p">)</span>
+                <span class="n">n_special</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">count_matches</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^a-zA-Z0-9\s]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_special&quot;</span><span class="p">)</span>
                 <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_special</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="s2">&quot;n_unique_chars&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
                 <span class="c1"># Count unique characters by exploding into chars and counting unique</span>
                 <span class="n">n_unique</span> <span class="o">=</span> <span class="n">col_expr</span><span class="o">.</span><span class="n">map_elements</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">return_dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">Int64</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_unique_chars&quot;</span><span class="p">)</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">return_dtype</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__n_unique_chars&quot;</span><span class="p">)</span>
                 <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_unique</span><span class="p">)</span>
 
             <span class="c1"># Ratio features</span>

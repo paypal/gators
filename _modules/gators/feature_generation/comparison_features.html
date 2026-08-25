@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -341,6 +348,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -676,7 +690,7 @@
             <span class="s2">&quot;is_not_null&quot;</span><span class="p">:</span> <span class="s2">&quot;is_not_null&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="k">for</span> <span class="n">col_a</span><span class="p">,</span> <span class="n">col_b</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operators</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">col_a</span><span class="p">,</span> <span class="n">col_b</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subset_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">operators</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="n">op_name</span> <span class="o">=</span> <span class="n">op_names</span><span class="p">[</span><span class="n">op</span><span class="p">]</span>
 
             <span class="c1"># For unary operators, only use column_a in the name</span>
@@ -685,8 +699,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_a</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">op_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">col_b</span><span class="si">}</span><span class="s2">&quot;</span>
 
-            <span class="n">comparison_expr</span> <span class="o">=</span> <span class="n">COMPARISON_OPERATORS</span><span class="p">[</span><span class="n">op</span><span class="p">](</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col_a</span><span class="p">),</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col_b</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span>
-                <span class="n">new_col_name</span>
+            <span class="n">comparison_expr</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">COMPARISON_OPERATORS</span><span class="p">[</span><span class="n">op</span><span class="p">](</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col_a</span><span class="p">),</span> <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col_b</span><span class="p">))</span>
+                <span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">new_col_name</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">new_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comparison_expr</span><span class="p">)</span>
 

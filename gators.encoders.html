@@ -237,6 +237,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -356,6 +363,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -1166,7 +1180,7 @@ Ignored when inplace=True.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>subset</strong> (list<em>[</em>str<em>]</em><em>, </em><em>default=None</em>) – List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.</p></li>
-<li><p><strong>default</strong> (str<em>, </em><em>default=&quot;RARE&quot;</em>) – Value to replace rare categories with.</p></li>
+<li><p><strong>default</strong> (str<em>, </em><em>default=&quot;__RARE__&quot;</em>) – Value to replace rare categories with.</p></li>
 <li><p><strong>min_count</strong> (<em>PositiveInt</em><em> | </em><em>PositiveFloat</em><em>, </em><em>default=2</em>) – Minimum count threshold for categories. Categories below this threshold are replaced with <cite>default</cite>. If &gt;= 1, treated as absolute count; if &lt; 1, treated as frequency.</p></li>
 <li><p><strong>inplace</strong> (bool<em>, </em><em>default=True</em>) – If True, replace original columns with encoded values.
 If False, create new columns with suffix ‘__encode_rare’.</p></li>
@@ -1341,11 +1355,11 @@ Ignored when inplace=True.</p></li>
 <span class="go">│ str         │ bool        │ f64           │ f64           │</span>
 <span class="go">╞═════════════╪═════════════╪═══════════════╪═══════════════╡</span>
 <span class="go">│ foo         │ true        │ 1.0           │ 1.0           │</span>
-<span class="go">│ bar         │ false       │ 1.0           │ 0.0           │</span>
+<span class="go">│ bar         │ false       │ 0.5           │ 0.0           │</span>
 <span class="go">│ foo         │ true        │ 1.0           │ 1.0           │</span>
-<span class="go">│ bar         │ true        │ 1.0           │ 1.0           │</span>
+<span class="go">│ bar         │ true        │ 0.5           │ 1.0           │</span>
 <span class="go">│ baz         │ false       │ 0.0           │ 0.0           │</span>
-<span class="go">└─────────────┴─────────────┴───────────────┴─────────────┘</span>
+<span class="go">└─────────────┴─────────────┴───────────────┴───────────────┘</span>
 </pre></div>
 </div>
 <p>Subset of columns:</p>
@@ -1442,7 +1456,7 @@ Ignored when inplace=True.</p></li>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Encoding with drop_columns=False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">WOEEncoder</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">drop_columns</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">WOEEncoder</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">drop_columns</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_X</span> <span class="o">=</span><span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">transformed_X</span><span class="p">)</span>

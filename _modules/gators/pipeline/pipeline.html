@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -341,6 +348,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -472,6 +486,44 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a compact stats string for a DataFrame (used by verbose mode).&quot;&quot;&quot;</span>
     <span class="n">n_nulls</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">null_count</span><span class="p">()</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;rows=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">}</span><span class="s2">  cols=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">  nulls=</span><span class="si">{</span><span class="n">n_nulls</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_transformer_source_columns</span><span class="p">(</span><span class="n">transformer</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return every column name a transformer reads from.</span>
+
+<span class="sd">    Most transformers expose their inputs via ``subset``, but feature generators</span>
+<span class="sd">    such as ``GeneralizedRatioFeatures``, ``HHIFeatures`` and</span>
+<span class="sd">    ``RowStatisticsFeatures`` key their source columns under different attribute</span>
+<span class="sd">    names (``column_groups``, ``numerator_columns``/``denominator_columns``)</span>
+<span class="sd">    instead. Both lineage tracing (``get_initial_features``) and step pruning</span>
+<span class="sd">    (``trim_to``) need this full set to avoid dropping/ignoring columns those</span>
+<span class="sd">    generators still depend on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;subset&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;operations&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;column&quot;</span> <span class="ow">in</span> <span class="n">op</span><span class="p">:</span>
+            <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="p">[</span><span class="s2">&quot;column&quot;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;column_pairs&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="n">cols</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+    <span class="n">group_by</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;group_by_column&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">group_by</span><span class="p">:</span>
+        <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_by</span><span class="p">)</span>
+
+    <span class="n">column_groups</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;column_groups&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column_groups</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">column_groups</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">cols</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">column_groups</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">column_groups</span><span class="p">:</span>
+            <span class="n">cols</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;numerator_columns&quot;</span><span class="p">,</span> <span class="s2">&quot;denominator_columns&quot;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+            <span class="n">cols</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cols</span>
 
 
 <div class="viewcode-block" id="Pipeline">
@@ -660,7 +712,7 @@
 
 <div class="viewcode-block" id="Pipeline.fit_transform">
 <a class="viewcode-back" href="../../../gators.pipeline.html#gators.pipeline.Pipeline.fit_transform">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">pl</span><span class="o">.</span><span class="n">LazyFrame</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Series</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit all transformers and transform the data.</span>
 
 <span class="sd">        Fits and transforms each transformer sequentially. This is more</span>
@@ -668,8 +720,9 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        X : pl.DataFrame</span>
-<span class="sd">            Input DataFrame to fit and transform.</span>
+<span class="sd">        X : pl.DataFrame or pl.LazyFrame</span>
+<span class="sd">            Input DataFrame to fit and transform. A LazyFrame is collected once</span>
+<span class="sd">            before fitting.</span>
 <span class="sd">        y : pl.Series, default=None</span>
 <span class="sd">            Target series for supervised transformers.</span>
 
@@ -678,6 +731,8 @@
 <span class="sd">        pl.DataFrame</span>
 <span class="sd">            Transformed DataFrame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">LazyFrame</span><span class="p">):</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
         <span class="n">X_transformed</span> <span class="o">=</span> <span class="n">X</span>
 
         <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">transformer</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">):</span>
@@ -696,6 +751,10 @@
                     <span class="sa">f</span><span class="s2">&quot;  |  in: </span><span class="si">{</span><span class="n">in_stats</span><span class="si">}</span><span class="s2">  →  out: </span><span class="si">{</span><span class="n">out_stats</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s)&quot;</span>
                 <span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_fitted</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input_dtypes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">dtypes</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">X_transformed</span></div>
 
 
@@ -850,18 +909,240 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation of the pipeline.</span>
+<div class="viewcode-block" id="Pipeline.get_initial_features">
+<a class="viewcode-back" href="../../../gators.pipeline.html#gators.pipeline.Pipeline.get_initial_features">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_initial_features</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the initial input columns that contribute to the pipeline output.</span>
+
+<span class="sd">        Traces forward through each step&#39;s column evolution and then resolves</span>
+<span class="sd">        which of the original input columns are actually needed, accounting for:</span>
+
+<span class="sd">        - **Passthrough** columns that survive unchanged to the final output.</span>
+<span class="sd">        - **Source** columns whose values were used to build new features (even</span>
+<span class="sd">          if the source column itself was later dropped).</span>
+<span class="sd">        - **Dropped** columns that neither survive nor produce any final output</span>
+<span class="sd">          column — these are *excluded* from the result.</span>
+
+<span class="sd">        The returned list preserves the original column order from the DataFrame</span>
+<span class="sd">        passed to ``fit()``.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        str</span>
-<span class="sd">            Human-readable string representation showing all steps.</span>
+<span class="sd">        list[str]</span>
+<span class="sd">            Initial input column names required to produce the current output.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NotFittedError</span>
+<span class="sd">            If the pipeline has not been fitted yet.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">        &gt;&gt;&gt; from gators.pipeline import Pipeline</span>
+<span class="sd">        &gt;&gt;&gt; from gators.imputers import NumericImputer</span>
+<span class="sd">        &gt;&gt;&gt; from gators.data_cleaning import SelectColumns</span>
+<span class="sd">        &gt;&gt;&gt; from gators.scalers import StandardScaler</span>
+
+<span class="sd">        &gt;&gt;&gt; X = pl.DataFrame({&quot;A&quot;: [1.0, None], &quot;B&quot;: [2.0, 3.0], &quot;C&quot;: [4.0, 5.0]})</span>
+<span class="sd">        &gt;&gt;&gt; pipe = Pipeline(steps=[</span>
+<span class="sd">        ...     (&quot;impute&quot;, NumericImputer(strategy=&quot;median&quot;)),</span>
+<span class="sd">        ...     (&quot;select&quot;, SelectColumns(subset=[&quot;A&quot;, &quot;B&quot;])),</span>
+<span class="sd">        ...     (&quot;scale&quot;,  StandardScaler()),</span>
+<span class="sd">        ... ])</span>
+<span class="sd">        &gt;&gt;&gt; pipe.fit(X)</span>
+<span class="sd">        &gt;&gt;&gt; pipe.get_initial_features()</span>
+<span class="sd">        [&#39;A&#39;, &#39;B&#39;]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">steps_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">transformer</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Pipeline(</span><span class="se">\n</span><span class="si">{</span><span class="n">steps_str</span><span class="si">}</span><span class="se">\n</span><span class="s2">)&quot;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_is_fitted</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">..onnx_converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_output_columns</span> <span class="k">as</span> <span class="n">_get_output_columns</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="c1"># Fallback when onnx is not installed: return all initial columns</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)</span>
+
+        <span class="c1"># ── Phase 1: forward simulation ──────────────────────────────────────</span>
+        <span class="c1"># Compute the column list at each step boundary [0=initial, 1=after step 0, …]</span>
+        <span class="n">col_at</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)]</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">transformer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">:</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">_get_output_columns</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="n">current</span><span class="p">)</span>
+            <span class="n">col_at</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+
+        <span class="c1"># ── Phase 2: build column lineage (forward) ───────────────────────────</span>
+        <span class="c1"># lineage[col] = set of initial input columns that contributed to col</span>
+        <span class="n">lineage</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="p">{</span><span class="n">c</span><span class="p">}</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">step_idx</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">transformer</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">):</span>
+            <span class="n">col_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;_column_mapping&quot;</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{})</span>
+            <span class="c1"># Reverse map: generated_name → source_name (for renamed/encoded cols)</span>
+            <span class="n">reverse</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">col_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">}</span>
+            <span class="c1"># Collect all column names this transformer uses as source inputs</span>
+            <span class="n">subset</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_transformer_source_columns</span><span class="p">(</span><span class="n">transformer</span><span class="p">)</span>
+
+            <span class="n">new_lineage</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">out_col</span> <span class="ow">in</span> <span class="n">col_at</span><span class="p">[</span><span class="n">step_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">out_col</span> <span class="ow">in</span> <span class="n">lineage</span><span class="p">:</span>
+                    <span class="c1"># Passthrough: column existed before this step</span>
+                    <span class="n">new_lineage</span><span class="p">[</span><span class="n">out_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">lineage</span><span class="p">[</span><span class="n">out_col</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">out_col</span> <span class="ow">in</span> <span class="n">reverse</span> <span class="ow">and</span> <span class="n">reverse</span><span class="p">[</span><span class="n">out_col</span><span class="p">]</span> <span class="ow">in</span> <span class="n">lineage</span><span class="p">:</span>
+                    <span class="c1"># Renamed / encoded: inherits lineage of its source column</span>
+                    <span class="n">new_lineage</span><span class="p">[</span><span class="n">out_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">lineage</span><span class="p">[</span><span class="n">reverse</span><span class="p">[</span><span class="n">out_col</span><span class="p">]]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># New column from a feature generator: collect lineage of</span>
+                    <span class="c1"># all source columns in subset (conservative union)</span>
+                    <span class="n">src</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">subset</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lineage</span><span class="p">:</span>
+                            <span class="n">src</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">lineage</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
+                    <span class="n">new_lineage</span><span class="p">[</span><span class="n">out_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">src</span>
+
+            <span class="n">lineage</span> <span class="o">=</span> <span class="n">new_lineage</span>
+
+        <span class="c1"># ── Phase 3: collect required initial columns ─────────────────────────</span>
+        <span class="n">needed</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">sources</span> <span class="ow">in</span> <span class="n">lineage</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">needed</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sources</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">needed</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Pipeline.trim_to">
+<a class="viewcode-back" href="../../../gators.pipeline.html#gators.pipeline.Pipeline.trim_to">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">trim_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Pipeline&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a minimal fitted Pipeline that produces exactly ``output_cols``.</span>
+
+<span class="sd">        Walks backward from the desired output, keeping only steps that either</span>
+<span class="sd">        create or operate inplace on at least one requested column.  Steps that</span>
+<span class="sd">        exclusively produce columns absent from ``output_cols`` are dropped.</span>
+
+<span class="sd">        The returned pipeline is already fitted (the individual transformers</span>
+<span class="sd">        carry their learned state); it can be called with ``transform()``</span>
+<span class="sd">        immediately.  Its input schema is identical to the original pipeline&#39;s</span>
+<span class="sd">        input schema — the caller is responsible for providing all original</span>
+<span class="sd">        input columns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        output_cols : list[str]</span>
+<span class="sd">            Column names to retain in the output.  Every element must appear in</span>
+<span class="sd">            the full pipeline&#39;s output.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pipeline</span>
+<span class="sd">            A new, fitted ``Pipeline`` with redundant steps removed.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NotFittedError</span>
+<span class="sd">            If the pipeline has not been fitted yet.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If any element of ``output_cols`` is not produced by the pipeline.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import polars as pl</span>
+<span class="sd">        &gt;&gt;&gt; from gators.pipeline import Pipeline</span>
+<span class="sd">        &gt;&gt;&gt; from gators.imputers import NumericImputer</span>
+<span class="sd">        &gt;&gt;&gt; from gators.scalers import StandardScaler</span>
+<span class="sd">        &gt;&gt;&gt; from gators.feature_generation import PolynomialFeatures</span>
+
+<span class="sd">        &gt;&gt;&gt; X = pl.DataFrame({&quot;A&quot;: [1.0, 2.0], &quot;B&quot;: [3.0, 4.0], &quot;C&quot;: [5.0, 6.0]})</span>
+<span class="sd">        &gt;&gt;&gt; pipe = Pipeline(steps=[</span>
+<span class="sd">        ...     (&quot;imp&quot;,   NumericImputer(strategy=&quot;mean&quot;)),</span>
+<span class="sd">        ...     (&quot;poly&quot;,  PolynomialFeatures(subset=[&quot;A&quot;, &quot;B&quot;, &quot;C&quot;], degree=2)),</span>
+<span class="sd">        ...     (&quot;scale&quot;, StandardScaler()),</span>
+<span class="sd">        ... ])</span>
+<span class="sd">        &gt;&gt;&gt; pipe.fit(X)</span>
+<span class="sd">        &gt;&gt;&gt; trimmed = pipe.trim_to([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; [name for name, _ in trimmed.steps]</span>
+<span class="sd">        [&#39;imp&#39;, &#39;scale&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_is_fitted</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">..onnx_converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_output_columns</span> <span class="k">as</span> <span class="n">_goc</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="k">return</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="c1"># Forward simulation: column set at each boundary</span>
+        <span class="n">col_at</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)]</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">_goc</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">cur</span><span class="p">)</span>
+            <span class="n">col_at</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+
+        <span class="n">unknown</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">output_cols</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">col_at</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">unknown</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Columns not produced by this pipeline: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">unknown</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">needed</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">output_cols</span><span class="p">)</span>
+        <span class="n">keep_indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">transformer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">before</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">col_at</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">after</span>  <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">col_at</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">new_cols</span>    <span class="o">=</span> <span class="n">after</span> <span class="o">-</span> <span class="n">before</span>
+            <span class="n">subset_cols</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">_transformer_source_columns</span><span class="p">(</span><span class="n">transformer</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">new_cols</span> <span class="o">&amp;</span> <span class="n">needed</span><span class="p">:</span>
+                <span class="c1"># Step creates columns we need → keep; its source cols become needed.</span>
+                <span class="c1"># Only propagate passthrough cols that originate from the pipeline</span>
+                <span class="c1"># input (not from other column-adding steps we may later drop).</span>
+                <span class="n">passthrough</span> <span class="o">=</span> <span class="p">(</span><span class="n">before</span> <span class="o">-</span> <span class="n">new_cols</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)</span> <span class="o">|</span> <span class="n">subset_cols</span><span class="p">)</span>
+                <span class="n">keep_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">needed</span> <span class="o">=</span> <span class="p">(</span><span class="n">needed</span> <span class="o">-</span> <span class="n">new_cols</span><span class="p">)</span> <span class="o">|</span> <span class="n">subset_cols</span> <span class="o">|</span> <span class="n">passthrough</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">new_cols</span> <span class="ow">and</span> <span class="n">subset_cols</span> <span class="o">&amp;</span> <span class="n">needed</span> <span class="o">&amp;</span> <span class="n">before</span><span class="p">:</span>
+                <span class="c1"># Step modifies values inplace on needed columns — no new dependencies</span>
+                <span class="n">keep_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># Forward-simulate through the TRIMMED steps to get the narrowed column</span>
+        <span class="c1"># set at each step boundary (different from the original col_at because</span>
+        <span class="c1"># dropped steps no longer add intermediate columns).</span>
+        <span class="n">sorted_keep</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">keep_indices</span><span class="p">)</span>
+        <span class="n">trimmed_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)]</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sorted_keep</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">_goc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">cur</span><span class="p">)</span>
+            <span class="n">trimmed_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+
+        <span class="c1"># Deepcopy kept transformers and restrict their subset/mappings to</span>
+        <span class="c1"># columns actually available in the trimmed context.</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+        <span class="n">narrowed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_keep</span><span class="p">):</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">transformer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">available</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">trimmed_cols</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>  <span class="c1"># cols before step i in trimmed pipeline</span>
+            <span class="n">orig_subset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">transformer</span><span class="p">,</span> <span class="s2">&quot;subset&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">transformer</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;subset&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">t</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">subset</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">available</span><span class="p">]</span>
+            <span class="n">new_subset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;subset&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+
+            <span class="c1"># Restrict column-keyed fitted dicts to available columns — but only when</span>
+            <span class="c1"># a dict is actually keyed by subset column names (e.g. WOEEncoder&#39;s</span>
+            <span class="c1"># _column_mapping). Feature generators (RowStatisticsFeatures, HHIFeatures,</span>
+            <span class="c1"># GeneralizedRatioFeatures, …) key these dicts by synthetic group names</span>
+            <span class="c1"># instead, so pruning by column availability would wipe them out entirely.</span>
+            <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;_offset&quot;</span><span class="p">,</span> <span class="s2">&quot;_scale&quot;</span><span class="p">,</span> <span class="s2">&quot;_statistics&quot;</span><span class="p">,</span> <span class="s2">&quot;_median&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;_clip_bounds&quot;</span><span class="p">,</span> <span class="s2">&quot;_column_mapping&quot;</span><span class="p">,</span> <span class="s2">&quot;_bins&quot;</span><span class="p">,</span> <span class="s2">&quot;_labels&quot;</span><span class="p">):</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">orig_subset</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">val</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">new_subset</span><span class="p">})</span>
+
+            <span class="n">narrowed</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
+
+        <span class="n">new_pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">narrowed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">new_pipe</span><span class="o">.</span><span class="n">_is_fitted</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">new_pipe</span><span class="o">.</span><span class="n">_input_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)</span>
+        <span class="n">new_pipe</span><span class="o">.</span><span class="n">_input_dtypes</span>  <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_dtypes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_pipe</span></div>
+</div>
+
 
 </pre></div>
 

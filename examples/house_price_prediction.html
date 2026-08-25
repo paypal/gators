@@ -242,6 +242,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -359,6 +366,13 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -494,6 +508,7 @@
 <li><p><a class="reference internal" href="#4.-Feature-Selection-with-Stability-Index"><span class="std std-ref">Feature Selection with Stability Index</span></a></p></li>
 <li><p><a class="reference internal" href="#5.-Train-Model-and-Evaluate"><span class="std std-ref">Train Model and Evaluate</span></a></p></li>
 <li><p><a class="reference internal" href="#6.-Generate-Predictions"><span class="std std-ref">Generate Predictions</span></a></p></li>
+<li><p><a class="reference internal" href="#7.-ONNX-Export"><span class="std std-ref">ONNX Export</span></a></p></li>
 <li><p><a class="reference internal" href="#Summary"><span class="std std-ref">Summary</span></a></p></li>
 </ol>
 </section>
@@ -506,6 +521,7 @@
 <li><p>Feature encoding (one-hot and count encoding)</p></li>
 <li><p>Feature stability analysis for robust feature selection</p></li>
 <li><p>Regression modeling with XGBoost</p></li>
+<li><p>ONNX export for portable, runtime-independent inference</p></li>
 </ul>
 <p><strong>Dataset:</strong> <a class="reference external" href="https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques">Kaggle House Prices - Advanced Regression Techniques</a></p>
 </section>
@@ -545,7 +561,7 @@
 <li><p>Fix problematic year values in GarageYrBlt</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data with &#39;NA&#39; strings interpreted as null values</span>
@@ -554,7 +570,6 @@
 
 <span class="c1"># Apply log transformation to target variable for better distribution</span>
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">with_columns</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;SalePrice&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">))</span>
-<span class="c1"># target =</span>
 
 <span class="c1"># Drop ID column and constant features</span>
 <span class="n">y_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span>
@@ -784,7 +799,7 @@ Test data shape: (1459, 79)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Number of selected stable features: 149
+Number of selected stable features: 147
 
 Top 10 features by importance:
 </pre></div></div>
@@ -800,7 +815,7 @@ Top 10 features by importance:
   white-space: pre-wrap;
 }
 </style>
-<small>shape: (10, 3)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>fsi</th><th>importance</th></tr><tr><td>str</td><td>f64</td><td>f32</td></tr></thead><tbody><tr><td>&quot;ExterQual&quot;</td><td>1.0</td><td>0.14603</td></tr><tr><td>&quot;OverallQual&quot;</td><td>1.0</td><td>0.128996</td></tr><tr><td>&quot;TotalBsmtSF_1stFlrSF_2ndFlrSF_…</td><td>1.0</td><td>0.071166</td></tr><tr><td>&quot;GarageCars&quot;</td><td>1.0</td><td>0.028733</td></tr><tr><td>&quot;GrLivArea&quot;</td><td>1.0</td><td>0.024264</td></tr><tr><td>&quot;TotalBsmtSF&quot;</td><td>1.0</td><td>0.024178</td></tr><tr><td>&quot;CentralAir&quot;</td><td>1.0</td><td>0.023048</td></tr><tr><td>&quot;CentralAir__Y&quot;</td><td>1.0</td><td>0.018462</td></tr><tr><td>&quot;GarageCond__TA&quot;</td><td>0.8</td><td>0.017281</td></tr><tr><td>&quot;YearBuilt&quot;</td><td>1.0</td><td>0.015729</td></tr></tbody></table></div></div>
+<small>shape: (10, 3)</small><table border="1" class="dataframe"><thead><tr><th>feature</th><th>fsi</th><th>importance</th></tr><tr><td>str</td><td>f64</td><td>f32</td></tr></thead><tbody><tr><td>&quot;ExterQual&quot;</td><td>1.0</td><td>0.144757</td></tr><tr><td>&quot;OverallQual&quot;</td><td>1.0</td><td>0.129108</td></tr><tr><td>&quot;TotalBsmtSF_1stFlrSF_2ndFlrSF_…</td><td>1.0</td><td>0.070859</td></tr><tr><td>&quot;GarageCars&quot;</td><td>1.0</td><td>0.028582</td></tr><tr><td>&quot;TotalBsmtSF&quot;</td><td>1.0</td><td>0.024367</td></tr><tr><td>&quot;GrLivArea&quot;</td><td>1.0</td><td>0.024277</td></tr><tr><td>&quot;CentralAir&quot;</td><td>1.0</td><td>0.022926</td></tr><tr><td>&quot;CentralAir__Y&quot;</td><td>1.0</td><td>0.018369</td></tr><tr><td>&quot;GarageCond__TA&quot;</td><td>0.8</td><td>0.017281</td></tr><tr><td>&quot;YearBuilt&quot;</td><td>1.0</td><td>0.015775</td></tr></tbody></table></div></div>
 </div>
 </section>
 <section id="5.-Train-Model-and-Evaluate">
@@ -854,7 +869,7 @@ False
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Cross-Validation RMSE: 0.1306 (+/- 0.0094)
+Cross-Validation RMSE: 0.1305 (+/- 0.0100)
 
 Final model trained successfully!
 </pre></div></div>
@@ -899,10 +914,205 @@ Final model trained successfully!
 Submission file created successfully!
 
 Predictions summary:
-Mean: $177,062.38
-Median: $156,061.42
-Min: $49,124.10
-Max: $472,172.97
+Mean: $177,317.23
+Median: $156,689.72
+Min: $47,496.06
+Max: $486,809.31
+</pre></div></div>
+</div>
+</section>
+<section id="7.-ONNX-Export">
+<h2>7. ONNX Export<a class="headerlink" href="#7.-ONNX-Export" title="Link to this heading">#</a></h2>
+<p>Convert the fitted pipeline and XGBoost regressor to ONNX for portable, runtime-independent inference.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">check_pipeline_onnx_compatibility</span></code></p></td>
+<td><p>Audit which steps have native ONNX converters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_to_onnx</span></code></p></td>
+<td><p>Export preprocessing pipeline to a self-contained ONNX graph</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pipeline_to_scoring_onnx</span></code></p></td>
+<td><p>Chain preprocessing graph with an ML model ONNX graph</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">create_session</span></code></p></td>
+<td><p>Create an <code class="docutils literal notranslate"><span class="pre">ORT_ENABLE_ALL</span></code>-optimised <code class="docutils literal notranslate"><span class="pre">InferenceSession</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">run_session</span></code></p></td>
+<td><p>Run session on a Polars DataFrame (supports batching)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gators.onnx_converters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">check_pipeline_onnx_compatibility</span><span class="p">,</span>
+    <span class="n">pipeline_to_onnx</span><span class="p">,</span>
+    <span class="n">pipeline_to_scoring_onnx</span><span class="p">,</span>
+    <span class="n">create_session</span><span class="p">,</span>
+    <span class="n">run_session</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">onnx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">ONNX_DIR</span> <span class="o">=</span> <span class="s2">&quot;onnx_models&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ONNX_DIR</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># ── 7.1  Audit ONNX compatibility ───────────────────────────────────</span>
+<span class="n">compat</span> <span class="o">=</span> <span class="n">check_pipeline_onnx_compatibility</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span>
+<span class="n">supported</span>     <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ok</span> <span class="ow">in</span> <span class="n">compat</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">ok</span><span class="p">)</span>
+<span class="n">not_supported</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">ok</span> <span class="ow">in</span> <span class="n">compat</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Native ONNX converters  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">supported</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">supported</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Identity pass-throughs  (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">not_supported</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">not_supported</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># ── 7.2  Export preprocessing pipeline ───────────────────────────────────</span>
+<span class="n">preprocessing_onnx</span> <span class="o">=</span> <span class="n">pipeline_to_onnx</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+<span class="n">onnx</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ONNX_DIR</span><span class="si">}</span><span class="s2">/house_price_preprocessing.onnx&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Preprocessing graph saved.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Nodes  : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Inputs : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">input</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Outputs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Native ONNX converters  (12): [&#39;cast_boolean_to_string&#39;, &#39;cast_int_to_float&#39;, &#39;cast_num_to_string&#39;, &#39;count_encoder&#39;, &#39;group_imputer&#39;, &#39;numerical_imputer_const&#39;, &#39;onehot&#39;, &#39;ratio_features&#39;, &#39;stat&#39;, &#39;string_imputer_const&#39;, &#39;string_imputer_missing&#39;, &#39;string_imputer_most_freq&#39;]
+Identity pass-throughs  (0): []
+
+Preprocessing graph saved.
+  Nodes  : 1558
+  Inputs : 78
+  Outputs: 349
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">onnxmltools</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert_xgboost</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">onnxmltools.convert.common.data_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatTensorType</span>
+
+<span class="n">feature_columns</span> <span class="o">=</span> <span class="n">selected_features</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_columns</span><span class="p">)</span>
+
+<span class="c1"># ── 7.3  Export XGBoost regressor to ONNX ────────────────────────────────────</span>
+<span class="c1"># estimator was fit() on a named Polars DataFrame, so its booster stores real column</span>
+<span class="c1"># names (e.g. &quot;OverallQual&quot;) instead of the &quot;f0&quot;,&quot;f1&quot;,... pattern onnxmltools expects</span>
+<span class="c1"># when converting a raw Booster - clear them so the dump uses generic feature indices.</span>
+<span class="n">booster</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">get_booster</span><span class="p">()</span>
+<span class="n">booster</span><span class="o">.</span><span class="n">feature_names</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">xgb_onnx</span> <span class="o">=</span> <span class="n">convert_xgboost</span><span class="p">(</span>
+    <span class="n">booster</span><span class="p">,</span>
+    <span class="n">initial_types</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="n">FloatTensorType</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_features</span><span class="p">]))],</span>
+<span class="p">)</span>
+<span class="n">onnx</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xgb_onnx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ONNX_DIR</span><span class="si">}</span><span class="s2">/house_price_xgb.onnx&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;XGBoost model exported  (</span><span class="si">{</span><span class="n">n_features</span><span class="si">}</span><span class="s2"> input features)&quot;</span><span class="p">)</span>
+
+<span class="c1"># ── 7.4  Build end-to-end scoring model: raw data → predicted log(SalePrice) ──</span>
+<span class="n">scoring_onnx</span> <span class="o">=</span> <span class="n">pipeline_to_scoring_onnx</span><span class="p">(</span>
+    <span class="n">pipe</span><span class="p">,</span>
+    <span class="n">xgb_onnx</span><span class="p">,</span>
+    <span class="n">feature_columns</span><span class="o">=</span><span class="n">feature_columns</span><span class="p">,</span>
+    <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">onnx</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">scoring_onnx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ONNX_DIR</span><span class="si">}</span><span class="s2">/house_price_scoring.onnx&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">End-to-end scoring model saved.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Inputs : </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">scoring_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">input</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Outputs: </span><span class="si">{</span><span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">scoring_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">output</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+XGBoost model exported  (147 input features)
+
+End-to-end scoring model saved.
+  Inputs : 78
+  Outputs: [&#39;variable&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># ── 7.5  Create ORT sessions and run inference ────────────────────────────────</span>
+<span class="n">pre_session</span>     <span class="o">=</span> <span class="n">create_session</span><span class="p">(</span><span class="n">preprocessing_onnx</span><span class="p">)</span>
+<span class="n">scoring_session</span> <span class="o">=</span> <span class="n">create_session</span><span class="p">(</span><span class="n">scoring_onnx</span><span class="p">,</span> <span class="n">optimized_model_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ONNX_DIR</span><span class="si">}</span><span class="s2">/house_price_scoring_opt.onnx&quot;</span><span class="p">)</span>
+
+<span class="c1"># Reload + clean the raw test data (X_test above was overwritten by feature selection)</span>
+<span class="n">X_test_raw</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../../../../Documents/kaggle/house/test.csv&#39;</span><span class="p">,</span> <span class="n">null_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NA&#39;</span><span class="p">])</span>
+<span class="n">X_test_raw</span> <span class="o">=</span> <span class="n">clean_data</span><span class="p">(</span><span class="n">X_test_raw</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Utilities&#39;</span><span class="p">]))</span>
+<span class="n">X_test_raw</span> <span class="o">=</span> <span class="n">X_test_raw</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">_input_columns</span><span class="p">)</span>
+
+<span class="n">X_test_onnx</span> <span class="o">=</span> <span class="n">run_session</span><span class="p">(</span><span class="n">pre_session</span><span class="p">,</span> <span class="n">X_test_raw</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ONNX preprocessing output: </span><span class="si">{</span><span class="n">X_test_onnx</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># End-to-end: raw data → predicted log(SalePrice)</span>
+<span class="n">onnx_preds</span> <span class="o">=</span> <span class="n">run_session</span><span class="p">(</span><span class="n">scoring_session</span><span class="p">,</span> <span class="n">X_test_raw</span><span class="p">)</span>
+<span class="n">onnx_output_name</span> <span class="o">=</span> <span class="n">scoring_onnx</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+<span class="n">onnx_log_predictions</span> <span class="o">=</span> <span class="n">onnx_preds</span><span class="p">[</span><span class="n">onnx_output_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">onnx_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">onnx_log_predictions</span><span class="p">)</span>
+
+<span class="c1"># ── 7.6  Compare xgb_onnx vs scoring_onnx ────────────────────────────────────</span>
+<span class="c1"># xgb_onnx expects a [N, F] float32 matrix — feed the same selected/cast features used to fit()</span>
+<span class="n">xgb_session</span>      <span class="o">=</span> <span class="n">create_session</span><span class="p">(</span><span class="n">xgb_onnx</span><span class="p">)</span>
+<span class="n">xgb_input_name</span>   <span class="o">=</span> <span class="n">xgb_session</span><span class="o">.</span><span class="n">get_inputs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+<span class="n">X_xgb</span>            <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+<span class="n">xgb_log_preds</span>    <span class="o">=</span> <span class="n">xgb_session</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="n">xgb_input_name</span><span class="p">:</span> <span class="n">X_xgb</span><span class="p">})[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">native_log_preds</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">max_diff</span>         <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xgb_log_preds</span> <span class="o">-</span> <span class="n">native_log_preds</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;Path&#39;</span><span class="si">:</span><span class="s2">&lt;45</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;log(SalePrice) first 5 rows&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">75</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;xgb_onnx  (gators features → xgb)&#39;</span><span class="si">:</span><span class="s2">&lt;45</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">xgb_log_preds</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;scoring_onnx (raw data → pipeline → xgb)&#39;</span><span class="si">:</span><span class="s2">&lt;45</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">onnx_log_predictions</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Max |xgb_onnx - native|: </span><span class="si">{</span><span class="n">max_diff</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">max_diff</span> <span class="o">&lt;</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Models diverge: </span><span class="si">{</span><span class="n">max_diff</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ONNX predictions match native predictions ✓&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ONNX preprocessing output: (1459, 349)
+
+Path                                          log(SalePrice) first 5 rows
+===========================================================================
+xgb_onnx  (gators features → xgb)             [12.239504 12.090002 12.271276 11.971485 12.584524]
+scoring_onnx (raw data → pipeline → xgb)      [11.725914 11.985086 12.135552 12.136435 12.146822]
+
+Max |xgb_onnx - native|: 1.24e-05
+ONNX predictions match native predictions ✓
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+2026-08-24 10:19:50.934 Python[54107:319616] 2026-08-24 10:19:50.934237 [W:onnxruntime:, inference_session.cc:2670 Initialize] Serializing optimized model with Graph Optimization level greater than ORT_ENABLE_EXTENDED and the NchwcTransformer enabled. The generated model may contain hardware specific optimizations, and should only be used in the same environment the model was optimized in.
 </pre></div></div>
 </div>
 </section>
@@ -985,6 +1195,7 @@ Max: $472,172.97
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4.-Feature-Selection-with-Stability-Index">4. Feature Selection with Stability Index</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5.-Train-Model-and-Evaluate">5. Train Model and Evaluate</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#6.-Generate-Predictions">6. Generate Predictions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#7.-ONNX-Export">7. ONNX Export</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Key-Takeaways:">Key Takeaways:</a></li>
 </ul>

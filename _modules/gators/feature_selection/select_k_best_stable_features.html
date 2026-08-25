@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -341,6 +348,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -502,7 +516,7 @@
 
     <span class="k">for</span> <span class="n">train_idx</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">skf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X_array</span><span class="p">,</span> <span class="n">y_array</span><span class="p">):</span>
         <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_array</span><span class="p">[</span><span class="n">train_idx</span><span class="p">],</span> <span class="n">y_array</span><span class="p">[</span><span class="n">train_idx</span><span class="p">])</span>
-        <span class="n">fold_importance</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">))</span>
+        <span class="n">fold_importance</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">estimator</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
         <span class="n">top_k_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
             <span class="n">pl</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span> <span class="s2">&quot;importance&quot;</span><span class="p">:</span> <span class="n">estimator</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">})</span>
             <span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;importance&quot;</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;feature&quot;</span><span class="p">]</span>

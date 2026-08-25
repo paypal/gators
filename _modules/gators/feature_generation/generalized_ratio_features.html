@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -341,6 +348,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -640,7 +654,7 @@
                     <span class="sa">f</span><span class="s2">&quot;Length of numerator_coefficients (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">numerator_coefficients</span><span class="p">)</span><span class="si">}</span><span class="s2">) &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;must match length of numerator_columns (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">numerator_columns</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
                 <span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">numerator_coefficients</span><span class="p">,</span> <span class="n">numerator_columns</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">numerator_coefficients</span><span class="p">,</span> <span class="n">numerator_columns</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;numerator_coefficients[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries &quot;</span>
@@ -658,7 +672,7 @@
                     <span class="sa">f</span><span class="s2">&quot;Length of denominator_coefficients (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">denominator_coefficients</span><span class="p">)</span><span class="si">}</span><span class="s2">) &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;must match length of denominator_columns (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">denominator_columns</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
                 <span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">denominator_coefficients</span><span class="p">,</span> <span class="n">denominator_columns</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">denominator_coefficients</span><span class="p">,</span> <span class="n">denominator_columns</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;denominator_coefficients[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries &quot;</span>
@@ -728,7 +742,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">default_names</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_default_name</span><span class="p">(</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">denom_cols</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">num_cols</span><span class="p">,</span> <span class="n">denom_cols</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numerator_columns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">denominator_columns</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">num_cols</span><span class="p">,</span> <span class="n">denom_cols</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numerator_columns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">denominator_columns</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="p">]</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">default_names</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">default_names</span><span class="p">)):</span>
@@ -748,6 +762,7 @@
                 <span class="sa">f</span><span class="s2">&quot;Use new_column_names to choose different names.&quot;</span>
             <span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
@@ -768,23 +783,29 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_columns</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">numerator_coefficients</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">denominator_coefficients</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerator_biases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">num_cols</span><span class="p">,</span> <span class="n">denom_cols</span><span class="p">,</span> <span class="n">num_coeffs</span><span class="p">,</span> <span class="n">denom_coeffs</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">new_col_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">numerator_columns</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">denominator_columns</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">numerator_coefficients</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">denominator_coefficients</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">numerator_biases</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_column_names</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">):</span>
 
             <span class="n">denom_terms</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">denom_cols</span><span class="p">,</span> <span class="n">denom_coeffs</span><span class="p">)</span>
+                <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">denom_cols</span><span class="p">,</span> <span class="n">denom_coeffs</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="p">]</span>
             <span class="n">denominator_expr</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">sum_horizontal</span><span class="p">(</span><span class="n">denom_terms</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span>
 
             <span class="k">if</span> <span class="n">num_cols</span><span class="p">:</span>
                 <span class="n">num_terms</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">num_coeffs</span><span class="p">)</span>
+                    <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">num_coeffs</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="p">]</span>
                 <span class="n">numerator_expr</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">sum_horizontal</span><span class="p">(</span><span class="n">num_terms</span><span class="p">)</span> <span class="o">+</span> <span class="n">bias</span>
             <span class="k">else</span><span class="p">:</span>

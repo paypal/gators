@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -344,6 +351,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -452,10 +466,14 @@
                 <article class="bd-article">
                   
   <h1>Source code for gators.encoders.onehot_encoder</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">PositiveInt</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">PositiveFloat</span><span class="p">,</span> <span class="n">PositiveInt</span><span class="p">,</span> <span class="n">PrivateAttr</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..transformer._base_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseTransformer</span>
+
+<span class="n">_norm_col</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;_{3,}&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="OneHotEncoder">
@@ -548,6 +566,8 @@
     <span class="n">column_categories</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">min_count</span><span class="p">:</span> <span class="n">PositiveInt</span> <span class="o">|</span> <span class="n">PositiveFloat</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">drop_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">_column_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="OneHotEncoder.fit">
 <a class="viewcode-back" href="../../../gators.encoders.html#gators.encoders.OneHotEncoder.fit">[docs]</a>
@@ -568,6 +588,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">col</span><span class="p">:</span> <span class="p">[</span><span class="n">_norm_col</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">cats</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">cats</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_output_dtypes</span><span class="p">()</span>
             <span class="k">return</span> <span class="bp">self</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
@@ -575,7 +600,7 @@
                 <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">dtype</span><span class="o">.</span><span class="n">base_type</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CAT_DTYPES</span>
             <span class="p">]</span>
 
-        <span class="n">X_filled</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="s2">&quot;MISSING_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">])</span>
+        <span class="n">X_filled</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="s2">&quot;MISSING__&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -586,8 +611,21 @@
             <span class="n">valid_categories</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">valid_categories</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_column_mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">col</span><span class="p">:</span> <span class="p">[</span><span class="n">_norm_col</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">cats</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">cats</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_output_dtypes</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_output_dtypes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Declare Float64 for every generated one-hot indicator column.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_dtypes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">_norm_col</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span> <span class="n">pl</span><span class="o">.</span><span class="n">Float64</span>
+            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">cats</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">cats</span>
+        <span class="p">}</span>
 
 <div class="viewcode-block" id="OneHotEncoder.transform">
 <a class="viewcode-back" href="../../../gators.encoders.html#gators.encoders.OneHotEncoder.transform">[docs]</a>
@@ -613,11 +651,15 @@
         <span class="n">X_encode</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">cols_to_encode</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cat_cols</span><span class="p">:</span>
             <span class="n">X_encode</span> <span class="o">=</span> <span class="n">X_encode</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">String</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cat_cols</span><span class="p">])</span>
+        <span class="c1"># Nulls must map to the &quot;MISSING__&quot; category learned in fit(), not Polars&#39; own null handling.</span>
+        <span class="n">X_encode</span> <span class="o">=</span> <span class="n">X_encode</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">fill_null</span><span class="p">(</span><span class="s2">&quot;MISSING__&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols_to_encode</span><span class="p">])</span>
         <span class="n">dummies</span> <span class="o">=</span> <span class="n">X_encode</span><span class="o">.</span><span class="n">to_dummies</span><span class="p">(</span><span class="n">separator</span><span class="o">=</span><span class="s2">&quot;__&quot;</span><span class="p">)</span>
+        <span class="c1"># Normalize 3+ consecutive underscores to __ (e.g. col____MISSING__ → col____MISSING__ → col__MISSING__)</span>
+        <span class="n">dummies</span> <span class="o">=</span> <span class="n">dummies</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="n">c</span><span class="p">:</span> <span class="n">_norm_col</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">dummies</span><span class="o">.</span><span class="n">columns</span><span class="p">})</span>
 
         <span class="c1"># Build expected columns list (pre-computed for efficiency)</span>
         <span class="n">expected_cols</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">cat_list</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">cat_list</span>
+            <span class="n">_norm_col</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">__</span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">cat_list</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_categories</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">cat_list</span>
         <span class="p">]</span>
         <span class="n">expected_cols_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">expected_cols</span><span class="p">)</span>
 
@@ -632,8 +674,9 @@
                 <span class="p">[</span><span class="n">pl</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">)]</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Just select existing columns</span>
             <span class="n">dummies</span> <span class="o">=</span> <span class="n">dummies</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">existing_cols</span><span class="p">)</span>
+        <span class="c1"># Enforce column_categories order so Python and ONNX output identical column sequences</span>
+        <span class="n">dummies</span> <span class="o">=</span> <span class="n">dummies</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">expected_cols</span><span class="p">)</span>
 
         <span class="c1"># Cast all to Float64 in single operation</span>
         <span class="n">dummies</span> <span class="o">=</span> <span class="n">dummies</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">))</span>

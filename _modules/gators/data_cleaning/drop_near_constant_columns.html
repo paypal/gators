@@ -226,6 +226,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -341,6 +348,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../benchmarking.html">
+    Benchmarking
   </a>
 </li>
 
@@ -584,7 +598,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_to_drop</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">col</span>
-            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">n_unique</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">columns_to_check</span><span class="p">,</span> <span class="n">n_unique_values</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">n_unique</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">columns_to_check</span><span class="p">,</span> <span class="n">n_unique_values</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">n_unique</span> <span class="o">&lt;=</span> <span class="n">max_unique</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span></div>
