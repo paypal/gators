@@ -13,6 +13,11 @@ try:
         _imputer_converters,  # noqa: F401
         _scaler_converters,  # noqa: F401
     )
+except ImportError:  # pragma: no cover
+    # ONNX package or converters not available - continue with basic functions
+    pass
+
+try:
     from ._converters import (
         check_pipeline_onnx_compatibility,
         get_input_onnx_type,
@@ -20,6 +25,17 @@ try:
         get_output_onnx_type,
         to_onnx_nodes,
     )
+except ImportError as _e:  # pragma: no cover
+    # Fallback for when onnx is not installed but ._converters is unavailable
+    _msg = _e
+
+    def _unavailable(*args, **kwargs):  # type: ignore[misc]
+        raise _msg
+
+    to_onnx_nodes = _unavailable  # type: ignore[assignment]
+    get_input_onnx_type = get_output_columns = get_output_onnx_type = _unavailable  # type: ignore[assignment]
+
+try:
     from ._export import (
         create_session,
         pipeline_to_onnx,
@@ -28,15 +44,12 @@ try:
         to_onnx_graph,
     )
 except ImportError as _e:  # pragma: no cover
-    # onnx is optional. Keep the module importable so test collection never
-    # errors; calling any function below will raise the original ImportError.
     _msg = _e
 
     def _unavailable(*args, **kwargs):  # type: ignore[misc]
         raise _msg
 
     to_onnx_graph = pipeline_to_onnx = to_onnx_nodes = _unavailable  # type: ignore[assignment]
-    get_input_onnx_type = get_output_columns = get_output_onnx_type = _unavailable  # type: ignore[assignment]
     create_session = run_session = _unavailable  # type: ignore[assignment]
 
 __all__ = [

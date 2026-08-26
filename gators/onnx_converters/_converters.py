@@ -9,16 +9,30 @@ from ..pipeline.pipeline import Pipeline
 from ..transformer._base_transformer import _BaseTransformer
 from ._exceptions import OnnxNotSupportedError
 
+# Try to import ONNX, but allow module to load even if it's not installed
+_ONNX_AVAILABLE = False
+_ONNX_IMPORT_ERROR: BaseException | None = None
+
 try:
     import numpy as np
     import onnx
     import onnx.helper as oh
     from onnx import TensorProto
+    _ONNX_AVAILABLE = True
 except ImportError as exc:  # pragma: no cover
-    raise ImportError(
-        "The 'onnx' package is required for ONNX export. "
-        "Install it with: pip install gators[onnx]"
-    ) from exc
+    _ONNX_IMPORT_ERROR = (
+        ImportError(
+            "The 'onnx' package is required for ONNX export. "
+            "Install it with: pip install gators[onnx]"
+        )
+    )
+    # Set the cause for better error messages
+    _ONNX_IMPORT_ERROR.__cause__ = exc
+    # Define placeholders so module-level dict creation doesn't fail
+    TensorProto = None  # type: ignore[assignment,misc]
+    oh = None  # type: ignore[assignment]
+    onnx = None  # type: ignore[assignment]
+    np = None  # type: ignore[assignment]
 
 # Float64 → DOUBLE; Float32 → FLOAT; Boolean → BOOL; integer/temporal dtypes → INT64
 # (their physical/ordinal representation); all other numeric types fall back to DOUBLE.
@@ -26,16 +40,31 @@ _INTEGER_PL_DTYPES: tuple = (
     pl.Int8, pl.Int16, pl.Int32, pl.Int64, pl.UInt8, pl.UInt16, pl.UInt32, pl.UInt64,
 )
 _TEMPORAL_PL_DTYPES: tuple = (pl.Datetime, pl.Date, pl.Duration, pl.Time)
-_POLARS_TO_ONNX: dict[Any, int] = {
-    pl.Float32: TensorProto.FLOAT,
-    pl.Float64: TensorProto.DOUBLE,
-    pl.Boolean: TensorProto.BOOL,
-    **dict.fromkeys(_INTEGER_PL_DTYPES, TensorProto.INT64),
-}
 
-_FLOAT_ONNX_TYPES: frozenset = frozenset({TensorProto.FLOAT, TensorProto.DOUBLE})
-_FLOAT_DATATYPE_TO_ONNX: dict[str, int] = {"float32": TensorProto.FLOAT, "float64": TensorProto.DOUBLE}
-_FLOAT_DATATYPE_TO_PL: dict[str, Any] = {"float32": pl.Float32, "float64": pl.Float64}
+# Initialize lookup dicts - will be populated below if onnx is available
+_POLARS_TO_ONNX: dict[Any, int] = {}
+_FLOAT_ONNX_TYPES: frozenset = frozenset()
+_FLOAT_DATATYPE_TO_ONNX: dict[str, int] = {}
+_FLOAT_DATATYPE_TO_PL: dict[str, Any] = {}
+
+# Build lookup dicts only when onnx is available
+if _ONNX_AVAILABLE:  # pragma: no cover
+    _POLARS_TO_ONNX = {
+        pl.Float32: TensorProto.FLOAT,
+        pl.Float64: TensorProto.DOUBLE,
+        pl.Boolean: TensorProto.BOOL,
+        **dict.fromkeys(_INTEGER_PL_DTYPES, TensorProto.INT64),
+    }
+    _FLOAT_ONNX_TYPES = frozenset({TensorProto.FLOAT, TensorProto.DOUBLE})
+    _FLOAT_DATATYPE_TO_ONNX = {"float32": TensorProto.FLOAT, "float64": TensorProto.DOUBLE}
+    _FLOAT_DATATYPE_TO_PL = {"float32": pl.Float32, "float64": pl.Float64}
+
+
+def _ensure_onnx() -> None:
+    """Raise ImportError if onnx is not installed."""
+    if not _ONNX_AVAILABLE:  # pragma: no cover
+        assert _ONNX_IMPORT_ERROR is not None
+        raise _ONNX_IMPORT_ERROR
 
 
 def apply_float_dtype(onnx_type: int, float_datatype: str) -> int:
@@ -182,6 +211,7 @@ def to_onnx_nodes(
         'raise'  – raise OnnxNotSupportedError for unsupported transformers / strategies.
         'coerce' – emit Identity pass-through nodes so the graph stays valid.
     """
+    _ensure_onnx()
     if errors == "raise":
         raise OnnxNotSupportedError(
             f"No ONNX converter registered for '{type(transformer).__name__}'. "

@@ -10,7 +10,9 @@ class OrdinalEncoder(_BaseEncoder):
     Parameters
     ----------
     subset : list[str], default=None
-        List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
+        List of categorical columns to encode. If None, all string, categorical, and enum
+        columns are selected. Boolean columns are not auto-detected - cast them to String
+        first if you want them encoded.
     min_count : int | float, default=1
         Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     inplace : bool, default=True

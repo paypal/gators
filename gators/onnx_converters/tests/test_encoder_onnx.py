@@ -291,8 +291,9 @@ def test_pipeline_rare_encoder_non_inplace_keep(df_rare):
 # ── WOEEncoder on Boolean column (is_bool_str keys) ──────────────────────────
 
 def test_woe_encoder_boolean_column():
-    """WOEEncoder on a Boolean column uses 'true'/'false' string keys mapped to FLOAT ONNX input."""
+    """Boolean columns are not auto-encoded - cast to String first, then WOE-encode."""
     X = pl.DataFrame({"flag": [True, False, True, False, True], "val": [1.0, 2.0, 3.0, 4.0, 5.0]})
+    X = X.with_columns(pl.col("flag").cast(pl.String))
     y = pl.Series([1, 0, 1, 0, 1])
     enc = WOEEncoder(subset=["flag"])
     enc.fit(X, y=y)

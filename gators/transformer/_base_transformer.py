@@ -10,7 +10,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from ..exceptions import NotFittedError
 
 
-class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
+class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):  # type: ignore[misc]
     """
     Base class for all transformers in the gators library.
 
@@ -35,7 +35,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
             original_fit = cls.__dict__["fit"]
 
             @functools.wraps(original_fit)
-            def wrapped_fit(self, *args: Any, **kw: Any) -> Any:
+            def wrapped_fit(self: Any, *args: Any, **kw: Any) -> Any:
                 X = args[0] if args else kw.get("X")
                 if isinstance(X, pl.LazyFrame):
                     X = X.collect()
@@ -49,13 +49,13 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
                     self._input_dtypes = dict(zip(X.columns, X.dtypes, strict=False))
                 return result
 
-            cls.fit = wrapped_fit  # type: ignore[method-assign]
+            cls.fit = wrapped_fit
 
         if "transform" in cls.__dict__:
             original_transform = cls.__dict__["transform"]
 
             @functools.wraps(original_transform)
-            def wrapped_transform(self, *args: Any, **kw: Any) -> Any:
+            def wrapped_transform(self: Any, *args: Any, **kw: Any) -> Any:
                 self.check_is_fitted()
                 X = args[0] if args else kw.get("X")
                 if isinstance(X, pl.LazyFrame):
@@ -66,13 +66,13 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
                         kw = {**kw, "X": X}
                 return original_transform(self, *args, **kw)
 
-            cls.transform = wrapped_transform  # type: ignore[method-assign]
+            cls.transform = wrapped_transform
 
         if "inverse_transform" in cls.__dict__:
             original_inv = cls.__dict__["inverse_transform"]
 
             @functools.wraps(original_inv)
-            def wrapped_inverse(self, *args: Any, **kw: Any) -> Any:
+            def wrapped_inverse(self: Any, *args: Any, **kw: Any) -> Any:
                 self.check_is_fitted()
                 return original_inv(self, *args, **kw)
 
@@ -172,7 +172,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
         with open(path, "rb") as f:
             return cast("_BaseTransformer", pickle.load(f))  # noqa: S301
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize transformer with clear error message for positional arguments.
 
         Raises
@@ -208,7 +208,7 @@ class _BaseTransformer(BaseModel, BaseEstimator, TransformerMixin):
         # Return all Pydantic model fields
         return {key: getattr(self, key) for key in self.__class__.model_fields.keys()}
 
-    def set_params(self, **params) -> "_BaseTransformer":
+    def set_params(self, **params: Any) -> "_BaseTransformer":
         """Set parameters for this estimator.
 
         This overrides sklearn's BaseEstimator.set_params() to work with

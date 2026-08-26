@@ -134,9 +134,10 @@ class TestCatBoostEncoder:
         encoder.fit(X, y=target)
         result = encoder.transform(X)
 
-        # Should encode str_col and bool_col, but not int_col
+        # Should encode str_col only - bool_col/int_col are not auto-detected as categorical
+        # (cast bool_col to String first if you want it encoded).
         assert "str_col__catboost_enc" in result.columns
-        assert "bool_col__catboost_enc" in result.columns
+        assert "bool_col" in result.columns
         assert "int_col" in result.columns
 
     def test_drop_columns_false(self):

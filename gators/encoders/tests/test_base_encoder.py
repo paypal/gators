@@ -91,15 +91,21 @@ def test_inplace_true():
     assert result["cat2"].to_list() == [10.0, 20.0, 10.0, 30.0]
 
 
-def test_boolean_column_encoding():
-    """Test encoding boolean columns."""
+def test_boolean_column_not_auto_detected():
+    """Boolean columns are excluded from _CAT_DTYPES - cast to String to encode them."""
+    assert pl.Boolean not in ExampleEncoder()._CAT_DTYPES
+
+
+def test_boolean_column_cast_to_string_workaround():
+    """Recommended workaround: cast a boolean column to String before encoding."""
     X = pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
+    X = X.with_columns(pl.col("bool_col").cast(pl.String))
 
     encoder = ExampleEncoder(
         subset=["bool_col"],
         drop_columns=False,
         inplace=False,
-        mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
+        mapping_={"bool_col": {"true": 1.0, "false": 0.0}},
     )
     encoder._column_mapping = {"bool_col": ["bool_col_encoded"]}
     encoder._is_fitted = True
@@ -108,23 +114,6 @@ def test_boolean_column_encoding():
     assert "bool_col_encoded" in result.columns
     assert result["bool_col_encoded"].dtype == pl.Float64
     assert result["bool_col_encoded"].to_list() == [1.0, 0.0, 1.0, 0.0]
-
-
-def test_boolean_column_inplace():
-    """Test encoding boolean columns with inplace=True."""
-    X = pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
-
-    encoder = ExampleEncoder(
-        subset=["bool_col"],
-        inplace=True,
-        mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
-    )
-    encoder._is_fitted = True
-    result = encoder.transform(X)
-
-    assert "bool_col" in result.columns
-    assert result["bool_col"].dtype == pl.Float64
-    assert result["bool_col"].to_list() == [1.0, 0.0, 1.0, 0.0]
 
 
 def test_missing_category_default_value():

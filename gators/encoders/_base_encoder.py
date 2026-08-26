@@ -26,6 +26,9 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
     _BaseEncoder is a base class and should not be used directly.
     Use one of the concrete encoder implementations instead.
 
+    Boolean columns are not treated as categorical - cast them to String first
+    (e.g. ``CastColumns(dtype=pl.String)``) if you want them encoded.
+
     """
 
     subset: list[str] | None = None
@@ -35,7 +38,7 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
     drop_columns: bool = True
     inplace: bool = True
 
-    _CAT_DTYPES: set = {pl.String, pl.Categorical, pl.Enum, pl.Boolean}
+    _CAT_DTYPES: set = {pl.String, pl.Categorical, pl.Enum}
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting specified components.
@@ -52,58 +55,26 @@ class _BaseEncoder(_BaseTransformer, metaclass=ABCMeta):
         """
         default_value = 0.0
 
-        dtypes = dict(zip(X.columns, X.dtypes, strict=False))
-        boolean_cols = {col for col in self.mapping_ if dtypes.get(col) == pl.Boolean}
-
-        boolean_string_mappings = {
-            col: {str(k).lower(): v for k, v in self.mapping_[col].items()} for col in boolean_cols
-        }
-
         expressions = []
 
         if self.inplace:
             for col in self.mapping_:
-                if col in boolean_cols:
-                    # Boolean column: cast to string then replace
-                    expr = (
-                        pl.col(col)
-                        .cast(pl.String)
-                        .replace_strict(
-                            boolean_string_mappings[col],
-                            default=default_value,
-                            return_dtype=pl.Float64,
-                        )
-                    )
-                else:
-                    # Non-boolean: direct replacement
-                    expr = pl.col(col).replace_strict(
-                        self.mapping_[col],
-                        default=default_value,
-                        return_dtype=pl.Float64,
-                    )
+                expr = pl.col(col).replace_strict(
+                    self.mapping_[col],
+                    default=default_value,
+                    return_dtype=pl.Float64,
+                )
                 expressions.append(expr)
             return X.with_columns(expressions)
 
         for col in self.mapping_:
             new_col_name = self._column_mapping[col][0]
 
-            if col in boolean_cols:
-                expr = (
-                    pl.col(col)
-                    .cast(pl.String)
-                    .replace_strict(
-                        boolean_string_mappings[col], default=default_value, return_dtype=pl.Float64
-                    )
-                    .alias(new_col_name)
-                )
-            else:
-                expr = (
-                    pl.col(col)
-                    .replace_strict(
-                        self.mapping_[col], default=default_value, return_dtype=pl.Float64
-                    )
-                    .alias(new_col_name)
-                )
+            expr = (
+                pl.col(col)
+                .replace_strict(self.mapping_[col], default=default_value, return_dtype=pl.Float64)
+                .alias(new_col_name)
+            )
             expressions.append(expr)
 
         X = X.with_columns(expressions)

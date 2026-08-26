@@ -10,7 +10,7 @@ def sample_X():
     return pl.DataFrame(
         {
             "A": ["foo", "bar", "foo", "bar", "baz"],
-            "B": [True, False, True, True, False],
+            "B": ["true", "false", "true", "true", "false"],
         }
     )
 
@@ -40,7 +40,7 @@ def test_transform_with_columns_and_no_drop(sample_X, sample_target):
     expected_X = pl.DataFrame(
         {
             "A": ["foo", "bar", "foo", "bar", "baz"],
-            "B": [True, False, True, True, False],
+            "B": ["true", "false", "true", "true", "false"],
             "A__target_enc": [1.0, 0.5, 1.0, 0.5, 0.0],
         }
     )
@@ -79,7 +79,7 @@ def test_transform_unseen(sample_X, sample_target):
     sample_X_new = pl.DataFrame(
         {
             "A": [None, "bar", "foo", "bar", "zeta"],
-            "B": [None, False, True, True, False],
+            "B": [None, "false", "true", "true", "false"],
         }
     )
     transformed_X = encoder.transform(sample_X_new)
