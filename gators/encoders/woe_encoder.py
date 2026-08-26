@@ -200,5 +200,5 @@ class WOEEncoder(_BaseEncoder):
             if self.inplace
             else [name for names in self._column_mapping.values() for name in names]
         )
-        self._output_dtypes = {col: pl.Float64 for col in targeted}
+        self._output_dtypes = dict.fromkeys(targeted, pl.Float64)
         return self

@@ -290,7 +290,7 @@ class GeneralizedRatioFeatures(_BaseTransformer):
                 f"Use new_column_names to choose different names."
             )
 
-        self._output_dtypes = {col: pl.Float64 for col in self.new_column_names}
+        self._output_dtypes = dict.fromkeys(self.new_column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

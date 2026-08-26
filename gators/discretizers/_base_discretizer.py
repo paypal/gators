@@ -191,7 +191,7 @@ class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
             else [name for names in self._column_mapping.values() for name in names]
         )
         assert targeted is not None
-        self._output_dtypes = {col: out_dtype for col in targeted}
+        self._output_dtypes = dict.fromkeys(targeted, out_dtype)
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting specified components.

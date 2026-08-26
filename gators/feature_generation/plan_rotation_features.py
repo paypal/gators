@@ -88,7 +88,7 @@ class PlanRotationFeatures(_BaseTransformer):
             Fitted transformer instance.
         """
         self.flatten_columns = [c for cols in self.columns for c in cols]
-        self._output_dtypes = {col: pl.Float64 for col in self.column_names}
+        self._output_dtypes = dict.fromkeys(self.column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

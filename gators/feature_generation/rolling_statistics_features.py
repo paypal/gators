@@ -154,7 +154,7 @@ class RollingStatisticsFeatures(_BaseTransformer):
         self._new_column_names = [
             f"{col}__rolling_{fn}_{self.window_size}" for col in self.subset for fn in self.func
         ]
-        self._output_dtypes = {col: pl.Float64 for col in self._new_column_names}
+        self._output_dtypes = dict.fromkeys(self._new_column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

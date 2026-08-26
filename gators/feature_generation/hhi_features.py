@@ -152,7 +152,7 @@ class HHIFeatures(_BaseTransformer):
         if self.new_column_names is None:
             self.new_column_names = [self._default_name(group) for group in self.column_groups]
 
-        self._output_dtypes = {col: pl.Float64 for col in self.new_column_names}
+        self._output_dtypes = dict.fromkeys(self.new_column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

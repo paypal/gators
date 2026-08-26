@@ -296,7 +296,7 @@ class ScalarMathFeatures(_BaseTransformer):
         else:
             self._generated_column_names = self.new_column_names
 
-        self._output_dtypes = {col: pl.Float64 for col in self._generated_column_names}
+        self._output_dtypes = dict.fromkeys(self._generated_column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

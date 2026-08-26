@@ -170,7 +170,7 @@ class NumericImputer(_BaseTransformer):
 
         # Only compute statistics for strategies that need them
         if self.strategy == "constant":
-            self._statistics = {col: self.value for col in self.subset}
+            self._statistics = dict.fromkeys(self.subset, self.value)
         elif self.strategy == "median":
             # Compute all medians in single pass
             median_results = X.select([pl.col(c).median() for c in self.subset]).row(0)

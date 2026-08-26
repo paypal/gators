@@ -101,7 +101,7 @@ class StringImputer(_BaseTransformer):
             self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         if self.strategy == "constant":
-            self._statistics = {col: self.value for col in self.subset}
+            self._statistics = dict.fromkeys(self.subset, self.value)
         else:  # most_frequent
             # Compute all modes in single pass, handle ties by taking smallest value (alphabetically)
             self._statistics = {
