@@ -30,7 +30,7 @@ class QuantileClipper(_BaseClipper):
     Examples
     --------
     >>> import polars as pl
-    >>> from gators.clipping import QuantileClipper
+    >>> from gators.clippers import QuantileClipper
 
     >>> # Sample DataFrame with outliers
     >>> X = pl.DataFrame({
@@ -139,12 +139,13 @@ class QuantileClipper(_BaseClipper):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype not in [pl.String, pl.Boolean]
             ]
 
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__clip_quantile" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__clip_quantile"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         # Compute all quantiles in a single operation
         exprs = []

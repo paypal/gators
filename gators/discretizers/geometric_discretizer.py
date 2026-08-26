@@ -1,6 +1,6 @@
 import polars as pl
 
-from ._base_discretizer import _BaseDiscretizer, generate_labels
+from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels
 
 
 def compute_geometric_bins(
@@ -147,12 +147,12 @@ class GeometricDiscretizer(_BaseDiscretizer):
     ┌─────┬─────┐
     │ A   │ B   │
     │ --- │ --- │
-    │ i32 │ i32 │
+    │ f64 │ f64 │
     ├─────┼─────┤
-    │ 0   │ 0   │
-    │ 0   │ 0   │
-    │ 1   │ 1   │
-    │ 2   │ 2   │
+    │ 0.0 │ 0.0 │
+    │ 0.0 │ 0.0 │
+    │ 1.0 │ 1.0 │
+    │ 2.0 │ 2.0 │
     └─────┴─────┘
 
     >>> # Handling zero/negative values
@@ -196,12 +196,13 @@ class GeometricDiscretizer(_BaseDiscretizer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
 
         # Compute geometric bins - pass subset to avoid creating intermediate DataFrame
         self._bins = compute_geometric_bins(X, self.num_bins, subset=self.subset)
+        self._bins = deduplicate_bins(self._bins, self.rounding)
 
         # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, rounding=self.rounding)
@@ -214,6 +215,7 @@ class GeometricDiscretizer(_BaseDiscretizer):
 
         # Set column mapping for non-inplace mode
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__discretize_geom" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__discretize_geom"] for col in self.subset}
 
+        self._set_output_dtypes()
         return self

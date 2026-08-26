@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -16,9 +16,18 @@ OPERATION_FUNCTIONS = {
     "median": lambda cols: pl.concat_list(*cols).list.eval(pl.element().median()).list.first(),
     "range": lambda cols: pl.max_horizontal(*cols) - pl.min_horizontal(*cols),
     "abs_diff": lambda cols: pl.reduce(lambda x, y: (x - y).abs(), cols),
-    "count_null": lambda cols: pl.concat_list(*cols).list.eval(pl.element().is_null().sum()),
-    "count_zero": lambda cols: pl.concat_list(*cols).list.eval((pl.element() == 0).sum()),
-    "count_nonzero": lambda cols: pl.concat_list(*cols).list.eval((pl.element() != 0).sum()),
+    "count_null": lambda cols: pl.concat_list(*cols)
+    .list.eval(pl.element().is_null().sum())
+    .list.first()
+    .cast(pl.Float64),
+    "count_zero": lambda cols: pl.concat_list(*cols)
+    .list.eval((pl.element() == 0).sum())
+    .list.first()
+    .cast(pl.Float64),
+    "count_nonzero": lambda cols: pl.concat_list(*cols)
+    .list.eval((pl.element() != 0).sum())
+    .list.first()
+    .cast(pl.Float64),
 }
 
 
@@ -107,7 +116,7 @@ class MathFeatures(_BaseTransformer):
     func: list[str]
     drop_columns: bool = False
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("func")
     def check_func(cls, func):
@@ -134,8 +143,11 @@ class MathFeatures(_BaseTransformer):
         default_names = [f"{'_'.join(group)}" for group in self.groups]
         if not self.new_column_names:
             self.new_column_names = default_names
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -155,9 +167,11 @@ class MathFeatures(_BaseTransformer):
         for group in self.groups:
             name = f"{'_'.join(group)}"
             for op in self.func:
-                new = f"{self._column_mapping[name]}_{op}"
+                new = f"{self._column_mapping[name][0]}_{op}"
                 new_columns.append(
-                    OPERATION_FUNCTIONS[op]([pl.col(col) for col in group]).alias(new)
+                    OPERATION_FUNCTIONS[op]([pl.col(col) for col in group])
+                    .cast(pl.Float64)
+                    .alias(new)
                 )
         X = X.with_columns(new_columns)
 

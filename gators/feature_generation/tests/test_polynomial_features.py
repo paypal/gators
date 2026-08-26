@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation import PolynomialFeatures
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -18,12 +19,12 @@ def test_default_parameters(sample_data):
     expected_X = sample_data.with_columns(
         [
             pl.lit(1).alias("bias"),
-            (sample_data["A"] * sample_data["A"]).alias("A__A"),
-            (sample_data["A"] * sample_data["B"]).alias("A__B"),
-            (sample_data["A"] * sample_data["C"]).alias("A__C"),
-            (sample_data["B"] * sample_data["B"]).alias("B__B"),
-            (sample_data["B"] * sample_data["C"]).alias("B__C"),
-            (sample_data["C"] * sample_data["C"]).alias("C__C"),
+            (sample_data["A"] * sample_data["A"]).cast(pl.Float64).alias("A__A"),
+            (sample_data["A"] * sample_data["B"]).cast(pl.Float64).alias("A__B"),
+            (sample_data["A"] * sample_data["C"]).cast(pl.Float64).alias("A__C"),
+            (sample_data["B"] * sample_data["B"]).cast(pl.Float64).alias("B__B"),
+            (sample_data["B"] * sample_data["C"]).cast(pl.Float64).alias("B__C"),
+            (sample_data["C"] * sample_data["C"]).cast(pl.Float64).alias("C__C"),
         ]
     )
     assert_frame_equal(transformed_X, expected_X)
@@ -37,9 +38,9 @@ def test_columns_as_subset(sample_data):
     expected_X = sample_data.with_columns(
         [
             pl.lit(1).alias("bias"),
-            (sample_data["A"] * sample_data["A"]).alias("A__A"),
-            (sample_data["A"] * sample_data["B"]).alias("A__B"),
-            (sample_data["B"] * sample_data["B"]).alias("B__B"),
+            (sample_data["A"] * sample_data["A"]).cast(pl.Float64).alias("A__A"),
+            (sample_data["A"] * sample_data["B"]).cast(pl.Float64).alias("A__B"),
+            (sample_data["B"] * sample_data["B"]).cast(pl.Float64).alias("B__B"),
         ]
     )
 
@@ -53,9 +54,9 @@ def test_interaction_only(sample_data):
 
     expected_X = sample_data.with_columns(
         [
-            (sample_data["A"] * sample_data["B"]).alias("A__B"),
-            (sample_data["A"] * sample_data["C"]).alias("A__C"),
-            (sample_data["B"] * sample_data["C"]).alias("B__C"),
+            (sample_data["A"] * sample_data["B"]).cast(pl.Float64).alias("A__B"),
+            (sample_data["A"] * sample_data["C"]).cast(pl.Float64).alias("A__C"),
+            (sample_data["B"] * sample_data["C"]).cast(pl.Float64).alias("B__C"),
         ]
     )
 
@@ -63,6 +64,7 @@ def test_interaction_only(sample_data):
 
 
 def test_transform_without_fit_returns_x_unchanged(sample_data):
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
     transformer = PolynomialFeatures()
-    assert_frame_equal(transformer.transform(sample_data), sample_data)
+    with pytest.raises(NotFittedError):
+        transformer.transform(sample_data)

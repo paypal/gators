@@ -65,6 +65,7 @@ def test_split_extract_keep_original():
     expected_X = pl.DataFrame(expected_X)
 
     transformer = SplitExtract(subset=["Column1"], by="|", n=0, drop_columns=False)
+    transformer.fit(X)
     transformed_X = transformer.transform(X)
     assert_frame_equal(transformed_X, expected_X)
 

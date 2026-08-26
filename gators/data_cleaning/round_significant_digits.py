@@ -106,7 +106,7 @@ class RoundSignificantDigits(_BaseTransformer):
     subset: list[str] | None = None
     inplace: bool = True
     drop_columns: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RoundSignificantDigits":
         """Fit the transformer by recording which columns to round.
@@ -126,7 +126,7 @@ class RoundSignificantDigits(_BaseTransformer):
         if self.subset is None:
             self.subset = [col for col in X.columns if X[col].dtype.is_numeric()]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__round_{self.n_digits}sig" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__round_{self.n_digits}sig"] for col in self.subset}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -154,7 +154,7 @@ class RoundSignificantDigits(_BaseTransformer):
         if self.inplace:
             return X.with_columns([_sigfig_expr(col, col) for col in columns])
 
-        X = X.with_columns([_sigfig_expr(col, new) for col, new in self._column_mapping.items()])
+        X = X.with_columns([_sigfig_expr(col, new) for col, [new] in self._column_mapping.items()])
         if self.drop_columns:
             return X.drop(columns)
         return X

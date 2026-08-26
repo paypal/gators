@@ -152,6 +152,7 @@ class HHIFeatures(_BaseTransformer):
         if self.new_column_names is None:
             self.new_column_names = [self._default_name(group) for group in self.column_groups]
 
+        self._output_dtypes = dict.fromkeys(self.new_column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -169,7 +170,8 @@ class HHIFeatures(_BaseTransformer):
         """
         new_columns = []
 
-        for group, new_col_name in zip(self.column_groups, self.new_column_names):
+        assert self.new_column_names is not None
+        for group, new_col_name in zip(self.column_groups, self.new_column_names, strict=False):
             float_cols = [pl.col(c).cast(pl.Float64) for c in group]
             total = pl.sum_horizontal(float_cols) + self.epsilon
             squared_shares = [(pl.col(c).cast(pl.Float64) / total) ** 2 for c in group]

@@ -1,7 +1,7 @@
-from typing import Callable
+from collections.abc import Callable
 
 import polars as pl
-from pydantic import ValidationInfo, field_validator
+from pydantic import PrivateAttr, ValidationInfo, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -93,6 +93,8 @@ class OrdinalFeatures(_BaseTransformer):
     subset: list[str] | None = None
     components: list[str]
     drop_columns: bool = False
+    _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("components")
     def check_components(cls, components, info: ValidationInfo):
@@ -124,23 +126,26 @@ class OrdinalFeatures(_BaseTransformer):
                 col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
 
+        for col in self.subset:
+            dtype = X.schema[col]
+            self._dt_units[col] = dtype.time_unit if hasattr(dtype, 'time_unit') else 'date'
+
+        self._column_mapping = {
+            col: [f"{col}__{comp}" for comp in self.components] for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting ordinal features.
 
         Parameters
-        ----------
-        X : pl.DataFrame
-            Input DataFrame to transform.
-
-        Returns
-        -------
-        pl.DataFrame
-            Transformed DataFrame with ordinal features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         # Parse datetime columns only if needed
         datetime_conversions = []
@@ -153,7 +158,7 @@ class OrdinalFeatures(_BaseTransformer):
 
         # Build all features in one list to minimize with_columns calls
         all_features = [
-            COMPONENT_FUNCTIONS[comp](pl.col(col)).alias(f"{col}__{comp}")
+            COMPONENT_FUNCTIONS[comp](pl.col(col)).cast(pl.Float64).alias(f"{col}__{comp}")
             for col in self.subset
             for comp in self.components
         ]

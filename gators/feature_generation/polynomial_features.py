@@ -26,7 +26,7 @@ class PolynomialFeatures(_BaseTransformer):
     --------
     **Example 1: Degree 2 polynomial with bias term**
 
-    >>> from gators.discretizers import PolynomialFeatures
+    >>> from gators.feature_generation import PolynomialFeatures
     >>> import polars as pl
     >>> X = pl.DataFrame({'A': [1, 2], 'B': [3, 4]})
     >>> transformer = PolynomialFeatures(degree=2, include_bias=True)
@@ -90,7 +90,7 @@ class PolynomialFeatures(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype not in [pl.String, pl.Boolean]
             ]
         return self
@@ -114,17 +114,16 @@ class PolynomialFeatures(_BaseTransformer):
             transformations.append(pl.lit(1).alias("bias"))
 
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         for i in range(2, self.degree + 1):
             for combination in combinations_with_replacement(self.subset, i):
                 if self.interaction_only and len(set(combination)) != i:
                     continue
                 new_col_name = "__".join(combination)
-                # Multiply columns directly to preserve dtype
                 new_col_expr = pl.col(combination[0])
                 for col in combination[1:]:
                     new_col_expr = new_col_expr * pl.col(col)
-                transformations.append(new_col_expr.alias(new_col_name))
+                transformations.append(new_col_expr.cast(pl.Float64).alias(new_col_name))
 
         return X.with_columns(transformations)

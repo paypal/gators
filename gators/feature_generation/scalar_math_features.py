@@ -1,7 +1,7 @@
 from typing import Any
 
 import polars as pl
-from pydantic import ConfigDict, field_validator
+from pydantic import field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -228,7 +228,7 @@ class ScalarMathFeatures(_BaseTransformer):
 
             # Validate scalar is numeric
             scalar = op_dict["scalar"]
-            if not isinstance(scalar, (int, float)):
+            if not isinstance(scalar, int | float):
                 raise ValueError(
                     f"Operation {idx}: 'scalar' must be numeric (int or float), "
                     f"got {type(scalar).__name__}"
@@ -296,6 +296,7 @@ class ScalarMathFeatures(_BaseTransformer):
         else:
             self._generated_column_names = self.new_column_names
 
+        self._output_dtypes = dict.fromkeys(self._generated_column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -314,7 +315,7 @@ class ScalarMathFeatures(_BaseTransformer):
         new_columns = []
 
         # Process each operation
-        for op_dict, output_col_name in zip(self.operations, self._generated_column_names):
+        for op_dict, output_col_name in zip(self.operations, self._generated_column_names, strict=False):
             column = op_dict["column"]
             op = op_dict["op"]
             scalar = op_dict["scalar"]
@@ -332,18 +333,19 @@ class ScalarMathFeatures(_BaseTransformer):
     def _build_operation(column: str, op: str, scalar: float) -> pl.Expr:
         """Build a Polars expression for column-scalar operation."""
         if op == "+":
-            return pl.col(column) + scalar
+            expr = pl.col(column) + scalar
         elif op == "-":
-            return pl.col(column) - scalar
+            expr = pl.col(column) - scalar
         elif op == "*":
-            return pl.col(column) * scalar
+            expr = pl.col(column) * scalar
         elif op == "/":
-            return pl.col(column) / scalar
+            expr = pl.col(column) / scalar
         elif op == "**":
-            return pl.col(column) ** scalar
+            expr = pl.col(column) ** scalar
         elif op == "//":
-            return pl.col(column) // scalar
+            expr = pl.col(column) // scalar
         elif op == "%":
-            return pl.col(column) % scalar
+            expr = pl.col(column) % scalar
         else:
             raise ValueError(f"Unsupported operator: {op}")
+        return expr.cast(pl.Float64)

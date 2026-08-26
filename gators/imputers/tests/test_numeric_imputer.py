@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.imputers.numeric_imputer import NumericImputer
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -86,10 +87,15 @@ def test_imputer_median(sample_dataframe):
     imputer.fit(sample_dataframe)
     transformed = imputer.transform(sample_dataframe)
 
+    # Integer columns (A, B) round the median fill value to preserve the original dtype.
     expected = sample_dataframe.with_columns(
         [
-            pl.col("A").fill_null(sample_dataframe["A"].median()).alias("A__impute_median"),
-            pl.col("B").fill_null(sample_dataframe["B"].median()).alias("B__impute_median"),
+            pl.col("A")
+            .fill_null(int(round(sample_dataframe["A"].median())))
+            .alias("A__impute_median"),
+            pl.col("B")
+            .fill_null(int(round(sample_dataframe["B"].median())))
+            .alias("B__impute_median"),
             pl.col("D").fill_null(sample_dataframe["D"].median()).alias("D__impute_median"),
         ]
     ).drop(["A", "B", "D"])
@@ -264,19 +270,22 @@ def test_imputer_mean_inplace_true(sample_dataframe):
 
 
 def test_imputer_constant_default_value(sample_dataframe):
-    """constant strategy with value=None defaults value to 0 during fit."""
-    imputer = NumericImputer(strategy="constant")  # value not specified
+    """constant strategy uses the default value=0.0 when no value is specified."""
+    imputer = NumericImputer(strategy="constant")  # value defaults to 0.0
     imputer.fit(sample_dataframe)
     assert imputer.value == 0
     assert imputer._statistics["A"] == 0
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"A": [1.0, None], "B": [2.0, 3.0]})
     imputer = NumericImputer(strategy="mean")
-    result = imputer.transform(X)
-    assert_frame_equal(result, X)
+    with pytest.raises(NotFittedError):
+        imputer.transform(X)
 
 
 def test_imputer_constant_inplace_true(sample_dataframe):
@@ -287,3 +296,38 @@ def test_imputer_constant_inplace_true(sample_dataframe):
     assert result["A"].null_count() == 0
     assert result["B"].null_count() == 0
     assert result["D"].null_count() == 0
+
+
+@pytest.mark.parametrize("strategy", ["mean", "median", "min", "max"])
+def test_all_null_column_statistics_defaults_to_zero(strategy):
+    # _statistics fallback to 0 is used by the ONNX exporter; transform uses Polars native for mean/min/max
+    X = pl.DataFrame({"A": pl.Series([None, None, None], dtype=pl.Float64)})
+    imputer = NumericImputer(strategy=strategy)
+    imputer.fit(X)
+    assert imputer._statistics["A"] == 0
+
+
+def test_all_null_column_median_fills_zero():
+    # median uses _statistics in transform, so all-null → 0
+    X = pl.DataFrame({"A": pl.Series([None, None, None], dtype=pl.Float64)})
+    imputer = NumericImputer(strategy="median")
+    imputer.fit(X)
+    result = imputer.transform(X)
+    assert result["A"].to_list() == [0.0, 0.0, 0.0]
+
+
+@pytest.mark.parametrize("strategy", ["mean", "median", "min", "max"])
+def test_all_nan_column_defaults_to_zero(strategy):
+    X = pl.DataFrame({"A": pl.Series([float("nan"), float("nan")], dtype=pl.Float64)})
+    imputer = NumericImputer(strategy=strategy)
+    imputer.fit(X)
+    assert imputer._statistics["A"] == 0
+
+
+def test_most_frequent_all_null_defaults_to_zero():
+    X = pl.DataFrame({"A": pl.Series([None, None, None], dtype=pl.Float64)})
+    imputer = NumericImputer(strategy="most_frequent")
+    imputer.fit(X)
+    assert imputer._statistics["A"] == 0
+    result = imputer.transform(X)
+    assert result["A"].to_list() == [0.0, 0.0, 0.0]

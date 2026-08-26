@@ -1,7 +1,7 @@
 import numpy as np
 import polars as pl
 
-from ._base_discretizer import _BaseDiscretizer, generate_labels
+from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels
 
 
 def compute_equal_length_bins(
@@ -171,12 +171,13 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
 
         # Compute bins - pass subset to avoid creating intermediate DataFrame
         self._bins = compute_equal_length_bins(X, self.num_bins, subset=self.subset)
+        self._bins = deduplicate_bins(self._bins, self.rounding)
 
         # Generate labels
         self._labels = generate_labels(self._bins, self.rounding)
@@ -189,6 +190,7 @@ class EqualLengthDiscretizer(_BaseDiscretizer):
 
         # Set column mapping for non-inplace mode
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__discretize_length" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__discretize_length"] for col in self.subset}
 
+        self._set_output_dtypes()
         return self

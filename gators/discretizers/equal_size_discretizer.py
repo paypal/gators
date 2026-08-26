@@ -3,7 +3,7 @@ from math import isnan
 import numpy as np
 import polars as pl
 
-from ._base_discretizer import _BaseDiscretizer, generate_labels
+from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels
 
 
 def compute_equal_size_bins(
@@ -57,7 +57,7 @@ def compute_equal_size_bins(
         col_bins = [bins[f"{col}_{p}"][0] for p in percentiles]
         # Filter out NaN/None values and get unique sorted values in one pass
         col_bins = sorted(
-            set(b for b in col_bins if b is not None and not (isinstance(b, float) and isnan(b)))
+            {b for b in col_bins if b is not None and not (isinstance(b, float) and isnan(b))}
         )
         selected_bins[col] = col_bins
 
@@ -169,12 +169,13 @@ class EqualSizeDiscretizer(_BaseDiscretizer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
             ]
 
         # Compute bins - pass subset to avoid creating intermediate DataFrame
         self._bins = compute_equal_size_bins(X, self.num_bins, subset=self.subset)
+        self._bins = deduplicate_bins(self._bins, self.rounding)
 
         # Generate labels with proper rounding
         self._labels = generate_labels(self._bins, self.rounding)
@@ -187,6 +188,7 @@ class EqualSizeDiscretizer(_BaseDiscretizer):
 
         # Set column mapping for non-inplace mode
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__discretize_size" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__discretize_size"] for col in self.subset}
 
+        self._set_output_dtypes()
         return self

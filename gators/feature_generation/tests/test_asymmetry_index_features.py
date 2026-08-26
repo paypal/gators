@@ -4,6 +4,7 @@ from polars.testing import assert_frame_equal
 from pydantic import ValidationError
 
 from gators.feature_generation import AsymmetryIndexFeatures
+from gators.exceptions import NotFittedError
 
 
 def test_transform_basic_with_smoothing():
@@ -142,12 +143,14 @@ def test_transform_drop_columns_with_overlap():
 
 
 def test_transform_without_fit_returns_x_unchanged():
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"A": [10, 20], "B": [10, 5]})
-
     transformer = AsymmetryIndexFeatures(x_columns=["A"], y_columns=["B"])
-    result = transformer.transform(X)
-
-    assert_frame_equal(result, X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)
 
 
 def test_fit_with_custom_names_does_not_overwrite():

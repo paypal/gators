@@ -477,6 +477,80 @@ def test_validation_mismatched_new_column_names_length():
 
 
 # ---------------------------------------------------------------------------
+# count_null
+# ---------------------------------------------------------------------------
+
+
+def test_transform_count_null():
+    X = pl.DataFrame({"value": [10, None, None, 40, 50], "group": ["A", "A", "A", "B", "B"]})
+    transformer = GroupStatisticsFeatures(subset=["value"], by=["group"], func=["count_null"])
+    result = transformer.fit_transform(X)
+    assert "count_null_value__per_group" in result.columns
+    assert result["count_null_value__per_group"][0] == pytest.approx(2.0)
+    assert result["count_null_value__per_group"][3] == pytest.approx(0.0)
+
+
+def test_transform_count_null_mixed_with_count():
+    X = pl.DataFrame({"value": [10, None, 30, 40, 50], "group": ["A", "A", "A", "B", "B"]})
+    transformer = GroupStatisticsFeatures(
+        subset=["value"], by=["group"], func=["count", "count_null"]
+    )
+    result = transformer.fit_transform(X)
+    assert result["count_value__per_group"][0] == pytest.approx(2.0)
+    assert result["count_null_value__per_group"][0] == pytest.approx(1.0)
+
+
+# ---------------------------------------------------------------------------
+# rank / pct_rank (order statistics, computed live at transform time)
+# ---------------------------------------------------------------------------
+
+
+def test_transform_rank():
+    X = pl.DataFrame({"value": [30, 10, 20, 100, 50], "group": ["A", "A", "A", "B", "B"]})
+    transformer = GroupStatisticsFeatures(subset=["value"], by=["group"], func=["rank"])
+    result = transformer.fit_transform(X)
+    assert "rank_value__per_group" in result.columns
+    # Group A: [30, 10, 20] -> ranks [3, 1, 2]
+    assert result["rank_value__per_group"][0] == pytest.approx(3.0)
+    assert result["rank_value__per_group"][1] == pytest.approx(1.0)
+    assert result["rank_value__per_group"][2] == pytest.approx(2.0)
+    # Group B: [100, 50] -> ranks [2, 1]
+    assert result["rank_value__per_group"][3] == pytest.approx(2.0)
+    assert result["rank_value__per_group"][4] == pytest.approx(1.0)
+
+
+def test_transform_rank_ties_use_average():
+    X = pl.DataFrame({"value": [10, 10, 20], "group": ["A", "A", "A"]})
+    transformer = GroupStatisticsFeatures(subset=["value"], by=["group"], func=["rank"])
+    result = transformer.fit_transform(X)
+    # Tied for rank 1-2 -> average rank 1.5
+    assert result["rank_value__per_group"][0] == pytest.approx(1.5)
+    assert result["rank_value__per_group"][1] == pytest.approx(1.5)
+    assert result["rank_value__per_group"][2] == pytest.approx(3.0)
+
+
+def test_transform_pct_rank():
+    X = pl.DataFrame({"value": [30, 10, 20, 100, 50], "group": ["A", "A", "A", "B", "B"]})
+    transformer = GroupStatisticsFeatures(subset=["value"], by=["group"], func=["pct_rank"])
+    result = transformer.fit_transform(X)
+    # Group A has 3 members -> pct_rank = rank / 3
+    assert result["pct_rank_value__per_group"][0] == pytest.approx(3 / 3)
+    assert result["pct_rank_value__per_group"][1] == pytest.approx(1 / 3)
+    assert result["pct_rank_value__per_group"][2] == pytest.approx(2 / 3)
+    # Group B has 2 members -> pct_rank = rank / 2
+    assert result["pct_rank_value__per_group"][3] == pytest.approx(2 / 2)
+    assert result["pct_rank_value__per_group"][4] == pytest.approx(1 / 2)
+
+
+def test_transform_rank_mixed_with_absolute_stats():
+    X = pl.DataFrame({"value": [10, 20, 30], "group": ["A", "A", "A"]})
+    transformer = GroupStatisticsFeatures(subset=["value"], by=["group"], func=["mean", "rank"])
+    result = transformer.fit_transform(X)
+    assert result["mean_value__per_group"][0] == pytest.approx(20.0)
+    assert result["rank_value__per_group"][0] == pytest.approx(1.0)
+
+
+# ---------------------------------------------------------------------------
 # fit / column mapping
 # ---------------------------------------------------------------------------
 

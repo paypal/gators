@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -15,7 +16,7 @@ class Length(_BaseTransformer):
     Examples
     --------
     >>> import polars as pl
-    >>> from gators.discretizers import Length
+    >>> from gators.feature_generation_str import Length
 
     >>> # Sample data
     >>> X =pl.DataFrame({
@@ -62,7 +63,7 @@ class Length(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Length":
         """Fit the transformer by identifying categorical columns and generating column mappings.
@@ -83,7 +84,10 @@ class Length(_BaseTransformer):
             self.subset = [
                 col for col, dtype in X.schema.items() if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
-        self._column_mapping = {col: f"{col}__length" for col in self.subset}
+        self._column_mapping = {col: [f"{col}__length"] for col in self.subset}
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -100,10 +104,10 @@ class Length(_BaseTransformer):
             Transformed DataFrame.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         transformations = [
-            pl.col(col).str.len_chars().cast(pl.Int64).alias(self._column_mapping[col])
+            pl.col(col).str.len_chars().cast(pl.Float64).alias(self._column_mapping[col][0])
             for col in self.subset
         ]
         return X.with_columns(transformations)

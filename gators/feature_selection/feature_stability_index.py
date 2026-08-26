@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Any
 
 import numpy as np
 import polars as pl
@@ -6,13 +6,13 @@ from pydantic import Field
 
 
 def feature_stability_index(
-    estimator,
-    skf,
+    estimator: Any,
+    skf: Any,
     X: pl.DataFrame,
     y: pl.Series,
     importance_threshold: Annotated[float, Field(ge=0.0, le=1.0)] = 0.0,
     k: Annotated[int, Field(ge=1)] = 5,
-):
+) -> pl.DataFrame:
     """Compute Feature Stability Index (FSI) using repeated estimator feature importance.
 
     Measures how consistently a feature is selected across different training folds.

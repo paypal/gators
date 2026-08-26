@@ -1,7 +1,7 @@
 from typing import Annotated
 
 import polars as pl
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -103,8 +103,7 @@ class DropHighNaNRatio(_BaseTransformer):
 
     max_ratio: Annotated[float, Field(ge=0.0, le=1.0)]
     subset: list[str] | None = None
-    _to_drop: list[str]
-    _column_mapping = dict[str, str]
+    _to_drop: list[str] = PrivateAttr(default_factory=list)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "DropHighNaNRatio":
         """Fit the transformer by identifying columns with high NaN ratios.

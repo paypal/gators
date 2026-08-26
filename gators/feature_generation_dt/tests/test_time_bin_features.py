@@ -5,6 +5,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation_dt.time_bin_features import TimeBinFeatures
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -413,8 +414,23 @@ def test_check_bin_types_invalid_raises_value_error():
         TimeBinFeatures.check_bin_types(["invalid"])
 
 
+def test_day_bin_type(sample_timebin_data):
+    """Test 'day' binning produces the correct weekday name."""
+    transformer = TimeBinFeatures(subset=["timestamp"], bin_types=["day"])
+    result = transformer.fit_transform(sample_timebin_data)
+
+    assert "timestamp__day" in result.columns
+    assert result["timestamp__day"].to_list() == [
+        "Friday", "Monday", "Thursday", "Wednesday", "Sunday",
+    ]
+
+
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"ts": [datetime(2024, 6, 15, 14, 0)]})
     transformer = TimeBinFeatures()
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

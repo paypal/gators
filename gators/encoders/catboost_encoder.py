@@ -90,7 +90,7 @@ class CatBoostEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
 
@@ -116,7 +116,7 @@ class CatBoostEncoder(_BaseEncoder):
                         pl.col("__target__").cum_count().alias("cumcount"),
                     ]
                 )
-                .explode(["cumsum", "cumcount"])
+                .explode(["cumsum", "cumcount"], empty_as_null=True)
             )
 
             X_with_stats = X_indexed.join(cumsum_expr, on=col, how="left").sort("__row_idx")
@@ -141,18 +141,18 @@ class CatBoostEncoder(_BaseEncoder):
 
             # Filter by min_count
             value_counts = X[col].value_counts()
-            valid_categories = set(
+            valid_categories = {
                 cat
-                for cat, count in zip(value_counts[col].to_list(), value_counts["count"].to_list())
+                for cat, count in zip(value_counts[col].to_list(), value_counts["count"].to_list(), strict=False)
                 if count >= min_threshold_count
-            )
+            }
 
             # Create mapping
             mapping_dict = {
                 cat: mean_val
                 for cat, mean_val in zip(
                     category_means[col].to_list(),
-                    category_means[f"{col}__encode_catboost"].to_list(),
+                    category_means[f"{col}__encode_catboost"].to_list(), strict=False,
                 )
                 if cat in valid_categories
             }
@@ -160,7 +160,13 @@ class CatBoostEncoder(_BaseEncoder):
             if mapping_dict:
                 self.mapping_[col] = mapping_dict
 
-        self.column_mapping_ = {col: f"{col}__catboost_enc" for col in self.mapping_.keys()}
+        self._column_mapping = {col: [f"{col}__catboost_enc"] for col in self.mapping_.keys()}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = dict.fromkeys(targeted, pl.Float64)
 
         return self
 
@@ -183,7 +189,7 @@ class CatBoostEncoder(_BaseEncoder):
         expressions = [
             pl.col(col)
             .replace_strict(mapping, default=default_value, return_dtype=pl.Float64)
-            .alias(self.column_mapping_[col])
+            .alias(self._column_mapping[col][0])
             for col, mapping in self.mapping_.items()
         ]
 

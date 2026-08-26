@@ -1,6 +1,10 @@
 import polars as pl
 
-from gators.discretizers._base_discretizer import _BaseDiscretizer, generate_labels
+from gators.discretizers._base_discretizer import (
+    _BaseDiscretizer,
+    deduplicate_bins,
+    generate_labels,
+)
 
 
 class CustomDiscretizer(_BaseDiscretizer):
@@ -128,10 +132,10 @@ class CustomDiscretizer(_BaseDiscretizer):
             self.subset = list(self.bins.keys())
 
         # Store bins (already provided by user)
-        self._bins = self.bins
+        self._bins = deduplicate_bins(dict(self.bins), self.rounding)
 
         # Generate labels with proper rounding
-        self._labels = generate_labels(bins=self.bins, rounding=self.rounding)
+        self._labels = generate_labels(bins=self._bins, rounding=self.rounding)
 
         # Convert to numeric labels if requested
         if self.as_numerics:
@@ -141,6 +145,7 @@ class CustomDiscretizer(_BaseDiscretizer):
 
         # Set column mapping for non-inplace mode
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__discretize_custom" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__discretize_custom"] for col in self.subset}
 
+        self._set_output_dtypes()
         return self

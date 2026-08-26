@@ -15,7 +15,7 @@ def test_log_scaler_default_natural():
         }
     )
 
-    scaler = Log1pScaler()
+    scaler = Log1pScaler(inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -38,7 +38,7 @@ def test_log_scaler_log10():
         }
     )
 
-    scaler = Log1pScaler(base="10")
+    scaler = Log1pScaler(base="10", inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -61,7 +61,7 @@ def test_log_scaler_log2():
         }
     )
 
-    scaler = Log1pScaler(base="2")
+    scaler = Log1pScaler(base="2", inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -85,7 +85,7 @@ def test_log_scaler_subset_columns():
         }
     )
 
-    scaler = Log1pScaler(subset=["col1", "col2"], base="e", drop_columns=False)
+    scaler = Log1pScaler(subset=["col1", "col2"], base="e", drop_columns=False, inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -107,7 +107,7 @@ def test_log_scaler_natural_values():
         }
     )
 
-    scaler = Log1pScaler(base="e")
+    scaler = Log1pScaler(base="e", inplace=False)
     result = scaler.fit_transform(X)
 
     # ln(1 + e^x - 1) = x
@@ -123,7 +123,7 @@ def test_log_scaler_log10_powers():
         }
     )
 
-    scaler = Log1pScaler(base="10")
+    scaler = Log1pScaler(base="10", inplace=False)
     result = scaler.fit_transform(X)
 
     # log10(1 + 10^x - 1) = x
@@ -139,7 +139,7 @@ def test_log_scaler_log2_powers():
         }
     )
 
-    scaler = Log1pScaler(base="2")
+    scaler = Log1pScaler(base="2", inplace=False)
     result = scaler.fit_transform(X)
 
     # log2(1 + 2^x - 1) = x
@@ -155,7 +155,7 @@ def test_log_scaler_fit_transform():
         }
     )
 
-    scaler = Log1pScaler(base="10")
+    scaler = Log1pScaler(base="10", inplace=False)
     result = scaler.fit_transform(X)
 
     expected = pl.DataFrame(
@@ -175,7 +175,7 @@ def test_log_scaler_drop_columns_false():
         }
     )
 
-    scaler = Log1pScaler(base="e", drop_columns=False)
+    scaler = Log1pScaler(base="e", drop_columns=False, inplace=False)
     scaler.fit(X)
     result = scaler.transform(X)
 
@@ -193,9 +193,9 @@ def test_log_scaler_all_bases():
         }
     )
 
-    scaler_ln = Log1pScaler(base="e")
-    scaler_10 = Log1pScaler(base="10")
-    scaler_2 = Log1pScaler(base="2")
+    scaler_ln = Log1pScaler(base="e", inplace=False)
+    scaler_10 = Log1pScaler(base="10", inplace=False)
+    scaler_2 = Log1pScaler(base="2", inplace=False)
 
     result_ln = scaler_ln.fit_transform(X)
     result_10 = scaler_10.fit_transform(X)
@@ -215,18 +215,75 @@ def test_log_scaler_column_naming():
     """Test that column naming is correct for each base."""
     X = pl.DataFrame({"col1": [1.0, 10.0]})
 
-    scaler_ln = Log1pScaler(base="e")
+    scaler_ln = Log1pScaler(base="e", inplace=False)
     scaler_ln.fit(X)
-    assert scaler_ln._column_mapping == {"col1": "col1__log1p"}
+    assert scaler_ln._column_mapping == {"col1": ["col1__log1p"]}
 
-    scaler_10 = Log1pScaler(base="10")
+    scaler_10 = Log1pScaler(base="10", inplace=False)
     scaler_10.fit(X)
-    assert scaler_10._column_mapping == {"col1": "col1__log1p_10"}
+    assert scaler_10._column_mapping == {"col1": ["col1__log1p_10"]}
 
-    scaler_2 = Log1pScaler(base="2")
+    scaler_2 = Log1pScaler(base="2", inplace=False)
     scaler_2.fit(X)
-    assert scaler_2._column_mapping == {"col1": "col1__log1p_2"}
+    assert scaler_2._column_mapping == {"col1": ["col1__log1p_2"]}
 
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+def test_log_scaler_inplace_true_base_e():
+    X = pl.DataFrame({"col1": [0.0, 1.0, 9.0], "col2": [0.0, 9.0, 99.0]})
+    scaler = Log1pScaler(base="e").fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["col1", "col2"]
+    assert "col1__log1p" not in result.columns
+    import math
+    assert result["col1"].to_list()[0] == pytest.approx(math.log(1), abs=1e-10)
+
+
+def test_log_scaler_inplace_true_base_10():
+    X = pl.DataFrame({"col1": [0.0, 9.0, 99.0]})
+    scaler = Log1pScaler(base="10").fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["col1"]
+    assert result["col1"].to_list() == pytest.approx([0.0, 1.0, 2.0], rel=1e-5)
+
+
+def test_log_scaler_inplace_true_base_2():
+    X = pl.DataFrame({"col1": [0.0, 1.0, 3.0]})
+    scaler = Log1pScaler(base="2").fit(X)
+    result = scaler.transform(X)
+    assert result.columns == ["col1"]
+    assert result["col1"].to_list() == pytest.approx([0.0, 1.0, 2.0], rel=1e-5)
+
+
+def test_log_scaler_inverse_transform_inplace_true_base_e():
+    X = pl.DataFrame({"a": [0.0, 1.0, 10.0]})
+    scaler = Log1pScaler(base="e").fit(X)
+    X_t = scaler.transform(X)
+    X_r = scaler.inverse_transform(X_t)
+    assert (X_r["a"].cast(pl.Float64) - X["a"].cast(pl.Float64)).abs().max() < 1e-5
+
+
+def test_log_scaler_inverse_transform_inplace_true_base_10():
+    X = pl.DataFrame({"a": [0.0, 1.0, 10.0]})
+    scaler = Log1pScaler(base="10").fit(X)
+    X_t = scaler.transform(X)
+    X_r = scaler.inverse_transform(X_t)
+    assert (X_r["a"].cast(pl.Float64) - X["a"].cast(pl.Float64)).abs().max() < 1e-5
+
+
+def test_log_scaler_inverse_transform_inplace_true_base_2():
+    X = pl.DataFrame({"a": [0.0, 1.0, 10.0]})
+    scaler = Log1pScaler(base="2").fit(X)
+    X_t = scaler.transform(X)
+    X_r = scaler.inverse_transform(X_t)
+    assert (X_r["a"].cast(pl.Float64) - X["a"].cast(pl.Float64)).abs().max() < 1e-5
+
+
+def test_log_scaler_get_params_includes_inplace():
+    scaler = Log1pScaler()
+    params = scaler.get_params()
+    assert "inplace" in params
+    assert params["inplace"] is True

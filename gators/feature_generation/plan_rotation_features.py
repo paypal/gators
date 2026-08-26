@@ -1,7 +1,6 @@
 # License: Apache-2.0
-from math import cos
+from math import cos, sin
 from math import pi as PI
-from math import sin
 
 import polars as pl
 from pydantic import model_validator
@@ -89,6 +88,7 @@ class PlanRotationFeatures(_BaseTransformer):
             Fitted transformer instance.
         """
         self.flatten_columns = [c for cols in self.columns for c in cols]
+        self._output_dtypes = dict.fromkeys(self.column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -106,7 +106,7 @@ class PlanRotationFeatures(_BaseTransformer):
         """
         new_columns = []
 
-        for x, y in zip(self.flatten_columns[::2], self.flatten_columns[1::2]):
+        for x, y in zip(self.flatten_columns[::2], self.flatten_columns[1::2], strict=False):
             for theta in self.angles:
                 cos_theta = cos(theta * PI / 180)
                 sin_theta = sin(theta * PI / 180)

@@ -17,9 +17,12 @@ class StandardScaler(_BaseTransformer):
     subset : list[str], default=None
         List of numeric column names to standardize. If None, all numeric columns
         (Float64, Int64, Float32, Int32) are automatically selected.
+    inplace : bool, default=True
+        If True, standardize values in the original columns (keep original column names).
+        If False, create new columns with suffix ``__standard_scale``.
     drop_columns : bool, default=True
-        If True, drop the original columns after scaling.
-        If False, keep both original and scaled columns.
+        If ``inplace=False``, whether to drop the original columns after standardizing.
+        Ignored when ``inplace=True``.
 
     Examples
     --------
@@ -40,8 +43,8 @@ class StandardScaler(_BaseTransformer):
     >>> transformed_X = scaler.transform(X)
     >>> print(transformed_X)
     shape: (4, 2)
-    ┌────────────────────┬──────────────────────┐
-    │ age__standard_scale ┆ income__standard_scale│
+    ┌─────────────────────┬──────────────────────┐
+    │ age__standard_scale  ┆ income__standard_scale │
     │ ---                 ┆ ---                   │
     │ f64                 ┆ f64                   │
     ├────────────────────┼──────────────────────┤
@@ -54,10 +57,11 @@ class StandardScaler(_BaseTransformer):
     """
 
     subset: list[str] | None = None
+    inplace: bool = True
+    drop_columns: bool = True
     _offset: dict[str, float] = PrivateAttr(default_factory=dict)
     _scale: dict[str, float] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
-    drop_columns: bool = True
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "StandardScaler":
         """Fit the transformer by computing mean and standard deviation.
@@ -77,10 +81,12 @@ class StandardScaler(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
+                if dtype.is_numeric()
             ]
-        self._column_mapping = {col: f"{col}__standard_scale" for col in self.subset}
+        if not self.inplace:
+            self._column_mapping = {col: [f"{col}__standard_scale"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         mean_std_exprs = []
         for col in self.subset:
@@ -112,13 +118,51 @@ class StandardScaler(_BaseTransformer):
         pl.DataFrame
             Transformed DataFrame with standardized columns.
         """
+        if self.inplace:
+            assert self.subset is not None
+            transformations = [
+                (self._scale[col] * (pl.col(col) - self._offset[col])).alias(col)
+                for col in self.subset
+            ]
+            return X.with_columns(transformations)
+
         transformations = [
             (self._scale[col] * (pl.col(col) - self._offset[col])).alias(new)
-            for col, new in self._column_mapping.items()
+            for col, [new] in self._column_mapping.items()
         ]
-
         X = X.with_columns(transformations)
-
-        if self.drop_columns and self.subset is not None:
+        if self.drop_columns:
+            assert self.subset is not None
             return X.drop(self.subset)
+        return X
+
+    def inverse_transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Reverse the standard scaling.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            DataFrame with scaled columns (output of ``transform``).
+
+        Returns
+        -------
+        pl.DataFrame
+            DataFrame with columns restored to their original scale.
+        """
+        def _inv_expr(scaled_col: str, orig_col: str) -> pl.Expr:
+            scale = self._scale[orig_col]
+            offset = self._offset[orig_col]
+            if scale == 0.0:
+                return pl.lit(offset).alias(orig_col)
+            return (pl.col(scaled_col) / scale + offset).alias(orig_col)
+
+        if self.inplace:
+            assert self.subset is not None
+            exprs = [_inv_expr(col, col) for col in self.subset]
+            return X.with_columns(exprs)
+        reverse_map = {v: k for k, values in self._column_mapping.items() for v in values}
+        exprs = [_inv_expr(new, orig) for new, orig in reverse_map.items() if new in X.columns]
+        X = X.with_columns(exprs)
+        if self.drop_columns:
+            return X.drop([c for c in reverse_map if c in X.columns])
         return X

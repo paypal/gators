@@ -26,8 +26,9 @@ def test_default_parameters(sample_X):
         drop_columns=True,
         inplace=False,
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},
-        column_mapping_={"category": "category_encoded"},
     )
+    encoder._column_mapping = {"category": ["category_encoded"]}
+    encoder._is_fitted = True
     transformed_X = encoder.transform(sample_X)
 
     expected_X = pl.DataFrame(
@@ -46,8 +47,9 @@ def test_columns_subset_drop_columns_false(sample_X):
         drop_columns=False,
         inplace=False,
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},
-        column_mapping_={"category": "category_encoded"},
     )
+    encoder._column_mapping = {"category": ["category_encoded"]}
+    encoder._is_fitted = True
     transformed_X = encoder.transform(sample_X)
 
     expected_X = sample_X.with_columns(
@@ -77,6 +79,7 @@ def test_inplace_true():
             "cat2": {"X": 10.0, "Y": 20.0, "Z": 30.0},
         },
     )
+    encoder._is_fitted = True
     result = encoder.transform(X)
 
     # When inplace=True, columns should be replaced in place
@@ -88,38 +91,29 @@ def test_inplace_true():
     assert result["cat2"].to_list() == [10.0, 20.0, 10.0, 30.0]
 
 
-def test_boolean_column_encoding():
-    """Test encoding boolean columns."""
+def test_boolean_column_not_auto_detected():
+    """Boolean columns are excluded from _CAT_DTYPES - cast to String to encode them."""
+    assert pl.Boolean not in ExampleEncoder()._CAT_DTYPES
+
+
+def test_boolean_column_cast_to_string_workaround():
+    """Recommended workaround: cast a boolean column to String before encoding."""
     X = pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
+    X = X.with_columns(pl.col("bool_col").cast(pl.String))
 
     encoder = ExampleEncoder(
         subset=["bool_col"],
         drop_columns=False,
         inplace=False,
-        mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
-        column_mapping_={"bool_col": "bool_col_encoded"},
+        mapping_={"bool_col": {"true": 1.0, "false": 0.0}},
     )
+    encoder._column_mapping = {"bool_col": ["bool_col_encoded"]}
+    encoder._is_fitted = True
     result = encoder.transform(X)
 
     assert "bool_col_encoded" in result.columns
     assert result["bool_col_encoded"].dtype == pl.Float64
     assert result["bool_col_encoded"].to_list() == [1.0, 0.0, 1.0, 0.0]
-
-
-def test_boolean_column_inplace():
-    """Test encoding boolean columns with inplace=True."""
-    X = pl.DataFrame({"bool_col": [True, False, True, False], "value": [1, 2, 3, 4]})
-
-    encoder = ExampleEncoder(
-        subset=["bool_col"],
-        inplace=True,
-        mapping_={"bool_col": {"true": 1.0, "false": 0.0}},  # Boolean keys as lowercase strings
-    )
-    result = encoder.transform(X)
-
-    assert "bool_col" in result.columns
-    assert result["bool_col"].dtype == pl.Float64
-    assert result["bool_col"].to_list() == [1.0, 0.0, 1.0, 0.0]
 
 
 def test_missing_category_default_value():
@@ -133,8 +127,9 @@ def test_missing_category_default_value():
         drop_columns=False,
         inplace=False,
         mapping_={"category": {"A": 1.0, "B": 2.0, "C": 3.0}},  # No "D"
-        column_mapping_={"category": "category_encoded"},
     )
+    encoder._column_mapping = {"category": ["category_encoded"]}
+    encoder._is_fitted = True
     result = encoder.transform(X)
 
     assert result["category_encoded"].to_list() == [1.0, 2.0, 0.0, 3.0]  # D -> 0.0

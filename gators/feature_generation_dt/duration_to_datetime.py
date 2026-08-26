@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Literal
 
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -121,6 +121,7 @@ class DurationToDatetime(_BaseTransformer):
     drop_columns: bool = False
     _reference_expr: pl.Expr | None = None
     _is_column_reference: bool = False
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("unit")
     def check_unit(cls, unit):
@@ -131,7 +132,7 @@ class DurationToDatetime(_BaseTransformer):
 
     @field_validator("reference_date")
     def check_reference_date(cls, reference_date):
-        if not isinstance(reference_date, (datetime, str)):
+        if not isinstance(reference_date, datetime | str):
             raise ValueError(
                 f"reference_date must be a datetime object or string, "
                 f"got {type(reference_date).__name__}"
@@ -165,11 +166,11 @@ class DurationToDatetime(_BaseTransformer):
                     parsed_date = datetime.fromisoformat(self.reference_date)
                     self._reference_expr = pl.lit(parsed_date).cast(pl.Datetime)
                     self._is_column_reference = False
-                except ValueError:
+                except ValueError as err:
                     raise ValueError(
                         f"reference_date '{self.reference_date}' is neither a column "
                         f"in the DataFrame nor a valid ISO format datetime string"
-                    )
+                    ) from err
         elif isinstance(self.reference_date, datetime):
             self._reference_expr = pl.lit(self.reference_date).cast(pl.Datetime)
             self._is_column_reference = False
@@ -178,6 +179,11 @@ class DurationToDatetime(_BaseTransformer):
                 f"reference_date must be a datetime object or string, "
                 f"got {type(self.reference_date)}"
             )
+
+        self._column_mapping = {col: [f"{col}__datetime"] for col in self.subset}
+        self._output_dtypes = {
+            new: pl.Datetime for names in self._column_mapping.values() for new in names
+        }
 
         return self
 

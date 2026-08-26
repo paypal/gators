@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -41,7 +42,7 @@ class IsNull(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "IsNull":
         """Fit the transformer by generating column name mappings.
@@ -61,7 +62,10 @@ class IsNull(_BaseTransformer):
         if self.subset is None:
             self.subset = X.columns
 
-        self._column_mapping = {col: f"{col}__is_null" for col in self.subset}
+        self._column_mapping = {col: [f"{col}__is_null"] for col in self.subset}
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -78,8 +82,9 @@ class IsNull(_BaseTransformer):
             Transformed DataFrame with additional is_null columns.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
         new_columns = [
-            pl.col(col).is_null().alias(self._column_mapping[col]) for col in self.subset
+            pl.col(col).is_null().cast(pl.Float64).alias(self._column_mapping[col][0])
+            for col in self.subset
         ]
         return X.with_columns(new_columns)

@@ -10,7 +10,7 @@ def sample_X():
     return pl.DataFrame(
         {
             "A": ["foo", "bar", "foo", "bar", "baz"],
-            "B": [True, False, True, True, False],
+            "B": ["true", "false", "true", "true", "false"],
         }
     )
 
@@ -40,7 +40,7 @@ def test_transform_with_columns_and_no_drop(sample_X, sample_target):
     expected_X = pl.DataFrame(
         {
             "A": ["foo", "bar", "foo", "bar", "baz"],
-            "B": [True, False, True, True, False],
+            "B": ["true", "false", "true", "true", "false"],
             "A__target_enc": [1.0, 0.5, 1.0, 0.5, 0.0],
         }
     )
@@ -79,7 +79,7 @@ def test_transform_unseen(sample_X, sample_target):
     sample_X_new = pl.DataFrame(
         {
             "A": [None, "bar", "foo", "bar", "zeta"],
-            "B": [None, False, True, True, False],
+            "B": [None, "false", "true", "true", "false"],
         }
     )
     transformed_X = encoder.transform(sample_X_new)
@@ -98,3 +98,41 @@ def test_fit_without_y_raises_value_error():
     encoder = TargetEncoder(subset=["A"])
     with pytest.raises(ValueError, match="requires a target variable"):
         encoder.fit(X, y=None)
+
+
+def test_target_encoder_with_enum_columns():
+    """Enum columns are cast to String before unpivot so no SchemaError is raised."""
+    X = pl.DataFrame(
+        {
+            "A": pl.Series(["[0,1)", "[1,2)", "[0,1)", "[1,2)", "[0,1)"]).cast(
+                pl.Enum(["[0,1)", "[1,2)"])
+            ),
+            "B": pl.Series(["[0,5)", "[5,10)", "[5,10)", "[0,5)", "[0,5)"]).cast(
+                pl.Enum(["[0,5)", "[5,10)"])
+            ),
+        }
+    )
+    y = pl.Series("target", [1, 0, 1, 1, 0])
+    encoder = TargetEncoder(inplace=False)
+    encoder.fit(X, y=y)
+    result = encoder.transform(X)
+    assert result.shape == (5, 2)
+    assert "A__target_enc" in result.columns
+    assert "B__target_enc" in result.columns
+    assert result.dtypes == [pl.Float64, pl.Float64]
+
+
+def test_target_encoder_with_categorical_columns():
+    """Categorical columns are cast to String before unpivot so no SchemaError is raised."""
+    X = pl.DataFrame(
+        {
+            "A": pl.Series(["cat", "dog", "cat", "dog", "cat"]).cast(pl.Categorical),
+            "B": pl.Series(["x", "x", "y", "y", "x"]).cast(pl.Categorical),
+        }
+    )
+    y = pl.Series("target", [1, 0, 1, 1, 0])
+    encoder = TargetEncoder(inplace=False)
+    encoder.fit(X, y=y)
+    result = encoder.transform(X)
+    assert result.shape == (5, 2)
+    assert result.dtypes == [pl.Float64, pl.Float64]

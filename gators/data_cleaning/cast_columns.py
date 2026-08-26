@@ -109,7 +109,7 @@ class CastColumns(_BaseTransformer):
     dtype: type
     inplace: bool = True
     drop_columns: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "CastColumns":
         """Fit the transformer by identifying columns to cast.
@@ -133,7 +133,7 @@ class CastColumns(_BaseTransformer):
             self.subset = [col for col in self.subset if col in available_columns]
         if not self.inplace:
             self._column_mapping = {
-                col: f"{col}__cast_{str(self.dtype).lower()}" for col in self.subset
+                col: [f"{col}__cast_{str(self.dtype).lower()}"] for col in self.subset
             }
         return self
 
@@ -171,7 +171,7 @@ class CastColumns(_BaseTransformer):
             return X.with_columns(transformations)
 
         transformations = []
-        for col, new in self._column_mapping.items():
+        for col, [new] in self._column_mapping.items():
             if self.dtype == pl.Datetime and X[col].dtype == pl.String:
                 # Handle string to datetime conversion
                 transformations.append(

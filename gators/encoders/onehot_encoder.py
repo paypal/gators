@@ -1,7 +1,11 @@
+import re
+
 import polars as pl
-from pydantic import PositiveFloat, PositiveInt
+from pydantic import PositiveFloat, PositiveInt, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
+
+_norm_col = re.compile(r'_{3,}')
 
 
 class OneHotEncoder(_BaseTransformer):
@@ -92,6 +96,8 @@ class OneHotEncoder(_BaseTransformer):
     column_categories: dict[str, list[str]] | None = None
     min_count: PositiveInt | PositiveFloat = 1
     drop_columns: bool = True
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
+
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "OneHotEncoder":
         """Fit the transformer by identifying categories for one-hot encoding.
@@ -110,6 +116,11 @@ class OneHotEncoder(_BaseTransformer):
         """
         if self.column_categories:
             self.subset = list(set(self.column_categories.keys()))
+            self._column_mapping = {
+                col: [_norm_col.sub("__", f"{col}__{cat}") for cat in cats]
+                for col, cats in self.column_categories.items()
+            }
+            self._set_output_dtypes()
             return self
 
         if not self.subset:
@@ -117,7 +128,7 @@ class OneHotEncoder(_BaseTransformer):
                 col for col, dtype in X.schema.items() if dtype.base_type() in self._CAT_DTYPES
             ]
 
-        X_filled = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
+        X_filled = X.with_columns([pl.col(col).fill_null("MISSING__") for col in self.subset])
 
         self.column_categories = {}
         n = len(X)
@@ -128,7 +139,20 @@ class OneHotEncoder(_BaseTransformer):
             valid_categories = counts.filter(pl.col("count") >= threshold)
             self.column_categories[col] = valid_categories[col].to_list()
 
+        self._column_mapping = {
+            col: [_norm_col.sub("__", f"{col}__{cat}") for cat in cats]
+            for col, cats in self.column_categories.items()
+        }
+        self._set_output_dtypes()
         return self
+
+    def _set_output_dtypes(self) -> None:
+        """Declare Float64 for every generated one-hot indicator column."""
+        self._output_dtypes = {
+            _norm_col.sub("__", f"{col}__{cat}"): pl.Float64
+            for col, cats in (self.column_categories or {}).items()
+            for cat in cats
+        }
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by applying one-hot encoding to categorical columns.
@@ -144,7 +168,7 @@ class OneHotEncoder(_BaseTransformer):
             DataFrame with one-hot encoded columns (one binary column per category).
         """
         if self.column_categories is None:
-            return X
+            return X  # pragma: no cover
 
         # Use native Polars to_dummies - single efficient call
         cols_to_encode = list(self.column_categories.keys())
@@ -152,11 +176,15 @@ class OneHotEncoder(_BaseTransformer):
         X_encode = X.select(cols_to_encode)
         if cat_cols:
             X_encode = X_encode.with_columns([pl.col(c).cast(pl.String) for c in cat_cols])
+        # Nulls must map to the "MISSING__" category learned in fit(), not Polars' own null handling.
+        X_encode = X_encode.with_columns([pl.col(c).fill_null("MISSING__") for c in cols_to_encode])
         dummies = X_encode.to_dummies(separator="__")
+        # Normalize 3+ consecutive underscores to __ (e.g. col____MISSING__ → col____MISSING__ → col__MISSING__)
+        dummies = dummies.rename({c: _norm_col.sub('__', c) for c in dummies.columns})
 
         # Build expected columns list (pre-computed for efficiency)
         expected_cols = [
-            f"{col}__{cat}" for col, cat_list in self.column_categories.items() for cat in cat_list
+            _norm_col.sub('__', f"{col}__{cat}") for col, cat_list in self.column_categories.items() for cat in cat_list
         ]
         expected_cols_set = set(expected_cols)
 
@@ -171,14 +199,15 @@ class OneHotEncoder(_BaseTransformer):
                 [pl.lit(0.0).alias(col_name) for col_name in sorted(missing_cols)]
             )
         else:
-            # Just select existing columns
             dummies = dummies.select(existing_cols)
+        # Enforce column_categories order so Python and ONNX output identical column sequences
+        dummies = dummies.select(expected_cols)
 
         # Cast all to Float64 in single operation
         dummies = dummies.select(pl.all().cast(pl.Float64))
 
         # Concatenate with original dataframe
-        X = pl.concat([X, dummies], how="horizontal")
+        X = pl.concat([X, dummies], how="horizontal_extend")
 
         # Drop original columns if requested
         if self.drop_columns and self.subset:

@@ -10,7 +10,9 @@ class TargetEncoder(_BaseEncoder):
     Parameters
     ----------
     subset : list[str], default=None
-        List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
+        List of categorical columns to encode. If None, all string, categorical, and enum
+        columns are selected. Boolean columns are not auto-detected - cast them to String
+        first if you want them encoded.
     min_count : int | float, default=1
         Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     inplace : bool, default=True
@@ -62,11 +64,11 @@ class TargetEncoder(_BaseEncoder):
     │ str         │ bool        │ f64           │ f64           │
     ╞═════════════╪═════════════╪═══════════════╪═══════════════╡
     │ foo         │ true        │ 1.0           │ 1.0           │
-    │ bar         │ false       │ 1.0           │ 0.0           │
+    │ bar         │ false       │ 0.5           │ 0.0           │
     │ foo         │ true        │ 1.0           │ 1.0           │
-    │ bar         │ true        │ 1.0           │ 1.0           │
+    │ bar         │ true        │ 0.5           │ 1.0           │
     │ baz         │ false       │ 0.0           │ 0.0           │
-    └─────────────┴─────────────┴───────────────┴─────────────┘
+    └─────────────┴─────────────┴───────────────┴───────────────┘
 
     Subset of columns:
 
@@ -115,9 +117,14 @@ class TargetEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
+        # Cast Enum/Categorical columns to String so unpivot can find a common supertype
+        enum_cols = [c for c, d in X.schema.items() if isinstance(d, pl.Enum | pl.Categorical)]
+        if enum_cols:
+            X = X.with_columns([pl.col(c).cast(pl.String) for c in enum_cols])
+
         # Add target as a temporary column for unpivoting
         X_with_target = X.select(self.subset).with_columns(y.alias("__target__"))
         melted = X_with_target.unpivot(index="__target__")
@@ -136,5 +143,11 @@ class TargetEncoder(_BaseEncoder):
                 for cat, val, count in stats_col[["value", "mean", "N"]].iter_rows()
                 if count >= min_count_threshold
             }
-        self.column_mapping_ = {col: f"{col}__target_enc" for col in self.subset}
+        self._column_mapping = {col: [f"{col}__target_enc"] for col in self.subset}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = dict.fromkeys(targeted, pl.Float64)
         return self

@@ -4,6 +4,7 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
+from gators.exceptions import NotFittedError
 from gators.feature_generation_dt.ordinal_features import (
     COMPONENT_FUNCTIONS,
     OrdinalFeatures,
@@ -336,7 +337,11 @@ def test_date_type_conversion():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"ts": [datetime(2024, 1, 15)]})
     transformer = OrdinalFeatures(components=["year"])
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

@@ -215,7 +215,7 @@ class ComparisonFeatures(_BaseTransformer):
             "is_not_null": "is_not_null",
         }
 
-        for col_a, col_b, op in zip(self.subset_a, self.subset_b, self.operators):
+        for col_a, col_b, op in zip(self.subset_a, self.subset_b, self.operators, strict=False):
             op_name = op_names[op]
 
             # For unary operators, only use column_a in the name
@@ -224,8 +224,10 @@ class ComparisonFeatures(_BaseTransformer):
             else:
                 new_col_name = f"{col_a}_{op_name}_{col_b}"
 
-            comparison_expr = COMPARISON_OPERATORS[op](pl.col(col_a), pl.col(col_b)).alias(
-                new_col_name
+            comparison_expr = (
+                COMPARISON_OPERATORS[op](pl.col(col_a), pl.col(col_b))
+                .cast(pl.Float64)
+                .alias(new_col_name)
             )
             new_columns.append(comparison_expr)
 

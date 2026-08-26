@@ -5,6 +5,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation_str import Upper
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -84,9 +85,13 @@ def test_upper_transform_inplace_false_with_drop(sample_data):
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"col": ["Hello", "World"]})
     transformer = Upper()
     from polars.testing import assert_frame_equal
 
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

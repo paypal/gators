@@ -5,7 +5,7 @@ from pydantic import PositiveInt, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
-__all__ = ["_BaseDiscretizer", "generate_labels"]
+__all__ = ["_BaseDiscretizer", "generate_labels", "deduplicate_bins"]
 
 
 def generate_labels(bins: dict[str, list[float]], rounding=3) -> dict[str, list[str]]:
@@ -48,11 +48,39 @@ def generate_labels(bins: dict[str, list[float]], rounding=3) -> dict[str, list[
             arr = arr + [float("inf")]
 
         labels[col] = [
-            f"({round(a, rounding)},{round(b, rounding)}]" for a, b in zip(arr[:-1], arr[1:])
+            f"({round(a, rounding)},{round(b, rounding)}]" for a, b in zip(arr[:-1], arr[1:], strict=False)
         ]
         if labels[col][-1].endswith("inf]"):
             labels[col][-1] = labels[col][-1].replace("]", ")")
     return labels
+
+
+def deduplicate_bins(bins: dict[str, list[float]], rounding: int) -> dict[str, list[float]]:
+    """Remove consecutive break points that are indistinguishable at the given rounding precision.
+
+    Parameters
+    ----------
+    bins : dict[str, list[float]]
+        Dictionary where keys are column names and values are lists of bin edges.
+    rounding : int
+        Number of decimal places used to compare bin edges.
+
+    Returns
+    -------
+    dict[str, list[float]]
+        Dictionary with deduplicated bin edges per column.
+    """
+    result = {}
+    for col, breaks in bins.items():
+        if len(breaks) <= 1:
+            result[col] = breaks
+            continue
+        cleaned = [breaks[0]]
+        for b in breaks[1:]:
+            if round(b, rounding) != round(cleaned[-1], rounding):
+                cleaned.append(b)
+        result[col] = cleaned
+    return result
 
 
 class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
@@ -149,7 +177,21 @@ class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
     inplace: bool = True
     _bins: dict[str, list[float]] = PrivateAttr(default_factory=dict)
     _labels: dict[str, list[str]] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
+
+    def _set_output_dtypes(self) -> None:
+        """Declare output dtypes for the discretized columns (called at the end of fit()).
+
+        as_numerics=True -> Float64 (bin index); as_numerics=False -> String (bin label).
+        """
+        out_dtype = pl.Float64 if self.as_numerics else pl.String
+        targeted = (
+            self.subset
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        assert targeted is not None
+        self._output_dtypes = dict.fromkeys(targeted, out_dtype)
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
         """Transform the input DataFrame by extracting specified components.
@@ -165,7 +207,7 @@ class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
             Transformed DataFrame.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         if self.inplace:
             # subset is guaranteed to be set during fit
@@ -174,15 +216,20 @@ class _BaseDiscretizer(_BaseTransformer, metaclass=ABCMeta):
                 for col in self.subset
             ]
             if self.as_numerics:
-                transformations = [t.cast(pl.Int32) for t in transformations]
+                # to_physical() gives the bin index directly, independent of label text.
+                transformations = [t.to_physical().cast(pl.Float64) for t in transformations]
+            else:
+                transformations = [t.cast(pl.String) for t in transformations]
             return X.with_columns(transformations)
 
         transformations = [
             pl.col(col).cut(breaks=self._bins[col], labels=self._labels[col]).alias(new)
-            for col, new in self._column_mapping.items()
+            for col, [new] in self._column_mapping.items()
         ]
         if self.as_numerics:
-            transformations = [t.cast(pl.Int32) for t in transformations]
+            transformations = [t.to_physical().cast(pl.Float64) for t in transformations]
+        else:
+            transformations = [t.cast(pl.String) for t in transformations]
         X = X.with_columns(transformations)
         if self.drop_columns and self.subset is not None:
             return X.drop(self.subset)

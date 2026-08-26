@@ -5,6 +5,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation_dt.business_time_features import BusinessTimeFeatures
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -266,7 +267,11 @@ def test_edge_case_exact_business_hour_boundaries():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"ts": [datetime(2024, 1, 15, 10, 0)]})
     transformer = BusinessTimeFeatures()
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)
