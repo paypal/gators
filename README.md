@@ -248,7 +248,7 @@ X = pl.read_csv("data.csv")
 pipeline = Pipeline(steps=[
     ('drop_nan',  DropHighNaNRatio(max_ratio=0.5)),  # drop columns with >50% missing values
     ('impute',    NumericImputer(strategy='median')), # fill numeric nulls with column median
-    ('variance',  VarianceFilter(min_var=0.01)),      # remove near-zero-variance columns
+    ('variance',  VarianceFilter(min_std_dev=0.01)),      # remove near-zero-variance columns
     ('encode',    OneHotEncoder()),                   # one-hot encode all string/categorical columns
     ('scale',     StandardScaler()),                  # z-score standardize numeric columns
 ])

@@ -24,7 +24,7 @@ Here's a simple example showing the core Gators workflow:
     pipeline = Pipeline(steps=[
         ('drop_nan', DropHighNaNRatio(max_ratio=0.5)),   # drop columns with >50% nulls
         ('impute',   NumericImputer(strategy='median')), # fill numeric nulls with column median
-        ('variance', VarianceFilter(min_var=0.01)),      # remove near-zero-variance columns
+        ('variance', VarianceFilter(min_std_dev=0.01)),      # remove near-zero-variance columns
         ('encode',   OneHotEncoder()),                   # one-hot encode all string/categorical columns
         ('scale',    StandardScaler()),                  # z-score standardize numeric columns
     ])
@@ -74,7 +74,7 @@ Example: Data Cleaning
     X = DropNearConstantColumns(max_ratio=0.99).fit_transform(X)
 
     # Remove low-variance numeric features
-    X = VarianceFilter(min_var=0.01).fit_transform(X)
+    X = VarianceFilter(min_std_dev=0.01).fit_transform(X)
 
     # Round to 3 significant figures for cleaner downstream processing
     X = RoundSignificantDigits(n_digits=3).fit_transform(X)
@@ -191,7 +191,7 @@ Example: Complete Production Pipeline
     pipeline = Pipeline(steps=[
         ('drop_nan',    DropHighNaNRatio(max_ratio=0.5)),
         ('drop_const',  DropConstantColumns()),
-        ('variance',    VarianceFilter(min_var=0.01)),
+        ('variance',    VarianceFilter(min_std_dev=0.01)),
         ('impute_num',  NumericImputer(strategy='median')),
         ('impute_str',  StringImputer(strategy='most_frequent')),
         ('polynomial',  PolynomialFeatures(subset=['amount', 'balance'], degree=2)),

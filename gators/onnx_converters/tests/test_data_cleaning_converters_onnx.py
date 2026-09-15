@@ -123,7 +123,7 @@ def test_drop_duplicate_columns():
 # ── VarianceFilter ────────────────────────────────────────────────────────────
 
 def test_variance_filter(df):
-    t = VarianceFilter(min_var=0.5)
+    t = VarianceFilter(min_std_dev=0.5)
     t.fit(df)
     model = to_onnx_graph(t)
     onnx_out = run_onnx(model, df)

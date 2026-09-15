@@ -98,6 +98,29 @@ def test_ordinal_encoder_boolean_column():
     assert false_val != pytest.approx(0.0)
 
 
+def test_woe_encoder_boolean_column_string_keys():
+    """WOEEncoder's unpivot turns a Boolean subset column's mapping_ keys into
+    'True'/'False' strings, but _input_dtypes still says Boolean, so ONNX must
+    still treat the input as FLOAT (not STRING).
+
+    Note: gators' own WOEEncoder.transform() cannot handle this combination
+    (replace_strict rejects Boolean -> string-keyed mapping), so the expected
+    values are computed directly from mapping_ instead of via transform().
+    """
+    X = pl.DataFrame({"flag": [True, False, True, False, True]})
+    y = pl.Series("y", [1.0, 0.0, 1.0, 0.0, 1.0])
+    enc = WOEEncoder(subset=["flag"])
+    enc.fit(X, y=y)
+    mapping = enc.mapping_["flag"]
+    assert isinstance(next(iter(mapping)), str)
+
+    model = to_onnx_graph(enc)
+    onnx_out = run_onnx(model, X)
+    expected = [mapping[str(v)] for v in X["flag"].to_list()]
+
+    np.testing.assert_allclose(onnx_out["flag"].astype(float), expected, atol=1e-5)
+
+
 # ── RareCategoryEncoder ───────────────────────────────────────────────────────
 
 @pytest.fixture

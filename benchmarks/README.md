@@ -78,3 +78,172 @@ See [results/summary.md](results/summary.md) for the full generated tables
   over multiple processes/machines — treat as directional, not a formal
   statistical benchmark.
 - `n/a` means "no comparable implementation exists", not "0x" or "untested".
+
+## Extended benchmark matrix
+
+A separate script sweeps rows, feature count, missingness, cardinality, and
+thread count — the axes the single-point comparison above cannot speak to,
+and in particular a **controlled, single-thread-vs-single-thread**
+comparison that isolates how much of the headline speedup above comes from
+Polars' default multi-threading rather than the transformer implementation
+itself.
+
+### Design: one-factor-at-a-time, not a full factorial grid
+
+A full grid across every axis (rows × features × missingness × cardinality ×
+threads × libraries) is combinatorially intractable on a single laptop, and
+some cells don't fit in memory regardless of time budget (10,000,000 rows ×
+1,000 float64 columns is 80GB for one array). We instead sweep **one axis at
+a time** around a fixed baseline (8 numeric + 4 categorical columns,
+cardinality 20, 10% nulls). This is a deliberate scope decision: OFAT cannot
+detect interaction effects between axes, and the ranges covered here
+(10⁴–10⁶ rows, ~6–80 columns) are narrower than a full 10⁴–10⁷ rows /
+10–1,000 feature study would require — both stated as open follow-up work,
+not hidden.
+
+### Reproducing
+
+```bash
+python benchmarks/run_benchmarks.py           # first, if results_50000.csv / results_500000.csv don't exist yet
+python benchmarks/run_matrix_benchmarks.py
+```
+
+Writes one CSV per axis plus `results/matrix/summary.md`. The row and thread
+sweeps reuse `run_benchmarks.py`'s existing 50,000/500,000-row output
+directly (for the sklearn/feature-engine reference numbers) rather than
+re-measuring them, so results stay consistent across scripts.
+
+### Headline result 1 — the reported speedups scale further than 2 points suggested
+
+Extending the row axis down to 10,000 and up to 1,000,000 rows confirms and
+sharpens the trend already visible at 50k/500k: every transformer's speedup
+vs. scikit-learn keeps growing with row count rather than plateauing —
+e.g. `TargetEncoder` goes from 4.1x (10k rows) → 7.3x (50k) → 15.0x (500k) →
+18.0x (1,000,000 rows). The same pattern holds on the feature-count axis
+(more columns, not just more rows, also widens the gap).
+
+### Headline result 2 — a controlled, thread-isolated comparison meaningfully lowers the "true" speedup
+
+This is the single most important correction in this benchmark matrix. Using
+`POLARS_MAX_THREADS=1` (set before Polars' first import, via a subprocess,
+since the thread pool is fixed for the process's lifetime), we re-measured
+three transformers at 500,000 rows with Gators pinned to one thread, holding
+scikit-learn's (already single-threaded) numbers fixed:
+
+| Transformer | gators, 1 thread (s) | gators, default threads (s) | sklearn (s) | speedup, 1-thread-vs-1-thread | speedup, default-vs-1-thread (previously reported) |
+|---|---:|---:|---:|---:|---:|
+| NumericImputer (mean) | 0.0053 | 0.0026 | 0.0250 | **4.72x** | 9.62x |
+| OneHotEncoder | 0.0663 | 0.0362 | 0.2835 | **4.28x** | 7.83x |
+| TargetEncoder | 0.0923 | 0.0230 | 0.4415 | **4.78x** | 19.20x |
+
+Once thread count is controlled for, the three transformers converge to a
+tight, consistent **~4.3–4.8x** advantage over scikit-learn — a genuinely
+measured, apples-to-apples number. The previously reported default-vs-default
+speedups (up to 19x for `TargetEncoder`) were real, but roughly half to
+two-thirds of that number was Polars using multiple cores against a
+single-threaded scikit-learn, not a 15–19x faster *implementation*. Both
+numbers are legitimate and are reported together deliberately: the
+default-vs-default number reflects realistic out-of-the-box usage (Section
+above); the thread-isolated number is the fairer algorithmic comparison. This
+directly resolves the thread-asymmetry caveat in the main methodology section
+rather than leaving it as an acknowledged-but-unquantified limitation.
+
+### Headline result 3 — `OneHotEncoder`'s advantage narrows as cardinality grows
+
+The cardinality sweep (a single categorical column, cardinality 5 → 1,000,
+50,000 rows) shows that `OneHotEncoder`'s speedup over scikit-learn is
+cardinality-dependent: 3.8x faster at cardinality 5, 3.0x at cardinality 20,
+2.0x at cardinality 100, and statistically indistinguishable from parity
+(1.00x, 0.0115s vs. 0.0115s) at cardinality 1,000 — the only point anywhere
+in this matrix where a Gators transformer does not clearly outperform
+scikit-learn. `feature-engine`, by contrast, gets dramatically slower as
+cardinality grows (about 120x slower than Gators at cardinality 1,000), so
+the narrowing is specific to the scikit-learn comparison. We report this
+trend as measured, without smoothing it into a flat "always faster" claim:
+at very high cardinality, whether Gators is faster than scikit-learn is not
+a given.
+
+### What this still does not show
+
+
+A full factorial grid (to detect interaction effects between axes), rows
+beyond 1,000,000 or features beyond ~80 (memory-bound on this hardware),
+thread sweeps for the other 5 transformer cases, multi-machine variance, and
+whether `OneHotEncoder`'s narrowing advantage continues past cardinality
+1,000 or appears in other wide-output transformers.
+See `paper/gators_paper.md` Section 9 for the prioritized follow-up list.
+
+
+## ONNX serving benchmark
+
+A separate script measures native Polars `transform()` versus an exported
+ONNX Runtime session — the question the fit/transform benchmark above does
+not answer, namely whether the ONNX export path (see the root README's ONNX
+Export section) is actually worth using at inference time, not just
+numerically correct.
+
+### Methodology
+
+- **Pipelines**: three fitted `gators.pipeline.Pipeline`s restricted to
+  ONNX-exportable transformers (`impute_scale`, `impute_clip_discretize`,
+  `impute_encode_scale`), fit on 50,000 rows, evaluated on an independently
+  sampled 100,000-row "serving" set.
+- **Batch-size sweep**: each pipeline is timed at batch sizes
+  1 / 10 / 100 / 1,000 / 10,000 / 100,000 — batch size 1 is the realistic
+  "one prediction request" serving scenario; larger batches represent bulk
+  scoring/offline transform.
+- **Correctness first**: for every pipeline, ONNX Runtime output is checked
+  against native Polars output (`atol=1e-4`) before any timing is trusted —
+  same principle as `check_parity.py`.
+- **Timing**: best-of-5 wall-clock time after 2 warm-up calls, one call per
+  batch size (not chunked further).
+- **Memory**: `resource.getrusage().ru_maxrss` delta around each call. This is
+  a process-wide, monotonically non-decreasing high-water mark, not a precise
+  per-call allocation count — a delta of 0 means "did not set a new peak",
+  not "used no memory". Treat these numbers as directional only.
+- **ONNX Runtime configuration**: `CPUExecutionProvider`, default graph
+  optimizations (`ORT_ENABLE_ALL`), `intra_op_num_threads=0` (let ORT choose),
+  `inter_op_num_threads=1` — the defaults `create_session` ships with, tuned
+  for single-request latency rather than bulk throughput. A thread-swept
+  comparison is listed as follow-up work, not included here.
+
+### Reproducing
+
+```bash
+pip install -e ".[onnx,benchmarks]"
+python benchmarks/run_onnx_benchmarks.py
+```
+
+Writes `results/onnx_results.csv` and `results/onnx_summary.md`, and prints
+the same summary to stdout.
+
+### Headline result
+
+Across all three pipelines, the same qualitative crossover appears: **ONNX
+Runtime is faster at small batch sizes (single-row up to ~100–1,000 rows),
+native Polars is faster at large batch sizes (10,000+ rows)** — e.g. for
+`impute_scale`, ONNX is ~1.6–1.8x faster than Polars at batch size 1–10, but
+~12x *slower* at batch size 10,000 and ~68x slower at 100,000. See
+[results/onnx_summary.md](results/onnx_summary.md) for full per-pipeline
+tables.
+
+This is the expected shape of the trade-off, not a surprise to be explained
+away: Polars' advantage comes from parallelizing a query plan across cores
+over a large batch, which only pays off once a batch is large enough to
+amortize scheduling overhead; ONNX Runtime's advantage at small batches comes
+from a lighter-weight, single-graph-execution call with none of the
+Python-object/query-planning overhead that `transform()` pays per call
+regardless of row count. In other words: **use the ONNX export path for
+low-latency, one-row-at-a-time serving; use native Polars for bulk/batch
+scoring** — the two paths are complementary, not "one strictly replaces the
+other".
+
+### What this does *not* show
+
+- Concurrent/sustained-load throughput (many simultaneous requests) — this
+  only measures single-threaded, single-request-at-a-time latency.
+- Non-CPU execution providers, other thread configurations, or `float32`
+  graphs (the benchmark uses `pipeline_to_onnx`'s `float64` default).
+- Behavior on pipelines containing the `feature_generation_str` transformers
+  that have no ONNX converter at all (Section on ONNX Export in the root
+  README) — those pipelines cannot take this path by construction.

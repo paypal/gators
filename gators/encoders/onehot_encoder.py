@@ -115,7 +115,9 @@ class OneHotEncoder(_BaseTransformer):
             The fitted transformer instance.
         """
         if self.column_categories:
-            self.subset = list(set(self.column_categories.keys()))
+            # dict preserves insertion order; a set here would make column order (and
+            # therefore output column order) nondeterministic across runs.
+            self.subset = list(self.column_categories.keys())
             self._column_mapping = {
                 col: [_norm_col.sub("__", f"{col}__{cat}") for cat in cats]
                 for col, cats in self.column_categories.items()
@@ -148,10 +150,10 @@ class OneHotEncoder(_BaseTransformer):
 
     def _set_output_dtypes(self) -> None:
         """Declare Float64 for every generated one-hot indicator column."""
+        # Reuses the names already normalized in _column_mapping instead of
+        # recomputing the same regex substitution a second time.
         self._output_dtypes = {
-            _norm_col.sub("__", f"{col}__{cat}"): pl.Float64
-            for col, cats in (self.column_categories or {}).items()
-            for cat in cats
+            name: pl.Float64 for names in (self._column_mapping or {}).values() for name in names
         }
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -172,39 +174,49 @@ class OneHotEncoder(_BaseTransformer):
 
         # Use native Polars to_dummies - single efficient call
         cols_to_encode = list(self.column_categories.keys())
-        cat_cols = [col for col in cols_to_encode if X[col].dtype.base_type() in self._CAT_DTYPES]
-        X_encode = X.select(cols_to_encode)
-        if cat_cols:
-            X_encode = X_encode.with_columns([pl.col(c).cast(pl.String) for c in cat_cols])
-        # Nulls must map to the "MISSING__" category learned in fit(), not Polars' own null handling.
-        X_encode = X_encode.with_columns([pl.col(c).fill_null("MISSING__") for c in cols_to_encode])
+        # Only Categorical/Enum columns need an explicit cast to String before to_dummies;
+        # casting an already-String column is a no-op that still costs a full pass, so it's
+        # skipped for the common case (subset columns are already strings).
+        needs_string_cast = {
+            col for col in cols_to_encode if X[col].dtype.base_type() in (pl.Categorical, pl.Enum)
+        }
+        # Nulls must map to the "MISSING__" category learned in fit(), not Polars' own null
+        # handling. Cast (where needed) and fill_null are combined into one with_columns pass
+        # instead of two, to avoid a second full-frame materialization.
+        X_encode = X.select(cols_to_encode).with_columns(
+            [
+                (pl.col(c).cast(pl.String) if c in needs_string_cast else pl.col(c)).fill_null(
+                    "MISSING__"
+                )
+                for c in cols_to_encode
+            ]
+        )
         dummies = X_encode.to_dummies(separator="__")
         # Normalize 3+ consecutive underscores to __ (e.g. col____MISSING__ → col____MISSING__ → col__MISSING__)
         dummies = dummies.rename({c: _norm_col.sub('__', c) for c in dummies.columns})
 
-        # Build expected columns list (pre-computed for efficiency)
-        expected_cols = [
-            _norm_col.sub('__', f"{col}__{cat}") for col, cat_list in self.column_categories.items() for cat in cat_list
-        ]
-        expected_cols_set = set(expected_cols)
+        # Reuse the names already normalized in fit()'s _column_mapping instead of
+        # recomputing the same regex substitution again here.
+        expected_cols = [name for names in self._column_mapping.values() for name in names]
 
-        # Identify existing and missing columns efficiently
-        existing_cols = [c for c in expected_cols if c in dummies.columns]
-        missing_cols = expected_cols_set - set(dummies.columns)
-
-        # Select existing columns and add missing columns in single operation
+        # Materialize dummies.columns into a set ONCE. Checking `c in dummies.columns`
+        # inside a loop (the previous approach) re-materializes the list *and* does an
+        # O(n) scan on every iteration, making category lookups O(cardinality^2); at
+        # cardinality=1000 that dominates the whole transform (see benchmarks/README.md,
+        # "Extended benchmark matrix" -- this was the root cause of the reported
+        # OneHotEncoder regression at high cardinality).
+        dummies_cols = set(dummies.columns)
+        missing_cols = [c for c in expected_cols if c not in dummies_cols]
         if missing_cols:
-            # Batch: select existing + create missing columns together
-            dummies = dummies.select(existing_cols).with_columns(
-                [pl.lit(0.0).alias(col_name) for col_name in sorted(missing_cols)]
-            )
-        else:
-            dummies = dummies.select(existing_cols)
-        # Enforce column_categories order so Python and ONNX output identical column sequences
-        dummies = dummies.select(expected_cols)
+            dummies = dummies.with_columns([pl.lit(0.0).alias(c) for c in missing_cols])
 
-        # Cast all to Float64 in single operation
-        dummies = dummies.select(pl.all().cast(pl.Float64))
+        # Single pass: reorder to column_categories order (plain names -- cheap, no
+        # per-column expression objects) and drop any unseen-category dummy columns
+        # (anything not in expected_cols) at once; cast is a single bulk DataFrame.cast
+        # call rather than one pl.col(c).cast(...) expression per category, which
+        # profiling showed was a meaningful share of Python-side overhead at high
+        # cardinality (building/parsing 1,000+ expression objects vs. one cast call).
+        dummies = dummies.select(expected_cols).cast(pl.Float64)
 
         # Concatenate with original dataframe
         X = pl.concat([X, dummies], how="horizontal_extend")

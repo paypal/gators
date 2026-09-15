@@ -172,6 +172,8 @@ def _base_encoder_to_onnx_nodes(
             )
         elif is_bool_str:
             # Boolean Polars column encoded as 'false'/'true' strings; ONNX tensor is FLOAT 0.0/1.0
+            # Keys may be title-cased (str(True)/str(False)) or lowercase - match case-insensitively.
+            lower_mapping = {str(k).lower(): v for k, v in mapping.items()}
             nodes.append(
                 oh.make_node(
                     "LabelEncoder",
@@ -179,7 +181,7 @@ def _base_encoder_to_onnx_nodes(
                     outputs=[out_name],
                     domain="ai.onnx.ml",
                     keys_floats=[0.0, 1.0],
-                    values_floats=[float(mapping.get('false', 0.0)), float(mapping.get('true', 0.0))],
+                    values_floats=[float(lower_mapping.get('false', 0.0)), float(lower_mapping.get('true', 0.0))],
                     default_float=0.0,
                 )
             )

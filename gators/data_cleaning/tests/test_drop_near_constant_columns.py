@@ -15,7 +15,7 @@ class TestDropNearConstantColumns:
     # ------------------------------------------------------------------
 
     def test_drop_near_constant_numeric(self):
-        """Column with 1 unique value out of 100 rows is dropped at threshold=0.02."""
+        """Column whose top value covers 99% of rows is dropped at max_ratio=0.98."""
         X = pl.DataFrame(
             {
                 "id": list(range(100)),
@@ -23,7 +23,7 @@ class TestDropNearConstantColumns:
                 "varying": list(range(100)),
             }
         )
-        remover = DropNearConstantColumns(threshold=0.02)
+        remover = DropNearConstantColumns(max_ratio=0.98)
         result = remover.fit_transform(X)
 
         expected = pl.DataFrame({"id": list(range(100)), "varying": list(range(100))})
@@ -49,7 +49,7 @@ class TestDropNearConstantColumns:
                 ],
             }
         )
-        remover = DropNearConstantColumns(threshold=0.25)
+        remover = DropNearConstantColumns(max_ratio=0.8)
         result = remover.fit_transform(X)
 
         expected = pl.DataFrame(
@@ -72,14 +72,14 @@ class TestDropNearConstantColumns:
         assert remover._to_drop == ["country"]
 
     def test_no_near_constant_columns(self):
-        """No columns dropped when all columns are sufficiently diverse."""
+        """No columns dropped when no value dominates."""
         X = pl.DataFrame(
             {
                 "col1": list(range(10)),
                 "col2": [str(i) for i in range(10)],
             }
         )
-        remover = DropNearConstantColumns(threshold=0.05)
+        remover = DropNearConstantColumns(max_ratio=0.5)
         result = remover.fit_transform(X)
 
         assert_frame_equal(result, X)
@@ -94,7 +94,7 @@ class TestDropNearConstantColumns:
                 "varying": list(range(10)),
             }
         )
-        remover = DropNearConstantColumns(threshold=0.25)
+        remover = DropNearConstantColumns(max_ratio=0.8)
         result = remover.fit_transform(X)
 
         expected = pl.DataFrame({"varying": list(range(10))})
@@ -104,39 +104,38 @@ class TestDropNearConstantColumns:
     def test_all_columns_near_constant(self):
         """All columns dropped yields an empty-column DataFrame."""
         X = pl.DataFrame({"nc1": [1] * 9 + [2], "nc2": ["A"] * 9 + ["B"]})
-        remover = DropNearConstantColumns(threshold=0.25)
+        remover = DropNearConstantColumns(max_ratio=0.8)
         result = remover.fit_transform(X)
 
         assert result.shape[1] == 0
         assert set(remover._to_drop) == {"nc1", "nc2"}
 
     # ------------------------------------------------------------------
-    # Threshold boundary
+    # max_ratio boundary
     # ------------------------------------------------------------------
 
-    def test_column_exactly_at_threshold_is_dropped(self):
-        """Column with n_unique == threshold * n_rows is dropped (<=)."""
-        # 10 rows, threshold=0.1 → max_unique=1.0; column has 1 unique value
+    def test_column_exactly_at_max_ratio_is_dropped(self):
+        """Column with mode share == max_ratio is dropped (>=)."""
+        # 10 rows, all identical -> mode share = 1.0
         X = pl.DataFrame({"nc": [42] * 10, "other": list(range(10))})
-        remover = DropNearConstantColumns(threshold=0.1)
+        remover = DropNearConstantColumns(max_ratio=1.0)
         result = remover.fit_transform(X)
 
         assert "nc" not in result.columns
         assert remover._to_drop == ["nc"]
 
-    def test_column_just_above_threshold_is_kept(self):
-        """Column with n_unique just above threshold * n_rows is kept."""
-        # 10 rows, threshold=0.1 → max_unique=1.0; column has 2 unique values → kept
+    def test_column_just_below_max_ratio_is_kept(self):
+        """Column with mode share just below max_ratio is kept."""
+        # 10 rows, 9 identical + 1 different -> mode share = 0.9
         X = pl.DataFrame({"nc": [42] * 9 + [0], "other": list(range(10))})
-        remover = DropNearConstantColumns(threshold=0.1)
+        remover = DropNearConstantColumns(max_ratio=0.95)
         result = remover.fit_transform(X)
 
         assert_frame_equal(result, X)
         assert remover._to_drop == []
 
-    def test_threshold_zero_behaves_like_drop_constant(self):
-        """threshold=0 drops only truly constant columns (n_unique <= 0 is impossible
-        for non-empty columns, so only empty columns / all-same columns are dropped)."""
+    def test_max_ratio_one_behaves_like_drop_constant(self):
+        """max_ratio=1.0 only drops truly constant columns (mode share == 1.0)."""
         X = pl.DataFrame(
             {
                 "const": [1, 1, 1],
@@ -144,28 +143,44 @@ class TestDropNearConstantColumns:
                 "varying": [1, 2, 3],
             }
         )
-        remover = DropNearConstantColumns(threshold=0.0)
+        remover = DropNearConstantColumns(max_ratio=1.0)
         result = remover.fit_transform(X)
 
-        # threshold=0 → max_unique=0 → only columns with n_unique<=0 dropped
-        # None of these columns have n_unique<=0, so nothing is dropped
-        assert_frame_equal(result, X)
-        assert remover._to_drop == []
+        # const has mode share 1.0 -> dropped; near_const (2/3) and varying (1/3) kept
+        expected = pl.DataFrame({"near_const": [1, 1, 2], "varying": [1, 2, 3]})
+        assert_frame_equal(result, expected)
+        assert remover._to_drop == ["const"]
+
+    def test_max_ratio_one_matches_drop_constant_with_nulls(self):
+        """max_ratio=1.0 with include_na=False exactly matches DropConstantColumns,
+        even when a column is constant among non-nulls but also contains nulls."""
+        X = pl.DataFrame(
+            {
+                "const_with_nulls": [1, 1, None, None, None],
+                "varying": [1, 2, 3, 4, 5],
+            }
+        )
+        remover = DropNearConstantColumns(max_ratio=1.0, include_na=False)
+        result = remover.fit_transform(X)
+
+        expected = pl.DataFrame({"varying": [1, 2, 3, 4, 5]})
+        assert_frame_equal(result, expected)
+        assert remover._to_drop == ["const_with_nulls"]
 
     # ------------------------------------------------------------------
     # include_na parameter
     # ------------------------------------------------------------------
 
-    def test_include_na_true_null_counts_as_unique(self):
-        """With include_na=True nulls count as a distinct value."""
-        # 10 rows; 'mostly_null' has 2 unique values (None + 1) but only 2 → <= 0.15*10=1.5 → dropped
+    def test_include_na_true_null_counts_as_dominant(self):
+        """With include_na=True, null is treated as its own (possibly dominant) value."""
+        # 10 rows; 'mostly_null' is null 9/10 times -> mode share 0.9
         X = pl.DataFrame(
             {
                 "mostly_null": [None] * 9 + [1],
                 "varying": list(range(10)),
             }
         )
-        remover = DropNearConstantColumns(threshold=0.25, include_na=True)
+        remover = DropNearConstantColumns(max_ratio=0.8, include_na=True)
         result = remover.fit_transform(X)
 
         expected = pl.DataFrame({"varying": list(range(10))})
@@ -173,35 +188,51 @@ class TestDropNearConstantColumns:
         assert remover._to_drop == ["mostly_null"]
 
     def test_include_na_false_null_ignored(self):
-        """With include_na=False nulls are excluded before counting."""
-        # 'same_non_null': non-null values are all 1 → 1 unique (excl. null) → dropped
+        """With include_na=False, nulls are excluded from both numerator and denominator."""
+        # 'same_non_null': all 9 non-null values are 1 -> share among non-null rows = 1.0
         X = pl.DataFrame(
             {
                 "same_non_null": [1] * 9 + [None],
                 "varying": list(range(10)),
             }
         )
-        remover = DropNearConstantColumns(threshold=0.15, include_na=False)
+        remover = DropNearConstantColumns(max_ratio=0.8, include_na=False)
         result = remover.fit_transform(X)
 
         expected = pl.DataFrame({"varying": list(range(10))})
         assert_frame_equal(result, expected)
         assert remover._to_drop == ["same_non_null"]
 
-    def test_include_na_false_null_adds_no_unique(self):
-        """Column with two real values plus nulls is kept when include_na=False."""
+    def test_include_na_false_null_adds_no_dominant_share(self):
+        """Column with two equally-common non-null values is kept when include_na=False."""
         X = pl.DataFrame(
             {
                 "two_vals": [1, 2, None, None, None, None, None, None, None, None],
                 "varying": list(range(10)),
             }
         )
-        # threshold=0.15 → max_unique=1.5; two_vals has 2 non-null unique values → kept
-        remover = DropNearConstantColumns(threshold=0.15, include_na=False)
+        # non-null mode count = 1 out of 2 non-null values -> share = 0.5 -> kept at 0.6
+        remover = DropNearConstantColumns(max_ratio=0.6, include_na=False)
         result = remover.fit_transform(X)
 
         assert_frame_equal(result, X)
         assert remover._to_drop == []
+
+    def test_include_na_false_all_null_column_is_dropped(self):
+        """An entirely-null column has no non-null value at all, so it is treated
+        as constant (dropped) when include_na=False, matching DropConstantColumns."""
+        X = pl.DataFrame(
+            {
+                "all_null": pl.Series([None] * 10, dtype=pl.Int64),
+                "varying": list(range(10)),
+            }
+        )
+        remover = DropNearConstantColumns(max_ratio=0.5, include_na=False)
+        result = remover.fit_transform(X)
+
+        expected = pl.DataFrame({"varying": list(range(10))})
+        assert_frame_equal(result, expected)
+        assert remover._to_drop == ["all_null"]
 
     # ------------------------------------------------------------------
     # subset parameter
@@ -216,7 +247,7 @@ class TestDropNearConstantColumns:
                 "col3": list(range(10)),
             }
         )
-        remover = DropNearConstantColumns(threshold=0.25, subset=["col1", "col2"])
+        remover = DropNearConstantColumns(max_ratio=0.8, subset=["col1", "col2"])
         result = remover.fit_transform(X)
 
         expected = pl.DataFrame({"col3": list(range(10))})
@@ -232,7 +263,7 @@ class TestDropNearConstantColumns:
                 "col3": list(range(10)),
             }
         )
-        remover = DropNearConstantColumns(threshold=0.25, subset=["col1", "col2"])
+        remover = DropNearConstantColumns(max_ratio=0.8, subset=["col1", "col2"])
         result = remover.fit_transform(X)
 
         expected = pl.DataFrame({"col2": list(range(10)), "col3": list(range(10))})
@@ -247,10 +278,10 @@ class TestDropNearConstantColumns:
                 "col2": list(range(10)),
             }
         )
-        remover = DropNearConstantColumns(threshold=0.15, subset=["col2"])
+        remover = DropNearConstantColumns(max_ratio=0.8, subset=["col2"])
         result = remover.fit_transform(X)
 
-        # nc_outside is not in subset → not dropped
+        # nc_outside is not in subset -> not dropped
         assert_frame_equal(result, X)
         assert remover._to_drop == []
 
@@ -263,7 +294,7 @@ class TestDropNearConstantColumns:
         train = pl.DataFrame({"nc": [1] * 9 + [2], "varying": list(range(10))})
         test = pl.DataFrame({"nc": list(range(5)), "varying": list(range(5))})
 
-        remover = DropNearConstantColumns(threshold=0.25)
+        remover = DropNearConstantColumns(max_ratio=0.8)
         remover.fit(train)
         result = remover.transform(test)
 
@@ -276,7 +307,7 @@ class TestDropNearConstantColumns:
         # In test data 'nc' is now fully varying
         test = pl.DataFrame({"nc": list(range(10)), "varying": list(range(10))})
 
-        remover = DropNearConstantColumns(threshold=0.25)
+        remover = DropNearConstantColumns(max_ratio=0.8)
         remover.fit(train)
         result = remover.transform(test)
 
@@ -288,21 +319,22 @@ class TestDropNearConstantColumns:
     # ------------------------------------------------------------------
 
     def test_single_row_dataframe(self):
-        """With one row every column has 1 unique value."""
+        """A single row is trivially 100% one value, so it is always dropped
+        regardless of max_ratio (there is no variation to observe)."""
         X = pl.DataFrame({"col1": [1], "col2": ["A"]})
-        # threshold=0.5 → max_unique=0.5; n_unique=1 > 0.5 → kept
-        remover = DropNearConstantColumns(threshold=0.5)
+        remover = DropNearConstantColumns(max_ratio=0.99)
+        result = remover.fit_transform(X)
+        assert result.shape[1] == 0
+        assert set(remover._to_drop) == {"col1", "col2"}
+
+    def test_empty_dataframe(self):
+        """Empty DataFrame (zero rows) has no rows to evaluate dominance over,
+        so no columns are dropped."""
+        X = pl.DataFrame({"col1": [], "col2": []}).cast({"col1": pl.Int64, "col2": pl.String})
+        remover = DropNearConstantColumns(max_ratio=0.01)
         result = remover.fit_transform(X)
         assert_frame_equal(result, X)
         assert remover._to_drop == []
-
-    def test_empty_dataframe(self):
-        """Empty DataFrame (zero rows) produces zero unique values → all dropped."""
-        X = pl.DataFrame({"col1": [], "col2": []}).cast({"col1": pl.Int64, "col2": pl.String})
-        remover = DropNearConstantColumns(threshold=0.01)
-        result = remover.fit_transform(X)
-        # 0 <= 0.01*0=0 → all dropped
-        assert result.shape[1] == 0
 
     def test_boolean_near_constant_column(self):
         """Boolean columns are handled correctly."""
@@ -312,21 +344,21 @@ class TestDropNearConstantColumns:
                 "mixed": [True, False] * 5,
             }
         )
-        # threshold=0.15 → max_unique=1.5; mostly_true has 2 unique → kept
-        remover = DropNearConstantColumns(threshold=0.15)
+        # mostly_true mode share = 0.9, mixed mode share = 0.5 -> both kept at 0.95
+        remover = DropNearConstantColumns(max_ratio=0.95)
         result = remover.fit_transform(X)
         assert_frame_equal(result, X)
         assert remover._to_drop == []
 
-    def test_boolean_constant_dropped_at_low_threshold(self):
-        """A boolean column with 1 unique value is dropped."""
+    def test_boolean_constant_dropped_at_high_max_ratio(self):
+        """A boolean column with only one value is dropped."""
         X = pl.DataFrame(
             {
                 "all_true": [True] * 10,
                 "mixed": [True, False] * 5,
             }
         )
-        remover = DropNearConstantColumns(threshold=0.15)
+        remover = DropNearConstantColumns(max_ratio=0.8)
         result = remover.fit_transform(X)
 
         expected = pl.DataFrame({"mixed": [True, False] * 5})
@@ -339,15 +371,15 @@ class TestDropNearConstantColumns:
 
     def test_get_params(self):
         """get_params() returns correct parameter dict."""
-        remover = DropNearConstantColumns(threshold=0.05, subset=["a"], include_na=False)
+        remover = DropNearConstantColumns(max_ratio=0.05, subset=["a"], include_na=False)
         params = remover.get_params()
-        assert params["threshold"] == 0.05
+        assert params["max_ratio"] == 0.05
         assert params["subset"] == ["a"]
         assert params["include_na"] is False
 
     def test_set_params(self):
         """set_params() updates parameters correctly."""
         remover = DropNearConstantColumns()
-        remover.set_params(threshold=0.05, include_na=False)
-        assert remover.threshold == 0.05
+        remover.set_params(max_ratio=0.05, include_na=False)
+        assert remover.max_ratio == 0.05
         assert remover.include_na is False
