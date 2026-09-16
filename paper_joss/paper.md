@@ -1,5 +1,5 @@
 ---
-title: 'Gators: a Python package for high-performance machine learning preprocessing and feature engineering on Polars, with portable ONNX export'
+title: 'Gators: Machine Learning Preprocessing and Feature Engineering on Polars with ONNX Export'
 tags:
   - Python
   - machine learning
