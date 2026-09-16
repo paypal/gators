@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Synthetic dataset generator shared by all benchmark cases.
 
 The same underlying data is materialized as both a pandas DataFrame (for sklearn /

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX converters for gators.feature_generation_str transformers.
 
 Importing this module registers all supported converters.

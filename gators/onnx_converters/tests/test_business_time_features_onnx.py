@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for BusinessTimeFeatures.
 
 Datetime columns are fed as tensor(int64) containing microseconds since the

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for CombineFeatures.
 
 Uses StringConcat (opset 20) to concatenate string columns with a fixed separator.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Shannon entropy features for groups of columns."""
 
 from __future__ import annotations

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Tests for IterativeImputer — 100 % branch coverage."""
 
 import numpy as np

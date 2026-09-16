@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 # OnnxNotSupportedError has no onnx dependency and must always be importable.
 from ._exceptions import OnnxNotSupportedError
 

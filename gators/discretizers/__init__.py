@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from .custom_discretizer import CustomDiscretizer
 from .equal_length_discretizer import EqualLengthDiscretizer
 from .equal_size_discretizer import EqualSizeDiscretizer

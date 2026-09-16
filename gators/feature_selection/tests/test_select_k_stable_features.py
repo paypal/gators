@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Tests for select_k_best_stable_features."""
 
 import polars as pl

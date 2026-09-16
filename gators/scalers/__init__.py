@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from .arcsin_squareroot_scaler import ArcSinSquareRootScaler
 from .arcsinh_scaler import ArcSinhScaler
 from .box_cox import BoxCox

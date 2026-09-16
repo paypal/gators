@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Tests for DropDuplicateRows transformer."""
 
 import polars as pl

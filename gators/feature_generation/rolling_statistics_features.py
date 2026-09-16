@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Rolling-window statistics feature generator."""
 
 from __future__ import annotations

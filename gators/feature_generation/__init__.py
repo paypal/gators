@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from .asymmetry_index_features import AsymmetryIndexFeatures
 from .comparison_features import ComparisonFeatures
 from .concentration_index_features import ConcentrationIndexFeatures

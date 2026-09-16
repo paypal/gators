@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Clipping transformers for outlier handling."""
 
 from gators.clippers.custom_clipper import CustomClipper

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for InteractionFeatures."""
 from __future__ import annotations
 

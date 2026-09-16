@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """MICE-style iterative imputer for numeric columns."""
 
 from __future__ import annotations

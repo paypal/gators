@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX converters for gators.feature_generation_dt transformers.
 
 Datetime columns are fed as tensor(int64) containing the Polars physical

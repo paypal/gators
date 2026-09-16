@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for OrdinalFeatures, CyclicFeatures, DiffFeatures, TimeBinFeatures.
 
 All datetime inputs are fed as tensor(int64) (Polars physical representation).

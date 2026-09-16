@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Tests for InformationValueSelector."""
 
 import polars as pl

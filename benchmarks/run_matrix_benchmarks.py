@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Extended benchmark matrix: rows x features x missingness x cardinality x threads.
 
 Usage

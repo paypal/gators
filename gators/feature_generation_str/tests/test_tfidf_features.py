@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Tests for TfidfFeatures — 100 % branch coverage."""
 
 import polars as pl

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from itertools import combinations
 
 import polars as pl

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import polars as pl
 
 from ..encoders.woe_encoder import compute_woe_iv

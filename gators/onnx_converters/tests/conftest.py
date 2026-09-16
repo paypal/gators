@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Shared helpers for gators.onnx_converters tests.
 
 Tests are skipped automatically when 'onnx' or 'onnxruntime' are not installed.

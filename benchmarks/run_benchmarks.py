@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Benchmark runner: gators vs scikit-learn vs feature-engine on synthetic data.
 
 Usage

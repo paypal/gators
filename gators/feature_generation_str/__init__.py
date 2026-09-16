@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from .character_statistics import CharacterStatistics
 from .combine_features import CombineFeatures
 from .contains import Contains

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Named-group regex extraction as new columns."""
 
 from __future__ import annotations

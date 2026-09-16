@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from .business_time_features import BusinessTimeFeatures
 from .cyclic_features import CyclicFeatures
 from .diff_features import DiffFeatures

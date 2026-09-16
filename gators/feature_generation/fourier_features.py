@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Fourier (sin/cos) features for cyclic numeric columns."""
 
 from __future__ import annotations

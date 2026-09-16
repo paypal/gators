@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """TF-IDF feature generator for string columns."""
 
 from __future__ import annotations

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from .correlation_selector import CorrelationSelector
 from .feature_stability_index import feature_stability_index
 from .feature_stability_selector import FeatureStabilitySelector
