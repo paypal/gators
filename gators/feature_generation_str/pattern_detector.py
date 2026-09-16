@@ -1,7 +1,19 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
+
+_ALL_PATTERNS_ORDER = [
+    "is_numeric",
+    "is_email",
+    "is_url",
+    "is_phone",
+    "is_alphanumeric",
+    "is_alpha",
+    "has_http",
+    "has_www",
+    "has_at",
+]
 
 
 class PatternDetector(_BaseTransformer):
@@ -83,6 +95,7 @@ class PatternDetector(_BaseTransformer):
     subset: list[str] | None = None
     patterns: list[str] = ["is_numeric", "is_email", "is_url", "is_phone"]
     drop_columns: bool = False
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("patterns")
     def check_patterns(cls, patterns):
@@ -124,6 +137,13 @@ class PatternDetector(_BaseTransformer):
             self.subset = [
                 col for col, dtype in X.schema.items() if dtype == pl.String or dtype == pl.Utf8
             ]
+        ordered_patterns = [p for p in _ALL_PATTERNS_ORDER if p in self.patterns]
+        self._column_mapping = {
+            col: [f"{col}__{p}" for p in ordered_patterns] for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -140,7 +160,7 @@ class PatternDetector(_BaseTransformer):
             Transformed DataFrame with pattern detection features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 
@@ -151,7 +171,7 @@ class PatternDetector(_BaseTransformer):
                 # Matches numbers (integer or float, with optional negative sign)
                 is_numeric = (
                     col_expr.str.contains(r"^-?\d+\.?\d*$")
-                    .fill_null(False)
+                    .fill_null(False).cast(pl.Float64)
                     .alias(f"{col}__is_numeric")
                 )
                 new_columns.append(is_numeric)
@@ -160,7 +180,7 @@ class PatternDetector(_BaseTransformer):
                 # Basic email pattern: something@something.something
                 is_email = (
                     col_expr.str.contains(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
-                    .fill_null(False)
+                    .fill_null(False).cast(pl.Float64)
                     .alias(f"{col}__is_email")
                 )
                 new_columns.append(is_email)
@@ -169,7 +189,7 @@ class PatternDetector(_BaseTransformer):
                 # URL pattern: http:// or https:// followed by domain
                 is_url = (
                     col_expr.str.contains(r"^https?://[^\s]+$")
-                    .fill_null(False)
+                    .fill_null(False).cast(pl.Float64)
                     .alias(f"{col}__is_url")
                 )
                 new_columns.append(is_url)
@@ -178,7 +198,7 @@ class PatternDetector(_BaseTransformer):
                 # Phone pattern: various formats like 555-1234, (555) 123-4567, 5551234567
                 is_phone = (
                     col_expr.str.contains(r"^[\d\s\-\(\)\.+]+$")
-                    .fill_null(False)
+                    .fill_null(False).cast(pl.Float64)
                     .alias(f"{col}__is_phone")
                 )
                 new_columns.append(is_phone)
@@ -187,7 +207,7 @@ class PatternDetector(_BaseTransformer):
                 # Only letters and digits
                 is_alphanum = (
                     col_expr.str.contains(r"^[a-zA-Z0-9]+$")
-                    .fill_null(False)
+                    .fill_null(False).cast(pl.Float64)
                     .alias(f"{col}__is_alphanumeric")
                 )
                 new_columns.append(is_alphanum)
@@ -195,25 +215,25 @@ class PatternDetector(_BaseTransformer):
             if "is_alpha" in self.patterns:
                 # Only letters
                 is_alpha = (
-                    col_expr.str.contains(r"^[a-zA-Z]+$").fill_null(False).alias(f"{col}__is_alpha")
+                    col_expr.str.contains(r"^[a-zA-Z]+$").fill_null(False).cast(pl.Float64).alias(f"{col}__is_alpha")
                 )
                 new_columns.append(is_alpha)
 
             if "has_http" in self.patterns:
                 # Contains http:// or https://
                 has_http = (
-                    col_expr.str.contains(r"https?://").fill_null(False).alias(f"{col}__has_http")
+                    col_expr.str.contains(r"https?://").fill_null(False).cast(pl.Float64).alias(f"{col}__has_http")
                 )
                 new_columns.append(has_http)
 
             if "has_www" in self.patterns:
                 # Contains www.
-                has_www = col_expr.str.contains(r"www\.").fill_null(False).alias(f"{col}__has_www")
+                has_www = col_expr.str.contains(r"www\.").fill_null(False).cast(pl.Float64).alias(f"{col}__has_www")
                 new_columns.append(has_www)
 
             if "has_at" in self.patterns:
                 # Contains @ symbol
-                has_at = col_expr.str.contains(r"@").fill_null(False).alias(f"{col}__has_at")
+                has_at = col_expr.str.contains(r"@").fill_null(False).cast(pl.Float64).alias(f"{col}__has_at")
                 new_columns.append(has_at)
 
         X = X.with_columns(new_columns)

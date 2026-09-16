@@ -5,7 +5,6 @@ Requirements
 ------------
 
 * Python >= 3.10
-* Polars >= 0.18.0
 
 Installing from PyPI
 --------------------
@@ -15,6 +14,24 @@ The easiest way to install Gators is via pip:
 .. code-block:: bash
 
     pip install gators
+
+With ONNX export support:
+
+.. code-block:: bash
+
+    pip install "gators[onnx]"
+
+With tree-based discretizer support (LightGBM):
+
+.. code-block:: bash
+
+    pip install "gators[tree]"
+
+With all optional dependencies:
+
+.. code-block:: bash
+
+    pip install "gators[all]"
 
 Installing from Source
 ----------------------
@@ -27,7 +44,7 @@ To install the latest development version:
     cd gators
     pip install -e .
 
-For development (includes testing dependencies):
+For development (includes testing and documentation dependencies):
 
 .. code-block:: bash
 
@@ -45,30 +62,19 @@ To verify that Gators is installed correctly:
 
 You should see the version number printed without any errors.
 
-Dependencies
-------------
+Core Dependencies
+-----------------
 
 Gators automatically installs the following core dependencies:
 
-* **polars** - High-performance DataFrame library
-* **pyarrow** - For efficient data serialization
-* **pandas** - Data manipulation and analysis
-* **pydantic** - Data validation and settings management
-* **numpy** - Numerical computing
-* **scikit-learn** - For model building and evaluation
+* **polars** >= 1.0 - High-performance DataFrame library
+* **pydantic** >= 2.0 - Data validation and settings management
+* **pyarrow** >= 12.0 - Efficient data serialization
+* **scikit-learn** >= 1.0 - Base estimator classes and sklearn API compatibility
+* **holidays** >= 0.30 - Public holiday detection for :class:`~gators.feature_generation_dt.HolidayFeatures`
 
-Optional dependencies for specific features:
+Optional Dependencies
+---------------------
 
-* **lightgbm** - For Tree-based discretization   
-* **holidays** - For holiday feature generation
-* **pytest** - For running tests (development only)
-
-
-    "pandas>=2.0.0",
-    "polars>=0.19.0",
-    "pydantic>=2.12.0",
-    "pyarrow>=20.0.0",
-    "typing-extensions>=4.15.0",
-    "scikit-learn>=1.3.0",
-    "lightgbm>=4.0.0",
-    "holidays>=0.92",
+* **onnx** >= 1.14 + **onnxruntime** >= 1.16 — ONNX export (``pip install "gators[onnx]"``)
+* **lightgbm** >= 4.0 — :class:`~gators.discretizers.TreeBasedDiscretizer` (``pip install "gators[tree]"``)

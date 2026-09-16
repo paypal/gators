@@ -2,9 +2,11 @@ from datetime import datetime
 from typing import Literal
 
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
+
+_UNIT_NAMES = {"d": "days", "h": "hours", "m": "minutes", "s": "seconds"}
 
 
 class DiffFeatures(_BaseTransformer):
@@ -94,6 +96,10 @@ class DiffFeatures(_BaseTransformer):
     units: list[Literal["d", "h", "m", "s"]] = ["d"]
     drop_columns: bool = False
     _parsed_reference_dates: dict = {}
+    # Physical int64 epoch values for ONNX export
+    _reference_dates_physical: dict[str, int] = PrivateAttr(default_factory=dict)
+    _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("units")
     def check_units(cls, units):
@@ -124,7 +130,6 @@ class DiffFeatures(_BaseTransformer):
         if self.reference_dates:
             for col, ref_date in self.reference_dates.items():
                 if isinstance(ref_date, str):
-                    # Parse string to datetime
                     self._parsed_reference_dates[col] = pl.lit(
                         datetime.fromisoformat(ref_date)
                     ).cast(pl.Datetime)
@@ -135,6 +140,36 @@ class DiffFeatures(_BaseTransformer):
                         f"Reference date for '{col}' must be string or datetime, "
                         f"got {type(ref_date)}"
                     )
+                # Store physical int64 (epoch units matching col's dtype) for ONNX export
+                ref_dt = datetime.fromisoformat(ref_date) if isinstance(ref_date, str) else ref_date
+                col_dtype = X.schema.get(col, pl.Datetime)
+                ref_physical = pl.Series([ref_dt]).cast(col_dtype).to_physical()[0]
+                self._reference_dates_physical[col] = int(ref_physical)
+
+        # Store time unit per datetime column for ONNX export
+        all_dt_cols: set[str] = set()
+        if self.column_pairs:
+            for a, b in self.column_pairs:
+                all_dt_cols.update([a, b])
+        if self.reference_dates:
+            all_dt_cols.update(self.reference_dates.keys())
+        for col in all_dt_cols:
+            dtype = X.schema.get(col, pl.Datetime)
+            self._dt_units[col] = dtype.time_unit if hasattr(dtype, 'time_unit') else 'date'
+
+        self._column_mapping = {}
+        if self.column_pairs:
+            for col_a, col_b in self.column_pairs:
+                key = f"{col_a}_minus_{col_b}"
+                self._column_mapping[key] = [f"{key}__{_UNIT_NAMES[unit]}" for unit in self.units]
+        if self.reference_dates:
+            for col in self.reference_dates:
+                key = f"{col}_since_ref"
+                self._column_mapping[key] = [f"{key}__{_UNIT_NAMES[unit]}" for unit in self.units]
+        self._output_dtypes = {
+            new: pl.Int64 for names in self._column_mapping.values() for new in names
+        }
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -162,12 +197,7 @@ class DiffFeatures(_BaseTransformer):
         }
 
         # Unit names for column suffixes
-        unit_names = {
-            "d": "days",
-            "h": "hours",
-            "m": "minutes",
-            "s": "seconds",
-        }
+        unit_names = _UNIT_NAMES
 
         # Pairwise column differences
         if self.column_pairs:

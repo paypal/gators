@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -8,6 +8,7 @@ class ExtractSubstring(_BaseTransformer):
     subset: list[str]
     start: int = Field(ge=0)
     end: int | None = Field(default=None, ge=1)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "ExtractSubstring":
         """Fit the transformer (no-op, but required for sklearn compatibility).
@@ -24,6 +25,11 @@ class ExtractSubstring(_BaseTransformer):
         ExtractSubstring
             Fitted transformer instance.
         """
+        suffix = f"start{self.start}_endNone" if self.end is None else f"start{self.start}_end{self.end}"
+        self._column_mapping = {col: [f"{col}__{suffix}"] for col in self.subset}
+        self._output_dtypes = {
+            new: pl.String for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

@@ -160,7 +160,7 @@ def test_transform_addition(sample_X):
     )
     result = transformer.fit_transform(sample_X)
 
-    expected = sample_X.with_columns((pl.col("Age") + 10).alias("Age_plus_10"))
+    expected = sample_X.with_columns((pl.col("Age") + 10).cast(pl.Float64).alias("Age_plus_10"))
     assert_frame_equal(result, expected)
 
 
@@ -208,7 +208,7 @@ def test_transform_power(sample_X):
     )
     result = transformer.fit_transform(sample_X)
 
-    expected = sample_X.with_columns((pl.col("Age") ** 2).alias("Age_squared"))
+    expected = sample_X.with_columns((pl.col("Age") ** 2).cast(pl.Float64).alias("Age_squared"))
     assert_frame_equal(result, expected)
 
 
@@ -220,7 +220,7 @@ def test_transform_floor_division(sample_X):
     )
     result = transformer.fit_transform(sample_X)
 
-    expected = sample_X.with_columns((pl.col("Age") // 10).alias("Age_decade"))
+    expected = sample_X.with_columns((pl.col("Age") // 10).cast(pl.Float64).alias("Age_decade"))
     assert_frame_equal(result, expected)
 
 
@@ -232,7 +232,7 @@ def test_transform_modulo(sample_X):
     )
     result = transformer.fit_transform(sample_X)
 
-    expected = sample_X.with_columns((pl.col("Count") % 10).alias("Count_mod_10"))
+    expected = sample_X.with_columns((pl.col("Count") % 10).cast(pl.Float64).alias("Count_mod_10"))
     assert_frame_equal(result, expected)
 
 
@@ -275,8 +275,8 @@ def test_transform_auto_naming(sample_X):
     # Check values
     expected = sample_X.with_columns(
         [
-            (pl.col("Age") + 10).alias("Age_plus_10"),
-            (pl.col("Price") * 2).alias("Price_mul_2"),
+            (pl.col("Age") + 10).cast(pl.Float64).alias("Age_plus_10"),
+            (pl.col("Price") * 2).cast(pl.Float64).alias("Price_mul_2"),
         ]
     )
     assert_frame_equal(result, expected)

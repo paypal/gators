@@ -3,7 +3,7 @@ import polars as pl
 from ..encoders.woe_encoder import compute_woe_iv
 
 
-def compute_iv(X, y, regularization=0.01):
+def compute_iv(X: pl.DataFrame, y: pl.Series, regularization: float = 0.01) -> pl.DataFrame:
     """
     Compute the Information Value (IV) for each categorical feature in the dataset.
 

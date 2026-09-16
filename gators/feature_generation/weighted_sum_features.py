@@ -125,7 +125,7 @@ class WeightedSumFeatures(_BaseTransformer):
     biases: list[float] | None = None
     new_column_names: list[str] | None = None
     drop_columns: bool = False
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("column_groups", mode="after")
     @classmethod
@@ -145,7 +145,7 @@ class WeightedSumFeatures(_BaseTransformer):
                     f"Length of coefficients ({len(coefficients)}) "
                     f"must match length of column_groups ({len(column_groups)})"
                 )
-            for i, (coeffs, cols) in enumerate(zip(coefficients, column_groups)):
+            for i, (coeffs, cols) in enumerate(zip(coefficients, column_groups, strict=False)):
                 if len(coeffs) != len(cols):
                     raise ValueError(
                         f"coefficients[{i}] has {len(coeffs)} entries "
@@ -207,8 +207,11 @@ class WeightedSumFeatures(_BaseTransformer):
         if self.new_column_names is None:
             self.new_column_names = default_names
 
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -226,11 +229,12 @@ class WeightedSumFeatures(_BaseTransformer):
         """
         new_columns = []
 
-        for cols, coeffs, bias in zip(self.column_groups, self.coefficients, self.biases):
+        assert self.coefficients is not None and self.biases is not None
+        for cols, coeffs, bias in zip(self.column_groups, self.coefficients, self.biases, strict=False):
             default_name = self._default_name(cols)
-            new_col_name = self._column_mapping[default_name]
+            new_col_name = self._column_mapping[default_name][0]
 
-            terms = [pl.col(col).cast(pl.Float64) * c for col, c in zip(cols, coeffs)]
+            terms = [pl.col(col).cast(pl.Float64) * c for col, c in zip(cols, coeffs, strict=False)]
             expr = pl.sum_horizontal(terms) + bias
 
             new_columns.append(expr.alias(new_col_name))

@@ -42,7 +42,7 @@ class RenameColumns(_BaseTransformer):
     """
 
     column_mapping: dict[str, str]
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RenameColumns":
         """Fit the transformer by storing the column mapping.
@@ -59,7 +59,7 @@ class RenameColumns(_BaseTransformer):
         RenameColumns
             The fitted transformer instance.
         """
-        self._column_mapping = {col: new_col for col, new_col in self.column_mapping.items()}
+        self._column_mapping = {col: [new_col] for col, new_col in self.column_mapping.items()}
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

@@ -96,7 +96,7 @@ class InformationValueSelector(_BaseSelector):
 
         iv_df = compute_iv(X_for_iv, y, regularization=self.regularization)
 
-        self._iv_values = dict(zip(iv_df["feature"].to_list(), iv_df["iv"].to_list()))
+        self._iv_values = dict(zip(iv_df["feature"].to_list(), iv_df["iv"].to_list(), strict=False))
 
         below_threshold = set(iv_df.filter(pl.col("iv") < self.threshold)["feature"].to_list())
 

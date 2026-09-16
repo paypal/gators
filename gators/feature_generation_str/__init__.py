@@ -9,10 +9,14 @@ from .lower import Lower
 from .ngram import NGram
 from .occurrences import Occurrences
 from .pattern_detector import PatternDetector
+from .regex_extract_features import RegexExtractFeatures
 from .split import Split
 from .split_extract import SplitExtract
 from .startswith import Startswith
+from .string_similarity import StringSimilarity
+from .tfidf_features import TfidfFeatures
 from .upper import Upper
+from .word_statistics import WordStatistics
 
 __all__ = [
     "CharacterStatistics",
@@ -26,8 +30,12 @@ __all__ = [
     "NGram",
     "Occurrences",
     "PatternDetector",
+    "RegexExtractFeatures",
     "Split",
     "SplitExtract",
     "Startswith",
+    "StringSimilarity",
+    "TfidfFeatures",
     "Upper",
+    "WordStatistics",
 ]

@@ -1,7 +1,14 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
+
+_ALL_FEATURES_ORDER = [
+    "is_business_hour",
+    "is_business_day",
+    "time_of_business_day",
+    "hour_of_business_day",
+]
 
 
 class BusinessTimeFeatures(_BaseTransformer):
@@ -113,6 +120,9 @@ class BusinessTimeFeatures(_BaseTransformer):
         "time_of_business_day",
     ]
     drop_columns: bool = False
+    # Maps column name → Polars time unit ('us', 'ms', 'ns', 'date')
+    _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("business_hours_start", "business_hours_end")
     def check_hours(cls, hour):
@@ -163,6 +173,26 @@ class BusinessTimeFeatures(_BaseTransformer):
                 col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
 
+        for col in self.subset:
+            dtype = X.schema[col]
+            if hasattr(dtype, 'time_unit'):
+                self._dt_units[col] = dtype.time_unit  # 'us', 'ms', or 'ns'
+            elif dtype == pl.Date:
+                self._dt_units[col] = 'date'
+            else:  # pragma: no cover
+                self._dt_units[col] = 'us'
+
+        # No renaming option for this transformer: default name is also the final name.
+        ordered_features = [f for f in _ALL_FEATURES_ORDER if f in self.features]
+        self._column_mapping = {
+            col: [f"{col}__{feature}" for feature in ordered_features] for col in self.subset
+        }
+        self._output_dtypes = {
+            new: (pl.String if new.endswith("__time_of_business_day") else pl.Float64)
+            for names in self._column_mapping.values()
+            for new in names
+        }
+
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -179,7 +209,7 @@ class BusinessTimeFeatures(_BaseTransformer):
             Transformed DataFrame with business time features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 
@@ -190,13 +220,13 @@ class BusinessTimeFeatures(_BaseTransformer):
             if "is_business_hour" in self.features:
                 is_business_hour = (
                     (hour >= self.business_hours_start) & (hour < self.business_hours_end)
-                ).alias(f"{col}__is_business_hour")
+                ).cast(pl.Float64).alias(f"{col}__is_business_hour")
                 new_columns.append(is_business_hour)
 
             if "is_business_day" in self.features:
-                is_business_day = (~weekday.is_in(self.weekend_days)).alias(
-                    f"{col}__is_business_day"
-                )
+                is_business_day = (
+                    (~weekday.is_in(self.weekend_days)).cast(pl.Float64)
+                ).alias(f"{col}__is_business_day")
                 new_columns.append(is_business_day)
 
             if "time_of_business_day" in self.features:
@@ -216,6 +246,7 @@ class BusinessTimeFeatures(_BaseTransformer):
                     pl.when((hour >= self.business_hours_start) & (hour < self.business_hours_end))
                     .then(hour - self.business_hours_start)
                     .otherwise(None)
+                    .cast(pl.Float64)
                 ).alias(f"{col}__hour_of_business_day")
                 new_columns.append(hour_of_biz_day)
 

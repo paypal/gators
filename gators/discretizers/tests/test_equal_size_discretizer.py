@@ -138,8 +138,8 @@ def test_as_numerics(sample_data):
     transformed_X = discretizer.transform(sample_data)
 
     # Should have numeric dtype
-    assert transformed_X["A__discretize_size"].dtype in [pl.Int32, pl.Int64]
-    # Labels should be numeric integers 0, 1, 2
+    assert transformed_X["A__discretize_size"].dtype == pl.Float64
+    # Labels should be numeric values 0, 1, 2
     unique_labels = transformed_X["A__discretize_size"].unique().sort().to_list()
     # Should have numeric labels
-    assert all(isinstance(label, int) and label in [0, 1, 2] for label in unique_labels)
+    assert all(label in [0.0, 1.0, 2.0] for label in unique_labels)

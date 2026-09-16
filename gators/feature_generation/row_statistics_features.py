@@ -114,7 +114,7 @@ class RowStatisticsFeatures(_BaseTransformer):
     func: list[str]
     drop_columns: bool = False
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("column_groups")
     def check_column_groups(cls, column_groups):
@@ -172,8 +172,11 @@ class RowStatisticsFeatures(_BaseTransformer):
 
         if not self.new_column_names:
             self.new_column_names = default_names
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -195,7 +198,7 @@ class RowStatisticsFeatures(_BaseTransformer):
         for group_name, cols in self.column_groups.items():
             for f in self.func:
                 default_name = f"{group_name}__{f}"
-                new_col_name = self._column_mapping[default_name]
+                new_col_name = self._column_mapping[default_name][0]
 
                 if f == "mean":
                     expr = pl.concat_list(cols).list.mean().alias(new_col_name)
@@ -214,7 +217,9 @@ class RowStatisticsFeatures(_BaseTransformer):
                 elif f == "sum":
                     expr = pl.concat_list(cols).list.sum().alias(new_col_name)
                 elif f == "count":
-                    expr = (pl.concat_list(cols).list.drop_nulls().list.len()).alias(new_col_name)
+                    expr = (
+                        pl.concat_list(cols).list.drop_nulls().list.len().cast(pl.Float64)
+                    ).alias(new_col_name)
 
                 new_columns.append(expr)
 

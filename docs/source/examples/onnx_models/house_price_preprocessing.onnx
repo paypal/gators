@@ -1,0 +1,9703 @@
+:¸ 
+-
+MSSubClass__inMSSubClass__step0"Identity
+)
+MSZoning__inMSZoning__step0"Identity
+/
+LotFrontage__inLotFrontage__step0"Identity
+'
+LotArea__inLotArea__step0"Identity
+%
+
+Street__inStreet__step0"Identity
+#
+	Alley__inAlley__step0"Identity
+)
+LotShape__inLotShape__step0"Identity
+/
+LandContour__inLandContour__step0"Identity
++
+LotConfig__inLotConfig__step0"Identity
++
+LandSlope__inLandSlope__step0"Identity
+1
+Neighborhood__inNeighborhood__step0"Identity
+-
+Condition1__inCondition1__step0"Identity
+-
+Condition2__inCondition2__step0"Identity
+)
+BldgType__inBldgType__step0"Identity
+-
+HouseStyle__inHouseStyle__step0"Identity
+/
+OverallQual__inOverallQual__step0"Identity
+/
+OverallCond__inOverallCond__step0"Identity
++
+YearBuilt__inYearBuilt__step0"Identity
+1
+YearRemodAdd__inYearRemodAdd__step0"Identity
++
+RoofStyle__inRoofStyle__step0"Identity
+)
+RoofMatl__inRoofMatl__step0"Identity
+/
+Exterior1st__inExterior1st__step0"Identity
+/
+Exterior2nd__inExterior2nd__step0"Identity
+-
+MasVnrType__inMasVnrType__step0"Identity
+-
+MasVnrArea__inMasVnrArea__step0"Identity
++
+ExterQual__inExterQual__step0"Identity
++
+ExterCond__inExterCond__step0"Identity
+-
+Foundation__inFoundation__step0"Identity
+)
+BsmtQual__inBsmtQual__step0"Identity
+)
+BsmtCond__inBsmtCond__step0"Identity
+1
+BsmtExposure__inBsmtExposure__step0"Identity
+1
+BsmtFinType1__inBsmtFinType1__step0"Identity
+-
+BsmtFinSF1__inBsmtFinSF1__step0"Identity
+1
+BsmtFinType2__inBsmtFinType2__step0"Identity
+-
+BsmtFinSF2__inBsmtFinSF2__step0"Identity
++
+BsmtUnfSF__inBsmtUnfSF__step0"Identity
+/
+TotalBsmtSF__inTotalBsmtSF__step0"Identity
+'
+Heating__inHeating__step0"Identity
++
+HeatingQC__inHeatingQC__step0"Identity
+-
+CentralAir__inCentralAir__step0"Identity
+-
+Electrical__inElectrical__step0"Identity
+)
+1stFlrSF__in1stFlrSF__step0"Identity
+)
+2ndFlrSF__in2ndFlrSF__step0"Identity
+1
+LowQualFinSF__inLowQualFinSF__step0"Identity
++
+GrLivArea__inGrLivArea__step0"Identity
+1
+BsmtFullBath__inBsmtFullBath__step0"Identity
+1
+BsmtHalfBath__inBsmtHalfBath__step0"Identity
+)
+FullBath__inFullBath__step0"Identity
+)
+HalfBath__inHalfBath__step0"Identity
+1
+BedroomAbvGr__inBedroomAbvGr__step0"Identity
+1
+KitchenAbvGr__inKitchenAbvGr__step0"Identity
+/
+KitchenQual__inKitchenQual__step0"Identity
+1
+TotRmsAbvGrd__inTotRmsAbvGrd__step0"Identity
+-
+Functional__inFunctional__step0"Identity
+-
+Fireplaces__inFireplaces__step0"Identity
+/
+FireplaceQu__inFireplaceQu__step0"Identity
+-
+GarageType__inGarageType__step0"Identity
+/
+GarageYrBlt__inGarageYrBlt__step0"Identity
+1
+GarageFinish__inGarageFinish__step0"Identity
+-
+GarageCars__inGarageCars__step0"Identity
+-
+GarageArea__inGarageArea__step0"Identity
+-
+GarageQual__inGarageQual__step0"Identity
+-
+GarageCond__inGarageCond__step0"Identity
+-
+PavedDrive__inPavedDrive__step0"Identity
+-
+WoodDeckSF__inWoodDeckSF__step0"Identity
+/
+OpenPorchSF__inOpenPorchSF__step0"Identity
+3
+EnclosedPorch__inEnclosedPorch__step0"Identity
++
+3SsnPorch__in3SsnPorch__step0"Identity
+/
+ScreenPorch__inScreenPorch__step0"Identity
+)
+PoolArea__inPoolArea__step0"Identity
+%
+
+PoolQC__inPoolQC__step0"Identity
+#
+	Fence__inFence__step0"Identity
+/
+MiscFeature__inMiscFeature__step0"Identity
+'
+MiscVal__inMiscVal__step0"Identity
+%
+
+MoSold__inMoSold__step0"Identity
+%
+
+YrSold__inYrSold__step0"Identity
+)
+SaleType__inSaleType__step0"Identity
+3
+SaleCondition__inSaleCondition__step0"Identity
+,
+MSZoning__step0MSZoning__step1"Identity
+2
+LotFrontage__step0LotFrontage__step1"Identity
+*
+LotArea__step0LotArea__step1"Identity
+(
+Street__step0Street__step1"Identity
+&
+Alley__step0Alley__step1"Identity
+,
+LotShape__step0LotShape__step1"Identity
+2
+LandContour__step0LandContour__step1"Identity
+.
+LotConfig__step0LotConfig__step1"Identity
+.
+LandSlope__step0LandSlope__step1"Identity
+4
+Neighborhood__step0Neighborhood__step1"Identity
+0
+Condition1__step0Condition1__step1"Identity
+0
+Condition2__step0Condition2__step1"Identity
+,
+BldgType__step0BldgType__step1"Identity
+0
+HouseStyle__step0HouseStyle__step1"Identity
+2
+OverallQual__step0OverallQual__step1"Identity
+.
+YearBuilt__step0YearBuilt__step1"Identity
+4
+YearRemodAdd__step0YearRemodAdd__step1"Identity
+.
+RoofStyle__step0RoofStyle__step1"Identity
+,
+RoofMatl__step0RoofMatl__step1"Identity
+2
+Exterior1st__step0Exterior1st__step1"Identity
+2
+Exterior2nd__step0Exterior2nd__step1"Identity
+0
+MasVnrType__step0MasVnrType__step1"Identity
+0
+MasVnrArea__step0MasVnrArea__step1"Identity
+.
+ExterQual__step0ExterQual__step1"Identity
+.
+ExterCond__step0ExterCond__step1"Identity
+0
+Foundation__step0Foundation__step1"Identity
+,
+BsmtQual__step0BsmtQual__step1"Identity
+,
+BsmtCond__step0BsmtCond__step1"Identity
+4
+BsmtExposure__step0BsmtExposure__step1"Identity
+4
+BsmtFinType1__step0BsmtFinType1__step1"Identity
+0
+BsmtFinSF1__step0BsmtFinSF1__step1"Identity
+4
+BsmtFinType2__step0BsmtFinType2__step1"Identity
+0
+BsmtFinSF2__step0BsmtFinSF2__step1"Identity
+.
+BsmtUnfSF__step0BsmtUnfSF__step1"Identity
+2
+TotalBsmtSF__step0TotalBsmtSF__step1"Identity
+*
+Heating__step0Heating__step1"Identity
+.
+HeatingQC__step0HeatingQC__step1"Identity
+0
+CentralAir__step0CentralAir__step1"Identity
+0
+Electrical__step0Electrical__step1"Identity
+,
+1stFlrSF__step01stFlrSF__step1"Identity
+,
+2ndFlrSF__step02ndFlrSF__step1"Identity
+4
+LowQualFinSF__step0LowQualFinSF__step1"Identity
+.
+GrLivArea__step0GrLivArea__step1"Identity
+4
+BsmtFullBath__step0BsmtFullBath__step1"Identity
+4
+BsmtHalfBath__step0BsmtHalfBath__step1"Identity
+,
+FullBath__step0FullBath__step1"Identity
+,
+HalfBath__step0HalfBath__step1"Identity
+4
+BedroomAbvGr__step0BedroomAbvGr__step1"Identity
+4
+KitchenAbvGr__step0KitchenAbvGr__step1"Identity
+2
+KitchenQual__step0KitchenQual__step1"Identity
+4
+TotRmsAbvGrd__step0TotRmsAbvGrd__step1"Identity
+0
+Functional__step0Functional__step1"Identity
+0
+Fireplaces__step0Fireplaces__step1"Identity
+2
+FireplaceQu__step0FireplaceQu__step1"Identity
+0
+GarageType__step0GarageType__step1"Identity
+2
+GarageYrBlt__step0GarageYrBlt__step1"Identity
+4
+GarageFinish__step0GarageFinish__step1"Identity
+0
+GarageCars__step0GarageCars__step1"Identity
+0
+GarageArea__step0GarageArea__step1"Identity
+0
+GarageQual__step0GarageQual__step1"Identity
+0
+GarageCond__step0GarageCond__step1"Identity
+0
+PavedDrive__step0PavedDrive__step1"Identity
+0
+WoodDeckSF__step0WoodDeckSF__step1"Identity
+2
+OpenPorchSF__step0OpenPorchSF__step1"Identity
+6
+EnclosedPorch__step0EnclosedPorch__step1"Identity
+.
+3SsnPorch__step03SsnPorch__step1"Identity
+2
+ScreenPorch__step0ScreenPorch__step1"Identity
+,
+PoolArea__step0PoolArea__step1"Identity
+(
+PoolQC__step0PoolQC__step1"Identity
+&
+Fence__step0Fence__step1"Identity
+2
+MiscFeature__step0MiscFeature__step1"Identity
+*
+MiscVal__step0MiscVal__step1"Identity
+,
+SaleType__step0SaleType__step1"Identity
+6
+SaleCondition__step0SaleCondition__step1"Identity
+D
+MSSubClass__step0MSSubClass__step0__CastToInt64"Cast*	
+to†
+D
+MSSubClass__step0__CastToInt64MSSubClass__step1"Cast*	
+to†
+F
+OverallCond__step0OverallCond__step0__CastToInt64"Cast*	
+to†
+F
+OverallCond__step0__CastToInt64OverallCond__step1"Cast*	
+to†
+<
+YrSold__step0YrSold__step0__CastToInt64"Cast*	
+to†
+<
+YrSold__step0__CastToInt64YrSold__step1"Cast*	
+to†
+<
+MoSold__step0MoSold__step0__CastToInt64"Cast*	
+to†
+<
+MoSold__step0__CastToInt64MoSold__step1"Cast*	
+to†
+0
+MSSubClass__step1MSSubClass__step2"Identity
+,
+MSZoning__step1MSZoning__step2"Identity
+2
+LotFrontage__step1LotFrontage__step2"Identity
+*
+LotArea__step1LotArea__step2"Identity
+(
+Street__step1Street__step2"Identity
+&
+Alley__step1Alley__step2"Identity
+,
+LotShape__step1LotShape__step2"Identity
+2
+LandContour__step1LandContour__step2"Identity
+.
+LotConfig__step1LotConfig__step2"Identity
+.
+LandSlope__step1LandSlope__step2"Identity
+4
+Neighborhood__step1Neighborhood__step2"Identity
+0
+Condition1__step1Condition1__step2"Identity
+0
+Condition2__step1Condition2__step2"Identity
+,
+BldgType__step1BldgType__step2"Identity
+0
+HouseStyle__step1HouseStyle__step2"Identity
+2
+OverallQual__step1OverallQual__step2"Identity
+2
+OverallCond__step1OverallCond__step2"Identity
+.
+YearBuilt__step1YearBuilt__step2"Identity
+4
+YearRemodAdd__step1YearRemodAdd__step2"Identity
+.
+RoofStyle__step1RoofStyle__step2"Identity
+,
+RoofMatl__step1RoofMatl__step2"Identity
+2
+Exterior1st__step1Exterior1st__step2"Identity
+2
+Exterior2nd__step1Exterior2nd__step2"Identity
+0
+MasVnrType__step1MasVnrType__step2"Identity
+0
+MasVnrArea__step1MasVnrArea__step2"Identity
+.
+ExterQual__step1ExterQual__step2"Identity
+.
+ExterCond__step1ExterCond__step2"Identity
+0
+Foundation__step1Foundation__step2"Identity
+,
+BsmtQual__step1BsmtQual__step2"Identity
+,
+BsmtCond__step1BsmtCond__step2"Identity
+4
+BsmtExposure__step1BsmtExposure__step2"Identity
+4
+BsmtFinType1__step1BsmtFinType1__step2"Identity
+0
+BsmtFinSF1__step1BsmtFinSF1__step2"Identity
+4
+BsmtFinType2__step1BsmtFinType2__step2"Identity
+0
+BsmtFinSF2__step1BsmtFinSF2__step2"Identity
+.
+BsmtUnfSF__step1BsmtUnfSF__step2"Identity
+2
+TotalBsmtSF__step1TotalBsmtSF__step2"Identity
+*
+Heating__step1Heating__step2"Identity
+.
+HeatingQC__step1HeatingQC__step2"Identity
+0
+CentralAir__step1CentralAir__step2"Identity
+0
+Electrical__step1Electrical__step2"Identity
+,
+1stFlrSF__step11stFlrSF__step2"Identity
+,
+2ndFlrSF__step12ndFlrSF__step2"Identity
+4
+LowQualFinSF__step1LowQualFinSF__step2"Identity
+.
+GrLivArea__step1GrLivArea__step2"Identity
+4
+BsmtFullBath__step1BsmtFullBath__step2"Identity
+4
+BsmtHalfBath__step1BsmtHalfBath__step2"Identity
+,
+FullBath__step1FullBath__step2"Identity
+,
+HalfBath__step1HalfBath__step2"Identity
+4
+BedroomAbvGr__step1BedroomAbvGr__step2"Identity
+4
+KitchenAbvGr__step1KitchenAbvGr__step2"Identity
+2
+KitchenQual__step1KitchenQual__step2"Identity
+4
+TotRmsAbvGrd__step1TotRmsAbvGrd__step2"Identity
+0
+Functional__step1Functional__step2"Identity
+0
+Fireplaces__step1Fireplaces__step2"Identity
+2
+FireplaceQu__step1FireplaceQu__step2"Identity
+0
+GarageType__step1GarageType__step2"Identity
+2
+GarageYrBlt__step1GarageYrBlt__step2"Identity
+4
+GarageFinish__step1GarageFinish__step2"Identity
+0
+GarageCars__step1GarageCars__step2"Identity
+0
+GarageArea__step1GarageArea__step2"Identity
+0
+GarageQual__step1GarageQual__step2"Identity
+0
+GarageCond__step1GarageCond__step2"Identity
+0
+PavedDrive__step1PavedDrive__step2"Identity
+0
+WoodDeckSF__step1WoodDeckSF__step2"Identity
+2
+OpenPorchSF__step1OpenPorchSF__step2"Identity
+6
+EnclosedPorch__step1EnclosedPorch__step2"Identity
+.
+3SsnPorch__step13SsnPorch__step2"Identity
+2
+ScreenPorch__step1ScreenPorch__step2"Identity
+,
+PoolArea__step1PoolArea__step2"Identity
+(
+PoolQC__step1PoolQC__step2"Identity
+&
+Fence__step1Fence__step2"Identity
+2
+MiscFeature__step1MiscFeature__step2"Identity
+*
+MiscVal__step1MiscVal__step2"Identity
+(
+MoSold__step1MoSold__step2"Identity
+(
+YrSold__step1YrSold__step2"Identity
+,
+SaleType__step1SaleType__step2"Identity
+6
+SaleCondition__step1SaleCondition__step2"Identity
+0
+MSSubClass__step2MSSubClass__step3"Identity
+,
+MSZoning__step2MSZoning__step3"Identity
+2
+LotFrontage__step2LotFrontage__step3"Identity
+*
+LotArea__step2LotArea__step3"Identity
+(
+Street__step2Street__step3"Identity
+,
+LotShape__step2LotShape__step3"Identity
+2
+LandContour__step2LandContour__step3"Identity
+.
+LotConfig__step2LotConfig__step3"Identity
+.
+LandSlope__step2LandSlope__step3"Identity
+4
+Neighborhood__step2Neighborhood__step3"Identity
+0
+Condition1__step2Condition1__step3"Identity
+0
+Condition2__step2Condition2__step3"Identity
+,
+BldgType__step2BldgType__step3"Identity
+0
+HouseStyle__step2HouseStyle__step3"Identity
+2
+OverallQual__step2OverallQual__step3"Identity
+2
+OverallCond__step2OverallCond__step3"Identity
+.
+YearBuilt__step2YearBuilt__step3"Identity
+4
+YearRemodAdd__step2YearRemodAdd__step3"Identity
+.
+RoofStyle__step2RoofStyle__step3"Identity
+,
+RoofMatl__step2RoofMatl__step3"Identity
+2
+Exterior1st__step2Exterior1st__step3"Identity
+2
+Exterior2nd__step2Exterior2nd__step3"Identity
+0
+MasVnrArea__step2MasVnrArea__step3"Identity
+.
+ExterQual__step2ExterQual__step3"Identity
+.
+ExterCond__step2ExterCond__step3"Identity
+0
+Foundation__step2Foundation__step3"Identity
+0
+BsmtFinSF1__step2BsmtFinSF1__step3"Identity
+0
+BsmtFinSF2__step2BsmtFinSF2__step3"Identity
+.
+BsmtUnfSF__step2BsmtUnfSF__step3"Identity
+2
+TotalBsmtSF__step2TotalBsmtSF__step3"Identity
+*
+Heating__step2Heating__step3"Identity
+.
+HeatingQC__step2HeatingQC__step3"Identity
+0
+CentralAir__step2CentralAir__step3"Identity
+0
+Electrical__step2Electrical__step3"Identity
+,
+1stFlrSF__step21stFlrSF__step3"Identity
+,
+2ndFlrSF__step22ndFlrSF__step3"Identity
+4
+LowQualFinSF__step2LowQualFinSF__step3"Identity
+.
+GrLivArea__step2GrLivArea__step3"Identity
+4
+BsmtFullBath__step2BsmtFullBath__step3"Identity
+4
+BsmtHalfBath__step2BsmtHalfBath__step3"Identity
+,
+FullBath__step2FullBath__step3"Identity
+,
+HalfBath__step2HalfBath__step3"Identity
+4
+BedroomAbvGr__step2BedroomAbvGr__step3"Identity
+4
+KitchenAbvGr__step2KitchenAbvGr__step3"Identity
+2
+KitchenQual__step2KitchenQual__step3"Identity
+4
+TotRmsAbvGrd__step2TotRmsAbvGrd__step3"Identity
+0
+Functional__step2Functional__step3"Identity
+0
+Fireplaces__step2Fireplaces__step3"Identity
+2
+GarageYrBlt__step2GarageYrBlt__step3"Identity
+0
+GarageCars__step2GarageCars__step3"Identity
+0
+GarageArea__step2GarageArea__step3"Identity
+0
+PavedDrive__step2PavedDrive__step3"Identity
+0
+WoodDeckSF__step2WoodDeckSF__step3"Identity
+2
+OpenPorchSF__step2OpenPorchSF__step3"Identity
+6
+EnclosedPorch__step2EnclosedPorch__step3"Identity
+.
+3SsnPorch__step23SsnPorch__step3"Identity
+2
+ScreenPorch__step2ScreenPorch__step3"Identity
+,
+PoolArea__step2PoolArea__step3"Identity
+*
+MiscVal__step2MiscVal__step3"Identity
+(
+MoSold__step2MoSold__step3"Identity
+(
+YrSold__step2YrSold__step3"Identity
+,
+SaleType__step2SaleType__step3"Identity
+6
+SaleCondition__step2SaleCondition__step3"Identity
+í
+PoolQC__step2&PoolQC__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+b
+&PoolQC__step2__StringImputer__mask_i64'PoolQC__step2__StringImputer__mask_bool"Cast*	
+to	†
+r
+'PoolQC__step2__StringImputer__mask_bool
+"PoolQC__step2__StringImputer__fill
+PoolQC__step2PoolQC__step3"Where
+ú
+MiscFeature__step2+MiscFeature__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+l
++MiscFeature__step2__StringImputer__mask_i64,MiscFeature__step2__StringImputer__mask_bool"Cast*	
+to	†
+Ü
+,MiscFeature__step2__StringImputer__mask_bool
+'MiscFeature__step2__StringImputer__fill
+MiscFeature__step2MiscFeature__step3"Where
+ê
+Alley__step2%Alley__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+`
+%Alley__step2__StringImputer__mask_i64&Alley__step2__StringImputer__mask_bool"Cast*	
+to	†
+n
+&Alley__step2__StringImputer__mask_bool
+!Alley__step2__StringImputer__fill
+Alley__step2Alley__step3"Where
+ê
+Fence__step2%Fence__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+`
+%Fence__step2__StringImputer__mask_i64&Fence__step2__StringImputer__mask_bool"Cast*	
+to	†
+n
+&Fence__step2__StringImputer__mask_bool
+!Fence__step2__StringImputer__fill
+Fence__step2Fence__step3"Where
+ú
+FireplaceQu__step2+FireplaceQu__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+l
++FireplaceQu__step2__StringImputer__mask_i64,FireplaceQu__step2__StringImputer__mask_bool"Cast*	
+to	†
+Ü
+,FireplaceQu__step2__StringImputer__mask_bool
+'FireplaceQu__step2__StringImputer__fill
+FireplaceQu__step2FireplaceQu__step3"Where
+ö
+GarageType__step2*GarageType__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+j
+*GarageType__step2__StringImputer__mask_i64+GarageType__step2__StringImputer__mask_bool"Cast*	
+to	†
+Ç
++GarageType__step2__StringImputer__mask_bool
+&GarageType__step2__StringImputer__fill
+GarageType__step2GarageType__step3"Where
+û
+GarageFinish__step2,GarageFinish__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+n
+,GarageFinish__step2__StringImputer__mask_i64-GarageFinish__step2__StringImputer__mask_bool"Cast*	
+to	†
+ä
+-GarageFinish__step2__StringImputer__mask_bool
+(GarageFinish__step2__StringImputer__fill
+GarageFinish__step2GarageFinish__step3"Where
+ö
+GarageQual__step2*GarageQual__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+j
+*GarageQual__step2__StringImputer__mask_i64+GarageQual__step2__StringImputer__mask_bool"Cast*	
+to	†
+Ç
++GarageQual__step2__StringImputer__mask_bool
+&GarageQual__step2__StringImputer__fill
+GarageQual__step2GarageQual__step3"Where
+ö
+GarageCond__step2*GarageCond__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+j
+*GarageCond__step2__StringImputer__mask_i64+GarageCond__step2__StringImputer__mask_bool"Cast*	
+to	†
+Ç
++GarageCond__step2__StringImputer__mask_bool
+&GarageCond__step2__StringImputer__fill
+GarageCond__step2GarageCond__step3"Where
+ñ
+BsmtQual__step2(BsmtQual__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+f
+(BsmtQual__step2__StringImputer__mask_i64)BsmtQual__step2__StringImputer__mask_bool"Cast*	
+to	†
+z
+)BsmtQual__step2__StringImputer__mask_bool
+$BsmtQual__step2__StringImputer__fill
+BsmtQual__step2BsmtQual__step3"Where
+ñ
+BsmtCond__step2(BsmtCond__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+f
+(BsmtCond__step2__StringImputer__mask_i64)BsmtCond__step2__StringImputer__mask_bool"Cast*	
+to	†
+z
+)BsmtCond__step2__StringImputer__mask_bool
+$BsmtCond__step2__StringImputer__fill
+BsmtCond__step2BsmtCond__step3"Where
+û
+BsmtExposure__step2,BsmtExposure__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+n
+,BsmtExposure__step2__StringImputer__mask_i64-BsmtExposure__step2__StringImputer__mask_bool"Cast*	
+to	†
+ä
+-BsmtExposure__step2__StringImputer__mask_bool
+(BsmtExposure__step2__StringImputer__fill
+BsmtExposure__step2BsmtExposure__step3"Where
+û
+BsmtFinType1__step2,BsmtFinType1__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+n
+,BsmtFinType1__step2__StringImputer__mask_i64-BsmtFinType1__step2__StringImputer__mask_bool"Cast*	
+to	†
+ä
+-BsmtFinType1__step2__StringImputer__mask_bool
+(BsmtFinType1__step2__StringImputer__fill
+BsmtFinType1__step2BsmtFinType1__step3"Where
+û
+BsmtFinType2__step2,BsmtFinType2__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+n
+,BsmtFinType2__step2__StringImputer__mask_i64-BsmtFinType2__step2__StringImputer__mask_bool"Cast*	
+to	†
+ä
+-BsmtFinType2__step2__StringImputer__mask_bool
+(BsmtFinType2__step2__StringImputer__fill
+BsmtFinType2__step2BsmtFinType2__step3"Where
+ö
+MasVnrType__step2*MasVnrType__step2__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+j
+*MasVnrType__step2__StringImputer__mask_i64+MasVnrType__step2__StringImputer__mask_bool"Cast*	
+to	†
+Ç
++MasVnrType__step2__StringImputer__mask_bool
+&MasVnrType__step2__StringImputer__fill
+MasVnrType__step2MasVnrType__step3"Where
+0
+MSSubClass__step3MSSubClass__step4"Identity
+,
+MSZoning__step3MSZoning__step4"Identity
+2
+LotFrontage__step3LotFrontage__step4"Identity
+*
+LotArea__step3LotArea__step4"Identity
+(
+Street__step3Street__step4"Identity
+&
+Alley__step3Alley__step4"Identity
+,
+LotShape__step3LotShape__step4"Identity
+2
+LandContour__step3LandContour__step4"Identity
+.
+LotConfig__step3LotConfig__step4"Identity
+.
+LandSlope__step3LandSlope__step4"Identity
+4
+Neighborhood__step3Neighborhood__step4"Identity
+0
+Condition1__step3Condition1__step4"Identity
+0
+Condition2__step3Condition2__step4"Identity
+,
+BldgType__step3BldgType__step4"Identity
+0
+HouseStyle__step3HouseStyle__step4"Identity
+2
+OverallQual__step3OverallQual__step4"Identity
+2
+OverallCond__step3OverallCond__step4"Identity
+.
+YearBuilt__step3YearBuilt__step4"Identity
+4
+YearRemodAdd__step3YearRemodAdd__step4"Identity
+.
+RoofStyle__step3RoofStyle__step4"Identity
+,
+RoofMatl__step3RoofMatl__step4"Identity
+2
+Exterior1st__step3Exterior1st__step4"Identity
+2
+Exterior2nd__step3Exterior2nd__step4"Identity
+0
+MasVnrType__step3MasVnrType__step4"Identity
+0
+MasVnrArea__step3MasVnrArea__step4"Identity
+.
+ExterQual__step3ExterQual__step4"Identity
+.
+ExterCond__step3ExterCond__step4"Identity
+0
+Foundation__step3Foundation__step4"Identity
+,
+BsmtQual__step3BsmtQual__step4"Identity
+,
+BsmtCond__step3BsmtCond__step4"Identity
+4
+BsmtExposure__step3BsmtExposure__step4"Identity
+4
+BsmtFinType1__step3BsmtFinType1__step4"Identity
+0
+BsmtFinSF1__step3BsmtFinSF1__step4"Identity
+4
+BsmtFinType2__step3BsmtFinType2__step4"Identity
+0
+BsmtFinSF2__step3BsmtFinSF2__step4"Identity
+.
+BsmtUnfSF__step3BsmtUnfSF__step4"Identity
+2
+TotalBsmtSF__step3TotalBsmtSF__step4"Identity
+*
+Heating__step3Heating__step4"Identity
+.
+HeatingQC__step3HeatingQC__step4"Identity
+0
+CentralAir__step3CentralAir__step4"Identity
+0
+Electrical__step3Electrical__step4"Identity
+,
+1stFlrSF__step31stFlrSF__step4"Identity
+,
+2ndFlrSF__step32ndFlrSF__step4"Identity
+4
+LowQualFinSF__step3LowQualFinSF__step4"Identity
+.
+GrLivArea__step3GrLivArea__step4"Identity
+4
+BsmtFullBath__step3BsmtFullBath__step4"Identity
+4
+BsmtHalfBath__step3BsmtHalfBath__step4"Identity
+,
+FullBath__step3FullBath__step4"Identity
+,
+HalfBath__step3HalfBath__step4"Identity
+4
+BedroomAbvGr__step3BedroomAbvGr__step4"Identity
+4
+KitchenAbvGr__step3KitchenAbvGr__step4"Identity
+2
+KitchenQual__step3KitchenQual__step4"Identity
+4
+TotRmsAbvGrd__step3TotRmsAbvGrd__step4"Identity
+0
+Fireplaces__step3Fireplaces__step4"Identity
+2
+FireplaceQu__step3FireplaceQu__step4"Identity
+0
+GarageType__step3GarageType__step4"Identity
+2
+GarageYrBlt__step3GarageYrBlt__step4"Identity
+4
+GarageFinish__step3GarageFinish__step4"Identity
+0
+GarageCars__step3GarageCars__step4"Identity
+0
+GarageArea__step3GarageArea__step4"Identity
+0
+GarageQual__step3GarageQual__step4"Identity
+0
+GarageCond__step3GarageCond__step4"Identity
+0
+PavedDrive__step3PavedDrive__step4"Identity
+0
+WoodDeckSF__step3WoodDeckSF__step4"Identity
+2
+OpenPorchSF__step3OpenPorchSF__step4"Identity
+6
+EnclosedPorch__step3EnclosedPorch__step4"Identity
+.
+3SsnPorch__step33SsnPorch__step4"Identity
+2
+ScreenPorch__step3ScreenPorch__step4"Identity
+,
+PoolArea__step3PoolArea__step4"Identity
+(
+PoolQC__step3PoolQC__step4"Identity
+&
+Fence__step3Fence__step4"Identity
+2
+MiscFeature__step3MiscFeature__step4"Identity
+*
+MiscVal__step3MiscVal__step4"Identity
+(
+MoSold__step3MoSold__step4"Identity
+(
+YrSold__step3YrSold__step4"Identity
+,
+SaleType__step3SaleType__step4"Identity
+6
+SaleCondition__step3SaleCondition__step4"Identity
+ö
+Functional__step3*Functional__step3__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+j
+*Functional__step3__StringImputer__mask_i64+Functional__step3__StringImputer__mask_bool"Cast*	
+to	†
+Ç
++Functional__step3__StringImputer__mask_bool
+&Functional__step3__StringImputer__fill
+Functional__step3Functional__step4"Where
+2
+LotFrontage__step4LotFrontage__step5"Identity
+*
+LotArea__step4LotArea__step5"Identity
+(
+Street__step4Street__step5"Identity
+&
+Alley__step4Alley__step5"Identity
+,
+LotShape__step4LotShape__step5"Identity
+2
+LandContour__step4LandContour__step5"Identity
+.
+LotConfig__step4LotConfig__step5"Identity
+.
+LandSlope__step4LandSlope__step5"Identity
+4
+Neighborhood__step4Neighborhood__step5"Identity
+0
+Condition1__step4Condition1__step5"Identity
+0
+Condition2__step4Condition2__step5"Identity
+,
+BldgType__step4BldgType__step5"Identity
+0
+HouseStyle__step4HouseStyle__step5"Identity
+2
+OverallQual__step4OverallQual__step5"Identity
+.
+YearBuilt__step4YearBuilt__step5"Identity
+4
+YearRemodAdd__step4YearRemodAdd__step5"Identity
+.
+RoofStyle__step4RoofStyle__step5"Identity
+,
+RoofMatl__step4RoofMatl__step5"Identity
+2
+Exterior2nd__step4Exterior2nd__step5"Identity
+0
+MasVnrType__step4MasVnrType__step5"Identity
+0
+MasVnrArea__step4MasVnrArea__step5"Identity
+.
+ExterQual__step4ExterQual__step5"Identity
+.
+ExterCond__step4ExterCond__step5"Identity
+0
+Foundation__step4Foundation__step5"Identity
+,
+BsmtQual__step4BsmtQual__step5"Identity
+,
+BsmtCond__step4BsmtCond__step5"Identity
+4
+BsmtExposure__step4BsmtExposure__step5"Identity
+4
+BsmtFinType1__step4BsmtFinType1__step5"Identity
+0
+BsmtFinSF1__step4BsmtFinSF1__step5"Identity
+4
+BsmtFinType2__step4BsmtFinType2__step5"Identity
+0
+BsmtFinSF2__step4BsmtFinSF2__step5"Identity
+.
+BsmtUnfSF__step4BsmtUnfSF__step5"Identity
+2
+TotalBsmtSF__step4TotalBsmtSF__step5"Identity
+*
+Heating__step4Heating__step5"Identity
+.
+HeatingQC__step4HeatingQC__step5"Identity
+0
+CentralAir__step4CentralAir__step5"Identity
+,
+1stFlrSF__step41stFlrSF__step5"Identity
+,
+2ndFlrSF__step42ndFlrSF__step5"Identity
+4
+LowQualFinSF__step4LowQualFinSF__step5"Identity
+.
+GrLivArea__step4GrLivArea__step5"Identity
+4
+BsmtFullBath__step4BsmtFullBath__step5"Identity
+4
+BsmtHalfBath__step4BsmtHalfBath__step5"Identity
+,
+FullBath__step4FullBath__step5"Identity
+,
+HalfBath__step4HalfBath__step5"Identity
+4
+BedroomAbvGr__step4BedroomAbvGr__step5"Identity
+4
+KitchenAbvGr__step4KitchenAbvGr__step5"Identity
+4
+TotRmsAbvGrd__step4TotRmsAbvGrd__step5"Identity
+0
+Functional__step4Functional__step5"Identity
+0
+Fireplaces__step4Fireplaces__step5"Identity
+2
+FireplaceQu__step4FireplaceQu__step5"Identity
+0
+GarageType__step4GarageType__step5"Identity
+2
+GarageYrBlt__step4GarageYrBlt__step5"Identity
+4
+GarageFinish__step4GarageFinish__step5"Identity
+0
+GarageCars__step4GarageCars__step5"Identity
+0
+GarageArea__step4GarageArea__step5"Identity
+0
+GarageQual__step4GarageQual__step5"Identity
+0
+GarageCond__step4GarageCond__step5"Identity
+0
+PavedDrive__step4PavedDrive__step5"Identity
+0
+WoodDeckSF__step4WoodDeckSF__step5"Identity
+2
+OpenPorchSF__step4OpenPorchSF__step5"Identity
+6
+EnclosedPorch__step4EnclosedPorch__step5"Identity
+.
+3SsnPorch__step43SsnPorch__step5"Identity
+2
+ScreenPorch__step4ScreenPorch__step5"Identity
+,
+PoolArea__step4PoolArea__step5"Identity
+(
+PoolQC__step4PoolQC__step5"Identity
+&
+Fence__step4Fence__step5"Identity
+2
+MiscFeature__step4MiscFeature__step5"Identity
+*
+MiscVal__step4MiscVal__step5"Identity
+6
+SaleCondition__step4SaleCondition__step5"Identity
+ñ
+MSZoning__step4(MSZoning__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+f
+(MSZoning__step4__StringImputer__mask_i64)MSZoning__step4__StringImputer__mask_bool"Cast*	
+to	†
+z
+)MSZoning__step4__StringImputer__mask_bool
+$MSZoning__step4__StringImputer__fill
+MSZoning__step4MSZoning__step5"Where
+ö
+Electrical__step4*Electrical__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+j
+*Electrical__step4__StringImputer__mask_i64+Electrical__step4__StringImputer__mask_bool"Cast*	
+to	†
+Ç
++Electrical__step4__StringImputer__mask_bool
+&Electrical__step4__StringImputer__fill
+Electrical__step4Electrical__step5"Where
+ú
+KitchenQual__step4+KitchenQual__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+l
++KitchenQual__step4__StringImputer__mask_i64,KitchenQual__step4__StringImputer__mask_bool"Cast*	
+to	†
+Ü
+,KitchenQual__step4__StringImputer__mask_bool
+'KitchenQual__step4__StringImputer__fill
+KitchenQual__step4KitchenQual__step5"Where
+ú
+Exterior1st__step4+Exterior1st__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+l
++Exterior1st__step4__StringImputer__mask_i64,Exterior1st__step4__StringImputer__mask_bool"Cast*	
+to	†
+Ü
+,Exterior1st__step4__StringImputer__mask_bool
+'Exterior1st__step4__StringImputer__fill
+Exterior1st__step4Exterior1st__step5"Where
+ñ
+SaleType__step4(SaleType__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+f
+(SaleType__step4__StringImputer__mask_i64)SaleType__step4__StringImputer__mask_bool"Cast*	
+to	†
+z
+)SaleType__step4__StringImputer__mask_bool
+$SaleType__step4__StringImputer__fill
+SaleType__step4SaleType__step5"Where
+ö
+MSSubClass__step4*MSSubClass__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+j
+*MSSubClass__step4__StringImputer__mask_i64+MSSubClass__step4__StringImputer__mask_bool"Cast*	
+to	†
+Ç
++MSSubClass__step4__StringImputer__mask_bool
+&MSSubClass__step4__StringImputer__fill
+MSSubClass__step4MSSubClass__step5"Where
+ú
+OverallCond__step4+OverallCond__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+l
++OverallCond__step4__StringImputer__mask_i64,OverallCond__step4__StringImputer__mask_bool"Cast*	
+to	†
+Ü
+,OverallCond__step4__StringImputer__mask_bool
+'OverallCond__step4__StringImputer__fill
+OverallCond__step4OverallCond__step5"Where
+í
+YrSold__step4&YrSold__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+b
+&YrSold__step4__StringImputer__mask_i64'YrSold__step4__StringImputer__mask_bool"Cast*	
+to	†
+r
+'YrSold__step4__StringImputer__mask_bool
+"YrSold__step4__StringImputer__fill
+YrSold__step4YrSold__step5"Where
+í
+MoSold__step4&MoSold__step4__StringImputer__mask_i64"LabelEncoder*
+default_int64 †*
+keys_stringsJ †*
+values_int64s@†:
+ai.onnx.ml
+b
+&MoSold__step4__StringImputer__mask_i64'MoSold__step4__StringImputer__mask_bool"Cast*	
+to	†
+r
+'MoSold__step4__StringImputer__mask_bool
+"MoSold__step4__StringImputer__fill
+MoSold__step4MoSold__step5"Where
+0
+MSSubClass__step5MSSubClass__step6"Identity
+,
+MSZoning__step5MSZoning__step6"Identity
+2
+LotFrontage__step5LotFrontage__step6"Identity
+*
+LotArea__step5LotArea__step6"Identity
+(
+Street__step5Street__step6"Identity
+&
+Alley__step5Alley__step6"Identity
+,
+LotShape__step5LotShape__step6"Identity
+2
+LandContour__step5LandContour__step6"Identity
+.
+LotConfig__step5LotConfig__step6"Identity
+.
+LandSlope__step5LandSlope__step6"Identity
+4
+Neighborhood__step5Neighborhood__step6"Identity
+0
+Condition1__step5Condition1__step6"Identity
+0
+Condition2__step5Condition2__step6"Identity
+,
+BldgType__step5BldgType__step6"Identity
+0
+HouseStyle__step5HouseStyle__step6"Identity
+2
+OverallQual__step5OverallQual__step6"Identity
+2
+OverallCond__step5OverallCond__step6"Identity
+.
+YearBuilt__step5YearBuilt__step6"Identity
+4
+YearRemodAdd__step5YearRemodAdd__step6"Identity
+.
+RoofStyle__step5RoofStyle__step6"Identity
+,
+RoofMatl__step5RoofMatl__step6"Identity
+2
+Exterior1st__step5Exterior1st__step6"Identity
+2
+Exterior2nd__step5Exterior2nd__step6"Identity
+0
+MasVnrType__step5MasVnrType__step6"Identity
+.
+ExterQual__step5ExterQual__step6"Identity
+.
+ExterCond__step5ExterCond__step6"Identity
+0
+Foundation__step5Foundation__step6"Identity
+,
+BsmtQual__step5BsmtQual__step6"Identity
+,
+BsmtCond__step5BsmtCond__step6"Identity
+4
+BsmtExposure__step5BsmtExposure__step6"Identity
+4
+BsmtFinType1__step5BsmtFinType1__step6"Identity
+4
+BsmtFinType2__step5BsmtFinType2__step6"Identity
+*
+Heating__step5Heating__step6"Identity
+.
+HeatingQC__step5HeatingQC__step6"Identity
+0
+CentralAir__step5CentralAir__step6"Identity
+0
+Electrical__step5Electrical__step6"Identity
+,
+1stFlrSF__step51stFlrSF__step6"Identity
+,
+2ndFlrSF__step52ndFlrSF__step6"Identity
+4
+LowQualFinSF__step5LowQualFinSF__step6"Identity
+.
+GrLivArea__step5GrLivArea__step6"Identity
+,
+FullBath__step5FullBath__step6"Identity
+,
+HalfBath__step5HalfBath__step6"Identity
+4
+BedroomAbvGr__step5BedroomAbvGr__step6"Identity
+4
+KitchenAbvGr__step5KitchenAbvGr__step6"Identity
+2
+KitchenQual__step5KitchenQual__step6"Identity
+4
+TotRmsAbvGrd__step5TotRmsAbvGrd__step6"Identity
+0
+Functional__step5Functional__step6"Identity
+0
+Fireplaces__step5Fireplaces__step6"Identity
+2
+FireplaceQu__step5FireplaceQu__step6"Identity
+0
+GarageType__step5GarageType__step6"Identity
+4
+GarageFinish__step5GarageFinish__step6"Identity
+0
+GarageQual__step5GarageQual__step6"Identity
+0
+GarageCond__step5GarageCond__step6"Identity
+0
+PavedDrive__step5PavedDrive__step6"Identity
+0
+WoodDeckSF__step5WoodDeckSF__step6"Identity
+2
+OpenPorchSF__step5OpenPorchSF__step6"Identity
+6
+EnclosedPorch__step5EnclosedPorch__step6"Identity
+.
+3SsnPorch__step53SsnPorch__step6"Identity
+2
+ScreenPorch__step5ScreenPorch__step6"Identity
+,
+PoolArea__step5PoolArea__step6"Identity
+(
+PoolQC__step5PoolQC__step6"Identity
+&
+Fence__step5Fence__step6"Identity
+2
+MiscFeature__step5MiscFeature__step6"Identity
+*
+MiscVal__step5MiscVal__step6"Identity
+(
+MoSold__step5MoSold__step6"Identity
+(
+YrSold__step5YrSold__step6"Identity
+,
+SaleType__step5SaleType__step6"Identity
+6
+SaleCondition__step5SaleCondition__step6"Identity
+2
+GarageYrBlt__step5GarageYrBlt__step6"Identity
+0
+GarageArea__step5GarageArea__step6"Identity
+0
+GarageCars__step5GarageCars__step6"Identity
+0
+BsmtFinSF1__step5BsmtFinSF1__step6"Identity
+0
+BsmtFinSF2__step5BsmtFinSF2__step6"Identity
+.
+BsmtUnfSF__step5BsmtUnfSF__step6"Identity
+2
+TotalBsmtSF__step5TotalBsmtSF__step6"Identity
+4
+BsmtFullBath__step5BsmtFullBath__step6"Identity
+4
+BsmtHalfBath__step5BsmtHalfBath__step6"Identity
+0
+MasVnrArea__step5MasVnrArea__step6"Identity
+0
+MSSubClass__step6MSSubClass__step7"Identity
+,
+MSZoning__step6MSZoning__step7"Identity
+*
+LotArea__step6LotArea__step7"Identity
+(
+Street__step6Street__step7"Identity
+&
+Alley__step6Alley__step7"Identity
+,
+LotShape__step6LotShape__step7"Identity
+2
+LandContour__step6LandContour__step7"Identity
+.
+LotConfig__step6LotConfig__step7"Identity
+.
+LandSlope__step6LandSlope__step7"Identity
+0
+Condition1__step6Condition1__step7"Identity
+0
+Condition2__step6Condition2__step7"Identity
+,
+BldgType__step6BldgType__step7"Identity
+0
+HouseStyle__step6HouseStyle__step7"Identity
+2
+OverallQual__step6OverallQual__step7"Identity
+2
+OverallCond__step6OverallCond__step7"Identity
+.
+YearBuilt__step6YearBuilt__step7"Identity
+4
+YearRemodAdd__step6YearRemodAdd__step7"Identity
+.
+RoofStyle__step6RoofStyle__step7"Identity
+,
+RoofMatl__step6RoofMatl__step7"Identity
+2
+Exterior1st__step6Exterior1st__step7"Identity
+2
+Exterior2nd__step6Exterior2nd__step7"Identity
+0
+MasVnrType__step6MasVnrType__step7"Identity
+0
+MasVnrArea__step6MasVnrArea__step7"Identity
+.
+ExterQual__step6ExterQual__step7"Identity
+.
+ExterCond__step6ExterCond__step7"Identity
+0
+Foundation__step6Foundation__step7"Identity
+,
+BsmtQual__step6BsmtQual__step7"Identity
+,
+BsmtCond__step6BsmtCond__step7"Identity
+4
+BsmtExposure__step6BsmtExposure__step7"Identity
+4
+BsmtFinType1__step6BsmtFinType1__step7"Identity
+0
+BsmtFinSF1__step6BsmtFinSF1__step7"Identity
+4
+BsmtFinType2__step6BsmtFinType2__step7"Identity
+0
+BsmtFinSF2__step6BsmtFinSF2__step7"Identity
+.
+BsmtUnfSF__step6BsmtUnfSF__step7"Identity
+2
+TotalBsmtSF__step6TotalBsmtSF__step7"Identity
+*
+Heating__step6Heating__step7"Identity
+.
+HeatingQC__step6HeatingQC__step7"Identity
+0
+CentralAir__step6CentralAir__step7"Identity
+0
+Electrical__step6Electrical__step7"Identity
+,
+1stFlrSF__step61stFlrSF__step7"Identity
+,
+2ndFlrSF__step62ndFlrSF__step7"Identity
+4
+LowQualFinSF__step6LowQualFinSF__step7"Identity
+.
+GrLivArea__step6GrLivArea__step7"Identity
+4
+BsmtFullBath__step6BsmtFullBath__step7"Identity
+4
+BsmtHalfBath__step6BsmtHalfBath__step7"Identity
+,
+FullBath__step6FullBath__step7"Identity
+,
+HalfBath__step6HalfBath__step7"Identity
+4
+BedroomAbvGr__step6BedroomAbvGr__step7"Identity
+4
+KitchenAbvGr__step6KitchenAbvGr__step7"Identity
+2
+KitchenQual__step6KitchenQual__step7"Identity
+4
+TotRmsAbvGrd__step6TotRmsAbvGrd__step7"Identity
+0
+Functional__step6Functional__step7"Identity
+0
+Fireplaces__step6Fireplaces__step7"Identity
+2
+FireplaceQu__step6FireplaceQu__step7"Identity
+0
+GarageType__step6GarageType__step7"Identity
+2
+GarageYrBlt__step6GarageYrBlt__step7"Identity
+4
+GarageFinish__step6GarageFinish__step7"Identity
+0
+GarageCars__step6GarageCars__step7"Identity
+0
+GarageArea__step6GarageArea__step7"Identity
+0
+GarageQual__step6GarageQual__step7"Identity
+0
+GarageCond__step6GarageCond__step7"Identity
+0
+PavedDrive__step6PavedDrive__step7"Identity
+0
+WoodDeckSF__step6WoodDeckSF__step7"Identity
+2
+OpenPorchSF__step6OpenPorchSF__step7"Identity
+6
+EnclosedPorch__step6EnclosedPorch__step7"Identity
+.
+3SsnPorch__step63SsnPorch__step7"Identity
+2
+ScreenPorch__step6ScreenPorch__step7"Identity
+,
+PoolArea__step6PoolArea__step7"Identity
+(
+PoolQC__step6PoolQC__step7"Identity
+&
+Fence__step6Fence__step7"Identity
+2
+MiscFeature__step6MiscFeature__step7"Identity
+*
+MiscVal__step6MiscVal__step7"Identity
+(
+MoSold__step6MoSold__step7"Identity
+(
+YrSold__step6YrSold__step7"Identity
+,
+SaleType__step6SaleType__step7"Identity
+6
+SaleCondition__step6SaleCondition__step7"Identity
+4
+Neighborhood__step6Neighborhood__step7"Identity
+2
+LotFrontage__step6LotFrontage__step7"Identity
+0
+MSSubClass__step7MSSubClass__step8"Identity
+,
+MSZoning__step7MSZoning__step8"Identity
+2
+LotFrontage__step7LotFrontage__step8"Identity
+*
+LotArea__step7LotArea__step8"Identity
+(
+Street__step7Street__step8"Identity
+&
+Alley__step7Alley__step8"Identity
+,
+LotShape__step7LotShape__step8"Identity
+2
+LandContour__step7LandContour__step8"Identity
+.
+LotConfig__step7LotConfig__step8"Identity
+.
+LandSlope__step7LandSlope__step8"Identity
+4
+Neighborhood__step7Neighborhood__step8"Identity
+0
+Condition1__step7Condition1__step8"Identity
+0
+Condition2__step7Condition2__step8"Identity
+,
+BldgType__step7BldgType__step8"Identity
+0
+HouseStyle__step7HouseStyle__step8"Identity
+2
+OverallQual__step7OverallQual__step8"Identity
+2
+OverallCond__step7OverallCond__step8"Identity
+.
+YearBuilt__step7YearBuilt__step8"Identity
+4
+YearRemodAdd__step7YearRemodAdd__step8"Identity
+.
+RoofStyle__step7RoofStyle__step8"Identity
+,
+RoofMatl__step7RoofMatl__step8"Identity
+2
+Exterior1st__step7Exterior1st__step8"Identity
+2
+Exterior2nd__step7Exterior2nd__step8"Identity
+0
+MasVnrType__step7MasVnrType__step8"Identity
+0
+MasVnrArea__step7MasVnrArea__step8"Identity
+.
+ExterQual__step7ExterQual__step8"Identity
+.
+ExterCond__step7ExterCond__step8"Identity
+0
+Foundation__step7Foundation__step8"Identity
+,
+BsmtQual__step7BsmtQual__step8"Identity
+,
+BsmtCond__step7BsmtCond__step8"Identity
+4
+BsmtExposure__step7BsmtExposure__step8"Identity
+4
+BsmtFinType1__step7BsmtFinType1__step8"Identity
+0
+BsmtFinSF1__step7BsmtFinSF1__step8"Identity
+4
+BsmtFinType2__step7BsmtFinType2__step8"Identity
+0
+BsmtFinSF2__step7BsmtFinSF2__step8"Identity
+.
+BsmtUnfSF__step7BsmtUnfSF__step8"Identity
+2
+TotalBsmtSF__step7TotalBsmtSF__step8"Identity
+*
+Heating__step7Heating__step8"Identity
+.
+HeatingQC__step7HeatingQC__step8"Identity
+0
+CentralAir__step7CentralAir__step8"Identity
+0
+Electrical__step7Electrical__step8"Identity
+,
+1stFlrSF__step71stFlrSF__step8"Identity
+,
+2ndFlrSF__step72ndFlrSF__step8"Identity
+4
+LowQualFinSF__step7LowQualFinSF__step8"Identity
+.
+GrLivArea__step7GrLivArea__step8"Identity
+4
+BsmtFullBath__step7BsmtFullBath__step8"Identity
+4
+BsmtHalfBath__step7BsmtHalfBath__step8"Identity
+,
+FullBath__step7FullBath__step8"Identity
+,
+HalfBath__step7HalfBath__step8"Identity
+4
+BedroomAbvGr__step7BedroomAbvGr__step8"Identity
+4
+KitchenAbvGr__step7KitchenAbvGr__step8"Identity
+2
+KitchenQual__step7KitchenQual__step8"Identity
+4
+TotRmsAbvGrd__step7TotRmsAbvGrd__step8"Identity
+0
+Functional__step7Functional__step8"Identity
+0
+Fireplaces__step7Fireplaces__step8"Identity
+2
+FireplaceQu__step7FireplaceQu__step8"Identity
+0
+GarageType__step7GarageType__step8"Identity
+2
+GarageYrBlt__step7GarageYrBlt__step8"Identity
+4
+GarageFinish__step7GarageFinish__step8"Identity
+0
+GarageCars__step7GarageCars__step8"Identity
+0
+GarageArea__step7GarageArea__step8"Identity
+0
+GarageQual__step7GarageQual__step8"Identity
+0
+GarageCond__step7GarageCond__step8"Identity
+0
+PavedDrive__step7PavedDrive__step8"Identity
+0
+WoodDeckSF__step7WoodDeckSF__step8"Identity
+2
+OpenPorchSF__step7OpenPorchSF__step8"Identity
+6
+EnclosedPorch__step7EnclosedPorch__step8"Identity
+.
+3SsnPorch__step73SsnPorch__step8"Identity
+2
+ScreenPorch__step7ScreenPorch__step8"Identity
+,
+PoolArea__step7PoolArea__step8"Identity
+(
+PoolQC__step7PoolQC__step8"Identity
+&
+Fence__step7Fence__step8"Identity
+2
+MiscFeature__step7MiscFeature__step8"Identity
+*
+MiscVal__step7MiscVal__step8"Identity
+(
+MoSold__step7MoSold__step8"Identity
+(
+YrSold__step7YrSold__step8"Identity
+,
+SaleType__step7SaleType__step8"Identity
+6
+SaleCondition__step7SaleCondition__step8"Identity
+r
+LotArea__step7
+,GrLivArea__step7__Ratio__LotArea__step7__one-GrLivArea__step7__Ratio__LotArea__step7__dep1"Add
+Y
+GrLivArea__step7
+-GrLivArea__step7__Ratio__LotArea__step7__dep1LivLotArea__step8"Div
+0
+MSSubClass__step8MSSubClass__step9"Identity
+,
+MSZoning__step8MSZoning__step9"Identity
+2
+LotFrontage__step8LotFrontage__step9"Identity
+*
+LotArea__step8LotArea__step9"Identity
+(
+Street__step8Street__step9"Identity
+&
+Alley__step8Alley__step9"Identity
+,
+LotShape__step8LotShape__step9"Identity
+2
+LandContour__step8LandContour__step9"Identity
+.
+LotConfig__step8LotConfig__step9"Identity
+.
+LandSlope__step8LandSlope__step9"Identity
+4
+Neighborhood__step8Neighborhood__step9"Identity
+0
+Condition1__step8Condition1__step9"Identity
+0
+Condition2__step8Condition2__step9"Identity
+,
+BldgType__step8BldgType__step9"Identity
+0
+HouseStyle__step8HouseStyle__step9"Identity
+2
+OverallQual__step8OverallQual__step9"Identity
+2
+OverallCond__step8OverallCond__step9"Identity
+.
+YearBuilt__step8YearBuilt__step9"Identity
+4
+YearRemodAdd__step8YearRemodAdd__step9"Identity
+.
+RoofStyle__step8RoofStyle__step9"Identity
+,
+RoofMatl__step8RoofMatl__step9"Identity
+2
+Exterior1st__step8Exterior1st__step9"Identity
+2
+Exterior2nd__step8Exterior2nd__step9"Identity
+0
+MasVnrType__step8MasVnrType__step9"Identity
+0
+MasVnrArea__step8MasVnrArea__step9"Identity
+.
+ExterQual__step8ExterQual__step9"Identity
+.
+ExterCond__step8ExterCond__step9"Identity
+0
+Foundation__step8Foundation__step9"Identity
+,
+BsmtQual__step8BsmtQual__step9"Identity
+,
+BsmtCond__step8BsmtCond__step9"Identity
+4
+BsmtExposure__step8BsmtExposure__step9"Identity
+4
+BsmtFinType1__step8BsmtFinType1__step9"Identity
+0
+BsmtFinSF1__step8BsmtFinSF1__step9"Identity
+4
+BsmtFinType2__step8BsmtFinType2__step9"Identity
+0
+BsmtFinSF2__step8BsmtFinSF2__step9"Identity
+.
+BsmtUnfSF__step8BsmtUnfSF__step9"Identity
+2
+TotalBsmtSF__step8TotalBsmtSF__step9"Identity
+*
+Heating__step8Heating__step9"Identity
+.
+HeatingQC__step8HeatingQC__step9"Identity
+0
+CentralAir__step8CentralAir__step9"Identity
+0
+Electrical__step8Electrical__step9"Identity
+,
+1stFlrSF__step81stFlrSF__step9"Identity
+,
+2ndFlrSF__step82ndFlrSF__step9"Identity
+4
+LowQualFinSF__step8LowQualFinSF__step9"Identity
+.
+GrLivArea__step8GrLivArea__step9"Identity
+4
+BsmtFullBath__step8BsmtFullBath__step9"Identity
+4
+BsmtHalfBath__step8BsmtHalfBath__step9"Identity
+,
+FullBath__step8FullBath__step9"Identity
+,
+HalfBath__step8HalfBath__step9"Identity
+4
+BedroomAbvGr__step8BedroomAbvGr__step9"Identity
+4
+KitchenAbvGr__step8KitchenAbvGr__step9"Identity
+2
+KitchenQual__step8KitchenQual__step9"Identity
+4
+TotRmsAbvGrd__step8TotRmsAbvGrd__step9"Identity
+0
+Functional__step8Functional__step9"Identity
+0
+Fireplaces__step8Fireplaces__step9"Identity
+2
+FireplaceQu__step8FireplaceQu__step9"Identity
+0
+GarageType__step8GarageType__step9"Identity
+2
+GarageYrBlt__step8GarageYrBlt__step9"Identity
+4
+GarageFinish__step8GarageFinish__step9"Identity
+0
+GarageCars__step8GarageCars__step9"Identity
+0
+GarageArea__step8GarageArea__step9"Identity
+0
+GarageQual__step8GarageQual__step9"Identity
+0
+GarageCond__step8GarageCond__step9"Identity
+0
+PavedDrive__step8PavedDrive__step9"Identity
+0
+WoodDeckSF__step8WoodDeckSF__step9"Identity
+2
+OpenPorchSF__step8OpenPorchSF__step9"Identity
+6
+EnclosedPorch__step8EnclosedPorch__step9"Identity
+.
+3SsnPorch__step83SsnPorch__step9"Identity
+2
+ScreenPorch__step8ScreenPorch__step9"Identity
+,
+PoolArea__step8PoolArea__step9"Identity
+(
+PoolQC__step8PoolQC__step9"Identity
+&
+Fence__step8Fence__step9"Identity
+2
+MiscFeature__step8MiscFeature__step9"Identity
+*
+MiscVal__step8MiscVal__step9"Identity
+(
+MoSold__step8MoSold__step9"Identity
+(
+YrSold__step8YrSold__step9"Identity
+,
+SaleType__step8SaleType__step9"Identity
+6
+SaleCondition__step8SaleCondition__step9"Identity
+0
+LivLotArea__step8LivLotArea__step9"Identity
+]
+TotalBsmtSF__step86Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF"Cast*	
+to†
+W
+1stFlrSF__step83Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF"Cast*	
+to†
+W
+2ndFlrSF__step83Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF"Cast*	
+to†
+†
+6Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF,Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__sum__s0"Add
+í
+,Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__sum__s0
+3Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF(TotalBsmtSF_1stFlrSF_2ndFlrSF_sum__step9"Add
+§
+6Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_ms0"Add
+ü
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_ms0
+3Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF1Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_msum"Add
+õ
+1Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_msum
+.Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_n1Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_mean"Div
+§
+6Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+1Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_mean2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff0"Sub
+ü
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff0
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff00Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq0"Mul
+°
+3Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+1Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_mean2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff1"Sub
+ü
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff1
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff10Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq1"Mul
+°
+3Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+1Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_mean2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff2"Sub
+ü
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff2
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff20Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq2"Mul
+û
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq0
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq13Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sqadd0"Add
+†
+3Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sqadd0
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq22Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sqsum"Add
+ú
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sqsum
+/Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_n10Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_var"Div
+b
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_var(TotalBsmtSF_1stFlrSF_2ndFlrSF_std__step9"Sqrt
+‹
+6Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF3Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__range__rng_max"Max
+‹
+6Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF3Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__range__rng_min"Min
+õ
+3Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__range__rng_max
+3Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__range__rng_min*TotalBsmtSF_1stFlrSF_2ndFlrSF_range__step9"Sub
+—
+6Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF(TotalBsmtSF_1stFlrSF_2ndFlrSF_min__step9"Min
+—
+6Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+3Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF(TotalBsmtSF_1stFlrSF_2ndFlrSF_max__step9"Max
+1
+MSSubClass__step9MSSubClass__step10"Identity
+3
+LotFrontage__step9LotFrontage__step10"Identity
++
+LotArea__step9LotArea__step10"Identity
+3
+OverallQual__step9OverallQual__step10"Identity
+3
+OverallCond__step9OverallCond__step10"Identity
+/
+YearBuilt__step9YearBuilt__step10"Identity
+5
+YearRemodAdd__step9YearRemodAdd__step10"Identity
+1
+MasVnrArea__step9MasVnrArea__step10"Identity
+1
+BsmtFinSF1__step9BsmtFinSF1__step10"Identity
+1
+BsmtFinSF2__step9BsmtFinSF2__step10"Identity
+/
+BsmtUnfSF__step9BsmtUnfSF__step10"Identity
+3
+TotalBsmtSF__step9TotalBsmtSF__step10"Identity
+-
+1stFlrSF__step91stFlrSF__step10"Identity
+-
+2ndFlrSF__step92ndFlrSF__step10"Identity
+5
+LowQualFinSF__step9LowQualFinSF__step10"Identity
+/
+GrLivArea__step9GrLivArea__step10"Identity
+5
+BsmtFullBath__step9BsmtFullBath__step10"Identity
+5
+BsmtHalfBath__step9BsmtHalfBath__step10"Identity
+-
+FullBath__step9FullBath__step10"Identity
+-
+HalfBath__step9HalfBath__step10"Identity
+5
+BedroomAbvGr__step9BedroomAbvGr__step10"Identity
+5
+KitchenAbvGr__step9KitchenAbvGr__step10"Identity
+5
+TotRmsAbvGrd__step9TotRmsAbvGrd__step10"Identity
+1
+Fireplaces__step9Fireplaces__step10"Identity
+3
+GarageYrBlt__step9GarageYrBlt__step10"Identity
+1
+GarageCars__step9GarageCars__step10"Identity
+1
+GarageArea__step9GarageArea__step10"Identity
+1
+WoodDeckSF__step9WoodDeckSF__step10"Identity
+3
+OpenPorchSF__step9OpenPorchSF__step10"Identity
+7
+EnclosedPorch__step9EnclosedPorch__step10"Identity
+/
+3SsnPorch__step93SsnPorch__step10"Identity
+3
+ScreenPorch__step9ScreenPorch__step10"Identity
+-
+PoolArea__step9PoolArea__step10"Identity
++
+MiscVal__step9MiscVal__step10"Identity
+)
+MoSold__step9MoSold__step10"Identity
+)
+YrSold__step9YrSold__step10"Identity
+1
+LivLotArea__step9LivLotArea__step10"Identity
+_
+(TotalBsmtSF_1stFlrSF_2ndFlrSF_sum__step9)TotalBsmtSF_1stFlrSF_2ndFlrSF_sum__step10"Identity
+_
+(TotalBsmtSF_1stFlrSF_2ndFlrSF_std__step9)TotalBsmtSF_1stFlrSF_2ndFlrSF_std__step10"Identity
+c
+*TotalBsmtSF_1stFlrSF_2ndFlrSF_range__step9+TotalBsmtSF_1stFlrSF_2ndFlrSF_range__step10"Identity
+_
+(TotalBsmtSF_1stFlrSF_2ndFlrSF_min__step9)TotalBsmtSF_1stFlrSF_2ndFlrSF_min__step10"Identity
+_
+(TotalBsmtSF_1stFlrSF_2ndFlrSF_max__step9)TotalBsmtSF_1stFlrSF_2ndFlrSF_max__step10"Identity
+-
+MSZoning__step9MSZoning__step10"Identity
+)
+Street__step9Street__step10"Identity
+'
+Alley__step9Alley__step10"Identity
+-
+LotShape__step9LotShape__step10"Identity
+3
+LandContour__step9LandContour__step10"Identity
+/
+LotConfig__step9LotConfig__step10"Identity
+/
+LandSlope__step9LandSlope__step10"Identity
+5
+Neighborhood__step9Neighborhood__step10"Identity
+1
+Condition1__step9Condition1__step10"Identity
+1
+Condition2__step9Condition2__step10"Identity
+-
+BldgType__step9BldgType__step10"Identity
+1
+HouseStyle__step9HouseStyle__step10"Identity
+/
+RoofStyle__step9RoofStyle__step10"Identity
+-
+RoofMatl__step9RoofMatl__step10"Identity
+3
+Exterior1st__step9Exterior1st__step10"Identity
+3
+Exterior2nd__step9Exterior2nd__step10"Identity
+1
+MasVnrType__step9MasVnrType__step10"Identity
+/
+ExterQual__step9ExterQual__step10"Identity
+/
+ExterCond__step9ExterCond__step10"Identity
+1
+Foundation__step9Foundation__step10"Identity
+-
+BsmtQual__step9BsmtQual__step10"Identity
+-
+BsmtCond__step9BsmtCond__step10"Identity
+5
+BsmtExposure__step9BsmtExposure__step10"Identity
+5
+BsmtFinType1__step9BsmtFinType1__step10"Identity
+5
+BsmtFinType2__step9BsmtFinType2__step10"Identity
++
+Heating__step9Heating__step10"Identity
+/
+HeatingQC__step9HeatingQC__step10"Identity
+1
+CentralAir__step9CentralAir__step10"Identity
+1
+Electrical__step9Electrical__step10"Identity
+3
+KitchenQual__step9KitchenQual__step10"Identity
+1
+Functional__step9Functional__step10"Identity
+3
+FireplaceQu__step9FireplaceQu__step10"Identity
+1
+GarageType__step9GarageType__step10"Identity
+5
+GarageFinish__step9GarageFinish__step10"Identity
+1
+GarageQual__step9GarageQual__step10"Identity
+1
+GarageCond__step9GarageCond__step10"Identity
+1
+PavedDrive__step9PavedDrive__step10"Identity
+)
+PoolQC__step9PoolQC__step10"Identity
+'
+Fence__step9Fence__step10"Identity
+3
+MiscFeature__step9MiscFeature__step10"Identity
+-
+SaleType__step9SaleType__step10"Identity
+7
+SaleCondition__step9SaleCondition__step10"Identity
+ä
+MSZoning__step9MSZoning__RL__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRL†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+MSZoning__step9MSZoning__RM__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRM†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+MSZoning__step9MSZoning__FV__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFV†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+MSZoning__step9MSZoning__RH__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRH†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+MSZoning__step9MSZoning__C (all)__step10"LabelEncoder*
+default_float    †*
+keys_stringsJC (all)†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+Street__step9Street__Pave__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPave†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+Street__step9Street__Grvl__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGrvl†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+Alley__step9Alley__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+à
+Alley__step9Alley__Grvl__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGrvl†*
+values_floats=  Ä?†:
+ai.onnx.ml
+à
+Alley__step9Alley__Pave__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPave†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+LotShape__step9LotShape__Reg__step10"LabelEncoder*
+default_float    †*
+keys_stringsJReg†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+LotShape__step9LotShape__IR1__step10"LabelEncoder*
+default_float    †*
+keys_stringsJIR1†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+LotShape__step9LotShape__IR2__step10"LabelEncoder*
+default_float    †*
+keys_stringsJIR2†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+LotShape__step9LotShape__IR3__step10"LabelEncoder*
+default_float    †*
+keys_stringsJIR3†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+LandContour__step9LandContour__Lvl__step10"LabelEncoder*
+default_float    †*
+keys_stringsJLvl†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+LandContour__step9LandContour__Bnk__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBnk†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+LandContour__step9LandContour__HLS__step10"LabelEncoder*
+default_float    †*
+keys_stringsJHLS†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+LandContour__step9LandContour__Low__step10"LabelEncoder*
+default_float    †*
+keys_stringsJLow†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+LotConfig__step9LotConfig__Inside__step10"LabelEncoder*
+default_float    †*
+keys_stringsJInside†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+LotConfig__step9LotConfig__Corner__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCorner†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+LotConfig__step9LotConfig__CulDSac__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCulDSac†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+LotConfig__step9LotConfig__FR2__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFR2†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+LotConfig__step9LotConfig__FR3__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFR3†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+LandSlope__step9LandSlope__Gtl__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGtl†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+LandSlope__step9LandSlope__Mod__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMod†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+LandSlope__step9LandSlope__Sev__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSev†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+Neighborhood__step9Neighborhood__NAmes__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNAmes†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__CollgCr__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCollgCr†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__OldTown__step10"LabelEncoder*
+default_float    †*
+keys_stringsJOldTown†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__Edwards__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEdwards†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__Somerst__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSomerst†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__Gilbert__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGilbert†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__NridgHt__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNridgHt†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Neighborhood__step9Neighborhood__Sawyer__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSawyer†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Neighborhood__step9Neighborhood__NWAmes__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNWAmes†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__SawyerW__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSawyerW†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__BrkSide__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrkSide†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__Crawfor__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCrawfor†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__Mitchel__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMitchel†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__NoRidge__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNoRidge†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Neighborhood__step9Neighborhood__Timber__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTimber†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Neighborhood__step9Neighborhood__IDOTRR__step10"LabelEncoder*
+default_float    †*
+keys_stringsJIDOTRR†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__ClearCr__step10"LabelEncoder*
+default_float    †*
+keys_stringsJClearCr†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__StoneBr__step10"LabelEncoder*
+default_float    †*
+keys_stringsJStoneBr†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+Neighborhood__step9Neighborhood__SWISU__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSWISU†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__MeadowV__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMeadowV†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__Blmngtn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBlmngtn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Neighborhood__step9Neighborhood__BrDale__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrDale†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__Veenker__step10"LabelEncoder*
+default_float    †*
+keys_stringsJVeenker†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__NPkVill__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNPkVill†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+Neighborhood__step9Neighborhood__Blueste__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBlueste†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition1__step9Condition1__Norm__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNorm†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+Condition1__step9Condition1__Feedr__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFeedr†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+Condition1__step9Condition1__Artery__step10"LabelEncoder*
+default_float    †*
+keys_stringsJArtery†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition1__step9Condition1__RRAn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRRAn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition1__step9Condition1__PosN__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPosN†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition1__step9Condition1__RRAe__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRRAe†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition1__step9Condition1__PosA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPosA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition1__step9Condition1__RRNn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRRNn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition1__step9Condition1__RRNe__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRRNe†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition2__step9Condition2__Norm__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNorm†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+Condition2__step9Condition2__Feedr__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFeedr†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+Condition2__step9Condition2__Artery__step10"LabelEncoder*
+default_float    †*
+keys_stringsJArtery†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition2__step9Condition2__RRNn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRRNn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition2__step9Condition2__PosN__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPosN†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition2__step9Condition2__PosA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPosA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition2__step9Condition2__RRAn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRRAn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Condition2__step9Condition2__RRAe__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRRAe†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+BldgType__step9BldgType__1Fam__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ1Fam†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+BldgType__step9BldgType__TwnhsE__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTwnhsE†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+BldgType__step9BldgType__Duplex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJDuplex†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+BldgType__step9BldgType__Twnhs__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTwnhs†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+BldgType__step9BldgType__2fmCon__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ2fmCon†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+HouseStyle__step9HouseStyle__1Story__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ1Story†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+HouseStyle__step9HouseStyle__2Story__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ2Story†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+HouseStyle__step9HouseStyle__1.5Fin__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ1.5Fin†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+HouseStyle__step9HouseStyle__SLvl__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSLvl†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+HouseStyle__step9HouseStyle__SFoyer__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSFoyer†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+HouseStyle__step9HouseStyle__1.5Unf__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ1.5Unf†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+HouseStyle__step9HouseStyle__2.5Unf__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ2.5Unf†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+HouseStyle__step9HouseStyle__2.5Fin__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ2.5Fin†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+RoofStyle__step9RoofStyle__Gable__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGable†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+RoofStyle__step9RoofStyle__Hip__step10"LabelEncoder*
+default_float    †*
+keys_stringsJHip†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+RoofStyle__step9RoofStyle__Flat__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFlat†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+RoofStyle__step9RoofStyle__Gambrel__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGambrel†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+RoofStyle__step9RoofStyle__Mansard__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMansard†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+RoofStyle__step9RoofStyle__Shed__step10"LabelEncoder*
+default_float    †*
+keys_stringsJShed†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+RoofMatl__step9RoofMatl__CompShg__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCompShg†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+RoofMatl__step9RoofMatl__Tar&Grv__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTar&Grv†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+RoofMatl__step9RoofMatl__WdShngl__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWdShngl†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+RoofMatl__step9RoofMatl__WdShake__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWdShake†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+RoofMatl__step9RoofMatl__Metal__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMetal†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+RoofMatl__step9RoofMatl__Membran__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMembran†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+RoofMatl__step9RoofMatl__Roll__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRoll†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+RoofMatl__step9RoofMatl__ClyTile__step10"LabelEncoder*
+default_float    †*
+keys_stringsJClyTile†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__VinylSd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJVinylSd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__HdBoard__step10"LabelEncoder*
+default_float    †*
+keys_stringsJHdBoard†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__MetalSd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMetalSd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__Wd Sdng__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWd Sdng†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__Plywood__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPlywood†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__CemntBd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCemntBd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__BrkFace__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrkFace†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__WdShing__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWdShing†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+Exterior1st__step9Exterior1st__Stucco__step10"LabelEncoder*
+default_float    †*
+keys_stringsJStucco†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__AsbShng__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAsbShng†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__BrkComm__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrkComm†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+Exterior1st__step9Exterior1st__Stone__step10"LabelEncoder*
+default_float    †*
+keys_stringsJStone†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__AsphShn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAsphShn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior1st__step9Exterior1st__ImStucc__step10"LabelEncoder*
+default_float    †*
+keys_stringsJImStucc†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+Exterior1st__step9Exterior1st__CBlock__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCBlock†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__VinylSd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJVinylSd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__MetalSd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMetalSd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__HdBoard__step10"LabelEncoder*
+default_float    †*
+keys_stringsJHdBoard†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__Wd Sdng__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWd Sdng†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__Plywood__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPlywood†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__CmentBd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCmentBd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__Wd Shng__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWd Shng†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+Exterior2nd__step9Exterior2nd__Stucco__step10"LabelEncoder*
+default_float    †*
+keys_stringsJStucco†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__BrkFace__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrkFace†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__AsbShng__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAsbShng†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__ImStucc__step10"LabelEncoder*
+default_float    †*
+keys_stringsJImStucc†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__BrkComm__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrkComm†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+Exterior2nd__step9Exterior2nd__Stone__step10"LabelEncoder*
+default_float    †*
+keys_stringsJStone†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+Exterior2nd__step9Exterior2nd__AsphShn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAsphShn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+Exterior2nd__step9Exterior2nd__Other__step10"LabelEncoder*
+default_float    †*
+keys_stringsJOther†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+Exterior2nd__step9Exterior2nd__CBlock__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCBlock†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+MasVnrType__step9MasVnrType__None__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNone†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+MasVnrType__step9MasVnrType__BrkFace__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrkFace†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+MasVnrType__step9MasVnrType__Stone__step10"LabelEncoder*
+default_float    †*
+keys_stringsJStone†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+MasVnrType__step9MasVnrType__BrkCmn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrkCmn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+MasVnrType__step9MasVnrType__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterQual__step9ExterQual__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterQual__step9ExterQual__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterQual__step9ExterQual__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterQual__step9ExterQual__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterCond__step9ExterCond__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterCond__step9ExterCond__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterCond__step9ExterCond__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterCond__step9ExterCond__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+ExterCond__step9ExterCond__Po__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPo†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+Foundation__step9Foundation__PConc__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPConc†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+Foundation__step9Foundation__CBlock__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCBlock†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+Foundation__step9Foundation__BrkTil__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBrkTil†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Foundation__step9Foundation__Slab__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSlab†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+Foundation__step9Foundation__Stone__step10"LabelEncoder*
+default_float    †*
+keys_stringsJStone†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Foundation__step9Foundation__Wood__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWood†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+BsmtQual__step9BsmtQual__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+BsmtQual__step9BsmtQual__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+BsmtQual__step9BsmtQual__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtQual__step9BsmtQual__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+BsmtQual__step9BsmtQual__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+BsmtCond__step9BsmtCond__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+BsmtCond__step9BsmtCond__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+BsmtCond__step9BsmtCond__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtCond__step9BsmtCond__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+BsmtCond__step9BsmtCond__Po__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPo†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+BsmtExposure__step9BsmtExposure__No__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNo†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+BsmtExposure__step9BsmtExposure__Av__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAv†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+BsmtExposure__step9BsmtExposure__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+BsmtExposure__step9BsmtExposure__Mn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+BsmtExposure__step9BsmtExposure__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType1__step9BsmtFinType1__Unf__step10"LabelEncoder*
+default_float    †*
+keys_stringsJUnf†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType1__step9BsmtFinType1__GLQ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGLQ†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType1__step9BsmtFinType1__ALQ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJALQ†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType1__step9BsmtFinType1__BLQ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBLQ†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType1__step9BsmtFinType1__Rec__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRec†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType1__step9BsmtFinType1__LwQ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJLwQ†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+BsmtFinType1__step9BsmtFinType1__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType2__step9BsmtFinType2__Unf__step10"LabelEncoder*
+default_float    †*
+keys_stringsJUnf†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType2__step9BsmtFinType2__Rec__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRec†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType2__step9BsmtFinType2__LwQ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJLwQ†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+BsmtFinType2__step9BsmtFinType2__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType2__step9BsmtFinType2__BLQ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBLQ†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType2__step9BsmtFinType2__ALQ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJALQ†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+BsmtFinType2__step9BsmtFinType2__GLQ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGLQ†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+Heating__step9Heating__GasA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGasA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+Heating__step9Heating__GasW__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGasW†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+Heating__step9Heating__Grav__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGrav†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+Heating__step9Heating__Wall__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWall†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+Heating__step9Heating__OthW__step10"LabelEncoder*
+default_float    †*
+keys_stringsJOthW†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+Heating__step9Heating__Floor__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFloor†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+HeatingQC__step9HeatingQC__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+HeatingQC__step9HeatingQC__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+HeatingQC__step9HeatingQC__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+HeatingQC__step9HeatingQC__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+HeatingQC__step9HeatingQC__Po__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPo†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+CentralAir__step9CentralAir__Y__step10"LabelEncoder*
+default_float    †*
+keys_stringsJY†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+CentralAir__step9CentralAir__N__step10"LabelEncoder*
+default_float    †*
+keys_stringsJN†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+Electrical__step9Electrical__SBrkr__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSBrkr†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+Electrical__step9Electrical__FuseA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFuseA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+Electrical__step9Electrical__FuseF__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFuseF†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+Electrical__step9Electrical__FuseP__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFuseP†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+Electrical__step9Electrical__Mix__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMix†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+KitchenQual__step9KitchenQual__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+KitchenQual__step9KitchenQual__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+KitchenQual__step9KitchenQual__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+KitchenQual__step9KitchenQual__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+Functional__step9Functional__Typ__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTyp†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Functional__step9Functional__Min2__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMin2†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Functional__step9Functional__Min1__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMin1†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+Functional__step9Functional__Mod__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMod†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Functional__step9Functional__Maj1__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMaj1†*
+values_floats=  Ä?†:
+ai.onnx.ml
+í
+Functional__step9Functional__Maj2__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMaj2†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+Functional__step9Functional__Sev__step10"LabelEncoder*
+default_float    †*
+keys_stringsJSev†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+FireplaceQu__step9FireplaceQu__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+FireplaceQu__step9FireplaceQu__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+FireplaceQu__step9FireplaceQu__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+FireplaceQu__step9FireplaceQu__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+FireplaceQu__step9FireplaceQu__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+FireplaceQu__step9FireplaceQu__Po__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPo†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+GarageType__step9GarageType__Attchd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAttchd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+GarageType__step9GarageType__Detchd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJDetchd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+GarageType__step9GarageType__BuiltIn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBuiltIn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+GarageType__step9GarageType__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+GarageType__step9GarageType__Basment__step10"LabelEncoder*
+default_float    †*
+keys_stringsJBasment†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+GarageType__step9GarageType__CarPort__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCarPort†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ñ
+GarageType__step9GarageType__2Types__step10"LabelEncoder*
+default_float    †*
+keys_stringsJ2Types†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+GarageFinish__step9GarageFinish__Unf__step10"LabelEncoder*
+default_float    †*
+keys_stringsJUnf†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+GarageFinish__step9GarageFinish__RFn__step10"LabelEncoder*
+default_float    †*
+keys_stringsJRFn†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+GarageFinish__step9GarageFinish__Fin__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFin†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+GarageFinish__step9GarageFinish__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageQual__step9GarageQual__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+GarageQual__step9GarageQual__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageQual__step9GarageQual__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageQual__step9GarageQual__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageQual__step9GarageQual__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageQual__step9GarageQual__Po__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPo†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageCond__step9GarageCond__TA__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTA†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ò
+GarageCond__step9GarageCond__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageCond__step9GarageCond__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageCond__step9GarageCond__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageCond__step9GarageCond__Po__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPo†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+GarageCond__step9GarageCond__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+PavedDrive__step9PavedDrive__Y__step10"LabelEncoder*
+default_float    †*
+keys_stringsJY†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+PavedDrive__step9PavedDrive__N__step10"LabelEncoder*
+default_float    †*
+keys_stringsJN†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+PavedDrive__step9PavedDrive__P__step10"LabelEncoder*
+default_float    †*
+keys_stringsJP†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+PoolQC__step9PoolQC__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+Ü
+PoolQC__step9PoolQC__Gd__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGd†*
+values_floats=  Ä?†:
+ai.onnx.ml
+Ü
+PoolQC__step9PoolQC__Ex__step10"LabelEncoder*
+default_float    †*
+keys_stringsJEx†*
+values_floats=  Ä?†:
+ai.onnx.ml
+Ü
+PoolQC__step9PoolQC__Fa__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFa†*
+values_floats=  Ä?†:
+ai.onnx.ml
+é
+Fence__step9Fence__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+Fence__step9Fence__MnPrv__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMnPrv†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+Fence__step9Fence__GdPrv__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGdPrv†*
+values_floats=  Ä?†:
+ai.onnx.ml
+à
+Fence__step9Fence__GdWo__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGdWo†*
+values_floats=  Ä?†:
+ai.onnx.ml
+à
+Fence__step9Fence__MnWw__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMnWw†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ö
+MiscFeature__step9MiscFeature__MISSING__step10"LabelEncoder*
+default_float    †*
+keys_stringsJMISSING†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+MiscFeature__step9MiscFeature__Shed__step10"LabelEncoder*
+default_float    †*
+keys_stringsJShed†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+MiscFeature__step9MiscFeature__Gar2__step10"LabelEncoder*
+default_float    †*
+keys_stringsJGar2†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+MiscFeature__step9MiscFeature__Othr__step10"LabelEncoder*
+default_float    †*
+keys_stringsJOthr†*
+values_floats=  Ä?†:
+ai.onnx.ml
+î
+MiscFeature__step9MiscFeature__TenC__step10"LabelEncoder*
+default_float    †*
+keys_stringsJTenC†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ä
+SaleType__step9SaleType__WD__step10"LabelEncoder*
+default_float    †*
+keys_stringsJWD†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+SaleType__step9SaleType__New__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNew†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+SaleType__step9SaleType__COD__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCOD†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+SaleType__step9SaleType__ConLD__step10"LabelEncoder*
+default_float    †*
+keys_stringsJConLD†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+SaleType__step9SaleType__ConLI__step10"LabelEncoder*
+default_float    †*
+keys_stringsJConLI†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ê
+SaleType__step9SaleType__ConLw__step10"LabelEncoder*
+default_float    †*
+keys_stringsJConLw†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+SaleType__step9SaleType__CWD__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCWD†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+SaleType__step9SaleType__Oth__step10"LabelEncoder*
+default_float    †*
+keys_stringsJOth†*
+values_floats=  Ä?†:
+ai.onnx.ml
+å
+SaleType__step9SaleType__Con__step10"LabelEncoder*
+default_float    †*
+keys_stringsJCon†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+SaleCondition__step9SaleCondition__Normal__step10"LabelEncoder*
+default_float    †*
+keys_stringsJNormal†*
+values_floats=  Ä?†:
+ai.onnx.ml
+û
+SaleCondition__step9SaleCondition__Partial__step10"LabelEncoder*
+default_float    †*
+keys_stringsJPartial†*
+values_floats=  Ä?†:
+ai.onnx.ml
+û
+SaleCondition__step9SaleCondition__Abnorml__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAbnorml†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+SaleCondition__step9SaleCondition__Family__step10"LabelEncoder*
+default_float    †*
+keys_stringsJFamily†*
+values_floats=  Ä?†:
+ai.onnx.ml
+ú
+SaleCondition__step9SaleCondition__Alloca__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAlloca†*
+values_floats=  Ä?†:
+ai.onnx.ml
+û
+SaleCondition__step9SaleCondition__AdjLand__step10"LabelEncoder*
+default_float    †*
+keys_stringsJAdjLand†*
+values_floats=  Ä?†:
+ai.onnx.ml
+*
+MSSubClass__step10
+MSSubClass"Identity
+,
+LotFrontage__step10LotFrontage"Identity
+$
+LotArea__step10LotArea"Identity
+,
+OverallQual__step10OverallQual"Identity
+,
+OverallCond__step10OverallCond"Identity
+(
+YearBuilt__step10	YearBuilt"Identity
+.
+YearRemodAdd__step10YearRemodAdd"Identity
+*
+MasVnrArea__step10
+MasVnrArea"Identity
+*
+BsmtFinSF1__step10
+BsmtFinSF1"Identity
+*
+BsmtFinSF2__step10
+BsmtFinSF2"Identity
+(
+BsmtUnfSF__step10	BsmtUnfSF"Identity
+,
+TotalBsmtSF__step10TotalBsmtSF"Identity
+&
+1stFlrSF__step101stFlrSF"Identity
+&
+2ndFlrSF__step102ndFlrSF"Identity
+.
+LowQualFinSF__step10LowQualFinSF"Identity
+(
+GrLivArea__step10	GrLivArea"Identity
+.
+BsmtFullBath__step10BsmtFullBath"Identity
+.
+BsmtHalfBath__step10BsmtHalfBath"Identity
+&
+FullBath__step10FullBath"Identity
+&
+HalfBath__step10HalfBath"Identity
+.
+BedroomAbvGr__step10BedroomAbvGr"Identity
+.
+KitchenAbvGr__step10KitchenAbvGr"Identity
+.
+TotRmsAbvGrd__step10TotRmsAbvGrd"Identity
+*
+Fireplaces__step10
+Fireplaces"Identity
+,
+GarageYrBlt__step10GarageYrBlt"Identity
+*
+GarageCars__step10
+GarageCars"Identity
+*
+GarageArea__step10
+GarageArea"Identity
+*
+WoodDeckSF__step10
+WoodDeckSF"Identity
+,
+OpenPorchSF__step10OpenPorchSF"Identity
+0
+EnclosedPorch__step10EnclosedPorch"Identity
+(
+3SsnPorch__step10	3SsnPorch"Identity
+,
+ScreenPorch__step10ScreenPorch"Identity
+&
+PoolArea__step10PoolArea"Identity
+$
+MiscVal__step10MiscVal"Identity
+"
+MoSold__step10MoSold"Identity
+"
+YrSold__step10YrSold"Identity
+*
+LivLotArea__step10
+LivLotArea"Identity
+X
+)TotalBsmtSF_1stFlrSF_2ndFlrSF_sum__step10!TotalBsmtSF_1stFlrSF_2ndFlrSF_sum"Identity
+X
+)TotalBsmtSF_1stFlrSF_2ndFlrSF_std__step10!TotalBsmtSF_1stFlrSF_2ndFlrSF_std"Identity
+\
++TotalBsmtSF_1stFlrSF_2ndFlrSF_range__step10#TotalBsmtSF_1stFlrSF_2ndFlrSF_range"Identity
+X
+)TotalBsmtSF_1stFlrSF_2ndFlrSF_min__step10!TotalBsmtSF_1stFlrSF_2ndFlrSF_min"Identity
+X
+)TotalBsmtSF_1stFlrSF_2ndFlrSF_max__step10!TotalBsmtSF_1stFlrSF_2ndFlrSF_max"Identity
+.
+MSZoning__RL__step10MSZoning__RL"Identity
+.
+MSZoning__RM__step10MSZoning__RM"Identity
+.
+MSZoning__FV__step10MSZoning__FV"Identity
+.
+MSZoning__RH__step10MSZoning__RH"Identity
+8
+MSZoning__C (all)__step10MSZoning__C (all)"Identity
+.
+Street__Pave__step10Street__Pave"Identity
+.
+Street__Grvl__step10Street__Grvl"Identity
+2
+Alley__MISSING__step10Alley__MISSING"Identity
+,
+Alley__Grvl__step10Alley__Grvl"Identity
+,
+Alley__Pave__step10Alley__Pave"Identity
+0
+LotShape__Reg__step10LotShape__Reg"Identity
+0
+LotShape__IR1__step10LotShape__IR1"Identity
+0
+LotShape__IR2__step10LotShape__IR2"Identity
+0
+LotShape__IR3__step10LotShape__IR3"Identity
+6
+LandContour__Lvl__step10LandContour__Lvl"Identity
+6
+LandContour__Bnk__step10LandContour__Bnk"Identity
+6
+LandContour__HLS__step10LandContour__HLS"Identity
+6
+LandContour__Low__step10LandContour__Low"Identity
+8
+LotConfig__Inside__step10LotConfig__Inside"Identity
+8
+LotConfig__Corner__step10LotConfig__Corner"Identity
+:
+LotConfig__CulDSac__step10LotConfig__CulDSac"Identity
+2
+LotConfig__FR2__step10LotConfig__FR2"Identity
+2
+LotConfig__FR3__step10LotConfig__FR3"Identity
+2
+LandSlope__Gtl__step10LandSlope__Gtl"Identity
+2
+LandSlope__Mod__step10LandSlope__Mod"Identity
+2
+LandSlope__Sev__step10LandSlope__Sev"Identity
+<
+Neighborhood__NAmes__step10Neighborhood__NAmes"Identity
+@
+Neighborhood__CollgCr__step10Neighborhood__CollgCr"Identity
+@
+Neighborhood__OldTown__step10Neighborhood__OldTown"Identity
+@
+Neighborhood__Edwards__step10Neighborhood__Edwards"Identity
+@
+Neighborhood__Somerst__step10Neighborhood__Somerst"Identity
+@
+Neighborhood__Gilbert__step10Neighborhood__Gilbert"Identity
+@
+Neighborhood__NridgHt__step10Neighborhood__NridgHt"Identity
+>
+Neighborhood__Sawyer__step10Neighborhood__Sawyer"Identity
+>
+Neighborhood__NWAmes__step10Neighborhood__NWAmes"Identity
+@
+Neighborhood__SawyerW__step10Neighborhood__SawyerW"Identity
+@
+Neighborhood__BrkSide__step10Neighborhood__BrkSide"Identity
+@
+Neighborhood__Crawfor__step10Neighborhood__Crawfor"Identity
+@
+Neighborhood__Mitchel__step10Neighborhood__Mitchel"Identity
+@
+Neighborhood__NoRidge__step10Neighborhood__NoRidge"Identity
+>
+Neighborhood__Timber__step10Neighborhood__Timber"Identity
+>
+Neighborhood__IDOTRR__step10Neighborhood__IDOTRR"Identity
+@
+Neighborhood__ClearCr__step10Neighborhood__ClearCr"Identity
+@
+Neighborhood__StoneBr__step10Neighborhood__StoneBr"Identity
+<
+Neighborhood__SWISU__step10Neighborhood__SWISU"Identity
+@
+Neighborhood__MeadowV__step10Neighborhood__MeadowV"Identity
+@
+Neighborhood__Blmngtn__step10Neighborhood__Blmngtn"Identity
+>
+Neighborhood__BrDale__step10Neighborhood__BrDale"Identity
+@
+Neighborhood__Veenker__step10Neighborhood__Veenker"Identity
+@
+Neighborhood__NPkVill__step10Neighborhood__NPkVill"Identity
+@
+Neighborhood__Blueste__step10Neighborhood__Blueste"Identity
+6
+Condition1__Norm__step10Condition1__Norm"Identity
+8
+Condition1__Feedr__step10Condition1__Feedr"Identity
+:
+Condition1__Artery__step10Condition1__Artery"Identity
+6
+Condition1__RRAn__step10Condition1__RRAn"Identity
+6
+Condition1__PosN__step10Condition1__PosN"Identity
+6
+Condition1__RRAe__step10Condition1__RRAe"Identity
+6
+Condition1__PosA__step10Condition1__PosA"Identity
+6
+Condition1__RRNn__step10Condition1__RRNn"Identity
+6
+Condition1__RRNe__step10Condition1__RRNe"Identity
+6
+Condition2__Norm__step10Condition2__Norm"Identity
+8
+Condition2__Feedr__step10Condition2__Feedr"Identity
+:
+Condition2__Artery__step10Condition2__Artery"Identity
+6
+Condition2__RRNn__step10Condition2__RRNn"Identity
+6
+Condition2__PosN__step10Condition2__PosN"Identity
+6
+Condition2__PosA__step10Condition2__PosA"Identity
+6
+Condition2__RRAn__step10Condition2__RRAn"Identity
+6
+Condition2__RRAe__step10Condition2__RRAe"Identity
+2
+BldgType__1Fam__step10BldgType__1Fam"Identity
+6
+BldgType__TwnhsE__step10BldgType__TwnhsE"Identity
+6
+BldgType__Duplex__step10BldgType__Duplex"Identity
+4
+BldgType__Twnhs__step10BldgType__Twnhs"Identity
+6
+BldgType__2fmCon__step10BldgType__2fmCon"Identity
+:
+HouseStyle__1Story__step10HouseStyle__1Story"Identity
+:
+HouseStyle__2Story__step10HouseStyle__2Story"Identity
+:
+HouseStyle__1.5Fin__step10HouseStyle__1.5Fin"Identity
+6
+HouseStyle__SLvl__step10HouseStyle__SLvl"Identity
+:
+HouseStyle__SFoyer__step10HouseStyle__SFoyer"Identity
+:
+HouseStyle__1.5Unf__step10HouseStyle__1.5Unf"Identity
+:
+HouseStyle__2.5Unf__step10HouseStyle__2.5Unf"Identity
+:
+HouseStyle__2.5Fin__step10HouseStyle__2.5Fin"Identity
+6
+RoofStyle__Gable__step10RoofStyle__Gable"Identity
+2
+RoofStyle__Hip__step10RoofStyle__Hip"Identity
+4
+RoofStyle__Flat__step10RoofStyle__Flat"Identity
+:
+RoofStyle__Gambrel__step10RoofStyle__Gambrel"Identity
+:
+RoofStyle__Mansard__step10RoofStyle__Mansard"Identity
+4
+RoofStyle__Shed__step10RoofStyle__Shed"Identity
+8
+RoofMatl__CompShg__step10RoofMatl__CompShg"Identity
+8
+RoofMatl__Tar&Grv__step10RoofMatl__Tar&Grv"Identity
+8
+RoofMatl__WdShngl__step10RoofMatl__WdShngl"Identity
+8
+RoofMatl__WdShake__step10RoofMatl__WdShake"Identity
+4
+RoofMatl__Metal__step10RoofMatl__Metal"Identity
+8
+RoofMatl__Membran__step10RoofMatl__Membran"Identity
+2
+RoofMatl__Roll__step10RoofMatl__Roll"Identity
+8
+RoofMatl__ClyTile__step10RoofMatl__ClyTile"Identity
+>
+Exterior1st__VinylSd__step10Exterior1st__VinylSd"Identity
+>
+Exterior1st__HdBoard__step10Exterior1st__HdBoard"Identity
+>
+Exterior1st__MetalSd__step10Exterior1st__MetalSd"Identity
+>
+Exterior1st__Wd Sdng__step10Exterior1st__Wd Sdng"Identity
+>
+Exterior1st__Plywood__step10Exterior1st__Plywood"Identity
+>
+Exterior1st__CemntBd__step10Exterior1st__CemntBd"Identity
+>
+Exterior1st__BrkFace__step10Exterior1st__BrkFace"Identity
+>
+Exterior1st__WdShing__step10Exterior1st__WdShing"Identity
+<
+Exterior1st__Stucco__step10Exterior1st__Stucco"Identity
+>
+Exterior1st__AsbShng__step10Exterior1st__AsbShng"Identity
+>
+Exterior1st__BrkComm__step10Exterior1st__BrkComm"Identity
+:
+Exterior1st__Stone__step10Exterior1st__Stone"Identity
+>
+Exterior1st__AsphShn__step10Exterior1st__AsphShn"Identity
+>
+Exterior1st__ImStucc__step10Exterior1st__ImStucc"Identity
+<
+Exterior1st__CBlock__step10Exterior1st__CBlock"Identity
+>
+Exterior2nd__VinylSd__step10Exterior2nd__VinylSd"Identity
+>
+Exterior2nd__MetalSd__step10Exterior2nd__MetalSd"Identity
+>
+Exterior2nd__HdBoard__step10Exterior2nd__HdBoard"Identity
+>
+Exterior2nd__Wd Sdng__step10Exterior2nd__Wd Sdng"Identity
+>
+Exterior2nd__Plywood__step10Exterior2nd__Plywood"Identity
+>
+Exterior2nd__CmentBd__step10Exterior2nd__CmentBd"Identity
+>
+Exterior2nd__Wd Shng__step10Exterior2nd__Wd Shng"Identity
+<
+Exterior2nd__Stucco__step10Exterior2nd__Stucco"Identity
+>
+Exterior2nd__BrkFace__step10Exterior2nd__BrkFace"Identity
+>
+Exterior2nd__AsbShng__step10Exterior2nd__AsbShng"Identity
+>
+Exterior2nd__ImStucc__step10Exterior2nd__ImStucc"Identity
+>
+Exterior2nd__BrkComm__step10Exterior2nd__BrkComm"Identity
+:
+Exterior2nd__Stone__step10Exterior2nd__Stone"Identity
+>
+Exterior2nd__AsphShn__step10Exterior2nd__AsphShn"Identity
+:
+Exterior2nd__Other__step10Exterior2nd__Other"Identity
+<
+Exterior2nd__CBlock__step10Exterior2nd__CBlock"Identity
+6
+MasVnrType__None__step10MasVnrType__None"Identity
+<
+MasVnrType__BrkFace__step10MasVnrType__BrkFace"Identity
+8
+MasVnrType__Stone__step10MasVnrType__Stone"Identity
+:
+MasVnrType__BrkCmn__step10MasVnrType__BrkCmn"Identity
+<
+MasVnrType__MISSING__step10MasVnrType__MISSING"Identity
+0
+ExterQual__TA__step10ExterQual__TA"Identity
+0
+ExterQual__Gd__step10ExterQual__Gd"Identity
+0
+ExterQual__Ex__step10ExterQual__Ex"Identity
+0
+ExterQual__Fa__step10ExterQual__Fa"Identity
+0
+ExterCond__TA__step10ExterCond__TA"Identity
+0
+ExterCond__Gd__step10ExterCond__Gd"Identity
+0
+ExterCond__Fa__step10ExterCond__Fa"Identity
+0
+ExterCond__Ex__step10ExterCond__Ex"Identity
+0
+ExterCond__Po__step10ExterCond__Po"Identity
+8
+Foundation__PConc__step10Foundation__PConc"Identity
+:
+Foundation__CBlock__step10Foundation__CBlock"Identity
+:
+Foundation__BrkTil__step10Foundation__BrkTil"Identity
+6
+Foundation__Slab__step10Foundation__Slab"Identity
+8
+Foundation__Stone__step10Foundation__Stone"Identity
+6
+Foundation__Wood__step10Foundation__Wood"Identity
+.
+BsmtQual__TA__step10BsmtQual__TA"Identity
+.
+BsmtQual__Gd__step10BsmtQual__Gd"Identity
+.
+BsmtQual__Ex__step10BsmtQual__Ex"Identity
+8
+BsmtQual__MISSING__step10BsmtQual__MISSING"Identity
+.
+BsmtQual__Fa__step10BsmtQual__Fa"Identity
+.
+BsmtCond__TA__step10BsmtCond__TA"Identity
+.
+BsmtCond__Gd__step10BsmtCond__Gd"Identity
+.
+BsmtCond__Fa__step10BsmtCond__Fa"Identity
+8
+BsmtCond__MISSING__step10BsmtCond__MISSING"Identity
+.
+BsmtCond__Po__step10BsmtCond__Po"Identity
+6
+BsmtExposure__No__step10BsmtExposure__No"Identity
+6
+BsmtExposure__Av__step10BsmtExposure__Av"Identity
+6
+BsmtExposure__Gd__step10BsmtExposure__Gd"Identity
+6
+BsmtExposure__Mn__step10BsmtExposure__Mn"Identity
+@
+BsmtExposure__MISSING__step10BsmtExposure__MISSING"Identity
+8
+BsmtFinType1__Unf__step10BsmtFinType1__Unf"Identity
+8
+BsmtFinType1__GLQ__step10BsmtFinType1__GLQ"Identity
+8
+BsmtFinType1__ALQ__step10BsmtFinType1__ALQ"Identity
+8
+BsmtFinType1__BLQ__step10BsmtFinType1__BLQ"Identity
+8
+BsmtFinType1__Rec__step10BsmtFinType1__Rec"Identity
+8
+BsmtFinType1__LwQ__step10BsmtFinType1__LwQ"Identity
+@
+BsmtFinType1__MISSING__step10BsmtFinType1__MISSING"Identity
+8
+BsmtFinType2__Unf__step10BsmtFinType2__Unf"Identity
+8
+BsmtFinType2__Rec__step10BsmtFinType2__Rec"Identity
+8
+BsmtFinType2__LwQ__step10BsmtFinType2__LwQ"Identity
+@
+BsmtFinType2__MISSING__step10BsmtFinType2__MISSING"Identity
+8
+BsmtFinType2__BLQ__step10BsmtFinType2__BLQ"Identity
+8
+BsmtFinType2__ALQ__step10BsmtFinType2__ALQ"Identity
+8
+BsmtFinType2__GLQ__step10BsmtFinType2__GLQ"Identity
+0
+Heating__GasA__step10Heating__GasA"Identity
+0
+Heating__GasW__step10Heating__GasW"Identity
+0
+Heating__Grav__step10Heating__Grav"Identity
+0
+Heating__Wall__step10Heating__Wall"Identity
+0
+Heating__OthW__step10Heating__OthW"Identity
+2
+Heating__Floor__step10Heating__Floor"Identity
+0
+HeatingQC__Ex__step10HeatingQC__Ex"Identity
+0
+HeatingQC__TA__step10HeatingQC__TA"Identity
+0
+HeatingQC__Gd__step10HeatingQC__Gd"Identity
+0
+HeatingQC__Fa__step10HeatingQC__Fa"Identity
+0
+HeatingQC__Po__step10HeatingQC__Po"Identity
+0
+CentralAir__Y__step10CentralAir__Y"Identity
+0
+CentralAir__N__step10CentralAir__N"Identity
+8
+Electrical__SBrkr__step10Electrical__SBrkr"Identity
+8
+Electrical__FuseA__step10Electrical__FuseA"Identity
+8
+Electrical__FuseF__step10Electrical__FuseF"Identity
+8
+Electrical__FuseP__step10Electrical__FuseP"Identity
+4
+Electrical__Mix__step10Electrical__Mix"Identity
+4
+KitchenQual__TA__step10KitchenQual__TA"Identity
+4
+KitchenQual__Gd__step10KitchenQual__Gd"Identity
+4
+KitchenQual__Ex__step10KitchenQual__Ex"Identity
+4
+KitchenQual__Fa__step10KitchenQual__Fa"Identity
+4
+Functional__Typ__step10Functional__Typ"Identity
+6
+Functional__Min2__step10Functional__Min2"Identity
+6
+Functional__Min1__step10Functional__Min1"Identity
+4
+Functional__Mod__step10Functional__Mod"Identity
+6
+Functional__Maj1__step10Functional__Maj1"Identity
+6
+Functional__Maj2__step10Functional__Maj2"Identity
+4
+Functional__Sev__step10Functional__Sev"Identity
+>
+FireplaceQu__MISSING__step10FireplaceQu__MISSING"Identity
+4
+FireplaceQu__Gd__step10FireplaceQu__Gd"Identity
+4
+FireplaceQu__TA__step10FireplaceQu__TA"Identity
+4
+FireplaceQu__Fa__step10FireplaceQu__Fa"Identity
+4
+FireplaceQu__Ex__step10FireplaceQu__Ex"Identity
+4
+FireplaceQu__Po__step10FireplaceQu__Po"Identity
+:
+GarageType__Attchd__step10GarageType__Attchd"Identity
+:
+GarageType__Detchd__step10GarageType__Detchd"Identity
+<
+GarageType__BuiltIn__step10GarageType__BuiltIn"Identity
+<
+GarageType__MISSING__step10GarageType__MISSING"Identity
+<
+GarageType__Basment__step10GarageType__Basment"Identity
+<
+GarageType__CarPort__step10GarageType__CarPort"Identity
+:
+GarageType__2Types__step10GarageType__2Types"Identity
+8
+GarageFinish__Unf__step10GarageFinish__Unf"Identity
+8
+GarageFinish__RFn__step10GarageFinish__RFn"Identity
+8
+GarageFinish__Fin__step10GarageFinish__Fin"Identity
+@
+GarageFinish__MISSING__step10GarageFinish__MISSING"Identity
+2
+GarageQual__TA__step10GarageQual__TA"Identity
+<
+GarageQual__MISSING__step10GarageQual__MISSING"Identity
+2
+GarageQual__Fa__step10GarageQual__Fa"Identity
+2
+GarageQual__Gd__step10GarageQual__Gd"Identity
+2
+GarageQual__Ex__step10GarageQual__Ex"Identity
+2
+GarageQual__Po__step10GarageQual__Po"Identity
+2
+GarageCond__TA__step10GarageCond__TA"Identity
+<
+GarageCond__MISSING__step10GarageCond__MISSING"Identity
+2
+GarageCond__Fa__step10GarageCond__Fa"Identity
+2
+GarageCond__Gd__step10GarageCond__Gd"Identity
+2
+GarageCond__Po__step10GarageCond__Po"Identity
+2
+GarageCond__Ex__step10GarageCond__Ex"Identity
+0
+PavedDrive__Y__step10PavedDrive__Y"Identity
+0
+PavedDrive__N__step10PavedDrive__N"Identity
+0
+PavedDrive__P__step10PavedDrive__P"Identity
+4
+PoolQC__MISSING__step10PoolQC__MISSING"Identity
+*
+PoolQC__Gd__step10
+PoolQC__Gd"Identity
+*
+PoolQC__Ex__step10
+PoolQC__Ex"Identity
+*
+PoolQC__Fa__step10
+PoolQC__Fa"Identity
+2
+Fence__MISSING__step10Fence__MISSING"Identity
+.
+Fence__MnPrv__step10Fence__MnPrv"Identity
+.
+Fence__GdPrv__step10Fence__GdPrv"Identity
+,
+Fence__GdWo__step10Fence__GdWo"Identity
+,
+Fence__MnWw__step10Fence__MnWw"Identity
+>
+MiscFeature__MISSING__step10MiscFeature__MISSING"Identity
+8
+MiscFeature__Shed__step10MiscFeature__Shed"Identity
+8
+MiscFeature__Gar2__step10MiscFeature__Gar2"Identity
+8
+MiscFeature__Othr__step10MiscFeature__Othr"Identity
+8
+MiscFeature__TenC__step10MiscFeature__TenC"Identity
+.
+SaleType__WD__step10SaleType__WD"Identity
+0
+SaleType__New__step10SaleType__New"Identity
+0
+SaleType__COD__step10SaleType__COD"Identity
+4
+SaleType__ConLD__step10SaleType__ConLD"Identity
+4
+SaleType__ConLI__step10SaleType__ConLI"Identity
+4
+SaleType__ConLw__step10SaleType__ConLw"Identity
+0
+SaleType__CWD__step10SaleType__CWD"Identity
+0
+SaleType__Oth__step10SaleType__Oth"Identity
+0
+SaleType__Con__step10SaleType__Con"Identity
+@
+SaleCondition__Normal__step10SaleCondition__Normal"Identity
+B
+SaleCondition__Partial__step10SaleCondition__Partial"Identity
+B
+SaleCondition__Abnorml__step10SaleCondition__Abnorml"Identity
+@
+SaleCondition__Family__step10SaleCondition__Family"Identity
+@
+SaleCondition__Alloca__step10SaleCondition__Alloca"Identity
+B
+SaleCondition__AdjLand__step10SaleCondition__AdjLand"Identity
+®
+MSZoning__step10MSZoning"LabelEncoder*
+default_float    †**
+keys_stringsJRLJRHJRMJFVJC (all)†*+
+values_floats= ‡èD=  ÄA=  ZC=  ÇB=   A†:
+ai.onnx.ml
+à
+Street__step10Street"LabelEncoder*
+default_float    †*
+keys_stringsJPaveJGrvl†*
+values_floats= ¿µD=  ¿@†:
+ai.onnx.ml
+î
+Alley__step10Alley"LabelEncoder*
+default_float    †*&
+keys_stringsJMISSINGJGrvlJPave†*!
+values_floats=  ´D=  HB=  $B†:
+ai.onnx.ml
+û
+LotShape__step10LotShape"LabelEncoder*
+default_float    †*%
+keys_stringsJIR2JRegJIR1JIR3†*&
+values_floats=  $B= @gD=  ÚC=   A†:
+ai.onnx.ml
+§
+LandContour__step10LandContour"LabelEncoder*
+default_float    †*%
+keys_stringsJLowJLvlJBnkJHLS†*&
+values_floats=  B= ‡£D=  |B=  HB†:
+ai.onnx.ml
+¥
+LotConfig__step10	LotConfig"LabelEncoder*
+default_float    †*4
+keys_stringsJFR2JCornerJFR3JInsideJCulDSac†*+
+values_floats=  <B= ÄÉC=  Ä@= ÄÉD=  ºB†:
+ai.onnx.ml
+ñ
+LandSlope__step10	LandSlope"LabelEncoder*
+default_float    †* 
+keys_stringsJGtlJModJSev†*!
+values_floats= ¿¨D=  ÇB=  PA†:
+ai.onnx.ml
+’
+Neighborhood__step10Neighborhood"LabelEncoder*
+default_float    †*È
+keys_stringsJTimberJCollgCrJBrDaleJNPkVillJOldTownJCrawforJClearCrJMeadowVJSomerstJStoneBrJSawyerJBrkSideJGilbertJIDOTRRJSawyerWJVeenkerJEdwardsJBluesteJBlmngtnJSWISUJNAmesJNoRidgeJMitchelJNridgHtJNWAmes†*è
+values_floats=  B=  C=  ÄA=  A=  ‚B=  LB=  ‡A=  àA=  ¨B=  »A=  îB=  hB=  ûB=  B=  lB=  0A=  »B=   @=  àA=  »A=  aC=  $B=  DB=  öB=  íB†:
+ai.onnx.ml
+‡
+Condition1__step10
+Condition1"LabelEncoder*
+default_float    †*J
+keys_stringsJRRAeJFeedrJRRNnJRRAnJPosAJArteryJNormJPosNJRRNe†*?
+values_floats=  0A=  ¢B=  †@=  –A=   A=  @B= ÄùD=  òA=   @†:
+ai.onnx.ml
+’
+Condition2__step10
+Condition2"LabelEncoder*
+default_float    †*D
+keys_stringsJRRNnJNormJRRAeJFeedrJRRAnJPosNJArteryJPosA†*:
+values_floats=   @= †¥D=  Ä?=  ¿@=  Ä?=   @=   @=  Ä?†:
+ai.onnx.ml
+¥
+BldgType__step10BldgType"LabelEncoder*
+default_float    †*6
+keys_stringsJ2fmConJ1FamJTwnhsJTwnhsEJDuplex†*+
+values_floats=  ¯A= ÄòD=  ,B=  ‰B=  PB†:
+ai.onnx.ml
+‡
+HouseStyle__step10
+HouseStyle"LabelEncoder*
+default_float    †*O
+keys_stringsJ1.5UnfJSFoyerJ2.5FinJSLvlJ2.5UnfJ2StoryJ1.5FinJ1Story†*:
+values_floats=  `A=  B=   A=  ÇB=  0A= ÄﬁC=  C= Ä5D†:
+ai.onnx.ml
+¿
+RoofStyle__step10	RoofStyle"LabelEncoder*
+default_float    †*;
+keys_stringsJGambrelJMansardJGableJFlatJHipJShed†*0
+values_floats=  0A=  ‡@= †éD=  PA=  èC=   @†:
+ai.onnx.ml
+·
+RoofMatl__step10RoofMatl"LabelEncoder*
+default_float    †*T
+keys_stringsJRollJWdShakeJCompShgJClyTileJMetalJWdShnglJMembranJTar&Grv†*:
+values_floats=  Ä?=  †@= @≥D=  Ä?=  Ä?=  ¿@=  Ä?=  0A†:
+ai.onnx.ml
+À
+Exterior1st__step10Exterior1st"LabelEncoder*
+default_float    †*î
+keys_stringsJAsphShnJCemntBdJImStuccJBrkCommJStoneJWdShingJPlywoodJWd SdngJHdBoardJBrkFaceJCBlockJVinylSdJAsbShngJStuccoJMetalSd†*]
+values_floats=  Ä?=  tB=  Ä?=   @=   @=  –A=  ÿB=  NC=  ^C=  HB=  Ä?= ¿ D=  †A=  »A=  \C†:
+ai.onnx.ml
+◊
+Exterior2nd__step10Exterior2nd"LabelEncoder*
+default_float    †*õ
+keys_stringsJVinylSdJPlywoodJWd ShngJBrkCommJStuccoJHdBoardJMetalSdJBrkFaceJAsbShngJCmentBdJStoneJImStuccJOtherJCBlockJWd SdngJAsphShn†*b
+values_floats=  ¸C=  C=  B=  ‡@=  –A=  OC=  VC=  »A=  †A=  pB=  †@=   A=  Ä?=  Ä?=  EC=  @@†:
+ai.onnx.ml
+∫
+MasVnrType__step10
+MasVnrType"LabelEncoder*
+default_float    †*8
+keys_stringsJBrkFaceJNoneJBrkCmnJMISSINGJStone†*+
+values_floats= ÄﬁC=  XD=  pA=   A=   C†:
+ai.onnx.ml
+ú
+ExterQual__step10	ExterQual"LabelEncoder*
+default_float    †*!
+keys_stringsJFaJTAJGdJEx†*&
+values_floats=  `A= ÄbD=  ÙC=  PB†:
+ai.onnx.ml
+•
+ExterCond__step10	ExterCond"LabelEncoder*
+default_float    †*%
+keys_stringsJGdJPoJFaJTAJEx†*+
+values_floats=  C=  Ä?=  ‡A= @†D=  @@†:
+ai.onnx.ml
+¬
+Foundation__step10
+Foundation"LabelEncoder*
+default_float    †*;
+keys_stringsJWoodJBrkTilJPConcJStoneJSlabJCBlock†*0
+values_floats=  @@=  C= ¿!D=  ¿@=  ¿A= ÄD†:
+ai.onnx.ml
+®
+BsmtQual__step10BsmtQual"LabelEncoder*
+default_float    †**
+keys_stringsJExJTAJGdJFaJMISSING†*+
+values_floats=  ÚB= @"D= ÄD=  B=  B†:
+ai.onnx.ml
+®
+BsmtCond__step10BsmtCond"LabelEncoder*
+default_float    †**
+keys_stringsJTAJPoJMISSINGJGdJFa†*+
+values_floats= ‡£D=   @=  B=  ÇB=  4B†:
+ai.onnx.ml
+∞
+BsmtExposure__step10BsmtExposure"LabelEncoder*
+default_float    †**
+keys_stringsJMISSINGJMnJNoJAvJGd†*+
+values_floats=  B=  ‰B= @nD=  ]C=  C†:
+ai.onnx.ml
+»
+BsmtFinType1__step10BsmtFinType1"LabelEncoder*
+default_float    †*8
+keys_stringsJALQJGLQJMISSINGJRecJBLQJUnfJLwQ†*5
+values_floats=  \C=  —C=  B=  C=  C=  ◊C=  îB†:
+ai.onnx.ml
+»
+BsmtFinType2__step10BsmtFinType2"LabelEncoder*
+default_float    †*8
+keys_stringsJUnfJRecJMISSINGJALQJBLQJGLQJLwQ†*5
+values_floats=  ùD=  XB=  B=  òA=  B=  `A=  8B†:
+ai.onnx.ml
+∑
+Heating__step10Heating"LabelEncoder*
+default_float    †*6
+keys_stringsJGasAJGravJWallJOthWJGasWJFloor†*0
+values_floats= Ä≤D=  ‡@=  Ä@=   @=  êA=  Ä?†:
+ai.onnx.ml
+•
+HeatingQC__step10	HeatingQC"LabelEncoder*
+default_float    †*%
+keys_stringsJPoJFaJExJTAJGd†*+
+values_floats=  Ä?=  DB= @9D=  ÷C=  qC†:
+ai.onnx.ml
+ä
+CentralAir__step10
+CentralAir"LabelEncoder*
+default_float    †*
+keys_stringsJYJN†*
+values_floats= †™D=  æB†:
+ai.onnx.ml
+¥
+Electrical__step10
+Electrical"LabelEncoder*
+default_float    †*2
+keys_stringsJSBrkrJMixJFusePJFuseAJFuseF†*+
+values_floats= ‡¶D=  Ä?=  @@=  ºB=  ÿA†:
+ai.onnx.ml
+†
+KitchenQual__step10KitchenQual"LabelEncoder*
+default_float    †*!
+keys_stringsJGdJTAJExJFa†*&
+values_floats= ÄD= ¿7D=  »B=  B†:
+ai.onnx.ml
+ƒ
+Functional__step10
+Functional"LabelEncoder*
+default_float    †*8
+keys_stringsJMin2JMaj1JMin1JTypJSevJModJMaj2†*5
+values_floats=  B=  `A=  ¯A=  ™D=  Ä?=  pA=  †@†:
+ai.onnx.ml
+∑
+FireplaceQu__step10FireplaceQu"LabelEncoder*
+default_float    †*.
+keys_stringsJExJMISSINGJTAJPoJFaJGd†*0
+values_floats=  ¿A= Ä,D= ÄúC=  †A=  B=  æC†:
+ai.onnx.ml
+Ÿ
+GarageType__step10
+GarageType"LabelEncoder*
+default_float    †*M
+keys_stringsJ2TypesJDetchdJBuiltInJAttchdJMISSINGJBasmentJCarPort†*5
+values_floats=  ¿@= Ä¡C=  ∞B= ÄYD=  ¢B=  òA=  A†:
+ai.onnx.ml
+™
+GarageFinish__step10GarageFinish"LabelEncoder*
+default_float    †*)
+keys_stringsJMISSINGJRFnJFinJUnf†*&
+values_floats=  ¢B=  ”C=  ∞C= @D†:
+ai.onnx.ml
+µ
+GarageQual__step10
+GarageQual"LabelEncoder*
+default_float    †*.
+keys_stringsJGdJMISSINGJExJPoJTAJFa†*0
+values_floats=  `A=  ¢B=  @@=  @@= ‡£D=  @B†:
+ai.onnx.ml
+µ
+GarageCond__step10
+GarageCond"LabelEncoder*
+default_float    †*.
+keys_stringsJExJFaJMISSINGJPoJGdJTA†*0
+values_floats=   @=  B=  ¢B=  ‡@=  A= ¿•D†:
+ai.onnx.ml
+í
+PavedDrive__step10
+PavedDrive"LabelEncoder*
+default_float    †*
+keys_stringsJYJNJP†*!
+values_floats= ÄßD=  ¥B=  A†:
+ai.onnx.ml
+õ
+PoolQC__step10PoolQC"LabelEncoder*
+default_float    †*&
+keys_stringsJGdJMISSINGJFaJEx†*&
+values_floats=  @@= †µD=   @=   @†:
+ai.onnx.ml
+¨
+Fence__step10Fence"LabelEncoder*
+default_float    †*4
+keys_stringsJMnWwJMISSINGJMnPrvJGdWoJGdPrv†*+
+values_floats=  0A= `ìD=  C=  XB=  lB†:
+ai.onnx.ml
+∂
+MiscFeature__step10MiscFeature"LabelEncoder*
+default_float    †*2
+keys_stringsJGar2JMISSINGJShedJTenCJOthr†*+
+values_floats=   @= ¿ØD=  DB=  Ä?=   @†:
+ai.onnx.ml
+’
+SaleType__step10SaleType"LabelEncoder*
+default_float    †*C
+keys_stringsJCODJCWDJWDJConLDJConJConLIJOthJNewJConLw†*?
+values_floats=  ,B=  Ä@= `ûD=  A=   @=  †@=  @@=  ÙB=  †@†:
+ai.onnx.ml
+—
+SaleCondition__step10SaleCondition"LabelEncoder*
+default_float    †*D
+keys_stringsJFamilyJNormalJAdjLandJPartialJAbnormlJAlloca†*0
+values_floats=  †A= ¿ïD=  Ä@=  ˙B=   B=  @A†:
+ai.onnx.mlGatorsPipeline*12MISSINGB"PoolQC__step2__StringImputer__fill*62MISSINGB'MiscFeature__step2__StringImputer__fill*02MISSINGB!Alley__step2__StringImputer__fill*02MISSINGB!Fence__step2__StringImputer__fill*62MISSINGB'FireplaceQu__step2__StringImputer__fill*52MISSINGB&GarageType__step2__StringImputer__fill*72MISSINGB(GarageFinish__step2__StringImputer__fill*52MISSINGB&GarageQual__step2__StringImputer__fill*52MISSINGB&GarageCond__step2__StringImputer__fill*32MISSINGB$BsmtQual__step2__StringImputer__fill*32MISSINGB$BsmtCond__step2__StringImputer__fill*72MISSINGB(BsmtExposure__step2__StringImputer__fill*72MISSINGB(BsmtFinType1__step2__StringImputer__fill*72MISSINGB(BsmtFinType2__step2__StringImputer__fill*52MISSINGB&MasVnrType__step2__StringImputer__fill*12TypB&Functional__step3__StringImputer__fill*.2RLB$MSZoning__step4__StringImputer__fill*32SBrkrB&Electrical__step4__StringImputer__fill*12TAB'KitchenQual__step4__StringImputer__fill*62VinylSdB'Exterior1st__step4__StringImputer__fill*.2WDB$SaleType__step4__StringImputer__fill*0220B&MSSubClass__step4__StringImputer__fill*025B'OverallCond__step4__StringImputer__fill*.22009B"YrSold__step4__StringImputer__fill*+26B"MoSold__step4__StringImputer__fill*<B,GrLivArea__step7__Ratio__LotArea__step7__oneJ       *>B.Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_nJ      @*?B/Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_n1J       @Z
+MSSubClass__in
+
+ Z
+MSZoning__in
+
+ Z
+LotFrontage__in
+
+ Z
+LotArea__in
+
+ Z
+
+Street__in
+
+ Z
+	Alley__in
+
+ Z
+LotShape__in
+
+ Z
+LandContour__in
+
+ Z
+LotConfig__in
+
+ Z
+LandSlope__in
+
+ Z
+Neighborhood__in
+
+ Z
+Condition1__in
+
+ Z
+Condition2__in
+
+ Z
+BldgType__in
+
+ Z
+HouseStyle__in
+
+ Z
+OverallQual__in
+
+ Z
+OverallCond__in
+
+ Z
+YearBuilt__in
+
+ Z
+YearRemodAdd__in
+
+ Z
+RoofStyle__in
+
+ Z
+RoofMatl__in
+
+ Z
+Exterior1st__in
+
+ Z
+Exterior2nd__in
+
+ Z
+MasVnrType__in
+
+ Z
+MasVnrArea__in
+
+ Z
+ExterQual__in
+
+ Z
+ExterCond__in
+
+ Z
+Foundation__in
+
+ Z
+BsmtQual__in
+
+ Z
+BsmtCond__in
+
+ Z
+BsmtExposure__in
+
+ Z
+BsmtFinType1__in
+
+ Z
+BsmtFinSF1__in
+
+ Z
+BsmtFinType2__in
+
+ Z
+BsmtFinSF2__in
+
+ Z
+BsmtUnfSF__in
+
+ Z
+TotalBsmtSF__in
+
+ Z
+Heating__in
+
+ Z
+HeatingQC__in
+
+ Z
+CentralAir__in
+
+ Z
+Electrical__in
+
+ Z
+1stFlrSF__in
+
+ Z
+2ndFlrSF__in
+
+ Z
+LowQualFinSF__in
+
+ Z
+GrLivArea__in
+
+ Z
+BsmtFullBath__in
+
+ Z
+BsmtHalfBath__in
+
+ Z
+FullBath__in
+
+ Z
+HalfBath__in
+
+ Z
+BedroomAbvGr__in
+
+ Z
+KitchenAbvGr__in
+
+ Z
+KitchenQual__in
+
+ Z
+TotRmsAbvGrd__in
+
+ Z
+Functional__in
+
+ Z
+Fireplaces__in
+
+ Z
+FireplaceQu__in
+
+ Z
+GarageType__in
+
+ Z
+GarageYrBlt__in
+
+ Z
+GarageFinish__in
+
+ Z
+GarageCars__in
+
+ Z
+GarageArea__in
+
+ Z
+GarageQual__in
+
+ Z
+GarageCond__in
+
+ Z
+PavedDrive__in
+
+ Z
+WoodDeckSF__in
+
+ Z
+OpenPorchSF__in
+
+ Z
+EnclosedPorch__in
+
+ Z
+3SsnPorch__in
+
+ Z
+ScreenPorch__in
+
+ Z
+PoolArea__in
+
+ Z
+
+PoolQC__in
+
+ Z
+	Fence__in
+
+ Z
+MiscFeature__in
+
+ Z
+MiscVal__in
+
+ Z
+
+MoSold__in
+
+ Z
+
+YrSold__in
+
+ Z
+SaleType__in
+
+ Z
+SaleCondition__in
+
+ b
+
+MSSubClass
+
+
+unk__0b
+MSZoning
+
+
+unk__1b
+LotFrontage
+
+
+unk__2b
+LotArea
+
+
+unk__3b
+Street
+
+
+unk__4b
+Alley
+
+
+unk__5b
+LotShape
+
+
+unk__6b
+LandContour
+
+
+unk__7b
+	LotConfig
+
+
+unk__8b
+	LandSlope
+
+
+unk__9b!
+Neighborhood
+
+	unk__10b
+
+Condition1
+
+	unk__11b
+
+Condition2
+
+	unk__12b
+BldgType
+
+	unk__13b
+
+HouseStyle
+
+	unk__14b 
+OverallQual
+
+	unk__15b 
+OverallCond
+
+	unk__16b
+	YearBuilt
+
+	unk__17b!
+YearRemodAdd
+
+	unk__18b
+	RoofStyle
+
+	unk__19b
+RoofMatl
+
+	unk__20b 
+Exterior1st
+
+	unk__21b 
+Exterior2nd
+
+	unk__22b
+
+MasVnrType
+
+	unk__23b
+
+MasVnrArea
+
+	unk__24b
+	ExterQual
+
+	unk__25b
+	ExterCond
+
+	unk__26b
+
+Foundation
+
+	unk__27b
+BsmtQual
+
+	unk__28b
+BsmtCond
+
+	unk__29b!
+BsmtExposure
+
+	unk__30b!
+BsmtFinType1
+
+	unk__31b
+
+BsmtFinSF1
+
+	unk__32b!
+BsmtFinType2
+
+	unk__33b
+
+BsmtFinSF2
+
+	unk__34b
+	BsmtUnfSF
+
+	unk__35b 
+TotalBsmtSF
+
+	unk__36b
+Heating
+
+	unk__37b
+	HeatingQC
+
+	unk__38b
+
+CentralAir
+
+	unk__39b
+
+Electrical
+
+	unk__40b
+1stFlrSF
+
+	unk__41b
+2ndFlrSF
+
+	unk__42b!
+LowQualFinSF
+
+	unk__43b
+	GrLivArea
+
+	unk__44b!
+BsmtFullBath
+
+	unk__45b!
+BsmtHalfBath
+
+	unk__46b
+FullBath
+
+	unk__47b
+HalfBath
+
+	unk__48b!
+BedroomAbvGr
+
+	unk__49b!
+KitchenAbvGr
+
+	unk__50b 
+KitchenQual
+
+	unk__51b!
+TotRmsAbvGrd
+
+	unk__52b
+
+Functional
+
+	unk__53b
+
+Fireplaces
+
+	unk__54b 
+FireplaceQu
+
+	unk__55b
+
+GarageType
+
+	unk__56b 
+GarageYrBlt
+
+	unk__57b!
+GarageFinish
+
+	unk__58b
+
+GarageCars
+
+	unk__59b
+
+GarageArea
+
+	unk__60b
+
+GarageQual
+
+	unk__61b
+
+GarageCond
+
+	unk__62b
+
+PavedDrive
+
+	unk__63b
+
+WoodDeckSF
+
+	unk__64b 
+OpenPorchSF
+
+	unk__65b"
+EnclosedPorch
+
+	unk__66b
+	3SsnPorch
+
+	unk__67b 
+ScreenPorch
+
+	unk__68b
+PoolArea
+
+	unk__69b
+PoolQC
+
+	unk__70b
+Fence
+
+	unk__71b 
+MiscFeature
+
+	unk__72b
+MiscVal
+
+	unk__73b
+MoSold
+
+	unk__74b
+YrSold
+
+	unk__75b
+SaleType
+
+	unk__76b"
+SaleCondition
+
+	unk__77b
+
+LivLotArea
+
+	unk__78b6
+!TotalBsmtSF_1stFlrSF_2ndFlrSF_sum
+
+	unk__80b6
+!TotalBsmtSF_1stFlrSF_2ndFlrSF_std
+
+	unk__87b8
+#TotalBsmtSF_1stFlrSF_2ndFlrSF_range
+
+	unk__90b6
+!TotalBsmtSF_1stFlrSF_2ndFlrSF_min
+
+	unk__91b6
+!TotalBsmtSF_1stFlrSF_2ndFlrSF_max
+
+	unk__92b 
+MSZoning__RL
+
+
+unk__1b 
+MSZoning__RM
+
+
+unk__1b 
+MSZoning__FV
+
+
+unk__1b 
+MSZoning__RH
+
+
+unk__1b%
+MSZoning__C (all)
+
+
+unk__1b 
+Street__Pave
+
+
+unk__4b 
+Street__Grvl
+
+
+unk__4b"
+Alley__MISSING
+
+
+unk__5b
+Alley__Grvl
+
+
+unk__5b
+Alley__Pave
+
+
+unk__5b!
+LotShape__Reg
+
+
+unk__6b!
+LotShape__IR1
+
+
+unk__6b!
+LotShape__IR2
+
+
+unk__6b!
+LotShape__IR3
+
+
+unk__6b$
+LandContour__Lvl
+
+
+unk__7b$
+LandContour__Bnk
+
+
+unk__7b$
+LandContour__HLS
+
+
+unk__7b$
+LandContour__Low
+
+
+unk__7b%
+LotConfig__Inside
+
+
+unk__8b%
+LotConfig__Corner
+
+
+unk__8b&
+LotConfig__CulDSac
+
+
+unk__8b"
+LotConfig__FR2
+
+
+unk__8b"
+LotConfig__FR3
+
+
+unk__8b"
+LandSlope__Gtl
+
+
+unk__9b"
+LandSlope__Mod
+
+
+unk__9b"
+LandSlope__Sev
+
+
+unk__9b(
+Neighborhood__NAmes
+
+	unk__10b*
+Neighborhood__CollgCr
+
+	unk__10b*
+Neighborhood__OldTown
+
+	unk__10b*
+Neighborhood__Edwards
+
+	unk__10b*
+Neighborhood__Somerst
+
+	unk__10b*
+Neighborhood__Gilbert
+
+	unk__10b*
+Neighborhood__NridgHt
+
+	unk__10b)
+Neighborhood__Sawyer
+
+	unk__10b)
+Neighborhood__NWAmes
+
+	unk__10b*
+Neighborhood__SawyerW
+
+	unk__10b*
+Neighborhood__BrkSide
+
+	unk__10b*
+Neighborhood__Crawfor
+
+	unk__10b*
+Neighborhood__Mitchel
+
+	unk__10b*
+Neighborhood__NoRidge
+
+	unk__10b)
+Neighborhood__Timber
+
+	unk__10b)
+Neighborhood__IDOTRR
+
+	unk__10b*
+Neighborhood__ClearCr
+
+	unk__10b*
+Neighborhood__StoneBr
+
+	unk__10b(
+Neighborhood__SWISU
+
+	unk__10b*
+Neighborhood__MeadowV
+
+	unk__10b*
+Neighborhood__Blmngtn
+
+	unk__10b)
+Neighborhood__BrDale
+
+	unk__10b*
+Neighborhood__Veenker
+
+	unk__10b*
+Neighborhood__NPkVill
+
+	unk__10b*
+Neighborhood__Blueste
+
+	unk__10b%
+Condition1__Norm
+
+	unk__11b&
+Condition1__Feedr
+
+	unk__11b'
+Condition1__Artery
+
+	unk__11b%
+Condition1__RRAn
+
+	unk__11b%
+Condition1__PosN
+
+	unk__11b%
+Condition1__RRAe
+
+	unk__11b%
+Condition1__PosA
+
+	unk__11b%
+Condition1__RRNn
+
+	unk__11b%
+Condition1__RRNe
+
+	unk__11b%
+Condition2__Norm
+
+	unk__12b&
+Condition2__Feedr
+
+	unk__12b'
+Condition2__Artery
+
+	unk__12b%
+Condition2__RRNn
+
+	unk__12b%
+Condition2__PosN
+
+	unk__12b%
+Condition2__PosA
+
+	unk__12b%
+Condition2__RRAn
+
+	unk__12b%
+Condition2__RRAe
+
+	unk__12b#
+BldgType__1Fam
+
+	unk__13b%
+BldgType__TwnhsE
+
+	unk__13b%
+BldgType__Duplex
+
+	unk__13b$
+BldgType__Twnhs
+
+	unk__13b%
+BldgType__2fmCon
+
+	unk__13b'
+HouseStyle__1Story
+
+	unk__14b'
+HouseStyle__2Story
+
+	unk__14b'
+HouseStyle__1.5Fin
+
+	unk__14b%
+HouseStyle__SLvl
+
+	unk__14b'
+HouseStyle__SFoyer
+
+	unk__14b'
+HouseStyle__1.5Unf
+
+	unk__14b'
+HouseStyle__2.5Unf
+
+	unk__14b'
+HouseStyle__2.5Fin
+
+	unk__14b%
+RoofStyle__Gable
+
+	unk__19b#
+RoofStyle__Hip
+
+	unk__19b$
+RoofStyle__Flat
+
+	unk__19b'
+RoofStyle__Gambrel
+
+	unk__19b'
+RoofStyle__Mansard
+
+	unk__19b$
+RoofStyle__Shed
+
+	unk__19b&
+RoofMatl__CompShg
+
+	unk__20b&
+RoofMatl__Tar&Grv
+
+	unk__20b&
+RoofMatl__WdShngl
+
+	unk__20b&
+RoofMatl__WdShake
+
+	unk__20b$
+RoofMatl__Metal
+
+	unk__20b&
+RoofMatl__Membran
+
+	unk__20b#
+RoofMatl__Roll
+
+	unk__20b&
+RoofMatl__ClyTile
+
+	unk__20b)
+Exterior1st__VinylSd
+
+	unk__21b)
+Exterior1st__HdBoard
+
+	unk__21b)
+Exterior1st__MetalSd
+
+	unk__21b)
+Exterior1st__Wd Sdng
+
+	unk__21b)
+Exterior1st__Plywood
+
+	unk__21b)
+Exterior1st__CemntBd
+
+	unk__21b)
+Exterior1st__BrkFace
+
+	unk__21b)
+Exterior1st__WdShing
+
+	unk__21b(
+Exterior1st__Stucco
+
+	unk__21b)
+Exterior1st__AsbShng
+
+	unk__21b)
+Exterior1st__BrkComm
+
+	unk__21b'
+Exterior1st__Stone
+
+	unk__21b)
+Exterior1st__AsphShn
+
+	unk__21b)
+Exterior1st__ImStucc
+
+	unk__21b(
+Exterior1st__CBlock
+
+	unk__21b)
+Exterior2nd__VinylSd
+
+	unk__22b)
+Exterior2nd__MetalSd
+
+	unk__22b)
+Exterior2nd__HdBoard
+
+	unk__22b)
+Exterior2nd__Wd Sdng
+
+	unk__22b)
+Exterior2nd__Plywood
+
+	unk__22b)
+Exterior2nd__CmentBd
+
+	unk__22b)
+Exterior2nd__Wd Shng
+
+	unk__22b(
+Exterior2nd__Stucco
+
+	unk__22b)
+Exterior2nd__BrkFace
+
+	unk__22b)
+Exterior2nd__AsbShng
+
+	unk__22b)
+Exterior2nd__ImStucc
+
+	unk__22b)
+Exterior2nd__BrkComm
+
+	unk__22b'
+Exterior2nd__Stone
+
+	unk__22b)
+Exterior2nd__AsphShn
+
+	unk__22b'
+Exterior2nd__Other
+
+	unk__22b(
+Exterior2nd__CBlock
+
+	unk__22b%
+MasVnrType__None
+
+	unk__23b(
+MasVnrType__BrkFace
+
+	unk__23b&
+MasVnrType__Stone
+
+	unk__23b'
+MasVnrType__BrkCmn
+
+	unk__23b(
+MasVnrType__MISSING
+
+	unk__23b"
+ExterQual__TA
+
+	unk__25b"
+ExterQual__Gd
+
+	unk__25b"
+ExterQual__Ex
+
+	unk__25b"
+ExterQual__Fa
+
+	unk__25b"
+ExterCond__TA
+
+	unk__26b"
+ExterCond__Gd
+
+	unk__26b"
+ExterCond__Fa
+
+	unk__26b"
+ExterCond__Ex
+
+	unk__26b"
+ExterCond__Po
+
+	unk__26b&
+Foundation__PConc
+
+	unk__27b'
+Foundation__CBlock
+
+	unk__27b'
+Foundation__BrkTil
+
+	unk__27b%
+Foundation__Slab
+
+	unk__27b&
+Foundation__Stone
+
+	unk__27b%
+Foundation__Wood
+
+	unk__27b!
+BsmtQual__TA
+
+	unk__28b!
+BsmtQual__Gd
+
+	unk__28b!
+BsmtQual__Ex
+
+	unk__28b&
+BsmtQual__MISSING
+
+	unk__28b!
+BsmtQual__Fa
+
+	unk__28b!
+BsmtCond__TA
+
+	unk__29b!
+BsmtCond__Gd
+
+	unk__29b!
+BsmtCond__Fa
+
+	unk__29b&
+BsmtCond__MISSING
+
+	unk__29b!
+BsmtCond__Po
+
+	unk__29b%
+BsmtExposure__No
+
+	unk__30b%
+BsmtExposure__Av
+
+	unk__30b%
+BsmtExposure__Gd
+
+	unk__30b%
+BsmtExposure__Mn
+
+	unk__30b*
+BsmtExposure__MISSING
+
+	unk__30b&
+BsmtFinType1__Unf
+
+	unk__31b&
+BsmtFinType1__GLQ
+
+	unk__31b&
+BsmtFinType1__ALQ
+
+	unk__31b&
+BsmtFinType1__BLQ
+
+	unk__31b&
+BsmtFinType1__Rec
+
+	unk__31b&
+BsmtFinType1__LwQ
+
+	unk__31b*
+BsmtFinType1__MISSING
+
+	unk__31b&
+BsmtFinType2__Unf
+
+	unk__33b&
+BsmtFinType2__Rec
+
+	unk__33b&
+BsmtFinType2__LwQ
+
+	unk__33b*
+BsmtFinType2__MISSING
+
+	unk__33b&
+BsmtFinType2__BLQ
+
+	unk__33b&
+BsmtFinType2__ALQ
+
+	unk__33b&
+BsmtFinType2__GLQ
+
+	unk__33b"
+Heating__GasA
+
+	unk__37b"
+Heating__GasW
+
+	unk__37b"
+Heating__Grav
+
+	unk__37b"
+Heating__Wall
+
+	unk__37b"
+Heating__OthW
+
+	unk__37b#
+Heating__Floor
+
+	unk__37b"
+HeatingQC__Ex
+
+	unk__38b"
+HeatingQC__TA
+
+	unk__38b"
+HeatingQC__Gd
+
+	unk__38b"
+HeatingQC__Fa
+
+	unk__38b"
+HeatingQC__Po
+
+	unk__38b"
+CentralAir__Y
+
+	unk__39b"
+CentralAir__N
+
+	unk__39b&
+Electrical__SBrkr
+
+	unk__40b&
+Electrical__FuseA
+
+	unk__40b&
+Electrical__FuseF
+
+	unk__40b&
+Electrical__FuseP
+
+	unk__40b$
+Electrical__Mix
+
+	unk__40b$
+KitchenQual__TA
+
+	unk__51b$
+KitchenQual__Gd
+
+	unk__51b$
+KitchenQual__Ex
+
+	unk__51b$
+KitchenQual__Fa
+
+	unk__51b$
+Functional__Typ
+
+	unk__53b%
+Functional__Min2
+
+	unk__53b%
+Functional__Min1
+
+	unk__53b$
+Functional__Mod
+
+	unk__53b%
+Functional__Maj1
+
+	unk__53b%
+Functional__Maj2
+
+	unk__53b$
+Functional__Sev
+
+	unk__53b)
+FireplaceQu__MISSING
+
+	unk__55b$
+FireplaceQu__Gd
+
+	unk__55b$
+FireplaceQu__TA
+
+	unk__55b$
+FireplaceQu__Fa
+
+	unk__55b$
+FireplaceQu__Ex
+
+	unk__55b$
+FireplaceQu__Po
+
+	unk__55b'
+GarageType__Attchd
+
+	unk__56b'
+GarageType__Detchd
+
+	unk__56b(
+GarageType__BuiltIn
+
+	unk__56b(
+GarageType__MISSING
+
+	unk__56b(
+GarageType__Basment
+
+	unk__56b(
+GarageType__CarPort
+
+	unk__56b'
+GarageType__2Types
+
+	unk__56b&
+GarageFinish__Unf
+
+	unk__58b&
+GarageFinish__RFn
+
+	unk__58b&
+GarageFinish__Fin
+
+	unk__58b*
+GarageFinish__MISSING
+
+	unk__58b#
+GarageQual__TA
+
+	unk__61b(
+GarageQual__MISSING
+
+	unk__61b#
+GarageQual__Fa
+
+	unk__61b#
+GarageQual__Gd
+
+	unk__61b#
+GarageQual__Ex
+
+	unk__61b#
+GarageQual__Po
+
+	unk__61b#
+GarageCond__TA
+
+	unk__62b(
+GarageCond__MISSING
+
+	unk__62b#
+GarageCond__Fa
+
+	unk__62b#
+GarageCond__Gd
+
+	unk__62b#
+GarageCond__Po
+
+	unk__62b#
+GarageCond__Ex
+
+	unk__62b"
+PavedDrive__Y
+
+	unk__63b"
+PavedDrive__N
+
+	unk__63b"
+PavedDrive__P
+
+	unk__63b$
+PoolQC__MISSING
+
+	unk__70b
+
+PoolQC__Gd
+
+	unk__70b
+
+PoolQC__Ex
+
+	unk__70b
+
+PoolQC__Fa
+
+	unk__70b#
+Fence__MISSING
+
+	unk__71b!
+Fence__MnPrv
+
+	unk__71b!
+Fence__GdPrv
+
+	unk__71b 
+Fence__GdWo
+
+	unk__71b 
+Fence__MnWw
+
+	unk__71b)
+MiscFeature__MISSING
+
+	unk__72b&
+MiscFeature__Shed
+
+	unk__72b&
+MiscFeature__Gar2
+
+	unk__72b&
+MiscFeature__Othr
+
+	unk__72b&
+MiscFeature__TenC
+
+	unk__72b!
+SaleType__WD
+
+	unk__76b"
+SaleType__New
+
+	unk__76b"
+SaleType__COD
+
+	unk__76b$
+SaleType__ConLD
+
+	unk__76b$
+SaleType__ConLI
+
+	unk__76b$
+SaleType__ConLw
+
+	unk__76b"
+SaleType__CWD
+
+	unk__76b"
+SaleType__Oth
+
+	unk__76b"
+SaleType__Con
+
+	unk__76b*
+SaleCondition__Normal
+
+	unk__77b+
+SaleCondition__Partial
+
+	unk__77b+
+SaleCondition__Abnorml
+
+	unk__77b*
+SaleCondition__Family
+
+	unk__77b*
+SaleCondition__Alloca
+
+	unk__77b+
+SaleCondition__AdjLand
+
+	unk__77j%
+MSSubClass__step0
+
+
+unk__0j#
+MSZoning__step0
+
+
+unk__1j&
+LotFrontage__step0
+
+
+unk__2j"
+LotArea__step0
+
+
+unk__3j!
+Street__step0
+
+
+unk__4j 
+Alley__step0
+
+
+unk__5j#
+LotShape__step0
+
+
+unk__6j&
+LandContour__step0
+
+
+unk__7j$
+LotConfig__step0
+
+
+unk__8j$
+LandSlope__step0
+
+
+unk__9j(
+Neighborhood__step0
+
+	unk__10j&
+Condition1__step0
+
+	unk__11j&
+Condition2__step0
+
+	unk__12j$
+BldgType__step0
+
+	unk__13j&
+HouseStyle__step0
+
+	unk__14j'
+OverallQual__step0
+
+	unk__15j'
+OverallCond__step0
+
+	unk__16j%
+YearBuilt__step0
+
+	unk__17j(
+YearRemodAdd__step0
+
+	unk__18j%
+RoofStyle__step0
+
+	unk__19j$
+RoofMatl__step0
+
+	unk__20j'
+Exterior1st__step0
+
+	unk__21j'
+Exterior2nd__step0
+
+	unk__22j&
+MasVnrType__step0
+
+	unk__23j&
+MasVnrArea__step0
+
+	unk__24j%
+ExterQual__step0
+
+	unk__25j%
+ExterCond__step0
+
+	unk__26j&
+Foundation__step0
+
+	unk__27j$
+BsmtQual__step0
+
+	unk__28j$
+BsmtCond__step0
+
+	unk__29j(
+BsmtExposure__step0
+
+	unk__30j(
+BsmtFinType1__step0
+
+	unk__31j&
+BsmtFinSF1__step0
+
+	unk__32j(
+BsmtFinType2__step0
+
+	unk__33j&
+BsmtFinSF2__step0
+
+	unk__34j%
+BsmtUnfSF__step0
+
+	unk__35j'
+TotalBsmtSF__step0
+
+	unk__36j#
+Heating__step0
+
+	unk__37j%
+HeatingQC__step0
+
+	unk__38j&
+CentralAir__step0
+
+	unk__39j&
+Electrical__step0
+
+	unk__40j$
+1stFlrSF__step0
+
+	unk__41j$
+2ndFlrSF__step0
+
+	unk__42j(
+LowQualFinSF__step0
+
+	unk__43j%
+GrLivArea__step0
+
+	unk__44j(
+BsmtFullBath__step0
+
+	unk__45j(
+BsmtHalfBath__step0
+
+	unk__46j$
+FullBath__step0
+
+	unk__47j$
+HalfBath__step0
+
+	unk__48j(
+BedroomAbvGr__step0
+
+	unk__49j(
+KitchenAbvGr__step0
+
+	unk__50j'
+KitchenQual__step0
+
+	unk__51j(
+TotRmsAbvGrd__step0
+
+	unk__52j&
+Functional__step0
+
+	unk__53j&
+Fireplaces__step0
+
+	unk__54j'
+FireplaceQu__step0
+
+	unk__55j&
+GarageType__step0
+
+	unk__56j'
+GarageYrBlt__step0
+
+	unk__57j(
+GarageFinish__step0
+
+	unk__58j&
+GarageCars__step0
+
+	unk__59j&
+GarageArea__step0
+
+	unk__60j&
+GarageQual__step0
+
+	unk__61j&
+GarageCond__step0
+
+	unk__62j&
+PavedDrive__step0
+
+	unk__63j&
+WoodDeckSF__step0
+
+	unk__64j'
+OpenPorchSF__step0
+
+	unk__65j)
+EnclosedPorch__step0
+
+	unk__66j%
+3SsnPorch__step0
+
+	unk__67j'
+ScreenPorch__step0
+
+	unk__68j$
+PoolArea__step0
+
+	unk__69j"
+PoolQC__step0
+
+	unk__70j!
+Fence__step0
+
+	unk__71j'
+MiscFeature__step0
+
+	unk__72j#
+MiscVal__step0
+
+	unk__73j"
+MoSold__step0
+
+	unk__74j"
+YrSold__step0
+
+	unk__75j$
+SaleType__step0
+
+	unk__76j)
+SaleCondition__step0
+
+	unk__77j#
+MSZoning__step1
+
+
+unk__1j&
+LotFrontage__step1
+
+
+unk__2j"
+LotArea__step1
+
+
+unk__3j!
+Street__step1
+
+
+unk__4j 
+Alley__step1
+
+
+unk__5j#
+LotShape__step1
+
+
+unk__6j&
+LandContour__step1
+
+
+unk__7j$
+LotConfig__step1
+
+
+unk__8j$
+LandSlope__step1
+
+
+unk__9j(
+Neighborhood__step1
+
+	unk__10j&
+Condition1__step1
+
+	unk__11j&
+Condition2__step1
+
+	unk__12j$
+BldgType__step1
+
+	unk__13j&
+HouseStyle__step1
+
+	unk__14j'
+OverallQual__step1
+
+	unk__15j%
+YearBuilt__step1
+
+	unk__17j(
+YearRemodAdd__step1
+
+	unk__18j%
+RoofStyle__step1
+
+	unk__19j$
+RoofMatl__step1
+
+	unk__20j'
+Exterior1st__step1
+
+	unk__21j'
+Exterior2nd__step1
+
+	unk__22j&
+MasVnrType__step1
+
+	unk__23j&
+MasVnrArea__step1
+
+	unk__24j%
+ExterQual__step1
+
+	unk__25j%
+ExterCond__step1
+
+	unk__26j&
+Foundation__step1
+
+	unk__27j$
+BsmtQual__step1
+
+	unk__28j$
+BsmtCond__step1
+
+	unk__29j(
+BsmtExposure__step1
+
+	unk__30j(
+BsmtFinType1__step1
+
+	unk__31j&
+BsmtFinSF1__step1
+
+	unk__32j(
+BsmtFinType2__step1
+
+	unk__33j&
+BsmtFinSF2__step1
+
+	unk__34j%
+BsmtUnfSF__step1
+
+	unk__35j'
+TotalBsmtSF__step1
+
+	unk__36j#
+Heating__step1
+
+	unk__37j%
+HeatingQC__step1
+
+	unk__38j&
+CentralAir__step1
+
+	unk__39j&
+Electrical__step1
+
+	unk__40j$
+1stFlrSF__step1
+
+	unk__41j$
+2ndFlrSF__step1
+
+	unk__42j(
+LowQualFinSF__step1
+
+	unk__43j%
+GrLivArea__step1
+
+	unk__44j(
+BsmtFullBath__step1
+
+	unk__45j(
+BsmtHalfBath__step1
+
+	unk__46j$
+FullBath__step1
+
+	unk__47j$
+HalfBath__step1
+
+	unk__48j(
+BedroomAbvGr__step1
+
+	unk__49j(
+KitchenAbvGr__step1
+
+	unk__50j'
+KitchenQual__step1
+
+	unk__51j(
+TotRmsAbvGrd__step1
+
+	unk__52j&
+Functional__step1
+
+	unk__53j&
+Fireplaces__step1
+
+	unk__54j'
+FireplaceQu__step1
+
+	unk__55j&
+GarageType__step1
+
+	unk__56j'
+GarageYrBlt__step1
+
+	unk__57j(
+GarageFinish__step1
+
+	unk__58j&
+GarageCars__step1
+
+	unk__59j&
+GarageArea__step1
+
+	unk__60j&
+GarageQual__step1
+
+	unk__61j&
+GarageCond__step1
+
+	unk__62j&
+PavedDrive__step1
+
+	unk__63j&
+WoodDeckSF__step1
+
+	unk__64j'
+OpenPorchSF__step1
+
+	unk__65j)
+EnclosedPorch__step1
+
+	unk__66j%
+3SsnPorch__step1
+
+	unk__67j'
+ScreenPorch__step1
+
+	unk__68j$
+PoolArea__step1
+
+	unk__69j"
+PoolQC__step1
+
+	unk__70j!
+Fence__step1
+
+	unk__71j'
+MiscFeature__step1
+
+	unk__72j#
+MiscVal__step1
+
+	unk__73j$
+SaleType__step1
+
+	unk__76j)
+SaleCondition__step1
+
+	unk__77j2
+MSSubClass__step0__CastToInt64
+
+
+unk__0j%
+MSSubClass__step1
+
+
+unk__0j4
+OverallCond__step0__CastToInt64
+
+	unk__16j'
+OverallCond__step1
+
+	unk__16j/
+YrSold__step0__CastToInt64
+
+	unk__75j"
+YrSold__step1
+
+	unk__75j/
+MoSold__step0__CastToInt64
+
+	unk__74j"
+MoSold__step1
+
+	unk__74j%
+MSSubClass__step2
+
+
+unk__0j#
+MSZoning__step2
+
+
+unk__1j&
+LotFrontage__step2
+
+
+unk__2j"
+LotArea__step2
+
+
+unk__3j!
+Street__step2
+
+
+unk__4j 
+Alley__step2
+
+
+unk__5j#
+LotShape__step2
+
+
+unk__6j&
+LandContour__step2
+
+
+unk__7j$
+LotConfig__step2
+
+
+unk__8j$
+LandSlope__step2
+
+
+unk__9j(
+Neighborhood__step2
+
+	unk__10j&
+Condition1__step2
+
+	unk__11j&
+Condition2__step2
+
+	unk__12j$
+BldgType__step2
+
+	unk__13j&
+HouseStyle__step2
+
+	unk__14j'
+OverallQual__step2
+
+	unk__15j'
+OverallCond__step2
+
+	unk__16j%
+YearBuilt__step2
+
+	unk__17j(
+YearRemodAdd__step2
+
+	unk__18j%
+RoofStyle__step2
+
+	unk__19j$
+RoofMatl__step2
+
+	unk__20j'
+Exterior1st__step2
+
+	unk__21j'
+Exterior2nd__step2
+
+	unk__22j&
+MasVnrType__step2
+
+	unk__23j&
+MasVnrArea__step2
+
+	unk__24j%
+ExterQual__step2
+
+	unk__25j%
+ExterCond__step2
+
+	unk__26j&
+Foundation__step2
+
+	unk__27j$
+BsmtQual__step2
+
+	unk__28j$
+BsmtCond__step2
+
+	unk__29j(
+BsmtExposure__step2
+
+	unk__30j(
+BsmtFinType1__step2
+
+	unk__31j&
+BsmtFinSF1__step2
+
+	unk__32j(
+BsmtFinType2__step2
+
+	unk__33j&
+BsmtFinSF2__step2
+
+	unk__34j%
+BsmtUnfSF__step2
+
+	unk__35j'
+TotalBsmtSF__step2
+
+	unk__36j#
+Heating__step2
+
+	unk__37j%
+HeatingQC__step2
+
+	unk__38j&
+CentralAir__step2
+
+	unk__39j&
+Electrical__step2
+
+	unk__40j$
+1stFlrSF__step2
+
+	unk__41j$
+2ndFlrSF__step2
+
+	unk__42j(
+LowQualFinSF__step2
+
+	unk__43j%
+GrLivArea__step2
+
+	unk__44j(
+BsmtFullBath__step2
+
+	unk__45j(
+BsmtHalfBath__step2
+
+	unk__46j$
+FullBath__step2
+
+	unk__47j$
+HalfBath__step2
+
+	unk__48j(
+BedroomAbvGr__step2
+
+	unk__49j(
+KitchenAbvGr__step2
+
+	unk__50j'
+KitchenQual__step2
+
+	unk__51j(
+TotRmsAbvGrd__step2
+
+	unk__52j&
+Functional__step2
+
+	unk__53j&
+Fireplaces__step2
+
+	unk__54j'
+FireplaceQu__step2
+
+	unk__55j&
+GarageType__step2
+
+	unk__56j'
+GarageYrBlt__step2
+
+	unk__57j(
+GarageFinish__step2
+
+	unk__58j&
+GarageCars__step2
+
+	unk__59j&
+GarageArea__step2
+
+	unk__60j&
+GarageQual__step2
+
+	unk__61j&
+GarageCond__step2
+
+	unk__62j&
+PavedDrive__step2
+
+	unk__63j&
+WoodDeckSF__step2
+
+	unk__64j'
+OpenPorchSF__step2
+
+	unk__65j)
+EnclosedPorch__step2
+
+	unk__66j%
+3SsnPorch__step2
+
+	unk__67j'
+ScreenPorch__step2
+
+	unk__68j$
+PoolArea__step2
+
+	unk__69j"
+PoolQC__step2
+
+	unk__70j!
+Fence__step2
+
+	unk__71j'
+MiscFeature__step2
+
+	unk__72j#
+MiscVal__step2
+
+	unk__73j"
+MoSold__step2
+
+	unk__74j"
+YrSold__step2
+
+	unk__75j$
+SaleType__step2
+
+	unk__76j)
+SaleCondition__step2
+
+	unk__77j%
+MSSubClass__step3
+
+
+unk__0j#
+MSZoning__step3
+
+
+unk__1j&
+LotFrontage__step3
+
+
+unk__2j"
+LotArea__step3
+
+
+unk__3j!
+Street__step3
+
+
+unk__4j#
+LotShape__step3
+
+
+unk__6j&
+LandContour__step3
+
+
+unk__7j$
+LotConfig__step3
+
+
+unk__8j$
+LandSlope__step3
+
+
+unk__9j(
+Neighborhood__step3
+
+	unk__10j&
+Condition1__step3
+
+	unk__11j&
+Condition2__step3
+
+	unk__12j$
+BldgType__step3
+
+	unk__13j&
+HouseStyle__step3
+
+	unk__14j'
+OverallQual__step3
+
+	unk__15j'
+OverallCond__step3
+
+	unk__16j%
+YearBuilt__step3
+
+	unk__17j(
+YearRemodAdd__step3
+
+	unk__18j%
+RoofStyle__step3
+
+	unk__19j$
+RoofMatl__step3
+
+	unk__20j'
+Exterior1st__step3
+
+	unk__21j'
+Exterior2nd__step3
+
+	unk__22j&
+MasVnrArea__step3
+
+	unk__24j%
+ExterQual__step3
+
+	unk__25j%
+ExterCond__step3
+
+	unk__26j&
+Foundation__step3
+
+	unk__27j&
+BsmtFinSF1__step3
+
+	unk__32j&
+BsmtFinSF2__step3
+
+	unk__34j%
+BsmtUnfSF__step3
+
+	unk__35j'
+TotalBsmtSF__step3
+
+	unk__36j#
+Heating__step3
+
+	unk__37j%
+HeatingQC__step3
+
+	unk__38j&
+CentralAir__step3
+
+	unk__39j&
+Electrical__step3
+
+	unk__40j$
+1stFlrSF__step3
+
+	unk__41j$
+2ndFlrSF__step3
+
+	unk__42j(
+LowQualFinSF__step3
+
+	unk__43j%
+GrLivArea__step3
+
+	unk__44j(
+BsmtFullBath__step3
+
+	unk__45j(
+BsmtHalfBath__step3
+
+	unk__46j$
+FullBath__step3
+
+	unk__47j$
+HalfBath__step3
+
+	unk__48j(
+BedroomAbvGr__step3
+
+	unk__49j(
+KitchenAbvGr__step3
+
+	unk__50j'
+KitchenQual__step3
+
+	unk__51j(
+TotRmsAbvGrd__step3
+
+	unk__52j&
+Functional__step3
+
+	unk__53j&
+Fireplaces__step3
+
+	unk__54j'
+GarageYrBlt__step3
+
+	unk__57j&
+GarageCars__step3
+
+	unk__59j&
+GarageArea__step3
+
+	unk__60j&
+PavedDrive__step3
+
+	unk__63j&
+WoodDeckSF__step3
+
+	unk__64j'
+OpenPorchSF__step3
+
+	unk__65j)
+EnclosedPorch__step3
+
+	unk__66j%
+3SsnPorch__step3
+
+	unk__67j'
+ScreenPorch__step3
+
+	unk__68j$
+PoolArea__step3
+
+	unk__69j#
+MiscVal__step3
+
+	unk__73j"
+MoSold__step3
+
+	unk__74j"
+YrSold__step3
+
+	unk__75j$
+SaleType__step3
+
+	unk__76j)
+SaleCondition__step3
+
+	unk__77j;
+&PoolQC__step2__StringImputer__mask_i64
+
+	unk__70j<
+'PoolQC__step2__StringImputer__mask_bool
+	
+	unk__70j"
+PoolQC__step3
+
+	unk__70j@
++MiscFeature__step2__StringImputer__mask_i64
+
+	unk__72jA
+,MiscFeature__step2__StringImputer__mask_bool
+	
+	unk__72j'
+MiscFeature__step3
+
+	unk__72j9
+%Alley__step2__StringImputer__mask_i64
+
+
+unk__5j:
+&Alley__step2__StringImputer__mask_bool
+	
+
+unk__5j 
+Alley__step3
+
+
+unk__5j:
+%Fence__step2__StringImputer__mask_i64
+
+	unk__71j;
+&Fence__step2__StringImputer__mask_bool
+	
+	unk__71j!
+Fence__step3
+
+	unk__71j@
++FireplaceQu__step2__StringImputer__mask_i64
+
+	unk__55jA
+,FireplaceQu__step2__StringImputer__mask_bool
+	
+	unk__55j'
+FireplaceQu__step3
+
+	unk__55j?
+*GarageType__step2__StringImputer__mask_i64
+
+	unk__56j@
++GarageType__step2__StringImputer__mask_bool
+	
+	unk__56j&
+GarageType__step3
+
+	unk__56jA
+,GarageFinish__step2__StringImputer__mask_i64
+
+	unk__58jB
+-GarageFinish__step2__StringImputer__mask_bool
+	
+	unk__58j(
+GarageFinish__step3
+
+	unk__58j?
+*GarageQual__step2__StringImputer__mask_i64
+
+	unk__61j@
++GarageQual__step2__StringImputer__mask_bool
+	
+	unk__61j&
+GarageQual__step3
+
+	unk__61j?
+*GarageCond__step2__StringImputer__mask_i64
+
+	unk__62j@
++GarageCond__step2__StringImputer__mask_bool
+	
+	unk__62j&
+GarageCond__step3
+
+	unk__62j=
+(BsmtQual__step2__StringImputer__mask_i64
+
+	unk__28j>
+)BsmtQual__step2__StringImputer__mask_bool
+	
+	unk__28j$
+BsmtQual__step3
+
+	unk__28j=
+(BsmtCond__step2__StringImputer__mask_i64
+
+	unk__29j>
+)BsmtCond__step2__StringImputer__mask_bool
+	
+	unk__29j$
+BsmtCond__step3
+
+	unk__29jA
+,BsmtExposure__step2__StringImputer__mask_i64
+
+	unk__30jB
+-BsmtExposure__step2__StringImputer__mask_bool
+	
+	unk__30j(
+BsmtExposure__step3
+
+	unk__30jA
+,BsmtFinType1__step2__StringImputer__mask_i64
+
+	unk__31jB
+-BsmtFinType1__step2__StringImputer__mask_bool
+	
+	unk__31j(
+BsmtFinType1__step3
+
+	unk__31jA
+,BsmtFinType2__step2__StringImputer__mask_i64
+
+	unk__33jB
+-BsmtFinType2__step2__StringImputer__mask_bool
+	
+	unk__33j(
+BsmtFinType2__step3
+
+	unk__33j?
+*MasVnrType__step2__StringImputer__mask_i64
+
+	unk__23j@
++MasVnrType__step2__StringImputer__mask_bool
+	
+	unk__23j&
+MasVnrType__step3
+
+	unk__23j%
+MSSubClass__step4
+
+
+unk__0j#
+MSZoning__step4
+
+
+unk__1j&
+LotFrontage__step4
+
+
+unk__2j"
+LotArea__step4
+
+
+unk__3j!
+Street__step4
+
+
+unk__4j 
+Alley__step4
+
+
+unk__5j#
+LotShape__step4
+
+
+unk__6j&
+LandContour__step4
+
+
+unk__7j$
+LotConfig__step4
+
+
+unk__8j$
+LandSlope__step4
+
+
+unk__9j(
+Neighborhood__step4
+
+	unk__10j&
+Condition1__step4
+
+	unk__11j&
+Condition2__step4
+
+	unk__12j$
+BldgType__step4
+
+	unk__13j&
+HouseStyle__step4
+
+	unk__14j'
+OverallQual__step4
+
+	unk__15j'
+OverallCond__step4
+
+	unk__16j%
+YearBuilt__step4
+
+	unk__17j(
+YearRemodAdd__step4
+
+	unk__18j%
+RoofStyle__step4
+
+	unk__19j$
+RoofMatl__step4
+
+	unk__20j'
+Exterior1st__step4
+
+	unk__21j'
+Exterior2nd__step4
+
+	unk__22j&
+MasVnrType__step4
+
+	unk__23j&
+MasVnrArea__step4
+
+	unk__24j%
+ExterQual__step4
+
+	unk__25j%
+ExterCond__step4
+
+	unk__26j&
+Foundation__step4
+
+	unk__27j$
+BsmtQual__step4
+
+	unk__28j$
+BsmtCond__step4
+
+	unk__29j(
+BsmtExposure__step4
+
+	unk__30j(
+BsmtFinType1__step4
+
+	unk__31j&
+BsmtFinSF1__step4
+
+	unk__32j(
+BsmtFinType2__step4
+
+	unk__33j&
+BsmtFinSF2__step4
+
+	unk__34j%
+BsmtUnfSF__step4
+
+	unk__35j'
+TotalBsmtSF__step4
+
+	unk__36j#
+Heating__step4
+
+	unk__37j%
+HeatingQC__step4
+
+	unk__38j&
+CentralAir__step4
+
+	unk__39j&
+Electrical__step4
+
+	unk__40j$
+1stFlrSF__step4
+
+	unk__41j$
+2ndFlrSF__step4
+
+	unk__42j(
+LowQualFinSF__step4
+
+	unk__43j%
+GrLivArea__step4
+
+	unk__44j(
+BsmtFullBath__step4
+
+	unk__45j(
+BsmtHalfBath__step4
+
+	unk__46j$
+FullBath__step4
+
+	unk__47j$
+HalfBath__step4
+
+	unk__48j(
+BedroomAbvGr__step4
+
+	unk__49j(
+KitchenAbvGr__step4
+
+	unk__50j'
+KitchenQual__step4
+
+	unk__51j(
+TotRmsAbvGrd__step4
+
+	unk__52j&
+Fireplaces__step4
+
+	unk__54j'
+FireplaceQu__step4
+
+	unk__55j&
+GarageType__step4
+
+	unk__56j'
+GarageYrBlt__step4
+
+	unk__57j(
+GarageFinish__step4
+
+	unk__58j&
+GarageCars__step4
+
+	unk__59j&
+GarageArea__step4
+
+	unk__60j&
+GarageQual__step4
+
+	unk__61j&
+GarageCond__step4
+
+	unk__62j&
+PavedDrive__step4
+
+	unk__63j&
+WoodDeckSF__step4
+
+	unk__64j'
+OpenPorchSF__step4
+
+	unk__65j)
+EnclosedPorch__step4
+
+	unk__66j%
+3SsnPorch__step4
+
+	unk__67j'
+ScreenPorch__step4
+
+	unk__68j$
+PoolArea__step4
+
+	unk__69j"
+PoolQC__step4
+
+	unk__70j!
+Fence__step4
+
+	unk__71j'
+MiscFeature__step4
+
+	unk__72j#
+MiscVal__step4
+
+	unk__73j"
+MoSold__step4
+
+	unk__74j"
+YrSold__step4
+
+	unk__75j$
+SaleType__step4
+
+	unk__76j)
+SaleCondition__step4
+
+	unk__77j?
+*Functional__step3__StringImputer__mask_i64
+
+	unk__53j@
++Functional__step3__StringImputer__mask_bool
+	
+	unk__53j&
+Functional__step4
+
+	unk__53j&
+LotFrontage__step5
+
+
+unk__2j"
+LotArea__step5
+
+
+unk__3j!
+Street__step5
+
+
+unk__4j 
+Alley__step5
+
+
+unk__5j#
+LotShape__step5
+
+
+unk__6j&
+LandContour__step5
+
+
+unk__7j$
+LotConfig__step5
+
+
+unk__8j$
+LandSlope__step5
+
+
+unk__9j(
+Neighborhood__step5
+
+	unk__10j&
+Condition1__step5
+
+	unk__11j&
+Condition2__step5
+
+	unk__12j$
+BldgType__step5
+
+	unk__13j&
+HouseStyle__step5
+
+	unk__14j'
+OverallQual__step5
+
+	unk__15j%
+YearBuilt__step5
+
+	unk__17j(
+YearRemodAdd__step5
+
+	unk__18j%
+RoofStyle__step5
+
+	unk__19j$
+RoofMatl__step5
+
+	unk__20j'
+Exterior2nd__step5
+
+	unk__22j&
+MasVnrType__step5
+
+	unk__23j&
+MasVnrArea__step5
+
+	unk__24j%
+ExterQual__step5
+
+	unk__25j%
+ExterCond__step5
+
+	unk__26j&
+Foundation__step5
+
+	unk__27j$
+BsmtQual__step5
+
+	unk__28j$
+BsmtCond__step5
+
+	unk__29j(
+BsmtExposure__step5
+
+	unk__30j(
+BsmtFinType1__step5
+
+	unk__31j&
+BsmtFinSF1__step5
+
+	unk__32j(
+BsmtFinType2__step5
+
+	unk__33j&
+BsmtFinSF2__step5
+
+	unk__34j%
+BsmtUnfSF__step5
+
+	unk__35j'
+TotalBsmtSF__step5
+
+	unk__36j#
+Heating__step5
+
+	unk__37j%
+HeatingQC__step5
+
+	unk__38j&
+CentralAir__step5
+
+	unk__39j$
+1stFlrSF__step5
+
+	unk__41j$
+2ndFlrSF__step5
+
+	unk__42j(
+LowQualFinSF__step5
+
+	unk__43j%
+GrLivArea__step5
+
+	unk__44j(
+BsmtFullBath__step5
+
+	unk__45j(
+BsmtHalfBath__step5
+
+	unk__46j$
+FullBath__step5
+
+	unk__47j$
+HalfBath__step5
+
+	unk__48j(
+BedroomAbvGr__step5
+
+	unk__49j(
+KitchenAbvGr__step5
+
+	unk__50j(
+TotRmsAbvGrd__step5
+
+	unk__52j&
+Functional__step5
+
+	unk__53j&
+Fireplaces__step5
+
+	unk__54j'
+FireplaceQu__step5
+
+	unk__55j&
+GarageType__step5
+
+	unk__56j'
+GarageYrBlt__step5
+
+	unk__57j(
+GarageFinish__step5
+
+	unk__58j&
+GarageCars__step5
+
+	unk__59j&
+GarageArea__step5
+
+	unk__60j&
+GarageQual__step5
+
+	unk__61j&
+GarageCond__step5
+
+	unk__62j&
+PavedDrive__step5
+
+	unk__63j&
+WoodDeckSF__step5
+
+	unk__64j'
+OpenPorchSF__step5
+
+	unk__65j)
+EnclosedPorch__step5
+
+	unk__66j%
+3SsnPorch__step5
+
+	unk__67j'
+ScreenPorch__step5
+
+	unk__68j$
+PoolArea__step5
+
+	unk__69j"
+PoolQC__step5
+
+	unk__70j!
+Fence__step5
+
+	unk__71j'
+MiscFeature__step5
+
+	unk__72j#
+MiscVal__step5
+
+	unk__73j)
+SaleCondition__step5
+
+	unk__77j<
+(MSZoning__step4__StringImputer__mask_i64
+
+
+unk__1j=
+)MSZoning__step4__StringImputer__mask_bool
+	
+
+unk__1j#
+MSZoning__step5
+
+
+unk__1j?
+*Electrical__step4__StringImputer__mask_i64
+
+	unk__40j@
++Electrical__step4__StringImputer__mask_bool
+	
+	unk__40j&
+Electrical__step5
+
+	unk__40j@
++KitchenQual__step4__StringImputer__mask_i64
+
+	unk__51jA
+,KitchenQual__step4__StringImputer__mask_bool
+	
+	unk__51j'
+KitchenQual__step5
+
+	unk__51j@
++Exterior1st__step4__StringImputer__mask_i64
+
+	unk__21jA
+,Exterior1st__step4__StringImputer__mask_bool
+	
+	unk__21j'
+Exterior1st__step5
+
+	unk__21j=
+(SaleType__step4__StringImputer__mask_i64
+
+	unk__76j>
+)SaleType__step4__StringImputer__mask_bool
+	
+	unk__76j$
+SaleType__step5
+
+	unk__76j>
+*MSSubClass__step4__StringImputer__mask_i64
+
+
+unk__0j?
++MSSubClass__step4__StringImputer__mask_bool
+	
+
+unk__0j%
+MSSubClass__step5
+
+
+unk__0j@
++OverallCond__step4__StringImputer__mask_i64
+
+	unk__16jA
+,OverallCond__step4__StringImputer__mask_bool
+	
+	unk__16j'
+OverallCond__step5
+
+	unk__16j;
+&YrSold__step4__StringImputer__mask_i64
+
+	unk__75j<
+'YrSold__step4__StringImputer__mask_bool
+	
+	unk__75j"
+YrSold__step5
+
+	unk__75j;
+&MoSold__step4__StringImputer__mask_i64
+
+	unk__74j<
+'MoSold__step4__StringImputer__mask_bool
+	
+	unk__74j"
+MoSold__step5
+
+	unk__74j%
+MSSubClass__step6
+
+
+unk__0j#
+MSZoning__step6
+
+
+unk__1j&
+LotFrontage__step6
+
+
+unk__2j"
+LotArea__step6
+
+
+unk__3j!
+Street__step6
+
+
+unk__4j 
+Alley__step6
+
+
+unk__5j#
+LotShape__step6
+
+
+unk__6j&
+LandContour__step6
+
+
+unk__7j$
+LotConfig__step6
+
+
+unk__8j$
+LandSlope__step6
+
+
+unk__9j(
+Neighborhood__step6
+
+	unk__10j&
+Condition1__step6
+
+	unk__11j&
+Condition2__step6
+
+	unk__12j$
+BldgType__step6
+
+	unk__13j&
+HouseStyle__step6
+
+	unk__14j'
+OverallQual__step6
+
+	unk__15j'
+OverallCond__step6
+
+	unk__16j%
+YearBuilt__step6
+
+	unk__17j(
+YearRemodAdd__step6
+
+	unk__18j%
+RoofStyle__step6
+
+	unk__19j$
+RoofMatl__step6
+
+	unk__20j'
+Exterior1st__step6
+
+	unk__21j'
+Exterior2nd__step6
+
+	unk__22j&
+MasVnrType__step6
+
+	unk__23j%
+ExterQual__step6
+
+	unk__25j%
+ExterCond__step6
+
+	unk__26j&
+Foundation__step6
+
+	unk__27j$
+BsmtQual__step6
+
+	unk__28j$
+BsmtCond__step6
+
+	unk__29j(
+BsmtExposure__step6
+
+	unk__30j(
+BsmtFinType1__step6
+
+	unk__31j(
+BsmtFinType2__step6
+
+	unk__33j#
+Heating__step6
+
+	unk__37j%
+HeatingQC__step6
+
+	unk__38j&
+CentralAir__step6
+
+	unk__39j&
+Electrical__step6
+
+	unk__40j$
+1stFlrSF__step6
+
+	unk__41j$
+2ndFlrSF__step6
+
+	unk__42j(
+LowQualFinSF__step6
+
+	unk__43j%
+GrLivArea__step6
+
+	unk__44j$
+FullBath__step6
+
+	unk__47j$
+HalfBath__step6
+
+	unk__48j(
+BedroomAbvGr__step6
+
+	unk__49j(
+KitchenAbvGr__step6
+
+	unk__50j'
+KitchenQual__step6
+
+	unk__51j(
+TotRmsAbvGrd__step6
+
+	unk__52j&
+Functional__step6
+
+	unk__53j&
+Fireplaces__step6
+
+	unk__54j'
+FireplaceQu__step6
+
+	unk__55j&
+GarageType__step6
+
+	unk__56j(
+GarageFinish__step6
+
+	unk__58j&
+GarageQual__step6
+
+	unk__61j&
+GarageCond__step6
+
+	unk__62j&
+PavedDrive__step6
+
+	unk__63j&
+WoodDeckSF__step6
+
+	unk__64j'
+OpenPorchSF__step6
+
+	unk__65j)
+EnclosedPorch__step6
+
+	unk__66j%
+3SsnPorch__step6
+
+	unk__67j'
+ScreenPorch__step6
+
+	unk__68j$
+PoolArea__step6
+
+	unk__69j"
+PoolQC__step6
+
+	unk__70j!
+Fence__step6
+
+	unk__71j'
+MiscFeature__step6
+
+	unk__72j#
+MiscVal__step6
+
+	unk__73j"
+MoSold__step6
+
+	unk__74j"
+YrSold__step6
+
+	unk__75j$
+SaleType__step6
+
+	unk__76j)
+SaleCondition__step6
+
+	unk__77j'
+GarageYrBlt__step6
+
+	unk__57j&
+GarageArea__step6
+
+	unk__60j&
+GarageCars__step6
+
+	unk__59j&
+BsmtFinSF1__step6
+
+	unk__32j&
+BsmtFinSF2__step6
+
+	unk__34j%
+BsmtUnfSF__step6
+
+	unk__35j'
+TotalBsmtSF__step6
+
+	unk__36j(
+BsmtFullBath__step6
+
+	unk__45j(
+BsmtHalfBath__step6
+
+	unk__46j&
+MasVnrArea__step6
+
+	unk__24j%
+MSSubClass__step7
+
+
+unk__0j#
+MSZoning__step7
+
+
+unk__1j"
+LotArea__step7
+
+
+unk__3j!
+Street__step7
+
+
+unk__4j 
+Alley__step7
+
+
+unk__5j#
+LotShape__step7
+
+
+unk__6j&
+LandContour__step7
+
+
+unk__7j$
+LotConfig__step7
+
+
+unk__8j$
+LandSlope__step7
+
+
+unk__9j&
+Condition1__step7
+
+	unk__11j&
+Condition2__step7
+
+	unk__12j$
+BldgType__step7
+
+	unk__13j&
+HouseStyle__step7
+
+	unk__14j'
+OverallQual__step7
+
+	unk__15j'
+OverallCond__step7
+
+	unk__16j%
+YearBuilt__step7
+
+	unk__17j(
+YearRemodAdd__step7
+
+	unk__18j%
+RoofStyle__step7
+
+	unk__19j$
+RoofMatl__step7
+
+	unk__20j'
+Exterior1st__step7
+
+	unk__21j'
+Exterior2nd__step7
+
+	unk__22j&
+MasVnrType__step7
+
+	unk__23j&
+MasVnrArea__step7
+
+	unk__24j%
+ExterQual__step7
+
+	unk__25j%
+ExterCond__step7
+
+	unk__26j&
+Foundation__step7
+
+	unk__27j$
+BsmtQual__step7
+
+	unk__28j$
+BsmtCond__step7
+
+	unk__29j(
+BsmtExposure__step7
+
+	unk__30j(
+BsmtFinType1__step7
+
+	unk__31j&
+BsmtFinSF1__step7
+
+	unk__32j(
+BsmtFinType2__step7
+
+	unk__33j&
+BsmtFinSF2__step7
+
+	unk__34j%
+BsmtUnfSF__step7
+
+	unk__35j'
+TotalBsmtSF__step7
+
+	unk__36j#
+Heating__step7
+
+	unk__37j%
+HeatingQC__step7
+
+	unk__38j&
+CentralAir__step7
+
+	unk__39j&
+Electrical__step7
+
+	unk__40j$
+1stFlrSF__step7
+
+	unk__41j$
+2ndFlrSF__step7
+
+	unk__42j(
+LowQualFinSF__step7
+
+	unk__43j%
+GrLivArea__step7
+
+	unk__44j(
+BsmtFullBath__step7
+
+	unk__45j(
+BsmtHalfBath__step7
+
+	unk__46j$
+FullBath__step7
+
+	unk__47j$
+HalfBath__step7
+
+	unk__48j(
+BedroomAbvGr__step7
+
+	unk__49j(
+KitchenAbvGr__step7
+
+	unk__50j'
+KitchenQual__step7
+
+	unk__51j(
+TotRmsAbvGrd__step7
+
+	unk__52j&
+Functional__step7
+
+	unk__53j&
+Fireplaces__step7
+
+	unk__54j'
+FireplaceQu__step7
+
+	unk__55j&
+GarageType__step7
+
+	unk__56j'
+GarageYrBlt__step7
+
+	unk__57j(
+GarageFinish__step7
+
+	unk__58j&
+GarageCars__step7
+
+	unk__59j&
+GarageArea__step7
+
+	unk__60j&
+GarageQual__step7
+
+	unk__61j&
+GarageCond__step7
+
+	unk__62j&
+PavedDrive__step7
+
+	unk__63j&
+WoodDeckSF__step7
+
+	unk__64j'
+OpenPorchSF__step7
+
+	unk__65j)
+EnclosedPorch__step7
+
+	unk__66j%
+3SsnPorch__step7
+
+	unk__67j'
+ScreenPorch__step7
+
+	unk__68j$
+PoolArea__step7
+
+	unk__69j"
+PoolQC__step7
+
+	unk__70j!
+Fence__step7
+
+	unk__71j'
+MiscFeature__step7
+
+	unk__72j#
+MiscVal__step7
+
+	unk__73j"
+MoSold__step7
+
+	unk__74j"
+YrSold__step7
+
+	unk__75j$
+SaleType__step7
+
+	unk__76j)
+SaleCondition__step7
+
+	unk__77j(
+Neighborhood__step7
+
+	unk__10j&
+LotFrontage__step7
+
+
+unk__2j%
+MSSubClass__step8
+
+
+unk__0j#
+MSZoning__step8
+
+
+unk__1j&
+LotFrontage__step8
+
+
+unk__2j"
+LotArea__step8
+
+
+unk__3j!
+Street__step8
+
+
+unk__4j 
+Alley__step8
+
+
+unk__5j#
+LotShape__step8
+
+
+unk__6j&
+LandContour__step8
+
+
+unk__7j$
+LotConfig__step8
+
+
+unk__8j$
+LandSlope__step8
+
+
+unk__9j(
+Neighborhood__step8
+
+	unk__10j&
+Condition1__step8
+
+	unk__11j&
+Condition2__step8
+
+	unk__12j$
+BldgType__step8
+
+	unk__13j&
+HouseStyle__step8
+
+	unk__14j'
+OverallQual__step8
+
+	unk__15j'
+OverallCond__step8
+
+	unk__16j%
+YearBuilt__step8
+
+	unk__17j(
+YearRemodAdd__step8
+
+	unk__18j%
+RoofStyle__step8
+
+	unk__19j$
+RoofMatl__step8
+
+	unk__20j'
+Exterior1st__step8
+
+	unk__21j'
+Exterior2nd__step8
+
+	unk__22j&
+MasVnrType__step8
+
+	unk__23j&
+MasVnrArea__step8
+
+	unk__24j%
+ExterQual__step8
+
+	unk__25j%
+ExterCond__step8
+
+	unk__26j&
+Foundation__step8
+
+	unk__27j$
+BsmtQual__step8
+
+	unk__28j$
+BsmtCond__step8
+
+	unk__29j(
+BsmtExposure__step8
+
+	unk__30j(
+BsmtFinType1__step8
+
+	unk__31j&
+BsmtFinSF1__step8
+
+	unk__32j(
+BsmtFinType2__step8
+
+	unk__33j&
+BsmtFinSF2__step8
+
+	unk__34j%
+BsmtUnfSF__step8
+
+	unk__35j'
+TotalBsmtSF__step8
+
+	unk__36j#
+Heating__step8
+
+	unk__37j%
+HeatingQC__step8
+
+	unk__38j&
+CentralAir__step8
+
+	unk__39j&
+Electrical__step8
+
+	unk__40j$
+1stFlrSF__step8
+
+	unk__41j$
+2ndFlrSF__step8
+
+	unk__42j(
+LowQualFinSF__step8
+
+	unk__43j%
+GrLivArea__step8
+
+	unk__44j(
+BsmtFullBath__step8
+
+	unk__45j(
+BsmtHalfBath__step8
+
+	unk__46j$
+FullBath__step8
+
+	unk__47j$
+HalfBath__step8
+
+	unk__48j(
+BedroomAbvGr__step8
+
+	unk__49j(
+KitchenAbvGr__step8
+
+	unk__50j'
+KitchenQual__step8
+
+	unk__51j(
+TotRmsAbvGrd__step8
+
+	unk__52j&
+Functional__step8
+
+	unk__53j&
+Fireplaces__step8
+
+	unk__54j'
+FireplaceQu__step8
+
+	unk__55j&
+GarageType__step8
+
+	unk__56j'
+GarageYrBlt__step8
+
+	unk__57j(
+GarageFinish__step8
+
+	unk__58j&
+GarageCars__step8
+
+	unk__59j&
+GarageArea__step8
+
+	unk__60j&
+GarageQual__step8
+
+	unk__61j&
+GarageCond__step8
+
+	unk__62j&
+PavedDrive__step8
+
+	unk__63j&
+WoodDeckSF__step8
+
+	unk__64j'
+OpenPorchSF__step8
+
+	unk__65j)
+EnclosedPorch__step8
+
+	unk__66j%
+3SsnPorch__step8
+
+	unk__67j'
+ScreenPorch__step8
+
+	unk__68j$
+PoolArea__step8
+
+	unk__69j"
+PoolQC__step8
+
+	unk__70j!
+Fence__step8
+
+	unk__71j'
+MiscFeature__step8
+
+	unk__72j#
+MiscVal__step8
+
+	unk__73j"
+MoSold__step8
+
+	unk__74j"
+YrSold__step8
+
+	unk__75j$
+SaleType__step8
+
+	unk__76j)
+SaleCondition__step8
+
+	unk__77jA
+-GrLivArea__step7__Ratio__LotArea__step7__dep1
+
+
+unk__3j&
+LivLotArea__step8
+
+	unk__78j%
+MSSubClass__step9
+
+
+unk__0j#
+MSZoning__step9
+
+
+unk__1j&
+LotFrontage__step9
+
+
+unk__2j"
+LotArea__step9
+
+
+unk__3j!
+Street__step9
+
+
+unk__4j 
+Alley__step9
+
+
+unk__5j#
+LotShape__step9
+
+
+unk__6j&
+LandContour__step9
+
+
+unk__7j$
+LotConfig__step9
+
+
+unk__8j$
+LandSlope__step9
+
+
+unk__9j(
+Neighborhood__step9
+
+	unk__10j&
+Condition1__step9
+
+	unk__11j&
+Condition2__step9
+
+	unk__12j$
+BldgType__step9
+
+	unk__13j&
+HouseStyle__step9
+
+	unk__14j'
+OverallQual__step9
+
+	unk__15j'
+OverallCond__step9
+
+	unk__16j%
+YearBuilt__step9
+
+	unk__17j(
+YearRemodAdd__step9
+
+	unk__18j%
+RoofStyle__step9
+
+	unk__19j$
+RoofMatl__step9
+
+	unk__20j'
+Exterior1st__step9
+
+	unk__21j'
+Exterior2nd__step9
+
+	unk__22j&
+MasVnrType__step9
+
+	unk__23j&
+MasVnrArea__step9
+
+	unk__24j%
+ExterQual__step9
+
+	unk__25j%
+ExterCond__step9
+
+	unk__26j&
+Foundation__step9
+
+	unk__27j$
+BsmtQual__step9
+
+	unk__28j$
+BsmtCond__step9
+
+	unk__29j(
+BsmtExposure__step9
+
+	unk__30j(
+BsmtFinType1__step9
+
+	unk__31j&
+BsmtFinSF1__step9
+
+	unk__32j(
+BsmtFinType2__step9
+
+	unk__33j&
+BsmtFinSF2__step9
+
+	unk__34j%
+BsmtUnfSF__step9
+
+	unk__35j'
+TotalBsmtSF__step9
+
+	unk__36j#
+Heating__step9
+
+	unk__37j%
+HeatingQC__step9
+
+	unk__38j&
+CentralAir__step9
+
+	unk__39j&
+Electrical__step9
+
+	unk__40j$
+1stFlrSF__step9
+
+	unk__41j$
+2ndFlrSF__step9
+
+	unk__42j(
+LowQualFinSF__step9
+
+	unk__43j%
+GrLivArea__step9
+
+	unk__44j(
+BsmtFullBath__step9
+
+	unk__45j(
+BsmtHalfBath__step9
+
+	unk__46j$
+FullBath__step9
+
+	unk__47j$
+HalfBath__step9
+
+	unk__48j(
+BedroomAbvGr__step9
+
+	unk__49j(
+KitchenAbvGr__step9
+
+	unk__50j'
+KitchenQual__step9
+
+	unk__51j(
+TotRmsAbvGrd__step9
+
+	unk__52j&
+Functional__step9
+
+	unk__53j&
+Fireplaces__step9
+
+	unk__54j'
+FireplaceQu__step9
+
+	unk__55j&
+GarageType__step9
+
+	unk__56j'
+GarageYrBlt__step9
+
+	unk__57j(
+GarageFinish__step9
+
+	unk__58j&
+GarageCars__step9
+
+	unk__59j&
+GarageArea__step9
+
+	unk__60j&
+GarageQual__step9
+
+	unk__61j&
+GarageCond__step9
+
+	unk__62j&
+PavedDrive__step9
+
+	unk__63j&
+WoodDeckSF__step9
+
+	unk__64j'
+OpenPorchSF__step9
+
+	unk__65j)
+EnclosedPorch__step9
+
+	unk__66j%
+3SsnPorch__step9
+
+	unk__67j'
+ScreenPorch__step9
+
+	unk__68j$
+PoolArea__step9
+
+	unk__69j"
+PoolQC__step9
+
+	unk__70j!
+Fence__step9
+
+	unk__71j'
+MiscFeature__step9
+
+	unk__72j#
+MiscVal__step9
+
+	unk__73j"
+MoSold__step9
+
+	unk__74j"
+YrSold__step9
+
+	unk__75j$
+SaleType__step9
+
+	unk__76j)
+SaleCondition__step9
+
+	unk__77j&
+LivLotArea__step9
+
+	unk__78jK
+6Math__cast__TotalBsmtSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+
+	unk__36jH
+3Math__cast__1stFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+
+	unk__41jH
+3Math__cast__2ndFlrSF__TotalBsmtSF_1stFlrSF_2ndFlrSF
+
+	unk__42jA
+,Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__sum__s0
+
+	unk__79j=
+(TotalBsmtSF_1stFlrSF_2ndFlrSF_sum__step9
+
+	unk__80jE
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_ms0
+
+	unk__81jF
+1Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_msum
+
+	unk__82jF
+1Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_mean
+
+	unk__82jG
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff0
+
+	unk__83jE
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq0
+
+	unk__83jG
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff1
+
+	unk__84jE
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq1
+
+	unk__84jG
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_diff2
+
+	unk__85jE
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sq2
+
+	unk__85jH
+3Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sqadd0
+
+	unk__86jG
+2Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_sqsum
+
+	unk__87jE
+0Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__std__sv_var
+
+	unk__87j=
+(TotalBsmtSF_1stFlrSF_2ndFlrSF_std__step9
+
+	unk__87jH
+3Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__range__rng_max
+
+	unk__88jH
+3Math__TotalBsmtSF_1stFlrSF_2ndFlrSF__range__rng_min
+
+	unk__89j?
+*TotalBsmtSF_1stFlrSF_2ndFlrSF_range__step9
+
+	unk__90j=
+(TotalBsmtSF_1stFlrSF_2ndFlrSF_min__step9
+
+	unk__91j=
+(TotalBsmtSF_1stFlrSF_2ndFlrSF_max__step9
+
+	unk__92j&
+MSSubClass__step10
+
+
+unk__0j'
+LotFrontage__step10
+
+
+unk__2j#
+LotArea__step10
+
+
+unk__3j(
+OverallQual__step10
+
+	unk__15j(
+OverallCond__step10
+
+	unk__16j&
+YearBuilt__step10
+
+	unk__17j)
+YearRemodAdd__step10
+
+	unk__18j'
+MasVnrArea__step10
+
+	unk__24j'
+BsmtFinSF1__step10
+
+	unk__32j'
+BsmtFinSF2__step10
+
+	unk__34j&
+BsmtUnfSF__step10
+
+	unk__35j(
+TotalBsmtSF__step10
+
+	unk__36j%
+1stFlrSF__step10
+
+	unk__41j%
+2ndFlrSF__step10
+
+	unk__42j)
+LowQualFinSF__step10
+
+	unk__43j&
+GrLivArea__step10
+
+	unk__44j)
+BsmtFullBath__step10
+
+	unk__45j)
+BsmtHalfBath__step10
+
+	unk__46j%
+FullBath__step10
+
+	unk__47j%
+HalfBath__step10
+
+	unk__48j)
+BedroomAbvGr__step10
+
+	unk__49j)
+KitchenAbvGr__step10
+
+	unk__50j)
+TotRmsAbvGrd__step10
+
+	unk__52j'
+Fireplaces__step10
+
+	unk__54j(
+GarageYrBlt__step10
+
+	unk__57j'
+GarageCars__step10
+
+	unk__59j'
+GarageArea__step10
+
+	unk__60j'
+WoodDeckSF__step10
+
+	unk__64j(
+OpenPorchSF__step10
+
+	unk__65j*
+EnclosedPorch__step10
+
+	unk__66j&
+3SsnPorch__step10
+
+	unk__67j(
+ScreenPorch__step10
+
+	unk__68j%
+PoolArea__step10
+
+	unk__69j$
+MiscVal__step10
+
+	unk__73j#
+MoSold__step10
+
+	unk__74j#
+YrSold__step10
+
+	unk__75j'
+LivLotArea__step10
+
+	unk__78j>
+)TotalBsmtSF_1stFlrSF_2ndFlrSF_sum__step10
+
+	unk__80j>
+)TotalBsmtSF_1stFlrSF_2ndFlrSF_std__step10
+
+	unk__87j@
++TotalBsmtSF_1stFlrSF_2ndFlrSF_range__step10
+
+	unk__90j>
+)TotalBsmtSF_1stFlrSF_2ndFlrSF_min__step10
+
+	unk__91j>
+)TotalBsmtSF_1stFlrSF_2ndFlrSF_max__step10
+
+	unk__92j$
+MSZoning__step10
+
+
+unk__1j"
+Street__step10
+
+
+unk__4j!
+Alley__step10
+
+
+unk__5j$
+LotShape__step10
+
+
+unk__6j'
+LandContour__step10
+
+
+unk__7j%
+LotConfig__step10
+
+
+unk__8j%
+LandSlope__step10
+
+
+unk__9j)
+Neighborhood__step10
+
+	unk__10j'
+Condition1__step10
+
+	unk__11j'
+Condition2__step10
+
+	unk__12j%
+BldgType__step10
+
+	unk__13j'
+HouseStyle__step10
+
+	unk__14j&
+RoofStyle__step10
+
+	unk__19j%
+RoofMatl__step10
+
+	unk__20j(
+Exterior1st__step10
+
+	unk__21j(
+Exterior2nd__step10
+
+	unk__22j'
+MasVnrType__step10
+
+	unk__23j&
+ExterQual__step10
+
+	unk__25j&
+ExterCond__step10
+
+	unk__26j'
+Foundation__step10
+
+	unk__27j%
+BsmtQual__step10
+
+	unk__28j%
+BsmtCond__step10
+
+	unk__29j)
+BsmtExposure__step10
+
+	unk__30j)
+BsmtFinType1__step10
+
+	unk__31j)
+BsmtFinType2__step10
+
+	unk__33j$
+Heating__step10
+
+	unk__37j&
+HeatingQC__step10
+
+	unk__38j'
+CentralAir__step10
+
+	unk__39j'
+Electrical__step10
+
+	unk__40j(
+KitchenQual__step10
+
+	unk__51j'
+Functional__step10
+
+	unk__53j(
+FireplaceQu__step10
+
+	unk__55j'
+GarageType__step10
+
+	unk__56j)
+GarageFinish__step10
+
+	unk__58j'
+GarageQual__step10
+
+	unk__61j'
+GarageCond__step10
+
+	unk__62j'
+PavedDrive__step10
+
+	unk__63j#
+PoolQC__step10
+
+	unk__70j"
+Fence__step10
+
+	unk__71j(
+MiscFeature__step10
+
+	unk__72j%
+SaleType__step10
+
+	unk__76j*
+SaleCondition__step10
+
+	unk__77j(
+MSZoning__RL__step10
+
+
+unk__1j(
+MSZoning__RM__step10
+
+
+unk__1j(
+MSZoning__FV__step10
+
+
+unk__1j(
+MSZoning__RH__step10
+
+
+unk__1j-
+MSZoning__C (all)__step10
+
+
+unk__1j(
+Street__Pave__step10
+
+
+unk__4j(
+Street__Grvl__step10
+
+
+unk__4j*
+Alley__MISSING__step10
+
+
+unk__5j'
+Alley__Grvl__step10
+
+
+unk__5j'
+Alley__Pave__step10
+
+
+unk__5j)
+LotShape__Reg__step10
+
+
+unk__6j)
+LotShape__IR1__step10
+
+
+unk__6j)
+LotShape__IR2__step10
+
+
+unk__6j)
+LotShape__IR3__step10
+
+
+unk__6j,
+LandContour__Lvl__step10
+
+
+unk__7j,
+LandContour__Bnk__step10
+
+
+unk__7j,
+LandContour__HLS__step10
+
+
+unk__7j,
+LandContour__Low__step10
+
+
+unk__7j-
+LotConfig__Inside__step10
+
+
+unk__8j-
+LotConfig__Corner__step10
+
+
+unk__8j.
+LotConfig__CulDSac__step10
+
+
+unk__8j*
+LotConfig__FR2__step10
+
+
+unk__8j*
+LotConfig__FR3__step10
+
+
+unk__8j*
+LandSlope__Gtl__step10
+
+
+unk__9j*
+LandSlope__Mod__step10
+
+
+unk__9j*
+LandSlope__Sev__step10
+
+
+unk__9j0
+Neighborhood__NAmes__step10
+
+	unk__10j2
+Neighborhood__CollgCr__step10
+
+	unk__10j2
+Neighborhood__OldTown__step10
+
+	unk__10j2
+Neighborhood__Edwards__step10
+
+	unk__10j2
+Neighborhood__Somerst__step10
+
+	unk__10j2
+Neighborhood__Gilbert__step10
+
+	unk__10j2
+Neighborhood__NridgHt__step10
+
+	unk__10j1
+Neighborhood__Sawyer__step10
+
+	unk__10j1
+Neighborhood__NWAmes__step10
+
+	unk__10j2
+Neighborhood__SawyerW__step10
+
+	unk__10j2
+Neighborhood__BrkSide__step10
+
+	unk__10j2
+Neighborhood__Crawfor__step10
+
+	unk__10j2
+Neighborhood__Mitchel__step10
+
+	unk__10j2
+Neighborhood__NoRidge__step10
+
+	unk__10j1
+Neighborhood__Timber__step10
+
+	unk__10j1
+Neighborhood__IDOTRR__step10
+
+	unk__10j2
+Neighborhood__ClearCr__step10
+
+	unk__10j2
+Neighborhood__StoneBr__step10
+
+	unk__10j0
+Neighborhood__SWISU__step10
+
+	unk__10j2
+Neighborhood__MeadowV__step10
+
+	unk__10j2
+Neighborhood__Blmngtn__step10
+
+	unk__10j1
+Neighborhood__BrDale__step10
+
+	unk__10j2
+Neighborhood__Veenker__step10
+
+	unk__10j2
+Neighborhood__NPkVill__step10
+
+	unk__10j2
+Neighborhood__Blueste__step10
+
+	unk__10j-
+Condition1__Norm__step10
+
+	unk__11j.
+Condition1__Feedr__step10
+
+	unk__11j/
+Condition1__Artery__step10
+
+	unk__11j-
+Condition1__RRAn__step10
+
+	unk__11j-
+Condition1__PosN__step10
+
+	unk__11j-
+Condition1__RRAe__step10
+
+	unk__11j-
+Condition1__PosA__step10
+
+	unk__11j-
+Condition1__RRNn__step10
+
+	unk__11j-
+Condition1__RRNe__step10
+
+	unk__11j-
+Condition2__Norm__step10
+
+	unk__12j.
+Condition2__Feedr__step10
+
+	unk__12j/
+Condition2__Artery__step10
+
+	unk__12j-
+Condition2__RRNn__step10
+
+	unk__12j-
+Condition2__PosN__step10
+
+	unk__12j-
+Condition2__PosA__step10
+
+	unk__12j-
+Condition2__RRAn__step10
+
+	unk__12j-
+Condition2__RRAe__step10
+
+	unk__12j+
+BldgType__1Fam__step10
+
+	unk__13j-
+BldgType__TwnhsE__step10
+
+	unk__13j-
+BldgType__Duplex__step10
+
+	unk__13j,
+BldgType__Twnhs__step10
+
+	unk__13j-
+BldgType__2fmCon__step10
+
+	unk__13j/
+HouseStyle__1Story__step10
+
+	unk__14j/
+HouseStyle__2Story__step10
+
+	unk__14j/
+HouseStyle__1.5Fin__step10
+
+	unk__14j-
+HouseStyle__SLvl__step10
+
+	unk__14j/
+HouseStyle__SFoyer__step10
+
+	unk__14j/
+HouseStyle__1.5Unf__step10
+
+	unk__14j/
+HouseStyle__2.5Unf__step10
+
+	unk__14j/
+HouseStyle__2.5Fin__step10
+
+	unk__14j-
+RoofStyle__Gable__step10
+
+	unk__19j+
+RoofStyle__Hip__step10
+
+	unk__19j,
+RoofStyle__Flat__step10
+
+	unk__19j/
+RoofStyle__Gambrel__step10
+
+	unk__19j/
+RoofStyle__Mansard__step10
+
+	unk__19j,
+RoofStyle__Shed__step10
+
+	unk__19j.
+RoofMatl__CompShg__step10
+
+	unk__20j.
+RoofMatl__Tar&Grv__step10
+
+	unk__20j.
+RoofMatl__WdShngl__step10
+
+	unk__20j.
+RoofMatl__WdShake__step10
+
+	unk__20j,
+RoofMatl__Metal__step10
+
+	unk__20j.
+RoofMatl__Membran__step10
+
+	unk__20j+
+RoofMatl__Roll__step10
+
+	unk__20j.
+RoofMatl__ClyTile__step10
+
+	unk__20j1
+Exterior1st__VinylSd__step10
+
+	unk__21j1
+Exterior1st__HdBoard__step10
+
+	unk__21j1
+Exterior1st__MetalSd__step10
+
+	unk__21j1
+Exterior1st__Wd Sdng__step10
+
+	unk__21j1
+Exterior1st__Plywood__step10
+
+	unk__21j1
+Exterior1st__CemntBd__step10
+
+	unk__21j1
+Exterior1st__BrkFace__step10
+
+	unk__21j1
+Exterior1st__WdShing__step10
+
+	unk__21j0
+Exterior1st__Stucco__step10
+
+	unk__21j1
+Exterior1st__AsbShng__step10
+
+	unk__21j1
+Exterior1st__BrkComm__step10
+
+	unk__21j/
+Exterior1st__Stone__step10
+
+	unk__21j1
+Exterior1st__AsphShn__step10
+
+	unk__21j1
+Exterior1st__ImStucc__step10
+
+	unk__21j0
+Exterior1st__CBlock__step10
+
+	unk__21j1
+Exterior2nd__VinylSd__step10
+
+	unk__22j1
+Exterior2nd__MetalSd__step10
+
+	unk__22j1
+Exterior2nd__HdBoard__step10
+
+	unk__22j1
+Exterior2nd__Wd Sdng__step10
+
+	unk__22j1
+Exterior2nd__Plywood__step10
+
+	unk__22j1
+Exterior2nd__CmentBd__step10
+
+	unk__22j1
+Exterior2nd__Wd Shng__step10
+
+	unk__22j0
+Exterior2nd__Stucco__step10
+
+	unk__22j1
+Exterior2nd__BrkFace__step10
+
+	unk__22j1
+Exterior2nd__AsbShng__step10
+
+	unk__22j1
+Exterior2nd__ImStucc__step10
+
+	unk__22j1
+Exterior2nd__BrkComm__step10
+
+	unk__22j/
+Exterior2nd__Stone__step10
+
+	unk__22j1
+Exterior2nd__AsphShn__step10
+
+	unk__22j/
+Exterior2nd__Other__step10
+
+	unk__22j0
+Exterior2nd__CBlock__step10
+
+	unk__22j-
+MasVnrType__None__step10
+
+	unk__23j0
+MasVnrType__BrkFace__step10
+
+	unk__23j.
+MasVnrType__Stone__step10
+
+	unk__23j/
+MasVnrType__BrkCmn__step10
+
+	unk__23j0
+MasVnrType__MISSING__step10
+
+	unk__23j*
+ExterQual__TA__step10
+
+	unk__25j*
+ExterQual__Gd__step10
+
+	unk__25j*
+ExterQual__Ex__step10
+
+	unk__25j*
+ExterQual__Fa__step10
+
+	unk__25j*
+ExterCond__TA__step10
+
+	unk__26j*
+ExterCond__Gd__step10
+
+	unk__26j*
+ExterCond__Fa__step10
+
+	unk__26j*
+ExterCond__Ex__step10
+
+	unk__26j*
+ExterCond__Po__step10
+
+	unk__26j.
+Foundation__PConc__step10
+
+	unk__27j/
+Foundation__CBlock__step10
+
+	unk__27j/
+Foundation__BrkTil__step10
+
+	unk__27j-
+Foundation__Slab__step10
+
+	unk__27j.
+Foundation__Stone__step10
+
+	unk__27j-
+Foundation__Wood__step10
+
+	unk__27j)
+BsmtQual__TA__step10
+
+	unk__28j)
+BsmtQual__Gd__step10
+
+	unk__28j)
+BsmtQual__Ex__step10
+
+	unk__28j.
+BsmtQual__MISSING__step10
+
+	unk__28j)
+BsmtQual__Fa__step10
+
+	unk__28j)
+BsmtCond__TA__step10
+
+	unk__29j)
+BsmtCond__Gd__step10
+
+	unk__29j)
+BsmtCond__Fa__step10
+
+	unk__29j.
+BsmtCond__MISSING__step10
+
+	unk__29j)
+BsmtCond__Po__step10
+
+	unk__29j-
+BsmtExposure__No__step10
+
+	unk__30j-
+BsmtExposure__Av__step10
+
+	unk__30j-
+BsmtExposure__Gd__step10
+
+	unk__30j-
+BsmtExposure__Mn__step10
+
+	unk__30j2
+BsmtExposure__MISSING__step10
+
+	unk__30j.
+BsmtFinType1__Unf__step10
+
+	unk__31j.
+BsmtFinType1__GLQ__step10
+
+	unk__31j.
+BsmtFinType1__ALQ__step10
+
+	unk__31j.
+BsmtFinType1__BLQ__step10
+
+	unk__31j.
+BsmtFinType1__Rec__step10
+
+	unk__31j.
+BsmtFinType1__LwQ__step10
+
+	unk__31j2
+BsmtFinType1__MISSING__step10
+
+	unk__31j.
+BsmtFinType2__Unf__step10
+
+	unk__33j.
+BsmtFinType2__Rec__step10
+
+	unk__33j.
+BsmtFinType2__LwQ__step10
+
+	unk__33j2
+BsmtFinType2__MISSING__step10
+
+	unk__33j.
+BsmtFinType2__BLQ__step10
+
+	unk__33j.
+BsmtFinType2__ALQ__step10
+
+	unk__33j.
+BsmtFinType2__GLQ__step10
+
+	unk__33j*
+Heating__GasA__step10
+
+	unk__37j*
+Heating__GasW__step10
+
+	unk__37j*
+Heating__Grav__step10
+
+	unk__37j*
+Heating__Wall__step10
+
+	unk__37j*
+Heating__OthW__step10
+
+	unk__37j+
+Heating__Floor__step10
+
+	unk__37j*
+HeatingQC__Ex__step10
+
+	unk__38j*
+HeatingQC__TA__step10
+
+	unk__38j*
+HeatingQC__Gd__step10
+
+	unk__38j*
+HeatingQC__Fa__step10
+
+	unk__38j*
+HeatingQC__Po__step10
+
+	unk__38j*
+CentralAir__Y__step10
+
+	unk__39j*
+CentralAir__N__step10
+
+	unk__39j.
+Electrical__SBrkr__step10
+
+	unk__40j.
+Electrical__FuseA__step10
+
+	unk__40j.
+Electrical__FuseF__step10
+
+	unk__40j.
+Electrical__FuseP__step10
+
+	unk__40j,
+Electrical__Mix__step10
+
+	unk__40j,
+KitchenQual__TA__step10
+
+	unk__51j,
+KitchenQual__Gd__step10
+
+	unk__51j,
+KitchenQual__Ex__step10
+
+	unk__51j,
+KitchenQual__Fa__step10
+
+	unk__51j,
+Functional__Typ__step10
+
+	unk__53j-
+Functional__Min2__step10
+
+	unk__53j-
+Functional__Min1__step10
+
+	unk__53j,
+Functional__Mod__step10
+
+	unk__53j-
+Functional__Maj1__step10
+
+	unk__53j-
+Functional__Maj2__step10
+
+	unk__53j,
+Functional__Sev__step10
+
+	unk__53j1
+FireplaceQu__MISSING__step10
+
+	unk__55j,
+FireplaceQu__Gd__step10
+
+	unk__55j,
+FireplaceQu__TA__step10
+
+	unk__55j,
+FireplaceQu__Fa__step10
+
+	unk__55j,
+FireplaceQu__Ex__step10
+
+	unk__55j,
+FireplaceQu__Po__step10
+
+	unk__55j/
+GarageType__Attchd__step10
+
+	unk__56j/
+GarageType__Detchd__step10
+
+	unk__56j0
+GarageType__BuiltIn__step10
+
+	unk__56j0
+GarageType__MISSING__step10
+
+	unk__56j0
+GarageType__Basment__step10
+
+	unk__56j0
+GarageType__CarPort__step10
+
+	unk__56j/
+GarageType__2Types__step10
+
+	unk__56j.
+GarageFinish__Unf__step10
+
+	unk__58j.
+GarageFinish__RFn__step10
+
+	unk__58j.
+GarageFinish__Fin__step10
+
+	unk__58j2
+GarageFinish__MISSING__step10
+
+	unk__58j+
+GarageQual__TA__step10
+
+	unk__61j0
+GarageQual__MISSING__step10
+
+	unk__61j+
+GarageQual__Fa__step10
+
+	unk__61j+
+GarageQual__Gd__step10
+
+	unk__61j+
+GarageQual__Ex__step10
+
+	unk__61j+
+GarageQual__Po__step10
+
+	unk__61j+
+GarageCond__TA__step10
+
+	unk__62j0
+GarageCond__MISSING__step10
+
+	unk__62j+
+GarageCond__Fa__step10
+
+	unk__62j+
+GarageCond__Gd__step10
+
+	unk__62j+
+GarageCond__Po__step10
+
+	unk__62j+
+GarageCond__Ex__step10
+
+	unk__62j*
+PavedDrive__Y__step10
+
+	unk__63j*
+PavedDrive__N__step10
+
+	unk__63j*
+PavedDrive__P__step10
+
+	unk__63j,
+PoolQC__MISSING__step10
+
+	unk__70j'
+PoolQC__Gd__step10
+
+	unk__70j'
+PoolQC__Ex__step10
+
+	unk__70j'
+PoolQC__Fa__step10
+
+	unk__70j+
+Fence__MISSING__step10
+
+	unk__71j)
+Fence__MnPrv__step10
+
+	unk__71j)
+Fence__GdPrv__step10
+
+	unk__71j(
+Fence__GdWo__step10
+
+	unk__71j(
+Fence__MnWw__step10
+
+	unk__71j1
+MiscFeature__MISSING__step10
+
+	unk__72j.
+MiscFeature__Shed__step10
+
+	unk__72j.
+MiscFeature__Gar2__step10
+
+	unk__72j.
+MiscFeature__Othr__step10
+
+	unk__72j.
+MiscFeature__TenC__step10
+
+	unk__72j)
+SaleType__WD__step10
+
+	unk__76j*
+SaleType__New__step10
+
+	unk__76j*
+SaleType__COD__step10
+
+	unk__76j,
+SaleType__ConLD__step10
+
+	unk__76j,
+SaleType__ConLI__step10
+
+	unk__76j,
+SaleType__ConLw__step10
+
+	unk__76j*
+SaleType__CWD__step10
+
+	unk__76j*
+SaleType__Oth__step10
+
+	unk__76j*
+SaleType__Con__step10
+
+	unk__76j2
+SaleCondition__Normal__step10
+
+	unk__77j3
+SaleCondition__Partial__step10
+
+	unk__77j3
+SaleCondition__Abnorml__step10
+
+	unk__77j2
+SaleCondition__Family__step10
+
+	unk__77j2
+SaleCondition__Alloca__step10
+
+	unk__77j3
+SaleCondition__AdjLand__step10
+
+	unk__77B
+ B
+
+ai.onnx.ml

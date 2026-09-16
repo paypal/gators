@@ -134,9 +134,10 @@ class TestCatBoostEncoder:
         encoder.fit(X, y=target)
         result = encoder.transform(X)
 
-        # Should encode str_col and bool_col, but not int_col
+        # Should encode str_col only - bool_col/int_col are not auto-detected as categorical
+        # (cast bool_col to String first if you want it encoded).
         assert "str_col__catboost_enc" in result.columns
-        assert "bool_col__catboost_enc" in result.columns
+        assert "bool_col" in result.columns
         assert "int_col" in result.columns
 
     def test_drop_columns_false(self):
@@ -251,10 +252,10 @@ class TestCatBoostEncoder:
         assert "cat2" in encoder.mapping_
         assert isinstance(encoder.mapping_["cat1"], dict)
 
-        # Check column_mapping_
-        assert encoder.column_mapping_ == {
-            "cat1": "cat1__catboost_enc",
-            "cat2": "cat2__catboost_enc",
+        # Check _column_mapping
+        assert encoder._column_mapping == {
+            "cat1": ["cat1__catboost_enc"],
+            "cat2": ["cat2__catboost_enc"],
         }
 
     def test_numeric_target(self):
@@ -298,11 +299,11 @@ class TestCatBoostEncoder:
         assert all(abs(v - 1.0) < 0.5 for v in values)
 
     def test_column_mapping_attribute(self):
-        """Test that column_mapping_ attribute is set correctly."""
+        """Test that _column_mapping attribute is set correctly."""
         X = pl.DataFrame({"cat1": ["A", "B"], "cat2": ["X", "Y"]})
         target = pl.Series("target", [1, 0])
         encoder = CatBoostEncoder(subset=["cat1", "cat2"], inplace=False)
         encoder.fit(X, y=target)
 
-        expected_mapping = {"cat1": "cat1__catboost_enc", "cat2": "cat2__catboost_enc"}
-        assert encoder.column_mapping_ == expected_mapping
+        expected_mapping = {"cat1": ["cat1__catboost_enc"], "cat2": ["cat2__catboost_enc"]}
+        assert encoder._column_mapping == expected_mapping

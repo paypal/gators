@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import field_validator, model_validator
+from pydantic import PrivateAttr, field_validator, model_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -10,11 +10,13 @@ class GroupLagFeatures(_BaseTransformer):
 
     This transformer creates features like:
 
-    - Previous transaction amount for this card
-    - Next transaction amount for this card
-    - Value N periods ago within group
+    - Value N periods ago within the same group
+    - Historical behavior patterns within groups
+    - Sequential dependencies in grouped data
 
     Useful for time-series analysis and detecting changes in behavior patterns.
+    Lag features are suitable for real-time scoring; lead features are only useful
+    for historical analysis and backtesting.
 
     Parameters
     ----------
@@ -111,8 +113,10 @@ class GroupLagFeatures(_BaseTransformer):
     Notes
     -----
     - Data should be sorted by by and time before transformation
-    - Lag features look backwards: lag_1 is the previous row within the group
-    - Lead features look forwards: lead_1 is the next row within the group
+    - Lag features look backwards: lag_1 is the previous row within the group.
+      These are suitable for real-time scoring.
+    - Lead features look forwards: lead_1 is the next row within the group.
+      These are useful only for historical analysis and backtesting, not real-time scoring.
     - First rows in each group will have null (or fill_value) for lag features
     - Last rows in each group will have null (or fill_value) for lead features
     """
@@ -121,10 +125,10 @@ class GroupLagFeatures(_BaseTransformer):
     by: list[str]
     lags: list[int]
     leads: list[int] = []
-    fill_value: float = None
+    fill_value: float | None = None
     drop_columns: bool = False
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("lags")
     def check_lags(cls, lags):
@@ -186,8 +190,11 @@ class GroupLagFeatures(_BaseTransformer):
 
         if not self.new_column_names:
             self.new_column_names = default_names
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -210,9 +217,9 @@ class GroupLagFeatures(_BaseTransformer):
             # Create lag features
             for lag in self.lags:
                 default_name = f"{num_col}_lag{lag}_{group_name}"
-                new_col_name = self._column_mapping[default_name]
+                new_col_name = self._column_mapping[default_name][0]
 
-                lag_expr = pl.col(num_col).shift(lag).over(self.by)
+                lag_expr = pl.col(num_col).shift(lag).over(self.by).cast(pl.Float64)
 
                 if self.fill_value is not None:
                     lag_expr = lag_expr.fill_null(self.fill_value)
@@ -222,9 +229,9 @@ class GroupLagFeatures(_BaseTransformer):
             # Create lead features
             for lead in self.leads:
                 default_name = f"{num_col}_lead{lead}_{group_name}"
-                new_col_name = self._column_mapping[default_name]
+                new_col_name = self._column_mapping[default_name][0]
 
-                lead_expr = pl.col(num_col).shift(-lead).over(self.by)
+                lead_expr = pl.col(num_col).shift(-lead).over(self.by).cast(pl.Float64)
 
                 if self.fill_value is not None:
                     lead_expr = lead_expr.fill_null(self.fill_value)

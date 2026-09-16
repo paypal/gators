@@ -7,6 +7,7 @@ Categorical Encoding
 * :class:`~gators.encoders.binary_encoder.BinaryEncoder` - Binary encoding for categorical features
 * :class:`~gators.encoders.catboost_encoder.CatBoostEncoder` - CatBoost-style encoding
 * :class:`~gators.encoders.count_encoder.CountEncoder` - Frequency-based encoding
+* :class:`~gators.encoders.hash_encoder.HashEncoder` - Hashing trick encoding
 * :class:`~gators.encoders.leave_one_out_encoder.LeaveOneOutEncoder` - Leave-one-out encoding
 * :class:`~gators.encoders.onehot_encoder.OneHotEncoder` - One-hot encoding
 * :class:`~gators.encoders.ordinal_encoder.OrdinalEncoder` - Ordinal encoding for ordered categories

@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -129,7 +129,7 @@ class CombineFeatures(_BaseTransformer):
     separator: str = "_"
     drop_columns: bool = False
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = {}
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("new_column_names")
     def check_new_column_names_length(cls, new_column_names, info):
@@ -161,8 +161,11 @@ class CombineFeatures(_BaseTransformer):
 
         if not self.new_column_names:
             self.new_column_names = default_names
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
 
+        self._output_dtypes = {
+            new: pl.String for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -183,7 +186,7 @@ class CombineFeatures(_BaseTransformer):
 
         for group in self.column_groups:
             default_name = "__".join(group)
-            new_col_name = self._column_mapping[default_name]
+            new_col_name = self._column_mapping[default_name][0]
 
             # Concatenate columns with separator
             # Cast to string and handle nulls

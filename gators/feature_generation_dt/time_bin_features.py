@@ -1,7 +1,7 @@
 from typing import Literal
 
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -19,7 +19,7 @@ class TimeBinFeatures(_BaseTransformer):
     subset : list[str], default=None
         List of datetime columns to extract features from. If None, all datetime columns
         will be used.
-    bin_types : list[Literal["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]], default=["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
+    bin_types : list[Literal["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour", "day"]], default=["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
         Types of time bins to generate. Options:
 
         - "part_of_day": night, morning, afternoon, evening
@@ -27,6 +27,7 @@ class TimeBinFeatures(_BaseTransformer):
         - "time_of_month": beginning, middle, end
         - "time_of_year": early, mid, late
         - "rush_hour": morning_rush, evening_rush, off_peak
+        - "day": Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
     hemisphere : Literal["northern", "southern"], default="northern"
         Hemisphere for season calculation.
     drop_columns : bool, default=False
@@ -103,10 +104,12 @@ class TimeBinFeatures(_BaseTransformer):
 
     subset: list[str] | None = None
     bin_types: list[
-        Literal["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
-    ] = ["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour"]
+        Literal["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour", "day"]
+    ] = ["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour", "day"]
     hemisphere: Literal["northern", "southern"] = "northern"
     drop_columns: bool = False
+    _dt_units: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("bin_types")
     def check_bin_types(cls, bin_types):
@@ -116,6 +119,7 @@ class TimeBinFeatures(_BaseTransformer):
             "time_of_month",
             "time_of_year",
             "rush_hour",
+            "day",
         ]
         for bin_type in bin_types:
             if bin_type not in valid_types:
@@ -143,6 +147,19 @@ class TimeBinFeatures(_BaseTransformer):
             self.subset = [
                 col for col, dtype in X.schema.items() if dtype == pl.Datetime or dtype == pl.Date
             ]
+        for col in self.subset:
+            dtype = X.schema[col]
+            self._dt_units[col] = dtype.time_unit if hasattr(dtype, 'time_unit') else 'date'
+        ordered_bin_types = [
+            b for b in ["part_of_day", "season", "time_of_month", "time_of_year", "rush_hour", "day"]
+            if b in self.bin_types
+        ]
+        self._column_mapping = {
+            col: [f"{col}__{bin_type}" for bin_type in ordered_bin_types] for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.String for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -159,7 +176,7 @@ class TimeBinFeatures(_BaseTransformer):
             Transformed DataFrame with time bin features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 
@@ -232,6 +249,15 @@ class TimeBinFeatures(_BaseTransformer):
                     .otherwise(pl.lit("off_peak"))
                 ).alias(f"{col}__rush_hour")
                 new_columns.append(rush_hour)
+
+            if "day" in self.bin_types:
+                weekday_names = ["Monday", "Tuesday", "Wednesday", "Thursday",
+                                  "Friday", "Saturday", "Sunday"]
+                day_name = (
+                    pl.col(col).dt.weekday()
+                    .replace_strict(dict(enumerate(weekday_names, start=1)), return_dtype=pl.String)
+                ).alias(f"{col}__day")
+                new_columns.append(day_name)
 
         X = X.with_columns(new_columns)
 

@@ -21,7 +21,7 @@ def determine_encoding_strategy(X: pl.DataFrame, max_count_woe: int = 100) -> tu
     """
     _CAT_DTYPES = {pl.String, pl.Categorical, pl.Enum}
     string_columns = [
-        col for col, dtype in zip(X.columns, X.dtypes) if dtype.base_type() in _CAT_DTYPES
+        col for col, dtype in zip(X.columns, X.dtypes, strict=False) if dtype.base_type() in _CAT_DTYPES
     ]
     column_counts = {col: X[col].n_unique() for col in string_columns}
     woe_columns = [col for col, count in column_counts.items() if count <= max_count_woe]

@@ -2,6 +2,7 @@ import polars as pl
 import pytest
 
 from gators.feature_generation_str import PatternDetector
+from gators.exceptions import NotFittedError
 
 
 class TestPatternDetector:
@@ -26,13 +27,13 @@ class TestPatternDetector:
         transformer = PatternDetector(subset=["contact"], patterns=["is_email"])
         result = transformer.fit_transform(X)
 
-        assert result["contact__is_email"][0] is True
-        assert result["contact__is_email"][1] is True
-        assert result["contact__is_email"][2] is False
-        assert result["contact__is_email"][3] is False
-        assert result["contact__is_email"][4] is False
-        assert result["contact__is_email"][5] is False  # null
-        assert result["contact__is_email"][6] is False  # empty
+        assert result["contact__is_email"][0] == 1.0
+        assert result["contact__is_email"][1] == 1.0
+        assert result["contact__is_email"][2] == 0.0
+        assert result["contact__is_email"][3] == 0.0
+        assert result["contact__is_email"][4] == 0.0
+        assert result["contact__is_email"][5] == 0.0  # null
+        assert result["contact__is_email"][6] == 0.0  # empty
 
     def test_url_detection(self):
         """Test URL pattern detection."""
@@ -52,12 +53,12 @@ class TestPatternDetector:
         transformer = PatternDetector(subset=["link"], patterns=["is_url"])
         result = transformer.fit_transform(X)
 
-        assert result["link__is_url"][0] is True
-        assert result["link__is_url"][1] is True
-        assert result["link__is_url"][2] is False  # ftp not matched
-        assert result["link__is_url"][3] is False  # no protocol
-        assert result["link__is_url"][4] is False  # null
-        assert result["link__is_url"][5] is False  # empty
+        assert result["link__is_url"][0] == 1.0
+        assert result["link__is_url"][1] == 1.0
+        assert result["link__is_url"][2] == 0.0  # ftp not matched
+        assert result["link__is_url"][3] == 0.0  # no protocol
+        assert result["link__is_url"][4] == 0.0  # null
+        assert result["link__is_url"][5] == 0.0  # empty
 
     def test_phone_detection(self):
         """Test phone number pattern detection."""
@@ -77,12 +78,12 @@ class TestPatternDetector:
         transformer = PatternDetector(subset=["phone"], patterns=["is_phone"])
         result = transformer.fit_transform(X)
 
-        assert result["phone__is_phone"][0] is True
-        assert result["phone__is_phone"][1] is True
-        assert result["phone__is_phone"][2] is True
-        assert result["phone__is_phone"][3] is True
-        assert result["phone__is_phone"][4] is False  # contains !
-        assert result["phone__is_phone"][5] is False  # null
+        assert result["phone__is_phone"][0] == 1.0
+        assert result["phone__is_phone"][1] == 1.0
+        assert result["phone__is_phone"][2] == 1.0
+        assert result["phone__is_phone"][3] == 1.0
+        assert result["phone__is_phone"][4] == 0.0  # contains !
+        assert result["phone__is_phone"][5] == 0.0  # null
 
     def test_numeric_detection(self):
         """Test numeric pattern detection."""
@@ -91,14 +92,14 @@ class TestPatternDetector:
         transformer = PatternDetector(subset=["value"], patterns=["is_numeric"])
         result = transformer.fit_transform(X)
 
-        assert result["value__is_numeric"][0] is True
-        assert result["value__is_numeric"][1] is True
-        assert result["value__is_numeric"][2] is True
-        assert result["value__is_numeric"][3] is False  # multiple dots
-        assert result["value__is_numeric"][4] is False
-        assert result["value__is_numeric"][5] is False
-        assert result["value__is_numeric"][6] is False  # empty
-        assert result["value__is_numeric"][7] is False  # null
+        assert result["value__is_numeric"][0] == 1.0
+        assert result["value__is_numeric"][1] == 1.0
+        assert result["value__is_numeric"][2] == 1.0
+        assert result["value__is_numeric"][3] == 0.0  # multiple dots
+        assert result["value__is_numeric"][4] == 0.0
+        assert result["value__is_numeric"][5] == 0.0
+        assert result["value__is_numeric"][6] == 0.0  # empty
+        assert result["value__is_numeric"][7] == 0.0  # null
 
     def test_alphanumeric_and_alpha_detection(self):
         """Test alphanumeric and alpha-only detection."""
@@ -108,28 +109,28 @@ class TestPatternDetector:
         result = transformer.fit_transform(X)
 
         # ABC123
-        assert result["code__is_alphanumeric"][0] is True
-        assert result["code__is_alpha"][0] is False
+        assert result["code__is_alphanumeric"][0] == 1.0
+        assert result["code__is_alpha"][0] == 0.0
 
         # XYZ
-        assert result["code__is_alphanumeric"][1] is True
-        assert result["code__is_alpha"][1] is True
+        assert result["code__is_alphanumeric"][1] == 1.0
+        assert result["code__is_alpha"][1] == 1.0
 
         # 123
-        assert result["code__is_alphanumeric"][2] is True
-        assert result["code__is_alpha"][2] is False
+        assert result["code__is_alphanumeric"][2] == 1.0
+        assert result["code__is_alpha"][2] == 0.0
 
         # ABC-123 (contains -)
-        assert result["code__is_alphanumeric"][3] is False
-        assert result["code__is_alpha"][3] is False
+        assert result["code__is_alphanumeric"][3] == 0.0
+        assert result["code__is_alpha"][3] == 0.0
 
         # Empty
-        assert result["code__is_alphanumeric"][4] is False
-        assert result["code__is_alpha"][4] is False
+        assert result["code__is_alphanumeric"][4] == 0.0
+        assert result["code__is_alpha"][4] == 0.0
 
         # Null
-        assert result["code__is_alphanumeric"][5] is False
-        assert result["code__is_alpha"][5] is False
+        assert result["code__is_alphanumeric"][5] == 0.0
+        assert result["code__is_alpha"][5] == 0.0
 
     def test_url_component_detection(self):
         """Test URL component detection (has_http, has_www, has_at)."""
@@ -150,34 +151,34 @@ class TestPatternDetector:
         result = transformer.fit_transform(X)
 
         # https://www.example.com
-        assert result["text__has_http"][0] is True
-        assert result["text__has_www"][0] is True
-        assert result["text__has_at"][0] is False
+        assert result["text__has_http"][0] == 1.0
+        assert result["text__has_www"][0] == 1.0
+        assert result["text__has_at"][0] == 0.0
 
         # http://example.com
-        assert result["text__has_http"][1] is True
-        assert result["text__has_www"][1] is False
-        assert result["text__has_at"][1] is False
+        assert result["text__has_http"][1] == 1.0
+        assert result["text__has_www"][1] == 0.0
+        assert result["text__has_at"][1] == 0.0
 
         # www.example.com
-        assert result["text__has_http"][2] is False
-        assert result["text__has_www"][2] is True
-        assert result["text__has_at"][2] is False
+        assert result["text__has_http"][2] == 0.0
+        assert result["text__has_www"][2] == 1.0
+        assert result["text__has_at"][2] == 0.0
 
         # email@test.com
-        assert result["text__has_http"][3] is False
-        assert result["text__has_www"][3] is False
-        assert result["text__has_at"][3] is True
+        assert result["text__has_http"][3] == 0.0
+        assert result["text__has_www"][3] == 0.0
+        assert result["text__has_at"][3] == 1.0
 
         # plain text
-        assert result["text__has_http"][4] is False
-        assert result["text__has_www"][4] is False
-        assert result["text__has_at"][4] is False
+        assert result["text__has_http"][4] == 0.0
+        assert result["text__has_www"][4] == 0.0
+        assert result["text__has_at"][4] == 0.0
 
         # null
-        assert result["text__has_http"][5] is False
-        assert result["text__has_www"][5] is False
-        assert result["text__has_at"][5] is False
+        assert result["text__has_http"][5] == 0.0
+        assert result["text__has_www"][5] == 0.0
+        assert result["text__has_at"][5] == 0.0
 
     def test_multiple_columns(self):
         """Test transformation on multiple columns."""
@@ -279,10 +280,14 @@ class TestPatternDetector:
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     import polars as pl
     from polars.testing import assert_frame_equal
 
     X = pl.DataFrame({"text": ["hello@world.com", "noemail"]})
     transformer = PatternDetector(patterns=["is_email"])
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

@@ -21,8 +21,8 @@ def test_defaults(sample_data):
     transformed_X = encoder.transform(sample_data)
     expected_X = {
         "C": [1, 2, 3, 4, 5, 6, 7],
-        "A__encode_rare": ["cat", "dog", "cat", "RARE", "dog", "cat", "RARE"],
-        "B__encode_rare": ["red", "blue", "red", "RARE", "blue", "red", "blue"],
+        "A__encode_rare": ["cat", "dog", "cat", "__RARE__", "dog", "cat", "__RARE__"],
+        "B__encode_rare": ["red", "blue", "red", "__RARE__", "blue", "red", "blue"],
     }
     expected_X = pl.DataFrame(expected_X)
 
@@ -38,7 +38,7 @@ def test_columns_subset(sample_data):
         "A": ["cat", "dog", "cat", "mouse", "dog", "cat", "rabbit"],
         "B": ["red", "blue", "red", "green", "blue", "red", "blue"],
         "C": [1, 2, 3, 4, 5, 6, 7],
-        "A__encode_rare": ["cat", "RARE", "cat", "RARE", "RARE", "cat", "RARE"],
+        "A__encode_rare": ["cat", "__RARE__", "cat", "__RARE__", "__RARE__", "cat", "__RARE__"],
     }
     expected_X = pl.DataFrame(expected_X)
     assert_frame_equal(transformed_X, expected_X)
@@ -52,7 +52,7 @@ def test_inplace_true(sample_data):
 
     # With inplace=True, original columns should be modified
     expected_X = {
-        "A": ["cat", "RARE", "cat", "RARE", "RARE", "cat", "RARE"],
+        "A": ["cat", "__RARE__", "cat", "__RARE__", "__RARE__", "cat", "__RARE__"],
         "B": ["red", "blue", "red", "green", "blue", "red", "blue"],
         "C": [1, 2, 3, 4, 5, 6, 7],
     }

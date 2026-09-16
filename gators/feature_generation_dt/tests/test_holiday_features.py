@@ -5,6 +5,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation_dt.holiday_features import HolidayFeatures
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -456,7 +457,11 @@ def test_days_from_holiday_after_all_holidays():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"date": [datetime(2024, 12, 25)]})
     transformer = HolidayFeatures()
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

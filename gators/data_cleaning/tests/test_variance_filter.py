@@ -18,7 +18,7 @@ def sample_X():
 
 
 def test_default_parameters(sample_X):
-    transformer = VarianceFilter(min_var=0.1)
+    transformer = VarianceFilter(min_std_dev=0.1)
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
 
@@ -27,7 +27,7 @@ def test_default_parameters(sample_X):
 
 
 def test_columns_subset(sample_X):
-    transformer = VarianceFilter(subset=["feature1", "feature2"], min_var=0.1)
+    transformer = VarianceFilter(subset=["feature1", "feature2"], min_std_dev=0.1)
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
 
@@ -36,7 +36,7 @@ def test_columns_subset(sample_X):
 
 
 def test_no_columns_dropped(sample_X):
-    transformer = VarianceFilter(subset=["feature1", "feature3"], min_var=0.1)
+    transformer = VarianceFilter(subset=["feature1", "feature3"], min_std_dev=0.1)
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
 
@@ -51,7 +51,7 @@ def test_drop_zero_std_dev():
             "feature2": [0.5, 0.5, 0.5, 0.5],
         }
     )
-    transformer = VarianceFilter(min_var=0.0)
+    transformer = VarianceFilter(min_std_dev=0.0)
     transformer.fit(sample_X)
     transformed_X = transformer.transform(sample_X)
     expected_X = sample_X.drop("feature2")

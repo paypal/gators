@@ -2,6 +2,7 @@ import polars as pl
 import pytest
 
 from gators.feature_generation_str import Occurrences
+from gators.exceptions import NotFittedError
 
 
 class TestOccurrences:
@@ -406,10 +407,14 @@ class TestOccurrencesEdgeCases:
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     import polars as pl
     from polars.testing import assert_frame_equal
 
     X = pl.DataFrame({"text": ["hello", "world"]})
     transformer = Occurrences(substrings={"text": ["l"]})
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

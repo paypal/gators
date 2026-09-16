@@ -21,6 +21,8 @@ Each example notebook demonstrates a complete ML workflow using Gators transform
 * Feature engineering pipeline construction
 * Model training and evaluation
 * Performance comparison with traditional methods
+* End-to-end ONNX export of the fitted pipeline, chaining feature preprocessing, feature
+  generation, and model scoring into a single portable inference graph
 
 
 Titanic Survival Prediction

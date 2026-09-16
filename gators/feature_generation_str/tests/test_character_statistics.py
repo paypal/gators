@@ -2,6 +2,7 @@ import polars as pl
 import pytest
 
 from gators.feature_generation_str import CharacterStatistics
+from gators.exceptions import NotFittedError
 
 
 class TestCharacterStatistics:
@@ -201,9 +202,13 @@ class TestCharacterStatistics:
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     from polars.testing import assert_frame_equal
 
     X = pl.DataFrame({"text": ["hello", "world123"]})
     transformer = CharacterStatistics(features=["n_digits"])
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)

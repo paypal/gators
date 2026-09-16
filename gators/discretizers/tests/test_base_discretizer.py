@@ -3,11 +3,12 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.discretizers._base_discretizer import _BaseDiscretizer
+from gators.exceptions import NotFittedError
 
 
 class ExampleDiscretizer(_BaseDiscretizer):
     def fit(self, X):
-        self._column_mapping = {"A": "A__discretize", "B": "B__discretize"}
+        self._column_mapping = {"A": ["A__discretize"], "B": ["B__discretize"]}
         self._bins = {"A": [0.5], "B": [5]}
         self._labels = {"A": ["a1", "a2"], "B": ["b1", "b2"]}
         return self
@@ -95,7 +96,11 @@ def test_default_parameters(sample_data):
     assert len(discretizer._labels) == 2
     transformed_X = discretizer.transform(sample_data)
     transformed_X = transformed_X.with_columns(
-        [pl.col(col).cast(pl.String) for col in discretizer._column_mapping.values()]
+        [
+            pl.col(new).cast(pl.String)
+            for names in discretizer._column_mapping.values()
+            for new in names
+        ]
     )
     assert_frame_equal(transformed_X, expected_data_default_parameters())
 
@@ -108,7 +113,11 @@ def test_subset_columns(sample_data):
     assert len(discretizer._labels) == 2
     transformed_X = discretizer.transform(sample_data)
     transformed_X = transformed_X.with_columns(
-        [pl.col(col).cast(pl.String) for col in discretizer._column_mapping.values()]
+        [
+            pl.col(new).cast(pl.String)
+            for names in discretizer._column_mapping.values()
+            for new in names
+        ]
     )
     assert_frame_equal(transformed_X, expected_data_drop_columns_false())
 
@@ -120,6 +129,7 @@ def test_inplace_true():
     discretizer = ExampleDiscretizer(subset=["A", "B"], inplace=True)
     discretizer._bins = {"A": [0.5], "B": [20]}
     discretizer._labels = {"A": ["low", "high"], "B": ["small", "large"]}
+    discretizer._is_fitted = True
 
     result = discretizer.transform(X)
 
@@ -140,17 +150,18 @@ def test_as_numerics_true():
     discretizer = ExampleDiscretizer(
         subset=["A", "B"], as_numerics=True, drop_columns=True, inplace=False
     )
-    discretizer._column_mapping = {"A": "A__disc", "B": "B__disc"}
+    discretizer._column_mapping = {"A": ["A__disc"], "B": ["B__disc"]}
     discretizer._bins = {"A": [0.5], "B": [20]}
     discretizer._labels = {"A": ["low", "high"], "B": ["small", "large"]}
+    discretizer._is_fitted = True
 
     result = discretizer.transform(X)
 
     # Should return numeric bins (indices of the categorical values)
     assert "A__disc" in result.columns
     assert "B__disc" in result.columns
-    assert result["A__disc"].dtype == pl.Int32
-    assert result["B__disc"].dtype == pl.Int32
+    assert result["A__disc"].dtype == pl.Float64
+    assert result["B__disc"].dtype == pl.Float64
     # Just verify the values are consistent
     assert len(set(result["A__disc"].to_list())) == 2  # Two unique values
     assert len(set(result["B__disc"].to_list())) == 2
@@ -163,12 +174,13 @@ def test_inplace_with_as_numerics():
     discretizer = ExampleDiscretizer(subset=["A"], inplace=True, as_numerics=True)
     discretizer._bins = {"A": [0.5]}
     discretizer._labels = {"A": ["low", "high"]}
+    discretizer._is_fitted = True
 
     result = discretizer.transform(X)
 
     # Column A should be replaced with numeric bins
     assert "A" in result.columns
-    assert result["A"].dtype == pl.Int32
+    assert result["A"].dtype == pl.Float64
     # Just verify the values are consistent
     assert len(set(result["A"].to_list())) == 2  # Two unique values
     assert "value" in result.columns
@@ -202,11 +214,11 @@ def test_generate_labels_empty_bins():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged (subset is None)."""
+    """transform() before fit() raises NotFittedError."""
     X = pl.DataFrame({"A": [1.0, 2.0, 3.0], "B": [4.0, 5.0, 6.0]})
     discretizer = ExampleDiscretizer()
-    result = discretizer.transform(X)
-    assert_frame_equal(result, X)
+    with pytest.raises(NotFittedError):
+        discretizer.transform(X)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import PrivateAttr, field_validator, model_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -25,10 +25,12 @@ class RobustScaler(_BaseTransformer):
     subset : list[str] or None, default=None
         Numeric columns to scale.  When ``None`` all Float64, Float32, Int64,
         and Int32 columns are selected automatically.
+    inplace : bool, default=True
+        If True, scale values in the original columns (keep original column names).
+        If False, create new columns with suffix ``__robust_quantile_scale``.
     drop_columns : bool, default=True
-        If ``True`` the original columns are dropped and only the scaled
-        columns are kept.  If ``False`` both original and scaled columns are
-        present in the output.
+        If ``inplace=False``, whether to drop the original columns after scaling.
+        Ignored when ``inplace=True``.
 
     Attributes
     ----------
@@ -38,7 +40,7 @@ class RobustScaler(_BaseTransformer):
         Fitted IQR-based scale (``1 / (Q_high - Q_low)``) per column.
         Columns where the quantile range is zero get a scale of ``0.0``
         (i.e. scaled output will be all zeros).
-    _column_mapping : dict[str, str]
+    _column_mapping : dict[str, list[str]]
         Mapping from original column name to scaled column name.
 
     Examples
@@ -57,11 +59,12 @@ class RobustScaler(_BaseTransformer):
 
     quantile_range: tuple[float, float] = (0.25, 0.75)
     subset: list[str] | None = None
+    inplace: bool = True
     drop_columns: bool = True
 
     _median: dict[str, float] = PrivateAttr(default_factory=dict)
     _scale: dict[str, float] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("quantile_range")
     @classmethod
@@ -89,11 +92,13 @@ class RobustScaler(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
-                if dtype in [pl.Float64, pl.Int64, pl.Float32, pl.Int32]
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
+                if dtype.is_numeric()
             ]
 
-        self._column_mapping = {col: f"{col}__robust_quantile_scale" for col in self.subset}
+        if not self.inplace:
+            self._column_mapping = {col: [f"{col}__robust_quantile_scale"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         q_low, q_high = self.quantile_range
         stat_exprs = []
@@ -129,13 +134,51 @@ class RobustScaler(_BaseTransformer):
         pl.DataFrame
             DataFrame with robust-scaled columns.
         """
+        if self.inplace:
+            assert self.subset is not None
+            transformations = [
+                (self._scale[col] * (pl.col(col) - self._median[col])).alias(col)
+                for col in self.subset
+            ]
+            return X.with_columns(transformations)
+
         transformations = [
             (self._scale[col] * (pl.col(col) - self._median[col])).alias(new_col)
-            for col, new_col in self._column_mapping.items()
+            for col, [new_col] in self._column_mapping.items()
         ]
-
         X = X.with_columns(transformations)
-
-        if self.drop_columns and self.subset is not None:
+        if self.drop_columns:
+            assert self.subset is not None
             return X.drop(self.subset)
+        return X
+
+    def inverse_transform(self, X: pl.DataFrame) -> pl.DataFrame:
+        """Reverse the robust scaling.
+
+        Parameters
+        ----------
+        X : pl.DataFrame
+            DataFrame with scaled columns (output of ``transform``).
+
+        Returns
+        -------
+        pl.DataFrame
+            DataFrame with columns restored to their original scale.
+        """
+        def _inv_expr(scaled_col: str, orig_col: str) -> pl.Expr:
+            scale = self._scale[orig_col]
+            median = self._median[orig_col]
+            if scale == 0.0:
+                return pl.lit(median).alias(orig_col)
+            return (pl.col(scaled_col) / scale + median).alias(orig_col)
+
+        if self.inplace:
+            assert self.subset is not None
+            exprs = [_inv_expr(col, col) for col in self.subset]
+            return X.with_columns(exprs)
+        reverse_map = {v: k for k, values in self._column_mapping.items() for v in values}
+        exprs = [_inv_expr(new, orig) for new, orig in reverse_map.items() if new in X.columns]
+        X = X.with_columns(exprs)
+        if self.drop_columns:
+            return X.drop([c for c in reverse_map if c in X.columns])
         return X

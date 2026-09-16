@@ -7,6 +7,7 @@ Text Properties
 * :class:`~gators.feature_generation_str.character_statistics.CharacterStatistics` - Character-level statistics
 * :class:`~gators.feature_generation_str.length.Length` - String length
 * :class:`~gators.feature_generation_str.occurrences.Occurrences` - Count substring occurrences
+* :class:`~gators.feature_generation_str.word_statistics.WordStatistics` - Word-level statistics
 
 Text Patterns
 -------------
@@ -14,6 +15,7 @@ Text Patterns
 * :class:`~gators.feature_generation_str.contains.Contains` - Check if string contains substring
 * :class:`~gators.feature_generation_str.endswith.Endswith` - Check if string ends with pattern
 * :class:`~gators.feature_generation_str.pattern_detector.PatternDetector` - Detect regex patterns
+* :class:`~gators.feature_generation_str.regex_extract_features.RegexExtractFeatures` - Extract features using regex groups
 * :class:`~gators.feature_generation_str.startswith.Startswith` - Check if string starts with pattern
 
 Text Transformation
@@ -24,6 +26,7 @@ Text Transformation
 * :class:`~gators.feature_generation_str.ngram.NGram` - Generate n-gram
 * :class:`~gators.feature_generation_str.split.Split` - Split based on a delimiter
 * :class:`~gators.feature_generation_str.split_extract.SplitExtract` - Split based on a delimiter and extract
+* :class:`~gators.feature_generation_str.tfidf_features.TfidfFeatures` - Generate TF-IDF features from text
 * :class:`~gators.feature_generation_str.upper.Upper` - Convert to uppercase
 
 Text Interaction
@@ -31,3 +34,4 @@ Text Interaction
 
 * :class:`~gators.feature_generation_str.interaction_features.InteractionFeatures` - Exhaustive string interactions
 * :class:`~gators.feature_generation_str.combine_features.CombineFeatures` - Selected string interactions
+* :class:`~gators.feature_generation_str.string_similarity.StringSimilarity` - Fuzzy string similarity (Levenshtein / Jaro-Winkler)

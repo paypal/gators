@@ -21,9 +21,9 @@ def expected_X() -> pl.DataFrame:
     X = {
         "column1": ["substring1 is here", None, "substring2 is also here"],
         "column2": [None, "contains substring3", "another no match"],
-        "column1__contains_substring1": [True, None, False],
-        "column1__contains_substring2": [False, None, True],
-        "column2__contains_substring3": [None, True, False],
+        "column1__contains_substring1": [1.0, None, 0.0],
+        "column1__contains_substring2": [0.0, None, 1.0],
+        "column2__contains_substring3": [None, 1.0, 0.0],
     }
     return pl.DataFrame(X)
 

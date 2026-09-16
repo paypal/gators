@@ -5,6 +5,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.imputers.knn_imputer import KNNImputer
+from gators.exceptions import NotFittedError
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -252,9 +253,23 @@ class TestSklearnAPI:
         assert_frame_equal(result1, result2)
 
     def test_transform_empty_subset_returns_x_unchanged(self):
-        """transform() before fit() (subset is None) returns X unchanged."""
+        """transform() before fit() raises NotFittedError."""
+
+    def test_transform_empty_subset_returns_x_unchanged(self):
         X = pl.DataFrame({"A": [1.0, 2.0, 3.0], "B": [4.0, 5.0, 6.0]})
         imp = KNNImputer(n_neighbors=2)
-        # Do NOT call fit() — subset remains None → not self.subset is True
-        result = imp.transform(X)
-        assert_frame_equal(result, X)
+        with pytest.raises(NotFittedError):
+            imp.transform(X)
+
+    def test_integer_column_rounded_and_cast_back(self):
+        """Integer columns must be rounded and cast back to their original dtype."""
+        X = pl.DataFrame(
+            {
+                "A": pl.Series([1, 2, 3, 4, None], dtype=pl.Int64),
+                "B": [10.0, 20.0, 30.0, 40.0, 35.0],
+            }
+        )
+        imp = KNNImputer(n_neighbors=2, subset=["A"])
+        result = imp.fit_transform(X)
+        assert result["A"].dtype == pl.Int64
+        assert result["A"].null_count() == 0

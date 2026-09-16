@@ -10,13 +10,19 @@ def compute_woe_iv(
     X: pl.DataFrame,
     y: pl.Series,
     regularization: Annotated[float, Field(ge=0.0, le=1.0)] = 0.01,
-):
+) -> pl.DataFrame:
     # Pre-compute target statistics for better performance
     reg = regularization if regularization is not None else 0.01
-    num_1s = y.sum()
+    # y.sum() is typed as the broad polars PythonLiteral union; y is always a 0/1 target here.
+    num_1s = float(y.sum())
     num_0s = len(y) - num_1s
     denom_1 = num_1s + 2 * reg
     denom_0 = num_0s + 2 * reg
+
+    # Cast Enum/Categorical columns to String so unpivot can find a common supertype
+    enum_cols = [c for c, d in X.schema.items() if isinstance(d, pl.Enum | pl.Categorical)]
+    if enum_cols:
+        X = X.with_columns([pl.col(c).cast(pl.String) for c in enum_cols])
 
     # Compute WOE and IV statistics in optimized chain
     stats = (
@@ -50,7 +56,9 @@ class WOEEncoder(_BaseEncoder):
     Parameters
     ----------
     subset : list[str], default=None
-        List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
+        List of categorical columns to encode. If None, all string, categorical, and enum
+        columns are selected. Boolean columns are not auto-detected - cast them to String
+        first if you want them encoded.
     regularization : float, default=0.01
         Regularization term (0.0-1.0) to prevent division by zero in WOE calculation.
     default : float, default=0.0
@@ -94,7 +102,7 @@ class WOEEncoder(_BaseEncoder):
     └────────────────┴────────────────┘
 
     >>> # Encoding with drop_columns=False
-    >>> encoder = WOEEncoder(inplace=False, inplace=False, drop_columns=False)
+    >>> encoder = WOEEncoder(inplace=False, drop_columns=False)
     >>> encoder.fit(X, y)
     >>> transformed_X =encoder.transform(X)
     >>> print(transformed_X)
@@ -162,10 +170,9 @@ class WOEEncoder(_BaseEncoder):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype.base_type() in self._CAT_DTYPES
             ]
-        X = X.with_columns([pl.col(col).fill_null("MISSING_") for col in self.subset])
         stats = compute_woe_iv(
             X=X.select(self.subset),
             y=y,
@@ -173,12 +180,25 @@ class WOEEncoder(_BaseEncoder):
         )
         self.mapping_ = {}
         min_count_threshold = self.min_count if self.min_count >= 1 else len(X) * self.min_count
+        raw_mapping: dict = {}
         for key, group_df in stats.group_by("variable"):
             col = key[0] if isinstance(key, tuple) else key
-            self.mapping_[col] = {
-                str(cat): float(val)
+            # Keep a real null category as the dict key None (like CountEncoder/OrdinalEncoder),
+            # not str(None) - _BaseEncoder.transform()'s replace_strict() only matches a null
+            # input against a literal None key; a "MISSING_"/"None" string key can never match,
+            # silently falling back to the unseen-category default instead of the learned WOE.
+            raw_mapping[col] = {
+                (None if cat is None else str(cat)): float(val)
                 for cat, val, count in group_df[["value", "woe", "N"]].iter_rows()
                 if count >= min_count_threshold
             }
-        self.column_mapping_ = {col: f"{col}__encode_woe" for col in self.subset}
+        # Preserve subset order so transform() adds columns in a deterministic sequence
+        self.mapping_ = {col: raw_mapping.get(col, {}) for col in self.subset}
+        self._column_mapping = {col: [f"{col}__encode_woe"] for col in self.subset}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = dict.fromkeys(targeted, pl.Float64)
         return self

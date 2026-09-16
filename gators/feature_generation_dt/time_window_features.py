@@ -1,3 +1,5 @@
+from typing import Any
+
 import polars as pl
 from pydantic import PrivateAttr, field_validator
 
@@ -160,7 +162,7 @@ class TimeWindowFeatures(_BaseTransformer):
     func: list[str] = ["count", "mean"]
     drop_columns: bool = False
     new_column_names: list[str] | None = None
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
     _converted_windows: dict[str, str] = PrivateAttr(default_factory=dict)
 
     @field_validator("windows")
@@ -169,7 +171,7 @@ class TimeWindowFeatures(_BaseTransformer):
             try:
                 validate_and_convert_window(window)
             except ValueError as e:
-                raise ValueError(f"Invalid window format: {e}")
+                raise ValueError(f"Invalid window format: {e}") from e
         return windows
 
     @field_validator("func")
@@ -215,16 +217,25 @@ class TimeWindowFeatures(_BaseTransformer):
 
         # Generate default column names
         default_names = []
+        default_dtypes: dict[str, Any] = {}
         group_suffix = f"_{'_'.join(self.by)}" if self.by else ""
+        # count/mean/std/median always compute a Float64 result; sum/min/max preserve
+        # the original numeric column's dtype.
+        _float_funcs = {"count", "mean", "std", "median"}
 
         for num_col in self.subset:
             for window in self.windows:
                 for fun in self.func:
-                    default_names.append(f"{fun}_{num_col}_{window}{group_suffix}")
+                    name = f"{fun}_{num_col}_{window}{group_suffix}"
+                    default_names.append(name)
+                    default_dtypes[name] = pl.Float64 if fun in _float_funcs else X.schema[num_col]
 
         if not self.new_column_names:
             self.new_column_names = default_names
-        self._column_mapping = dict(zip(default_names, self.new_column_names))
+        self._column_mapping = {d: [n] for d, n in zip(default_names, self.new_column_names, strict=False)}
+        self._output_dtypes = {
+            self._column_mapping[default][0]: dtype for default, dtype in default_dtypes.items()
+        }
 
         return self
 
@@ -248,7 +259,7 @@ class TimeWindowFeatures(_BaseTransformer):
             for window_str, window_polars in self._converted_windows.items():
                 for fun in self.func:
                     default_name = f"{fun}_{num_col}_{window_str}{group_suffix}"
-                    new_col_name = self._column_mapping[default_name]
+                    new_col_name = self._column_mapping[default_name][0]
 
                     # Use rolling with group_by for time-based windows
                     # rolling_* excludes current row by default

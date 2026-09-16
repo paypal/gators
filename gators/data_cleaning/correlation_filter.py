@@ -39,12 +39,20 @@ def find_connected_components(adj_list: dict[int, set[int]]) -> list[set[int]]:
     visited = set()
     components: list[set[int]] = []
 
-    def Xs(node: int, component: set[int]) -> None:
-        visited.add(node)
-        component.add(node)
-        for neighbor in adj_list[node]:
-            if neighbor not in visited:
-                Xs(neighbor, component)
+    def Xs(start: int, component: set[int]) -> None:
+        # Iterative DFS (explicit stack) - a recursive version can blow Python's default
+        # recursion limit (1000) when a single connected component spans hundreds+ of highly
+        # intercorrelated columns (e.g. Vesta's V1-V339 block in the IEEE fraud dataset).
+        stack = [start]
+        while stack:
+            node = stack.pop()
+            if node in visited:
+                continue
+            visited.add(node)
+            component.add(node)
+            for neighbor in adj_list[node]:
+                if neighbor not in visited:
+                    stack.append(neighbor)
 
     for node in adj_list:
         if node not in visited:
@@ -154,7 +162,7 @@ class CorrelationFilter(_BaseTransformer):
             return self
 
         adj_list: dict[int, set[int]] = {i: set() for i in range(n)}
-        for i, j in zip(rows, cols):
+        for i, j in zip(rows.tolist(), cols.tolist(), strict=False):
             adj_list[i].add(j)
             adj_list[j].add(i)
 

@@ -1,7 +1,20 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
+
+_ALL_FEATURES_ORDER = [
+    "n_digits",
+    "n_letters",
+    "n_uppercase",
+    "n_lowercase",
+    "n_spaces",
+    "n_special",
+    "n_unique_chars",
+    "ratio_uppercase",
+    "ratio_digits",
+    "ratio_special",
+]
 
 
 class CharacterStatistics(_BaseTransformer):
@@ -91,6 +104,7 @@ class CharacterStatistics(_BaseTransformer):
         "n_special",
     ]
     drop_columns: bool = False
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     @field_validator("features")
     def check_features(cls, features):
@@ -133,6 +147,13 @@ class CharacterStatistics(_BaseTransformer):
             self.subset = [
                 col for col, dtype in X.schema.items() if dtype == pl.String or dtype == pl.Utf8
             ]
+        ordered_features = [f for f in _ALL_FEATURES_ORDER if f in self.features]
+        self._column_mapping = {
+            col: [f"{col}__{f}" for f in ordered_features] for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -149,7 +170,7 @@ class CharacterStatistics(_BaseTransformer):
             Transformed DataFrame with character statistics features.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         new_columns = []
 
@@ -158,35 +179,35 @@ class CharacterStatistics(_BaseTransformer):
 
             # Count features
             if "n_digits" in self.features:
-                n_digits = col_expr.str.count_matches(r"\d").alias(f"{col}__n_digits")
+                n_digits = col_expr.str.count_matches(r"\d").cast(pl.Float64).alias(f"{col}__n_digits")
                 new_columns.append(n_digits)
 
             if "n_letters" in self.features:
-                n_letters = col_expr.str.count_matches(r"[a-zA-Z]").alias(f"{col}__n_letters")
+                n_letters = col_expr.str.count_matches(r"[a-zA-Z]").cast(pl.Float64).alias(f"{col}__n_letters")
                 new_columns.append(n_letters)
 
             if "n_uppercase" in self.features:
-                n_uppercase = col_expr.str.count_matches(r"[A-Z]").alias(f"{col}__n_uppercase")
+                n_uppercase = col_expr.str.count_matches(r"[A-Z]").cast(pl.Float64).alias(f"{col}__n_uppercase")
                 new_columns.append(n_uppercase)
 
             if "n_lowercase" in self.features:
-                n_lowercase = col_expr.str.count_matches(r"[a-z]").alias(f"{col}__n_lowercase")
+                n_lowercase = col_expr.str.count_matches(r"[a-z]").cast(pl.Float64).alias(f"{col}__n_lowercase")
                 new_columns.append(n_lowercase)
 
             if "n_spaces" in self.features:
-                n_spaces = col_expr.str.count_matches(r"\s").alias(f"{col}__n_spaces")
+                n_spaces = col_expr.str.count_matches(r"\s").cast(pl.Float64).alias(f"{col}__n_spaces")
                 new_columns.append(n_spaces)
 
             if "n_special" in self.features:
                 # Special chars: not letters, digits, or spaces
-                n_special = col_expr.str.count_matches(r"[^a-zA-Z0-9\s]").alias(f"{col}__n_special")
+                n_special = col_expr.str.count_matches(r"[^a-zA-Z0-9\s]").cast(pl.Float64).alias(f"{col}__n_special")
                 new_columns.append(n_special)
 
             if "n_unique_chars" in self.features:
                 # Count unique characters by exploding into chars and counting unique
                 n_unique = col_expr.map_elements(
-                    lambda x: len(set(x)) if x else 0, return_dtype=pl.Int64
-                ).alias(f"{col}__n_unique_chars")
+                    lambda x: float(len(set(x))) if x else 0.0, return_dtype=pl.Float64
+                ).cast(pl.Float64).alias(f"{col}__n_unique_chars")
                 new_columns.append(n_unique)
 
             # Ratio features

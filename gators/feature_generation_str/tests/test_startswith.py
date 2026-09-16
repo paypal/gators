@@ -21,9 +21,9 @@ def expected_X() -> pl.DataFrame:
     X = {
         "column1": ["prefix1_sample", None, "prefix2_sample"],
         "column2": [None, "prefix3_sample", "no_match"],
-        "column1__startswith_prefix1": [True, None, False],
-        "column1__startswith_prefix2": [False, None, True],
-        "column2__startswith_prefix3": [None, True, False],
+        "column1__startswith_prefix1": [1.0, None, 0.0],
+        "column1__startswith_prefix2": [0.0, None, 1.0],
+        "column2__startswith_prefix3": [None, 1.0, 0.0],
     }
     return pl.DataFrame(X)
 

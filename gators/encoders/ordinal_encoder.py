@@ -1,4 +1,3 @@
-import numpy as np
 import polars as pl
 
 from ._base_encoder import _BaseEncoder
@@ -11,7 +10,9 @@ class OrdinalEncoder(_BaseEncoder):
     Parameters
     ----------
     subset : list[str], default=None
-        List of categorical columns to encode. If None, all string, boolean, and categorical columns are selected.
+        List of categorical columns to encode. If None, all string, categorical, and enum
+        columns are selected. Boolean columns are not auto-detected - cast them to String
+        first if you want them encoded.
     min_count : int | float, default=1
         Minimum count threshold for encoding categories. If >= 1, treated as absolute count; if < 1, treated as frequency.
     inplace : bool, default=True
@@ -113,8 +114,14 @@ class OrdinalEncoder(_BaseEncoder):
             else:
                 counts = counts.filter(pl.col("count") / n >= self.min_count)
 
-            values = np.arange(1, len(counts) + 1, dtype=float)
-            self.mapping_[col] = dict(zip(counts[col], values))
-        self.column_mapping_ = {col: f"{col}__ordinal_enc" for col in self.subset}
+            values = [float(i) for i in range(1, len(counts) + 1)]
+            self.mapping_[col] = dict(zip(counts[col], values, strict=False))
+        self._column_mapping = {col: [f"{col}__ordinal_enc"] for col in self.subset}
+        targeted = (
+            self._column_mapping.keys()
+            if self.inplace
+            else [name for names in self._column_mapping.values() for name in names]
+        )
+        self._output_dtypes = dict.fromkeys(targeted, pl.Float64)
 
         return self

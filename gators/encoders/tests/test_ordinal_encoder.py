@@ -10,7 +10,7 @@ def sample_X():
     return pl.DataFrame(
         {
             "A": ["foo", "bar", "foo", "bar", "baz"],
-            "B": [True, False, True, True, False],
+            "B": ["true", "false", "true", "true", "false"],
         }
     )
 
@@ -39,7 +39,7 @@ def test_transform_with_columns_and_no_drop(sample_X):
     expected_X = pl.DataFrame(
         {
             "A": ["foo", "bar", "foo", "bar", "baz"],
-            "B": [True, False, True, True, False],
+            "B": ["true", "false", "true", "true", "false"],
             "A__ordinal_enc": [3.0, 2.0, 3.0, 2.0, 1.0],
         }
     )
@@ -78,7 +78,7 @@ def test_unseen_categories(sample_X):
     sample_X_new = pl.DataFrame(
         {
             "A": ["foo", None, "foo", "bar", "alpha"],
-            "B": [True, False, True, True, None],
+            "B": ["true", "false", "true", "true", None],
         }
     )
     transformed_X = encoder.transform(sample_X_new)

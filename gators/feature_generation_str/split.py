@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import PositiveInt
+from pydantic import PositiveInt, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -70,6 +70,7 @@ class Split(_BaseTransformer):
     by: str
     max_splits: PositiveInt
     drop_columns: bool = True
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Split":
         """Fit the transformer (no-op, but required for sklearn compatibility).
@@ -86,6 +87,14 @@ class Split(_BaseTransformer):
         Split
             Fitted transformer instance.
         """
+        by_clean = self.by.replace(" ", "_")
+        self._column_mapping = {
+            col: [f"{col}__split_{by_clean}_{i}" for i in range(self.max_splits)]
+            for col in self.subset
+        }
+        self._output_dtypes = {
+            new: pl.String for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

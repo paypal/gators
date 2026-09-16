@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -39,6 +40,7 @@ class Endswith(_BaseTransformer):
     """
 
     endswith_dict: dict[str, list[str]]
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "Endswith":
         """Fit the transformer (no-op, but required for sklearn compatibility).
@@ -55,6 +57,13 @@ class Endswith(_BaseTransformer):
         Endswith
             Fitted transformer instance.
         """
+        self._column_mapping = {
+            col: [f"{col}__endswith_{suffix}" for suffix in suffixes]
+            for col, suffixes in self.endswith_dict.items()
+        }
+        self._output_dtypes = {
+            new: pl.Float64 for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -71,7 +80,7 @@ class Endswith(_BaseTransformer):
             Transformed DataFrame.
         """
         transformations = [
-            pl.col(col).str.ends_with(substring).alias(f"{col}__endswith_{substring}")
+            pl.col(col).str.ends_with(substring).cast(pl.Float64).alias(f"{col}__endswith_{substring}")
             for col, substrings in self.endswith_dict.items()
             for substring in substrings
         ]

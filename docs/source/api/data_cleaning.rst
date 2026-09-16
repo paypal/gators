@@ -7,6 +7,7 @@ Column Operations
 * :class:`~gators.data_cleaning.cast_columns.CastColumns` - Cast columns to different data types
 * :class:`~gators.data_cleaning.drop_columns.DropColumns` - Drop specified columns
 * :class:`~gators.data_cleaning.rename_columns.RenameColumns` - Rename columns
+* :class:`~gators.data_cleaning.select_columns.SelectColumns` - Retain only specified columns
 
 Quality Filters
 ---------------

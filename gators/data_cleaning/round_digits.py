@@ -30,7 +30,7 @@ class RoundDigits(_BaseTransformer):
     subset: list[str] | None = None
     inplace: bool = True
     drop_columns: bool = True
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "RoundDigits":
         """Fit the transformer by recording which columns to round."""
@@ -38,7 +38,7 @@ class RoundDigits(_BaseTransformer):
             self.subset = [col for col in X.columns if X[col].dtype.is_numeric()]
         if not self.inplace:
             self._column_mapping = {
-                col: f"{col}__round_{self.n_digits}digits" for col in self.subset
+                col: [f"{col}__round_{self.n_digits}digits"] for col in self.subset
             }
         return self
 
@@ -52,7 +52,7 @@ class RoundDigits(_BaseTransformer):
         if self.inplace:
             return X.with_columns([_round_expr(col, col) for col in columns])
 
-        X = X.with_columns([_round_expr(col, new) for col, new in self._column_mapping.items()])
+        X = X.with_columns([_round_expr(col, new) for col, [new] in self._column_mapping.items()])
         if self.drop_columns:
             return X.drop(columns)
         return X

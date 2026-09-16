@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.feature_generation.is_null import IsNull
+from gators.exceptions import NotFittedError
 
 
 def test_transform_no_nulls():
@@ -10,8 +11,8 @@ def test_transform_no_nulls():
     X = pl.DataFrame({"col1": [1, 2, 3], "col2": [4, 5, 6], "col3": [7, 8, 9]})
     expected_X = X.with_columns(
         [
-            pl.col("col1").is_null().alias("col1__is_null"),
-            pl.col("col2").is_null().alias("col2__is_null"),
+            pl.col("col1").is_null().cast(pl.Float64).alias("col1__is_null"),
+            pl.col("col2").is_null().cast(pl.Float64).alias("col2__is_null"),
         ]
     )
 
@@ -26,8 +27,8 @@ def test_transform_with_nulls():
     X = pl.DataFrame({"col1": [1, None, 3, None], "col2": [4, 5, None, 7], "col3": [7, 8, 9, 10]})
     expected_X = X.with_columns(
         [
-            pl.col("col1").is_null().alias("col1__is_null"),
-            pl.col("col2").is_null().alias("col2__is_null"),
+            pl.col("col1").is_null().cast(pl.Float64).alias("col1__is_null"),
+            pl.col("col2").is_null().cast(pl.Float64).alias("col2__is_null"),
         ]
     )
 
@@ -40,7 +41,7 @@ def test_transform_with_nulls():
 def test_transform_single_column():
     """Test transformation with a single column."""
     X = pl.DataFrame({"col1": [1, None, 3], "col2": [4, 5, 6]})
-    expected_X = X.with_columns([pl.col("col1").is_null().alias("col1__is_null")])
+    expected_X = X.with_columns([pl.col("col1").is_null().cast(pl.Float64).alias("col1__is_null")])
 
     transformer = IsNull(subset=["col1"])
     _ = transformer.fit(X)
@@ -51,7 +52,7 @@ def test_transform_single_column():
 def test_transform_all_nulls():
     """Test transformation when all values are null."""
     X = pl.DataFrame({"col1": [None, None, None], "col2": [4, 5, 6]})
-    expected_X = X.with_columns([pl.col("col1").is_null().alias("col1__is_null")])
+    expected_X = X.with_columns([pl.col("col1").is_null().cast(pl.Float64).alias("col1__is_null")])
 
     transformer = IsNull(subset=["col1"])
     _ = transformer.fit(X)
@@ -66,7 +67,7 @@ def test_column_mapping():
     transformer = IsNull(subset=["col1", "col2"])
     _ = transformer.fit(X)
 
-    expected_mapping = {"col1": "col1__is_null", "col2": "col2__is_null"}
+    expected_mapping = {"col1": ["col1__is_null"], "col2": ["col2__is_null"]}
     assert transformer._column_mapping == expected_mapping
 
 
@@ -98,9 +99,9 @@ def test_transform_multiple_columns():
     )
     expected_X = X.with_columns(
         [
-            pl.col("A").is_null().alias("A__is_null"),
-            pl.col("B").is_null().alias("B__is_null"),
-            pl.col("C").is_null().alias("C__is_null"),
+            pl.col("A").is_null().cast(pl.Float64).alias("A__is_null"),
+            pl.col("B").is_null().cast(pl.Float64).alias("B__is_null"),
+            pl.col("C").is_null().cast(pl.Float64).alias("C__is_null"),
         ]
     )
 
@@ -115,9 +116,9 @@ def test_transform_with_none_subset():
     X = pl.DataFrame({"col1": [1, None, 3], "col2": [4, 5, None], "col3": [7, 8, 9]})
     expected_X = X.with_columns(
         [
-            pl.col("col1").is_null().alias("col1__is_null"),
-            pl.col("col2").is_null().alias("col2__is_null"),
-            pl.col("col3").is_null().alias("col3__is_null"),
+            pl.col("col1").is_null().cast(pl.Float64).alias("col1__is_null"),
+            pl.col("col2").is_null().cast(pl.Float64).alias("col2__is_null"),
+            pl.col("col3").is_null().cast(pl.Float64).alias("col3__is_null"),
         ]
     )
 
@@ -128,10 +129,14 @@ def test_transform_with_none_subset():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when subset is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"col": [1, None, 3]})
     transformer = IsNull()
-    assert_frame_equal(transformer.transform(X), X)
+    with pytest.raises(NotFittedError):
+        transformer.transform(X)
 
 
 if __name__ == "__main__":

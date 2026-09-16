@@ -126,7 +126,7 @@ class CustomClipper(_BaseClipper):
                 raise TypeError("Bounds must be a dictionary")
             if not all(isinstance(k, str) for k in v.keys()):
                 raise TypeError("All keys in bounds must be strings (column names)")
-            if not all(isinstance(val, (int, float)) for val in v.values()):
+            if not all(isinstance(val, int | float) for val in v.values()):
                 raise TypeError("All values in bounds must be numeric")
         return v
 
@@ -159,7 +159,8 @@ class CustomClipper(_BaseClipper):
         subset = lower_cols | upper_cols
 
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__clip_custom" for col in subset}
+            self._column_mapping = {col: [f"{col}__clip_custom"] for col in subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         # Check that all specified columns exist in X
         missing_cols = subset - set(X.columns)
@@ -200,7 +201,7 @@ class CustomClipper(_BaseClipper):
             if self.inplace:
                 clipped_cols.append(clipped_col.alias(col))
             else:
-                clipped_cols.append(clipped_col.alias(self._column_mapping[col]))
+                clipped_cols.append(clipped_col.alias(self._column_mapping[col][0]))
 
         if clipped_cols:
             X = X.with_columns(clipped_cols)

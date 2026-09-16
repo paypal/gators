@@ -1,6 +1,7 @@
+from typing import Literal
+
 import polars as pl
 from pydantic import PrivateAttr
-from typing_extensions import Literal
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -18,9 +19,8 @@ class BooleanImputer(_BaseTransformer):
         - "most_frequent": Fill with the mode (most frequent value)
     subset : list[str], default=None
         List of boolean columns to impute. If None, all boolean columns are selected.
-    value : bool, default=None
-        Value to use when strategy is 'constant'. Must be True or False.
-        Required when strategy='constant', ignored otherwise.
+    value : bool, default=False
+        Value to use when strategy is 'constant'.
     inplace : bool, default=True
         If True, impute values in the original columns.
         If False, create new columns with suffix '__impute_{strategy}'.
@@ -98,11 +98,11 @@ class BooleanImputer(_BaseTransformer):
 
     strategy: Literal["constant", "most_frequent"]
     subset: list[str] | None = None
-    value: bool = None
+    value: bool = False
     drop_columns: bool = True
     inplace: bool = True
     _statistics: dict[str, bool] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "BooleanImputer":
         """Fit the transformer by computing imputation statistics.
@@ -120,11 +120,16 @@ class BooleanImputer(_BaseTransformer):
             The fitted transformer instance.
         """
         if not self.subset:
-            self.subset = [col for col, dtype in zip(X.columns, X.dtypes) if dtype in [pl.Boolean]]
+            self.subset = [col for col, dtype in zip(X.columns, X.dtypes, strict=False) if dtype in [pl.Boolean]]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__impute_{self.strategy}" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__impute_{self.strategy}"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
         strategies = {
-            "most_frequent": lambda col: bool(X[col].drop_nulls().mode()[0]),
+            "most_frequent": lambda col: (
+                bool(X[col].drop_nulls().mode()[0])
+                if X[col].drop_nulls().len() > 0
+                else False
+            ),
             "constant": lambda col: bool(self.value),
         }
         self._statistics = {col: strategies[self.strategy](col) for col in self.subset}
@@ -144,7 +149,7 @@ class BooleanImputer(_BaseTransformer):
             DataFrame with imputed boolean columns.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         if self.inplace:
             transformations = [pl.col(col).fill_null(val) for col, val in self._statistics.items()]
@@ -152,7 +157,7 @@ class BooleanImputer(_BaseTransformer):
 
         transformations = [
             pl.col(col).fill_null(self._statistics[col]).alias(new)
-            for col, new in self._column_mapping.items()
+            for col, [new] in self._column_mapping.items()
         ]
         X = X.with_columns(transformations)
         if self.drop_columns:

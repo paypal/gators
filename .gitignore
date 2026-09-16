@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.pypirc
 
 # C extensions
 *.so
@@ -80,6 +81,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+notebooks/
 
 # IPython
 profile_default/
@@ -132,9 +134,15 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Benchmarks (development tools, not tracked)
-benchmarks/
-
 tst*/
 
+dist/dist/
+build/
 dist/
+build/
+htmlcov/
+docs/build/
+
+# Data files for examples
+docs/source/examples/*.csv
+docs/source/examples/*.zip

@@ -15,7 +15,7 @@ The documentation is organized into three main sections:
 - **Categorical Encoding** - OneHot, Target, WOE, and more
 - **Feature Generation** - Numeric, string, and datetime feature engineering
 - **Missing Value Imputation** - Handle missing data intelligently
-- **Feature Scaling** - Normalize and standardize features
+- **Feature Scalers** - Normalize and standardize features
 - **Pipeline** - Chain transformers together
 
 ### API Reference

@@ -1,7 +1,7 @@
 Scalers
 =======
 
-Feature Scaling
+Feature Scalers
 ---------------
 
 * :class:`~gators.scalers.arcsin_squareroot_scaler.ArcSinSquareRootScaler` - Arcsinh square root transformation
@@ -12,4 +12,4 @@ Feature Scaling
 * :class:`~gators.scalers.minmax_scaler.MinmaxScaler` - Min-max normalization
 * :class:`~gators.scalers.power_scaler.PowerScaler` - Power transformation
 * :class:`~gators.scalers.standard_scaler.StandardScaler` - Z-score standardization
-* :class:`~gators.scalers.yeo_jonhson.YeoJonhson` - Yeo-Johnson power transformation
+* :class:`~gators.scalers.yeo_johnson.YeoJohnson` - Yeo-Johnson power transformation

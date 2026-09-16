@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.encoders import OneHotEncoder
+from gators.exceptions import NotFittedError
 
 
 @pytest.fixture
@@ -185,7 +186,27 @@ def test_transform_categorical_dtype():
 
 
 def test_transform_without_fit_returns_x_unchanged():
-    """transform() before fit() returns X unchanged when categories is None."""
+    """transform() before fit() raises NotFittedError."""
+
+
+def test_transform_without_fit_returns_x_unchanged():
     X = pl.DataFrame({"cat": ["a", "b", "c"]})
     encoder = OneHotEncoder()
-    assert_frame_equal(encoder.transform(X), X)
+    with pytest.raises(NotFittedError):
+        encoder.transform(X)
+
+
+def test_transform_null_maps_to_missing_category():
+    """Null values must be flagged via the MISSING__ indicator learned in fit(), not left all-zero."""
+    X = pl.DataFrame({"A": ["foo", "bar", "foo", None]})
+    encoder = OneHotEncoder(subset=["A"])
+    encoder.fit(X)
+    transformed_X = encoder.transform(X)
+    expected_X = pl.DataFrame(
+        {
+            "A__foo": [1.0, 0.0, 1.0, 0.0],
+            "A__bar": [0.0, 1.0, 0.0, 0.0],
+            "A__MISSING__": [0.0, 0.0, 0.0, 1.0],
+        }
+    )
+    assert_frame_equal(transformed_X, expected_X, check_column_order=False)

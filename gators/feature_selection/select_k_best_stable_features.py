@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Any
 
 import numpy as np
 import polars as pl
@@ -6,8 +6,8 @@ from pydantic import Field
 
 
 def select_k_best_stable_features(
-    estimator, skf, X: pl.DataFrame, y: pl.Series, k: Annotated[int, Field(ge=1)] = 200
-):
+    estimator: Any, skf: Any, X: pl.DataFrame, y: pl.Series, k: Annotated[int, Field(ge=1)] = 200
+) -> pl.DataFrame:
     """Select features that consistently appear in the top-k across all folds.
 
     For each fold, fits the estimator on the training split and selects the top-k
@@ -46,7 +46,7 @@ def select_k_best_stable_features(
 
     for train_idx, _ in skf.split(X_array, y_array):
         estimator.fit(X_array[train_idx], y_array[train_idx])
-        fold_importance = dict(zip(features, estimator.feature_importances_))
+        fold_importance = dict(zip(features, estimator.feature_importances_, strict=False))
         top_k_set = set(
             pl.DataFrame({"feature": features, "importance": estimator.feature_importances_})
             .sort("importance", descending=True)[:k]["feature"]

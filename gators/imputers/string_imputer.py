@@ -1,6 +1,7 @@
+from typing import Literal
+
 import polars as pl
 from pydantic import PrivateAttr
-from typing_extensions import Literal
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -18,8 +19,8 @@ class StringImputer(_BaseTransformer):
         - "most_frequent": Fill with the mode (most frequent value)
     subset : list[str], default=None
         List of string columns to impute. If None, all string columns are selected.
-    value : str, default=None
-        Value to use when strategy is 'constant'. Required when strategy='constant', ignored otherwise.
+    value : str, default='__NULL__'
+        Value to use when strategy is 'constant'.
     inplace : bool, default=True
         If True, impute values in the original columns.
         If False, create new columns with suffix '__impute_{strategy}'.
@@ -38,7 +39,7 @@ class StringImputer(_BaseTransformer):
     ... })
     >>> imputer = StringImputer(strategy='most_frequent', inplace=False)
     >>> imputer.fit(X)
-    StringImputer(strategy='most_frequent', subset=['col1', 'col2', 'col3'], value=None, drop_columns=True, inplace=False)
+    StringImputer(strategy='most_frequent', subset=['col1', 'col2', 'col3'], value='__NULL__', drop_columns=True, inplace=False)
     >>> X_imputed = imputer.transform(X)
     >>> print(X_imputed)
     shape: (4, 3)
@@ -72,11 +73,11 @@ class StringImputer(_BaseTransformer):
 
     strategy: Literal["constant", "most_frequent"]
     subset: list[str] | None = None
-    value: str = None
+    value: str = "__NULL__"
     drop_columns: bool = True
     inplace: bool = True
     _statistics: dict[str, str] = PrivateAttr(default_factory=dict)
-    _column_mapping: dict[str, str] = PrivateAttr(default_factory=dict)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "StringImputer":
         """Fit the transformer by computing imputation statistics.
@@ -94,15 +95,23 @@ class StringImputer(_BaseTransformer):
             The fitted transformer instance.
         """
         if not self.subset:
-            self.subset = [col for col, dtype in zip(X.columns, X.dtypes) if dtype == pl.String]
+            self.subset = [col for col, dtype in zip(X.columns, X.dtypes, strict=False) if dtype == pl.String]
         if not self.inplace:
-            self._column_mapping = {col: f"{col}__impute_{self.strategy}" for col in self.subset}
+            self._column_mapping = {col: [f"{col}__impute_{self.strategy}"] for col in self.subset}
+            self._output_dtypes = {new: X.schema[old] for old, news in self._column_mapping.items() for new in news}
 
         if self.strategy == "constant":
-            self._statistics = {col: self.value for col in self.subset}
+            self._statistics = dict.fromkeys(self.subset, self.value)
         else:  # most_frequent
             # Compute all modes in single pass, handle ties by taking smallest value (alphabetically)
-            self._statistics = {col: X[col].drop_nulls().mode().sort()[0] for col in self.subset}
+            self._statistics = {
+                col: (
+                    X[col].drop_nulls().mode().sort()[0]
+                    if X[col].drop_nulls().len() > 0
+                    else self.value
+                )
+                for col in self.subset
+            }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -119,7 +128,7 @@ class StringImputer(_BaseTransformer):
             DataFrame with imputed string columns.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         if self.inplace:
             transformations = [pl.col(col).fill_null(val) for col, val in self._statistics.items()]
@@ -127,7 +136,7 @@ class StringImputer(_BaseTransformer):
 
         transformations = [
             pl.col(col).fill_null(self._statistics[col]).alias(new)
-            for col, new in self._column_mapping.items()
+            for col, [new] in self._column_mapping.items()
         ]
         X = X.with_columns(transformations)
         if self.drop_columns:

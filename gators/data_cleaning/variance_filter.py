@@ -1,7 +1,7 @@
 from typing import Annotated
 
 import polars as pl
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -14,8 +14,8 @@ class VarianceFilter(_BaseTransformer):
     ----------
     subset : list[str], default=None
         List of numeric columns to check for variance. If None, all numeric columns are checked.
-    min_var : float
-        Minimum variance threshold. Columns with variance <= min_var will be dropped. Must be >= 0.0.
+    min_std_dev : float
+        Minimum standard deviation threshold. Columns with std <= min_std_dev will be dropped. Must be >= 0.0.
 
     Examples
     --------
@@ -31,7 +31,7 @@ class VarianceFilter(_BaseTransformer):
     ...     "feature3": [5, 6, 7, 8],
     ...     "label": [0, 1, 0, 1]
     ... })
-    >>> transformer = VarianceFilter(min_var=0.1)
+    >>> transformer = VarianceFilter(min_std_dev=0.1)
     >>> transformer.fit(X)
     >>> transformed_X = transformer.transform(X)
     >>> print(transformed_X)
@@ -54,7 +54,7 @@ class VarianceFilter(_BaseTransformer):
     ...     "feature3": [5, 6, 7, 8],
     ...     "label": [0, 1, 0, 1]
     ... })
-    >>> transformer = VarianceFilter(subset=['feature1’, ‘feature3'], min_var=0.1)
+    >>> transformer = VarianceFilter(subset=['feature1’, ‘feature3'], min_std_dev=0.1)
     >>> transformer.fit(X)
     >>> transformed_X = transformer.transform(X)
     >>> print(transformed_X)
@@ -72,10 +72,10 @@ class VarianceFilter(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    min_var: Annotated[float, Field(ge=0.0)]
-    _to_drop: list[str]
-    _column_mapping = dict[str, str]
-    _std_devs: dict[str, float]
+    min_std_dev: Annotated[float, Field(ge=0.0)]
+    _to_drop: list[str] = PrivateAttr(default_factory=list)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
+    _std_devs: dict[str, float] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "VarianceFilter":
         """Fit the transformer by identifying low-variance columns.
@@ -101,7 +101,7 @@ class VarianceFilter(_BaseTransformer):
         self._to_drop = [
             col
             for col, ratio in self._std_devs.items()
-            if ratio is not None and ratio <= self.min_var
+            if ratio is not None and ratio <= self.min_std_dev
         ]
         return self
 

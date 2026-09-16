@@ -12,6 +12,7 @@ from .rename_columns import RenameColumns
 from .replace import Replace
 from .round_digits import RoundDigits
 from .round_significant_digits import RoundSignificantDigits
+from .select_columns import SelectColumns
 from .variance_filter import VarianceFilter
 
 __all__ = [
@@ -30,4 +31,5 @@ __all__ = [
     "HighCardinalityFilter",
     "RoundSignificantDigits",
     "RoundDigits",
+    "SelectColumns",
 ]

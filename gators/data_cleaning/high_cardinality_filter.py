@@ -1,5 +1,5 @@
 import polars as pl
-from pydantic import field_validator
+from pydantic import PrivateAttr, field_validator
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -107,10 +107,10 @@ class HighCardinalityFilter(_BaseTransformer):
     """
 
     subset: list[str] | None = None
-    max_unique: int = None
-    max_ratio: float = None
+    max_unique: int | None = None
+    max_ratio: float | None = None
     ignore_na: bool = True
-    _to_drop: list[str] = []
+    _to_drop: list[str] = PrivateAttr(default_factory=list)
 
     @field_validator("max_unique")
     @classmethod

@@ -18,7 +18,7 @@ def test_transform_greater_than():
         {
             "A": [10, 20, 30, 40],
             "B": [15, 10, 30, 35],
-            "A_gt_B": [False, True, False, True],
+            "A_gt_B": [0.0, 1.0, 0.0, 1.0],
         }
     )
 
@@ -36,7 +36,7 @@ def test_transform_less_than():
         {
             "A": [10, 20, 30, 40],
             "B": [15, 10, 30, 35],
-            "A_lt_B": [True, False, False, False],
+            "A_lt_B": [1.0, 0.0, 0.0, 0.0],
         }
     )
 
@@ -54,7 +54,7 @@ def test_transform_equals():
         {
             "A": [10, 20, 30, 40],
             "B": [10, 10, 30, 35],
-            "A_eq_B": [True, False, True, False],
+            "A_eq_B": [1.0, 0.0, 1.0, 0.0],
         }
     )
 
@@ -75,9 +75,9 @@ def test_transform_multiple_comparisons():
             "A": [10, 20, 30, 40],
             "B": [15, 10, 30, 35],
             "C": [5, 25, 20, 50],
-            "A_gt_B": [False, True, False, True],
-            "B_lt_C": [False, True, False, True],
-            "A_gte_C": [True, False, True, False],
+            "A_gt_B": [0.0, 1.0, 0.0, 1.0],
+            "B_lt_C": [0.0, 1.0, 0.0, 1.0],
+            "A_gte_C": [1.0, 0.0, 1.0, 0.0],
         }
     )
 
@@ -93,7 +93,7 @@ def test_transform_with_drop_columns():
     )
     result = transformer.fit_transform(X)
 
-    expected = pl.DataFrame({"C": [100, 200, 300, 400], "A_gt_B": [False, True, False, True]})
+    expected = pl.DataFrame({"C": [100, 200, 300, 400], "A_gt_B": [0.0, 1.0, 0.0, 1.0]})
 
     assert_frame_equal(result, expected)
 
@@ -109,7 +109,7 @@ def test_transform_greater_than_or_equal():
         {
             "A": [10, 20, 30, 40],
             "B": [10, 10, 30, 35],
-            "A_gte_B": [True, True, True, True],
+            "A_gte_B": [1.0, 1.0, 1.0, 1.0],
         }
     )
 
@@ -127,7 +127,7 @@ def test_transform_less_than_or_equal():
         {
             "A": [10, 20, 30, 40],
             "B": [10, 10, 30, 35],
-            "A_lte_B": [True, False, True, False],
+            "A_lte_B": [1.0, 0.0, 1.0, 0.0],
         }
     )
 
@@ -145,7 +145,7 @@ def test_transform_not_equals():
         {
             "A": [10, 20, 30, 40],
             "B": [10, 10, 30, 35],
-            "A_ne_B": [False, True, False, True],
+            "A_ne_B": [0.0, 1.0, 0.0, 1.0],
         }
     )
 
@@ -188,8 +188,8 @@ def test_transform_is_null():
             "A": [10, None, 30, None],
             "B": [15, 10, None, 35],
             "C": [100, 200, 300, 400],
-            "A__is_null": [False, True, False, True],
-            "B__is_null": [False, False, True, False],
+            "A__is_null": [0.0, 1.0, 0.0, 1.0],
+            "B__is_null": [0.0, 0.0, 1.0, 0.0],
         }
     )
 
@@ -211,8 +211,8 @@ def test_transform_is_not_null():
         {
             "A": [10, None, 30, None],
             "B": [15, 10, None, 35],
-            "A__is_not_null": [True, False, True, False],
-            "B__is_not_null": [True, True, False, True],
+            "A__is_not_null": [1.0, 0.0, 1.0, 0.0],
+            "B__is_not_null": [1.0, 1.0, 0.0, 1.0],
         }
     )
 
@@ -235,9 +235,9 @@ def test_transform_mixed_operators():
             "A": [10, None, 30, 40],
             "B": [15, 10, 30, None],
             "C": [5, 25, 20, 50],
-            "A_gt_B": [False, None, False, None],
-            "B__is_null": [False, False, False, True],
-            "A_lte_C": [False, None, False, True],
+            "A_gt_B": [0.0, None, 0.0, None],
+            "B__is_null": [0.0, 0.0, 0.0, 1.0],
+            "A_lte_C": [0.0, None, 0.0, 1.0],
         }
     )
 
@@ -260,7 +260,7 @@ def test_transform_is_null_with_drop_columns():
         {
             "B": [15, 10, 30, 35],
             "C": [100, 200, 300, 400],
-            "A__is_null": [False, True, False, True],
+            "A__is_null": [0.0, 1.0, 0.0, 1.0],
         }
     )
 

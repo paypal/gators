@@ -3,6 +3,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from gators.data_cleaning import CorrelationFilter
+from gators.data_cleaning.correlation_filter import find_connected_components
 
 
 def test_correlation_filter_default():
@@ -67,6 +68,21 @@ def test_fit_all_constant_columns_skips_filtering():
     # No columns should be dropped since there are no correlations to compute
     assert f._to_drop == []
     assert_frame_equal(f.transform(X), X)
+
+
+def test_find_connected_components_large_chain_no_recursion_error():
+    """A single connected component spanning >1000 nodes (Python's default recursion limit)
+    must not raise RecursionError - regression test for the DFS being made iterative."""
+    n = 5000
+    adj_list = {i: set() for i in range(n)}
+    for i in range(n - 1):
+        adj_list[i].add(i + 1)
+        adj_list[i + 1].add(i)
+
+    components = find_connected_components(adj_list)
+
+    assert len(components) == 1
+    assert components[0] == set(range(n))
 
 
 if __name__ == "__main__":

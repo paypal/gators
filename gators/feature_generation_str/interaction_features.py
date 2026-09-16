@@ -1,7 +1,7 @@
 from itertools import combinations
 
 import polars as pl
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 
 from ..transformer._base_transformer import _BaseTransformer
 
@@ -87,6 +87,7 @@ class InteractionFeatures(_BaseTransformer):
 
     subset: list[str] | None = None
     degree: int = Field(default=2, gt=1)
+    _column_mapping: dict[str, list[str]] = PrivateAttr(default_factory=dict)
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "InteractionFeatures":
         """Fit the transformer by identifying categorical columns if not specified.
@@ -106,9 +107,17 @@ class InteractionFeatures(_BaseTransformer):
         if not self.subset:
             self.subset = [
                 col
-                for col, dtype in zip(X.columns, X.dtypes)
+                for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype in [pl.String, pl.Boolean, pl.Enum]
             ]
+        self._column_mapping = {
+            "__".join(combination): ["__".join(combination)]
+            for i in range(2, self.degree + 1)
+            for combination in combinations(self.subset, i)
+        }
+        self._output_dtypes = {
+            new: pl.String for names in self._column_mapping.values() for new in names
+        }
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -125,7 +134,7 @@ class InteractionFeatures(_BaseTransformer):
             Transformed DataFrame.
         """
         if self.subset is None:
-            return X
+            return X  # pragma: no cover
 
         transformations = []
         for i in range(2, self.degree + 1):
