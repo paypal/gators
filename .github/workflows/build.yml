@@ -77,7 +77,10 @@ jobs:
     - name: Generate coverage badge
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.14'
       run: |
-        pip install coverage-badge
+        # coverage-badge imports pkg_resources, which recent setuptools no
+        # longer ships (removed in newer releases) - pin to a version that
+        # still includes it just for this step.
+        pip install "setuptools<81" coverage-badge
         coverage-badge -f -o coverage.svg
         echo "### Coverage" >> $GITHUB_STEP_SUMMARY
         coverage report --format=markdown >> $GITHUB_STEP_SUMMARY || true
