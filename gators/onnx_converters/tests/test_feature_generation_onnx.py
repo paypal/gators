@@ -415,15 +415,18 @@ def test_condition_multiple(df):
 
 
 def test_condition_output_onnx_type(df):
-    """get_output_onnx_type inherits the SOURCE column's onnx type — via pipeline_to_onnx."""
+    """get_output_onnx_type always reports FLOAT for the generated column, matching
+    ConditionFeatures.transform()'s `.cast(pl.Float64)` regardless of the source
+    column's actual type — via pipeline_to_onnx."""
     from gators.onnx_converters import get_output_onnx_type, pipeline_to_onnx
     from gators.pipeline import Pipeline
+    from onnx import TensorProto
 
     t = ConditionFeatures(conditions=[{"column": "A", "op": ">", "value": 2.0}], new_column_names=["a_gt_2"])
     pipe = Pipeline(steps=[("cond", t)])
     pipe.fit(df)
     pipeline_to_onnx(pipe)
-    assert get_output_onnx_type(t, "a_gt_2") == get_output_onnx_type(t, "A")
+    assert get_output_onnx_type(t, "a_gt_2") == TensorProto.FLOAT
     assert get_output_onnx_type(t, "B") == get_output_onnx_type(t, "B")
 
 

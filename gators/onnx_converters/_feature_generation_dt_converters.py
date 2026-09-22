@@ -99,11 +99,10 @@ _CAL_COMPONENTS = frozenset({
 
 @get_output_columns.register(BusinessTimeFeatures)
 def _btf_output_columns(transformer: BusinessTimeFeatures, input_columns: list[str]) -> list[str]:
-    generated = [
-        f"{col}__{feature}"
-        for col in (transformer.subset or [])
-        for feature in transformer.features
-    ]
+    from ..feature_generation_dt.business_time_features import _ALL_FEATURES_ORDER
+
+    ordered_features = [f for f in _ALL_FEATURES_ORDER if f in transformer.features]
+    generated = [f"{col}__{feature}" for col in (transformer.subset or []) for feature in ordered_features]
     if transformer.drop_columns:
         dropped = set(transformer.subset or [])
         return [c for c in input_columns if c not in dropped] + generated

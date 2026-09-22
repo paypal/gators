@@ -72,6 +72,7 @@ class PolynomialFeatures(_BaseTransformer):
     degree: int = Field(default=2, gt=1)
     interaction_only: bool = False
     include_bias: bool = False
+    _poly_terms: list[tuple[str, tuple[str, ...]]] = []
 
     def fit(self, X: pl.DataFrame, y: pl.Series | None = None) -> "PolynomialFeatures":
         """Fit the transformer by identifying columns to transform.
@@ -94,6 +95,16 @@ class PolynomialFeatures(_BaseTransformer):
                 for col, dtype in zip(X.columns, X.dtypes, strict=False)
                 if dtype not in [pl.String, pl.Boolean]
             ]
+
+        self._poly_terms = [
+            ("__".join(combination), combination)
+            for i in range(2, self.degree + 1)
+            for combination in combinations_with_replacement(self.subset, i)
+            if not self.interaction_only or len(set(combination)) == i
+        ]
+        self._output_dtypes = dict.fromkeys((name for name, _ in self._poly_terms), pl.Float64)
+        if self.include_bias:
+            self._output_dtypes["bias"] = pl.Int32
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -117,14 +128,10 @@ class PolynomialFeatures(_BaseTransformer):
         if self.subset is None:
             return X  # pragma: no cover
 
-        for i in range(2, self.degree + 1):
-            for combination in combinations_with_replacement(self.subset, i):
-                if self.interaction_only and len(set(combination)) != i:
-                    continue
-                new_col_name = "__".join(combination)
-                new_col_expr = pl.col(combination[0])
-                for col in combination[1:]:
-                    new_col_expr = new_col_expr * pl.col(col)
-                transformations.append(new_col_expr.cast(pl.Float64).alias(new_col_name))
+        for new_col_name, combination in self._poly_terms:
+            new_col_expr = pl.col(combination[0])
+            for col in combination[1:]:
+                new_col_expr = new_col_expr * pl.col(col)
+            transformations.append(new_col_expr.cast(pl.Float64).alias(new_col_name))
 
         return X.with_columns(transformations)

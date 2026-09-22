@@ -87,6 +87,17 @@ tox -e format  # Auto-format code
 tox -e lint    # Run all checks
 ```
 
+### Pre-commit Hooks
+
+A `.pre-commit-config.yaml` is provided to automate these checks on every commit. It uses
+**Ruff** for both linting and formatting/import-sorting (`ruff format` + the `I` rule set),
+so you don't need Black/isort installed as separate pre-commit hooks — Ruff replaces both.
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
 ### Code Style Rules
 
 - **Line length**: Maximum 100 characters

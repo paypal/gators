@@ -278,6 +278,15 @@ Full per-pipeline results (including `impute_clip_discretize` and
 `impute_encode_scale`) and peak-RSS measurements are in
 [`benchmarks/results/onnx_summary.md`](https://github.com/paypal/gators/blob/master/benchmarks/results/onnx_summary.md).
 
+Peak-RSS overhead is negligible for both runtimes below 10,000-row
+batches (under 3 MB for every pipeline tested) and does not favor either
+runtime uniformly once it becomes measurable at 100,000 rows: native
+`gators` adds 34.6 MB against 51.6 MB for ONNX Runtime on `impute_scale`,
+12.3 MB against 106.1 MB on `impute_clip_discretize`, and 18.0 MB against
+a leaner 8.2 MB for ONNX Runtime on `impute_encode_scale`. Both stay
+well within the memory budget of a single serving container at the batch
+sizes typical of request-time scoring.
+
 ### Change to daily practice of users
 
 Within PayPal's Payment Service
