@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from .boolean_imputer import BooleanImputer
 from .groupby_imputer import GroupByImputer
 from .iterative_imputer import IterativeImputer

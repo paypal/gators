@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import polars as pl
 import polars.selectors as cs
 from pydantic import Field, field_validator

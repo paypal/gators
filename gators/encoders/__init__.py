@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from .binary_encoder import BinaryEncoder
 from .catboost_encoder import CatBoostEncoder
 from .count_encoder import CountEncoder

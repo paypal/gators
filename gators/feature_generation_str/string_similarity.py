@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Fuzzy string similarity features between pairs of string columns."""
 
 from __future__ import annotations

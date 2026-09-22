@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX converters for gators.data_cleaning transformers.
 
 Importing this module registers all supported converters.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for TfidfFeatures.
 
 Pipeline: StringNormalizer → StringSplit → TfIdfVectorizer(TF) → length-normalise → IDF-weight → Gather.

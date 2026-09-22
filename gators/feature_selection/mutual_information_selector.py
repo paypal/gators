@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Mutual information-based feature selector."""
 
 from __future__ import annotations

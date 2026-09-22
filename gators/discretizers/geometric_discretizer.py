@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import polars as pl
 
 from ._base_discretizer import _BaseDiscretizer, deduplicate_bins, generate_labels

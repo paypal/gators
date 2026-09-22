@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for HolidayFeatures.
 
 Holiday dates are pre-computed at fit() time; the ONNX graph uses

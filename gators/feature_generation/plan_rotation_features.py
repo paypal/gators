@@ -1,4 +1,4 @@
-# License: Apache-2.0
+# SPDX-License-Identifier: Apache-2.0
 from math import cos, sin
 from math import pi as PI
 

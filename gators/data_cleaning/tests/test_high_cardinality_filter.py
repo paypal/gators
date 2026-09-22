@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Tests for HighCardinalityFilter transformer."""
 
 import polars as pl

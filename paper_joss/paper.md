@@ -1,5 +1,5 @@
 ---
-title: 'Gators: a Python package for high-performance machine learning preprocessing and feature engineering on Polars, with portable ONNX export'
+title: 'Gators: Machine Learning Preprocessing and Feature Engineering on Polars with ONNX Export'
 tags:
   - Python
   - machine learning
@@ -26,7 +26,9 @@ bibliography: paper.bib
 
 Data preprocessing and feature engineering are executed far more often than
 model training: every serving request re-runs the same transformations that
-were fit once during training. `Gators` is an open-source Python library that
+were fit once during training. `Gators` -- named for the alligator, which
+looks idle but strikes in a fraction of a second -- is an open-source
+Python library that
 provides 107 transformers, organized into 10 categories (data cleaning,
 outlier clipping, categorical encoding -- including CatBoost-style target
 encoding [@prokhorenkova2018] -- numeric/string/datetime feature generation,
@@ -159,7 +161,7 @@ benchmarked by a human author before being retained.
 
 ## Acknowledgements
 
-We thank Prem Thangamani for his managerial support of the development of
+We thank Prem Thangamani for her managerial support of the development of
 `Gators`, PayPal's PSP Data Team for supporting the project more broadly, and
 the maintainers of `Polars`, `scikit-learn`, `Pydantic`, and `ONNX`, whose
 libraries this project builds directly on.

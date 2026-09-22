@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import polars as pl
 
 from ..transformer._base_transformer import _BaseTransformer

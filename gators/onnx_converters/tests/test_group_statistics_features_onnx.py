@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for GroupStatisticsFeatures.
 
 The ONNX converter uses training-time group statistics (stored in _group_stats

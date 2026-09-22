@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Fourier (sin/cos) features for cyclic numeric columns."""
 
 from __future__ import annotations
@@ -91,6 +92,7 @@ class FourierFeatures(_BaseTransformer):
     drop_columns: bool = False
 
     _column_periods: dict[str, list[float]] = PrivateAttr(default_factory=dict)
+    _generated_column_names: list[str] = PrivateAttr(default_factory=list)
 
     @field_validator("periods")
     @classmethod
@@ -138,6 +140,15 @@ class FourierFeatures(_BaseTransformer):
             self._column_periods = {col: list(self.periods) for col in self.subset}
         else:
             self._column_periods = {col: list(self.periods[col]) for col in self.subset}
+
+        self._generated_column_names = [
+            f"{col}__fourier_{kind}_p{period:g}_k{k}"
+            for col in self.subset
+            for period in self._column_periods[col]
+            for k in range(1, self.n_harmonics + 1)
+            for kind in ("sin", "cos")
+        ]
+        self._output_dtypes = dict.fromkeys(self._generated_column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Test that TreeBasedDiscretizer raises a clear ImportError when lightgbm is absent."""
 
 import sys

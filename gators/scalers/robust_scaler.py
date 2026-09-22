@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 import polars as pl
 from pydantic import PrivateAttr, field_validator
 

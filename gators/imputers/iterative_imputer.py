@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """MICE-style iterative imputer for numeric columns."""
 
 from __future__ import annotations
@@ -41,16 +42,12 @@ class IterativeImputer(_BaseTransformer):
        column.
     2. Replace all ``null`` values in the training data with those initial
        statistics.
-    3. For each of ``max_iter`` rounds:
-       a. For every column in ``subset`` (processed in ascending order of
-          null count):
-
-          - Select rows where the column was *originally* non-null as the
-            training set.
-          - Fit OLS (``numpy.linalg.lstsq``) using all other numeric columns
-            as features.
-          - Predict the imputed values and update those rows in the working
-            copy of the data.
+    3. For each of ``max_iter`` rounds, process every column in ``subset``
+       (ascending order of null count): select rows where the column was
+       *originally* non-null as the training set, fit OLS
+       (``numpy.linalg.lstsq``) using all other numeric columns as features,
+       then predict the imputed values and update those rows in the working
+       copy of the data.
     4. Store the final regression coefficients.
 
     Algorithm (transform)

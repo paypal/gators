@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Correctness/parity checks for the benchmark suite.
 
 Confirms gators, scikit-learn, and feature-engine are doing genuinely

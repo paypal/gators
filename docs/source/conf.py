@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -13,7 +14,7 @@ sys.path.insert(0, os.path.abspath("../../"))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "gators"
-copyright = "Mozilla Public License (MPL) 2.0"
+copyright = "2026, Charles Poli. Licensed under the Apache License 2.0"
 author = "Charles Poli"
 release = "1.0.x"
 

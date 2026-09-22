@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for DurationToDatetime.
 
 Output columns are int64 (physical microseconds/milliseconds/nanoseconds since

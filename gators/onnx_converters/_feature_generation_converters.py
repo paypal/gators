@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX converters for gators.feature_generation transformers.
 
 Importing this module registers all supported converters on the
@@ -656,12 +657,12 @@ def _cond_output_cols(transformer: ConditionFeatures, input_columns: list[str]) 
 
 @get_output_onnx_type.register(ConditionFeatures)
 def _cond_output_onnx_type(transformer: ConditionFeatures, col: str) -> int:
-    # Not using _output_dtypes here: it declares a fixed Float64, but _cond_to_onnx always
-    # Casts the bool result to the SOURCE column's actual current onnx type. Report that
-    # instead, so pipeline type-tracking stays accurate.
-    for cond, out_col in zip(transformer.conditions, transformer._generated_column_names, strict=False):
-        if out_col == col:
-            return get_input_onnx_type(transformer, cond["column"])
+    # The condition result is always Cast to FLOAT (see _cond_to_onnx, matching
+    # ConditionFeatures.transform()'s `.cast(pl.Float64)`), regardless of the source
+    # column's actual type. Report that so pipeline type-tracking stays accurate instead
+    # of falling through to the UNDEFINED default.
+    if col in transformer._generated_column_names:
+        return TensorProto.FLOAT
     return get_input_onnx_type(transformer, col)
 
 
@@ -693,12 +694,12 @@ def _cond_to_onnx(
 
         if op == "is_null":
             nodes.append(oh.make_node("IsNaN", inputs=[in_name], outputs=[bool_out]))
-            nodes.append(_cast_numeric(bool_out, out_name, onnx_type))
+            nodes.append(_cast_numeric(bool_out, out_name, TensorProto.FLOAT))
         elif op == "is_not_null":
             isnan_out = f"{p}__isnan"
             nodes.append(oh.make_node("IsNaN", inputs=[in_name], outputs=[isnan_out]))
             nodes.append(oh.make_node("Not", inputs=[isnan_out], outputs=[bool_out]))
-            nodes.append(_cast_numeric(bool_out, out_name, onnx_type))
+            nodes.append(_cast_numeric(bool_out, out_name, TensorProto.FLOAT))
         elif "other_column" in cond:
             other_col = cond["other_column"]
             if other_col not in input_names:  # pragma: no cover
@@ -710,7 +711,7 @@ def _cond_to_onnx(
                 nodes.append(oh.make_node("Not", inputs=[eq_out], outputs=[bool_out]))
             else:
                 nodes.append(oh.make_node(_CMP_ONNX_OPS[op], inputs=[in_name, in_b], outputs=[bool_out]))
-            nodes.append(_cast_numeric(bool_out, out_name, onnx_type))
+            nodes.append(_cast_numeric(bool_out, out_name, TensorProto.FLOAT))
         else:
             value = float(cond["value"])
             scalar_init = f"{p}__scalar"
@@ -721,7 +722,7 @@ def _cond_to_onnx(
                 nodes.append(oh.make_node("Not", inputs=[eq_out], outputs=[bool_out]))
             else:
                 nodes.append(oh.make_node(_CMP_ONNX_OPS[op], inputs=[in_name, scalar_init], outputs=[bool_out]))
-            nodes.append(_cast_numeric(bool_out, out_name, onnx_type))
+            nodes.append(_cast_numeric(bool_out, out_name, TensorProto.FLOAT))
 
     return nodes, initializers
 

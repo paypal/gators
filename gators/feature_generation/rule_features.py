@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from typing import Any, Literal, cast
 
 import polars as pl
@@ -335,7 +336,6 @@ class RuleFeatures(_BaseTransformer):
         else:
             # Keep intermediate columns: batch all expressions
             all_exprs = []
-            all_condition_cols = []
             output_exprs = []
 
             for rule_idx, (rule, output_col_name) in enumerate(
@@ -356,7 +356,6 @@ class RuleFeatures(_BaseTransformer):
 
                     all_exprs.append(expr.alias(col_name))
                     condition_cols.append(col_name)
-                    all_condition_cols.append(col_name)
 
                 # Build combined expression
                 if len(condition_cols) == 1:

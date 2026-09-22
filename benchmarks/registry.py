@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Registry of gators / scikit-learn / feature-engine transformer triples.
 
 Only cases with a genuinely equivalent implementation in the other library(ies) are

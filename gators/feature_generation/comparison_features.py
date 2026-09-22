@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 from typing import Literal
 
 import polars as pl
@@ -18,6 +19,24 @@ COMPARISON_OPERATORS = {
 
 # Unary operators that only use the first column
 UNARY_OPERATORS = {"is_null", "is_not_null"}
+
+_CMP_OP_NAMES = {
+    ">": "gt",
+    "<": "lt",
+    ">=": "gte",
+    "<=": "lte",
+    "==": "eq",
+    "!=": "ne",
+    "is_null": "is_null",
+    "is_not_null": "is_not_null",
+}
+
+
+def _cmp_col_name(col_a: str, col_b: str, op: str) -> str:
+    op_name = _CMP_OP_NAMES[op]
+    if op in UNARY_OPERATORS:
+        return f"{col_a}__{op_name}"
+    return f"{col_a}_{op_name}_{col_b}"
 
 
 class ComparisonFeatures(_BaseTransformer):
@@ -140,6 +159,7 @@ class ComparisonFeatures(_BaseTransformer):
     subset_b: list[str]
     operators: list[Literal[">", "<", ">=", "<=", "==", "!=", "is_null", "is_not_null"]]
     drop_columns: bool = False
+    _generated_column_names: list[str] = []
 
     @field_validator("operators")
     def check_operators(cls, operators):
@@ -185,6 +205,11 @@ class ComparisonFeatures(_BaseTransformer):
         ComparisonFeatures
             Fitted transformer instance.
         """
+        self._generated_column_names = [
+            _cmp_col_name(col_a, col_b, op)
+            for col_a, col_b, op in zip(self.subset_a, self.subset_b, self.operators, strict=False)
+        ]
+        self._output_dtypes = dict.fromkeys(self._generated_column_names, pl.Float64)
         return self
 
     def transform(self, X: pl.DataFrame) -> pl.DataFrame:
@@ -203,27 +228,9 @@ class ComparisonFeatures(_BaseTransformer):
         new_columns = []
         to_drop = set()
 
-        # Operator name mapping for column names
-        op_names = {
-            ">": "gt",
-            "<": "lt",
-            ">=": "gte",
-            "<=": "lte",
-            "==": "eq",
-            "!=": "ne",
-            "is_null": "is_null",
-            "is_not_null": "is_not_null",
-        }
-
-        for col_a, col_b, op in zip(self.subset_a, self.subset_b, self.operators, strict=False):
-            op_name = op_names[op]
-
-            # For unary operators, only use column_a in the name
-            if op in UNARY_OPERATORS:
-                new_col_name = f"{col_a}__{op_name}"
-            else:
-                new_col_name = f"{col_a}_{op_name}_{col_b}"
-
+        for col_a, col_b, op, new_col_name in zip(
+            self.subset_a, self.subset_b, self.operators, self._generated_column_names, strict=False
+        ):
             comparison_expr = (
                 COMPARISON_OPERATORS[op](pl.col(col_a), pl.col(col_b))
                 .cast(pl.Float64)

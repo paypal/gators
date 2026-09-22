@@ -9,11 +9,11 @@
 | | |
 |:--|:-:|
 | Package | [![PyPI version](https://img.shields.io/pypi/v/gators)](https://pypi.org/project/gators/) [![Python versions](https://img.shields.io/pypi/pyversions/gators)](https://pypi.org/project/gators/) |
-| Quality | [![License](https://img.shields.io/github/license/paypal/gators)](https://github.com/paypal/gators/blob/main/LICENSE) [![Coverage](https://img.shields.io/codecov/c/github/paypal/gators)](https://codecov.io/gh/paypal/gators) |
+| Quality | [![License](https://img.shields.io/github/license/paypal/gators)](https://github.com/paypal/gators/blob/master/LICENSE) [![Coverage](https://raw.githubusercontent.com/paypal/gators/master/coverage.svg)](https://github.com/paypal/gators/actions/workflows/build.yml) |
 | Documentation | [![Documentation](https://img.shields.io/badge/docs-online-blue)](https://paypal.github.io/gators/) |
 | Code style | [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) |
 | Downloads | [![Downloads](https://static.pepy.tech/badge/gators)](https://pepy.tech/project/gators) [![Downloads/Month](https://static.pepy.tech/badge/gators/month)](https://pepy.tech/project/gators) |
-| Community | [![GitHub Stars](https://img.shields.io/github/stars/paypal/gators?style=social)](https://github.com/paypal/gators) [![GitHub Forks](https://img.shields.io/github/forks/paypal/gators?style=social)](https://github.com/paypal/gators) [![Contributors](https://img.shields.io/github/contributors/paypal/gators)](https://github.com/paypal/gators/graphs/contributors) [![Last Commit](https://img.shields.io/github/last-commit/paypal/gators)](https://github.com/paypal/gators/commits/main) |
+| Community | [![GitHub Stars](https://img.shields.io/github/stars/paypal/gators?style=social)](https://github.com/paypal/gators) [![GitHub Forks](https://img.shields.io/github/forks/paypal/gators?style=social)](https://github.com/paypal/gators) [![Contributors](https://img.shields.io/github/contributors/paypal/gators)](https://github.com/paypal/gators/graphs/contributors) [![Last Commit](https://img.shields.io/github/last-commit/paypal/gators)](https://github.com/paypal/gators/commits/master) |
 
 
 📚 **[Full Documentation](https://paypal.github.io/gators/)**

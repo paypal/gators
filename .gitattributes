@@ -1,0 +1,6 @@
+# Excluded from `git archive` and GitHub release source archives (e.g. the
+# tarball reviewers download for a JOSS/MLOSS submission), while remaining
+# tracked in git history for contributors who clone the repo.
+paper_joss/ export-ignore
+gators_paper_joss.zip export-ignore
+CLAUDE.md export-ignore

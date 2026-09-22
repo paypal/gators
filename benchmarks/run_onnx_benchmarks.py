@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX serving benchmark: gators native (Polars) vs ONNX Runtime.
 
 Usage

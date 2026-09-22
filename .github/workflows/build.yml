@@ -40,6 +40,8 @@ jobs:
 
   test:
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write  # to commit the generated coverage badge
     strategy:
       fail-fast: false
       matrix:
@@ -71,6 +73,28 @@ jobs:
     - name: Run tests with coverage
       run: |
         pytest
+
+    - name: Generate coverage badge
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.14'
+      run: |
+        # coverage-badge imports pkg_resources, which recent setuptools no
+        # longer ships (removed in newer releases) - pin to a version that
+        # still includes it just for this step.
+        pip install "setuptools<81" coverage-badge
+        coverage-badge -f -o coverage.svg
+        echo "### Coverage" >> $GITHUB_STEP_SUMMARY
+        coverage report --format=markdown >> $GITHUB_STEP_SUMMARY || true
+
+    - name: Commit coverage badge
+      if: github.event_name == 'push' && matrix.os == 'ubuntu-latest' && matrix.python-version == '3.14'
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add coverage.svg
+        if ! git diff --cached --quiet; then
+          git commit -m "chore: update coverage badge [skip ci]"
+          git push origin HEAD:${{ github.ref_name }}
+        fi
 
     - name: Build wheel
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.14'

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """ONNX tests for BusinessTimeFeatures.
 
 Datetime columns are fed as tensor(int64) containing microseconds since the
@@ -90,6 +91,23 @@ def test_all_features(X):
     _compare_bool(out["ts__is_business_day"],      exp["ts__is_business_day"])
     _compare_str( out["ts__time_of_business_day"], exp["ts__time_of_business_day"])
     _compare_float(out["ts__hour_of_business_day"], exp["ts__hour_of_business_day"].cast(pl.Float64))
+
+
+def test_output_columns_order_matches_transform_regardless_of_features_order(X):
+    """get_output_columns must follow transform()'s FIXED check-order, not the user-supplied
+    `features` list order (regression test for a real column-order mismatch bug)."""
+    from gators.onnx_converters import get_output_columns
+
+    t = BusinessTimeFeatures(
+        subset=["ts"],
+        # Deliberately reversed vs. the natural check order.
+        features=["hour_of_business_day", "time_of_business_day", "is_business_day", "is_business_hour"],
+        drop_columns=True,
+    )
+    t.fit(X)
+    onnx_cols = get_output_columns(t, ["ts"])
+    real_cols = list(t.transform(X).columns)
+    assert onnx_cols == real_cols
 
 
 # ── custom hours ──────────────────────────────────────────────────────────────

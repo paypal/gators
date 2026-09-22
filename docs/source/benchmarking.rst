@@ -173,3 +173,287 @@ Caveats
 * Numbers are single-machine, single-run-session measurements, not averaged over multiple processes/machines
   — treat as directional, not a formal statistical benchmark.
 * ``n/a`` means "no comparable implementation exists", not "0x" or "untested".
+
+---
+
+ONNX Serving Benchmark
+=======================
+
+A separate script measures native Polars ``transform()`` versus an exported ONNX Runtime session —
+the question the fit/transform benchmark above does not answer, namely whether the ONNX export path
+is actually worth using at inference time, not just numerically correct.
+
+Methodology
+-----------
+
+* **Pipelines**: three fitted ``gators.pipeline.Pipeline`` instances restricted to ONNX-exportable
+  transformers, fit on 50,000 rows and evaluated on an independently sampled 100,000-row "serving" set:
+
+  * ``impute_scale``: ``NumericImputer`` → ``StandardScaler``
+  * ``impute_clip_discretize``: ``NumericImputer`` → ``QuantileClipper`` → ``EqualSizeDiscretizer``
+  * ``impute_encode_scale``: ``NumericImputer`` → ``OneHotEncoder`` → ``StandardScaler``
+
+* **Batch-size sweep**: each pipeline is timed at batch sizes 1 / 10 / 100 / 1,000 / 10,000 / 100,000 —
+  batch size 1 is the realistic "one prediction request" serving scenario; larger batches represent
+  bulk scoring/offline transform.
+* **Correctness first**: for every pipeline, ONNX Runtime output is checked against native Polars
+  output (``atol=1e-4``) before any timing is trusted.
+* **Timing**: best-of-5 wall-clock time after 2 warm-up calls, one call per batch size.
+* **Memory**: ``resource.getrusage().ru_maxrss`` delta around each call — a process-wide, monotonically
+  non-decreasing high-water mark, not a precise per-call allocation count. A delta of 0 means "did not
+  set a new peak", not "used no memory"; treat these numbers as directional only.
+* **ONNX Runtime configuration**: ``CPUExecutionProvider``, default graph optimizations
+  (``ORT_ENABLE_ALL``), ``intra_op_num_threads=0`` (let ORT choose), ``inter_op_num_threads=1`` — the
+  defaults ``create_session`` ships with, tuned for single-request latency rather than bulk throughput.
+
+Reproducing
+-----------
+
+.. code-block:: bash
+
+    pip install -e ".[onnx,benchmarks]"
+    python benchmarks/run_onnx_benchmarks.py
+
+Writes ``benchmarks/results/onnx_results.csv`` and ``benchmarks/results/onnx_summary.md``.
+
+Environment
+-----------
+
+* Hardware/OS/Python: same machine as above (macOS 26.6.2, arm64, Python 3.14.5)
+* ``gators`` 1.3.1, ``polars`` 1.43.0, ``onnx`` 1.22.0, ``onnxruntime`` 1.26.0
+* Fit rows: 50,000. Serving rows sampled independently (seed=1) up to 100,000; each batch size is the
+  first N rows of that serving set.
+
+Results
+-------
+
+impute_scale
+~~~~~~~~~~~~
+
+Serialized ONNX graph size: 6,135 bytes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 12 14 14 14 16 16 12 12
+
+   * - Batch size
+     - gators (s)
+     - onnx (s)
+     - onnx vs gators
+     - gators (rows/s)
+     - onnx (rows/s)
+     - gators Δpeak-RSS (MB)
+     - onnx Δpeak-RSS (MB)
+   * - 1
+     - 0.000502
+     - 0.000322
+     - 1.56x
+     - 1,991
+     - 3,102
+     - 0.5
+     - 0.0
+   * - 10
+     - 0.000573
+     - 0.000317
+     - 1.81x
+     - 17,443
+     - 31,550
+     - 0.1
+     - 0.0
+   * - 100
+     - 0.000589
+     - 0.000397
+     - 1.48x
+     - 169,815
+     - 251,783
+     - 0.2
+     - 0.0
+   * - 1,000
+     - 0.000583
+     - 0.001055
+     - 0.55x
+     - 1,715,142
+     - 947,867
+     - 0.4
+     - 0.0
+   * - 10,000
+     - 0.000565
+     - 0.006680
+     - 0.08x
+     - 17,710,870
+     - 1,496,997
+     - 2.8
+     - 1.4
+   * - 100,000
+     - 0.000856
+     - 0.058543
+     - 0.01x
+     - 116,816,698
+     - 1,708,153
+     - 34.6
+     - 51.6
+
+impute_clip_discretize
+~~~~~~~~~~~~~~~~~~~~~~
+
+Serialized ONNX graph size: 19,938 bytes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 12 14 14 14 16 16 12 12
+
+   * - Batch size
+     - gators (s)
+     - onnx (s)
+     - onnx vs gators
+     - gators (rows/s)
+     - onnx (rows/s)
+     - gators Δpeak-RSS (MB)
+     - onnx Δpeak-RSS (MB)
+   * - 1
+     - 0.000864
+     - 0.000308
+     - 2.81x
+     - 1,158
+     - 3,249
+     - 0.0
+     - 0.0
+   * - 10
+     - 0.000810
+     - 0.000308
+     - 2.63x
+     - 12,349
+     - 32,494
+     - 0.0
+     - 0.0
+   * - 100
+     - 0.000650
+     - 0.000365
+     - 1.78x
+     - 153,955
+     - 273,941
+     - 0.0
+     - 0.0
+   * - 1,000
+     - 0.000780
+     - 0.001182
+     - 0.66x
+     - 1,281,366
+     - 846,024
+     - 0.0
+     - 0.0
+   * - 10,000
+     - 0.001065
+     - 0.009345
+     - 0.11x
+     - 9,393,711
+     - 1,070,058
+     - 0.0
+     - 0.0
+   * - 100,000
+     - 0.003814
+     - 0.090926
+     - 0.04x
+     - 26,221,193
+     - 1,099,794
+     - 12.3
+     - 106.1
+
+impute_encode_scale
+~~~~~~~~~~~~~~~~~~~~
+
+Serialized ONNX graph size: 27,709 bytes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 12 14 14 14 16 16 12 12
+
+   * - Batch size
+     - gators (s)
+     - onnx (s)
+     - onnx vs gators
+     - gators (rows/s)
+     - onnx (rows/s)
+     - gators Δpeak-RSS (MB)
+     - onnx Δpeak-RSS (MB)
+   * - 1
+     - 0.002486
+     - 0.000563
+     - 4.41x
+     - 402
+     - 1,775
+     - 0.0
+     - 0.0
+   * - 10
+     - 0.002640
+     - 0.000564
+     - 4.68x
+     - 3,788
+     - 17,721
+     - 0.0
+     - 0.0
+   * - 100
+     - 0.002577
+     - 0.000630
+     - 4.09x
+     - 38,799
+     - 158,636
+     - 0.0
+     - 0.0
+   * - 1,000
+     - 0.002588
+     - 0.001416
+     - 1.83x
+     - 386,430
+     - 706,318
+     - 0.0
+     - 0.0
+   * - 10,000
+     - 0.002625
+     - 0.009987
+     - 0.26x
+     - 3,809,644
+     - 1,001,318
+     - 0.0
+     - 0.0
+   * - 100,000
+     - 0.004792
+     - 0.096898
+     - 0.05x
+     - 20,867,386
+     - 1,032,008
+     - 18.0
+     - 8.2
+
+Headline result
+---------------
+
+Across all three pipelines, the same qualitative crossover appears: **ONNX Runtime is faster at small
+batch sizes (single-row up to ~100–1,000 rows), native Polars is faster at large batch sizes (10,000+
+rows)** — e.g. for ``impute_scale``, ONNX is ~1.6–1.8x faster than Polars at batch size 1–10, but ~12x
+*slower* at batch size 10,000 and ~68x slower at 100,000.
+
+This is the expected shape of the trade-off: Polars' advantage comes from parallelizing a query plan
+across cores over a large batch, which only pays off once a batch is large enough to amortize
+scheduling overhead; ONNX Runtime's advantage at small batches comes from a lighter-weight,
+single-graph-execution call with none of the Python-object/query-planning overhead that ``transform()``
+pays per call regardless of row count. In other words: **use the ONNX export path for low-latency,
+one-row-at-a-time serving; use native Polars for bulk/batch scoring** — the two paths are
+complementary, not "one strictly replaces the other".
+
+Peak-RSS overhead is negligible for both runtimes below 10,000-row batches (under 3 MB for every
+pipeline tested) and does not favor either runtime uniformly once it becomes measurable at 100,000
+rows: native gators adds 34.6 MB against 51.6 MB for ONNX Runtime on ``impute_scale``, 12.3 MB against
+106.1 MB on ``impute_clip_discretize``, and 18.0 MB against a leaner 8.2 MB for ONNX Runtime on
+``impute_encode_scale``. Both stay well within the memory budget of a single serving container at the
+batch sizes typical of request-time scoring.
+
+ONNX caveats
+------------
+
+* Does not measure concurrent/sustained-load throughput (many simultaneous requests) — only
+  single-threaded, single-request-at-a-time latency.
+* Does not cover non-CPU execution providers, other thread configurations, or ``float32`` graphs (this
+  benchmark uses ``pipeline_to_onnx``'s ``float64`` default).
+* Pipelines containing the ``feature_generation_str`` transformers with no ONNX converter at all cannot
+  take this path by construction — see the ONNX Export section of the root README.

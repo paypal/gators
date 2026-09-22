@@ -143,6 +143,7 @@ addopts = [
     "--cov=gators",
     "--cov-report=term-missing",
     "--cov-report=html",
+    "--cov-report=xml",
 ]
 
 # MyPy type checker
